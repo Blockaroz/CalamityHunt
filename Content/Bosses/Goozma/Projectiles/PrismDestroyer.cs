@@ -49,7 +49,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             if (Time < 0)
-                Projectile.rotation += Projectile.direction * 0.2f * Utils.GetLerpValue(-10, -50, Time, true);
+                Projectile.rotation += Projectile.direction * 0.16f * Utils.GetLerpValue(-18, -50, Time, true);
             else
                 Projectile.rotation += -Projectile.direction * 0.003f;
 
@@ -129,7 +129,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, rainbow, rotation, baseFrame.Size() * new Vector2(0.01f, 0.5f), attackScale * new Vector2(0.6f, 0.4f), 0, 0);
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, rainbowSolid * 0.3f, rotation, glowFrame.Size() * new Vector2(0.05f, 0.5f), attackScale * new Vector2(0.8f, 0.5f), 0, 0);
                 Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, rainbow * 0.3f, rotation, bloom.Size() * new Vector2(0.25f, 0.5f), 10 * attackScale * new Vector2(1.5f, 0.4f), 0, 0);
-                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, rainbow * 0.6f, rotation, bloom.Size() * new Vector2(0.25f, 0.5f), attackScale * new Vector2(8f, 2f), 0, 0);
+                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, rainbow * 0.5f, rotation, bloom.Size() * new Vector2(0.25f, 0.5f), attackScale * new Vector2(8f, 2f), 0, 0);
             }
 
             Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, new Color(20, 5, 10, 0), Projectile.rotation, bloom.Size() * 0.5f, 10 * attackScale * 3f, 0, 0);

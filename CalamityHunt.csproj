@@ -19,6 +19,9 @@
     <Folder Include="Assets\Sounds\Goozma\Slimes\" />
     <Folder Include="Assets\Sounds\SlimeMonsoon\" />
     <Folder Include="Content\Items\BossBags\" />
+    <Folder Include="Content\Items\Weapons\Melee\" />
+    <Folder Include="Content\Items\Weapons\Ranged\" />
+    <Folder Include="Content\Projectiles\Weapons\Ranged\" />
     <Folder Include="lib\" />
   </ItemGroup>
 </Project>

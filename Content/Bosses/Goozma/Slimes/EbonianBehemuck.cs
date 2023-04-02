@@ -289,6 +289,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             int waitTime = 150;
             int countOfMe = Main.projectile.Count(n => n.type == ModContent.ProjectileType<EbonianBehemuckClone>() && n.active);
 
+            NPC.damage = 0;
+
             if (Time < 60)
             {
                 NPC.dontTakeDamage = true;

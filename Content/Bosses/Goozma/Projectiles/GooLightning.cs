@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -47,14 +48,21 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (Projectile.owner > -1)
-                if (Main.npc[Projectile.owner].active)
-                    Projectile.Center = Main.npc[Projectile.owner].Center;
+            int owner = -1;
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+            {
+                Projectile.active = false;
+                return;
+            }
+            else
+                owner = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
+            
+            Projectile.Center = Main.npc[owner].Center;
 
             if (Time < 0)
             {
                 if (Collides == 0 || Collides == 2)
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[Projectile.owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.07f * Utils.GetLerpValue(0, -20, Time, true));
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.07f * Utils.GetLerpValue(0, -20, Time, true));
                 else if (Collides == 1)
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2CircularEdge(1, 1), 0.005f);
             }
@@ -67,11 +75,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         endPoint = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.05f) * 16 * i;
                         if (WorldGen.InWorld(endPoint.ToTileCoordinates().X, endPoint.ToTileCoordinates().Y))
                         {
-                            if (Projectile.owner > -1)
-                            {
-                                if (Main.npc[Projectile.owner].GetTargetData().Center.Distance(endPoint) > 20)
-                                    continue;
-                            }
+                            if (Main.npc[owner].GetTargetData().Center.Distance(endPoint) > 20)
+                                continue;
                             if (WorldGen.SolidTile(endPoint.ToTileCoordinates()))
                                 break;
                         }
@@ -162,7 +167,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 lightningEffect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Lightning").Value);
                 lightningEffect.Parameters["uGlow"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
-                lightningEffect.Parameters["uTime"].SetValue(Projectile.timeLeft * 0.1f);
+                lightningEffect.Parameters["uTime"].SetValue(Projectile.timeLeft * 0.005f + 0.2f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
 
                 strip.DrawTrail();

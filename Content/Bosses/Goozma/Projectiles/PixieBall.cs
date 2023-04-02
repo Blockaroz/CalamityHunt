@@ -31,6 +31,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         }
 
         public ref float Time => ref Projectile.ai[0];
+        public ref float Cooldown => ref Projectile.ai[1];
         public ref float HitCount => ref Projectile.ai[2];
 
         public override void AI()
@@ -46,17 +47,37 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active).whoAmI;
 
-            if (Projectile.ai[1] == 0)
+            if (HitCount < 0 || HitCount == 1)
+            {
+                Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 50f;
+                Cooldown = 0;
+            }
+            else
+            {
+                if (Main.rand.NextBool(5))
+                    Projectile.velocity += Main.rand.NextVector2Circular(3, 3);
+
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * 3f, 0.03f) * Utils.GetLerpValue(500, 470, Time, true);
+                Projectile.velocity += Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * 0.3f;
+            }
+
+            if (Cooldown == 0)
             {
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(Projectile.Center) < 64))
                 {
-                    Projectile.velocity = Projectile.DirectionFrom(player.Center).SafeNormalize(Vector2.Zero) * (12f + Projectile.velocity.Length() + player.velocity.Length());
-                    Projectile.ai[1] = 15;
+                    if (HitCount < 0 || HitCount == 1)
+                    {
+                        HitCount++;
+                        Projectile.velocity = -Vector2.UnitY * 10;
+                    }
+                    else
+                        Projectile.velocity = Projectile.DirectionFrom(player.Center).SafeNormalize(Vector2.Zero) * (12f + Projectile.velocity.Length() + player.velocity.Length());
+                    Cooldown = 15;
                     for (int i = 0; i < 40; i++)
                     {
-                        Color glowColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / 120f) % 1f, 1f, 0.6f, 0);
+                        Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                         glowColor.A /= 2;
-                        Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(5, 5) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
+                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
                     }
 
                     break;
@@ -65,7 +86,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 //foreach(NPC goozma in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<Goozma>() && n.Distance(Projectile.Center) < 64))
                 //{
                 //    Projectile.velocity += Projectile.DirectionTo(goozma.GetTargetData().Center).SafeNormalize(Vector2.Zero) * (12f + Projectile.velocity.Length());
-                //    Projectile.ai[1] = 15;
+                //    Cooldown = 15;
                 //    for (int i = 0; i < 40; i++)
                 //    {
                 //        Color glowColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / 120f) % 1f, 1f, 0.6f, 0);
@@ -74,36 +95,30 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 //    }
                 //}
 
-                if (Main.rand.NextBool(5))
-                    Projectile.velocity += Main.rand.NextVector2Circular(3, 3);
-
                 if (Projectile.Distance(Main.npc[owner].Center) < 64 && Time > 60)
                 {
                     HitCount++;
                     Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * (12f + Projectile.velocity.Length());
-                    Projectile.ai[1] = 15;
+                    Cooldown = 15;
                     for (int i = 0; i < 40; i++)
                     {
-                        Color glowColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / 120f) % 1f, 1f, 0.6f, 0);
+                        Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                         glowColor.A /= 2;
-                        Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(5, 5) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
+                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
                     }
                 }
             }
-            if (Projectile.ai[1] > 0)
-                Projectile.ai[1]--;
+            if (Cooldown > 0)
+                Cooldown--;
 
-            if (HitCount > 1)
+            if (HitCount > 2)
             {
                 Main.npc[owner].ai[0] = 0;
-                Main.npc[owner].ai[1] = 3;
+                Main.npc[owner].ai[1] = -1;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     Main.npc[owner].netUpdate = true;
                 Projectile.Kill();
             }
-
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * 2f, 0.033f) * Utils.GetLerpValue(500, 470, Time, true);
-            Projectile.velocity += Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * 0.3f;
 
             if (Time > 480)
                 Projectile.Kill();
@@ -123,18 +138,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.oldPos[0] = Projectile.Center;
             Projectile.oldRot[0] = Projectile.rotation;
 
+            if (Time > 400)
+                for (int i = 0; i < 40 - (Time / 2); i++)
+                {
+                    Color glowColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.5f, 0);
+                    glowColor.A /= 2;
+                    Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(25 - Time / 4f, 25 - Time / 4f), 0, glowColor, 2f + Main.rand.NextFloat(2f)).noGravity = true;
+                }
+
             Projectile.localAI[0]++;
             Time++;
-        }
-
-        public override void Kill(int timeLeft)
-        {
-            for (int i = 0; i < 60; i++)
-            {
-                Color glowColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.6f, 0);
-                glowColor.A /= 2;
-                Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(10, 10), 0, glowColor, 2f + Main.rand.NextFloat(2f)).noGravity = true;
-            }
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -143,25 +156,24 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
 
             Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.6f, 0);
-            bloomColor.A = 0;
-            Color solidColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
-            solidColor.A /= 2;
+            Color solidColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 100);
             SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, solidColor, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, solidColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
 
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
             {
-                Color trailColor = Color.DarkGoldenrod * 0.05f;
+                Color trailColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f - i * 0.03f) % 1f, 1f, 0.6f, 0) * 0.15f;
                 trailColor.A = 0;
                 float fadeOut = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
                 float outScale = (float)Math.Pow(fadeOut, 1.5f);
-                Main.EntitySpriteDraw(texture.Value, Projectile.oldPos[i] + Projectile.velocity * i * 0.1f - Main.screenPosition, null, trailColor * outScale, Projectile.oldRot[i], texture.Size() * 0.5f, Projectile.scale * fadeOut, direction, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.oldPos[i] + Projectile.velocity * i * 0.1f - Main.screenPosition, null, trailColor * outScale, Projectile.oldRot[i], texture.Size() * 0.5f, Projectile.scale, direction, 0);
             }
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, direction, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation * 1.1f, texture.Size() * 0.5f, Projectile.scale * 0.9f, direction, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2.5f, direction, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, solidColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, direction, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(200, 200, 200, 0), Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.7f, direction, 0);
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, direction, 0);
 
             return false;
         }

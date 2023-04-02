@@ -76,9 +76,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             PrismDestroyer,
             CrystalStorm,
             PixieBall,
-            BlowUp,
             TooFar,
-            Interrupt
+            Interrupt,
+            BlowUp = -1
         }
 
         public ref float Time => ref NPC.ai[0];
@@ -117,6 +117,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 NPC.active = false;
 
             NPC.damage = 0;
+
             if (Time < 0)
             {
                 NPC.velocity *= 0.9f;
@@ -127,6 +128,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     RememberAttack = Attack;
                     Attack = (int)AttackList.TooFar;
                 }
+                NPC.frameCounter++;
             }
             else switch (Attack)
                 {
@@ -140,12 +142,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                                             
                     case (int)AttackList.PixieBall:
                         PixieBall();
-                        break;                    
+                        break;                                                      
                     
                     case (int)AttackList.BlowUp:
                         BlowUp();
-                        break;
-
+                        break;                    
+                    
                     case (int)AttackList.Interrupt:
                         NPC.noTileCollide = true;
                         NPC.damage = 0;
@@ -188,6 +190,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             Time = 0;
             Attack = (int)AttackList.Interrupt;
             squishFactor = Vector2.One;
+
+            for (int i = 0; i < 10; i++)
+                Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(40, 20), DustID.TintableDust, Main.rand.NextVector2Circular(15, 8), 200, Color.Pink, 1.5f);
+
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NPC.netUpdate = true;
         }
@@ -216,7 +222,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         prism.ai[0] = -66 + i;
                         prism.ai[1] = i;
                         prism.ai[2] = randSpin;
-      }              
+                    }              
 
                     if (!Main.dedServ)
                     {
@@ -226,7 +232,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 }
 
                 foreach (Projectile proj in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<PrismDestroyer>() && n.ai[0] < 2))
-                    proj.ai[2] += (NPC.velocity.X > 0 ? 1 : -1) * 0.07f * Utils.GetLerpValue(80, 20, Time % 150, true);
+                    proj.ai[2] += (NPC.velocity.X > 0 ? 1 : -1) * 0.07f * Utils.GetLerpValue(70, 20, Time % 150, true);
 
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.07f * Utils.GetLerpValue(147, 40, Time % 150, true), 0.1f + 0.1f * Utils.GetLerpValue(170, 40, Time % 150, true));
 
@@ -267,7 +273,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
                 if (Time <= lengthOfAttack + 100 && Time % 15 == 0)
                     for (int i = 0; i < crystalFrequency; i++)
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Top, Main.rand.NextVector2Circular(8, 5) - Vector2.UnitY * 10 + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 5f, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(2), 0);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Top, Main.rand.NextVector2Circular(8, 5) - Vector2.UnitY * 12 + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 5f, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(2), 0);
             }
 
             if (Time > lengthOfAttack + 110)
@@ -283,7 +289,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 if (Time == 50)
                 {
                     NPC.velocity = Vector2.UnitY * 5f;
-                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.UnitY * -30f, ModContent.ProjectileType<PixieBall>(), 0, 0, ai1: 15);
+                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Host.Center, Host.DirectionTo(Target.Center - Vector2.UnitY * 15).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<PixieBall>(), 0, 0, ai1: 15, ai2: -1);
 
                     //if (!Main.dedServ)
                     //{
@@ -293,18 +299,19 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
                 NPC.velocity *= 0.9f;
 
-                float progress = MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(0, 60, Time, true) * Utils.GetLerpValue(120, 80, Time, true));
-                squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Cos(progress * MathHelper.Pi) * 0.2f, 1f + (float)Math.Cos(progress * MathHelper.Pi + MathHelper.Pi) * 0.4f), 0.3f);
+                if (Time < 50)
+                    squishFactor = Vector2.Lerp(Vector2.One, new Vector2(1.5f, 0.6f), (float)Math.Sqrt(Utils.GetLerpValue(0, 50, Time, true)));
+                else
+                    squishFactor = Vector2.SmoothStep(new Vector2(1.5f, 0.6f), Vector2.One, (float)Math.Sqrt(Utils.GetLerpValue(50, 120, Time, true)));
             }
             else if (Time < 500)
             {
-                squishFactor = Vector2.Lerp(squishFactor, Vector2.One, 0.1f);
+                squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Cos(Time * 0.05f) * 0.2f, 1f + (float)Math.Cos(Time * 0.05f + MathHelper.Pi) * 0.4f), 0.3f);
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.01f, 0.1f);
 
-                if (Time % 80 == 0)
-                    for (int i = 0; i < Main.rand.Next(10, 30); i++)
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2Circular(10, 10) - Vector2.UnitY * 10, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(3), 0);
-
+                //if (Time % 80 == 0)
+                //    for (int i = 0; i < Main.rand.Next(10, 30); i++)
+                //        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2Circular(10, 10) - Vector2.UnitY * 10, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(3), 0);
             }
             else
                 NPC.velocity *= 0.9f;
@@ -330,10 +337,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             squishFactor = Vector2.Lerp(squishFactor * 0.98f, squishFactor * 1.1f, 0.05f + Time / 60f);
             NPC.frameCounter += 2;
 
-            if (Time == 2)
-            {
+            if (Time == 1)
+                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HolyExplosion>(), 0, 0);
 
-            }
             if (Time > 30)
             {
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))

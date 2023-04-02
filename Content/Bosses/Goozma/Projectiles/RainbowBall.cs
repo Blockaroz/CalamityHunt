@@ -84,10 +84,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             bloomColor.A = 0;
             Color solidColor = bloomColor;
-            solidColor.A /= 2;
+            solidColor.A = 100;
             SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, solidColor, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale * 1.1f, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, solidColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
 
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
             {

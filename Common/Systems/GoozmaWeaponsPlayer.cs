@@ -9,7 +9,6 @@ namespace CalamityHunt.Common.Systems
 {
     public class GoozmaWeaponsPlayer : ModPlayer
     {
-        public int mortarUses;
-        public readonly int mortarMaxUses = 25;
+        
     }
 }
