@@ -94,8 +94,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
         public override void AI()
         {
-            return;
-
             if (NPC.ai[2] < 0)
                 NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
