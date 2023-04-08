@@ -87,10 +87,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             for (int i = 0; i < 3; i++)
             {
                 Vector2 offset = new Vector2(16, 0).RotatedBy(MathHelper.TwoPi / 3f * i + Projectile.localAI[0] * 0.5f);
-                Main.EntitySpriteDraw(trail.Value, Projectile.Center + offset - Main.screenPosition, null, new Color(55, 0, 170, 0) * 0.3f, Projectile.rotation, trail.Size() * new Vector2(0.5f, 0.18f), Projectile.scale * new Vector2(1.5f, 1.8f), 0, 0);
+                Main.EntitySpriteDraw(trail.Value, Projectile.Center + offset - Main.screenPosition, null, new Color(30, 0, 170, 0) * 0.3f, Projectile.rotation, trail.Size() * new Vector2(0.5f, 0.18f), Projectile.scale * new Vector2(1.5f, 1.8f), 0, 0);
             }
 
-            Main.EntitySpriteDraw(star.Value, Projectile.Center - Main.screenPosition, null, Color.LightGoldenrodYellow, Projectile.localAI[0], star.Size() * new Vector2(0.5f, 0.57f), Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(star.Value, Projectile.Center - Main.screenPosition, null, Color.LightGoldenrodYellow, Projectile.localAI[0], star.Size() * new Vector2(0.5f, 0.57f), Projectile.scale * 1.4f, 0, 0);
             Main.EntitySpriteDraw(star.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 10, 30, 0), Projectile.localAI[0], star.Size() * new Vector2(0.5f, 0.57f), Projectile.scale * 1.8f, 0, 0);
 
             Main.EntitySpriteDraw(tell.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 10, 30, 0) * Utils.GetLerpValue(waitTime + 20, waitTime, Time, true), TargetRot, new Vector2(0f, 1f), new Vector2(Utils.GetLerpValue(waitTime + 40, 0, Time, true) * (float)Math.Pow(speed, 1.1f) * 0.1f, Utils.GetLerpValue(waitTime + 40, waitTime - 20, Time, true) * 5f), 0, 0);

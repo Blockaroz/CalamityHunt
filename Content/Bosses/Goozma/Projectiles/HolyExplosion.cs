@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ModLoader;
@@ -31,15 +32,27 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         
         public override void AI()
         {
-            Time++;
-
             if (Time > 85)
                 Projectile.Kill();
 
             float strength = Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(80, 40, Time, true);
             if (Time % 4 == 0)
-                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), strength * 60, 20, 30));
+                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), strength * 120, 20, 30));
             
+            if (!Main.dedServ)
+            {
+                if (Time == 0)
+                {
+                    SoundStyle explosion = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixieBallExplode");
+                    SoundEngine.PlaySound(explosion, Projectile.Center);
+                }
+                if (Time == 35)
+                {
+                    SoundStyle ringing = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaEarRinging");
+                    SoundEngine.PlaySound(ringing.WithVolumeScale(2f), Projectile.Center);
+                }
+            }
+
             if (Time < 40)
                 for (int i = 0; i < 10; i++)
                 {
@@ -47,6 +60,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     float distanceScale = 3f / Math.Max(vel.Length(), 0.9f) + Main.rand.NextFloat();
                     Particle.NewParticle(Particle.ParticleType<Particles.SlimeChunk>(), Projectile.Center, vel, Main.hslToRgb(Time / 80f % 1f, 0.5f, 0.5f, 128), distanceScale);
                 }
+
+            Time++;
 
             Projectile.localAI[0]++;
 
@@ -75,12 +90,20 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, new Vector2(0.2f, 1f) * (float)Math.Pow(time, 3f) * 80f, 0, 0);
             Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor, Projectile.rotation, sparkle.Size() * 0.5f, new Vector2(0.15f, 1f) * (float)Math.Pow(time, 5f) * 50f, 0, 0);
             Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor, Projectile.rotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, new Vector2(0.15f, 1f) * (float)Math.Pow(time, 5f) * 50f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.2f, 1f) * (float)Math.Pow(time, 3f) * 80f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation + MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.2f, 1f) * (float)Math.Pow(time, 3f) * 80f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor, Projectile.rotation + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.15f, 1f) * (float)Math.Pow(time, 5f) * 50f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor, Projectile.rotation + MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.15f, 1f) * (float)Math.Pow(time, 5f) * 50f, 0, 0);
 
             //after
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.5f, 1f) * (float)Math.Pow(time, 5f) * 120f, 0, 0);
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.5f, 1f) * (float)Math.Pow(time, 5f) * 120f, 0, 0);
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.3f, 1f) * (float)Math.Pow(time, 8f) * 70f, 0, 0);
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.3f, 1f) * (float)Math.Pow(time, 8f) * 70f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation, sparkle.Size() * 0.5f, new Vector2(0.4f, 1f) * (float)Math.Pow(time, 5f) * 120f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, new Vector2(0.4f, 1f) * (float)Math.Pow(time, 5f) * 120f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation, sparkle.Size() * 0.5f, new Vector2(0.2f, 1f) * (float)Math.Pow(time, 8f) * 70f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, new Vector2(0.2f, 1f) * (float)Math.Pow(time, 8f) * 70f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.4f, 1f) * (float)Math.Pow(time, 5f) * 120f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.4f, 1f) * (float)Math.Pow(time, 5f) * 120f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.2f, 1f) * (float)Math.Pow(time, 8f) * 70f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, sparkleColor * Utils.GetLerpValue(60, 50, Time, true), Projectile.rotation + MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, new Vector2(0.2f, 1f) * (float)Math.Pow(time, 8f) * 70f, 0, 0);
 
             return false;
         }

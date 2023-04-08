@@ -66,10 +66,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Asset<Texture2D> flare = TextureAssets.Extra[98];
 
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, new Color(30, 0, 80, 0), 0, bloom.Size() * 0.5f, 8 * Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, new Color(100, 0, 150, 0), 0, bloom.Size() * 0.5f, 3 * Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(flare.Value, Projectile.Center - Main.screenPosition, null, new Color(50, 10, 150, 0), 0, flare.Size() * 0.5f, new Vector2(1f, 10f) * Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(flare.Value, Projectile.Center - Main.screenPosition, null, new Color(50, 10, 150, 0), MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(1f, 10f) * Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, new Color(10, 0, 80, 0), 0, bloom.Size() * 0.5f, 8 * Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, new Color(710, 0, 150, 0), 0, bloom.Size() * 0.5f, 3 * Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(flare.Value, Projectile.Center - Main.screenPosition, null, new Color(30, 10, 150, 0), 0, flare.Size() * 0.5f, new Vector2(1f, 10f) * Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(flare.Value, Projectile.Center - Main.screenPosition, null, new Color(30, 10, 150, 0), MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(1f, 10f) * Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(flare.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 230, 60, 0), 0, flare.Size() * 0.5f, new Vector2(0.5f, 5f) * Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(flare.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 230, 60, 0), MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(0.5f, 5f) * Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(flare.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), 0, flare.Size() * 0.5f, new Vector2(0.8f, 2f) * Projectile.scale, 0, 0);

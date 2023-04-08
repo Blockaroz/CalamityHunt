@@ -6,6 +6,7 @@ using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using ReLogic.Utilities;
 using System;
 using System.Linq;
 using Terraria;
@@ -71,6 +72,41 @@ namespace CalamityHunt.Common.Systems
                 Gore.NewGore(Entity.GetSource_NaturalSpawn(), Main.npc[ks].Top, -Vector2.UnitY, GoreID.KingSlimeCrown);
                 Main.npc[ks].active = false;
             }
+
+            HandleGoozmaShootSound();
+        }
+
+        public static SlotId goozmaShoot;
+        public static float goozmaShootPowerCurrent;
+        public static float goozmaShootPowerTarget;
+
+        public void HandleGoozmaShootSound()
+        {
+            SoundStyle shootSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShootLoop");
+            shootSound.IsLooped = true;
+
+            goozmaShootPowerCurrent = MathHelper.Lerp(goozmaShootPowerCurrent, goozmaShootPowerTarget, 0.2f);
+            if (goozmaShootPowerCurrent < 0.05f)
+                goozmaShootPowerCurrent = 0f;
+
+            bool active = SoundEngine.TryGetActiveSound(goozmaShoot, out ActiveSound sound);
+            if (!active && goozmaShootPowerCurrent > 0.1f && GoozmaActive)
+                goozmaShoot = SoundEngine.PlaySound(shootSound, Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).Center);
+
+            else if (active)
+            {
+                sound.Volume = goozmaShootPowerCurrent * 1.5f;
+
+                if (goozmaShootPowerCurrent < 0.05f)
+                {
+                    goozmaShoot = SlotId.Invalid;
+                    sound.Stop();
+                }
+            }
+
+            goozmaShootPowerTarget -= 0.05f;
+            if (goozmaShootPowerTarget < 0.2f)
+                goozmaShootPowerTarget = 0f;
         }
 
         public static bool GoozmaActive => Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active) || Main.projectile.Any(n => n.type == ModContent.ProjectileType<GoozmaSpawn>() && n.active);       

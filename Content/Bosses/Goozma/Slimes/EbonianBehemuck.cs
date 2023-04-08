@@ -40,8 +40,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData); 
             
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) {  };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            //NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) {  };
+            //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -463,6 +463,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             Asset<Texture2D> tell = TextureAssets.Extra[178];
 
             Color color = Color.White;
+
+            if (eyeType is null)
+            {
+                eyeType = new List<int>
+                {
+                    0, 1, 2
+                };
+            }
 
             switch (Attack)
             {

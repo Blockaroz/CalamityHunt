@@ -51,20 +51,20 @@ namespace CalamityHunt.Content.Particles
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Rectangle frame = texture.Frame(1, 3, 0, variant);
-            Vector2 squish = new Vector2(1f - velocity.Length() * 0.01f, 1f + velocity.Length() * 0.01f);
+            Vector2 squish = new Vector2(1f - velocity.Length() * 0.002f, 1f + velocity.Length() * 0.002f);
             float inOut = Utils.GetLerpValue(0, 20, time, true) * Utils.GetLerpValue(50, 20, time, true);
             Color drawColor = color;
             if (data is not null)
                 if (data is Vector2)
                 {
                     drawColor = Color.Lerp(color, Color.Black * 0.3f, Utils.GetLerpValue(200, 80, position.Distance(finalPos), true));
-                    spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGBA(drawColor).MultiplyRGBA(new Color(150, 150, 150)), rotation, frame.Size() * 0.5f, squish * scale * inOut, 0, 0);
-                    spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, drawColor.MultiplyRGBA(new Color(260, 260, 260, 0)), rotation, frame.Size() * 0.5f, squish * scale * inOut, 0, 0);
+                    spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGBA(drawColor).MultiplyRGBA(new Color(150, 150, 150)), rotation, frame.Size() * new Vector2(0.5f, 0.7f), squish * scale * inOut, 0, 0);
+                    spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, drawColor.MultiplyRGBA(new Color(260, 260, 260, 0)), rotation, frame.Size() * new Vector2(0.5f, 0.7f), squish * scale * inOut, 0, 0);
                     return;
                 }
 
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGBA(drawColor).MultiplyRGBA(new Color(150, 150, 150)), rotation, frame.Size() * 0.5f, squish * scale * inOut, 0, 0);
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGBA(drawColor).MultiplyRGBA(new Color(270, 270, 270, 0)), rotation, frame.Size() * 0.5f, squish * scale * inOut, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGBA(drawColor).MultiplyRGBA(new Color(150, 150, 150)), rotation, frame.Size() * new Vector2(0.5f, 0.7f), squish * scale * inOut, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGBA(drawColor).MultiplyRGBA(new Color(270, 270, 270, 0)), rotation, frame.Size() * new Vector2(0.5f, 0.7f), squish * scale * inOut, 0, 0);
         }
     }
 }

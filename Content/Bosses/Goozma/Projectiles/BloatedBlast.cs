@@ -4,6 +4,7 @@ using ReLogic.Content;
 using System;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -29,6 +30,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             Projectile.localAI[0] += Main.rand.NextFloat(20f);
             Projectile.frame = Main.rand.Next(3);
+
+            if (!Main.dedServ)
+            {
+                SoundStyle dartSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDartShoot", 1, 2);
+                dartSound.PitchVariance = 0.2f;
+                dartSound.Pitch = -1f;
+                SoundEngine.PlaySound(dartSound);
+            }
         }
 
         public float colOffset;
@@ -110,6 +119,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Projectile dart = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(20, 0).RotatedBy(MathHelper.TwoPi / 16f * i), Type, Projectile.damage, 0, ai1: 1);
                     dart.ai[1] = 1;
                     dart.localAI[0] = Projectile.localAI[0] + i / 16f * 90f;
+                }
+
+                if (!Main.dedServ)
+                {
+                    SoundStyle dartSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDartShoot", 1, 2);
+                    dartSound.PitchVariance = 0.2f;
+                    dartSound.Pitch = 0.3f;
+                    SoundEngine.PlaySound(dartSound);
                 }
             }
 

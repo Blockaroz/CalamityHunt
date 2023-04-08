@@ -64,10 +64,6 @@ namespace CalamityHunt.Content.Tiles.Autoloaded
 
         public override bool CreateDust(int i, int j, ref int type) => false;
 
-        public override void KillMultiTile(int i, int j, int frameX, int frameY) =>
-            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ItemType);
-
-
         public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
             // Since this tile does not have the hovering part on its sheet, we have to animate it ourselves
@@ -136,9 +132,8 @@ namespace CalamityHunt.Content.Tiles.Autoloaded
             effectColor.A = 0;
             effectColor = effectColor * 0.1f * scale;
             for (int h = 0; h < 6; h++)
-            {
                 spriteBatch.Draw(texture, drawPos + (MathHelper.TwoPi * h / 6f).ToRotationVector2() * (6f + offset * 2f), frame, effectColor, 0f, origin, 1f, effects, 0f);
-            }
+
         }
     }
 }

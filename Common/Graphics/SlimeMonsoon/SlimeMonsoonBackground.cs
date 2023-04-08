@@ -116,7 +116,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             for (int i = 0; i < thunder.Length; i++)
             {
                 if (_random.NextBool(150) && _strength > 0.5f)
-                    thunder[i].Add(new GooThunder(Main.screenPosition.X, _random.NextFloat(0.5f, 1.5f), _random.Next(50, 100), i));
+                    thunder[i].Add(new GooThunder(Main.screenPosition.X, _random.NextFloat(0.5f, 1.4f), _random.Next(50, 100), i));
 
                 for (int j = 0; j < thunder[i].Count; j++)
                 {
@@ -226,11 +226,12 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
                 rots.Add(points[totalPoints - 2].AngleTo(points[totalPoints - 1]));
 
-                //if (!Main.dedServ)
-                //{
-                //    SoundStyle thunderSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SlimeMonsoon/GooThunder", 3, SoundType.Ambient);
-                //    SoundEngine.PlaySound(thunderSound, Main.LocalPlayer.Center + new Vector2(position, 0));
-                //}
+                if (!Main.dedServ)
+                {
+                    SoundStyle thunderSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SlimeMonsoon/GoozmaMonsoonThunder", 3, SoundType.Ambient);
+                    thunderSound.MaxInstances = 0;
+                    SoundEngine.PlaySound(thunderSound.WithVolumeScale(0.1f + strength * 0.2f).WithPitchOffset(Main.rand.NextFloat(-0.1f, 0.4f)), Main.LocalPlayer.Center);
+                }
             }
 
             public float position;

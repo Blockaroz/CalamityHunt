@@ -39,8 +39,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
 
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            //NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { };
+            //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -282,22 +282,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
         private void Hellstars()
         {
-            int ringTime = 80;
-            int ringCount = 3;
+            int collapserFrequency = 18;
             if (Main.expertMode)
-            {
-                ringTime = 60;
-                ringCount = 4;
-            }
-            float clearance = 0.4f;
-            if (Main.expertMode)
-                clearance = 0.15f;
-
-            int resizeCount = (int)(Math.Floor(Time / ringTime) + 1);
+                collapserFrequency = 12;
 
             bool tooClose = false;
             Point pos = NPC.Bottom.ToTileCoordinates();
-            for (int i = 0; i < 60; i++)
+            for (int i = 0; i < 10; i++)
             {
                 if (WorldGen.SolidTile(pos.X, pos.Y + i))
                 {
@@ -311,68 +302,48 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             else
                 NPC.velocity.Y *= 0.9f;
 
-
-            if (Time < (ringCount + 1) * ringTime)
+            if (Time > 20 && Time < 490)
             {
-                foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 20000 && n.Distance(NPC.Center) > 600))
-                    player.velocity += player.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * player.Distance(NPC.Center) / 1500f;
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 100) * 0.01f, 0.1f);
+                NPC.rotation = NPC.velocity.X * 0.01f;
 
-                float localTime = Time % ringTime;
-                NPC.velocity *= 0.9f;
-
-                if (Time > 30)
+                Vector2 offset = new Vector2(Main.rand.Next(800, 1500), 0).RotatedBy(Time / 70f);
+                if (Main.rand.NextBool(3) || Time % collapserFrequency == 0)
                 {
-                    if (localTime == 5)
-                    {
-                        NPC.width = (int)(140 + 28f * resizeCount);
-                        NPC.height = (int)(100 + 20f * resizeCount);
-                        NPC.scale = 1f + resizeCount * 0.2f;
-                        NPC.Center -= new Vector2(7f, 10f);
-                    }
-                    float progress = (float)Math.Cbrt(Math.Sin(Utils.GetLerpValue(0, 30, localTime, true) * MathHelper.TwoPi));
-                    squishFactor = new Vector2(1f + progress * 0.5f, 1f - progress * 0.6f);
-                }
+                    for (int i = 0; i < 3; i++)
+                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + offset.RotatedByRandom(0.8f).RotatedBy(MathHelper.TwoPi / 3f * i), Vector2.Zero, ModContent.ProjectileType<CollapsingStar>(), GetDamage(2), 0);
 
-                if (localTime < 1)
-                    randomAngle = NPC.AngleTo(Target.Center) + Main.rand.NextFloat(-0.4f, 0.4f);
-
-                if (localTime < 9)
-                {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        float between = localTime / 9f;
-                        Vector2 starVelocity = new Vector2(50, 0).RotatedBy(randomAngle + MathHelper.Lerp(clearance, -clearance, between)).RotatedBy(localTime / 9f * MathHelper.TwoPi).RotatedBy(MathHelper.TwoPi / 45f * i);
-                        Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, starVelocity, ModContent.ProjectileType<CollapsingStar>(), 5, 0);
-                        star.ai[0] = localTime;
-                        star.ai[1] = NPC.whoAmI;
-                    }
                 }
             }
 
-            if (Time > ringCount * ringTime + 10)
+            if (Time < 680)
+                squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Sin(Time * 0.1f) * 0.2f, 1f + (float)Math.Cos(Time * 0.1f) * 0.2f) * (1f + Utils.GetLerpValue(50, 400, Time, true)), 0.2f);
+
+            if (Time > 510)
             {
-                if (Time < ringCount * ringTime + 140)
+                NPC.velocity *= 0.83f;
+
+                if (Time < 640)
                     NPC.Center += Main.rand.NextVector2Circular(7, 7);
 
-                if (Time == ringCount * ringTime + 155)
+                if (Time == 655)
                 {
                     NPC.width = 140;
                     NPC.height = 100;
                     NPC.scale = 1f;
-                    NPC.Center += new Vector2(7f, 10f) * resizeCount;
 
                     for (int i = 0; i < 75; i++)
-                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2CircularEdge(15, 15) + Main.rand.NextVector2Circular(5, 5), ModContent.ProjectileType<TrailingStar>(), 5, 0);
+                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2CircularEdge(15, 15) + Main.rand.NextVector2Circular(5, 5), ModContent.ProjectileType<TrailingStar>(), GetDamage(3), 0);
                 }
 
-                float progress = (float)Math.Cbrt(Math.Sin(Utils.GetLerpValue(ringCount * ringTime + 140, ringCount * ringTime + 210, Time, true) * MathHelper.TwoPi));
-                squishFactor = new Vector2(1f + progress * 0.6f, 1f - progress * 0.7f);
+                float progress = (float)Math.Cbrt(Math.Sin(Utils.GetLerpValue(640, 690, Time, true) * MathHelper.TwoPi));
+                squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + progress * 0.6f, 1f - progress * 0.7f), Utils.GetLerpValue(640, 690, Time, true));
                 
-                if (Time >= ringCount * ringTime + 140 && Time % 2 == 0 && Time < ringCount * ringTime + 200)
+                if (Time >= 640 && Time % 2 == 0 && Time < 700)
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 5f, 10, 12));
             }
 
-            if (Time > ringCount * ringTime + 240)
+            if (Time > 740)
                 Reset();
         }
 
@@ -456,7 +427,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 {
                     if (!Main.dedServ)
                     {
-                        Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, new Color(100, 40, 255, 0), 38f);
+                        Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, new Color(60, 30, 255, 0), 38f);
                         SoundEngine.PlaySound(SoundID.Item130, NPC.Center);
                     }
                 }
@@ -473,7 +444,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         targetPos = Main.projectile[nextPortal].Center;
                     float prog = Utils.GetLerpValue((int)(portTime * 0.67f), (int)(portTime * 0.72f), localTime, true) * Utils.GetLerpValue((int)(portTime * 0.97f), (int)(portTime * 0.9f), localTime, true);
                     NPC.Center = Vector2.Lerp(NPC.Center, targetPos, prog * 0.3f);
-                    NPC.damage = GetDamage(0);
+                    NPC.damage = GetDamage(4);
                     NPC.rotation = NPC.AngleTo(targetPos) - MathHelper.PiOver2;
                     squishFactor = new Vector2(0.8f, 1.2f) * prog;
                 }
@@ -505,7 +476,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     {
                         if (!Main.dedServ)
                         {
-                            Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, Main.OurFavoriteColor, 38f);
+                            Particle exit = Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, Main.OurFavoriteColor, 38f);
+                            exit.data = "Wormhole";
                             SoundEngine.PlaySound(SoundID.Item30, NPC.Center);
                         }
                     }
@@ -538,10 +510,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             int damage = attack switch
             {
                 0 => 70,//contact
-                1 => 0,// 
-                2 => 0,//
-                3 => 0,//
-                _ => damage = 0
+                1 => 20,//falling stars 
+                2 => 30,//collapsing stars
+                3 => 40,//collapse explosion stars
+                4 => 100,//contact during wormholes
+                _ => 0
             };
 
             return (int)(damage * modifier);
@@ -553,7 +526,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
-            Asset<Texture2D> trail = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SmashTrail");
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Asset<Texture2D> tell = TextureAssets.Extra[178];
             Asset<Texture2D> flare = TextureAssets.Extra[98];
@@ -570,9 +542,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     if (Time > 172 && Time < 200)
                     {
                         float power = Utils.GetLerpValue(200, 185, Time, true);
-                        spriteBatch.Draw(trail.Value, NPC.Center + new Vector2(0, 20) - Main.screenPosition, null, new Color(5, 0, 20, 0), saveAngle - MathHelper.PiOver2, trail.Size() * new Vector2(0.5f, 1f), new Vector2(1f, 5 * power), 0, 0);
-                        spriteBatch.Draw(trail.Value, NPC.Center + new Vector2(0, 20) - Main.screenPosition, null, new Color(30, 10, 120, 0), saveAngle - MathHelper.PiOver2, trail.Size() * new Vector2(0.5f, 1f), new Vector2(0.7f, 5 * power), 0, 0);
-                        spriteBatch.Draw(trail.Value, NPC.Center + new Vector2(0, 20) - Main.screenPosition, null, new Color(255, 200, 30, 0), saveAngle - MathHelper.PiOver2, trail.Size() * new Vector2(0.5f, 1f), new Vector2(0.5f, 5 * power), 0, 0);
                     }
                     break;
 
@@ -602,10 +571,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         if (Main.expertMode)
                             portTime = 60;
 
-                        spriteBatch.Draw(bloom.Value, oldPortal - Main.screenPosition, null, new Color(30, 0, 80, 0), 0, bloom.Size() * 0.5f, 8 * oldPortalScale, 0, 0);
-                        spriteBatch.Draw(bloom.Value, oldPortal - Main.screenPosition, null, new Color(80, 0, 150, 0), 0, bloom.Size() * 0.5f, 3 * oldPortalScale, 0, 0);
-                        spriteBatch.Draw(flare.Value, oldPortal - Main.screenPosition, null, new Color(110, 10, 200, 0), 0, flare.Size() * 0.5f, new Vector2(0.6f, 4f) * oldPortalScale, 0, 0);
-                        spriteBatch.Draw(flare.Value, oldPortal - Main.screenPosition, null, new Color(110, 10, 200, 0), MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(0.6f, 4f) * oldPortalScale, 0, 0);
+                        spriteBatch.Draw(bloom.Value, oldPortal - Main.screenPosition, null, new Color(10, 0, 80, 0), 0, bloom.Size() * 0.5f, 8 * oldPortalScale, 0, 0);
+                        spriteBatch.Draw(bloom.Value, oldPortal - Main.screenPosition, null, new Color(50, 0, 150, 0), 0, bloom.Size() * 0.5f, 3 * oldPortalScale, 0, 0);
+                        spriteBatch.Draw(flare.Value, oldPortal - Main.screenPosition, null, new Color(70, 10, 200, 0), 0, flare.Size() * 0.5f, new Vector2(0.6f, 4f) * oldPortalScale, 0, 0);
+                        spriteBatch.Draw(flare.Value, oldPortal - Main.screenPosition, null, new Color(70, 10, 200, 0), MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(0.6f, 4f) * oldPortalScale, 0, 0);
                         spriteBatch.Draw(flare.Value, oldPortal - Main.screenPosition, null, new Color(255, 205, 255, 0), 0, flare.Size() * 0.5f, new Vector2(0.8f, 1f) * oldPortalScale, 0, 0);
                         spriteBatch.Draw(flare.Value, oldPortal - Main.screenPosition, null, new Color(255, 205, 255, 0), MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(0.8f, 1f) * oldPortalScale, 0, 0);
 

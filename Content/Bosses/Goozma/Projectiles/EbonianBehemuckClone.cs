@@ -15,8 +15,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
     public class EbonianBehemuckClone : ModProjectile
     {
-        public override string Texture => $"{nameof(CalamityHunt)}/Content/Bosses/Goozma/Slimes/{nameof(EbonianBehemuck)}";
-
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Ebonian Behemuck");
@@ -93,7 +91,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 else if (Projectile.ai[1] >= 0)
                 {
                     squish = new Vector2(0.6f, 1.5f);
-                    Projectile.velocity = Projectile.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * Utils.GetLerpValue(5, 10, Time, true) * 70;
+                    Projectile.velocity = Projectile.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * Utils.GetLerpValue(5, 10, Time, true) * (float)Math.Pow(Utils.GetLerpValue(0, 30, Time, true), 1.5f) * 70;
                     if (Projectile.Distance(saveTarget) < 50)
                     {
                         Projectile.Center = saveTarget;// + (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2();

@@ -89,8 +89,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Asset<Texture2D> flare = TextureAssets.Extra[98];
 
-            Rectangle ornamentBase = ornament.Frame(1, 2, 0, 0);
-            Rectangle ornamentGlow = ornament.Frame(1, 2, 0, 1);
+            //Rectangle ornamentBase = ornament.Frame(1, 2, 0, 0);
+            //Rectangle ornamentGlow = ornament.Frame(1, 2, 0, 1);
 
             SpriteEffects direction = NPC.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
@@ -107,7 +107,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 3f;
                 NPC.localAI[1] = Main.GlobalTimeWrappedHourly;
-                return false;
             }
 
             float trailStrength = Phase > 1 ? 1f : 0.33f;

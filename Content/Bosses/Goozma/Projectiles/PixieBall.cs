@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -36,7 +37,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            Projectile.rotation += Projectile.velocity.Length() * 0.01f * Math.Sign(Projectile.velocity.X);
+            Projectile.rotation = Projectile.velocity.X * 0.02f;
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 17, Time, true) * Utils.GetLerpValue(480, 440, Time, true)) * 2f;
             int owner = -1;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active))
@@ -153,6 +154,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            Asset<Texture2D> sparkle = TextureAssets.Extra[98];
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
 
             Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.6f, 0);
@@ -164,7 +166,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
             {
-                Color trailColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f - i * 0.03f) % 1f, 1f, 0.6f, 0) * 0.15f;
+                Color trailColor = Main.hslToRgb((Projectile.localAI[0] * 0.03f - i * 0.04f) % 1f, 1f, 0.6f, 0) * 0.15f;
                 trailColor.A = 0;
                 float fadeOut = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
                 float outScale = (float)Math.Pow(fadeOut, 1.5f);
@@ -174,6 +176,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, solidColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, direction, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(200, 200, 200, 0), Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.7f, direction, 0);
             Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, direction, 0);
+
+            float wobble = 1.05f + (float)Math.Sin(Time * 0.1f) * 0.1f;
+            Vector2 sparkleScale = new Vector2(0.5f, 2.5f) * wobble * Projectile.scale;
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation + MathHelper.PiOver4, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation + MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation, sparkle.Size() * 0.5f, 0.8f * sparkleScale, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, 0.8f * sparkleScale, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver4, sparkle.Size() * 0.5f, 0.8f * sparkleScale, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, 0.8f * sparkleScale, 0, 0);
 
             return false;
         }

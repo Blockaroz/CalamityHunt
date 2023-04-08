@@ -76,7 +76,7 @@ namespace CalamityHunt.Content.Particles
                     spriteBatch.Draw(bloom.Value, position - Main.screenPosition, null, drawColor * 0.4f * Utils.GetLerpValue(40 + scale * 0.3f, 25, time, true) * newScale, rotation, bloom.Size() * 0.5f, scale * newScale * 0.2f, 0, 0);
                 }                
                 if ((string)data == "Wormhole")
-                    spriteBatch.Draw(bloom.Value, position - Main.screenPosition, null, new Color(80, 10, 110, 0) * Utils.GetLerpValue(30 + scale * 0.5f, 5, time, true) * newScale, rotation, bloom.Size() * 0.5f, scale * newScale * 0.2f, 0, 0);
+                    spriteBatch.Draw(bloom.Value, position - Main.screenPosition, null, new Color(220, 50, 120, 0) * Utils.GetLerpValue(30 + scale * 0.5f, 5, time, true) * newScale, rotation, bloom.Size() * 0.5f, scale * newScale * 0.2f, 0, 0);
             }
             else
                 spriteBatch.Draw(bloom.Value, position - Main.screenPosition, null, drawColor * 0.5f * Utils.GetLerpValue(30 + scale * 0.3f, 5, time, true) * newScale, rotation, bloom.Size() * 0.5f, scale * newScale * 0.2f, 0, 0);

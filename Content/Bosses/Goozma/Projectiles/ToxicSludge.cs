@@ -71,17 +71,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Rectangle frame = texture.Frame(1, 1);
 
-            Color glowColor = new Color(60, 20, 170, 0);
+            Color glowColor = new Color(100, 60, 255, 0);
             float scaleUp = 1f;
-            if (Projectile.localAI[1] > 190)
+            if (Projectile.localAI[1] > 195)
             {
                 texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CorruptEye");
                 frame = texture.Frame(5, 1, (int)(Projectile.localAI[1] % 3), 0);
                 scaleUp = 1.1f;
             }
 
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * scaleUp * 2f, 0, 0);
+            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.33f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * scaleUp * 2f, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Black * 0.05f, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp * 1.2f, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, glowColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp * 1.08f, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, glowColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp * 1.1f, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
 

@@ -62,6 +62,26 @@ Items: {
 		DisplayName: Monsoon Monolith
 		Tooltip: ""
 	}
+
+	TreasureTrunk: {
+		DisplayName: Treasure Trunk
+		Tooltip: ""
+	}
+
+	GoozmaMask: {
+		DisplayName: Goozma Mask
+		Tooltip: ""
+	}
+
+	TrollRelicItem: {
+		DisplayName: Troll Relic Item
+		Tooltip: ""
+	}
+
+	TreasureBucket: {
+		DisplayName: Treasure Bucket
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -99,14 +119,15 @@ Projectiles: {
 	GelCrystalShard.DisplayName: Gel Crystal Shard
 	EbonianBehemuckClone.DisplayName: Ebonian Behemuck Clone
 	HolyExplosion.DisplayName: Holy Explosion
+	CrimulanSmasher.DisplayName: Crimulan Smasher
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
 
 Bestiary: {
 	Goozma: A singularity of slimes assimilating to the point of criticality, engulfing an oversaturated core. It emits powerful pheromones that exert its will beyond its main body, affecting all slimes.
-	CrimulanGlopstrosity: A concentrated mass of visceral rot that ferociously defends its mucilaginous master with vicious, twisted fervor. Each of Goozma’s paladins coagulated individually from unique cores.
-	DivineGargooptuar: A concentrated mass of resplendent divinity that ferociously defends its mucilaginous master with dazzling, flamboyant ardor. As extensions of its body, Goozma’s paladins possess only limited autonomy.
-	EbonianBehemuck: A concentrated mass of virulent corrosion that ferociously defends its mucilaginous master with ruthless, determined zeal. Goozma’s paladins are deliberately spared from assimilation.
+	CrimulanGlopstrosity: A concentrated mass of visceral rot that ferociously defends its mucilaginous master with vicious, twisted fervor. Each of Goozmaï¿½s paladins coagulated individually from unique cores.
+	DivineGargooptuar: A concentrated mass of resplendent divinity that ferociously defends its mucilaginous master with dazzling, flamboyant ardor. As extensions of its body, Goozmaï¿½s paladins possess only limited autonomy.
+	EbonianBehemuck: A concentrated mass of virulent corrosion that ferociously defends its mucilaginous master with ruthless, determined zeal. Goozmaï¿½s paladins are deliberately spared from assimilation.
 	StellarGeliath: A concentrated mass of empyrean infinity that ferociously defends its mucilaginous master with ethereal, unearthly vigor. Left alone, Goozma could assimilate all matter in the universe.
 }

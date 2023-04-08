@@ -61,16 +61,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             for (int i = 0; i < 5; i++)
             {
                 Vector2 offset = Projectile.velocity * i * 5 * Projectile.scale;
-                Main.EntitySpriteDraw(trail.Value, Projectile.Center - offset - Main.screenPosition, null, new Color(55, 0, 170, 0) * 0.2f * ((5f - i) / 5f), Projectile.velocity.ToRotation() + MathHelper.PiOver2, trail.Size() * new Vector2(0.5f, 0.18f), Projectile.scale * 3 * ((5f - i) / 5f), 0, 0);
+                Main.EntitySpriteDraw(trail.Value, Projectile.Center - offset - Main.screenPosition, null, new Color(20, 0, 170, 0) * 0.2f * ((5f - i) / 5f), Projectile.velocity.ToRotation() + MathHelper.PiOver2, trail.Size() * new Vector2(0.5f, 0.18f), Projectile.scale * 3 * ((5f - i) / 5f), 0, 0);
             }
                         
             for (int i = 0; i < 5; i++)
             {
                 Vector2 offset = new Vector2(16, 0).RotatedBy(MathHelper.TwoPi / 3f * i + Projectile.rotation * 0.5f);
-                Main.EntitySpriteDraw(trail.Value, Projectile.Center + offset - Main.screenPosition, null, new Color(55, 0, 170, 0) * 0.4f, Projectile.velocity.ToRotation() + MathHelper.PiOver2, trail.Size() * new Vector2(0.5f, 0.18f), Projectile.scale * 2, 0, 0);
+                Main.EntitySpriteDraw(trail.Value, Projectile.Center + offset - Main.screenPosition, null, new Color(30, 0, 170, 0) * 0.4f, Projectile.velocity.ToRotation() + MathHelper.PiOver2, trail.Size() * new Vector2(0.5f, 0.18f), Projectile.scale * 2, 0, 0);
             }
 
-            Main.EntitySpriteDraw(star.Value, Projectile.Center - Main.screenPosition, null, Color.LightGoldenrodYellow, Projectile.rotation, star.Size() * new Vector2(0.5f, 0.57f), Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(star.Value, Projectile.Center - Main.screenPosition, null, Color.LightGoldenrodYellow, Projectile.rotation, star.Size() * new Vector2(0.5f, 0.57f), Projectile.scale * 1.4f, 0, 0);
             Main.EntitySpriteDraw(star.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 10, 30, 0), Projectile.rotation, star.Size() * new Vector2(0.5f, 0.57f), Projectile.scale * 1.8f, 0, 0);
 
             return false;

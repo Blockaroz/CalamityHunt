@@ -37,8 +37,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
 
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            //NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { };
+            //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -94,6 +94,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
         public override void AI()
         {
+            return;
+
             if (NPC.ai[2] < 0)
                 NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
@@ -108,6 +110,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             if (NPC.frameCounter > 56)
                 NPC.frameCounter = 0;
+
+            if (wingFrame == 2 && NPC.frameCounter % 8 == 0 && !Main.dedServ)
+                SoundEngine.PlaySound(SoundID.Item32.WithVolumeScale(2f), NPC.Center);
 
             NPC.realLife = Host.whoAmI;
 
@@ -211,7 +216,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             if (Time < danceCount * 150)
             {
-                if (Time % 150 == 0 && Time <= danceCount * 150)
+                if (Time % 150 == 0)
                 { 
                     float randSpin = Main.rand.NextFloat(-3f, 3f);
                     for (int i = 0; i < prismCount; i++)
@@ -225,10 +230,22 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     }              
 
                     if (!Main.dedServ)
-                    {
-                        SoundEngine.PlaySound(SoundID.Item147, NPC.Center);
                         SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
-                    }
+                }
+
+                if (Time % 150 == 1)
+                {
+                    SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PrismDestroyerExpand");
+                    createSound.Pitch = -4f;
+                    createSound.PitchVariance = 0.1f;
+                    SoundEngine.PlaySound(createSound, NPC.Center);
+                }
+                
+                if (Time % 150 == 70)
+                {
+                    SoundStyle expandSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PrismDestroyerExpand");
+                    expandSound.PitchVariance = 0.1f;
+                    SoundEngine.PlaySound(expandSound, NPC.Center);
                 }
 
                 foreach (Projectile proj in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<PrismDestroyer>() && n.ai[0] < 2))
@@ -373,6 +390,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            Asset<Texture2D> shineTexture = ModContent.Request<Texture2D>(Texture + "Shine");
             Asset<Texture2D> trailTexture = ModContent.Request<Texture2D>(Texture + "Trail");
             Asset<Texture2D> core = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CrystalMine");
             Asset<Texture2D> wings = TextureAssets.Extra[185];
@@ -396,9 +414,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             }
 
             Color rainbowColor = Main.hslToRgb((NPC.localAI[0] * 0.03f) % 1f, 1f, 0.7f, 0) * 0.5f;
-            Vector2 corePos = NPC.Bottom + new Vector2(0, -45 - (float)Math.Cos(npcFrame * MathHelper.PiOver2) * 3) * squishFactor;
-            Vector2 leftWingPos = corePos + new Vector2(-10, -4).RotatedBy(NPC.rotation) * NPC.scale;
-            Vector2 rightWingPos = corePos + new Vector2(10, -4).RotatedBy(NPC.rotation) * NPC.scale;
+            Vector2 corePos = NPC.Bottom + new Vector2(0, -45 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor;
+            Vector2 leftWingPos = corePos + new Vector2(-12, 2).RotatedBy(NPC.rotation) * NPC.scale;
+            Vector2 rightWingPos = corePos + new Vector2(12, 2).RotatedBy(NPC.rotation) * NPC.scale;
             
             spriteBatch.Draw(wings.Value, leftWingPos - Main.screenPosition, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale, 0, 0);
             spriteBatch.Draw(wings.Value, rightWingPos - Main.screenPosition, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale, SpriteEffects.FlipHorizontally, 0);
@@ -410,7 +428,25 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             spriteBatch.Draw(core.Value, corePos + Main.rand.NextVector2Circular(5, 5) - Main.screenPosition, null, color.MultiplyRGBA(new Color(120, 50, 120, 0)), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
             spriteBatch.Draw(core.Value, corePos + Main.rand.NextVector2Circular(10, 10) - Main.screenPosition, null, color.MultiplyRGBA(new Color(40, 0, 50, 0)), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
 
+            Asset<Texture2D> colorMap = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/RainbowGelMap");
+            Effect gelEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel", AssetRequestMode.ImmediateLoad).Value;
+            gelEffect.Parameters["uImageSize"].SetValue(texture.Size());
+            gelEffect.Parameters["uSourceRect"].SetValue(new Vector4(frame.Left, frame.Top, frame.Width, frame.Height));
+            gelEffect.Parameters["uMap"].SetValue(colorMap.Value);
+            gelEffect.Parameters["uRbThreshold"].SetValue(0.57f);
+            gelEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.5f % 1f);
+            gelEffect.Parameters["uRbTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.8f % 1f);
+            gelEffect.Parameters["uFrequency"].SetValue(1.1f);
+
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, gelEffect, Main.Transform);
+
             spriteBatch.Draw(texture.Value, NPC.Bottom - Main.screenPosition, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+            
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            
+            spriteBatch.Draw(shineTexture.Value, NPC.Bottom - Main.screenPosition, frame, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
 
             return false;
         }
