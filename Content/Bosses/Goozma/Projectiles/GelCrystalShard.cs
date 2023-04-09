@@ -27,7 +27,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.frame = Main.rand.Next(3);
+            Projectile.frame = Main.rand.Next(4);
         }
 
         public override void AI()
@@ -53,7 +53,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Rectangle frame = texture.Frame(3, 1, Projectile.frame, 0);
+            Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
             Color darkBack = Color.BlueViolet * 0.15f;
             darkBack.A /= 2;

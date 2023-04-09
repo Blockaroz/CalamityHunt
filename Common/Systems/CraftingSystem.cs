@@ -20,7 +20,7 @@ namespace CalamityHunt.Common.Systems
                 {
                     Recipe recipe = Main.recipe[i];
                     if (recipe.HasResult(cal.Find<ModItem>("ShadowspecBar").Type))
-                        recipe.AddIngredient(ModContent.ItemType<ShatteredHeartOfDarkness>());
+                        recipe.AddIngredient(ModContent.ItemType<EntropyMatter>());
 
                 }
             }

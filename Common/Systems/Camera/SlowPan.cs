@@ -37,8 +37,8 @@ namespace CalamityHunt.Common.Systems.Camera
                 time++;
 
             float totalTime = Utils.GetLerpValue(0, riseTime, time, true) * Utils.GetLerpValue(riseTime + waitTime + fallTime, riseTime + waitTime, time, true);
-            Vector2 newPosition = Vector2.Lerp(cameraPosition.CameraPosition, target, (float)MathHelper.SmoothStep(0, 1, totalTime));
-            cameraPosition.CameraPosition = newPosition - Main.ScreenSize.ToVector2() / 2f * (float)MathHelper.SmoothStep(0, 1, totalTime);
+            Vector2 newPosition = Vector2.Lerp(cameraPosition.CameraPosition, target - Main.ScreenSize.ToVector2() / 2f, (float)MathHelper.SmoothStep(0, 1, totalTime));
+            cameraPosition.CameraPosition = newPosition;
         }
     }
 }

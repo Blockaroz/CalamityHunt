@@ -19,36 +19,75 @@ namespace CalamityHunt.Content.Items.Materials
     {
         public override void SetStaticDefaults()
         {
-            ItemID.Sets.ItemNoGravity[Type] = true;
+            Main.RegisterItemAnimation(Type, new DrawAnimationVertical(8, 5));
             ItemID.Sets.AnimatesAsSoul[Type] = true;
-            Main.RegisterItemAnimation(Item.whoAmI, new DrawAnimationVertical(4, 4));
+
+            ItemID.Sets.ItemNoGravity[Type] = true;
             Item.ResearchUnlockCount = 50;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 24;
-            Item.height = 36;
+            Item.width = 34;
+            Item.height = 30;
             Item.value = Item.sellPrice(0, 30);
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.maxStack = Item.CommonMaxStack;
         }
 
+        public override void PostUpdate()
+        {
+            Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 10f);
+
+            if (Main.rand.NextBool(5))
+            {
+                Dust dark = Dust.NewDustPerfect(Item.Center + Main.rand.NextVector2Circular(18, 18), DustID.TintableDust, -Vector2.UnitY.RotatedByRandom(0.1f) * Main.rand.NextFloat(3f), 150, Color.Black, 1f + Main.rand.NextFloat());
+                dark.noGravity = true;
+            }            
+            
+            if (Main.rand.NextBool(20))
+            {
+                Dust spark = Dust.NewDustPerfect(Item.Center + Main.rand.NextVector2Circular(15, 15), DustID.FireworksRGB, -Vector2.UnitY * Main.rand.NextFloat(2f), 0, color, 0.2f + Main.rand.NextFloat());
+                spark.noGravity = true;
+            }
+        }
+
+        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Aura");
+            float backScale = 1f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 8f % MathHelper.TwoPi) * 0.1f;
+            spriteBatch.Draw(glow.Value, position, null, Color.Black * 0.4f, 1f, glow.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
+
+            return true;
+        }
+
+        public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+        {
+            Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Aura");
+            float backScale = 1f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 8f % MathHelper.TwoPi) * 0.1f;
+            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, null, Color.Black * 0.7f, 1f, glow.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
+            return true;
+        }
+
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
+            Asset<Texture2D> bloom = ModContent.Request<Texture2D>(Texture + "Aura");
             Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 10f);
             spriteBatch.Draw(glow.Value, position, frame, color * 0.8f, 0, origin, scale, 0, 0);
             spriteBatch.Draw(glow.Value, position, frame, new Color(color.R, color.G, color.B, 0), 0, origin, scale, 0, 0);
+            spriteBatch.Draw(bloom.Value, position, null, new Color(color.R, color.G, color.B, 0) * 0.5f, 0, bloom.Size() * 0.5f, scale, 0, 0);
         }
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
+            Asset<Texture2D> bloom = ModContent.Request<Texture2D>(Texture + "Aura");
+            Rectangle frame = Main.itemAnimations[Type].GetFrame(glow.Value, Main.itemFrameCounter[whoAmI]);
             Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 10f);
-
-            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, null, color * 0.5f, rotation, Item.Size * 0.5f, scale, 0, 0);
-            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, null, new Color(color.R, color.G, color.B, 0), rotation, Item.Size * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, frame, color * 0.8f, rotation, Item.Size * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, frame, new Color(color.R, color.G, color.B, 0), rotation, Item.Size * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(bloom.Value, Item.Center - Main.screenPosition, null, new Color(color.R, color.G, color.B, 0) * 0.5f, rotation, bloom.Size() * 0.5f, scale * 1.5f, 0, 0);
         }
     }
 }

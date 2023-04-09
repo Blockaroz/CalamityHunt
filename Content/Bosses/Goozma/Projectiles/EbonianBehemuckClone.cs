@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -23,7 +24,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = 180;
+            Projectile.width = 120;
             Projectile.height = 120;
             Projectile.tileCollide = false;
             Projectile.hostile = true;
@@ -43,6 +44,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
+            Projectile.scale = 0.001f;
             List<int> eyeTypes = new List<int>()
             {
                 0, 1, 2, 3, 4
@@ -69,22 +71,20 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (owner > -1)
             {
-                Projectile.scale = 0.66f;
-
                 int slimeCount = 3;
 
                 NPCAimedTarget target = Main.npc[owner].GetTargetData();
-                if (Time < -5)
+                if (Time < 0)
                 {
+                    Projectile.scale = MathHelper.Lerp(Projectile.scale, 0.8f, 0.1f);
                     Projectile.rotation = Projectile.AngleTo(Main.npc[owner].Center) - MathHelper.PiOver2;
-                    Vector2 outerTarget = Main.npc[owner].Center + new Vector2(300 * (float)Math.Sqrt(Utils.GetLerpValue(-140, -110, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
+                    Vector2 outerTarget = Main.npc[owner].Center + new Vector2(300 * (float)Math.Sqrt(Utils.GetLerpValue(-150, -80, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
 
                     if (Projectile.ai[1] >= 3)
-                        outerTarget = Main.npc[owner].Center - new Vector2(300 * (float)Math.Sqrt(Utils.GetLerpValue(-140, -100, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
+                        outerTarget = Main.npc[owner].Center - new Vector2(300 * (float)Math.Sqrt(Utils.GetLerpValue(-150, -90, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
 
                     CupGameRotation += Main.npc[owner].velocity.X * 0.001f;
-                    Projectile.velocity *= 0.9f;
-                    Projectile.velocity = Projectile.DirectionTo(outerTarget).SafeNormalize(Vector2.Zero) * Projectile.Distance(outerTarget);
+                    Projectile.velocity = Projectile.DirectionTo(outerTarget).SafeNormalize(Vector2.Zero) * Projectile.Distance(outerTarget) * 0.5f;
                     saveTarget = target.Center;
                     squish = Vector2.SmoothStep(Vector2.One, new Vector2(1.3f, 0.8f), Utils.GetLerpValue(-20, 0, Time, true));
                 }
@@ -101,6 +101,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                         for (int i = 0; i < Main.rand.Next(1, 3); i++)
                             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextVector2Circular(5, 5), ModContent.ProjectileType<ToxicSludge>(), Projectile.damage / 2, 0);
+
+                        if (!Main.dedServ)
+                            SoundEngine.PlaySound(SoundID.Item167.WithPitchOffset(0.2f), Projectile.Center);
 
                     }
                 }

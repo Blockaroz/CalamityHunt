@@ -45,8 +45,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
+            database.FindEntryByNPCID(Type).UIInfoProvider = new HighestOfMultipleUICollectionInfoProvider(new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[ModContent.NPCType<Goozma>()], true));
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
-                new MoonLordPortraitBackgroundProviderBestiaryInfoElement(),
                 new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.StellarGeliath"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
@@ -261,7 +261,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 5f, 20, 12));
                     if (Time == 179 && !Main.dedServ)
                     {
-                        SoundEngine.PlaySound(SoundID.Item167, NPC.Center);
+                        SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                        slam.MaxInstances = 0;
+                        SoundEngine.PlaySound(slam, NPC.Center);
+
                         SoundEngine.PlaySound(SoundID.Item130, NPC.Center);
                     }
                 }
@@ -304,7 +307,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             if (Time > 20 && Time < 490)
             {
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 100) * 0.01f, 0.1f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 100) * 0.1f, 0.1f);
                 NPC.rotation = NPC.velocity.X * 0.01f;
 
                 Vector2 offset = new Vector2(Main.rand.Next(800, 1500), 0).RotatedBy(Time / 70f);
@@ -491,8 +494,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     if (Time >= 238 + portCount * portTime && Time % 3 == 0)
                         Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 7f, 20, 12));
                     if (Time == 238 + portCount * portTime && !Main.dedServ)
-                        SoundEngine.PlaySound(SoundID.Item167, NPC.Center);
-
+                    {
+                        SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                        slam.MaxInstances = 0;
+                        SoundEngine.PlaySound(slam, NPC.Center);
+                    }
                 }
 
                 NPC.width = 140;

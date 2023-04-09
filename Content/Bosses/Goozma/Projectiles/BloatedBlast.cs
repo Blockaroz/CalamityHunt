@@ -30,14 +30,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             Projectile.localAI[0] += Main.rand.NextFloat(20f);
             Projectile.frame = Main.rand.Next(3);
-
-            if (!Main.dedServ)
-            {
-                SoundStyle dartSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDartShoot", 1, 2);
-                dartSound.PitchVariance = 0.2f;
-                dartSound.Pitch = -1f;
-                SoundEngine.PlaySound(dartSound);
-            }
         }
 
         public float colOffset;

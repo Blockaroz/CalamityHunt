@@ -38,7 +38,7 @@ namespace CalamityHunt.Content.Particles
 
                 rotation = velocity.ToRotation() - MathHelper.PiOver2;
 
-                if (Collision.SolidTiles(position - new Vector2(0, 16) + velocity * 1.7f, 4, 4) && time > 20)
+                if (Collision.SolidTiles(position - new Vector2(0, 12) + velocity * 2f, 4, 4) && time > 20)
                 {
                     if (!Main.dedServ)
                         SoundEngine.PlaySound(SoundID.NPCDeath9.WithPitchOffset(Main.rand.NextFloat(-0.2f, 0.3f)), position);
@@ -82,8 +82,9 @@ namespace CalamityHunt.Content.Particles
                 frame = texture.Frame(4, 1, variant + 2, 0);
                 squish = new Vector2(1f + (float)Math.Sqrt(Utils.GetLerpValue(20, 0, time, true)) * 0.33f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(20, 0, time, true)) * 0.33f);
             }
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, color, rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
 
+            Color lightColor = Lighting.GetColor(position.ToTileCoordinates());
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, color.MultiplyRGBA(lightColor), stuck ? 1f : Utils.GetLerpValue(10, 50, time, true)), rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
         }
     }
 }

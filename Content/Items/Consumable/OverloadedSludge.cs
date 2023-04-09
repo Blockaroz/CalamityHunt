@@ -38,7 +38,7 @@ namespace CalamityHunt.Content.Items.Consumable
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient<ShatteredHeartOfDarkness>()
+                .AddIngredient<EntropyMatter>(10)
                 .AddIngredient(ItemID.Gel, 90)
                 .Register();
         }

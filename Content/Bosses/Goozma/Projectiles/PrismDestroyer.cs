@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Content.Bosses.Goozma.Slimes;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Bosses.Goozma.Slimes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -58,7 +59,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < Rays; i++)
             {
-                DelegateMethods.v3_1 = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0).ToVector3() * 0.4f * Projectile.scale;
+                Color rayColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
+                DelegateMethods.v3_1 = rayColor.ToVector3() * 0.4f * Projectile.scale;
+
+                if (Main.rand.NextBool(15))
+                    Particle.NewParticle(Particle.ParticleType<Particles.PrettySparkle>(), Projectile.Center, new Vector2(15 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i).RotatedByRandom(0.3f), rayColor, 0.1f + Main.rand.NextFloat());
+
                 Utils.PlotTileLine(Projectile.Center, Projectile.Center + new Vector2(400 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 1f, DelegateMethods.CastLight);
             }
 

@@ -20,7 +20,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     if (WorldGen.SolidTileAllowTopSlope(world.X, world.Y + j))
                     {
-                        pos.Y = (int)(pos.Y / 16f) * 16f + j * 16 - NPC.height / 2f + 18;
+                        pos.Y = (int)(pos.Y / 16f) * 16f + j * 16 - NPC.height / 2f + 16;
                         break;
                     }
                 }
@@ -38,7 +38,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     if (WorldGen.SolidTileAllowTopSlope(world.X, world.Y + j))
                     {
-                        pos.Y = (int)(pos.Y / 16f) * 16f + j * 16 - Projectile.height / 2f + 2;
+                        pos.Y = (int)(pos.Y / 16f) * 16f + j * 16 - Projectile.height / 2f + 16;
                         break;
                     }
                 }

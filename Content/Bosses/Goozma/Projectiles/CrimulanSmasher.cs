@@ -108,7 +108,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     float prog = j / 5f;
                     float trailProgress = Utils.GetLerpValue(0, ProjectileID.Sets.TrailCacheLength[Type], i + prog, true);
                     Vector2 position = Vector2.Lerp(Projectile.oldPos[i - 1], Projectile.oldPos[i], j) + Projectile.Size * new Vector2(0.5f, 1f);
-                    Main.EntitySpriteDraw(trail.Value, position - Main.screenPosition, null, new Color(40, 0, 0, 10) * (1f - trailProgress) * trailOut, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish, 0, 0);
+                    Main.EntitySpriteDraw(trail.Value, position - Main.screenPosition, null, new Color(40, 0, 0, 10) * (1f - trailProgress) * trailOut, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * (0.5f + trailOut * 0.5f), 0, 0);
                 }
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Bottom - Main.screenPosition, null, Color.White, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish * (0.5f + fadeOut * 0.5f), 0, 0);

@@ -46,8 +46,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
+            database.FindEntryByNPCID(Type).UIInfoProvider = new HighestOfMultipleUICollectionInfoProvider(new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[ModContent.NPCType<Goozma>()], true));
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
-                new MoonLordPortraitBackgroundProviderBestiaryInfoElement(),
                 new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.CrimulanGlopstrosity"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson,
@@ -283,7 +283,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                             player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 5;
 
                         if (!Main.dedServ)
-                            SoundEngine.PlaySound(SoundID.Item167, NPC.Center);
+                        {
+                            SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                            slam.MaxInstances = 0;
+                            SoundEngine.PlaySound(slam, NPC.Center);
+                        }
+
+                        for (int i = 0; i < Main.rand.Next(30, 40); i++)
+                        {
+                            Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
+                            Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
+                            Particle.NewParticle(Particle.ParticleType<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        }
                     }
 
                     if (Time >= 106 && Time % 2 == 0)
@@ -298,6 +309,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
         private void CollidingCrush()
         {
             int waitTime = 70;
+            if (Time == waitTime + 5 && !Main.dedServ)
+            {
+                SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
+                SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
+            }
+
             if (Time < 62)
             {
                 NPC.velocity *= 0.1f;
@@ -308,6 +325,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
             }
+
             else if (Time < 65)
             {
                 NPC.noTileCollide = true;
@@ -362,10 +380,21 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                             rightProj.ai[1] = -1;
                             rightProj.localAI[0] = 1;
                         }
-                        if (!Main.dedServ)
-                            SoundEngine.PlaySound(SoundID.Item167, NPC.Center);
-                    }
 
+                        if (!Main.dedServ)
+                        {
+                            SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                            slam.MaxInstances = 0;
+                            SoundEngine.PlaySound(slam, NPC.Center);
+                        }
+
+                        for (int i = 0; i < Main.rand.Next(30, 40); i++)
+                        {
+                            Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
+                            Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
+                            Particle.NewParticle(Particle.ParticleType<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        }
+                    }
 
                     if (Time >= waitTime + 55 && Time % 2 == 0)
                         Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 5f, 10, 12));
@@ -392,56 +421,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             if (Time > waitTime + 150)
                 Reset();
         }
-
-        //private void Dash()
-        //{
-        //    NPC.noTileCollide = true;
-
-        //    if (Time < 20)
-        //    {
-        //        NPC.velocity *= 0.1f;
-        //        squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(0, 16, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(0, 16, Time, true)) * 0.5f);
-        //        if (Time == 15)
-        //            SoundEngine.PlaySound(SoundID.Item146, NPC.Center);
-        //    }
-        //    else if (Time < 200)
-        //    {
-        //        if (Time == 21)
-        //            NPC.velocity.Y -= 20;
-
-        //        Vector2 side = Target.Center + new Vector2(400 * (Target.Center.X > NPC.Center.X ? -1 : 1), 0);
-
-        //        if (Time < 65)
-        //        {
-        //            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(side).SafeNormalize(Vector2.Zero) * 0.1f * Math.Max(1, NPC.Distance(side)), 0.15f);
-        //            squishFactor = new Vector2(1f - (float)Math.Cbrt(Utils.GetLerpValue(50, 30, Time, true)) * 0.4f, 1f + (float)Math.Sqrt(Utils.GetLerpValue(50, 30, Time, true)) * 0.4f);
-        //        }
-
-        //        if (Time < 120)
-        //        {
-        //            side = Target.Center + new Vector2((400 + (float)Math.Sqrt(Utils.GetLerpValue(70, 118, Time, true)) * 100) * (Target.Center.X > NPC.Center.X ? -1 : 1), 0);
-        //            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(side).SafeNormalize(Vector2.Zero) * 0.1f * Math.Max(1, NPC.Distance(side)), 0.3f) * Utils.GetLerpValue(115, 110, Time, true);
-        //            squishFactor = new Vector2(1f - MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(70, 110, Time, true)) * 0.4f, 1f + (float)Math.Sqrt(Utils.GetLerpValue(70, 120, Time, true)) * 0.1f);
-        //            if (Time < 115)
-        //                saveTarget = NPC.Center - new Vector2(900 * (Target.Center.X > NPC.Center.X ? -1 : 1), 0);
-        //        }
-        //        else if (Time < 129)
-        //        {
-        //            if (Time == 121)
-        //                NPC.velocity = NPC.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * 15f;
-        //            NPC.Center = Vector2.Lerp(NPC.Center, saveTarget, Utils.GetLerpValue(120, 128, Time, true));
-        //            squishFactor = new Vector2(1.5f, 0.7f);
-        //        }                
-        //        else if (Time < 150)
-        //        {
-        //            NPC.velocity *= 0.8f;
-        //            squishFactor = new Vector2(1f + (float)Math.Pow(Utils.GetLerpValue(150, 132, Time, true), 2) * 0.5f, 1f - (float)Math.Pow(Utils.GetLerpValue(150, 132, Time, true), 2) * 0.3f);
-        //        }
-        //    }
-
-        //    if (Time > 150)
-        //        Reset();
-        //}
 
         private void EndlessChase()
         {
@@ -496,9 +475,19 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 3;
 
                     if (!Main.dedServ)
-                        SoundEngine.PlaySound(SoundID.Item167, NPC.Center);
-                }
+                    {
+                        SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                        slam.MaxInstances = 0;
+                        SoundEngine.PlaySound(slam, NPC.Center);
+                    }
 
+                    for (int i = 0; i < Main.rand.Next(20, 30); i++)
+                    {
+                        Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
+                        Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
+                        Particle.NewParticle(Particle.ParticleType<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                    }
+                }
             }
 
             if (Time > 36 + jumpCount * jumpTime)

@@ -16,7 +16,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Sounds\Goozma\Slimes\" />
     <Folder Include="Assets\Sounds\SlimeMonsoon\" />
     <Folder Include="Content\Items\Weapons\Melee\" />
     <Folder Include="Content\Items\Weapons\Ranged\" />

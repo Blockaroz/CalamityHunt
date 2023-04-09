@@ -17,7 +17,7 @@ using Terraria;
 namespace CalamityHunt.Content.Tiles.Autoloaded
 {
     [Autoload(false)]
-    public class AutoloadedBossRelic : ModTile
+    public class AutoloadedBossRelicTile : ModTile
     {
         public const int FrameWidth = 18 * 3;
         public const int FrameHeight = 18 * 4;
@@ -30,7 +30,7 @@ namespace CalamityHunt.Content.Tiles.Autoloaded
 
         internal static Dictionary<int, Asset<Texture2D>> RelicAssets;
 
-        public AutoloadedBossRelic(string NPCname, int dropType, string path = null)
+        public AutoloadedBossRelicTile(string NPCname, int dropType, string path = null)
         {
             InternalName = NPCname + "RelicTile";
             ItemType = dropType;

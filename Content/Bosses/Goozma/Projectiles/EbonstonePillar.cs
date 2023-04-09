@@ -85,9 +85,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 if (Height <= 0 && Time > (maxHeight * speed) + waitTime)
                 {
-                    if (Time % 4 == 0)
-                        SoundEngine.PlaySound(SoundID.Tink.WithVolumeScale(0.8f).WithPitchOffset(0.1f), position[0]);
-
                     for (int i = 0; i < 6; i++)
                     {
                         Dust.NewDustPerfect(position[position.Count - 1] + Main.rand.NextVector2Circular(12, 18) + Vector2.UnitY * 16, DustID.Stone, Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 3, 0, new Color(215, 200, 255), 1.5f);
@@ -144,7 +141,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> tell = TextureAssets.Extra[178];
 
-            Color glowColor = Color.Indigo;
+            Color glowColor = new Color(100, 60, 255, 0);
             glowColor.A = 0;
             if (Time < 0)
             {
@@ -160,15 +157,19 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 for (int i = position.Count - 1; i > 0; i--)
                 {
                     Rectangle frame = texture.Frame(4, 1, variant[i], 0);
-                    float rockScale = scale[i] + (float)Math.Sin(time[i] * 0.06f % MathHelper.TwoPi) * 0.07f;
-                    Main.EntitySpriteDraw(texture.Value, position[i] + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, glowColor * 0.5f, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * 1.2f * rockScale * new Vector2(1.3f, 1.1f), 0, 0);
+                    float rockScale = scale[i] + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.1f;
+                    for (int j = 0; j < 8; j++)
+                    {
+                        Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 8f * j) * rockScale;
+                        Main.EntitySpriteDraw(texture.Value, position[i] + off + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, glowColor, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * rockScale, 0, 0);
+                    }
                 }                
                 for (int i = position.Count - 1; i > 0; i--)
                 {
                     Rectangle frame = texture.Frame(4, 1, variant[i], 0);
                     float rockScale = scale[i] + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.1f;
                     Color drawColor = Lighting.GetColor(position[i].ToTileCoordinates());
-                    drawColor = drawColor.MultiplyRGBA(Color.Lerp(Color.White, Color.DarkOrchid, 0.4f + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.4f));
+                    //drawColor = drawColor.MultiplyRGBA(Color.Lerp(Color.White, Color.DarkOrchid, 0.4f + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.4f));
                     Main.EntitySpriteDraw(texture.Value, position[i] + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, drawColor, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * rockScale, 0, 0);
                 }
             }

@@ -16,9 +16,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Slime Shot"); 
             ProjectileID.Sets.DrawScreenCheckFluff[Type] = 5000;
-
         }
 
         public override void SetDefaults()

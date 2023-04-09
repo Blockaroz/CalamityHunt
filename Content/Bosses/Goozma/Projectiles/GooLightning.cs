@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
@@ -85,6 +86,24 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
                 else
                     endPoint = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.05f) * Length;
+
+                if (!Main.dedServ)
+                    if (Collides == 0)
+                    {
+                        SoundStyle lightningSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBigThunder");
+                        lightningSound.MaxInstances = 0;
+                        lightningSound.PitchVariance = 0.15f;
+
+                        SoundEngine.PlaySound(lightningSound, Projectile.Center);
+                    }
+                    else
+                    {
+                        SoundStyle lightningMiniSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShot", 1, 2);
+                        lightningMiniSound.MaxInstances = 0;
+                        lightningMiniSound.PitchVariance = 0.15f;
+
+                        SoundEngine.PlaySound(lightningMiniSound, Projectile.Center);
+                    }
 
                 points = new List<Vector2>();
                 pointVelocities = new List<Vector2>();

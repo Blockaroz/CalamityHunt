@@ -4,6 +4,8 @@ using CalamityHunt.Common.Systems.Particles;
 using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.Audio;
+using Terraria.ID;
 
 namespace CalamityHunt.Content.Particles
 {
@@ -42,7 +44,11 @@ namespace CalamityHunt.Content.Particles
             rotation = velocity.ToRotation() - MathHelper.PiOver2;
 
             if (time > 50)
+            {
+                if (!Main.dedServ)
+                    SoundEngine.PlaySound(SoundID.NPCDeath9.WithPitchOffset(Main.rand.NextFloat(-0.2f, 0.3f)), position);
                 Active = false;
+            }
 
             time++;
         }

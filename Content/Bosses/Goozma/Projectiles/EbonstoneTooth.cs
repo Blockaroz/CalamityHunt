@@ -63,7 +63,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time < 10)
             {
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(80, 0, 225, 0) * Utils.GetLerpValue(10, -10, Time, true), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true), flip, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(100, 60, 255, 0) * Utils.GetLerpValue(10, -10, Time, true), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true), flip, 0);
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(0, 0, 0, 20), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true) * 0.6f, flip, 0);
             }
 

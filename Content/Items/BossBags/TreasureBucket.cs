@@ -22,8 +22,8 @@ namespace CalamityHunt.Content.Items.BossBags
 
         public override void SetDefaults()
         {
-            Item.width = 52;
-            Item.height = 40;
+            Item.width = 42;
+            Item.height = 46;
             Item.rare = ItemRarityID.Expert;
         }
 

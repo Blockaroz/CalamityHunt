@@ -35,7 +35,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 8, Time, true) * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true));
+            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 15, Time, true) * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true));
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Zero, 0.001f + Utils.GetLerpValue(50, 165, Time, true) * 0.05f) * (1f + 0.115f * Utils.GetLerpValue(50, 0, Time, true));
 
             int target = -1;
@@ -86,12 +86,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Rectangle glowFrame = texture.Frame(3, 3, 1, Projectile.frame);
             Rectangle outlineFrame = texture.Frame(3, 3, 2, Projectile.frame);
 
-            Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
+            Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * Utils.GetLerpValue(0, 25, Time, true);
             bloomColor.A = 0;
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
             Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, bloomColor * 0.15f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor * Utils.GetLerpValue(15, 30, Time, true), Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f * squishFactor, 0, 0);
 

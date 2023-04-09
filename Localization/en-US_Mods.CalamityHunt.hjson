@@ -32,20 +32,7 @@ Items: {
 
 	GoozmaLore: {
 		DisplayName: Goozma
-		Tooltip:
-			'''
-			The form it took on was unusual.
-			The beast compressed itself grossly, retaining mild sagaciousness yet I fail to discern the remainder's purpose.
-			The crown. How, in the name and spirit of all Gods and their depravity, has it not but retained but grown its very own crown...!?
-			Is it a mark of its final contest of wisdom? Has it succeeded in such? Only the answer will quench me.
-			Its similarities to the common jellyfish and oblong body tell no story of intelligence, but your fight contradicts this so.
-			No feral creature, no matter power, can be so ornate and have such graceful control over its servants.
-			Still, it was comprised of the unexpected. I have seen others attempt, in their growing enlightenment, to grow as this one did.
-			They were much greater in color and size, much different from how yours behaved.
-			Had it wielded the Auric soul - I quiver in my knowledge of what it might spawn.
-			...
-			You truly are insane, to be nurturing such destruction for your own gain.
-			'''
+		Tooltip: tooltip
 	}
 
 	Goozmolisher: {
@@ -80,6 +67,11 @@ Items: {
 
 	TreasureBucket: {
 		DisplayName: Treasure Bucket
+		Tooltip: ""
+	}
+
+	GoozmaTrophyItem: {
+		DisplayName: Goozma Trophy Item
 		Tooltip: ""
 	}
 }
@@ -120,14 +112,16 @@ Projectiles: {
 	EbonianBehemuckClone.DisplayName: Ebonian Behemuck Clone
 	HolyExplosion.DisplayName: Holy Explosion
 	CrimulanSmasher.DisplayName: Crimulan Smasher
+	GaussRay.DisplayName: Gauss Ray
+	GoozmaDeathGodrays.DisplayName: Goozma Death Godrays
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
 
 Bestiary: {
 	Goozma: A singularity of slimes assimilating to the point of criticality, engulfing an oversaturated core. It emits powerful pheromones that exert its will beyond its main body, affecting all slimes.
-	CrimulanGlopstrosity: A concentrated mass of visceral rot that ferociously defends its mucilaginous master with vicious, twisted fervor. Each of Goozma�s paladins coagulated individually from unique cores.
-	DivineGargooptuar: A concentrated mass of resplendent divinity that ferociously defends its mucilaginous master with dazzling, flamboyant ardor. As extensions of its body, Goozma�s paladins possess only limited autonomy.
-	EbonianBehemuck: A concentrated mass of virulent corrosion that ferociously defends its mucilaginous master with ruthless, determined zeal. Goozma�s paladins are deliberately spared from assimilation.
+	CrimulanGlopstrosity: A concentrated mass of visceral rot that ferociously defends its mucilaginous master with vicious, twisted fervor. Each of Goozma's paladins coagulated individually from unique cores.
+	DivineGargooptuar: A concentrated mass of resplendent divinity that ferociously defends its mucilaginous master with dazzling, flamboyant ardor. As extensions of its body, Goozma's paladins possess only limited autonomy.
+	EbonianBehemuck: A concentrated mass of virulent corrosion that ferociously defends its mucilaginous master with ruthless, determined zeal. Goozma's paladins are deliberately spared from assimilation.
 	StellarGeliath: A concentrated mass of empyrean infinity that ferociously defends its mucilaginous master with ethereal, unearthly vigor. Left alone, Goozma could assimilate all matter in the universe.
 }

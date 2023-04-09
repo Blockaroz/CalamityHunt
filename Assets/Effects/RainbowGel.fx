@@ -11,7 +11,8 @@ sampler2D map = sampler_state
 };
 float2 uImageSize;
 float4 uSourceRect;
-float uRbThreshold;
+float uRbThresholdUpper;
+float uRbThresholdLower;
 float uTime;
 float uRbTime;
 float uFrequency;
@@ -30,9 +31,9 @@ float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0)
     float yCoord = (coords.y * uImageSize.y - uSourceRect.y) / uSourceRect.w;
     float4 img = tex2D(uImage0, coords);
     float4 color = tex2D(map, float2(img.r * uFrequency + frac(yCoord * 0.33 + uTime), saturate(img.r - img.g)));
-    float4 final = float4(color.rgb * (0.4 + img.r), 1);
+    float4 final = float4(color.rgb * (0.4 + img.r) * (img.r < 0.1 ? 0.5 : 1), 1);
 
-    float shine = smoothstep(uRbThreshold - 0.1, uRbThreshold + 0.1, img.r);
+    float shine = smoothstep(uRbThresholdLower, uRbThresholdUpper, img.r);
     float3 hue = HSLtoRGB(frac(yCoord * uFrequency + uRbTime), 1.1, 0.8);
     
     return lerp(final * img.a, float4(hue, 1), shine);
