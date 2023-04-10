@@ -94,12 +94,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
         public override void AI()
         {
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
-                NPC.active = false;
-            else
-                NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
+            //if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+            //    NPC.active = false;
+            //else
+            //    NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
             
-            NPC.realLife = Host.whoAmI;
+            //NPC.realLife = Host.whoAmI;
 
             NPC.frameCounter++;
             if (NPC.frameCounter > 7)
@@ -107,6 +107,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 NPC.frameCounter = 0;
                 npcFrame = (npcFrame + 1) % 4;
             }
+
+            return;
 
             if (!NPC.HasPlayerTarget)
                 NPC.TargetClosestUpgraded();
@@ -399,7 +401,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 {
                     if (!Main.dedServ)
                     {
-                        Particle crack = Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, new Color(255, 230, 50, 0), 50f);
+                        Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, new Color(255, 230, 50, 0), 50f);
                         crack.data = "Wormhole";
 
                         SoundEngine.PlaySound(SoundID.Item30, NPC.Center);
@@ -430,7 +432,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 {
                     if (!Main.dedServ)
                     {
-                        Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, new Color(60, 30, 255, 0), 38f);
+                        Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, new Color(60, 30, 255, 0), 38f);
                         SoundEngine.PlaySound(SoundID.Item130, NPC.Center);
                     }
                 }
@@ -479,7 +481,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     {
                         if (!Main.dedServ)
                         {
-                            Particle exit = Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, Main.OurFavoriteColor, 38f);
+                            Particle exit = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Main.OurFavoriteColor, 38f);
                             exit.data = "Wormhole";
                             SoundEngine.PlaySound(SoundID.Item30, NPC.Center);
                         }

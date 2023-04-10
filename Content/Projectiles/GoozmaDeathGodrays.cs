@@ -42,16 +42,23 @@ namespace CalamityHunt.Content.Projectiles
         public ref NPC Host => ref Main.npc[(int)Projectile.ai[1]];
 
         public List<float> rotations;
+        public List<float> accelerations;
         public List<float> waits;
         public List<float> lengths;
 
         public override void OnSpawn(IEntitySource source)
         {
-            for (int i = 0; i < Main.rand.Next(12, 20); i++)
+            rotations = new List<float>();
+            accelerations = new List<float>();
+            waits = new List<float>();
+            lengths = new List<float>();
+
+            for (int i = 0; i < Main.rand.Next(20, 30); i++)
             {
                 rotations.Add(Main.rand.NextFloat(-3.1415f, 3.1415f));
+                accelerations.Add(Main.rand.NextFloat(-3.1415f, 3.1415f));
                 waits.Add(Main.rand.Next(200));
-                lengths.Add(Main.rand.NextFloat(0.8f, 1.1f));
+                lengths.Add(Main.rand.NextFloat(0.7f, 2f));
             }
         }
 
@@ -63,6 +70,13 @@ namespace CalamityHunt.Content.Projectiles
                 Projectile.ai[1] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
 
             Projectile.Center = Host.Center;
+
+            for (int i = 0; i < rotations.Count; i++)
+            {
+                rotations[i] += (float)Math.Sin(Time * 0.9f + accelerations[i]) * 0.03f;
+            }
+
+            Time++;
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => false;
@@ -77,8 +91,9 @@ namespace CalamityHunt.Content.Projectiles
             {
                 Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Host.localAI[0]);
                 glowColor.A = 0;
-                float power = Utils.GetLerpValue(waits[i], waits[i] + 50, Projectile.timeLeft, true);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, glowColor * power, rotations[i], texture.Size() * new Vector2(0.5f, 1f), new Vector2(1f, 0.8f * lengths[i]) * (0.5f + power * 0.5f), 0, 0);
+                float power = Utils.GetLerpValue(waits[i], waits[i] + 70, Time, true);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, glowColor * power * 0.3f, rotations[i] + Time * (1f + i * 0.001f) * 0.005f, texture.Size() * new Vector2(0.5f, 1f), new Vector2(1f, 2f * lengths[i]) * (0.2f + power * 0.8f), 0, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, glowColor * power * 1.5f, rotations[i] + Time * (1f + i * 0.001f) * 0.005f, texture.Size() * new Vector2(0.5f, 1f), new Vector2(0.555f, 1f * lengths[i]) * (0.2f + power * 0.8f), 0, 0);
             }
 
             return false;

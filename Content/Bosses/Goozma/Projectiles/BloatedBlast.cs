@@ -50,7 +50,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Time++;
 
-            int frameMax = 2;
             if (Projectile.ai[1] == 0)
             {
                 int target = -1;
@@ -65,20 +64,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 else
                     Projectile.velocity *= 0.96f;
 
-                frameMax = 4;
-
                 if (Time > 60)
                     Projectile.Kill();
             }
             else
                 Projectile.Resize(24, 24);
-
-            Projectile.frameCounter++;
-            if (Projectile.frameCounter > frameMax)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = (Projectile.frame + 1) % 3;
-            }
 
             Projectile.localAI[0]++;
         }
@@ -144,10 +134,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Projectile.ai[1] == 0)
             {
                 Color growColor = Color.Lerp(Color.Transparent, bloomColor, Utils.GetLerpValue(20, 60, Time, true));
-                Rectangle baseFrame = texture.Frame(3, 3, 0, Projectile.frame);
-                Rectangle glowFrame = texture.Frame(3, 3, 1, Projectile.frame);
-                Rectangle outlineFrame = texture.Frame(3, 3, 2, Projectile.frame);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
+                Rectangle baseFrame = texture.Frame(3, 1, 0, 0);
+                Rectangle glowFrame = texture.Frame(3, 1, 1, 0);
+                Rectangle outlineFrame = texture.Frame(3, 1, 2, 0);
+
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation);
+                    Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center + off - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
+                }
+
+                DrawTentacles();
+
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, growColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, growColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f * squishFactor, 0, 0);
@@ -159,7 +157,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Rectangle glowFrame = textureSmall.Frame(3, 1, 1, 0);
                 Rectangle outlineFrame = textureSmall.Frame(3, 1, 2, 0);
 
-                Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation);
+                    Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center + off - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
+                }
                 Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f * squishFactor, 0, 0);
@@ -168,6 +170,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             return false;
+        }
+
+        public void DrawTentacles()
+        {
+
         }
     }
 }

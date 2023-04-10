@@ -53,7 +53,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time == 45 && !Main.dedServ)
             {
-                Particle crack = Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), Projectile.Center, Vector2.Zero, Main.OurFavoriteColor, 40f);
+                Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), Projectile.Center, Vector2.Zero, Main.OurFavoriteColor, 40f);
                 crack.data = "Wormhole";
                 SoundEngine.PlaySound(SoundID.Item176, Projectile.Center);
             }

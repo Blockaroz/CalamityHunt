@@ -46,34 +46,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             return pos;
         }
 
-        public static int[] SlimeIDs = new int[]
-        {
-            NPCID.BlueSlime,
-            NPCID.GreenSlime,
-            NPCID.PurpleSlime,
-            NPCID.RedSlime,
-            NPCID.YellowSlime,
-            NPCID.BlackSlime
-        };
-
-        public static int[] JellyfishIDs = new int[]
-        {
-            NPCID.BlueJellyfish,
-            NPCID.GreenJellyfish,
-            NPCID.PinkJellyfish
-        };
-
-        public static Color[] SlimeColors = new Color[]
-        {
-            new Color(0, 80, 255, 100),
-            new Color(0, 220, 40, 100),
-            new Color(0, 0, 0, 50),
-            new Color(200, 0, 255, 150),
-            new Color(255, 30, 0, 100),
-            new Color(255, 255, 0, 100),
-            new Color(143, 215, 93, 100)
-        };
-
         public static Color[] GoozColorArray = new Color[]
         {
             new Color(174, 23, 189),

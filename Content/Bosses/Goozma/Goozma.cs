@@ -39,31 +39,20 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPCID.Sets.TrailingMode[Type] = -1;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
-            {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.OnFire,
-                    BuffID.Ichor,
-                    BuffID.CursedInferno,
-                    BuffID.Poisoned,
-                    BuffID.Confused
-                }
-            };
+            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData { ImmuneToAllBuffsThatAreNotWhips = true };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
             NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
 
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
-            {
-                Rotation = 0.01f,
-                Velocity = 2f
-            };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            //NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            //{
+            //    Rotation = 0.01f,
+            //    Velocity = 2f
+            //};
+            //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
-                new MoonLordPortraitBackgroundProviderBestiaryInfoElement(),
                 new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.Goozma"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
             });
@@ -127,8 +116,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             LeadingConditionRule classic = new LeadingConditionRule(new Conditions.NotExpert());
 
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
-            
-            
+                       
             //Weapon
             //classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>()));
         }
@@ -168,7 +156,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (!Main.dedServ)
             {
-                Particle crack = Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
+                Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
                 crack.data = "GoozmaColor";
 
                 SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaAwaken");
@@ -327,8 +315,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            currentSlime = 1;// (currentSlime + 1) % 3;
-                            nextAttack[currentSlime] = 2;
+                            currentSlime = (currentSlime + 1) % 3;
+                            nextAttack[currentSlime]++;
 
                             for (int i = 0; i < nextAttack.Length; i++)
                                 nextAttack[i] = nextAttack[i] % 3;
@@ -547,7 +535,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (Time < 300 || Main.rand.NextBool((int)Time + 20))
                     {
                         for (int i = 0; i < (int)(Utils.GetLerpValue(500, 0, Time, true) * 2); i++)
-                            Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.4f + Main.rand.NextFloat(1.6f));
+                            Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
                     }
 
                     if (!Main.dedServ)
@@ -586,7 +574,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         case (int)AttackList.BurstLightning:
 
-                            NPC.takenDamageMultiplier = 2f;
                             Orbit((int)(600 + ((float)NPC.life / NPC.lifeMax * 100)), new Vector2(0, -450));
                             SortedProjectileAttack(Target.Center + Target.Velocity * 1.5f, SortedProjectileAttackTypes.BurstLightning);
 
@@ -624,11 +611,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 {
                                     NPC.velocity = Vector2.Zero;
                                     NPC.Center = Vector2.Lerp(NPC.Center, Target.Center - NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 320, 0.12f * Utils.GetLerpValue(50, 35, Time % dashTime, true));
-                                    saveTarget = Target.Center - (NPC.Center - Target.Center).SafeNormalize(Vector2.Zero) * (550 + Target.Velocity.Length());
+                                    saveTarget = Target.Center - (NPC.Center - Target.Center).SafeNormalize(Vector2.Zero) * (750 + Target.Velocity.Length());
                                 }
                                 else if (Time % dashTime < 65)
                                 {
-                                    saveTarget = Vector2.Lerp(saveTarget, Target.Center - (NPC.Center - Target.Center).SafeNormalize(Vector2.Zero) * (550 + Target.Velocity.Length()), 0.1f);
+                                    saveTarget = Vector2.Lerp(saveTarget, Target.Center - (NPC.Center - Target.Center).SafeNormalize(Vector2.Zero) * (750 + Target.Velocity.Length()), 0.1f);
                                     NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero).RotatedBy(0.05f) * 50f, 0.1f);
                                 }
                                 else
@@ -673,7 +660,23 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.life = 1;
 
                     if (Time == 0)
+                    {
                         Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GoozmaDeathGodrays>(), 0, 0, ai1: NPC.whoAmI);
+
+                        if (!Main.dedServ)
+                        {
+                            SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDeathBuildup");
+                            roar.MaxInstances = 0;
+                            SoundEngine.PlaySound(roar, NPC.Center);
+                        }
+                    }
+
+                    if (Main.rand.NextBool(2 + (int)(60 - Time / 5f)))
+                        for (int i =0; i < Main.rand.Next(1, 4); i++)
+                            Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
+
+                    if (Time > 290)
+                        NPC.scale = MathHelper.Lerp(NPC.scale, 5f, 0.2f);
 
                     if (Time > 300)
                     {
@@ -692,7 +695,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         if (!Main.dedServ)
                         {
-                            Particle leave = Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
+                            Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
                             leave.data = "GoozmaBlack";
                         }
                     }
@@ -701,7 +704,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         if (!Main.dedServ)
                         {
-                            Particle leave = Particle.NewParticle(Particle.ParticleType<SpaceCrack>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
+                            Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
                             leave.data = "GoozmaColor";
                         }
 
@@ -898,7 +901,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             for (int i = 0; i < 200; i++)
-                Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(30, 30) - Vector2.UnitY * 15f, Color.White, 0.1f + Main.rand.NextFloat(2f));
         }
 
         private void Fly()

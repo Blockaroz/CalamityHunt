@@ -90,14 +90,14 @@ namespace CalamityHunt.Common.Systems
                 goozmaShootPowerCurrent = 0f;
 
             bool active = SoundEngine.SoundPlayer.TryGetActiveSound(goozmaShoot, out ActiveSound sound);
-            if (!active && goozmaShootPowerCurrent > 0.1f && GoozmaActive)
+            if (!active && goozmaShootPowerCurrent > 0.05f && GoozmaActive)
                 goozmaShoot = SoundEngine.PlaySound(shootSound, Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).Center);
 
             else if (active)
             {
                 sound.Volume = goozmaShootPowerCurrent * 1.5f;
 
-                if (goozmaShootPowerCurrent < 0.05f)
+                if (goozmaShootPowerCurrent <= 0.05f)
                     sound.Stop();
 
             }

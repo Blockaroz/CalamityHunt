@@ -458,6 +458,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     }
                 }
 
+            if (Time < 160 + spikeCount * spikeTime)
+                foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 10000))
+                    player.AddBuff(BuffID.Obstructed, 20, true);
+
             if (Time == 140 + spikeCount * spikeTime && !Main.dedServ)
             {
                 SoundStyle raise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneRaise");

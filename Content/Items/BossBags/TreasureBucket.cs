@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Items.Materials;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -29,6 +30,7 @@ namespace CalamityHunt.Content.Items.BossBags
 
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
         }
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
