@@ -13,6 +13,7 @@ using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -165,105 +166,81 @@ namespace CalamityHunt.Content.Projectiles
         {
             Vector2 position = Projectile.Center + Main.rand.NextVector2CircularEdge(1600, 1600) + Main.rand.NextVector2Circular(600, 600);
             Vector2 velocity = position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(1f);
-            Particle particle;
 
-            if (Main.rand.NextBool(5000))
-                particle = Particle.NewParticle(Particle.ParticleType<FlyingGoldSlime>(), position, velocity, Color.Yellow, 1f);
+            WeightedRandom<int> randomType = new WeightedRandom<int>();
+            randomType.Add(Particle.ParticleType<FlyingNormalSlime>(), 1f / 50f);
+            randomType.Add(Particle.ParticleType<FlyingBigSlime>(), 1f / 100f);
+            randomType.Add(Particle.ParticleType<FlyingBalloonSlime>(), 1f / 400f);
+            randomType.Add(Particle.ParticleType<FlyingGastropod>(), 1f / 800f);
+            randomType.Add(Particle.ParticleType<FlyingIlluminantSlime>(), 1f / 800f);
+            randomType.Add(Particle.ParticleType<FlyingLavaSlime>(), 1f / 700f);
+            randomType.Add(Particle.ParticleType<FlyingZombieSlime>(), 1f / 700f);
+            randomType.Add(Particle.ParticleType<FlyingShimmerSlime>(), 1f / 700f);
+            randomType.Add(Particle.ParticleType<FlyingIceSlime>(), 1f / 700f);
+            randomType.Add(Particle.ParticleType<FlyingSandSlime>(), 1f / 700f);
+            randomType.Add(Particle.ParticleType<FlyingJungleSlimeSpiked>(), 1f / 700f);
+            randomType.Add(Particle.ParticleType<FlyingSpikedSlime>(), 1f / 700f);
+            randomType.Add(Particle.ParticleType<FlyingBouncySlime>(), 1f / 800f);
+            randomType.Add(Particle.ParticleType<FlyingCrystalSlime>(), 1f / 800f);
+            randomType.Add(Particle.ParticleType<FlyingHeavenlySlime>(), 1f / 800f);
+            randomType.Add(Particle.ParticleType<FlyingGoldSlime>(), 1f / 5000f);
+            randomType.Add(Particle.ParticleType<FlyingYuH>(), 1f / 10000f);
+            randomType.Add(Particle.ParticleType<FlyingUmbrellaSlime>(), 1f / 400f);
+            randomType.Add(Particle.ParticleType<FlyingCorruptSlime>(), 1f / 500f);
+            randomType.Add(Particle.ParticleType<FlyingSlimer>(), 1f / 1000f);
+            randomType.Add(Particle.ParticleType<FlyingCrimslime>(), 1f / 500f);
+            randomType.Add(Particle.ParticleType<FlyingToxicSludge>(), 1f / 1000f);
+            randomType.Add(Particle.ParticleType<FlyingDungeonSlime>(), 1f / 1500f);
+            randomType.Add(Particle.ParticleType<FlyingHoppinJack>(), Main.halloween ? (1f / 150f) : (1f / 2000f));
+            randomType.Add(Particle.ParticleType<FlyingSlimeFish>(), 1f / 1000f);
 
-            else if (Main.rand.NextBool(10)) //big slimes
+            if (Main.halloween)
             {
-                if (Main.rand.NextBool(100))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingToxicSludge>(), position, velocity, Color.White, 1f);
+                randomType.Add(Particle.ParticleType<FlyingSlimeBunny>(), 1f / 150f);
+                randomType.Add(Particle.ParticleType<FlyingBunnySlime>(), 1f / 150f);
+            }
+            if (Main.xMas)
+                randomType.Add(Particle.ParticleType<FlyingPresentSlime>(), 1f / 150f);
 
-                else if(Main.rand.NextBool(300))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingDungeonSlime>(), position, velocity, Color.White, 1f);
+            int type = randomType.Get();
+            float scale = 1f;
+            Color color = Color.White;
+            if (type == Particle.ParticleType<FlyingNormalSlime>())
+            {
+                WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
+                slimeColor.Add(new Color(0, 80, 255, 100), 1f);
+                slimeColor.Add(new Color(0, 220, 40, 100), 0.9f);
+                slimeColor.Add(new Color(255, 30, 0, 100), 0.3f);
+                slimeColor.Add(new Color(0, 220, 40, 100), 0.1f);
+                color = slimeColor.Get();
 
-                else if(Main.rand.NextBool(100))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingSlimer>(), position, velocity, Color.White, 1f);
-                
-                else if (Main.rand.NextBool(100))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingCorruptSlime>(), position, velocity, Color.White, 1f);
-                
-                else if (Main.rand.NextBool(100))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingCrimslime>(), position, velocity, Color.White, 1f);
-                                
-                else if (Main.rand.NextBool(1000))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingHoppinJack>(), position, velocity, Color.White, 1f);
-                                
-                else
+                if (Main.rand.NextBool(3000))
                 {
-                    WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
-                    slimeColor.Add(new Color(0, 80, 255, 100), 1f);
-                    slimeColor.Add(new Color(0, 220, 40, 100), 0.9f);
-                    slimeColor.Add(new Color(255, 30, 0, 100), 0.3f + Utils.GetLerpValue(20, 50, Time, true) * 0.1f);
-                    slimeColor.Add(new Color(0, 220, 40, 100), 0.1f + Utils.GetLerpValue(30, 80, Time, true) * 0.1f);
-
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingBigSlime>(), position, velocity, Color.White, 1f);
+                    color = Color.HotPink;
+                    scale = 0.33f;
                 }
             }
-            else if (Main.rand.NextBool(30)) //balloon slimes
+            if (type == Particle.ParticleType<FlyingBalloonSlime>())
             {
-                if (Main.rand.NextBool(800))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingBalloonSlime>(), position, velocity, Color.Pink * 0.5f, 0.4f);
-
-                else
-                {
-                    WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
-                    slimeColor.Add(new Color(0, 80, 255, 100), 1f);
-                    slimeColor.Add(new Color(0, 220, 40, 100), 0.9f);
-                    slimeColor.Add(new Color(255, 30, 0, 100), 0.3f + Utils.GetLerpValue(20, 50, Time, true) * 0.1f);
-                    slimeColor.Add(new Color(0, 220, 40, 100), 0.1f + Utils.GetLerpValue(30, 80, Time, true) * 0.1f);
-
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingBalloonSlime>(), position, velocity, Color.White, 1f);
-                }
+                WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
+                slimeColor.Add(new Color(0, 80, 255, 100), 1f);
+                slimeColor.Add(new Color(0, 220, 40, 100), 0.9f);
+                slimeColor.Add(new Color(255, 30, 0, 100), 0.3f);
+                slimeColor.Add(new Color(0, 220, 40, 100), 0.1f);
+                color = slimeColor.Get();
             }
-            else //normal slimes
+
+            if (type == Particle.ParticleType<FlyingBigSlime>())
             {
-                if (Main.rand.NextBool(800))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingGastropod>(), position, velocity, Color.Pink * 0.5f, 0.4f);
-                
-                else if (Main.rand.NextBool(200))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingIlluminantSlime>(), position, velocity, Color.White, 1f);
-                                
-                else if (Main.rand.NextBool(200))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingBouncySlime>(), position, velocity, Color.White, 1f);
-                                
-                else if (Main.rand.NextBool(300))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingCrystalSlime>(), position, velocity, Color.White, 1f);
-                                
-                else if (Main.rand.NextBool(300))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingHeavenlySlime>(), position, velocity, Color.White, 1f);
-                
-                else if (Main.rand.NextBool(200))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingLavaSlime>(), position, velocity, Color.White, 1f);
-                
-                else if (Main.rand.NextBool(180))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingZombieSlime>(), position, velocity, Color.White, 1f);
-                
-                else if (Main.rand.NextBool(500))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingShimmerSlime>(), position, velocity, Color.White, 1f);
-
-                else if (Main.rand.NextBool(500))
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingYuH>(), position, velocity, Color.White, 1f);
-
-                else if (Main.rand.NextBool(500) && Main.halloween)
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingSlimeBunny>(), position, velocity, Color.White, 1f);
-                else if (Main.rand.NextBool(500) && Main.halloween)
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingBunnySlime>(), position, velocity, Color.White, 1f);
-                else if (Main.rand.NextBool(500) && Main.xMas)
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingBunnySlime>(), position, velocity, Color.White, 1f);
-
-                else
-                {
-                    WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
-                    slimeColor.Add(new Color(0, 80, 255, 100), 1f);
-                    slimeColor.Add(new Color(0, 220, 40, 100), 0.9f);
-                    slimeColor.Add(new Color(255, 30, 0, 100), 0.3f);
-                    slimeColor.Add(new Color(0, 220, 40, 100), 0.1f);
-
-                    particle = Particle.NewParticle(Particle.ParticleType<FlyingNormalSlime>(), position, velocity, Color.White, 1f);
-                }
+                WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
+                slimeColor.Add(new Color(0, 80, 255, 100), 1f);
+                slimeColor.Add(new Color(0, 220, 40, 100), 0.9f);
+                slimeColor.Add(new Color(255, 30, 0, 100), 0.3f);
+                slimeColor.Add(new Color(0, 220, 40, 100), 0.1f);
+                color = slimeColor.Get();
             }
+
+            Particle particle = Particle.NewParticle(randomType, position, velocity, color, scale);
             particle.data = Projectile.Center;
             particle.behindEntities = true;
         }

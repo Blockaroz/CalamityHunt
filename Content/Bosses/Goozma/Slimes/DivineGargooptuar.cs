@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
+using CalamityHunt.Content.Gores.CrystalShieldGores;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -360,7 +361,34 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 {
                     NPC.localAI[1]++;
 
-                    Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, GoreID.GreekPot1, 1f);
+                    for (int i = 0; i < 2; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment0>(), 1f);
+                    
+                    for (int i = 0; i < 3; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment1>(), 1f);
+                   
+                    Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment2>(), 1f);
+
+                    for (int i = 0; i < 3; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment3>(), 1f);
+                    
+                    for (int i = 0; i < 5; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment4>(), 1f);
+                    
+                    for (int i = 0; i < 2; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment5>(), 1f);
+                    
+                    for (int i = 0; i < 3; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment6>(), 1f);
+                    
+                    for (int i = 0; i < 7; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment7>(), 1f);
+                    
+                    for (int i = 0; i < 9; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(11, 11), ModContent.GoreType<CrystalShieldFragment8>(), 1f);
+                    
+                    for (int i = 0; i < 14; i++)
+                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(12, 12), ModContent.GoreType<CrystalShieldFragment9>(), 1f);
 
                     if (!Main.dedServ)
                     {
