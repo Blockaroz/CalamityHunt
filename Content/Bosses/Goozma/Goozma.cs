@@ -676,10 +676,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
 
                     if (Time > 290)
-                        NPC.scale = MathHelper.Lerp(NPC.scale, 5f, 0.2f);
+                        NPC.scale = MathHelper.Lerp(NPC.scale, 3f, Time / 300f);
 
                     if (Time > 300)
                     {
+                        Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 60f);
+                        leave.data = "GoozmaBlack";
+
                         NPC.justHit = true;
                         NPC.life = 0;
                         NPC.checkDead();
@@ -693,20 +696,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time > 30 && Time % 3 == 0)
                     {
-                        if (!Main.dedServ)
-                        {
-                            Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
-                            leave.data = "GoozmaBlack";
-                        }
+                        Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
+                        leave.data = "GoozmaBlack";
                     }
 
                     if (Time == 50)
                     {
-                        if (!Main.dedServ)
-                        {
-                            Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
-                            leave.data = "GoozmaColor";
-                        }
+                        Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
+                        leave.data = "GoozmaColor";
 
                         NPC.active = false;
                     }

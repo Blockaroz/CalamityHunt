@@ -20,12 +20,10 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
     {
         public int time;
         public float distanceFade;
-        public bool spiked;
 
         public override void OnSpawn()
         {
             scale *= Main.rand.NextFloat(0.9f, 1.1f);
-            spiked = Main.rand.NextBool();
         }
 
         public override void Update()
@@ -59,8 +57,6 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
         public override void Draw(SpriteBatch spriteBatch)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            if (spiked)
-                texture = ModContent.Request<Texture2D>(Texture + "Spiked");
 
             float fadeIn = Utils.GetLerpValue(0, 30, time, true) * distanceFade;
 

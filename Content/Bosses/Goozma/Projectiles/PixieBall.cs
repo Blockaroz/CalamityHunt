@@ -65,19 +65,20 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.velocity += Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * 0.3f;
             }
 
-            if (Cooldown == 0)
+            if (Cooldown <= 0)
             {
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(Projectile.Center) < 64))
                 {
                     if (HitCount < 0 || HitCount == 1)
                     {
                         HitCount++;
+                        Cooldown += 15;
                         Projectile.velocity = -Vector2.UnitY * 10;
                     }
                     else
                         Projectile.velocity = Projectile.DirectionFrom(player.Center).SafeNormalize(Vector2.Zero) * (14f + Projectile.velocity.Length() + player.velocity.Length());
                     
-                    Cooldown = 15;
+                    Cooldown += 15;
                     
                     for (int i = 0; i < 40; i++)
                     {

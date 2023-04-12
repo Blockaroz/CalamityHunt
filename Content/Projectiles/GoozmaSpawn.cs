@@ -83,7 +83,7 @@ namespace CalamityHunt.Content.Projectiles
                 //SoundEngine.PlaySound(devour, Projectile.Center);
             }
 
-            if (((Time < 500 && Main.rand.NextBool(30)) || (!Main.rand.NextBool((int)Time + 1))) && Time < 900)
+            if (((Time < 500 && Main.rand.NextBool(30)) || (!Main.rand.NextBool((int)Time + 1))) && Time < 750)
                 for (int i = 0; i < 1 + (int)(Utils.GetLerpValue(400, 900, Time, true) * 10); i++)
                     SpawnSlimes();
 
@@ -170,7 +170,7 @@ namespace CalamityHunt.Content.Projectiles
             WeightedRandom<int> randomType = new WeightedRandom<int>();
             randomType.Add(Particle.ParticleType<FlyingNormalSlime>(), 1f / 50f);
             randomType.Add(Particle.ParticleType<FlyingBigSlime>(), 1f / 100f);
-            randomType.Add(Particle.ParticleType<FlyingBalloonSlime>(), 1f / 400f);
+            randomType.Add(Particle.ParticleType<FlyingBalloonSlime>(), 1f / 500f);
             randomType.Add(Particle.ParticleType<FlyingGastropod>(), 1f / 800f);
             randomType.Add(Particle.ParticleType<FlyingIlluminantSlime>(), 1f / 800f);
             randomType.Add(Particle.ParticleType<FlyingLavaSlime>(), 1f / 700f);
@@ -183,9 +183,7 @@ namespace CalamityHunt.Content.Projectiles
             randomType.Add(Particle.ParticleType<FlyingBouncySlime>(), 1f / 800f);
             randomType.Add(Particle.ParticleType<FlyingCrystalSlime>(), 1f / 800f);
             randomType.Add(Particle.ParticleType<FlyingHeavenlySlime>(), 1f / 800f);
-            randomType.Add(Particle.ParticleType<FlyingGoldSlime>(), 1f / 5000f);
-            randomType.Add(Particle.ParticleType<FlyingYuH>(), 1f / 10000f);
-            randomType.Add(Particle.ParticleType<FlyingUmbrellaSlime>(), 1f / 400f);
+            randomType.Add(Particle.ParticleType<FlyingUmbrellaSlime>(), 1f / 800f);
             randomType.Add(Particle.ParticleType<FlyingCorruptSlime>(), 1f / 500f);
             randomType.Add(Particle.ParticleType<FlyingSlimer>(), 1f / 1000f);
             randomType.Add(Particle.ParticleType<FlyingCrimslime>(), 1f / 500f);
@@ -193,6 +191,8 @@ namespace CalamityHunt.Content.Projectiles
             randomType.Add(Particle.ParticleType<FlyingDungeonSlime>(), 1f / 1500f);
             randomType.Add(Particle.ParticleType<FlyingHoppinJack>(), Main.halloween ? (1f / 150f) : (1f / 2000f));
             randomType.Add(Particle.ParticleType<FlyingSlimeFish>(), 1f / 1000f);
+            randomType.Add(Particle.ParticleType<FlyingGoldSlime>(), 1f / 5000f);
+            randomType.Add(Particle.ParticleType<FlyingYuH>(), 1f / 10000f);
 
             if (Main.halloween)
             {
