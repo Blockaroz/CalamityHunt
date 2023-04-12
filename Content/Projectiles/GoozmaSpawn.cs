@@ -202,6 +202,22 @@ namespace CalamityHunt.Content.Projectiles
             if (Main.xMas)
                 randomType.Add(Particle.ParticleType<FlyingPresentSlime>(), 1f / 150f);
 
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                randomType.Add(Particle.ParticleType<FlyingAeroSlime>(), 1f / 800f);
+                randomType.Add(Particle.ParticleType<FlyingEbonianBlightSlime>(), 1f / 1000f);
+                randomType.Add(Particle.ParticleType<FlyingCrimulanBlightSlime>(), 1f / 1000f);
+                randomType.Add(Particle.ParticleType<FlyingAstralSlime>(), 1f / 1000f);
+                randomType.Add(Particle.ParticleType<FlyingCryoSlime>(), 1f / 1000f);
+                randomType.Add(Particle.ParticleType<FlyingIrradiatedSlime>(), 1f / 800f);
+                randomType.Add(Particle.ParticleType<FlyingCharredSlime>(), 1f / 1000f);
+                randomType.Add(Particle.ParticleType<FlyingPerennialSlime>(), 1f / 1000f);
+                randomType.Add(Particle.ParticleType<FlyingPestilentSlime>(), 1f / 800f);
+                randomType.Add(Particle.ParticleType<FlyingBloomSlime>(), 1f / 1000f);
+                randomType.Add(Particle.ParticleType<FlyingGammaSlime>(), 1f / 800f);
+                randomType.Add(Particle.ParticleType<FlyingCragmawMire>(), 1f / 5000f);
+            }
+
             int type = randomType.Get();
             float scale = 1f;
             Color color = Color.White;
