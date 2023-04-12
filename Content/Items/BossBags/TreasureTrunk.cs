@@ -25,6 +25,7 @@ namespace CalamityHunt.Content.Items.BossBags
         {
             Item.width = 52;
             Item.height = 40;
+            Item.maxStack = Item.CommonMaxStack;
             Item.rare = ItemRarityID.Expert;
         }
 

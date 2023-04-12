@@ -117,10 +117,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 if (Main.rand.NextBool(3))
                     Dust.NewDustPerfect(Projectile.Center + new Vector2(0, Projectile.height / 2).RotatedBy(Projectile.rotation) * Projectile.scale * squish + Main.rand.NextVector2Circular(60, 48).RotatedBy(Projectile.rotation), 4, Projectile.velocity * 0.5f, 150, Color.DarkOrchid, 2f).noGravity = true;
-
-                if (Time < -40)
-                    Projectile.frameCounter++;
             }
+
+            Projectile.frameCounter++;
 
             Time++;
             Projectile.localAI[0]++;
@@ -147,7 +146,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Rectangle frame = texture.Frame(1, 4, 0, Projectile.frame);
+            Rectangle frame = texture.Frame(2, 4, (Time > -10 ? 1 : 0), Projectile.frame);
             Asset<Texture2D> eye = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CorruptEye");
             Asset<Texture2D> tell = TextureAssets.Extra[178];
 
