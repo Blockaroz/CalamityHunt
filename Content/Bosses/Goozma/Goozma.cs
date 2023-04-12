@@ -156,7 +156,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (!Main.dedServ)
             {
-                Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
+                Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 36f);
                 crack.data = "GoozmaColor";
 
                 SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaAwaken");
@@ -680,7 +680,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time > 300)
                     {
-                        Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 60f);
+                        Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 36f);
                         leave.data = "GoozmaBlack";
 
                         NPC.justHit = true;

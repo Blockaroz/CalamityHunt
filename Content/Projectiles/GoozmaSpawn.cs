@@ -103,9 +103,9 @@ namespace CalamityHunt.Content.Projectiles
                     Main.NewText(NetworkText.FromKey(slimeMonsoonText.Value), new Color(50, 255, 130));
             }
 
-            if (Time > 700 && Time % 20 == 0)
+            if (Time > 50 && Time % 30 == 0)
             {
-                Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), Projectile.Center, Vector2.Zero, Color.DimGray, 10 + Time / 15f);
+                Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), Projectile.Center, Vector2.Zero, Color.DimGray, 5f + Time / 20f);
                 crack.data = "GoozmaBlack";
             }
 
