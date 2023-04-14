@@ -61,18 +61,18 @@ namespace CalamityHunt.Content.Projectiles
                 {
                     Vector2 pos = Projectile.Center + Main.rand.NextVector2Circular(200, 150) + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
                     Vector2 vel = pos.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * pos.Distance(Projectile.Center) * 0.1f * ((Time - 400) / 500f);
-                    Color glowColor = SlimeUtils.GoozColor(Main.rand.Next(6));
-                    glowColor.A /= 2;
-                    Dust.NewDustPerfect(pos, DustID.FireworksRGB, vel, 0, glowColor, 1.5f).noGravity = true;
+
+                    Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), pos, vel, Color.White, 2f);
+                    hue.data = Time * 0.33f;
                 }
             }
 
             for (int i = 0; i < (int)(Time / 1000f) + 1; i++)
             {
                 Vector2 pos = Projectile.Center + Main.rand.NextVector2CircularEdge(200, 150) + Main.rand.NextVector2Circular(40, 40);
-                Color slimeColor = Color.Lerp(new Color(78, 136, 255, 80), Color.Black, Utils.GetLerpValue(10, 300, Time, true));
-                slimeColor.A /= 2;
-                Dust.NewDustPerfect(pos, 4, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), 150, slimeColor, 2f).noGravity = true;
+
+                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
+                hue.data = Time * 0.33f;
             }
 
             if (Time == 0 && !Main.dedServ)
@@ -103,7 +103,7 @@ namespace CalamityHunt.Content.Projectiles
                     Main.NewText(NetworkText.FromKey(slimeMonsoonText.Value), new Color(50, 255, 130));
             }
 
-            if (Time > 50 && Time % 30 == 0)
+            if (Time > 50 && Time % 20 == 0)
             {
                 Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), Projectile.Center, Vector2.Zero, Color.DimGray, 5f + Time / 20f);
                 crack.data = "GoozmaBlack";
@@ -124,12 +124,11 @@ namespace CalamityHunt.Content.Projectiles
 
                 for (int i = 0; i < 200; i++)
                 {
-                    Dust.NewDustPerfect(Projectile.Center, 4, Main.rand.NextVector2Circular(20f, 17f), 150, Color.Black, 3f).noGravity = true;
+                    Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(20f, 17f), 100, Color.Black, 3f + Main.rand.NextFloat()).noGravity = true;
                     if (Main.rand.NextBool())
                     {
-                        Color glowColor = SlimeUtils.GoozColor(Main.rand.Next(6));
-                        glowColor.A /= 2;
-                        Dust.NewDustPerfect(Projectile.Center, DustID.FireworksRGB, Main.rand.NextVector2Circular(18f, 15f), 0, glowColor, 1.5f).noGravity = true;
+                        Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
+                        hue.data = Time * 0.33f;
                     }
                 }
 
@@ -164,8 +163,8 @@ namespace CalamityHunt.Content.Projectiles
 
         public void SpawnSlimes()
         {
-            Vector2 position = Projectile.Center + Main.rand.NextVector2CircularEdge(1600, 1600) + Main.rand.NextVector2Circular(600, 600);
-            Vector2 velocity = position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(1f);
+            Vector2 position = Projectile.Center + Main.rand.NextVector2CircularEdge(1100, 1100) + Main.rand.NextVector2Circular(600, 600);
+            Vector2 velocity = position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(3f);
 
             WeightedRandom<int> randomType = new WeightedRandom<int>();
             randomType.Add(Particle.ParticleType<FlyingNormalSlime>(), 1f / 50f);
@@ -183,7 +182,7 @@ namespace CalamityHunt.Content.Projectiles
             randomType.Add(Particle.ParticleType<FlyingBouncySlime>(), 1f / 800f);
             randomType.Add(Particle.ParticleType<FlyingCrystalSlime>(), 1f / 800f);
             randomType.Add(Particle.ParticleType<FlyingHeavenlySlime>(), 1f / 800f);
-            randomType.Add(Particle.ParticleType<FlyingUmbrellaSlime>(), 1f / 800f);
+            randomType.Add(Particle.ParticleType<FlyingUmbrellaSlime>(), 1f / 1200f);
             randomType.Add(Particle.ParticleType<FlyingCorruptSlime>(), 1f / 500f);
             randomType.Add(Particle.ParticleType<FlyingSlimer>(), 1f / 1000f);
             randomType.Add(Particle.ParticleType<FlyingCrimslime>(), 1f / 500f);
@@ -221,6 +220,7 @@ namespace CalamityHunt.Content.Projectiles
             int type = randomType.Get();
             float scale = 1f;
             Color color = Color.White;
+
             if (type == Particle.ParticleType<FlyingNormalSlime>())
             {
                 WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
@@ -245,7 +245,6 @@ namespace CalamityHunt.Content.Projectiles
                 slimeColor.Add(new Color(0, 220, 40, 100), 0.1f);
                 color = slimeColor.Get();
             }
-
             if (type == Particle.ParticleType<FlyingBigSlime>())
             {
                 WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
@@ -287,12 +286,12 @@ namespace CalamityHunt.Content.Projectiles
             Vector2 corePos = Projectile.Center + Main.rand.NextVector2Circular(2, 2) * Utils.GetLerpValue(700, 150, Time, true);
             Main.EntitySpriteDraw(glow.Value, corePos - Main.screenPosition, null, Color.Lerp(Color.Transparent, glowColor * 0.07f, Utils.GetLerpValue(50, 350, Time, true)), 0, glow.Size() * 0.5f, 2f + Projectile.scale * 0.7f, 0, 0);
             Main.EntitySpriteDraw(core.Value, corePos - Main.screenPosition, baseFrame, Color.Lerp(lightColor, new Color(20, 20, 20, 200), Utils.GetLerpValue(250, 400, Time, true)), 0, baseFrame.Size() * 0.5f, 1f + Projectile.scale * 0.7f, 0, 0);
-            Main.EntitySpriteDraw(core.Value, corePos - Main.screenPosition, glowFrame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(50, 250, Time, true)), 0, glowFrame.Size() * 0.5f, 1f + Projectile.scale * 0.7f, 0, 0);
-            Main.EntitySpriteDraw(core.Value, corePos - Main.screenPosition, glowFrame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(50, 300, Time, true)), 0, glowFrame.Size() * 0.5f, 1.05f + Projectile.scale * 0.7f, 0, 0);
+            Main.EntitySpriteDraw(core.Value, corePos - Main.screenPosition, glowFrame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(50, 250, Time, true) * Utils.GetLerpValue(750, 550, Time, true)), 0, glowFrame.Size() * 0.5f, 1f + Projectile.scale * 0.7f, 0, 0);
+            Main.EntitySpriteDraw(core.Value, corePos - Main.screenPosition, glowFrame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(50, 300, Time, true) * Utils.GetLerpValue(750, 550, Time, true)), 0, glowFrame.Size() * 0.5f, 1.05f + Projectile.scale * 0.7f, 0, 0);
 
             Vector2 eyePos = Projectile.Center + drawOffset + new Vector2(-14, -20).RotatedBy(Projectile.rotation) * Projectile.scale;
-            float eyeScale = (float)Math.Sqrt(Utils.GetLerpValue(440, 750, Time, true) * Utils.GetLerpValue(805, 780, Time, true)) * 3f;
-            float eyeRot = (float)Math.Sqrt(Utils.GetLerpValue(440, 800, Time, true)) * MathHelper.PiOver2 - MathHelper.PiOver4;
+            float eyeScale = (float)Math.Sqrt(Utils.GetLerpValue(840, 950, Time, true)) * 3f;
+            float eyeRot = (float)Math.Sqrt(Utils.GetLerpValue(840, 1100, Time, true)) * MathHelper.PiOver2 - MathHelper.PiOver4;
             Main.EntitySpriteDraw(flare.Value, eyePos - Main.screenPosition, null, glowColor, eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.2f, 2.4f), 0, 0);
             Main.EntitySpriteDraw(flare.Value, eyePos - Main.screenPosition, null, glowColor, eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.2f, 2f), 0, 0);
             Main.EntitySpriteDraw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.15f, 1f), 0, 0);

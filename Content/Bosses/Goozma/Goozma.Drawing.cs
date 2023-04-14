@@ -82,8 +82,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Phase = -22;
-
             Asset<Texture2D> crownMask = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaCrown_Mask");
             Asset<Texture2D> ornament = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaOrnament");
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
@@ -108,10 +106,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 3f;
                 NPC.localAI[1] = Main.GlobalTimeWrappedHourly;
             }
-            float trailStrength = Phase > 1 ? 1f : 0.33f;
+            float trailStrength = Phase > 1 ? 1.4f : 0.5f;
             for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
             {
-                Color trailColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(i * 5f - NPC.localAI[0] * 3f) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
+                Color trailColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
                 trailColor.A = 0;
                 DrawGoozma(spriteBatch, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], trailColor * trailStrength);
             }
@@ -213,16 +211,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     float stickRot = lastPos.AngleTo(lastPos + nextStick);
                     Vector2 stretch = new Vector2(1f, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(NPC.scale, 1f, i / (float)segments);
                     lastPos += nextStick;
-                    //spriteBatch.Draw(tentacle.Value, lastPos + drawOffset * (1f - prog) - Main.screenPosition, frame, color, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
+                    spriteBatch.Draw(tentacle.Value, lastPos + drawOffset * (1f - prog) - Main.screenPosition, frame, color, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
                 }
             }
 
-            Phase = -22;
             DrawCord(spriteBatch);
 
-            //spriteBatch.Draw(dress.Value, dressPos - Main.screenPosition, null, color, -extraTilt * 0.66f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dress.Size() * new Vector2(0.5f, 0f), NPC.scale, direction, 0);
-            //spriteBatch.Draw(texture.Value, position + drawOffset - Main.screenPosition, null, color, rotation, texture.Size() * 0.5f, NPC.scale, direction, 0);
-            //spriteBatch.Draw(crown.Value, crownPos - Main.screenPosition, null, color, extraTilt + rotation, crown.Size() * new Vector2(0.5f, 1f), 1f, direction, 0);
-        }
+            spriteBatch.Draw(dress.Value, dressPos - Main.screenPosition, null, color, -extraTilt * 0.66f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dress.Size() * new Vector2(0.5f, 0f), NPC.scale, direction, 0);
+            spriteBatch.Draw(texture.Value, position + drawOffset - Main.screenPosition, null, color, rotation, texture.Size() * 0.5f, NPC.scale, direction, 0);
+            spriteBatch.Draw(crown.Value, crownPos - Main.screenPosition, null, color, extraTilt + rotation, crown.Size() * new Vector2(0.5f, 1f), 1f, direction, 0);
+        } 
     }
 }

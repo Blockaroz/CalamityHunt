@@ -94,6 +94,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             trophyType = BossDropAutoloader.AddBossTrophy("Goozma");          
             On_Main.UpdateAudio += FadeMusicOut;
             On_Main.CheckMonoliths += DrawCordShapes;
+            On_Main.DrawNPCs += TestDraws;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
@@ -162,6 +163,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaAwaken");
                 SoundEngine.PlaySound(roar, NPC.Center);
             }
+
+            for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
+            {
+                NPC.oldPos[i] = NPC.position;
+                NPC.oldRot[i] = NPC.rotation;
+                oldVel[i] = NPC.velocity;
+            }
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -176,7 +184,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             Main.StopRain();
 
-            Main.LocalPlayer.ManageSpecialBiomeVisuals("HuntOfTheOldGods:SlimeMonsoon", true, Main.LocalPlayer.Center);
+            //Main.LocalPlayer.ManageSpecialBiomeVisuals("HuntOfTheOldGods:SlimeMonsoon", true, Main.LocalPlayer.Center);
         }
 
         private Vector2 saveTarget;
@@ -214,6 +222,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void AI()
         {
+            if (Phase < 3)
+                Phase = -22;
+
             ChangeWeather();
             bool noSlime = NPC.ai[3] < 0 || NPC.ai[3] >= Main.maxNPCs || ActiveSlime.ai[1] > 3 || !ActiveSlime.active;
             if (Phase == 0 && noSlime)
@@ -540,7 +551,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(20, 20), 200, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
 
                             Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
-
                         }
                     }
 
@@ -665,7 +675,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.dontTakeDamage = true;
                     NPC.life = 1;
 
-                    if (Time == 0)
+                    if (Time == 2)
                     {
                         Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GoozmaDeathGodrays>(), 0, 0, ai1: NPC.whoAmI);
 
@@ -682,7 +692,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
 
                     if (Time > 290)
-                        NPC.scale = MathHelper.Lerp(NPC.scale, 3f, Time / 300f);
+                        NPC.scale += 0.15f;
 
                     if (Time > 300)
                     {
@@ -755,9 +765,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     break;
 
                 case -22:
-
                     Fly();
-
                     break;
 
                 default:
@@ -774,18 +782,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.localAI[0]++;
                 NPC.localAI[1] -= NPC.velocity.X * 0.001f + NPC.direction * 0.02f;
 
-                if (NPC.localAI[0] % 4 == 1)
+                for (int i = NPCID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
                 {
-                    for (int i = NPCID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
-                    {
-                        NPC.oldPos[i] = NPC.oldPos[i - 1];
-                        NPC.oldRot[i] = NPC.oldRot[i - 1];
-                        oldVel[i] = oldVel[i - 1];
-                    }
-                    NPC.oldPos[0] = NPC.position;
-                    NPC.oldRot[0] = NPC.rotation;
-                    oldVel[0] = NPC.velocity;
+                    NPC.oldPos[i] = Vector2.Lerp(NPC.oldPos[i], NPC.oldPos[i - 1], 0.5f + (float)Math.Sin(NPC.localAI[0] * 0.33f - i * 2f) * 0.4f);
+                    NPC.oldRot[i] = MathHelper.Lerp(NPC.oldRot[i], NPC.oldRot[i - 1], 0.5f + (float)Math.Sin(NPC.localAI[0] * 0.33f - i * 2f) * 0.4f);
+                    oldVel[i] = Vector2.Lerp(oldVel[i], oldVel[i - 1], 0.5f + (float)Math.Sin(NPC.localAI[0] * 0.33f - i * 2f) * 0.4f);
                 }
+                NPC.oldPos[0] = Vector2.Lerp(NPC.oldPos[0], NPC.position, 0.5f + (float)Math.Sin(NPC.localAI[0] * 0.33f) * 0.4f);
+                NPC.oldRot[0] = MathHelper.Lerp(NPC.oldRot[0], NPC.rotation, 0.5f + (float)Math.Sin(NPC.localAI[0] * 0.33f) * 0.4f);
+                oldVel[0] = Vector2.Lerp(oldVel[0], NPC.velocity, 0.5f + (float)Math.Sin(NPC.localAI[0] * 0.33f) * 0.4f);
 
                 if (Main.rand.NextBool(3))
                 {
@@ -1274,7 +1279,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     for (int i = 0; i < Main.musicFade.Length; i++)
                     {
-                        float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(320, 50, goozma.ai[0], true);
+                        float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(320, 20, goozma.ai[0], true);
+                        float tempFade = Main.musicFade[i];
+                        Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.15f && goozma.ai[0] < 320);
+                        Main.musicFade[i] = tempFade;
+                    }
+                }                
+                if (goozma.ai[2] == 3)
+                {
+                    for (int i = 0; i < Main.musicFade.Length; i++)
+                    {
+                        float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(170, 20, goozma.ai[0], true);
                         float tempFade = Main.musicFade[i];
                         Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.15f && goozma.ai[0] < 320);
                         Main.musicFade[i] = tempFade;

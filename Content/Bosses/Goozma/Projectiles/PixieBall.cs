@@ -197,7 +197,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> sparkle = TextureAssets.Extra[98];
-            Asset<Texture2D> ring = ModContent.Request<Texture2D>(Texture + "Ring");
+            Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
 
             Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);

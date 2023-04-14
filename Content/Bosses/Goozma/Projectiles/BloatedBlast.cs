@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
@@ -23,9 +24,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.hostile = true;
             Projectile.friendly = false;
             Projectile.penetrate = -1;
-            Projectile.aiStyle = -1; 
-            Projectile.timeLeft = 180;
-
+            Projectile.aiStyle = -1;
         }
 
         public override void OnSpawn(IEntitySource source)
@@ -51,20 +50,22 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 if (Main.player.Any(n => n.active && !n.dead))
                     target = Main.player.First(n => n.active && !n.dead).whoAmI;
 
-                if (target > -1 && Time < 50)
+                if (target > -1 && Time < 59)
                 {
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * 10f, 0.1f);
-                    Projectile.Center += Main.player[target].velocity * 0.8f * Utils.GetLerpValue(100, 0, Time, true); 
+                    Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * (0.15f + Time * 0.015f);
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * 40f, 0.03f);
+                    Projectile.Center += Main.player[target].velocity * 0.4f * Utils.GetLerpValue(100, 0, Time, true);
                 }
                 else
-                    Projectile.velocity *= 0.96f;
+                    Projectile.velocity *= 0.85f;
 
-                if (Time > 60)
+                if (Time > 65)
                     Projectile.Kill();
             }
             else
             {
                 Projectile.Resize(24, 24);
+                Projectile.velocity = Projectile.velocity.RotatedBy(0.015f);
 
                 if (Main.rand.NextBool(3))
                 {
@@ -74,17 +75,31 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 for (int i = 0; i < 2; i++)
                     Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.8f, DustID.TintableDust, Projectile.velocity * 0.4f, 100, Color.Black, 1f + Main.rand.NextFloat()).noGravity = true;
-
+                
+                if (Time > 250)
+                    Projectile.Kill();
             }
+
+            if (oldVels == null)
+            {
+                oldVels = new Vector2[10];
+                for (int i = 0; i < oldVels.Length; i++)
+                    oldVels[i] = Projectile.velocity;
+            }
+            for (int i = 9; i > 0; i--)
+                oldVels[i] = Vector2.Lerp(oldVels[i], oldVels[i - 1] * 1.2f, 0.6f);
+            oldVels[0] = Vector2.Lerp(oldVels[0], Projectile.velocity, 0.6f);
 
             Projectile.localAI[0]++;
         }
+
+        public Vector2[] oldVels;
 
         public override void Kill(int timeLeft)
         {
             if (Projectile.ai[1] == 0)
             {
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     float size = Main.rand.NextFloat(4f, 5f) + i * 2f;
                     float rotation = Main.rand.NextFloat(-2f, 2f);
@@ -95,16 +110,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         glowColor.A /= 2;
                         Vector2 outward = new Vector2(size + Main.rand.NextFloat(), 0).RotatedBy(MathHelper.TwoPi / 30f * j);
                         outward.X *= 0.4f;
-                        Dust.NewDustPerfect(Projectile.Center, DustID.FireworksRGB, outward.RotatedBy(rotation), 0, glowColor, 1.5f).noGravity = true;
 
-                        Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(4, 4), Color.White, 3f * Projectile.scale);
-                        hue.data = Projectile.localAI[0];
+                        Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, outward.RotatedBy(rotation), Color.White, 1.5f);
+                        hue.data = (j * 30f + i) / 10f;
 
                     }
                 }
 
-                for (int i = 0; i < 40; i++)
-                    Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(5, 5), 100, Color.Black, 2f).noGravity = true;
+                for (int i = 0; i < 80; i++)
+                    Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(15, 15), 100, Color.Black, 2f).noGravity = true;
 
 
                 for (int i = 0; i < 16; i++)
@@ -137,30 +151,35 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> textureSmall = ModContent.Request<Texture2D>(Texture + "Small");
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
             Vector2 squishFactor = new Vector2(1f - Projectile.velocity.Length() * 0.0045f, 1f + Projectile.velocity.Length() * 0.0075f);
-            
+
             Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             bloomColor.A = 0;
 
             if (Projectile.ai[1] == 0)
             {
-                Color growColor = Color.Lerp(Color.Transparent, bloomColor, Utils.GetLerpValue(20, 60, Time, true));
+                Color growColor = Color.Lerp(Color.Transparent, bloomColor, Utils.GetLerpValue(3, 40, Time, true));
                 Rectangle baseFrame = texture.Frame(3, 1, 0, 0);
                 Rectangle glowFrame = texture.Frame(3, 1, 1, 0);
                 Rectangle outlineFrame = texture.Frame(3, 1, 2, 0);
 
-                for (int i = 0; i < 8; i++)
+                float aboutToExplode = (float)Math.Sqrt(Utils.GetLerpValue(40, 65, Time, true));
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.6f * aboutToExplode, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 5f * squishFactor, 0, 0);
+                Main.EntitySpriteDraw(ring.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.2f * aboutToExplode, Projectile.rotation, ring.Size() * 0.5f, Projectile.scale * 2.5f * aboutToExplode, 0, 0);
+
+                for (int i = 0; i < 4; i++)
                 {
-                    Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation);
-                    Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, outlineFrame, growColor * 0.4f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
+                    Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
+                    Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, outlineFrame, growColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 }
 
-                DrawTentacles();
+                DrawTentacles(lightColor, growColor);
 
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, growColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, growColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f * squishFactor, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.5f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, growColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f * squishFactor, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.7f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
             }
             if (Projectile.ai[1] == 1)
             {
@@ -171,16 +190,79 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f * squishFactor, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, bloomColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * squishFactor * 1.5f, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, bloomColor * 0.3f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * squishFactor * 1.5f, 0, 0);
 
             }
 
             return false;
         }
 
-        public void DrawTentacles()
+        public void DrawTentacles(Color lightColor, Color growColor)
         {
+            Asset<Texture2D> tentacleTexture = ModContent.Request<Texture2D>(Texture + "Tentacle");
+            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
 
+            float tentaCount = 2;
+            for (int j = 0; j < tentaCount; j++)
+            {
+                int dir = j > 0 ? 1 : -1;
+
+                float rot = Projectile.rotation + MathHelper.PiOver2;
+                Vector2 pos = Projectile.Center + new Vector2(13 * dir, 28).RotatedBy(Projectile.rotation);
+                Vector2 stick = (rot.ToRotationVector2() * 12 - Projectile.velocity * 0.05f) * (0.5f + Projectile.scale * 0.5f);
+                int segments = 10;
+
+                Vector2 lastPos = pos;
+                for (int i = 0; i < segments; i++)
+                {
+                    float prog = i / (float)segments;
+                    int segFrame = Math.Clamp((int)(prog * 5f), 1, 3);
+                    if (i == 0)
+                        segFrame = 0;
+                    if (i == segments - 1)
+                        segFrame = 4;
+
+                    Rectangle outlineFrame = tentacleTexture.Frame(3, 5, 2, segFrame);
+
+                    Vector2 nextStick = stick.RotatedBy(oldVels[i].RotatedBy(-Projectile.rotation).ToRotation() + MathHelper.PiOver2).RotatedBy((float)Math.Sin((Projectile.localAI[0] * 0.15 - i * 0.8f) % MathHelper.TwoPi) * dir * 0.3f);
+                    float stickRot = lastPos.AngleTo(lastPos + nextStick);
+                    Vector2 stretch = new Vector2(1f, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(Projectile.scale, 1f, i / (float)segments);
+                    lastPos += nextStick;
+
+                    for (int k = 0; k < 4; k++)
+                    {
+                        Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * k + stickRot);
+                        Main.EntitySpriteDraw(tentacleTexture.Value, lastPos + off - Main.screenPosition, outlineFrame, growColor * 0.7f, stickRot - MathHelper.PiOver2, outlineFrame.Size() * 0.5f, stretch, 0, 0);
+                    }
+                }
+
+                lastPos = pos;
+
+                for (int i = 0; i < segments; i++)
+                {
+                    float prog = i / (float)segments;
+                    int segFrame = Math.Clamp((int)(prog * 5f), 1, 3);
+                    if (i == 0)
+                        segFrame = 0;
+                    if (i == segments - 1)
+                        segFrame = 4;
+
+                    Rectangle frame = tentacleTexture.Frame(3, 5, 0, segFrame);
+                    Rectangle glowFrame = tentacleTexture.Frame(3, 5, 1, segFrame);
+
+                    Vector2 nextStick = stick.RotatedBy(oldVels[i].RotatedBy(-Projectile.rotation).ToRotation() + MathHelper.PiOver2).RotatedBy((float)Math.Sin((Projectile.localAI[0] * 0.15 - i * 0.8f) % MathHelper.TwoPi) * dir * 0.3f);
+                    float stickRot = lastPos.AngleTo(lastPos + nextStick);
+                    Vector2 stretch = new Vector2(1f, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(Projectile.scale, 1f, i / (float)segments);
+                    lastPos += nextStick;
+
+                    float bloomScale = (float)Math.Pow(prog, 1.25f);
+                    Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, frame, lightColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
+                    Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
+                    Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * 0.8f * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch * 1.05f, 0, 0);
+                    Main.EntitySpriteDraw(glow.Value, lastPos + oldVels[i] * 0.2f - Main.screenPosition, null, growColor * bloomScale * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);
+
+                }
+            }
         }
     }
 }

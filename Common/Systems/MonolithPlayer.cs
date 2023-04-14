@@ -18,7 +18,7 @@ namespace CalamityHunt.Common.Systems
             if (GoozmaSystem.GoozmaActive)
                 monolithCount = 1;
 
-            Player.ManageSpecialBiomeVisuals("HuntOfTheOldGods:SlimeMonsoon", monolithCount > 0, Player.Center);
+            Player.ManageSpecialBiomeVisuals("HuntOfTheOldGods:SlimeMonsoon", monolithCount > 4, Player.Center);
         }
     }
 }
