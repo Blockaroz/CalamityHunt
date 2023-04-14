@@ -146,9 +146,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Rectangle frame = texture.Frame(2, 4, (Time > -10 ? 1 : 0), Projectile.frame);
+            Rectangle frame = texture.Frame(1, 4, 0, Projectile.frame);
             Asset<Texture2D> eye = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CorruptEye");
             Asset<Texture2D> tell = TextureAssets.Extra[178];
+            float scale = 1f;
+
+            if (Time < -10)
+            {
+                scale = 1.33f;
+                texture = ModContent.Request<Texture2D>(Texture + "Ball");
+                frame = texture.Frame();
+            }
 
             for (int i = 0; i < (Projectile.ai[1] % 3) + 1; i++)
             {
@@ -157,10 +165,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Main.EntitySpriteDraw(eye.Value, Projectile.Center + offset * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, new Color(110, 50, 255, 20), Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
                 Main.EntitySpriteDraw(eye.Value, Projectile.Center + offset * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, Color.White, Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale, 0, 0);
             }
-            Vector2 shadow = Main.rand.NextVector2Circular(40, 0).RotatedBy(Projectile.rotation) * Projectile.scale;
+            Vector2 shadow = Main.rand.NextVector2Circular(40, 10).RotatedBy(Projectile.rotation) * Projectile.scale;
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White * 0.8f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center + shadow - Main.screenPosition, frame, Color.LightBlue * 0.2f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - shadow - Main.screenPosition, frame, Color.LightBlue * 0.2f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center + shadow - Main.screenPosition, frame, Color.LightBlue * 0.15f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish * scale, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - shadow - Main.screenPosition, frame, Color.LightBlue * 0.15f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish * scale, 0, 0);
 
             return false;
         }

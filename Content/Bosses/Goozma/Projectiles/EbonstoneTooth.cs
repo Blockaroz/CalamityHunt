@@ -57,14 +57,23 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
             Rectangle frame = texture.Frame(4, 1, (int)Projectile.localAI[0], 0);
 
             SpriteEffects flip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            
+            Color glowColor = new Color(100, 60, 255, 0);
 
             if (Time < 10)
             {
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(100, 60, 255, 0) * Utils.GetLerpValue(10, -10, Time, true), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true), flip, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(0, 0, 0, 20), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true) * 0.6f, flip, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(0, 0, 0, 30), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true) * 0.6f, flip, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, glowColor * Utils.GetLerpValue(10, -10, Time, true), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true), flip, 0);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center + off - Main.screenPosition, frame, glowColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);
             }
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Lighting.GetColor(Projectile.Top.ToTileCoordinates()), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);

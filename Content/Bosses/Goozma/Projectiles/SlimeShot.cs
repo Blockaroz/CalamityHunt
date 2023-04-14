@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
@@ -47,9 +49,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Main.rand.NextBool(5))
             {
-                Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-                glowColor.A /= 2;
-                Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.FireworksRGB, Projectile.velocity * 0.4f, 0, glowColor, 1f).noGravity = true;
+                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Projectile.velocity * 0.4f, Color.White, 1f);
+                hue.data = Projectile.localAI[0];
             }
 
             Projectile.frameCounter++;
@@ -65,14 +66,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 30; i++)
             {
-                Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-                glowColor.A /= 2;
-                Dust.NewDustPerfect(Projectile.Center, DustID.FireworksRGB, Main.rand.NextVector2Circular(10, 10), 0, glowColor, 1f).noGravity = true;
+                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(6, 6), Color.White, 1f);
+                hue.data = Projectile.localAI[0];
 
-                if (Main.rand.NextBool(2))
-                    Dust.NewDustPerfect(Projectile.Center, 4, Main.rand.NextVector2Circular(4, 4), 0, Color.Black, 1.5f).noGravity = true;
+                if (!Main.rand.NextBool(3))
+                    Dust.NewDustPerfect(Projectile.Center, 4, Main.rand.NextVector2Circular(3, 3), 100, Color.Black, 1.5f).noGravity = true;
             }
         }
 

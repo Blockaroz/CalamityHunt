@@ -86,10 +86,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Black * 0.05f, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp * 1.33f, 0, 0);
             Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * scaleUp * 2f, 0, 0);
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 4; i++)
             {
-                Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i + ProjAIStyleID.Rainbow);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, frame, glowColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
+                Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + ProjAIStyleID.Rainbow);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, glowFrame, glowColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
             }
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, lightColor * opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);

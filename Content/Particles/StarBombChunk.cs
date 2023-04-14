@@ -52,7 +52,7 @@ namespace CalamityHunt.Content.Particles
                         Active = false;
 
                         for (int i = 0; i < 8; i++)
-                            Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(4, 4), DustID.TintableDust, -velocity * 0.1f + Main.rand.NextVector2Circular(2, 2), 200, Color.Red, Main.rand.NextFloat(2f) * scale);
+                            Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(4, 4), DustID.TintableDust, -velocity * 0.1f + Main.rand.NextVector2Circular(2, 2), 200, Color.DarkBlue, Main.rand.NextFloat(2f) * scale);
 
                     }
                 }

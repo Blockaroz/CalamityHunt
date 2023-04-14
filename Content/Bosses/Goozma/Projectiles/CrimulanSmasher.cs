@@ -53,13 +53,22 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             if (Time < 1)
+            {
                 saveTarget = new Vector2(Projectile.Center.X, Projectile.FindSmashSpot(Target.Center).Y);
 
-            if (Time < 1)
-            {
-                Projectile.velocity = Vector2.Zero;
-                Projectile.Center = saveTarget - new Vector2(0, 900);
+                Projectile.velocity.Y = 0;
+                if (Projectile.ai[2] == 1)
+                {
+                    Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, (Target.Center.X - Projectile.Center.X) * 0.05f, 0.01f * Utils.GetLerpValue(0, -25, Time, true));
+                    Projectile.velocity.X *= 0.98f * Utils.GetLerpValue(0, -25, Time, true);
+                }
+                else
+                    Projectile.velocity.X = 0;
+                Projectile.position.Y = saveTarget.Y - 900 + (Projectile.height / 2);
             }
+            else
+                Projectile.velocity.X = 0;
+
 
             if (Time > 0)
                 Projectile.Center = Vector2.Lerp(Projectile.Center, saveTarget, 0.001f + Utils.GetLerpValue(0, 10, Time, true));
@@ -84,13 +93,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> trail = ModContent.Request<Texture2D>(Texture + "Trail");
-            Asset<Texture2D> tell = TextureAssets.Extra[178];
+            Asset<Texture2D> tell = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Projectiles/GoozmaDeathGodrays");
 
             if (Time < 0)
             {
-                float width = (float)Math.Pow(Utils.GetLerpValue(0, -70, Time, true), 0.75f) * Projectile.width * 1.5f;
-                Color tellColor = new Color(100, 0, 0, 0) * (float)Math.Pow(Utils.GetLerpValue(-70, 0, Time, true), 2f) * Utils.GetLerpValue(100, 0, Time, true) * 0.6f;
-                Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, 0), null, tellColor, Projectile.rotation + MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2(1.5f, width), 0, 0);
+                float width = (float)Math.Pow(Utils.GetLerpValue(-70, -50, Time, true) * Utils.GetLerpValue(5, -60, Time, true), 0.5f) * Projectile.width * 0.025f;
+                Color tellColor = new Color(255, 0, 0, 0) * (float)Math.Pow(Utils.GetLerpValue(-70, -60, Time, true), 2f) * 0.6f;
+                Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, 0), null, tellColor, Projectile.rotation + MathHelper.Pi, tell.Size() * new Vector2(0.5f, 0.66f), new Vector2(width, 7f - width), 0, 0);
                 return false;
 
             }

@@ -157,6 +157,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     case (int)AttackList.Interrupt:
                         NPC.noTileCollide = true;
                         NPC.damage = 0;
+                        NPC.velocity *= 0.5f;
 
                         if (Time < 15)
                             Host.ai[0] = 0;
@@ -276,7 +277,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             NPC.damage = 0;
 
-            if (Time > danceCount * 150 + 10)
+            if (Time > danceCount * 150 + 30)
                 Reset();
 
         }

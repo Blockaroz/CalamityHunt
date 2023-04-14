@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
@@ -44,12 +46,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (target > -1)
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(2f) * new Vector2(Main.rand.Next(8, 30), Main.rand.Next(18, 30)), 0.04f);
 
-            if (Main.rand.NextBool(3))
-            {
-                Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-                glowColor.A /= 2;
-                Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24, 24), DustID.FireworksRGB, Main.rand.NextVector2Circular(2, 2), 0, glowColor, 1f).noGravity = true;
-            }
+            Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(4, 4), Color.White, 3f * Projectile.scale);
+            hue.data = Projectile.localAI[0];
 
             for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
             {
@@ -67,12 +65,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             for (int i = 0; i < 20; i++)
             {
-                Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-                glowColor.A /= 2;
-                Dust.NewDustPerfect(Projectile.Center, DustID.FireworksRGB, Main.rand.NextVector2Circular(10, 10), 0, glowColor, 1f).noGravity = true;
-
-                if (Main.rand.NextBool(2))
-                    Dust.NewDustPerfect(Projectile.Center, 4, Main.rand.NextVector2Circular(4, 4), 0, Color.Black, 1.5f).noGravity = true;
+                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, -Projectile.velocity + Main.rand.NextVector2Circular(15, 15), Color.White, 3f * Projectile.scale);
+                hue.data = Projectile.localAI[0];
             }
         }
 

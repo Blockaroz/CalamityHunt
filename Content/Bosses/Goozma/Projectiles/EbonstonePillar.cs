@@ -139,10 +139,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
             Asset<Texture2D> tell = TextureAssets.Extra[178];
 
             Color glowColor = new Color(100, 60, 255, 0);
-            glowColor.A = 0;
             if (Time < 0)
             {
                 float width = Projectile.width * 1.2f;
@@ -158,10 +158,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     Rectangle frame = texture.Frame(4, 1, variant[i], 0);
                     float rockScale = scale[i] + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.1f;
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < 4; j++)
                     {
-                        Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 8f * j) * rockScale;
-                        Main.EntitySpriteDraw(texture.Value, position[i] + off + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, glowColor, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * rockScale, 0, 0);
+                        Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 4f * j) * rockScale;
+                        Main.EntitySpriteDraw(glow.Value, position[i] + off + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, glowColor, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * rockScale, 0, 0);
                     }
                 }                
                 for (int i = position.Count - 1; i > 0; i--)

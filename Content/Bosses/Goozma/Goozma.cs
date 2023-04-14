@@ -25,7 +25,6 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -94,6 +93,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             relicType = BossDropAutoloader.AddBossRelic("Goozma");
             trophyType = BossDropAutoloader.AddBossTrophy("Goozma");          
             On_Main.UpdateAudio += FadeMusicOut;
+            On_Main.CheckMonoliths += DrawCordShapes;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
@@ -231,6 +231,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Math.Abs(NPC.Center.X - Target.Center.X) > 10)
                 NPC.direction = NPC.Center.X > Target.Center.X ? -1 : 1;
 
+            if (NPC.Distance(Target.Center) > 700)
+                NPC.Center = Vector2.Lerp(NPC.Center, NPC.Center + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Math.Max(0, NPC.Distance(Target.Center) - 700), 0.05f);
+
             drawOffset = new Vector2(-14f * NPC.direction, 20f) + new Vector2((float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 2, (float)Math.Cos(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 4);
             float offsetWobble = (float)Math.Cos(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 0.07f;
             NPC.rotation = MathHelper.Lerp(NPC.rotation, Math.Clamp(NPC.velocity.X * 0.02f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.2f);
@@ -284,9 +287,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             for (int i = 0; i < 3; i++)
                             {
                                 Vector2 inward = NPC.Center + Main.rand.NextVector2Circular(70, 70) + Main.rand.NextVector2CircularEdge(100 - Time, 100 - Time);
-                                Color glowColor = SlimeUtils.GoozColor(Main.rand.Next(6));
-                                glowColor.A /= 2;
-                                Dust.NewDustPerfect(inward, DustID.FireworksRGB, inward.DirectionTo(NPC.Center) * Main.rand.NextFloat(3f), 0, glowColor, 1f).noGravity = true;
+                                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), inward, inward.DirectionTo(NPC.Center) * Main.rand.NextFloat(3f), Color.White, 1f);
+                                hue.data = NPC.localAI[0];
                             }
                         }
 
@@ -295,13 +297,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                         if (Time == 50)
                         {
-                            NPC.velocity.Y = 7;
-                            for (int i = 0; i < 25; i++)
+                            NPC.velocity *= -1f;
+                            for (int i = 0; i < 45; i++)
                             {
                                 Vector2 outward = NPC.Center + Main.rand.NextVector2Circular(10, 10);
-                                Color glowColor = SlimeUtils.GoozColor(Main.rand.Next(6));
-                                glowColor.A /= 2;
-                                Dust.NewDustPerfect(outward, DustID.FireworksRGB, outward.DirectionFrom(NPC.Center) * Main.rand.NextFloat(5f, 15f), 0, glowColor, 2f).noGravity = true;
+                                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), outward, outward.DirectionFrom(NPC.Center) * Main.rand.NextFloat(3f, 10f), Color.White, 2f);
+                                hue.data = NPC.localAI[0];
                             }
 
                             //for (int i = 0; i < Main.rand.Next(3, 8); i++)
@@ -528,14 +529,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.life = 1 + (int)((float)Math.Pow(Utils.GetLerpValue(300, 530, Time, true), 3) * (NPC.lifeMax - 1));
 
                     eyePower = Vector2.SmoothStep(Vector2.One * 1.5f, new Vector2(5f, 3.6f), Utils.GetLerpValue(300, 500, Time, true));
-
+                    
                     if (Time < 15)
                         KillSlime(currentSlime);
 
                     if (Time < 300 || Main.rand.NextBool((int)Time + 20))
                     {
                         for (int i = 0; i < (int)(Utils.GetLerpValue(500, 0, Time, true) * 2); i++)
+                        {
+                            Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(20, 20), 200, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
+
                             Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
+
+                        }
                     }
 
                     if (!Main.dedServ)
@@ -781,10 +787,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     oldVel[0] = NPC.velocity;
                 }
 
-                if (Main.rand.NextBool(5))
+                if (Main.rand.NextBool(3))
                 {
-                    Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(40), 80, 120, DustID.TintableDust, 0, 0, 150, Color.Black, 2f + Main.rand.NextFloat());
+                    Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(50), 100, 160, DustID.TintableDust, 0, 0, 100, Color.Black, 2f + Main.rand.NextFloat());
                     dust.noGravity = true;
+                }
+                if (Main.rand.NextBool(8))
+                {
+                    Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), NPC.Center + Main.rand.NextVector2Circular(60, 80), Main.rand.NextVector2Circular(6, 6), Color.White, 1f);
+                    hue.data = NPC.localAI[0];
                 }
             }
 
@@ -903,11 +914,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void Fly()
         {
-            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Math.Max(0, NPC.Distance(Target.Center) - 300) * 0.03f, 0.02f);
+            if (NPC.Distance(Target.Center) < 300)
+                NPC.velocity *= 0.9f;
+
+            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Math.Max(0, NPC.Distance(Target.Center) - 300) * 0.04f, 0.02f);
         }        
         
         private void FlyTo(Vector2 target)
         {
+            if (NPC.Distance(target) < 20)
+                NPC.velocity *= 0.9f;
+
             NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(target).SafeNormalize(Vector2.Zero) * Math.Max(1, NPC.Distance(target) * 0.2f), 0.1f);
         }        
         

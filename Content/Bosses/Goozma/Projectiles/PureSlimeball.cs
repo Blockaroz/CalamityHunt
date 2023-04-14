@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
@@ -52,9 +54,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Main.rand.NextBool(8))
             {
-                Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.4f, 0.5f).ValueAt(Projectile.localAI[1]);
-                glowColor.A /= 2;
-                Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.FireworksRGB, Main.rand.NextVector2Circular(5, 5), 0, glowColor, 1.2f).noGravity = true;
+                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(5, 5), Color.White, 1.2f);
+                hue.data = Projectile.localAI[1];
             }
 
             Time++;
@@ -64,14 +65,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 30; i++)
             {
-                Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-                glowColor.A /= 2;
-                Dust.NewDustPerfect(Projectile.Center, DustID.FireworksRGB, Main.rand.NextVector2Circular(6, 6), 0, glowColor, 1f).noGravity = true;
+                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(5, 5), Color.White, 1.2f);
+                hue.data = Projectile.localAI[1];
 
-                if (Main.rand.NextBool(2))
-                    Dust.NewDustPerfect(Projectile.Center, 4, Main.rand.NextVector2Circular(3, 3), 0, Color.Black, 1.5f).noGravity = true;
+                if (!Main.rand.NextBool(4))
+                    Dust.NewDustPerfect(Projectile.Center, 4, Main.rand.NextVector2Circular(4, 4), 100, Color.Black, 2f).noGravity = true;
             }
         }
 
@@ -86,8 +86,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.4f, 0.5f).ValueAt(Projectile.localAI[1]);
             bloomColor.A = 0;
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * 1.1f, 0, 0);
+            for (int i = 0; i < 8; i++)
+            {
+                Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, outlineFrame, bloomColor * 0.4f, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale, 0, 0);
+            }
             Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.15f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 3f, 0, 0);
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f, 0, 0);
