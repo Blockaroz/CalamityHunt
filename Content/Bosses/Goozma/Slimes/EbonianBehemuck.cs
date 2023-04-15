@@ -498,6 +498,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             Color color = Color.White;
 
+            if (NPC.IsABestiaryIconDummy)
+            {
+                return true;
+            }
+
             if (eyeType is null)
             {
                 eyeType = new List<int>
