@@ -94,7 +94,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             trophyType = BossDropAutoloader.AddBossTrophy("Goozma");          
             On_Main.UpdateAudio += FadeMusicOut;
             On_Main.CheckMonoliths += DrawCordShapes;
-            On_Main.DrawNPCs += TestDraws;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)

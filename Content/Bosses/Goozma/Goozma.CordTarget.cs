@@ -21,7 +21,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (cordTarget == null)
                 return;
 
-            spriteBatch.Draw(cordTarget, Main.LocalPlayer.Center - Main.screenPosition, null, Color.White, NPC.rotation, new Vector2(512), NPC.scale, 0, 0);
+            spriteBatch.Draw(cordTarget, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 2f, 0, 0);
         }
 
         public override void Unload()
@@ -39,43 +39,44 @@ namespace CalamityHunt.Content.Bosses.Goozma
         private Color ColorFunc(float progress) => Color.White;
         private float WidthFunc(float progress) => Utils.GetLerpValue(1.1f, 0.1f, progress, true) * 40f;
 
-
-        private void TestDraws(On_Main.orig_DrawNPCs orig, Main self, bool behindTiles)
-        {
-            orig(self, behindTiles);
-            foreach (NPC npc in Main.npc.Where(n => n.active && n.ModNPC is Goozma))
-            {
-                Goozma targetOwner = (Goozma)npc.ModNPC;
-                if (targetOwner.cordTarget == null)
-                    return;
-                Main.spriteBatch.Draw(targetOwner.cordTarget, Vector2.Zero, null, Color.White, npc.rotation, new Vector2(512), npc.scale, 0, 0);
-            }
-        }
-            
         public void DrawCordShapes(On_Main.orig_CheckMonoliths orig)
         {
             orig();
+            
+            bool switchedTargets = false;
 
-            Main.spriteBatch.Begin(default, default, default, default, default, null);
+            //WE DO NOT USE GAMEVIEWMATRIX TRANSFORMATIONMATRIX because that ruins the pixelated thing for reasons. Just use the ortographic projection witout the view matrix
+            Matrix theRealMatrix = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, -1, 1);
+            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoozmaCordMap", AssetRequestMode.ImmediateLoad).Value;
 
             foreach (NPC npc in Main.npc.Where(n => n.active && n.ModNPC is Goozma))
             {
                 Goozma targetOwner = (Goozma)npc.ModNPC;
 
                 if (targetOwner.cordTarget == null)
+                    targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2);
+
+                else if (targetOwner.cordTarget.Size() != new Vector2(Main.screenWidth / 2, Main.screenHeight / 2) )
                 {
-                    if (targetOwner.cordTarget != null)
+                    Main.QueueMainThreadAction(() =>
                     {
-                        if (!targetOwner.cordTarget.IsDisposed)
-                            targetOwner.cordTarget.Dispose();
-                    }
-                    targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 1024, 1024, false, Main.graphics.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+                        targetOwner.cordTarget.Dispose();
+                        targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2);
+                    });
+                    return;
                 }
 
                 if (targetOwner.cordTarget != null)
                 {
-                    Main.graphics.GraphicsDevice.SetRenderTarget(cordTarget);
+                    //Be sure to switch to the **TARGET OWNER's** cordTarget, not just cordTarget
+                    //If you just use cordTarget that'll use the one from the autoloaded instance who loaded the detour
+                    Main.graphics.GraphicsDevice.SetRenderTarget(targetOwner.cordTarget);
                     Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+                    if (!switchedTargets)
+                    {
+                        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
+                        switchedTargets = true;
+                    }
 
                     List<Vector2> positions = new List<Vector2>();
                     List<float> rotations = new List<float>();
@@ -86,30 +87,31 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2f, i, true) * (110 + (float)Math.Sin((Main.GlobalTimeWrappedHourly * 4 - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 12 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.5f, -3f, i / partitions));
                         offset.X *= npc.direction;
                         offset -= npc.velocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
-                        positions.Add(new Vector2(0, 10).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation));
+                        positions.Add((new Vector2(0, 10).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation)) * npc.scale);
                         rotations.Add(offset.RotatedBy(npc.rotation).ToRotation() - MathHelper.PiOver2 * (i / partitions) * npc.direction);
                     }
 
-                    VertexStrip cord = new VertexStrip();
-                    cord.PrepareStripWithProceduralPadding(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, Vector2.Zero, true);
-
-                    Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoozmaCordMap", AssetRequestMode.ImmediateLoad).Value;
-                    effect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+                    effect.Parameters["uTransformMatrix"].SetValue(theRealMatrix);
                     effect.Parameters["uTime"].SetValue(npc.localAI[0] * 0.0033f % 1f);
                     effect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LiquidTrail").Value);
                     effect.Parameters["uMap"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GoozmaColorMap").Value);
-
                     effect.CurrentTechnique.Passes[0].Apply();
+
+                    VertexStrip cord = new VertexStrip();
+                    cord.PrepareStripWithProceduralPadding(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, npc.Center - Main.screenPosition, true);
                     cord.DrawTrail();
                     Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-
-                    Main.graphics.GraphicsDevice.SetRenderTarget(null);
-                    Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-
                 }
             }
 
-            Main.spriteBatch.End();
+            //Go back to the backbuffer RT if we switched away from it.
+            //Putting it at the end like that avoids having to switch back and forth if somehow theres more than 1 goozma
+            //Also you don't have to clear it transparent when switching back to it
+            if (switchedTargets)
+            {
+                Main.graphics.GraphicsDevice.SetRenderTarget(null);
+                Main.spriteBatch.End();
+            }
         }
     }
 }
