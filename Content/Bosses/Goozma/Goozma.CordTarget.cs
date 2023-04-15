@@ -62,15 +62,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 Goozma targetOwner = (Goozma)npc.ModNPC;
 
-                if (targetOwner.cordTarget == null)
-                {
-                    if (targetOwner.cordTarget != null)
-                    {
-                        if (!targetOwner.cordTarget.IsDisposed)
-                            targetOwner.cordTarget.Dispose();
-                    }
+                if (targetOwner.cordTarget == null || targetOwner.cordTarget.IsDisposed)
                     targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 1024, 1024, false, Main.graphics.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
-                }
 
                 if (targetOwner.cordTarget != null)
                 {

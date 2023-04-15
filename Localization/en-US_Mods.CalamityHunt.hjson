@@ -74,6 +74,15 @@ Items: {
 		DisplayName: Goozma Trophy Item
 		Tooltip: ""
 	}
+
+	ImperialGelato: {
+		DisplayName: Imperial Gelato
+		Tooltip:
+			'''
+			Summons a baby bloat blob
+			'A dessert fit for an emperor!'
+			'''
+	}
 }
 
 NPCs: {
@@ -85,26 +94,17 @@ NPCs: {
 }
 
 Projectiles: {
-	CollapsingStar.DisplayName: Collapsing Star
-	EbonslimeClone.DisplayName: Ebonian Behemuck
 	EbonstonePillar.DisplayName: Ebonstone Pillar
 	EbonstoneTooth.DisplayName: Ebonstone Tooth
 	FoulSlime.DisplayName: Foul Slime
-	Novacracker.DisplayName: Novacracker
 	PureSlimeball.DisplayName: Pure Slime
-	ShootingStar.DisplayName: Shooting Star
 	SlimeShot.DisplayName: Slime Shot
-	Smasher.DisplayName: Smasher
 	ToxicSludge.DisplayName: Toxic Sludge
 	TrailingStar.DisplayName: Trailing Star
 	Wormhole.DisplayName: Wormhole
 	GoozmaSpawn.DisplayName: Slime Singularity
-	GoozmortarHeld.DisplayName: Goozmortar
-	GoozmortarLob.DisplayName: Goozmortar Lob
-	GoozmortarMinishot.DisplayName: Goozmortar Minishot
 	GooLightning.DisplayName: Goo Lightning
 	RainbowBall.DisplayName: Rainbow Ball
-	SplitRay.DisplayName: Split Ray
 	PrismDestroyer.DisplayName: Prism Destroyer
 	BloatedBlast.DisplayName: Bloated Blast
 	PixieBall.DisplayName: Pixie Ball
@@ -114,6 +114,8 @@ Projectiles: {
 	CrimulanSmasher.DisplayName: Crimulan Smasher
 	GaussRay.DisplayName: Gauss Ray
 	GoozmaDeathGodrays.DisplayName: Goozma Death Godrays
+	BloatBabyProj.DisplayName: Bloat Baby
+	ShootingStar.DisplayName: Shooting Star
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
@@ -124,4 +126,11 @@ Bestiary: {
 	DivineGargooptuar: A concentrated mass of resplendent divinity that ferociously defends its mucilaginous master with dazzling, flamboyant ardor. As extensions of its body, Goozma's paladins possess only limited autonomy.
 	EbonianBehemuck: A concentrated mass of virulent corrosion that ferociously defends its mucilaginous master with ruthless, determined zeal. Goozma's paladins are deliberately spared from assimilation.
 	StellarGeliath: A concentrated mass of empyrean infinity that ferociously defends its mucilaginous master with ethereal, unearthly vigor. Left alone, Goozma could assimilate all matter in the universe.
+}
+
+Buffs: {
+	BloatBabyBuff: {
+		DisplayName: Bloat Baby
+		Description: It seems to like you as much as the others.
+	}
 }
