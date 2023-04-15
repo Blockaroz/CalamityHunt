@@ -27,7 +27,7 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
         {
             if (data is Vector2)
             {
-                velocity = Vector2.Lerp(velocity, position.DirectionTo((Vector2)data).SafeNormalize(Vector2.Zero) * 30f, 0.1f);
+                velocity = Vector2.Lerp(velocity, position.DirectionTo((Vector2)data).SafeNormalize(Vector2.Zero) * 22f, 0.1f);
                 if (position.Distance((Vector2)data) < 10)
                     Active = false;
 
@@ -51,6 +51,8 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
 
             velocity *= 0.98f;
             rotation = velocity.ToRotation();
+
+            color = Color.White;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

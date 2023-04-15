@@ -48,6 +48,8 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
 
             velocity *= 0.98f;
             rotation += 0.1f;
+
+            color = Color.White;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -57,7 +59,7 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
             float fadeIn = Utils.GetLerpValue(0, 30, time, true) * distanceFade;
 
             Color drawColor = color;
-            drawColor.A /= 2;
+            drawColor.A = 255;
 
             for (int i = 0; i < 10; i++)
                 spriteBatch.Draw(texture.Value, position - velocity * i * 0.5f - Main.screenPosition, null, drawColor.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn * ((10f - i) / 60f), rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade, 0, 0);

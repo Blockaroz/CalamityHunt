@@ -51,6 +51,8 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
 
             velocity *= 0.98f;
             rotation = velocity.ToRotation();
+
+            color = Color.White;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
