@@ -10,11 +10,14 @@ namespace CalamityHunt.Common.Systems
 
         public override void ResetEffects()
         {
-            monolithCount = 0;
+            //monolithCount = 0;
         }
 
         public override void PostUpdateMiscEffects()
         {
+            if (monolithCount > 0 && !GoozmaSystem.GoozmaActive)
+            monolithCount--;
+
             if (GoozmaSystem.GoozmaActive)
                 monolithCount = 1;
 

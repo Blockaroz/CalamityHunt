@@ -38,40 +38,30 @@ namespace CalamityHunt.Content.Tiles
             AnimationFrameHeight = 54;
         }
 
-        public bool active;
-
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (active)
+            if (Main.tile[i,j].TileFrameY < 54)
+                return;
+
+            Player player = Main.LocalPlayer;
+            if (player is null)
+                return;
+            if (player.active)
             {
-                if (closer)
-                    Main.LocalPlayer.GetModPlayer<MonolithPlayer>().monolithCount = 1;
+                Main.LocalPlayer.GetModPlayer<MonolithPlayer>().monolithCount = 40;
             }
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)
         {
-            if (active)
-            {
-                Main.tileFrameCounter[Type]++;
-                if (Main.tileFrameCounter[Type] > 5)
-                {
-                    Main.tileFrameCounter[Type] = 0;
-                    Main.tileFrame[Type]++;
-                }
-                if (Main.tileFrame[Type] > 8 || Main.tileFrame[Type] < 1)
-                    Main.tileFrame[Type] = 1;
-            }
-            else
-            {
-                Main.tileFrameCounter[Type] = 0;
-                Main.tileFrame[Type] = 0;
-            }
+            frame = Main.tileFrame[TileID.LunarMonolith];
+            frameCounter = Main.tileFrameCounter[TileID.LunarMonolith];
         }
 
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
+            player.noThrow = 2;
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = ModContent.ItemType<GoozMonolith>();
         }
@@ -83,44 +73,64 @@ namespace CalamityHunt.Content.Tiles
 
         public override bool RightClick(int i, int j)
         {
-            active = !active;
+            HitWire(i, j);
             SoundEngine.PlaySound(SoundID.Mech, new Vector2(i * 16, j * 16));
             return true;
         }
 
         public override void HitWire(int i, int j)
         {
-            Tile tile = Main.tile[i, j];
-
-            int spawnX = i;
-            int spawnY = j - (tile.TileFrameY % 52) / 18;
-
-            Wiring.SkipWire(spawnX, spawnY);
-            Wiring.SkipWire(spawnX, spawnY + 1);
-            Wiring.SkipWire(spawnX, spawnY + 2);            
-            Wiring.SkipWire(spawnX + 1, spawnY);
-            Wiring.SkipWire(spawnX + 1, spawnY + 1);
-            Wiring.SkipWire(spawnX + 1, spawnY + 2);
-
-            if (Wiring.CheckMech(spawnX, spawnY, 60))
-                RightClick(i, j);
-
+            int x = i - Main.tile[i, j].TileFrameX / 16 % 3;
+            int y = j - Main.tile[i, j].TileFrameY / 18 % 3;
+            for (int l = x; l < x + 2; l++)
+            {
+                for (int m = y; m < y + 3; m++)
+                {
+                    if (Main.tile[l, m].TileType == Type)
+                    {
+                        if (Main.tile[l, m].TileFrameY < 54)
+                        {
+                            Main.tile[l, m].TileFrameY += 54;
+                        }
+                        else
+                        {
+                            Main.tile[l, m].TileFrameY -= 54;
+                        }
+                    }
+                }
+            }
+            if (Wiring.running)
+            {
+                Wiring.SkipWire(x, y);
+                Wiring.SkipWire(x, y + 1);
+                Wiring.SkipWire(x, y + 2);
+                Wiring.SkipWire(x + 1, y);
+                Wiring.SkipWire(x + 1, y + 1);
+                Wiring.SkipWire(x + 1, y + 2);
+            }
+            NetMessage.SendTileSquare(-1, x, y + 1, 3);
         }
 
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Main.tile[i, j];
+            Texture2D texture;
+            texture = ModContent.Request<Texture2D>("CalamityHunt/Content/Tiles/GoozMonolithTile").Value;
             Asset<Texture2D> glowTexture = ModContent.Request<Texture2D>(Texture + "Glow");
-
-            Vector2 zero = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange));
-            int height = tile.TileFrameY % AnimationFrameHeight == 36 ? 18 : 16;
-            int frameYOffset = Main.tileFrame[Type] * AnimationFrameHeight;
-
-            spriteBatch.Draw(
-                glowTexture.Value,
-                new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                new Rectangle(tile.TileFrameX, tile.TileFrameY + frameYOffset, 16, height),
-                new Color(255, 255, 255, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            if (Main.drawToScreen)
+            {
+                zero = Vector2.Zero;
+            }
+            int height = 16;
+            int animate = 0;
+            if (tile.TileFrameY >= 54)
+            {
+                animate = Main.tileFrame[Type] * AnimationFrameHeight;
+            }
+            Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(glowTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            return false;
         }
     }
 }
