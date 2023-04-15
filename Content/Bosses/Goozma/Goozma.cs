@@ -83,6 +83,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 Music = MusicLoader.GetMusicSlot($"{nameof(CalamityHunt)}/Assets/Music/GlutinousArbitration");
                 Music2 = MusicLoader.GetMusicSlot($"{nameof(CalamityHunt)}/Assets/Music/ViscousDesperation");
             }
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.Call("SetDebuffVulnerabilities", "poison", false);
+                calamity.Call("SetDebuffVulnerabilities", "heat", true);
+                calamity.Call("SetDefenseDamageNPC", Type, true);
+            }
         }
 
         public int Music2;

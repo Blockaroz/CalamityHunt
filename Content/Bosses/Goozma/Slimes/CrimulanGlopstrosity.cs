@@ -72,6 +72,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             NPC.aiStyle = -1;
             NPC.immortal = true;
             NPC.takenDamageMultiplier = 0.33f;
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.Call("SetDebuffVulnerabilities", "poison", false);
+                calamity.Call("SetDebuffVulnerabilities", "heat", true);
+                calamity.Call("SetDefenseDamageNPC", Type, true);
+            }
         }
 
         private enum AttackList
