@@ -118,6 +118,16 @@ Items: {
 		DisplayName: Stellar Mask
 		Tooltip: ""
 	}
+
+	Goozmaga: {
+		DisplayName: Goozmaga
+		Tooltip:
+			'''
+			Tosses out planetary blobs that orbit struck enemies
+			Hitting an enemy that has a blob orbitting it will increase the speed of the blob
+			Stealth strikes cause two additional smaller blobs to orbit the struck target
+			'''
+	}
 }
 
 NPCs: {
@@ -151,6 +161,8 @@ Projectiles: {
 	GoozmaDeathGodrays.DisplayName: Goozma Death Godrays
 	BloatBabyProj.DisplayName: Bloat Baby
 	ShootingStar.DisplayName: Shooting Star
+	GoombombShard.DisplayName: Planetary Glob
+	GoombombProj.DisplayName: Microplanetary Glob
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
