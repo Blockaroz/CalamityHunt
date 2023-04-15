@@ -16,14 +16,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         public RenderTarget2D cordTarget;
 
-        public void DrawCord(SpriteBatch spriteBatch)
-        { 
-            if (cordTarget == null)
-                return;
-
-            spriteBatch.Draw(cordTarget, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 2f, 0, 0);
-        }
-
         public override void Unload()
         {
             Main.QueueMainThreadAction(() =>

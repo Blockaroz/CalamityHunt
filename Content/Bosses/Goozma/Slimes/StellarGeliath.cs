@@ -127,7 +127,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             }
             else switch (Attack)
                 {
-
                     case (int)AttackList.Interrupt:
                         NPC.noTileCollide = true;
                         NPC.damage = 0;
@@ -194,7 +193,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
+            Rectangle frame = texture.Frame(1, 1, 0, 0);//npcFrame
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Asset<Texture2D> tell = TextureAssets.Extra[178];
             Asset<Texture2D> flare = TextureAssets.Extra[98];

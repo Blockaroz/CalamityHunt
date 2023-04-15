@@ -144,7 +144,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //spriteBatch.End();
             //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
 
-            DrawGoozma(spriteBatch, NPC.Center, NPC.rotation, NPC.velocity, drawColor * 2);
+            DrawGoozma(spriteBatch, NPC.Center, NPC.rotation, NPC.velocity, Color.Lerp(drawColor, Color.White, 0.3f));
             
             //spriteBatch.End();
             //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
@@ -215,7 +215,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            DrawCord(spriteBatch);
+            if (cordTarget != null)
+                spriteBatch.Draw(cordTarget, Vector2.Zero + (position - NPC.Center), null, color * 2f, 0, Vector2.Zero, 2f, 0, 0);
 
             spriteBatch.Draw(dress.Value, dressPos - Main.screenPosition, null, color, -extraTilt * 0.66f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dress.Size() * new Vector2(0.5f, 0f), NPC.scale, direction, 0);
             spriteBatch.Draw(texture.Value, position + drawOffset - Main.screenPosition, null, color, rotation, texture.Size() * 0.5f, NPC.scale, direction, 0);

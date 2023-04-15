@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -32,6 +33,7 @@ namespace CalamityHunt.Content.Items.BossBags
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
+            itemLoot.Add(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<EbonianMask>(), ModContent.ItemType<DivineMask>(), ModContent.ItemType<CrimulanMask>(), ModContent.ItemType<StellarMask>()));
         }
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)

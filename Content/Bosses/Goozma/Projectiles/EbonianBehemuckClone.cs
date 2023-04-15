@@ -47,10 +47,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.scale = 0.001f;
             List<int> eyeTypes = new List<int>()
             {
-                0, 1, 2, 3, 4
+                0, 1, 2, 3, 4, 5
             };
             eyeType = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 int rand = Main.rand.Next(eyeTypes.Count);
                 eyeType.Add(rand);
@@ -160,7 +160,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < (Projectile.ai[1] % 3) + 1; i++)
             {
-                Rectangle eyeFrame = eye.Frame(5, 1, eyeType[i], 0);
+                Rectangle eyeFrame = eye.Frame(6, 1, eyeType[i], 0);
                 Vector2 offset = new Vector2((float)Math.Sin((Projectile.localAI[0] * 0.05f + i * 2f) % MathHelper.TwoPi) * 10 * (i % 2 == 0 ? 1 : -1), 0).RotatedBy((Projectile.localAI[0] * 0.008f + i * 2.4) % MathHelper.TwoPi);
                 Main.EntitySpriteDraw(eye.Value, Projectile.Center + offset * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, new Color(110, 50, 255, 20), Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
                 Main.EntitySpriteDraw(eye.Value, Projectile.Center + offset * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, Color.White, Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale, 0, 0);

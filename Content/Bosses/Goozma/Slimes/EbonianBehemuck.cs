@@ -99,10 +99,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
         {
             List<int> eyeTypes = new List<int>()
             {
-                0, 1, 2, 3, 4
+                0, 1, 2, 3, 4, 5
             };
             eyeType = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 int rand = Main.rand.Next(eyeTypes.Count);
                 eyeType.Add(rand);
@@ -544,7 +544,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             for (int i = 0; i < 3; i++)
             {
-                Rectangle eyeFrame = eye.Frame(5, 1, eyeType[i], 0);
+                Rectangle eyeFrame = eye.Frame(6, 1, eyeType[i], 0);
                 Vector2 offset = new Vector2((float)Math.Sin((NPC.localAI[0] * 0.05f + i * 2f) % MathHelper.TwoPi) * 14 * (i % 2 == 0 ? 1 : -1), 0).RotatedBy((NPC.localAI[0] * 0.008f + i * 2.4) % MathHelper.TwoPi);
                 spriteBatch.Draw(eye.Value, NPC.Bottom + offset * squishFactor - new Vector2(0, 47).RotatedBy(NPC.rotation) * NPC.scale * squishFactor - Main.screenPosition, eyeFrame, new Color(110, 50, 255, 20), NPC.rotation + NPC.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, NPC.scale * 1.2f * squishFactor.Length() * 0.5f, 0, 0);
                 spriteBatch.Draw(eye.Value, NPC.Bottom + offset * squishFactor - new Vector2(0, 47).RotatedBy(NPC.rotation) * NPC.scale * squishFactor - Main.screenPosition, eyeFrame, color, NPC.rotation + NPC.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, NPC.scale * squishFactor.Length() * 0.5f, 0, 0);

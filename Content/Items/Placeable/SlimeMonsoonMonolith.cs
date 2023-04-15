@@ -9,11 +9,11 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Placeable
 {
-    public class GoozMonolith : ModItem
+    public class SlimeMonsoonMonolith : ModItem
     {
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<GoozMonolithTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<SlimeMonsoonMonolithTile>());
         }
 
         public override void AddRecipes()

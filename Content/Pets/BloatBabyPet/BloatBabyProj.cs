@@ -45,10 +45,9 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             Vector2 targetPos = player.MountedCenter + new Vector2((-100 + (float)Math.Sin(Projectile.ai[0] * 0.005) * 60f) * player.direction, -30 + (float)Math.Sin(Projectile.ai[0] * 0.01) * 60f);
 
             Projectile.rotation = Utils.AngleLerp(Projectile.velocity.X * 0.05f, Projectile.velocity.ToRotation() + MathHelper.PiOver2, Math.Clamp(Projectile.velocity.Length() * 0.5f, 0f, 1f));
-            crownRotation = -Projectile.velocity.X * 0.015f;
 
-            if (Projectile.Distance(player.MountedCenter) > 1000)
-                Projectile.Center = Vector2.Lerp(Projectile.Center, Projectile.Center + Projectile.DirectionTo(targetPos).SafeNormalize(Vector2.Zero) * (Projectile.Distance(targetPos) - 1000) * 0.2f, 0.5f);
+            if (Projectile.Distance(player.MountedCenter) > 600)
+                Projectile.Center = Vector2.Lerp(Projectile.Center, Projectile.Center + Projectile.DirectionTo(targetPos).SafeNormalize(Vector2.Zero) * (Projectile.Distance(targetPos) - 600) * 0.3f, 0.1f);
 
             int waitTime = 600;
             if (player.velocity.Length() < 5f)
@@ -65,8 +64,9 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
 
             if (Projectile.ai[1] > waitTime)
             {
-                Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.MouseWorld) * 0.00005f;
-                Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 0.0005f;
+                Vector2 off = new Vector2((-100 + (float)Math.Sin(Projectile.ai[0] * 0.005) * 60f) * player.direction, -30 + (float)Math.Sin(Projectile.ai[0] * 0.01) * 60f);
+                Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld + off).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.MouseWorld) * 0.0002f;
+                Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld + off).SafeNormalize(Vector2.Zero) * 0.0005f;
                 Projectile.velocity *= 0.98f;
             }
 
@@ -115,9 +115,9 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             glowColor.A = 0;
 
-            float auraSize = 0.9f + (float)Math.Sin(Projectile.localAI[0] * 0.03f) * 0.1f;
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.2f * auraSize, 0, glow.Size() * 0.5f, Projectile.scale * 5f * auraSize, 0, 0);
-            Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.08f * auraSize, 0, ring.Size() * 0.5f, Projectile.scale * 2f * auraSize, 0, 0);
+            float auraSize = 0.8f + (float)Math.Sin(Projectile.localAI[0] * 0.04f) * 0.2f;
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.14f * auraSize, 0, glow.Size() * 0.5f, Projectile.scale * 5f * auraSize, 0, 0);
+            Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.07f * auraSize, 0, ring.Size() * 0.5f, Projectile.scale * 2f * auraSize, 0, 0);
 
             DrawTentacles(lightColor, glowColor);
 
@@ -126,10 +126,14 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, glowColor * 0.9f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, glowColor * 0.5f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale * 1.05f, flip, 0);
+            
+            crownRotation = Math.Clamp(-Projectile.velocity.X * 0.06f, -1f, 1f);
+
             Main.EntitySpriteDraw(crown.Value, Projectile.Center + new Vector2(0, -17).RotatedBy(crownRotation) * Projectile.scale - Main.screenPosition, null, Color.Lerp(lightColor, Color.White, 0.5f), crownRotation, crown.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * 1.05f, flip, 0);
             Main.EntitySpriteDraw(crown.Value, Projectile.Center + new Vector2(0, -17).RotatedBy(crownRotation) * Projectile.scale - Main.screenPosition, null, glowColor * 0.3f, crownRotation, crown.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * 1.15f, flip, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 3f, 0, 0);
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.4f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, 0, 0);
+            
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
         }
 
         public Vector2[] oldVels;
@@ -152,7 +156,7 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
                 int dir = j > 0 ? 1 : -1;
 
                 float rot = Projectile.rotation + MathHelper.PiOver2;
-                Vector2 pos = Projectile.Center + new Vector2(6 * dir, 20).RotatedBy(Projectile.rotation);
+                Vector2 pos = Projectile.Center + new Vector2(6 * dir, 18).RotatedBy(Projectile.rotation);
                 Vector2 stick = (rot.ToRotationVector2() * 12 - Projectile.velocity * 0.05f) * (0.5f + Projectile.scale * 0.5f);
                 int segments = 8;
 
@@ -170,16 +174,16 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
                     Rectangle frame = tentacleTexture.Frame(3, 5, 0, segFrame);
                     Rectangle glowFrame = tentacleTexture.Frame(3, 5, 1, segFrame);
 
-                    Vector2 nextStick = stick.RotatedBy(oldVels[i].RotatedBy(-Projectile.rotation).ToRotation() + MathHelper.PiOver2).RotatedBy((float)Math.Sin((Projectile.localAI[0] * 0.15 - i * 0.8f) % MathHelper.TwoPi) * dir * 0.22f - dir * 0.06f);
+                    Vector2 nextStick = stick.RotatedBy(oldVels[i].RotatedBy(-Projectile.rotation).ToRotation() + MathHelper.PiOver2).RotatedBy((float)Math.Sin((Projectile.localAI[0] * 0.15 - i * 0.95f) % MathHelper.TwoPi) * dir * 0.15f * (0.5f + i * 0.5f) - dir * 0.06f);
                     float stickRot = lastPos.AngleTo(lastPos + nextStick);
-                    Vector2 stretch = new Vector2(1f, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(Projectile.scale, 1f, i / (float)segments);
+                    Vector2 stretch = new Vector2(1f, 0.5f + lastPos.Distance(lastPos + nextStick) / 20f) * MathHelper.Lerp(Projectile.scale, 1f, i / (float)segments);
                     lastPos += nextStick;
 
                     float bloomScale = (float)Math.Pow(prog, 1.25f);
                     Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, frame, lightColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
                     Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
                     Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * 0.8f * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch * 1.05f, 0, 0);
-                    Main.EntitySpriteDraw(glow.Value, lastPos + oldVels[i] * 0.2f - Main.screenPosition, null, growColor * bloomScale * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);
+                    Main.EntitySpriteDraw(glow.Value, lastPos + oldVels[i] * 0.1f - Main.screenPosition, null, growColor * bloomScale * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);
                 }
             }
         }

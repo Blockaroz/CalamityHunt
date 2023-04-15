@@ -18,7 +18,7 @@ using Terraria.Audio;
 
 namespace CalamityHunt.Content.Tiles
 {
-    public class GoozMonolithTile : ModTile
+    public class SlimeMonsoonMonolithTile : ModTile
     {
         public override void SetStaticDefaults()
         {
@@ -63,13 +63,10 @@ namespace CalamityHunt.Content.Tiles
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = ModContent.ItemType<GoozMonolith>();
+            player.cursorItemIconID = ModContent.ItemType<SlimeMonsoonMonolith>();
         }
 
-        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
-        {
-            return true;
-        }
+        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
         public override bool RightClick(int i, int j)
         {
@@ -111,26 +108,26 @@ namespace CalamityHunt.Content.Tiles
             NetMessage.SendTileSquare(-1, x, y + 1, 3);
         }
 
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            Tile tile = Main.tile[i, j];
-            Texture2D texture;
-            texture = ModContent.Request<Texture2D>("CalamityHunt/Content/Tiles/GoozMonolithTile").Value;
-            Asset<Texture2D> glowTexture = ModContent.Request<Texture2D>(Texture + "Glow");
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen)
-            {
-                zero = Vector2.Zero;
-            }
-            int height = 16;
-            int animate = 0;
-            if (tile.TileFrameY >= 54)
-            {
-                animate = Main.tileFrame[Type] * AnimationFrameHeight;
-            }
-            Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(glowTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            return false;
-        }
+        //public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        //{
+        //    Tile tile = Main.tile[i, j];
+        //    Texture2D texture;
+        //    texture = ModContent.Request<Texture2D>("CalamityHunt/Content/Tiles/GoozMonolithTile").Value;
+        //    Asset<Texture2D> glowTexture = ModContent.Request<Texture2D>(Texture + "Glow");
+        //    Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+        //    if (Main.drawToScreen)
+        //    {
+        //        zero = Vector2.Zero;
+        //    }
+        //    int height = 16;
+        //    int animate = 0;
+        //    if (tile.TileFrameY >= 54)
+        //    {
+        //        animate = Main.tileFrame[Type] * AnimationFrameHeight;
+        //    }
+        //    Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+        //    Main.spriteBatch.Draw(glowTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+        //    return false;
+        //}
     }
 }

@@ -83,6 +83,41 @@ Items: {
 			'A dessert fit for an emperor!'
 			'''
 	}
+
+	GoozmaMusicBoxP1: {
+		DisplayName: Goozma Music Box P1
+		Tooltip: ""
+	}
+
+	GoozmaMusicBoxP2: {
+		DisplayName: Goozma Music Box P2
+		Tooltip: ""
+	}
+
+	SlimeMonsoonMonolith: {
+		DisplayName: Slime Monsoon Monolith
+		Tooltip: ""
+	}
+
+	CrimulanMask: {
+		DisplayName: Crimulan Mask
+		Tooltip: ""
+	}
+
+	DivineMask: {
+		DisplayName: Divine Mask
+		Tooltip: ""
+	}
+
+	EbonianMask: {
+		DisplayName: Ebonian Mask
+		Tooltip: ""
+	}
+
+	StellarMask: {
+		DisplayName: Stellar Mask
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -133,4 +168,9 @@ Buffs: {
 		DisplayName: Bloat Baby
 		Description: It seems to like you as much as the others.
 	}
+}
+
+Tiles: {
+	GoozmaMusicBoxP1Tile.MapEntry: Goozma Music Box P1 Tile
+	GoozmaMusicBoxP2Tile.MapEntry: Goozma Music Box P2 Tile
 }
