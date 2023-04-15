@@ -88,7 +88,7 @@ namespace CalamityHunt.Content.Particles
             }
             Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
             glowColor.A = 0;
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, color * Utils.GetLerpValue(4, 30, time, true), rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, color * Utils.GetLerpValue(10, 40, time, true), rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
             spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor * 0.5f, rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * 1.1f * grow * squish, 0, 0);
             spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor, rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
         }

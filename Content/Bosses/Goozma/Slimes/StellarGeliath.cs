@@ -92,12 +92,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
         public override void AI()
         {
-            //if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
-            //    NPC.active = false;
-            //else
-            //    NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
-            
-            //NPC.realLife = Host.whoAmI;
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+                NPC.active = false;
+            else
+                NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
+
+            NPC.realLife = Host.whoAmI;
 
             NPC.frameCounter++;
             if (NPC.frameCounter > 7)
@@ -105,8 +105,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 NPC.frameCounter = 0;
                 npcFrame = (npcFrame + 1) % 4;
             }
-
-            return;
 
             if (!NPC.HasPlayerTarget)
                 NPC.TargetClosestUpgraded();

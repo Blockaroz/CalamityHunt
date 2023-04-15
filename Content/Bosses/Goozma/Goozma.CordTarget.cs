@@ -53,7 +53,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 Goozma targetOwner = (Goozma)npc.ModNPC;
 
-                if (targetOwner.cordTarget == null)
+                if (targetOwner.cordTarget == null || targetOwner.cordTarget.IsDisposed)
                     targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2);
 
                 else if (targetOwner.cordTarget.Size() != new Vector2(Main.screenWidth / 2, Main.screenHeight / 2) )
@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     });
                     return;
                 }
-
+				
                 if (targetOwner.cordTarget != null)
                 {
                     //Be sure to switch to the **TARGET OWNER's** cordTarget, not just cordTarget
