@@ -127,6 +127,7 @@ Items: {
 			Hitting an enemy that has a planet orbitting it will increase the speed of the planet
 			This stacks 8 times
 			Stealth strikes cause two additional smaller planetoids to orbit the struck target
+			Right click to kill all existing planets and planetoids
 			'''
 	}
 }

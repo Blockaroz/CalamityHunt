@@ -38,6 +38,35 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
             }
 			Item.shoot = ModContent.ProjectileType<GoozmagaBomb>();
 		}
+
+		public override bool CanUseItem(Player player)
+		{
+			if (player.altFunctionUse == 2)
+			{
+				Item.shoot = ProjectileID.None;
+				Item.useStyle = ItemUseStyleID.HoldUp;
+			}
+			else
+			{
+				Item.shoot = ModContent.ProjectileType<GoozmagaBomb>();
+				Item.useStyle = ItemUseStyleID.Swing;
+			}
+			return true;
+		}
+
+		public override bool AltFunctionUse(Player player)
+		{
+			for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+				Projectile proj = Main.projectile[i];
+				if (proj.active && (proj.type == ModContent.ProjectileType<GoozmagaBomb>() || proj.type == ModContent.ProjectileType<GoozmagaShrapnel>()) && proj.owner == player.whoAmI)
+                {
+					proj.Kill();
+                }
+            }
+			return true;
+		}
+
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (ModLoader.HasMod("CalamityMod"))
