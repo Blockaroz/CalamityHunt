@@ -149,8 +149,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 effect.Parameters["baseToScreenPercent"].SetValue(1f - fadeDownProg);
             }
 
-            Phase = -22;
-
             FlipShadersOnOff(spriteBatch, effect);
             DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, NPC.velocity, Color.Lerp(drawColor, Color.White, 0.3f));
             FlipShadersOnOff(spriteBatch, null);
