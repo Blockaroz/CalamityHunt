@@ -109,12 +109,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 3f;
                 NPC.localAI[1] = Main.GlobalTimeWrappedHourly;
             }
-            float trailStrength = (Phase > 1 || Phase == -22) ? 1.4f : 0.5f;
+            float trailStrength = (Phase > 1 || Phase == -22) ? 1.3f : 0.5f;
             for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
             {
                 Color trailColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
                 trailColor.A = 0;
-                DrawGoozma(spriteBatch, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], trailColor * trailStrength * 0.1f);
+                DrawGoozma(spriteBatch, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], trailColor * trailStrength);
             }
 
             //GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
@@ -155,7 +155,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * NPC.scale;
             spriteBatch.Draw(crownMask.Value, crownPos - Main.screenPosition, null, Color.White, extraTilt + NPC.rotation, crownMask.Size() * new Vector2(0.5f, 1f), 1f, direction, 0);
            
-            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(-extraTilt * 0.4f + NPC.rotation) * NPC.scale;
+            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.7f + NPC.rotation) * NPC.scale;
             float eyeRot = -MathHelper.PiOver4;
             float eyeScale = (1.1f + (float)Math.Sin(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 0.15f) * NPC.scale;
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.7f, 0.8f), 0, 0);

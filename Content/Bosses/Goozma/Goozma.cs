@@ -488,14 +488,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                                         Orbit(200, new Vector2(720, 0));
 
-                                        if (Time > 40 && Time < 380)
-                                        {
+                                        if (Time > 40 && Time < 400)
                                             SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.CrimulanHop);
-                                            if (NPC.Center.Y < Target.Center.Y + 50 && NPC.Center.Y > Target.Center.Y - 50)
-                                                if (Time % 2 == 0)
-                                                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).RotatedByRandom(0.3f) * 10f, ModContent.ProjectileType<PureSlimeball>(), GetDamage(2), 0);
 
-                                        }
 
                                         NPC.velocity *= 0.9f;
 
@@ -667,10 +662,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             if (Time > dashTime * dashCount + 20)
                             {
                                 Time = 0;
-                                Attack = (int)AttackList.GaussRay;
+                                if (NPC.life < NPC.lifeMax / 2f)
+                                    Attack = (int)AttackList.GaussRay;
+                                else
+                                    Attack = (int)AttackList.BurstLightning;
                             }
 
-                            NPC.damage = GetDamage(4, 0.9f + Time % dashTime / dashTime * 0.2f);
+                            NPC.damage = GetDamage(6, 0.9f + Time % dashTime / dashTime * 0.2f);
 
                             break;
 
@@ -680,12 +678,18 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                             Fly();
 
-                            if (Time > 1000)
+                            if (Time > 1500)
                             {
                                 Time = 0;
-                                Attack = (int)AttackList.BurstLightning;
+                                Attack = (int)AttackList.GaussRay;
                             }
 
+                            break;
+
+                        default:
+
+                            Attack = (int)AttackList.BurstLightning;
+                            Time = 0;
                             break;
                     }
 
@@ -792,8 +796,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     break;
 
                 case -22:
-                    FlyTo(Main.MouseWorld);
+
                     NPC.velocity *= 0.9f;
+
+                    if (Main.mouseRight)
+                        FlyTo(Main.MouseWorld);
+
                     break;
 
                 default:
@@ -1262,6 +1270,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         if (Time % 25 == 0)
                             Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 3f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
 
+                        if (Time % 50 == 0)
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f) * 10f, ModContent.ProjectileType<PureSlimeball>(), GetDamage(2), 0);
+
                     }
 
                     break;
@@ -1278,8 +1289,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             if (!Main.dedServ)
                                 SoundEngine.PlaySound(fireballSound, NPC.Center);
 
-                            Projectile fireball = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.6f) * 16f, ModContent.ProjectileType<RainbowBall>(), GetDamage(1), 0);
-                            fireball.localAI[0] = Time * 2f;
+                            Projectile fireball = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.6f) * 16f, ModContent.ProjectileType<RainbowBall>(), GetDamage(4), 0);
+                            fireball.localAI[0] = NPC.localAI[0];
                         }
                     }
                     else if (Time % 20 == 0)
@@ -1303,7 +1314,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<GooLightning>(), GetDamage(3), 0, -1, -80, 1500, 0);
 
                     if (Time % 55 == 0 && !Main.rand.NextBool(20))
-                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), ModContent.ProjectileType<GooLightning>(), GetDamage(4), 0, -1, -50, 1500, 1);
+                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(2f), ModContent.ProjectileType<GooLightning>(), GetDamage(4), 0, -1, -50, 1500, 1);
 
                     break;
 
@@ -1343,7 +1354,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 
                 case SortedProjectileAttackTypes.GaussRay:
 
-                    if (Time < 270 && Time % 25 == 0)
+                    if (Time < 350 && Time % 25 == 0)
                     {
                         if (!Main.dedServ)
                         {
@@ -1353,6 +1364,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                         for (int i = 0; i < Main.rand.Next(5, 8); i++)
                             Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * 2.5f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
+                        
+                        if (Time > 100 && Time % 50 == 0)
+                        {
+                            if (!Main.dedServ)
+                                SoundEngine.PlaySound(fireballSound, NPC.Center);
+
+                            Projectile fireball = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.6f) * 16f, ModContent.ProjectileType<RainbowBall>(), GetDamage(4), 0);
+                            fireball.localAI[0] = NPC.localAI[0];
+                        }
                     }
 
                     if (Time > 150 && Time <= 450 && Time % 90 == 0)
@@ -1362,14 +1382,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             SoundEngine.PlaySound(bloatSound, NPC.Center);
                     }
 
-                    if (Time > 250 && Time < 560 && Time % 20 == 0)
+                    if (Time > 250 && Time < 530 && Time % 40 == 0)
                         Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(1f), ModContent.ProjectileType<GooLightning>(), GetDamage(4), 0, -1, -50, 1500, 1);
 
-
-                    if (Time == 100)
-                    {
-                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(1f), ModContent.ProjectileType<GooLightning>(), GetDamage(4), 0, -1, -400, 1500, 0);
-                    }
+                    if (Time == 250)
+                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<GaussRay>(), GetDamage(7), 0);
 
                     break;
             }

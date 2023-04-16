@@ -63,7 +63,7 @@ float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0)
     float wave = sin((length(center) + uProgress) * 6.28 * uIntensity * distPower);
     float2 distort = center * wave * uOpacity * donut(center);
     float4 image = tex2D(uImage0, coords + distort);
-    return image * (1 - clamp(length(center + distort) * 0.4 * uOpacity, 0, 0.6));
+    return image * (1 - clamp(length(center + distort) * 0.4 * uOpacity, 0, 0.6)) * (0.7 + float4(uColor, 1) * 0.5);
 
 }
 

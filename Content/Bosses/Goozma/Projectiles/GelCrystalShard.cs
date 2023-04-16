@@ -60,7 +60,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Color bloom = Color.MediumVioletRed * 0.25f;
             bloom.A = 0;
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Black * 0.5f, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.4f, 0, 0);
+            Color backColor = Color.SeaGreen * 0.5f;
+            backColor.A = 200;
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, backColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.4f, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, darkBack, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.66f, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloom, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1.5f, 2f), 0, 0);

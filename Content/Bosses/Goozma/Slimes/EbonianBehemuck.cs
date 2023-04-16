@@ -416,6 +416,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             }
             else
             {
+                if (Time < 150 && Time % 4 == 0)
+                    Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 8f * Utils.GetLerpValue(150, 60, Time, true), 10, 12));
+
                 NPC.rotation = 0;
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * NPC.Distance(saveTarget) * 0.5f, (float)Math.Pow(Utils.GetLerpValue(100, 70, Time, true), 2f) * 0.5f + 0.1f);
 
@@ -472,9 +475,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             if (Time == 140 + spikeCount * spikeTime && !Main.dedServ)
             {
-                SoundStyle raise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneRaise");
-                raise.MaxInstances = 0;
-                SoundEngine.PlaySound(raise, NPC.Center);
+                SoundStyle crumble = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneCrumble");
+                crumble.MaxInstances = 0;
+                SoundEngine.PlaySound(crumble, NPC.Center);
             }
 
             if (Time > 190 + spikeCount * spikeTime)

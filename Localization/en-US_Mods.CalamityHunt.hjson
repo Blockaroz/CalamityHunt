@@ -85,12 +85,12 @@ Items: {
 	}
 
 	GoozmaMusicBoxP1: {
-		DisplayName: Goozma Music Box P1
+		DisplayName: Music Box (Glutinous Arbitration)
 		Tooltip: ""
 	}
 
 	GoozmaMusicBoxP2: {
-		DisplayName: Goozma Music Box P2
+		DisplayName: Music Box (Viscous Desperation)
 		Tooltip: ""
 	}
 

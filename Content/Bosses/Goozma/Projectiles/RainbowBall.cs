@@ -22,8 +22,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = 60;
-            Projectile.height = 60;
+            Projectile.width = 50;
+            Projectile.height = 50;
             Projectile.tileCollide = false;
             Projectile.hostile = true;
             Projectile.friendly = false;
@@ -47,8 +47,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (target > -1)
             {
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * new Vector2(Main.rand.Next(18, 25), Main.rand.Next(28, 30)), 0.05f);
-                Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(2f) * 0.2f;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * new Vector2(Main.rand.Next(18, 25), Main.rand.Next(18, 30)), 0.04f);
+                Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(2f) * 0.05f;
             }
 
             Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity, -Projectile.velocity * 0.5f, Color.White, 2f * Projectile.scale);

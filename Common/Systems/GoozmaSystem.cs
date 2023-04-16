@@ -93,9 +93,23 @@ namespace CalamityHunt.Common.Systems
 
             if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BloatBabyProj>()))
             {
-                bool travelActive = SoundEngine.TryGetActiveSound(BloatBabyProj.travelSound, out ActiveSound travelSound);
-                if (travelActive)
-                    travelSound.Stop();
+                bool active = SoundEngine.TryGetActiveSound(BloatBabyProj.travelSound, out ActiveSound sound);
+                if (active)
+                    sound.Stop();
+            }
+            
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
+            {
+                bool active = SoundEngine.TryGetActiveSound(PixieBall.auraSound, out ActiveSound sound);
+                if (active)
+                    sound.Stop();
+            }
+            
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GaussRay>()))
+            {
+                bool active = SoundEngine.TryGetActiveSound(GaussRay.laserSound, out ActiveSound sound);
+                if (active)
+                    sound.Stop();
             }
         }
 

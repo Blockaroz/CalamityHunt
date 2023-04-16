@@ -13,6 +13,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -244,6 +245,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     if (!Main.dedServ)
                         SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
+
+                if (Time % 150 > 70 && Time % 150 < 100 && Time % 3 == 0)
+                    Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 10f * Utils.GetLerpValue(100, 70, Time % 150, true), 10, 12));
+
 
                 if (Time % 150 == 5)
                 {
