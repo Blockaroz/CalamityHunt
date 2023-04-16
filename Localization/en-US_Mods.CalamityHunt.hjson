@@ -123,9 +123,10 @@ Items: {
 		DisplayName: Goozmaga
 		Tooltip:
 			'''
-			Tosses out planetary blobs that orbit struck enemies
-			Hitting an enemy that has a blob orbitting it will increase the speed of the blob
-			Stealth strikes cause two additional smaller blobs to orbit the struck target
+			Tosses out planets that orbit struck enemies
+			Hitting an enemy that has a planet orbitting it will increase the speed of the planet
+			This stacks 8 times
+			Stealth strikes cause two additional smaller planetoids to orbit the struck target
 			'''
 	}
 }
