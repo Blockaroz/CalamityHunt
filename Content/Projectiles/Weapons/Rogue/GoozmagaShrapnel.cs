@@ -41,7 +41,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
 			if (mom != null && mom.type == ModContent.ProjectileType<GoozmagaBomb>() && !hasATarget)
 			{
-				Main.NewText(mom.ai[0]);
 				bool hasTarget = mom.ai[0] > -1;
 				NPC target = hasTarget ? Main.npc[(int)mom.ai[0]] : null;
 				TargetIndex = hasTarget ? mom.ai[0] : -1;
