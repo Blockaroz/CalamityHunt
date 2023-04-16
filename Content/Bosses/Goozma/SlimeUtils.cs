@@ -57,21 +57,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(113, 53, 146)
         };
 
-        public static Color GoozColor(int type)
-        {
-            Color final = type switch
-            {
-                0 => new Color(174, 23, 189),
-                1 => new Color(255, 85, 228),
-                2 => new Color(237, 128, 60),
-                3 => new Color(247, 255, 101),
-                4 => new Color(176, 234, 85),
-                5 => new Color(102, 219, 249),
-                _ => new Color(113, 53, 146)
-            };
-            return final;
-        }
-
         public static void DrawWormhole(Vector2 position, Color innerColor, float rotation, float scale)
         {
             Asset<Texture2D> wormhole = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Wormhole");

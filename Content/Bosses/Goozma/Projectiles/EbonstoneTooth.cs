@@ -50,7 +50,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float collisionPoint = 0;
-            bool onLine = Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(0, -150 * Projectile.scale).RotatedBy(Projectile.rotation), 6, ref collisionPoint);
+            bool onLine = Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(0, -180 * Projectile.scale).RotatedBy(Projectile.rotation), 6, ref collisionPoint);
             return onLine && Time > 10;
         }
 

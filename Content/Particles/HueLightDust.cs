@@ -16,25 +16,25 @@ namespace CalamityHunt.Content.Particles
         public override void OnSpawn()
         {
             rotation += Main.rand.NextFloat(-3f, 3f);
-            scale *= 1.1f;
+            scale *= 1.2f;
             frame = Main.rand.Next(3);
         }
 
         public override void Update()
         {
             life += 0.1f;
-            scale *= 0.97f;
-            rotation += velocity.X * 0.5f;
+            scale *= 0.96f;
+            rotation += velocity.X * 0.2f;
 
-            scale -= 0.02f;
-            velocity *= 0.96f;
-            velocity.X += Main.rand.Next(-10, 10) * 0.01f;
-            velocity.Y += Main.rand.Next(-10, 10) * 0.01f;
+            scale -= 0.01f;
+            velocity *= 0.97f;
+            velocity.X += Main.rand.Next(-5, 5) * 0.01f;
+            velocity.Y += Main.rand.Next(-5, 5) * 0.02f;
 
             if (data is float)
                 color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt((float)data + life * 0.05f);
 
-            int chance = 60;
+            int chance = 70;
             if (!Collision.SolidTiles(position, 2, 2))
             {
                 chance += 10;

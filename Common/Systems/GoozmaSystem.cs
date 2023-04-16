@@ -2,6 +2,7 @@
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Items.Consumable;
 using CalamityHunt.Content.Items.Dyes;
+using CalamityHunt.Content.Pets.BloatBabyPet;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -73,38 +74,29 @@ namespace CalamityHunt.Common.Systems
                 Main.npc[ks].active = false;
             }
 
-            HandleGoozmaShootSound();
+            StopSoundsIfNotActive();
         }
 
-        public static SlotId goozmaShoot;
-        public static float goozmaShootPowerCurrent;
-        public static float goozmaShootPowerTarget;
-
-        public void HandleGoozmaShootSound()
+        public void StopSoundsIfNotActive()
         {
-            SoundStyle shootSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShootLoop");
-            shootSound.IsLooped = true;
-
-            goozmaShootPowerCurrent = MathHelper.Lerp(goozmaShootPowerCurrent, goozmaShootPowerTarget, 0.2f);
-            if (goozmaShootPowerCurrent < 0.05f)
-                goozmaShootPowerCurrent = 0f;
-
-            bool active = SoundEngine.SoundPlayer.TryGetActiveSound(goozmaShoot, out ActiveSound sound);
-            if (!active && goozmaShootPowerCurrent > 0.05f && GoozmaActive)
-                goozmaShoot = SoundEngine.PlaySound(shootSound, Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).Center);
-
-            else if (active)
+            if (!GoozmaActive)
             {
-                sound.Volume = goozmaShootPowerCurrent * 1.5f;
+                bool warbleActive = SoundEngine.TryGetActiveSound(Goozma.goozmaWarble, out ActiveSound warbleSound);
+                if (warbleActive)
+                    warbleSound.Stop();
 
-                if (goozmaShootPowerCurrent <= 0.05f)
-                    sound.Stop();
+                bool shootActive = SoundEngine.TryGetActiveSound(Goozma.goozmaShoot, out ActiveSound shootSound);
+                if (shootActive)
+                    shootSound.Stop();
 
             }
 
-            goozmaShootPowerTarget -= 0.05f;
-            if (goozmaShootPowerTarget < 0.1f)
-                goozmaShootPowerTarget = 0f;
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BloatBabyProj>()))
+            {
+                bool travelActive = SoundEngine.TryGetActiveSound(BloatBabyProj.travelSound, out ActiveSound travelSound);
+                if (travelActive)
+                    travelSound.Stop();
+            }
         }
 
         public static bool GoozmaActive => Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active) || Main.projectile.Any(n => n.type == ModContent.ProjectileType<GoozmaSpawn>() && n.active);       

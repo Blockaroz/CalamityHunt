@@ -4,9 +4,12 @@ using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -64,7 +67,7 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
 
             if (Projectile.ai[1] > waitTime)
             {
-                Vector2 off = new Vector2((-100 + (float)Math.Sin(Projectile.ai[0] * 0.005) * 60f) * player.direction, -30 + (float)Math.Sin(Projectile.ai[0] * 0.01) * 60f);
+                Vector2 off = new Vector2((float)Math.Sin(Projectile.ai[0] * 0.005) * 60f * player.direction, (float)Math.Sin(Projectile.ai[0] * 0.01) * 60f);
                 Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld + off).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.MouseWorld) * 0.0002f;
                 Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld + off).SafeNormalize(Vector2.Zero) * 0.0005f;
                 Projectile.velocity *= 0.98f;
@@ -98,6 +101,31 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             }
 
             Lighting.AddLight(Projectile.Center, new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]).ToVector3() * 0.2f);
+            HandleTravelSound();
+        }
+
+        public static SlotId travelSound;
+        public static float travelVolume;
+        public static float travelPitch;
+
+        public void HandleTravelSound()
+        {
+            SoundStyle travelLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/BabyBloatTravelLoop");
+            travelLoop.IsLooped = true;
+
+            travelVolume = Math.Clamp(1.1f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0002f, 0, 1.1f) * Projectile.scale * Projectile.velocity.Length() * 0.77f;
+            travelPitch = Math.Clamp(Projectile.velocity.Length() * 0.025f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0001f, -0.8f, 0.8f);
+
+            bool active = SoundEngine.TryGetActiveSound(travelSound, out ActiveSound sound);
+            if (!active || !travelSound.IsValid)
+                travelSound = SoundEngine.PlaySound(travelLoop, Projectile.Center);
+
+            else if (active)
+            {
+                sound.Volume = travelVolume;
+                sound.Pitch = travelPitch;
+                sound.Position = Projectile.Center;
+            }
         }
 
         public float crownRotation;

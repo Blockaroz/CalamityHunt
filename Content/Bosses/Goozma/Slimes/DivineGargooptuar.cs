@@ -228,7 +228,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             if (Time < danceCount * 150)
             {
-                if (Time % 150 == 0)
+                if (Time % 150 == 2)
                 { 
                     float randSpin = Main.rand.NextFloat(-3f, 3f);
                     for (int i = 0; i < prismCount; i++)

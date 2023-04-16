@@ -66,7 +66,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Main.graphics.GraphicsDevice.Clear(Color.Transparent);
                     if (!switchedTargets)
                     {
-                        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
+                        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null);
                         switchedTargets = true;
                     }
 
@@ -76,10 +76,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     float partitions = 50;
                     for (int i = 0; i < partitions; i++)
                     {
-                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2f, i, true) * (110 + (float)Math.Sin((Main.GlobalTimeWrappedHourly * 4 - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 12 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.5f, -3f, i / partitions));
+                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2f, i, true) * Utils.GetLerpValue(partitions * 1.5f, partitions / 2f, i, true) * (140 + (float)Math.Sin((Main.GlobalTimeWrappedHourly * 4 - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 16 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.1f, -3.5f, i / partitions));
                         offset.X *= npc.direction;
                         offset -= npc.velocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
-                        positions.Add((new Vector2(0, 10).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation)) * npc.scale);
+                        positions.Add((new Vector2(0, 30).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation)) * npc.scale);
                         rotations.Add(offset.RotatedBy(npc.rotation).ToRotation() - MathHelper.PiOver2 * (i / partitions) * npc.direction);
                     }
 

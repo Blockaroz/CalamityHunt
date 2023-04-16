@@ -173,7 +173,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             SoundStyle pixieBallSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixieBallLoop");
             pixieBallSound.IsLooped = true;
 
-            volume = Math.Clamp(1f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
+            volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
 
             bool active = SoundEngine.TryGetActiveSound(auraSound, out ActiveSound sound);
             if (!active || !auraSound.IsValid)

@@ -1,5 +1,7 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Rarities;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -37,8 +39,6 @@ namespace CalamityHunt.Content.Items.Materials
 
         public override void PostUpdate()
         {
-            Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 10f);
-
             if (Main.rand.NextBool(5))
             {
                 Dust dark = Dust.NewDustPerfect(Item.Center + Main.rand.NextVector2Circular(18, 18), DustID.TintableDust, -Vector2.UnitY.RotatedByRandom(0.1f) * Main.rand.NextFloat(3f), 150, Color.Black, 1f + Main.rand.NextFloat());
@@ -47,8 +47,8 @@ namespace CalamityHunt.Content.Items.Materials
             
             if (Main.rand.NextBool(20))
             {
-                Dust spark = Dust.NewDustPerfect(Item.Center + Main.rand.NextVector2Circular(15, 15), DustID.FireworksRGB, -Vector2.UnitY * Main.rand.NextFloat(2f), 0, color, 0.2f + Main.rand.NextFloat());
-                spark.noGravity = true;
+                Particle spark = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Item.Center + Main.rand.NextVector2Circular(15, 15), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 0.7f + Main.rand.NextFloat());
+                spark.data = Main.GlobalTimeWrappedHourly * 10f;
             }
         }
 

@@ -20,8 +20,8 @@ sampler2D map = sampler_state
     magfilter = LINEAR;
     minfilter = LINEAR;
     mipfilter = LINEAR;
-    AddressU = wrap;
-    AddressV = wrap;
+    AddressU = clamp;
+    AddressV = clamp;
 };
 
 struct VertexShaderInput
@@ -51,24 +51,23 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
     float4 img0 = tex2D(tex, input.Coord * float2(3, 1) - float2(uTime, sin(uTime * 6.28) * 0.02));
     float4 img1 = tex2D(tex, input.Coord * float2(2, 1) - float2(uTime * 3, 0));
-    float4 flat = (length(img0 * img1) > input.Coord.x ? 1 : 0);
-    float4 colors = tex2D(map, float2(flat.r + input.Coord.x * 0.5, 0.33));
-    float4 colorsDark = tex2D(map, float2(flat.r + input.Coord.x * 0.5, 0.66));
+    float4 flat = (length(img0 * img1) > 0.001 ? 1 : 0);    
+    float4 baseMap = img0 + img1;
     
-    if (length(flat.rgba) <= 0.0001)
-        return 0;
-    
-    if (flat.g > 0)
-        return colorsDark;
-    
-    return colors;
+    float4 colors = tex2D(map, float2(input.Coord.x - baseMap.r * 0.3, 0.25));
+    float4 colorsDark = tex2D(map, float2(input.Coord.x - baseMap.r * 0.1, 0.75));
+
+    if (baseMap.g > 0.5)
+        return colorsDark * flat;
+    else
+        return colors * flat;
 }
 
 technique Technique1
 {
-    pass LiquidPass
+    pass CordMapPass
     {
-        PixelShader = compile ps_3_0 PixelShaderFunction();
-        VertexShader = compile vs_3_0 VertexShaderFunction();
+        PixelShader = compile ps_2_0 PixelShaderFunction();
+        VertexShader = compile vs_2_0 VertexShaderFunction();
     }
 }
