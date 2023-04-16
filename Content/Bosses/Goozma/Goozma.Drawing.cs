@@ -108,6 +108,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 53f;
                 NPC.localAI[1] = Main.GlobalTimeWrappedHourly;
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 off = new Vector2(4).RotatedBy(MathHelper.TwoPi / 4f * i + NPC.rotation);
+                    DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, NPC.velocity, glowColor);
+                }
             }
             else
             {
