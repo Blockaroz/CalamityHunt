@@ -1,26 +1,21 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
-using Terraria.GameContent;
-using ReLogic.Content;
-using Terraria.Graphics.Shaders;
 
-namespace CalamityHunt.Content.Projectiles.Weapons
+namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 {
-	public class GoombombShard : ModProjectile
+	public class GoozmagaBomb : ModProjectile
 	{
-		public override string Texture => "CalamityHunt/Content/Items/Weapons/Goozmaga";
-
 		const float maxStacks = 10;
+		public int startVal = 0;
 
 		public override void SetDefaults()
 		{
-			Projectile.width = 40;
-			Projectile.height = 40;
+			Projectile.width = 46;
+			Projectile.height = 30;
 			Projectile.friendly = true;
 			Projectile.penetrate = -1;
 			Projectile.timeLeft = 720;
@@ -47,10 +42,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons
 			NPC target = hasTarget ? Main.npc[(int)Projectile.ai[0]] : null;
 			if (target != null && target.chaseable && target.active)
 			{
-				double deg = Main.GlobalTimeWrappedHourly * 360 + 120;
+				startVal++;
+				float distance = 100;
+				distance = target.width >= target.height ? target.width : target.height;
+				distance += 30;
+				double deg = Main.GlobalTimeWrappedHourly * 360 * (1 + Math.Clamp(Projectile.localAI[0] / 600, 0.6f, 0.6f * maxStacks)) + 120 + startVal;
 				double rad = deg * (Math.PI / 180);
-				float hyposx = target.Center.X - (int)(Math.Cos(rad) * 100) - Projectile.width / 2;
-				float hyposy = target.Center.Y - (int)(Math.Sin(rad) * 100) - Projectile.height / 2;
+				float hyposx = target.Center.X - (int)(Math.Cos(rad) * distance) - Projectile.width / 2;
+				float hyposy = target.Center.Y - (int)(Math.Sin(rad) * distance) - Projectile.height / 2;
 
 				Projectile.position = new Vector2(hyposx, hyposy);
 
@@ -74,7 +73,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile proj = Main.projectile[i];
-					if (proj.type == ModContent.ProjectileType<GoombombShard>() && proj.whoAmI != Projectile.whoAmI && proj.ai[0] == target.whoAmI && proj.active)
+					if (proj.type == ModContent.ProjectileType<GoozmagaBomb>() && proj.whoAmI != Projectile.whoAmI && proj.ai[0] == target.whoAmI && proj.active)
 					{
 						projCount = true;
 						break;
@@ -85,7 +84,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons
 					for (int i = 0; i < Main.maxProjectiles; i++)
 					{
 						Projectile proj = Main.projectile[i];
-						if (proj.type == ModContent.ProjectileType<GoombombShard>() && proj.whoAmI != Projectile.whoAmI && proj.ai[0] == target.whoAmI && proj.active)
+						if (proj.type == ModContent.ProjectileType<GoozmagaBomb>() && proj.whoAmI != Projectile.whoAmI && proj.ai[0] == target.whoAmI && proj.active)
 						{
 							SoundEngine.PlaySound(SoundID.Item28 with { Volume = SoundID.Item28.Volume * 0.8f }, Projectile.Center);
 							proj.localAI[0] += 60;
@@ -106,7 +105,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons
 					{
 						SoundEngine.PlaySound(SoundID.Item89, Projectile.position);
 						for (int i = 0; i < 2; i++)
-							Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, -20), ModContent.ProjectileType<GoombombProj>(), (int)Projectile.damage / 2, Projectile.knockBack, Main.myPlayer, Projectile.whoAmI, i + 1);
+							Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, -20), ModContent.ProjectileType<GoozmagaShrapnel>(), (int)Projectile.damage / 2, Projectile.knockBack, Main.myPlayer, Projectile.whoAmI, i + 1);
 					}
 				}
 			}

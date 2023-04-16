@@ -161,8 +161,8 @@ Projectiles: {
 	GoozmaDeathGodrays.DisplayName: Goozma Death Godrays
 	BloatBabyProj.DisplayName: Bloat Baby
 	ShootingStar.DisplayName: Shooting Star
-	GoombombShard.DisplayName: Planetary Glob
-	GoombombProj.DisplayName: Microplanetary Glob
+	GoozmagaBomb.DisplayName: Planetary Glob
+	GoozmagaShrapnel.DisplayName: Microplanetary Glob
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
