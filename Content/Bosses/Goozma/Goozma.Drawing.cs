@@ -106,7 +106,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (NPC.IsABestiaryIconDummy)
             {
-                NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 3f;
+                NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 53f;
                 NPC.localAI[1] = Main.GlobalTimeWrappedHourly;
             }
             else
@@ -149,14 +149,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 effect.Parameters["baseToScreenPercent"].SetValue(1f - fadeDownProg);
             }
 
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
+            Phase = -22;
 
+            FlipShadersOnOff(spriteBatch, effect);
             DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, NPC.velocity, Color.Lerp(drawColor, Color.White, 0.3f));
-            
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-            
+            FlipShadersOnOff(spriteBatch, null);
+
             Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * NPC.scale;
             spriteBatch.Draw(crownMask.Value, crownPos - screenPos, null, Color.White, extraTilt + NPC.rotation, crownMask.Size() * new Vector2(0.5f, 1f), 1f, direction, 0);
            
@@ -180,6 +178,24 @@ namespace CalamityHunt.Content.Bosses.Goozma
             spriteBatch.Draw(glow.Value, eyePos - screenPos, null, glowColor * 0.2f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 5f * eyeScale, 0, 0);
 
             return false;
+        }
+
+        public void FlipShadersOnOff(SpriteBatch spriteBatch, Effect effect)
+        {
+            if (NPC.IsABestiaryIconDummy)
+            {
+                RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
+                Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
+                spriteBatch.End();
+                spriteBatch.GraphicsDevice.RasterizerState = priorRrasterizerState;
+                spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, effect, Main.UIScaleMatrix);
+            }
+            else
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
+            }
         }
 
         private void DrawGoozma(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 position, float rotation, Vector2 velocity, Color color)

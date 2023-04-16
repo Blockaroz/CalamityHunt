@@ -44,13 +44,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
             NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
 
-            //NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
-            //{
-            //    Rotation = 0.01f,
-            //    Velocity = 2f
-            //};
-            //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            {
+                Rotation = 0.01f,
+                Velocity = 2f,
+                Position = Vector2.One * 20f
+            };
+
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
+
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
