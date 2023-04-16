@@ -73,9 +73,11 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     float4 base2 = tex2D(tex1, float2(frac(uTime * 3 + input.Coord.x * uFreq), input.Coord.y));
     float4 glow = tex2D(glowTex, float2(frac(uTime + input.Coord.x), input.Coord.y));
     float4 laser = length(glow * base * base2) * float4(input.Color.rgb * 0.02, 0.8) + pow(length(base * base2), 2) * input.Color + pow(base * base2, 5);
-    float4 bits = tex2D(bitsTex, float2(frac(uTime * 2 + input.Coord.x * uFreq * 1.1), input.Coord.y * 2)) * tex2D(bitsTex, float2(frac(uTime * 3 + input.Coord.x * uFreq), input.Coord.y)) * float4(input.Color.rgb * 0.05, 0.8);
-    if (length(bits) > 0.4)
-        return laser * 0.4 + bits + glow * input.Color * 0.4;
+    float4 bits = tex2D(bitsTex, float2(frac(uTime * 3 + input.Coord.x * uFreq), frac(input.Coord.y + sin((input.Coord.x * uFreq * 2 + uTime) * 6.28) * 0.01))) * tex2D(bitsTex, float2(frac(uTime * 5 + input.Coord.x * uFreq), frac(input.Coord.y + sin((input.Coord.x * uFreq * 0.5 + uTime * 2) * 6.28) * 0.02))) * float4(input.Color.rgb * 0.05, 0.8);
+    
+    if (length(bits) > 0.2)
+        return laser * 0.1 + bits + glow * input.Color * 0.3;
+    
     return laser + glow * input.Color * 0.8;
 
 }
@@ -84,7 +86,7 @@ technique Technique1
 {
     pass ShaderPass
     {
-        PixelShader = compile ps_2_0 PixelShaderFunction();
-        VertexShader = compile vs_2_0 VertexShaderFunction();
+        PixelShader = compile ps_3_0 PixelShaderFunction();
+        VertexShader = compile vs_3_0 VertexShaderFunction();
     }
 }

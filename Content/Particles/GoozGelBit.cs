@@ -1,0 +1,97 @@
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Bosses.Goozma;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace CalamityHunt.Content.Particles
+{
+    public class GoozGelBit : Particle
+    {
+        private bool colorful;
+        private int variant;
+        private float colOffset;
+        private int time;
+        private Vector2 homePos;
+
+        public override void OnSpawn()
+        {
+            scale *= Main.rand.NextFloat(1f, 1.1f);
+            variant = Main.rand.Next(3);
+            colOffset = Main.rand.NextFloat();
+            homePos = position;
+            colorful = Main.rand.NextBool(8);
+            behindEntities = true;
+        }
+
+        public override void Update()
+        {
+            time++;
+            rotation += velocity.X * 0.02f;
+
+            if (data is int)
+            {
+                if (time > 20 && time < (int)data)
+                {
+                    velocity *= 0.99f;
+                    velocity = Vector2.Lerp(velocity, Main.rand.NextVector2Circular(78, 67), 0.02f);
+                }
+                else if (time > (int)data + 20)
+                {
+                    velocity = Vector2.Lerp(velocity, position.DirectionTo(homePos).SafeNormalize(Vector2.Zero) * (position.Distance(homePos) + 10) * 0.02f, 0.1f * Utils.GetLerpValue((int)data + 20, (int)data + 40, time, true));
+                    if (position.Distance(homePos) < 30)
+                        scale *= 0.9f;
+                }
+            }
+            else
+                velocity *= 0.98f;
+
+            if (scale < 0.5f)
+                Active = false;
+
+            if (Main.rand.NextBool(20))
+            {
+                Particle hue = NewParticle(ParticleType<HueLightDust>(), position + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 2f, Color.White, 1f);
+                hue.data = time * 2f + colOffset; 
+            }            
+            
+            if (Main.rand.NextBool(10))
+                Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(3, 3), 100, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
+
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        { 
+            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Rectangle frame = texture.Frame(3, 2, variant, 0);
+            Rectangle glowFrame = texture.Frame(3, 2, variant, 1);
+
+            Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
+            glowColor.A = 0;
+            if (colorful)
+                spriteBatch.Draw(glow.Value, position - Main.screenPosition, null, glowColor * 0.1f, rotation, glow.Size() * 0.5f, scale * 2f, 0, 0);
+
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + rotation);
+                spriteBatch.Draw(texture.Value, position + off - Main.screenPosition, frame, glowColor, rotation, frame.Size() * 0.5f, scale, 0, 0);
+            }
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.4f), rotation, frame.Size() * 0.5f, scale, 0, 0);
+
+            if (colorful)
+                spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor * 0.75f * scale, rotation, frame.Size() * 0.5f, scale, 0, 0);
+
+        }
+    }
+}

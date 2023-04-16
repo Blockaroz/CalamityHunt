@@ -446,11 +446,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         rightSpike.ai[1] = 80 + Main.rand.Next(-5, 5);
                     }
                 }
-                if (Time % spikeTime == 70 && Time >= 150 && Time <= 150 + spikeCount * spikeTime && !Main.dedServ)
+                 if (Time % spikeTime == 55 && Time >= 150 && Time <= 150 + spikeCount * spikeTime && !Main.dedServ)
                 {
-                    SoundStyle spiked = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDartShoot", 1, 2);
+                    SoundStyle spiked = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothEmerge", 1, 2);
                     spiked.MaxInstances = 0;
-                    SoundEngine.PlaySound(spiked, NPC.Center);
+                    spiked.PitchVariance = 0.2f;
+                    SoundEngine.PlaySound(spiked, Main.LocalPlayer.MountedCenter);
                 }
             }
 
@@ -473,7 +474,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             //    foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 10000))
             //        player.AddBuff(BuffID.Obstructed, 20, true);
 
-            if (Time == 140 + spikeCount * spikeTime && !Main.dedServ)
+            if (Time == 150 + spikeCount * spikeTime && !Main.dedServ)
             {
                 SoundStyle crumble = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneCrumble");
                 crumble.MaxInstances = 0;

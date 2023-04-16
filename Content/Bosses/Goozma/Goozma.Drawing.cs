@@ -111,6 +111,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
             else
             {
+                if (Phase == 1 && Time > 50)
+                    goto EyeOnly;
+
                 float trailStrength = (Phase > 1 || Phase == -22) ? 1.3f : 0.5f;
                 for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
                 {
@@ -141,21 +144,18 @@ namespace CalamityHunt.Content.Bosses.Goozma
             effect.Parameters["colors"].SetValue(colors);
             effect.Parameters["brightnesses"].SetValue(brightnesses);
             effect.Parameters["baseToScreenPercent"].SetValue(1f);
-            effect.Parameters["baseToMapPercent"].SetValue(0.3f - (float)Math.Sin(NPC.localAI[0] * 0.01f % MathHelper.TwoPi) * 0.3f);
+            effect.Parameters["baseToMapPercent"].SetValue(0f);
             if (Phase == 3)
-            {
-                float fadeDownProg = Utils.GetLerpValue(120, 220, Time, true);
-                effect.Parameters["baseToMapPercent"].SetValue(MathHelper.Lerp(0.3f - (float)Math.Sin(Main.GlobalTimeWrappedHourly * 0.1f % MathHelper.TwoPi) * 0.3f, 0f, fadeDownProg));
-                effect.Parameters["baseToScreenPercent"].SetValue(1f - fadeDownProg);
-            }
+                effect.Parameters["baseToScreenPercent"].SetValue(1f - Utils.GetLerpValue(120, 220, Time, true));
 
             FlipShadersOnOff(spriteBatch, effect);
             DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, NPC.velocity, Color.Lerp(drawColor, Color.White, 0.3f));
             FlipShadersOnOff(spriteBatch, null);
 
             Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * NPC.scale;
-            spriteBatch.Draw(crownMask.Value, crownPos - screenPos, null, Color.White, extraTilt + NPC.rotation, crownMask.Size() * new Vector2(0.5f, 1f), 1f, direction, 0);
-           
+            spriteBatch.Draw(crownMask.Value, crownPos - Main.screenPosition, null, Color.White, extraTilt + NPC.rotation, crownMask.Size() * new Vector2(0.5f, 1f), 1f, direction, 0);
+
+            EyeOnly:
             Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.7f + NPC.rotation) * NPC.scale;
             float eyeRot = -MathHelper.PiOver4;
             float eyeScale = (1.1f + (float)Math.Sin(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 0.15f) * NPC.scale;
@@ -163,6 +163,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.7f, 0.8f), 0, 0);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.5f) + new Vector2(0, eyePower.Y), 0, 0);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.1f) + new Vector2(0, eyePower.X), 0, 0);
+            
+            if (Phase == 1 && Time >= 50)
+                eyeScale *= (float)Math.Sqrt(Utils.GetLerpValue(300, 320, Time, true));
 
             Asset<Texture2D> godEye = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/SpecialEye");
             spriteBatch.Draw(godEye.Value, eyePos - screenPos, null, Color.Black * 0.5f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f), 0, 0);

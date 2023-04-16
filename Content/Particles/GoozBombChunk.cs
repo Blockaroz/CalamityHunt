@@ -37,7 +37,7 @@ namespace CalamityHunt.Content.Particles
             if (!stuck)
             {
                 if (velocity.Y < 25)
-                    velocity.Y += 0.6f;
+                    velocity.Y += 0.45f;
 
                 rotation = velocity.ToRotation() - MathHelper.PiOver2;
 
@@ -87,10 +87,12 @@ namespace CalamityHunt.Content.Particles
                 squish = new Vector2(1f + (float)Math.Sqrt(Utils.GetLerpValue(20, 0, time, true)) * 0.33f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(20, 0, time, true)) * 0.33f);
             }
             Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
-            glowColor.A = 0;
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, color * Utils.GetLerpValue(10, 40, time, true), rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor * 0.5f, rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * 1.1f * grow * squish, 0, 0);
+            glowColor.A = 0; 
+            Color lightColor = Lighting.GetColor(position.ToTileCoordinates());
+
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, color.MultiplyRGBA(lightColor), stuck ? 1f : Utils.GetLerpValue(10, 50, time, true)) * Utils.GetLerpValue(10, 40, time, true), rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
             spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor, rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor * 0.5f, rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * 1.05f * grow * squish, 0, 0);
         }
     }
 }

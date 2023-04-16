@@ -110,6 +110,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 if (Time < 20)
                 {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(25, 25), Color.White, 1.5f);
+                        hue.data = Projectile.localAI[1];
+                    }
                 }
 
                 if (Time > 60)

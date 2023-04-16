@@ -68,38 +68,38 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Time = ChargeTime + LaserDuration - 2;
 
             if (Time < ChargeTime)
-                Projectile.direction = (int)Main.rand.NextFloatDirection();
+                Projectile.direction = Main.rand.NextBool().ToDirectionInt();
 
-            float initialSweep = MathHelper.SmoothStep(-0.8f, 1f, Utils.GetLerpValue(ChargeTime, ChargeTime + 200, Time, true));
-            float secondSweep = MathHelper.SmoothStep(0f, -2f, Utils.GetLerpValue(ChargeTime + 250, ChargeTime + 600, Time, true)) * Utils.GetLerpValue(ChargeTime + LaserDuration - 10, ChargeTime + 550, Time, true);
+            float totalOffRot = (float)Math.Sin(Time * 0.03f) * 0.07f * Utils.GetLerpValue(ChargeTime - 10, ChargeTime + 10, Time, true);
 
-            Projectile.velocity = (Projectile.rotation.AngleLerp(Projectile.AngleTo(Main.npc[owner].GetTargetData().Center) + (initialSweep + secondSweep) * Projectile.direction, 0.025f) + (float)Math.Sin(Time * 0.03f) * 0.005f).ToRotationVector2();
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.028f);
+            Projectile.rotation = Projectile.velocity.ToRotation() + totalOffRot;
             Projectile.localAI[0] = Main.npc[owner].localAI[0];
 
-            if (Time < ChargeTime && !Main.rand.NextBool((int)(Time * 0.5f + 2)))
+            if (!Main.rand.NextBool((int)(Time * 0.5f + 2)))
             {
-                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(5f, 25f), Color.White, 2f);
+                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(0.4f) * Main.rand.NextFloat(5f, 25f), Color.White, 3f);
                 hue.data = Projectile.localAI[0];
             }
-            else
+            if (Time> ChargeTime && Time < ChargeTime + LaserDuration + 55 || Main.rand.NextBool(5))
             {
-                if (Time < ChargeTime + LaserDuration + 5 || Main.rand.NextBool((int)(Time - ChargeTime - LaserDuration) + 5))
+                for (int i = 0; i < 5; i++)
                 {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(5f, 25f), Color.White, 2f);
-                        hue.data = Projectile.localAI[0];
-                    }
+                    float progress = Main.rand.NextFloat(3500);
+                    Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + new Vector2(progress * 3500, Main.rand.NextFloat(-5f, 5f)).RotatedBy(Projectile.rotation), Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), Color.White, 4f);
+                    hue.data = Projectile.localAI[0] - (progress / 3500f) * 40;
                 }
             }
 
-            if (Time == ChargeTime + LaserDuration + 5 && !Main.dedServ)
+            if (Time == ChargeTime + LaserDuration + 20 && !Main.dedServ)
             {
                 SoundStyle sizzle = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSizzle");
                 sizzle.MaxInstances = 0;
                 SoundEngine.PlaySound(sizzle, Projectile.Center);
             }
+            //Projectile.velocity = (Projectile.rotation.AngleLerp(Projectile.AngleTo(Main.LocalPlayer.Center) + (initialSweep + secondSweep) * Projectile.direction, 0.025f) + (float)Math.Sin(Time * 0.03f) * 0.005f).ToRotationVector2();
+            //Projectile.rotation = Projectile.velocity.ToRotation();
+            //Projectile.localAI[0]++;
 
             Time++;
             Projectile.timeLeft = 10;
@@ -138,12 +138,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             if (Time > ChargeTime && Time < ChargeTime + LaserDuration + 20)
             {
+                float angle = 0.23f;
                 float grow = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
 
-                //if (targetHitbox.IntersectsConeFastInaccurate(Projectile.Center, 3500f * (0.5f + grow * 0.5f), Projectile.rotation, 0.22f * grow))
+                //Dust.QuickDustLine(Projectile.Center, Projectile.Center + new Vector2(3500f * (0.5f + grow * 0.5f), 0).RotatedBy(Projectile.rotation + angle), 200, Color.Blue);
+                //Dust.QuickDustLine(Projectile.Center, Projectile.Center + new Vector2(3500f * (0.5f + grow * 0.5f), 0).RotatedBy(Projectile.rotation - angle), 200, Color.Blue);
+                //if (targetHitbox.IntersectsConeFastInaccurate(Projectile.Center, 3500f * (0.5f + grow * 0.5f), Projectile.rotation, angle * grow))
                 //    Dust.NewDustPerfect(targetHitbox.Center(), DustID.TintableDust, Vector2.Zero, 0, Color.Black, 2f).noGravity = true;
 
-                return targetHitbox.IntersectsConeFastInaccurate(Projectile.Center, 3500f * (0.5f + grow * 0.5f), Projectile.rotation, 0.22f * grow);
+                return targetHitbox.IntersectsConeFastInaccurate(Projectile.Center, 3500f * (0.5f + grow * 0.5f), Projectile.rotation, angle * grow);
             }
             return false;
         }
@@ -157,13 +160,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> textureGlow = ModContent.Request<Texture2D>(Texture + "Glow");
             Asset<Texture2D> textureBits = ModContent.Request<Texture2D>(Texture + "Bits");
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Asset<Texture2D> spark = ModContent.Request<Texture2D>(Texture + "Spark");
 
             Color startColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             startColor.A = 0;
 
-            float laserCharge = Utils.GetLerpValue(50, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 90, ChargeTime + LaserDuration + 20, Time, true);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, startColor, 0, glow.Size() * 0.5f, 2f, 0, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0) * laserCharge, 0, glow.Size() * 0.5f, 1.5f, 0, 0);
+            float laserCharge = Utils.GetLerpValue(50, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration + 20, Time, true);
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, startColor, 0, glow.Size() * 0.5f, 2f * laserCharge, 0, 0);
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0) * laserCharge, 0, glow.Size() * 0.5f, 1.5f * laserCharge, 0, 0);
 
             if (Time >= ChargeTime)
             {
@@ -187,10 +191,23 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 lightningEffect.Parameters["uGlow"].SetValue(textureGlow.Value);
                 lightningEffect.Parameters["uBits"].SetValue(textureBits.Value);
                 lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.015f);
-                lightningEffect.Parameters["uFreq"].SetValue(1.2f);
+                lightningEffect.Parameters["uFreq"].SetValue(1.5f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
                 strip.DrawTrail();
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+                Color endColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - 40f);
+                endColor.A = 0;
+
+                for (int i = 0; i < 12; i++)
+                {
+                    Main.EntitySpriteDraw(spark.Value, positions[1499] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.7f * new Vector2(1f, 2f), 0, 0);
+                    Main.EntitySpriteDraw(spark.Value, positions[1499] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.03f * Projectile.direction), spark.Size() * 0.5f, laserActive * new Vector2(1f, 2f), 0, 0);
+                    Main.EntitySpriteDraw(spark.Value, positions[1499] - Main.screenPosition, null, new Color(255, 255, 255, 0), (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.33f * new Vector2(1f, 2f), 0, 0);
+                    Main.EntitySpriteDraw(glow.Value, positions[1499] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), glow.Size() * 0.5f, laserActive * new Vector2(3f, 20f), 0, 0);
+
+                }
+                Main.EntitySpriteDraw(glow.Value, positions[1499] - Main.screenPosition, null, endColor, 0, glow.Size() * 0.5f, laserActive * 15f, 0, 0);
             }
             return false;
         }
@@ -208,7 +225,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             float start = (float)Math.Pow(progress, 0.6f);
             float cap = (float)Math.Cbrt(Utils.GetLerpValue(1.01f, 0.7f, progress, true));
             float grow = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
-            return start * cap * grow * 1300f * (1.1f + (float)Math.Cos(Time) * (0.02f - progress * 0.02f));
+            return start * cap * grow * 1600f * (1.1f + (float)Math.Cos(Time) * (0.02f - progress * 0.02f));
         }
     }
 }

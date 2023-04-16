@@ -147,6 +147,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time > 30)
                 Projectile.Kill();
 
+            Projectile.localAI[0] = Main.npc[owner].localAI[0];
             Time++;
         }
 
@@ -186,7 +187,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 lightningEffect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Lightning").Value);
                 lightningEffect.Parameters["uGlow"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
-                lightningEffect.Parameters["uTime"].SetValue(Projectile.timeLeft * 0.005f + 0.2f);
+                lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.05f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
 
                 strip.DrawTrail();
@@ -199,7 +200,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public Color ColorFunction(float progress)
         {
-            Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Time * 3 + colOffset + progress * 60);
+            Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + progress * 60);
             float small = Collides == 0 ? 1f : 0.7f;
             return color * (float)Math.Pow(1f - (Time / 30f), 0.6f) * small;
         }

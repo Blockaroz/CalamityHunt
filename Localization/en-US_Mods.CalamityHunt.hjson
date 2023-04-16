@@ -60,18 +60,13 @@ Items: {
 		Tooltip: ""
 	}
 
-	TrollRelicItem: {
-		DisplayName: Troll Relic Item
-		Tooltip: ""
-	}
-
 	TreasureBucket: {
 		DisplayName: Treasure Bucket
 		Tooltip: ""
 	}
 
 	GoozmaTrophyItem: {
-		DisplayName: Goozma Trophy Item
+		DisplayName: Goozma Trophy
 		Tooltip: ""
 	}
 

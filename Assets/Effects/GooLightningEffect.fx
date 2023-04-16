@@ -49,8 +49,10 @@ VertexShaderOutput VertexShaderFunction(in VertexShaderInput input)
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-    float4 base = tex2D(tex, input.Coord + float2(uTime * 2, 0));
-    return (base * float4(0, 0, 0, 1) + base * input.Color + tex2D(glow, input.Coord + float2(uTime, 0)) * (0.2 + input.Color * 2)) * uColor;
+    float4 base = tex2D(tex, input.Coord + float2(frac(uTime * 2), 0)) * tex2D(tex, input.Coord + float2(frac(uTime) + 0.5, 0)) * float4(1, 1, 1, 0);
+    float4 baseGlow = tex2D(glow, input.Coord + float2(frac(uTime), 0)) * float4(1, 1, 1, 0);
+    float4 back = length(baseGlow + base * 2) * float4(input.Color.rgb * 0.1, 0.2);
+    return back + (pow(base * 2 + baseGlow, 2) + baseGlow) * input.Color;
 }
 
 technique Technique1
