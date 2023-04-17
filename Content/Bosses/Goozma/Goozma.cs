@@ -3,7 +3,6 @@ using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Camera;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
-using CalamityHunt.Content.Bosses.Goozma.Slimes;
 using CalamityHunt.Content.Items.BossBags;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
@@ -343,7 +342,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            currentSlime = (currentSlime + 1) % 3;
+                            currentSlime = 3;// (currentSlime + 1) % 3;
                             nextAttack[currentSlime]++;
 
                             for (int i = 0; i < nextAttack.Length; i++)
@@ -508,25 +507,18 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 {
                                     case 0:
 
-                                        bool inLeft = ActiveSlime.AngleTo(Target.Center) < 0.5f && ActiveSlime.AngleTo(Target.Center) > -0.5f;
-                                        bool inRight = ActiveSlime.AngleTo(Target.Center) - MathHelper.Pi < 0.5f && ActiveSlime.AngleTo(Target.Center) - MathHelper.Pi > -0.5f;
-                                        if (inLeft || inRight)
-                                            Dash(50);
-                                        else
-                                        {
-                                            Fly();
-                                            NPC.velocity *= 0.97f;
-                                        }
+                                        AresLockTo(Target.Center + Vector2.UnitY * 300);
+                                        NPC.velocity *= 0.8f;
 
                                         break;
                                     case 1:
 
-                                        Fly();
-
+                                        AresLockTo(Target.Center + Vector2.UnitY * 300);
+                                        NPC.velocity *= 0.8f;
                                         break;
                                     case 2:
 
-                                        AresLockTo(Target.Center - Vector2.UnitY * 200);
+                                        AresLockTo(Target.Center + Vector2.UnitY * 300);
                                         NPC.velocity *= 0.8f;
 
                                         break;
@@ -698,7 +690,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             if (Time > 1350)
                             {
                                 Time = 0;
-                                Attack = (int)AttackList.GaussRay;
+                                Attack = (int)AttackList.BurstLightning;
                             }
 
                             break;

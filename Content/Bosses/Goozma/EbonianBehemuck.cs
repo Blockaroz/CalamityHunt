@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
 
-namespace CalamityHunt.Content.Bosses.Goozma.Slimes
+namespace CalamityHunt.Content.Bosses.Goozma
 {
     public class EbonianBehemuck : ModNPC
     {
@@ -36,10 +36,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     BuffID.CursedInferno,
                     BuffID.Poisoned,
                     BuffID.Confused
-				}
+                }
             };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData); 
-            
+            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
             //NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) {  };
             //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
@@ -158,11 +158,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     case (int)AttackList.ToxicBubbles:
                         ToxicBubbles();
                         break;
-                                            
+
                     case (int)AttackList.Trifecta:
                         Trifecta();
-                        break;                    
-                    
+                        break;
+
                     case (int)AttackList.RockPillar:
                         RockPillar();
                         break;
@@ -181,7 +181,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
                         if (Time < 5)
                             saveTarget = Target.Center;
-                         
+
                         Vector2 midPoint = new Vector2((NPC.Center.X + saveTarget.X) / 2f, NPC.Center.Y);
                         Vector2 jumpTarget = Vector2.Lerp(Vector2.Lerp(NPC.Center, midPoint, Utils.GetLerpValue(0, 15, Time, true)), Vector2.Lerp(midPoint, saveTarget, Utils.GetLerpValue(5, 30, Time, true)), Utils.GetLerpValue(0, 30, Time, true));
                         NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(jumpTarget).SafeNormalize(Vector2.Zero) * NPC.Distance(jumpTarget) * 0.5f * Utils.GetLerpValue(0, 35, Time, true), (float)Math.Pow(Utils.GetLerpValue(0, 40, Time, true), 2f));
@@ -245,7 +245,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     NPC.velocity.Y -= 10;
                     if (!Main.dedServ)
                     {
-                        SoundEngine.PlaySound(SoundID.Item146, NPC.Center);
+                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                        hop.MaxInstances = 0;
+                        hop.PitchVariance = 0.1f;
+                        SoundEngine.PlaySound(hop, NPC.Center);
                         SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                     }
                 }
@@ -394,7 +397,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 {
                     foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                         player.velocity.Y = -20;
-                    
+
                     Projectile leftPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(-170, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
                     leftPillar.ai[0] = -25;
                     leftPillar.ai[1] = 45;
@@ -446,12 +449,23 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         rightSpike.ai[1] = 80 + Main.rand.Next(-5, 5);
                     }
                 }
-                 if (Time % spikeTime == 55 && Time >= 150 && Time <= 150 + spikeCount * spikeTime && !Main.dedServ)
+
+                if (Time >= 150 && Time <= 150 + spikeCount * spikeTime && !Main.dedServ)
                 {
-                    SoundStyle spiked = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothEmerge", 1, 2);
-                    spiked.MaxInstances = 0;
-                    spiked.PitchVariance = 0.2f;
-                    SoundEngine.PlaySound(spiked, Main.LocalPlayer.MountedCenter);
+                    if (Time % spikeTime == 5)
+                    {
+                        SoundStyle spiking = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothTelegraph");
+                        spiking.MaxInstances = 0;
+                        spiking.PitchVariance = 0.2f;
+                        SoundEngine.PlaySound(spiking, Main.LocalPlayer.MountedCenter);
+                    }
+                    if (Time % spikeTime == 58)
+                    {
+                        SoundStyle spiked = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothEmerge", 1, 2);
+                        spiked.MaxInstances = 0;
+                        spiked.PitchVariance = 0.2f;
+                        SoundEngine.PlaySound(spiked, Main.LocalPlayer.MountedCenter);
+                    }
                 }
             }
 
@@ -469,6 +483,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         player.velocity.X -= (player.Center.X - NPC.Center.X) * 0.07f;
                     }
                 }
+
+            squishFactor = Vector2.Lerp(squishFactor, Vector2.One, 0.1f);
 
             //if (Time < 160 + spikeCount * spikeTime)
             //    foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 10000))
@@ -522,7 +538,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 case (int)AttackList.ToxicBubbles:
 
                     color = Color.Lerp(new Color(100, 100, 100, 0), Color.White, Math.Clamp(NPC.Distance(Target.Center), 100, 300) / 200f);
-                   
+
                     break;
 
                 case (int)AttackList.RockPillar:
@@ -540,7 +556,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     color = Color.Lerp(new Color(100, 100, 100, 0), Color.White, Math.Clamp(NPC.Distance(Target.Center), 100, 300) / 200f);
                     break;
             }
-            
+
             for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
             {
                 Vector2 oldPos = NPC.oldPos[i] + NPC.Size * new Vector2(0.5f, 1f);
@@ -557,7 +573,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             }
 
             spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color * 0.8f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
-            
+
             return false;
         }
     }

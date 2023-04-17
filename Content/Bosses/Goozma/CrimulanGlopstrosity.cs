@@ -17,7 +17,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Bosses.Goozma.Slimes
+namespace CalamityHunt.Content.Bosses.Goozma
 {
     public class CrimulanGlopstrosity : ModNPC
     {
@@ -234,7 +234,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(10, 26, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(10, 26, Time, true)) * 0.5f);
                 if (Time == 25 && !Main.dedServ)
                 {
-                    SoundEngine.PlaySound(SoundID.Item146, NPC.Center);
+                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                    hop.MaxInstances = 0;
+                    hop.PitchVariance = 0.1f;
+                    SoundEngine.PlaySound(hop, NPC.Center);
                     SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
 
@@ -279,7 +282,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         squishFactor = new Vector2(1f + (float)Math.Pow(Utils.GetLerpValue(waitTime + 78, waitTime + 63, Time, true), 2) * 0.6f, 1f - (float)Math.Pow(Utils.GetLerpValue(waitTime + 78, waitTime + 63, Time, true), 4) * 0.8f);
                     }
 
-                    if (Time == waitTime + 30 && !Main.dedServ)
+                    if (Time == waitTime + 10 && !Main.dedServ)
                     {
                         SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
                         SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
@@ -342,7 +345,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(15, 56, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(15, 56, Time, true)) * 0.5f);
                 if (Time == 58 && !Main.dedServ)
                 {
-                    SoundEngine.PlaySound(SoundID.Item146, NPC.Center);
+                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                    hop.MaxInstances = 0;
+                    hop.PitchVariance = 0.1f;
+                    SoundEngine.PlaySound(hop, NPC.Center);
                     SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
             }
@@ -429,7 +435,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     NPC.velocity *= 0.1f;
                     squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.5f);
                     if (Time == waitTime + 95 && !Main.dedServ)
-                        SoundEngine.PlaySound(SoundID.Item146, NPC.Center);
+                    {
+                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                        hop.MaxInstances = 0;
+                        hop.PitchVariance = 0.1f;
+                        SoundEngine.PlaySound(hop, NPC.Center);
+                    }
                 }
                 else if (Time < waitTime + 130)
                 {
@@ -460,12 +471,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             {
                 float localTime = (Time - 35) % jumpTime;
 
-                if (localTime == 0)
+                if (localTime < 1)
                 {
                     NPC.velocity.Y -= 30;
                     saveTarget = Target.Center + new Vector2((Main.rand.Next(0, 50) + Math.Abs(Target.Velocity.X) * 25 + 360) * (Target.Center.X > NPC.Center.X ? 1 : -1), NPC.height);
                     if (!Main.dedServ)
-                        SoundEngine.PlaySound(SoundID.Item146, NPC.Center);
+                    {
+                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                        hop.MaxInstances = 0;
+                        hop.PitchVariance = 0.1f;
+                        SoundEngine.PlaySound(hop, NPC.Center);
+                    }
                 }
                 else if (localTime < (int)(jumpTime * 0.72f))
                 {

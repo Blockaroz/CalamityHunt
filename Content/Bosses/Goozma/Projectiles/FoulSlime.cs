@@ -1,5 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Bosses.Goozma.Slimes;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

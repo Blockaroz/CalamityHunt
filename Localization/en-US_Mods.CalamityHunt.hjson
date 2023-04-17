@@ -160,6 +160,8 @@ Projectiles: {
 	ShootingStar.DisplayName: Shooting Star
 	GoozmagaBomb.DisplayName: Planetary Glob
 	GoozmagaShrapnel.DisplayName: Microplanetary Glob
+	StellarGelatine.DisplayName: Stellar Gelatine
+	ConstellationStar.DisplayName: Constellation Star
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

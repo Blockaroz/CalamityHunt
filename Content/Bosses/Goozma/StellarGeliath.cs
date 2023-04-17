@@ -17,7 +17,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Bosses.Goozma.Slimes
+namespace CalamityHunt.Content.Bosses.Goozma
 {
     public class StellarGeliath : ModNPC
     {
@@ -83,7 +83,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
         private enum AttackList
         {
-
+            Constellation,
+            Starfall,
+            BlackHole,
             TooFar,
             Interrupt
         }
@@ -135,6 +137,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             }
             else switch (Attack)
                 {
+                    case (int)AttackList.Constellation:
+                    case (int)AttackList.Starfall:
+                    case (int)AttackList.BlackHole:
+
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * NPC.Distance(Main.MouseWorld) * 0.05f, 0.03f);
+                        NPC.rotation = NPC.velocity.X * 0.03f;
+
+                        break;
+
                     case (int)AttackList.Interrupt:
                         NPC.noTileCollide = true;
                         NPC.damage = 0;
@@ -184,12 +195,72 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
         }
 
         private Vector2 saveTarget;
+        private float opacity;
+
+        public void StarSigns()
+        {
+            if (Time > 20 && Time < 40)
+            {
+
+            }
+        }        
+        
+        public void Starfall()
+        {
+            int gelTime = 20;
+            if (Main.expertMode)
+                gelTime = 15;
+
+            if (Time < 40)
+            {
+                NPC.velocity *= 0.8f;
+                squishFactor = Vector2.Lerp(Vector2.One, new Vector2(1.5f, 0.4f), (float)Math.Sqrt(Time / 40f));
+            }
+
+            else if (Time < 100)
+            {
+                NPC.velocity *= 0.9f;
+
+                squishFactor = Vector2.SmoothStep(new Vector2(1.5f, 0.4f), new Vector2(0.7f, 1.5f), (float)Math.Pow(Utils.GetLerpValue(40, 80, Time, true), 2));
+
+                if (Time > 80)
+                {
+                    int count = 1;
+                    if (Main.expertMode)
+                        count = 2;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        Projectile gelatin = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(30, 40), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(5f, 10f), ModContent.ProjectileType<StellarGelatine>(), GetDamage(1), 0);
+                        gelatin.ai[0] = Time - 140 - Main.projectile.Count(n => n.active && n.type == ModContent.ProjectileType<StellarGelatine>()) * gelTime;
+                        gelatin.ai[1] = Main.projectile.Count(n => n.active && n.type == ModContent.ProjectileType<StellarGelatine>()) * gelTime;
+                    }
+                }
+            }
+            else
+            {
+                squishFactor = Vector2.Lerp(squishFactor, Vector2.One, 0.1f);
+            }
+            if (Time < 1200)
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center - new Vector2(0, 300)).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.05f, 0.02f);
+
+            NPC.rotation = NPC.velocity.X * 0.02f;
+
+            if (Time > 1500)
+                Reset();
+        }
+
+        public void BlackHole()
+        {
+            Reset();
+        }
 
         private int GetDamage(int attack, float modifier = 1f)
         {
             int damage = attack switch
             {
                 0 => 70,//contact
+                1 => 40,//star gelatine
                 _ => 0
             };
 
@@ -201,7 +272,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Rectangle frame = texture.Frame(1, 1, 0, 0);//npcFrame
+            Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Asset<Texture2D> tell = TextureAssets.Extra[178];
             Asset<Texture2D> flare = TextureAssets.Extra[98];
@@ -214,20 +285,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     break;
             }
 
-            for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
-            {
-                Vector2 oldPos = NPC.oldPos[i] + NPC.Size * 0.5f;
-                Color trailColor = Color.Lerp(new Color(255, 255, 255, 0), new Color(10, 0, 10, 0), (float)Math.Sqrt(i / 10f)) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1);
-                spriteBatch.Draw(texture.Value, oldPos - screenPos, frame, trailColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
-            }
             spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
             
-            for (int i = 0; i < 5; i++)
-            {
-                Vector2 offset = new Vector2(25 * NPC.scale + (float)Math.Cos(Main.GlobalTimeWrappedHourly * 4f % MathHelper.TwoPi) * 8f, 0).RotatedBy(MathHelper.TwoPi / 5f * i + Main.GlobalTimeWrappedHourly * NPC.direction);
-                spriteBatch.Draw(texture.Value, NPC.Bottom + offset - screenPos, frame, new Color(50, 30, 60, 0).MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
-            }
-
             return false;
         }
     }

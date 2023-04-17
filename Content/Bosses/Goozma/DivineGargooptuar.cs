@@ -18,7 +18,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Bosses.Goozma.Slimes
+namespace CalamityHunt.Content.Bosses.Goozma
 {
     public class DivineGargooptuar : ModNPC
     {
@@ -197,7 +197,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 }
 
             if (Main.rand.NextBool(10))
-                Particle.NewParticle(Particle.ParticleType<Particles.PrettySparkle>(), NPC.Center + Main.rand.NextVector2Circular(100, 80), Main.rand.NextVector2Circular(3, 3), Main.hslToRgb(NPC.localAI[0] * 0.1f % 1f, 0.5f, 0.7f, 0), 0.3f + Main.rand.NextFloat());
+                Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), NPC.Center + Main.rand.NextVector2Circular(100, 80), Main.rand.NextVector2Circular(3, 3), Main.hslToRgb(NPC.localAI[0] * 0.1f % 1f, 0.5f, 0.7f, 0), 0.3f + Main.rand.NextFloat());
 
             Time++;
             NPC.localAI[0]++;
