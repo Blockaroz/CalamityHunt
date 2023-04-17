@@ -49,7 +49,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.StellarGeliath"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
+                ModLoader.HasMod("CalamityMod") ? null : BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
             });
         }
 
@@ -77,6 +77,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
                 calamity.Call("SetDefenseDamageNPC", Type, true);
+                SpawnModBiomes = new int[1] { calamity.Find<ModBiome>("AbovegroundAstralBiome").Type };
             }
         }
 
@@ -217,14 +218,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             {
                 Vector2 oldPos = NPC.oldPos[i] + NPC.Size * 0.5f;
                 Color trailColor = Color.Lerp(new Color(255, 255, 255, 0), new Color(10, 0, 10, 0), (float)Math.Sqrt(i / 10f)) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1);
-                spriteBatch.Draw(texture.Value, oldPos - Main.screenPosition, frame, trailColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                spriteBatch.Draw(texture.Value, oldPos - screenPos, frame, trailColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
             }
-            spriteBatch.Draw(texture.Value, NPC.Bottom - Main.screenPosition, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+            spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
             
             for (int i = 0; i < 5; i++)
             {
                 Vector2 offset = new Vector2(25 * NPC.scale + (float)Math.Cos(Main.GlobalTimeWrappedHourly * 4f % MathHelper.TwoPi) * 8f, 0).RotatedBy(MathHelper.TwoPi / 5f * i + Main.GlobalTimeWrappedHourly * NPC.direction);
-                spriteBatch.Draw(texture.Value, NPC.Bottom + offset - Main.screenPosition, frame, new Color(50, 30, 60, 0).MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                spriteBatch.Draw(texture.Value, NPC.Bottom + offset - screenPos, frame, new Color(50, 30, 60, 0).MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
             }
 
             return false;

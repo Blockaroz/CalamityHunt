@@ -40,8 +40,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
 
-            //NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { };
-            //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            {
+                PortraitScale = 0.75f,
+                PortraitPositionYOverride = -10
+            };
+
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -538,8 +543,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     if (Time > 50 && Time < 110)
                     {
                         float tellFade = Utils.GetLerpValue(80, 105, Time, true);
-                        spriteBatch.Draw(tell.Value, NPC.Bottom - new Vector2(0, NPC.height / 2f * squishFactor.Y).RotatedBy(NPC.rotation) - Main.screenPosition, null, new Color(200, 10, 20, 0) * tellFade, NPC.rotation + MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2(1f - tellFade, 110) * new Vector2(squishFactor.Y, squishFactor.X), 0, 0);
-                        spriteBatch.Draw(tell.Value, NPC.Bottom - new Vector2(0, NPC.height / 2f * squishFactor.Y).RotatedBy(NPC.rotation) - Main.screenPosition, null, new Color(200, 10, 20, 0) * tellFade, NPC.rotation - MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2((1f - tellFade) * 0.2f, 110) * new Vector2(squishFactor.Y, squishFactor.X), 0, 0);
+                        spriteBatch.Draw(tell.Value, NPC.Bottom - new Vector2(0, NPC.height / 2f * squishFactor.Y).RotatedBy(NPC.rotation) - screenPos, null, new Color(200, 10, 20, 0) * tellFade, NPC.rotation + MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2(1f - tellFade, 110) * new Vector2(squishFactor.Y, squishFactor.X), 0, 0);
+                        spriteBatch.Draw(tell.Value, NPC.Bottom - new Vector2(0, NPC.height / 2f * squishFactor.Y).RotatedBy(NPC.rotation) - screenPos, null, new Color(200, 10, 20, 0) * tellFade, NPC.rotation - MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2((1f - tellFade) * 0.2f, 110) * new Vector2(squishFactor.Y, squishFactor.X), 0, 0);
                     }
                     break;
 
@@ -551,8 +556,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                             Rectangle tellframe = texture.Frame(1, 4, 0, (int)((npcFrame + i * 0.5f) % 4));
 
                             Vector2 offset = new Vector2(90 * i * (float)Math.Pow(Utils.GetLerpValue(70, 100, Time, true), 2) * (float)Math.Sqrt(Utils.GetLerpValue(70, 100, Time, true)), 0);
-                            spriteBatch.Draw(texture.Value, NPC.Bottom - offset - new Vector2(0, (float)Math.Pow(i, 2f)).RotatedBy(NPC.rotation) - Main.screenPosition, tellframe, new Color(255, 20, 20, 20) * (0.5f - i / 14f) * Utils.GetLerpValue(70, 80, Time, true), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
-                            spriteBatch.Draw(texture.Value, NPC.Bottom + offset - new Vector2(0, (float)Math.Pow(i, 2f)).RotatedBy(NPC.rotation) - Main.screenPosition, tellframe, new Color(255, 20, 20, 20) * (0.5f - i / 14f) * Utils.GetLerpValue(70, 80, Time, true), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                            spriteBatch.Draw(texture.Value, NPC.Bottom - offset - new Vector2(0, (float)Math.Pow(i, 2f)).RotatedBy(NPC.rotation) - screenPos, tellframe, new Color(255, 20, 20, 20) * (0.5f - i / 14f) * Utils.GetLerpValue(70, 80, Time, true), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                            spriteBatch.Draw(texture.Value, NPC.Bottom + offset - new Vector2(0, (float)Math.Pow(i, 2f)).RotatedBy(NPC.rotation) - screenPos, tellframe, new Color(255, 20, 20, 20) * (0.5f - i / 14f) * Utils.GetLerpValue(70, 80, Time, true), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
                         }
                     }
                     break;
@@ -566,12 +571,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             {
                 Vector2 oldPos = NPC.oldPos[i] + NPC.Size * 0.5f;
                 Color trailColor = Color.Lerp(new Color(255, 10, 10, 0), new Color(0, 0, 0, 100), (float)Math.Sqrt(i / 10f)) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1) * 0.5f;
-                spriteBatch.Draw(texture.Value, oldPos - Main.screenPosition, frame, trailColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                spriteBatch.Draw(texture.Value, oldPos - screenPos, frame, trailColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
             }
 
             Vector2 ninjaPos = NPC.Bottom + new Vector2(0, -60 - (float)Math.Cos(npcFrame * MathHelper.PiOver2) * 4) * squishFactor;
-            spriteBatch.Draw(ninja.Value, ninjaPos - NPC.oldVelocity - Main.screenPosition, null, color, NPC.rotation, ninja.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
-            spriteBatch.Draw(texture.Value, NPC.Bottom - Main.screenPosition, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+            if (NPC.IsABestiaryIconDummy)
+            {
+                ninjaPos.Y += 16;
+            }
+            spriteBatch.Draw(ninja.Value, ninjaPos - NPC.oldVelocity - screenPos, null, color, NPC.rotation, ninja.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
+            spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
 
             return false;
         }

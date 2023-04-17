@@ -509,11 +509,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
             Color color = Color.White;
 
-            if (NPC.IsABestiaryIconDummy)
-            {
-                return true;
-            }
-
             if (eyeType is null)
             {
                 eyeType = new List<int>
@@ -535,8 +530,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                     if (Time > 0 && Time < 150)
                     {
                         float tellFade = Utils.GetLerpValue(60, 30, Time, true);
-                        spriteBatch.Draw(tell.Value, NPC.Bottom - new Vector2(0, NPC.height / 4f * squishFactor.Y).RotatedBy(NPC.rotation) - Main.screenPosition, null, new Color(140, 40, 200, 0) * tellFade, NPC.rotation - MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2(1f - tellFade, 80) * new Vector2(squishFactor.Y, squishFactor.X), 0, 0);
-                        spriteBatch.Draw(tell.Value, NPC.Bottom - new Vector2(0, NPC.height / 4f * squishFactor.Y).RotatedBy(NPC.rotation) - Main.screenPosition, null, new Color(140, 40, 200, 0) * tellFade, NPC.rotation + MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2((1f - tellFade) * 0.2f, 80) * new Vector2(squishFactor.Y, squishFactor.X), 0, 0);
+                        spriteBatch.Draw(tell.Value, NPC.Bottom - new Vector2(0, NPC.height / 4f * squishFactor.Y).RotatedBy(NPC.rotation) - screenPos, null, new Color(140, 40, 200, 0) * tellFade, NPC.rotation - MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2(1f - tellFade, 80) * new Vector2(squishFactor.Y, squishFactor.X), 0, 0);
+                        spriteBatch.Draw(tell.Value, NPC.Bottom - new Vector2(0, NPC.height / 4f * squishFactor.Y).RotatedBy(NPC.rotation) - screenPos, null, new Color(140, 40, 200, 0) * tellFade, NPC.rotation + MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2((1f - tellFade) * 0.2f, 80) * new Vector2(squishFactor.Y, squishFactor.X), 0, 0);
                     }
 
                     break;
@@ -550,18 +545,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             {
                 Vector2 oldPos = NPC.oldPos[i] + NPC.Size * new Vector2(0.5f, 1f);
                 Color trailColor = Color.Lerp(new Color(200, 20, 255, 120), new Color(0, 0, 0, 100), (float)Math.Sqrt(i / 10f)) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1) * 0.5f;
-                spriteBatch.Draw(texture.Value, oldPos - Main.screenPosition, frame, trailColor.MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                spriteBatch.Draw(texture.Value, oldPos - screenPos, frame, trailColor.MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
             }
 
             for (int i = 0; i < 3; i++)
             {
                 Rectangle eyeFrame = eye.Frame(6, 1, eyeType[i], 0);
                 Vector2 offset = new Vector2((float)Math.Sin((NPC.localAI[0] * 0.05f + i * 2f) % MathHelper.TwoPi) * 14 * (i % 2 == 0 ? 1 : -1), 0).RotatedBy((NPC.localAI[0] * 0.008f + i * 2.4) % MathHelper.TwoPi);
-                spriteBatch.Draw(eye.Value, NPC.Bottom + offset * squishFactor - new Vector2(0, 47).RotatedBy(NPC.rotation) * NPC.scale * squishFactor - Main.screenPosition, eyeFrame, new Color(110, 50, 255, 20), NPC.rotation + NPC.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, NPC.scale * 1.2f * squishFactor.Length() * 0.5f, 0, 0);
-                spriteBatch.Draw(eye.Value, NPC.Bottom + offset * squishFactor - new Vector2(0, 47).RotatedBy(NPC.rotation) * NPC.scale * squishFactor - Main.screenPosition, eyeFrame, color, NPC.rotation + NPC.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, NPC.scale * squishFactor.Length() * 0.5f, 0, 0);
+                spriteBatch.Draw(eye.Value, NPC.Bottom + offset * squishFactor - new Vector2(0, 47).RotatedBy(NPC.rotation) * NPC.scale * squishFactor - screenPos, eyeFrame, new Color(110, 50, 255, 20), NPC.rotation + NPC.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, NPC.scale * 1.2f * squishFactor.Length() * 0.5f, 0, 0);
+                spriteBatch.Draw(eye.Value, NPC.Bottom + offset * squishFactor - new Vector2(0, 47).RotatedBy(NPC.rotation) * NPC.scale * squishFactor - screenPos, eyeFrame, color, NPC.rotation + NPC.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, NPC.scale * squishFactor.Length() * 0.5f, 0, 0);
             }
 
-            spriteBatch.Draw(texture.Value, NPC.Bottom - Main.screenPosition, frame, color * 0.8f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+            spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color * 0.8f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
             
             return false;
         }

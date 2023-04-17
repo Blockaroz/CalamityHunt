@@ -494,7 +494,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                 {
                     Vector2 oldPos = NPC.oldPos[i] + NPC.Size * new Vector2(0.5f, 1f);
                     Color trailColor = Main.hslToRgb((NPC.localAI[0] * 0.03f - ((float)i / NPCID.Sets.TrailCacheLength[Type])) % 1f, 1f, 0.6f, 0) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1) * (1f - (float)i / NPCID.Sets.TrailCacheLength[Type]) * 0.6f;
-                    spriteBatch.Draw(trailTexture.Value, oldPos - Main.screenPosition, frame, trailColor.MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                    spriteBatch.Draw(trailTexture.Value, oldPos - screenPos, frame, trailColor.MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
                 }
 
             Color rainbowColor = Main.hslToRgb((NPC.localAI[0] * 0.03f) % 1f, 1f, 0.7f, 0) * 0.8f;
@@ -502,15 +502,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
             Vector2 leftWingPos = corePos + new Vector2(-12, 2).RotatedBy(NPC.rotation) * NPC.scale;
             Vector2 rightWingPos = corePos + new Vector2(12, 2).RotatedBy(NPC.rotation) * NPC.scale;
             
-            spriteBatch.Draw(wings.Value, leftWingPos - Main.screenPosition, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale, 0, 0);
-            spriteBatch.Draw(wings.Value, rightWingPos - Main.screenPosition, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale, SpriteEffects.FlipHorizontally, 0);
+            spriteBatch.Draw(wings.Value, leftWingPos - screenPos, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale, 0, 0);
+            spriteBatch.Draw(wings.Value, rightWingPos - screenPos, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale, SpriteEffects.FlipHorizontally, 0);
             
-            spriteBatch.Draw(wings.Value, leftWingPos - Main.screenPosition, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale * 1.02f, 0, 0);
-            spriteBatch.Draw(wings.Value, rightWingPos - Main.screenPosition, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale * 1.02f, SpriteEffects.FlipHorizontally, 0);
+            spriteBatch.Draw(wings.Value, leftWingPos - screenPos, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale * 1.02f, 0, 0);
+            spriteBatch.Draw(wings.Value, rightWingPos - screenPos, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale * 1.02f, SpriteEffects.FlipHorizontally, 0);
 
-            spriteBatch.Draw(core.Value, corePos - Main.screenPosition, null, color, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
-            spriteBatch.Draw(core.Value, corePos + Main.rand.NextVector2Circular(5, 5) - Main.screenPosition, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
-            spriteBatch.Draw(core.Value, corePos + Main.rand.NextVector2Circular(10, 10) - Main.screenPosition, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
+            spriteBatch.Draw(core.Value, corePos - screenPos, null, color, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
+            spriteBatch.Draw(core.Value, corePos + Main.rand.NextVector2Circular(5, 5) - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
+            spriteBatch.Draw(core.Value, corePos + Main.rand.NextVector2Circular(10, 10) - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
 
             Asset<Texture2D> colorMap = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/RainbowGelMap");
             Effect gelEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel", AssetRequestMode.ImmediateLoad).Value;
@@ -537,17 +537,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, gelEffect, Main.Transform);
 
-                        spriteBatch.Draw(dangerTexture.Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                        spriteBatch.Draw(dangerTexture.Value, NPC.Center - screenPos, null, color, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-                        spriteBatch.Draw(dangerShineTexture.Value, NPC.Center - Main.screenPosition, null, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                        spriteBatch.Draw(dangerShineTexture.Value, NPC.Center - screenPos, null, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
                         
                         if (NPC.localAI[1] == 0)
                         {
-                            spriteBatch.Draw(dangerShield.Value, NPC.Center - Main.screenPosition, null, new Color(150, 150, 150, 150), NPC.rotation, dangerShield.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                            spriteBatch.Draw(dangerShield.Value, NPC.Center - Main.screenPosition, null, rainbowColor * 0.3f, NPC.rotation, dangerShield.Size() * 0.5f, NPC.scale * 1.01f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                            spriteBatch.Draw(dangerShield.Value, NPC.Center - screenPos, null, new Color(150, 150, 150, 150), NPC.rotation, dangerShield.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                            spriteBatch.Draw(dangerShield.Value, NPC.Center - screenPos, null, rainbowColor * 0.3f, NPC.rotation, dangerShield.Size() * 0.5f, NPC.scale * 1.01f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
                         }
                     }
                     else
@@ -556,17 +556,39 @@ namespace CalamityHunt.Content.Bosses.Goozma.Slimes
 
                 default:
 
-                    spriteBatch.End();
-                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, gelEffect, Main.Transform);
-                    
-                    spriteBatch.Draw(texture.Value, NPC.Bottom - Main.screenPosition, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                    if (NPC.IsABestiaryIconDummy)
+                    {
+                        RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
+                        Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
+                        spriteBatch.End();
+                        spriteBatch.GraphicsDevice.RasterizerState = priorRrasterizerState;
+                        spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
 
-                    spriteBatch.End();
-                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, gelEffect, Main.UIScaleMatrix);
 
-                    spriteBatch.Draw(shineTexture.Value, NPC.Bottom - Main.screenPosition, frame, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                        spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
 
-                    break;
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
+
+                        spriteBatch.Draw(shineTexture.Value, NPC.Bottom - screenPos, frame, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+
+                        break;
+                    }
+                    else
+                    {
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, gelEffect, Main.Transform);
+
+                        spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+                        
+                        spriteBatch.Draw(shineTexture.Value, NPC.Bottom - screenPos, frame, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+
+                        break;
+                    }
             }
 
             return false;

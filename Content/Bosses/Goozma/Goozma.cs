@@ -59,6 +59,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.Goozma"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
+                new SlimeMonsoonPortraitBackground()
             });
         }
 
