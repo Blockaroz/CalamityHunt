@@ -23,7 +23,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Crimulan Glopstrosity"); 
+            Main.npcFrameCount[Type] = 4;
             NPCID.Sets.TrailCacheLength[Type] = 10;
             NPCID.Sets.TrailingMode[Type] = 1;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
@@ -43,7 +43,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 PortraitScale = 0.75f,
-                PortraitPositionYOverride = -10
+                PortraitPositionYOverride = -10,
             };
 
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
@@ -103,8 +103,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public NPCAimedTarget Target => NPC.GetTargetData();
         public Vector2 squishFactor = Vector2.One;
 
-        public int npcFrame;
-
         public override void AI()
         {
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
@@ -113,13 +111,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
 
             NPC.realLife = Host.whoAmI;
-
-            NPC.frameCounter++;
-            if (NPC.frameCounter > 9)
-            {
-                NPC.frameCounter = 0;
-                npcFrame = (npcFrame + 1) % 4;
-            }
 
             if (!NPC.HasPlayerTarget)
                 NPC.TargetClosestUpgraded();
@@ -543,6 +534,18 @@ namespace CalamityHunt.Content.Bosses.Goozma
             };
 
             return (int)(damage * modifier);
+        }
+
+        public int npcFrame;
+
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter++;
+            if (NPC.frameCounter > 9)
+            {
+                NPC.frameCounter = 0;
+                npcFrame = (npcFrame + 1) % Main.npcFrameCount[Type];
+            }
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

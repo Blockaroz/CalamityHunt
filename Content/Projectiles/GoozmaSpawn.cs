@@ -144,6 +144,11 @@ namespace CalamityHunt.Content.Projectiles
             On_Main.UpdateAudio += FadeMusicOut;
         }
 
+        public override void Unload()
+        {
+            On_Main.UpdateAudio -= FadeMusicOut;
+        }
+
         private void FadeMusicOut(On_Main.orig_UpdateAudio orig, Main self)
         {
             orig(self);

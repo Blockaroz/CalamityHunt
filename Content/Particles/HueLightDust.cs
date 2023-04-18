@@ -57,7 +57,7 @@ namespace CalamityHunt.Content.Particles
             Asset<Texture2D> glowSoft = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Rectangle rect = texture.Frame(1, 3, 0, frame);
             Color drawColor = color;
-            drawColor.A /= 2;
+            drawColor.A /= 3;
             Color glowColor = color * 0.2f;
             glowColor.A = 0;
             Color whiteColor = Color.White;

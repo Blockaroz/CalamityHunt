@@ -24,7 +24,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Divine Gargooptuar"); 
+            Main.npcFrameCount[Type] = 4;
             NPCID.Sets.TrailCacheLength[Type] = 10;
             NPCID.Sets.TrailingMode[Type] = 1;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
@@ -100,25 +100,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public NPCAimedTarget Target => NPC.GetTargetData();
         public Vector2 squishFactor = Vector2.One;
 
-        public int npcFrame;
-        public int wingFrame;
-
         public override void AI()
         {
             if (NPC.ai[2] < 0)
                 NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
                 NPC.active = false;
-
-            NPC.frameCounter++;
-            if (NPC.frameCounter % 7 == 0)
-                npcFrame = (npcFrame + 1) % 4;
-
-            if (NPC.frameCounter % 8 == 0 && Time >= 0)
-                wingFrame = (wingFrame + 1) % 4;
-
-            if (NPC.frameCounter > 56)
-                NPC.frameCounter = 0;
 
             if (wingFrame == 2 && NPC.frameCounter % 8 == 0 && !Main.dedServ)
                 SoundEngine.PlaySound(SoundID.Item32.WithVolumeScale(2f), NPC.Center);
@@ -466,6 +453,23 @@ namespace CalamityHunt.Content.Bosses.Goozma
             return (int)(damage * modifier);
         }
 
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter++;
+            if (NPC.frameCounter % 7 == 0)
+                npcFrame = (npcFrame + 1) % Main.npcFrameCount[Type];
+
+            if (NPC.frameCounter % 8 == 0 && Time >= 0)
+                wingFrame = (wingFrame + 1) % 4;
+
+            if (NPC.frameCounter > 56)
+                NPC.frameCounter = 0;
+
+        }
+
+        public int npcFrame;
+        public int wingFrame;
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
@@ -509,8 +513,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             spriteBatch.Draw(wings.Value, rightWingPos - screenPos, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale * 1.02f, SpriteEffects.FlipHorizontally, 0);
 
             spriteBatch.Draw(core.Value, corePos - screenPos, null, color, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
-            spriteBatch.Draw(core.Value, corePos + Main.rand.NextVector2Circular(5, 5) - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
-            spriteBatch.Draw(core.Value, corePos + Main.rand.NextVector2Circular(10, 10) - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
+            spriteBatch.Draw(core.Value, corePos - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * 1.1f * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
 
             Asset<Texture2D> colorMap = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/RainbowGelMap");
             Effect gelEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel", AssetRequestMode.ImmediateLoad).Value;

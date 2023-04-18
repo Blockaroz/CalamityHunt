@@ -23,7 +23,6 @@ namespace CalamityHunt.Common.Systems.Particles
 
         public override void OnModLoad()
         {
-            Main.QueueMainThreadAction(() => particleBatch = new SpriteBatch(Main.graphics.GraphicsDevice));
             On_Main.UpdateParticleSystems += UpdateParticles;
             On_Main.DoDraw_DrawNPCsOverTiles += DrawParticlesUnderEntities;
             On_Main.DrawDust += DrawParticles;
@@ -85,8 +84,6 @@ namespace CalamityHunt.Common.Systems.Particles
 
             spriteBatch.End();
         }
-
-        public static SpriteBatch particleBatch;
 
         public static void DrawParticles(SpriteBatch spriteBatch)
         {

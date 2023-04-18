@@ -30,23 +30,31 @@ namespace CalamityHunt.Content.Particles
         {
             scale *= 0.99f;
             time++;
-            velocity *= 0.95f;
 
             rotationalVelocity *= 0.97f * Math.Clamp(1 - time * 0.001f, 0.7f, 1f);
             rotation += rotationalVelocity;
 
-            if (time > 20)
-                scale *= 0.9f + Math.Clamp(scale * 0.0001f, 0f, 1f);
-
-            if (scale < 0.1f)
+            if (time > 10)
+            {
+                scale *= 0.93f - Math.Clamp(scale * 0.0001f, 0f, 0.5f);
+                velocity *= 0.82f;
+            }
+            if (scale < 0.3f)
                 Active = false;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if ((string)data == "Cosmos")
+            {
+                behindEntities = true;
+                return;
+            }
+
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Rectangle frame = texture.Frame(4, 2, variant % 4, (int)(variant / 4f));
             float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, 7, time, true));
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, color, rotation, frame.Size() * 0.5f, scale * grow, 0, 0);
+            float opacity = Utils.GetLerpValue(25, 0, time, true) * Math.Clamp(scale, 0, 1);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, color * opacity, rotation, frame.Size() * 0.5f, scale * grow, 0, 0);
         }
     }
 }

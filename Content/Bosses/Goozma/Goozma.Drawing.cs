@@ -35,11 +35,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
         {
-            maxBright = 0.66f;
+            maxBright = 0.667f;
             brightnesses = new float[10];
             colors = new Vector3[10];
 
-            float rainbowStartOffset = 0.35f + NPC.localAI[0] * 0.005f;
+            float rainbowStartOffset = 0.35f + NPC.localAI[0] * 0.00625f;
             //Calculate and store every non-modulo brightness, with the shifting offset. 
             //The first brightness is ignored for the moment, it will be relevant later. Setting it to -1 temporarily
             brightnesses[0] = -1;
@@ -81,7 +81,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
             colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
         }
 
-        public float bend;
+        public override void FindFrame(int frameHeight)
+        {
+            if (NPC.IsABestiaryIconDummy)
+                NPC.localAI[0]++;
+        }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -104,28 +108,24 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (oldVel == null)
                 oldVel = new Vector2[NPCID.Sets.TrailCacheLength[Type]];
 
+            float trailStrength = (Phase > 1 || Phase == -22) ? 1.3f : 0.5f;
+
             if (NPC.IsABestiaryIconDummy)
-            {
-                NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 53f;
-                NPC.localAI[1] = Main.GlobalTimeWrappedHourly;
-                for (int i = 0; i < 4; i++)
-                {
-                    Vector2 off = new Vector2(4).RotatedBy(MathHelper.TwoPi / 4f * i + NPC.rotation);
-                    DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, NPC.velocity, glowColor);
-                }
-            }
+                headScale = 1f;
             else
             {
-                if (Phase == 1 && Time > 50)
-                    goto EyeOnly;
-
-                float trailStrength = (Phase > 1 || Phase == -22) ? 1.3f : 0.5f;
                 for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
                 {
                     Color trailColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
                     trailColor.A = 0;
-                    DrawGoozma(spriteBatch, screenPos, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], trailColor * trailStrength);
+                    DrawGoozma(spriteBatch, screenPos, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], trailColor * trailStrength * NPC.scale);
                 }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 off = new Vector2(4, 0).RotatedBy(MathHelper.TwoPi / 4f * i + NPC.rotation);
+                DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, NPC.velocity, glowColor * trailStrength);
             }
 
             GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
@@ -157,13 +157,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
             DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, NPC.velocity, Color.Lerp(drawColor, Color.White, 0.3f));
             FlipShadersOnOff(spriteBatch, null);
 
-            Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * NPC.scale;
-            spriteBatch.Draw(crownMask.Value, crownPos - Main.screenPosition, null, Color.White, extraTilt + NPC.rotation, crownMask.Size() * new Vector2(0.5f, 1f), 1f, direction, 0);
+            Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * headScale * NPC.scale;
+            spriteBatch.Draw(crownMask.Value, crownPos - screenPos, null, Color.White, extraTilt + NPC.rotation, crownMask.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
 
-            EyeOnly:
-            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.7f + NPC.rotation) * NPC.scale;
+            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.7f + NPC.rotation) * headScale * NPC.scale;
             float eyeRot = -MathHelper.PiOver4;
-            float eyeScale = (1.1f + (float)Math.Sin(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 0.15f) * NPC.scale;
+            float eyeScale = (1.1f + (float)Math.Sin(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 0.15f);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.7f, 0.8f), 0, 0);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.7f, 0.8f), 0, 0);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.5f) + new Vector2(0, eyePower.Y), 0, 0);
@@ -213,17 +212,18 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             SpriteEffects direction = NPC.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            Vector2 crownPos = position + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + rotation) * NPC.scale;
-            Vector2 dressPos = position + drawOffset + new Vector2(4 * NPC.direction, 16).RotatedBy(-extraTilt * 0.4f + rotation) * NPC.scale;
+            Vector2 crownPos = position + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + rotation) * headScale * NPC.scale;
+            Vector2 dressPos = position + drawOffset + new Vector2(4 * NPC.direction, 16).RotatedBy(-extraTilt * 0.4f + rotation) * headScale * NPC.scale;
 
             Vector2 basePos = position + new Vector2(0, 10).RotatedBy(-extraTilt * 0.4f + rotation) * NPC.scale;
-            
+            headScale = 1f;
+
             float tentaCount = 5;
             for (int j = 0; j < tentaCount; j++)
             {
                 float rot = rotation + (0.4f - j * 0.1f) * NPC.direction + MathHelper.PiOver2;
-                Vector2 pos = basePos + new Vector2(0, 30).RotatedBy(MathHelper.Lerp(0.5f, -1.3f, j / tentaCount) * NPC.direction + rotation);
-                Vector2 stick = (rot.ToRotationVector2() * 12 - velocity * 0.1f) * (0.5f + NPC.scale * 0.5f);
+                Vector2 pos = basePos + new Vector2(0, 30).RotatedBy(MathHelper.Lerp(0.5f, -1.3f, j / tentaCount) * NPC.direction + rotation) * NPC.scale;
+                Vector2 stick = (rot.ToRotationVector2() * 12 - velocity * 0.1f) * (0.5f + headScale * 0.5f) * NPC.scale;
                 int segments = 12 - Math.Clamp(Math.Abs(j - (int)(tentaCount / 2f)), 1, 2);
 
                 Vector2 lastPos = pos;
@@ -238,19 +238,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Rectangle frame = tentacle.Frame(1, 5, 0, segFrame);
                     Vector2 nextStick = stick.RotatedBy(Math.Clamp(velocity.X * 0.03f, -1, 1) * prog + (float)Math.Sin((NPC.localAI[0] * 0.06 - i * 0.8f) % MathHelper.TwoPi) * 1f * Utils.GetLerpValue(tentaCount / 2f, tentaCount, j - velocity.X * 0.001f * NPC.direction * (1f - prog)) * (i / (float)segments));
                     float stickRot = lastPos.AngleTo(lastPos + nextStick);
-                    Vector2 stretch = new Vector2(1f, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(NPC.scale, 1f, i / (float)segments);
+                    Vector2 stretch = new Vector2(1f * NPC.scale, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(headScale, 1f, i / (float)segments);
                     lastPos += nextStick;
                     Color tentaColor = Color.Lerp(Color.Black * (color.A / 255), color, (float)Math.Sqrt(prog));
-                    spriteBatch.Draw(tentacle.Value, lastPos + drawOffset * (1f - prog) - screenPos, frame, tentaColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
+                    spriteBatch.Draw(tentacle.Value, lastPos + drawOffset - screenPos, frame, tentaColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
                 }
             }
 
             if (cordTarget != null)
                 spriteBatch.Draw(cordTarget, Vector2.Zero + (position - NPC.Center), null, color * 2f, 0, Vector2.Zero, 2f, 0, 0);
 
-            spriteBatch.Draw(dress.Value, dressPos - screenPos, null, color, -extraTilt * 0.66f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dress.Size() * new Vector2(0.5f, 0f), NPC.scale, direction, 0);
-            spriteBatch.Draw(texture.Value, position + drawOffset - screenPos, null, color, extraTilt * 0.4f + rotation * 0.7f, texture.Size() * 0.5f, NPC.scale, direction, 0);
-            spriteBatch.Draw(crown.Value, crownPos - screenPos, null, color, extraTilt + rotation, crown.Size() * new Vector2(0.5f, 1f), 1f, direction, 0);
+            spriteBatch.Draw(dress.Value, dressPos - screenPos, null, color, -extraTilt * 0.66f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dress.Size() * new Vector2(0.5f, 0f), headScale * NPC.scale, direction, 0);
+            spriteBatch.Draw(texture.Value, position + drawOffset - screenPos, null, color, extraTilt * 0.4f + rotation * 0.7f, texture.Size() * 0.5f, headScale * NPC.scale, direction, 0);
+            spriteBatch.Draw(crown.Value, crownPos - screenPos, null, color, extraTilt + rotation, crown.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
         } 
     }
 }

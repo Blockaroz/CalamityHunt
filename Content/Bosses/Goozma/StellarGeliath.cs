@@ -23,6 +23,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         public override void SetStaticDefaults()
         {
+            Main.npcFrameCount[Type] = 4;
             NPCID.Sets.TrailCacheLength[Type] = 10;
             NPCID.Sets.TrailingMode[Type] = 1;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
@@ -98,23 +99,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public NPCAimedTarget Target => NPC.GetTargetData();
         public Vector2 squishFactor = Vector2.One;
 
-        public int npcFrame;
-
         public override void AI()
         {
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
-                NPC.active = false;
-            else
-                NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
+            //if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+            //    NPC.active = false;
+            //else
+            //    NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
 
-            NPC.realLife = Host.whoAmI;
-
-            NPC.frameCounter++;
-            if (NPC.frameCounter > 7)
-            {
-                NPC.frameCounter = 0;
-                npcFrame = (npcFrame + 1) % 4;
-            }
+            //NPC.realLife = Host.whoAmI;
 
             if (!NPC.HasPlayerTarget)
                 NPC.TargetClosestUpgraded();
@@ -267,7 +259,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
             return (int)(damage * modifier);
         }
 
-        private float saveAngle;
+        public int npcFrame;
+
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter++;
+            if (NPC.frameCounter > 7)
+            {
+                NPC.frameCounter = 0;
+                npcFrame = (npcFrame + 1) % Main.npcFrameCount[Type];
+            }
+        }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -284,9 +286,45 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     color = Color.Lerp(new Color(100, 100, 100, 0), Color.White, Math.Clamp(NPC.Distance(Target.Center), 100, 300) / 200f);
                     break;
             }
+            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
+            effect.Parameters["uTextureClose"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
+            effect.Parameters["uTextureFar"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
+            effect.Parameters["uPosition"].SetValue(Main.screenPosition * 0.001f);
+            effect.Parameters["uParallax"].SetValue(new Vector2(0.125f, 0.25f));
+            effect.Parameters["uScrollClose"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.004f % 2f, Main.GlobalTimeWrappedHourly * 0.014f % 2f));
+            effect.Parameters["uScrollFar"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.01f % 2f, Main.GlobalTimeWrappedHourly * 0.012f % 2f));
+            effect.Parameters["uCloseColor"].SetValue(Color.IndianRed.ToVector3());
+            effect.Parameters["uFarColor"].SetValue(Color.Indigo.ToVector3());
+            effect.Parameters["uOutlineColor"].SetValue(Color.White.ToVector3());
+            effect.Parameters["uImageRatio"].SetValue(new Vector2(Main.screenWidth / (float)Main.screenHeight, 1f));
 
-            spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
-            
+            if (NPC.IsABestiaryIconDummy)
+            {
+                RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
+                Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
+                spriteBatch.End();
+                spriteBatch.GraphicsDevice.RasterizerState = priorRrasterizerState;
+                spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
+                effect.Parameters["uPosition"].SetValue(Vector2.Zero);
+
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.UIScaleMatrix);
+
+                spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
+            }
+            else
+            {
+                //spriteBatch.End();
+                //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
+
+                spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+
+                //spriteBatch.End();
+                //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            }
+
             return false;
         }
     }

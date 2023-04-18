@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -11,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -84,6 +86,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                         glowColor.A /= 2;
                         Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
+                        
+                        if (Main.rand.NextBool(2))
+                            Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(54, 54), Main.rand.NextVector2Circular(15, 15) + Projectile.velocity * 0.4f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), 0.5f + Main.rand.NextFloat());
                     }
 
                     break;
@@ -127,19 +132,19 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.Kill();
             }
 
+            if (Time > 400)
+                Projectile.velocity *= 0.9f;
+
             if (Time > 480)
                 Projectile.Kill();
 
             if (Main.rand.NextBool(5))
-            {
-                Color glowColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.6f, 0);
-                glowColor.A /= 2;
-                Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(3, 3), 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
-            }
+                Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(3, 3), 0, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.6f, 128), 1f + Main.rand.NextFloat(2f)).noGravity = true;
 
-            if (Main.rand.NextBool(5))
-                Particle.NewParticle(Particle.ParticleType<Particles.PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(36, 36), Main.rand.NextVector2Circular(3, 3), Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.6f, 0), 0.5f + Main.rand.NextFloat());
+            if (Main.rand.NextBool(2))
+                Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(54, 54), Main.rand.NextVector2Circular(7, 7), Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), 0.2f + Main.rand.NextFloat());
 
+            //Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.1f) * 0.8f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), Projectile.scale + Main.rand.NextFloat(0.7f));
 
             for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
             {
@@ -224,9 +229,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             float sparkRotation = Projectile.velocity.X * 0.01f;
             float wobble = 1.2f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.05f;
-            Vector2 sparkleScale = new Vector2(0.5f, 6f) * wobble * Projectile.scale;
+            Vector2 sparkleScale = new Vector2(0.5f, 6f) * wobble * Utils.GetLerpValue(0.3f, 1f, Projectile.scale, true);
             Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f, sparkRotation + MathHelper.PiOver2 + 0.2f, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f, sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.6f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), sparkRotation + MathHelper.PiOver2 + 0.2f, sparkle.Size() * 0.5f, sparkleScale * 0.4f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.6f, 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.33f, 0, 0);
             
             float ringWobble0 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.6f) * 0.01f;
             float ringWobble1 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.3f) * 0.01f;

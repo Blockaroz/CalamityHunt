@@ -28,6 +28,7 @@ namespace CalamityHunt.Content.Items.BossBags
             Item.height = 40;
             Item.maxStack = Item.CommonMaxStack;
             Item.rare = ItemRarityID.Expert;
+            Item.expert = true;
         }
 
         public override void ModifyItemLoot(ItemLoot itemLoot)
