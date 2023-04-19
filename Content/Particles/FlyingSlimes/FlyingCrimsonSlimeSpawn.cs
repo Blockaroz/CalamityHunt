@@ -10,21 +10,23 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
-    public class FlyingSlimer : Particle
+    public class FlyingCrimsonSlimeSpawn : Particle
     {
         public int time;
         public float distanceFade;
+        public bool spiked;
 
         public override void OnSpawn()
         {
             scale *= Main.rand.NextFloat(0.9f, 1.1f);
+            spiked = Main.rand.NextBool();
         }
 
         public override void Update()
         {
             if (data is Vector2)
             {
-                velocity = Vector2.Lerp(velocity, position.DirectionTo((Vector2)data).SafeNormalize(Vector2.Zero) * 30f, 0.1f);
+                velocity = Vector2.Lerp(velocity, position.DirectionTo((Vector2)data).SafeNormalize(Vector2.Zero) * 22f, 0.1f);
                 if (position.Distance((Vector2)data) < 10)
                 {
                     Active = false;
@@ -36,9 +38,9 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
             else
                 distanceFade = 1f;
 
-            if (Main.rand.NextBool(3))
+            if (Main.rand.NextBool(10))
             {
-                Dust slime = Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(20, 20), DustID.Corruption, velocity * 0.5f, 200, color, 0.5f + Main.rand.NextFloat());
+                Dust slime = Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(20, 20), 306, velocity * 0.2f, DustID.Blood, color, 0.5f + Main.rand.NextFloat() * 0.3f);
                 slime.noGravity = true;
             }
 
@@ -56,6 +58,8 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
         public override void Draw(SpriteBatch spriteBatch)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            if (spiked)
+                texture = ModContent.Request<Texture2D>(Texture + "Spiked");
 
             float fadeIn = Utils.GetLerpValue(0, 30, time, true) * distanceFade;
 

@@ -1,14 +1,10 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Projectiles;
+using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
@@ -31,6 +27,7 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
                 if (position.Distance((Vector2)data) < 10)
                 {
                     Active = false;
+                    SoundEngine.PlaySound(GoozmaSpawn.slimeabsorb, position);
                     Gore.NewGore(Entity.GetSource_None(), position, Main.rand.NextVector2Circular(1, 1), 4);
                     Gore.NewGore(Entity.GetSource_None(), position, Main.rand.NextVector2Circular(1, 1), 5);
                 }
@@ -58,13 +55,10 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
 
             float fadeIn = Utils.GetLerpValue(0, 30, time, true) * distanceFade;
 
-            Color drawColor = color;
-            drawColor.A = 255;
-
             for (int i = 0; i < 10; i++)
-                spriteBatch.Draw(texture.Value, position - velocity * i * 0.5f - Main.screenPosition, null, drawColor.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn * ((10f - i) / 60f), rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade, 0, 0);
+                spriteBatch.Draw(texture.Value, position - velocity * i * 0.5f - Main.screenPosition, null, color.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn * ((10f - i) / 60f), rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade, 0, 0);
 
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, drawColor.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn, rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, color.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn, rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade, 0, 0);
         }
     }
 }

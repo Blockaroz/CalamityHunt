@@ -1,12 +1,9 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Projectiles;
+using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -29,14 +26,17 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
             {
                 velocity = Vector2.Lerp(velocity, position.DirectionTo((Vector2)data).SafeNormalize(Vector2.Zero) * 22f, 0.1f);
                 if (position.Distance((Vector2)data) < 10)
+                {
                     Active = false;
+                    SoundEngine.PlaySound(GoozmaSpawn.slimeabsorb, position);
+                }
 
                 distanceFade = Utils.GetLerpValue(20, 80, position.Distance((Vector2)data), true);
             }
             else
                 distanceFade = 1f;
 
-            Lighting.AddLight(position + velocity, Color.LightGray.ToVector3());
+            Lighting.AddLight(position + velocity, Color.LightGreen.ToVector3());
 
             if (Main.rand.NextBool(3))
             {

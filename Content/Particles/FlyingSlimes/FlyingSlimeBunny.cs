@@ -1,17 +1,10 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
-using log4net.Util;
+using CalamityHunt.Content.Projectiles;
+using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.Graphics.Shaders;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
@@ -34,6 +27,7 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
                 if (position.Distance((Vector2)data) < 10)
                 {
                     Active = false;
+                    SoundEngine.PlaySound(GoozmaSpawn.slimeabsorb, position);
                     Gore.NewGore(Entity.GetSource_None(), position, Main.rand.NextVector2Circular(1, 1), 440);
                 }
                 distanceFade = Utils.GetLerpValue(20, 80, position.Distance((Vector2)data), true);

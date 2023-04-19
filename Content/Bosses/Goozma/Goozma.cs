@@ -236,6 +236,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void AI()
         {
+            if (NPC.life > 3000)
+            {
+                NPC.life = 3000;
+            }
             ChangeWeather();
             bool noSlime = NPC.ai[3] < 0 || NPC.ai[3] >= Main.maxNPCs || ActiveSlime.ai[1] > 3 || !ActiveSlime.active;
             if (Phase == 0 && noSlime)
@@ -343,8 +347,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            currentSlime = 1;// (currentSlime + 1) % 3;
-                            nextAttack[currentSlime] = 2;
+                            currentSlime =  (currentSlime + 1) % 3;
+                            nextAttack[currentSlime] = nextAttack[currentSlime]++;
 
                             for (int i = 0; i < nextAttack.Length; i++)
                                 nextAttack[i] = nextAttack[i] % 3;
@@ -876,7 +880,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //        KillSlime(currentSlime);
             //    ActiveSlime.active = false;
             //}
-            Phase = -22;
 
             if (hitTimer > 0)
                 hitTimer--;

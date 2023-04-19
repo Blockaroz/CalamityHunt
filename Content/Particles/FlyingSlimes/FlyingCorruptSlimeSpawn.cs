@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
-    public class FlyingSlimer : Particle
+    public class FlyingCorruptSlimeSpawn : Particle
     {
         public int time;
         public float distanceFade;

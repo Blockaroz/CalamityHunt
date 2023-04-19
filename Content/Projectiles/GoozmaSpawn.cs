@@ -24,6 +24,7 @@ namespace CalamityHunt.Content.Projectiles
 {
     public class GoozmaSpawn : ModProjectile
     {
+        public static readonly SoundStyle slimeabsorb = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeAbsorb", 8) with { MaxInstances = 100, Volume = 0.1f};
         public override void SetDefaults()
         {
             Projectile.width = 92;
@@ -195,6 +196,8 @@ namespace CalamityHunt.Content.Projectiles
             randomType.Add(Particle.ParticleType<FlyingDungeonSlime>(), 1f / 1500f);
             randomType.Add(Particle.ParticleType<FlyingHoppinJack>(), Main.halloween ? (1f / 150f) : (1f / 2000f));
             randomType.Add(Particle.ParticleType<FlyingSlimeFish>(), 1f / 1000f);
+            randomType.Add(Particle.ParticleType<FlyingSlimeStatue>(), 1f / 3000f);
+            randomType.Add(Particle.ParticleType<FlyingFirstEncounter>(), 1f / 3000f);
             randomType.Add(Particle.ParticleType<FlyingGoldSlime>(), 1f / 5000f);
             randomType.Add(Particle.ParticleType<FlyingYuH>(), 1f / 10000f);
 
@@ -211,11 +214,14 @@ namespace CalamityHunt.Content.Projectiles
                 randomType.Add(Particle.ParticleType<FlyingAeroSlime>(), 1f / 800f);
                 randomType.Add(Particle.ParticleType<FlyingEbonianBlightSlime>(), 1f / 1500f);
                 randomType.Add(Particle.ParticleType<FlyingCrimulanBlightSlime>(), 1f / 1500f);
+                randomType.Add(Particle.ParticleType<FlyingCorruptSlimeSpawn>(), 1f / 700f);
+                randomType.Add(Particle.ParticleType<FlyingCrimsonSlimeSpawn>(), 1f / 700f);
                 randomType.Add(Particle.ParticleType<FlyingAstralSlime>(), 1f / 1000f);
                 randomType.Add(Particle.ParticleType<FlyingCryoSlime>(), 1f / 1000f);
                 randomType.Add(Particle.ParticleType<FlyingIrradiatedSlime>(), 1f / 800f);
                 randomType.Add(Particle.ParticleType<FlyingCharredSlime>(), 1f / 1000f);
                 randomType.Add(Particle.ParticleType<FlyingPerennialSlime>(), 1f / 1000f);
+                randomType.Add(Particle.ParticleType<AureusSpawn>(), 1f / 3000f);
                 randomType.Add(Particle.ParticleType<FlyingPestilentSlime>(), 1f / 800f);
                 randomType.Add(Particle.ParticleType<FlyingBloomSlime>(), 1f / 1000f);
                 randomType.Add(Particle.ParticleType<FlyingGammaSlime>(), 1f / 800f);
