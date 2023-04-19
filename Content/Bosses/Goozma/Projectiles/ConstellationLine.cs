@@ -61,10 +61,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             //    smoke.data = "Cosmos";
             //}
 
-            if (Time > 30 && Time < 100)
+            if (Time > 60 && Time < 130)
                 Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, Main.rand.NextFloat()), Main.rand.NextVector2Circular(1, 1), new Color(30, 15, 8, 0), (0.2f + Main.rand.NextFloat()));
 
-            if (Time > 130)
+            if (Time > 160)
                 Projectile.Kill();
 
             Projectile.localAI[0]++;
@@ -73,7 +73,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > 50 && Time < 110)
+            if (Time > 60 && Time < 130)
             {
                 float point = 0f;
                 return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Main.projectile[(int)Start].Center, Main.projectile[(int)Start].Center, 40, ref point);
@@ -88,8 +88,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Rectangle half = texture.Frame(1, 2, 0, 0);
             Rectangle glowHalf = glow.Frame(1, 2, 0, 0);
 
-            float power = Utils.GetLerpValue(20, 40, Time, true) * Utils.GetLerpValue(130, 100, Time, true);
-            Color lineColor = Color.Lerp(new Color(130, 90, 40, 0), new Color(200, 140, 70, 0), Utils.GetLerpValue(20, 40, Time, true)) * MathHelper.SmoothStep(0.1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.1f, 1f, Utils.GetLerpValue(35, 40, Time, true)) * Utils.GetLerpValue(130, 100, Time, true); ;
+            float power = Utils.GetLerpValue(0, 60, Time, true) * Utils.GetLerpValue(160, 135, Time, true);
+            Color lineColor = Color.Lerp(new Color(130, 90, 40, 0), new Color(200, 140, 70, 0), Utils.GetLerpValue(50, 60, Time, true)) * MathHelper.SmoothStep(0.1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.1f, 1f, Utils.GetLerpValue(35, 60, Time, true)) * power;
             Color bloomColor = new Color(30, 12, 8, 0) * power;
             if (Time > 1)
             {

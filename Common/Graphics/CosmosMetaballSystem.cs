@@ -78,7 +78,8 @@ namespace CalamityHunt.Common.Graphics
                     Asset<Texture2D> texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
                     float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, 7, smoke.time, true));
                     float opacity = Utils.GetLerpValue(22, 0, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
-                    Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), null, new Color(20, 13, 11, 0) * 0.18f * opacity * grow, smoke.rotation, texture.Size() * 0.5f, smoke.scale * (0.5f + grow * 0.5f) * 2f, 0, 0);
+                    //new Color(20, 13, 11, 0)
+                    Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), null, new Color(22, 5, 40, 0) * 0.18f * opacity * grow, smoke.rotation, texture.Size() * 0.5f, smoke.scale * (0.5f + grow * 0.5f) * 2f, 0, 0);
                 }
             }
 

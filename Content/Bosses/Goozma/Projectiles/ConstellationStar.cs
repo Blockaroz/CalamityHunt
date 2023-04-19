@@ -53,10 +53,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.velocity *= 0.95f;
             Projectile.rotation = Projectile.velocity.ToRotation();
 
-            Projectile.velocity = Projectile.velocity.RotatedBy(0.02f * Projectile.direction);
+            Projectile.velocity = Projectile.velocity.RotatedBy(0.012f * Projectile.direction);
 
-            if (Time % 83 == 30)
-                Projectile.velocity += Main.rand.NextVector2CircularEdge(3, 3) + Main.rand.NextVector2Circular(4, 4);
+            if (Time % 83 < 4)
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.velocity + Main.rand.NextVector2CircularEdge(8, 8) + Main.rand.NextVector2Circular(5, 5), 0.2f);
 
             switch (WhoAmI)
             {
@@ -73,16 +73,19 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     break;
             }
 
-            if (Time > 550 + WhoAmI * 2f)
+            if (Time + WhoAmI > 550)
             {
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[owner].Center) * 0.1f, 0.1f);
                 Projectile.scale = Utils.GetLerpValue(50, 250, Projectile.Distance(Main.npc[owner].Center), true);
             }
 
+            if ((Time - 70) % 50 > 48)
+                Selected = 0;
+
             if (Main.rand.NextBool(10))
                 Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 8, 0), (0.2f + Main.rand.NextFloat()) * Projectile.scale);
 
-            Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Projectile.velocity * 2f, Main.rand.NextVector2Circular(7, 7) - Projectile.velocity * 0.1f, Color.White, (2f + Main.rand.NextFloat()) * Projectile.scale);
+            Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Projectile.velocity * 2f, Main.rand.NextVector2Circular(6, 6), Color.White, (1f + Main.rand.NextFloat()) * Projectile.scale);
             smoke.data = "Cosmos";
 
             if (Time > 630)
@@ -94,7 +97,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > 30)
+            if (Time > 30 && Time < 550)
                 return base.Colliding(projHitbox, targetHitbox);
             return false;
         }

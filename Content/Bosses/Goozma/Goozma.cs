@@ -507,20 +507,26 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 switch (ActiveSlime.ai[1])
                                 {
                                     case 0:
-
-                                        AresLockTo(Target.Center + Vector2.UnitY * 300);
-                                        NPC.velocity *= 0.8f;
-
-                                        break;
                                     case 1:
-
-                                        AresLockTo(Target.Center + Vector2.UnitY * 300);
-                                        NPC.velocity *= 0.8f;
-                                        break;
                                     case 2:
 
-                                        AresLockTo(Target.Center + Vector2.UnitY * 300);
-                                        NPC.velocity *= 0.8f;
+                                        if (Time >= 70 && Time < 550)
+                                        {
+                                            if ((Time - 70) % 160 > 100)
+                                            {
+                                                NPC.velocity *= 0.98f;
+                                                saveTarget = Vector2.Lerp(saveTarget, Target.Center, 0.01f);
+                                            }
+                                            else
+                                            {
+                                                saveTarget = Target.Center;
+                                                Fly();
+                                                NPC.velocity *= 1.01f;
+                                            }
+
+                                            SortedProjectileAttack(saveTarget, SortedProjectileAttackTypes.StellarBarrage);
+
+                                        }
 
                                         break;
                                 }
@@ -1061,6 +1067,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             PixieBallDisruption,
             CrimulanSlam,
             CrimulanHop,
+            StellarBarrage,
             BurstLightning,
             DrillDash,
             GaussRay
@@ -1294,6 +1301,22 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     break;
 
+                case SortedProjectileAttackTypes.StellarBarrage:
+
+                    if ((Time - 70) % 160 > 100)
+                    {
+                        if ((Time - 70) % 5 == 0 && !Main.dedServ)
+                        {
+                            SoundEngine.PlaySound(fizzSound, NPC.Center);
+                            goozmaShootPowerTarget = 1f;
+                        }
+                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.7f) * 8f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
+                    }
+                    else if ((Time - 70) % 15 == 5)
+                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.8f) * NPC.Distance(targetPos) * 0.033f * Main.rand.NextFloat(0.5f, 1.5f), ModContent.ProjectileType<PureSlimeball>(), GetDamage(2), 0);
+
+                    break;
+
                 case SortedProjectileAttackTypes.BurstLightning:
 
                     if (Time % 170 > 130)
@@ -1353,7 +1376,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     }
 
-                    if (Time * 3 % dashTime == 60)
+                    if (Time * 4 % dashTime == 60)
                         Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f) * 10f, ModContent.ProjectileType<PureSlimeball>(), GetDamage(2), 0);
                     
                     if (Time % dashTime == 70)

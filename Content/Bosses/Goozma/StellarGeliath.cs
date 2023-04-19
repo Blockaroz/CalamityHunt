@@ -203,14 +203,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.scale = 0.66f;
 
-                int count = 5 + Main.rand.Next(4, 6);
+                int count = 17 + Main.rand.Next(5, 8);
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1500, 2000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(2200, 3500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.1f);
                     Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
-                    star.ai[0] = i * 2;
+                    star.ai[0] = 0;
                     star.ai[1] = 0;
                 }
             }
@@ -218,14 +218,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.scale = 0.33f;
 
-                int count = 5 + Main.rand.Next(4, 8);
+                int count = 15 + Main.rand.Next(4, 8);
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1000, 2000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(2000, 3000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.2f);
                     Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Bottom, GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
-                    star.ai[0] = i * 2;
+                    star.ai[0] = -18;
                     star.ai[1] = 1;
                 }
             }
@@ -233,10 +233,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.scale = 0f;
 
-                int count = 8 + Main.rand.Next(8, 12);
+                int count = 12 + Main.rand.Next(8, 12);
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(100, 700), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(50, 1000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
                     Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Bottom, GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
@@ -244,14 +244,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     star.ai[1] = 2;
                 }
 
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 8; i++)
                 {
-                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(10, 200), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(10, 500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
 
                     Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Bottom, GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
-                    star.ai[0] = i * 2;
+                    star.ai[0] = -35;
                     star.ai[1] = 2;
                 }
             }
@@ -260,14 +260,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 if ((Time - 70) % 150 == 5)
                     SpawnConstellation(0, 8);
-                if ((Time - 70) % 150 == 15)
-                    SpawnConstellation(1, 8);
-                if ((Time - 70) % 150 == 30)
-                    SpawnConstellation(2, 8);
+                if ((Time - 70) % 150 == 25)
+                    SpawnConstellation(1, 12);
+                if ((Time - 70) % 150 == 45)
+                    SpawnConstellation(2, 10);
             }
 
             if (Time > 680)
-                Reset();
+            {
+                NPC.active = false;
+            }
         }
 
         private void SpawnConstellation(int checkType, int lineCount)
@@ -278,20 +280,34 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     for (int i = 0; i < lineCount; i++)
                     {
-                        if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 0 && n.ai[2] == 0 && n.Distance(Target.Center) < 2000))
+                        Func<Projectile, bool> check1 = n =>
+                        n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
+                        n.ai[1] == 0 &&
+                        n.ai[2] == 0;                        
+                        if (Main.projectile.Any(check1))
                         {
-                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 0 && n.ai[2] == 0 && n.Distance(Target.Center) < 2000).ToArray());
+                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(check1).ToArray());
                             firstStar.ai[2] = 1;
 
-                            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.Distance(firstStar.Center) > 150 && n.Distance(firstStar.Center) < 2000 && n.ai[1] == 0 && n.ai[2] == 0))
-                                break;
+                            for (int j = 0; j < Main.rand.Next(1, 2); j++)
+                            {
+                                Func<Projectile, bool> check2 = n =>
+                                n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
+                                n.Distance(firstStar.Center) > 250 &&
+                                n.Distance(firstStar.Center) < 1500 &&
+                                n.ai[1] < 2 &&
+                                n.ai[2] == 0;
 
-                            Projectile secondStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.Distance(firstStar.Center) > 150 && n.Distance(firstStar.Center) < 2000 && n.ai[1] == 0 && n.ai[2] == 0).ToArray());
-                            secondStar.ai[2] = 1;
+                                if (!Main.projectile.Any(check2))
+                                    break;
 
-                            Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
-                            line.ai[1] = firstStar.whoAmI;
-                            line.ai[2] = secondStar.whoAmI;
+                                Projectile secondStar = Main.rand.Next(Main.projectile.Where(check2).ToArray());
+                                secondStar.ai[2] = 1;
+
+                                Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
+                                line.ai[1] = firstStar.whoAmI;
+                                line.ai[2] = secondStar.whoAmI;
+                            }
                         }
                     }
                     break;
@@ -300,20 +316,33 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     for (int i = 0; i < lineCount; i++)
                     {
-                        if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 0 && n.ai[2] == 1))
+                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && 
+                        n.ai[1] == 0 &&
+                        n.ai[2] == 1;
+                        if (Main.projectile.Any(check1))
                         {
-                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 0 && n.ai[2] == 1).ToArray());
+                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(check1).ToArray());
                             firstStar.ai[2] = 2;
 
-                            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 1 && n.ai[2] == 0))
-                                break;
+                            for (int j = 0; j < Main.rand.Next(1, 3); j++)
+                            {
+                                Func<Projectile, bool> check2 = n =>
+                                n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
+                                n.Distance(firstStar.Center) > 250 &&
+                                n.Distance(firstStar.Center) < 1000 &&
+                                n.ai[1] == 1 &&
+                                n.ai[2] == 0;
 
-                            Projectile secondStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 1 && n.ai[2] == 0).ToArray());
-                            secondStar.ai[2] = 1;
+                                if (!Main.projectile.Any(check2))
+                                    break;
 
-                            Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
-                            line.ai[1] = firstStar.whoAmI;
-                            line.ai[2] = secondStar.whoAmI;
+                                Projectile secondStar = Main.rand.Next(Main.projectile.Where(check2).ToArray());
+                                secondStar.ai[2] = 1;
+
+                                Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
+                                line.ai[1] = firstStar.whoAmI;
+                                line.ai[2] = secondStar.whoAmI;
+                            }
                         }
                     }
 
@@ -323,20 +352,65 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     for (int i = 0; i < lineCount; i++)
                     {
-                        if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 1))
+                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && 
+                        n.ai[1] == 1 &&
+                        n.ai[2] == 1;
+                        if (Main.projectile.Any(check1))
                         {
-                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 1).ToArray());
+                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(check1).ToArray());
                             firstStar.ai[2] = 2;
 
-                            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 2))
-                                break;
+                            for (int j = 0; j < Main.rand.Next(1, 3); j++)
+                            {
+                                Func<Projectile, bool> check2 = n =>
+                                n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
+                                n.Distance(firstStar.Center) > 250 &&
+                                n.Distance(firstStar.Center) < 1000 &&
+                                ((n.ai[1] == 1 && n.ai[2] == 0) ||
+                                (n.ai[1] == 2 && n.ai[2] == 0));
 
-                            Projectile secondStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 2).ToArray());
-                            secondStar.ai[2] = 1;
+                                if (!Main.projectile.Any(check2))
+                                    break;
 
-                            Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
-                            line.ai[1] = firstStar.whoAmI;
-                            line.ai[2] = secondStar.whoAmI;
+                                Projectile secondStar = Main.rand.Next(Main.projectile.Where(check2).ToArray());
+                                secondStar.ai[2] = 1;
+
+                                Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
+                                line.ai[1] = firstStar.whoAmI;
+                                line.ai[2] = secondStar.whoAmI;
+                            }
+                        }
+                    }                    
+                    
+                    for (int i = 0; i < lineCount; i++)
+                    {
+                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && 
+                        n.ai[1] == 2 &&
+                        n.ai[2] == 0;
+                        if (Main.projectile.Any(check1))
+                        {
+                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(check1).ToArray());
+                            firstStar.ai[2] = 2;
+
+                            for (int j = 0; j < Main.rand.Next(1, 3); j++)
+                            {
+                                Func<Projectile, bool> check2 = n =>
+                                n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
+                                n.Distance(firstStar.Center) > 250 &&
+                                n.Distance(firstStar.Center) < 1200 &&
+                                ((n.ai[1] == 1 && n.ai[2] == 1) ||
+                                (n.ai[1] == 2 && n.ai[2] == 0));
+
+                                if (!Main.projectile.Any(check2))
+                                    break;
+
+                                Projectile secondStar = Main.rand.Next(Main.projectile.Where(check2).ToArray());
+                                secondStar.ai[2] = 1;
+
+                                Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
+                                line.ai[1] = firstStar.whoAmI;
+                                line.ai[2] = secondStar.whoAmI;
+                            }
                         }
                     }
 
