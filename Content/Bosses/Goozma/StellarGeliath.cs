@@ -84,7 +84,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private enum AttackList
         {
-            Constellation,
+            StarSigns,
             Starfall,
             BlackHole,
             TooFar,
@@ -129,12 +129,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
             else switch (Attack)
                 {
-                    case (int)AttackList.Constellation:
+                    case (int)AttackList.StarSigns:
                     case (int)AttackList.Starfall:
                     case (int)AttackList.BlackHole:
 
-                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * NPC.Distance(Main.MouseWorld) * 0.05f, 0.03f);
-                        NPC.rotation = NPC.velocity.X * 0.03f;
+                        StarSigns();
 
                         break;
 
@@ -172,6 +171,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         break;
                 }
 
+            Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), NPC.Center + Main.rand.NextVector2Circular(70, 50) * NPC.scale, Main.rand.NextVector2Circular(2, 2), Color.White, (1f + Main.rand.NextFloat()) * NPC.scale);
+            smoke.data = "Cosmos";
 
             Time++;
         }
@@ -191,12 +192,166 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public void StarSigns()
         {
-            if (Time > 20 && Time < 40)
+            NPC.damage = 0;
+            NPC.dontTakeDamage = true;
+
+            if (Time >= 20 && Time < 80)
             {
+            }
+
+            if (Time == 35)
+            {
+                NPC.scale = 0.66f;
+
+                int count = 5 + Main.rand.Next(4, 6);
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1500, 2000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    star.direction = Main.rand.NextBool() ? -1 : 1;
+                    star.localAI[0] = i / (float)count;
+                    star.ai[0] = i * 2;
+                    star.ai[1] = 0;
+                }
+            }
+            if (Time == 53)
+            {
+                NPC.scale = 0.33f;
+
+                int count = 5 + Main.rand.Next(4, 8);
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1000, 2000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Bottom, GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    star.direction = Main.rand.NextBool() ? -1 : 1;
+                    star.localAI[0] = i / (float)count;
+                    star.ai[0] = i * 2;
+                    star.ai[1] = 1;
+                }
+            }
+            if (Time == 70)
+            {
+                NPC.scale = 0f;
+
+                int count = 8 + Main.rand.Next(8, 12);
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(100, 700), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Bottom, GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    star.direction = Main.rand.NextBool() ? -1 : 1;
+                    star.localAI[0] = i / (float)count;
+                    star.ai[0] = i * 2;
+                    star.ai[1] = 2;
+                }
+
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(10, 200), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
+
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Bottom, GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    star.direction = Main.rand.NextBool() ? -1 : 1;
+                    star.localAI[0] = i / (float)count;
+                    star.ai[0] = i * 2;
+                    star.ai[1] = 2;
+                }
+            }
+
+            if (Time > 70 && Time < 521)
+            {
+                if ((Time - 70) % 150 == 5)
+                    SpawnConstellation(0, 8);
+                if ((Time - 70) % 150 == 15)
+                    SpawnConstellation(1, 8);
+                if ((Time - 70) % 150 == 30)
+                    SpawnConstellation(2, 8);
+            }
+
+            if (Time > 680)
+                Reset();
+        }
+
+        private void SpawnConstellation(int checkType, int lineCount)
+        {
+            switch (checkType)
+            {
+                case 0:
+
+                    for (int i = 0; i < lineCount; i++)
+                    {
+                        if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 0 && n.ai[2] == 0 && n.Distance(Target.Center) < 2000))
+                        {
+                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 0 && n.ai[2] == 0 && n.Distance(Target.Center) < 2000).ToArray());
+                            firstStar.ai[2] = 1;
+
+                            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.Distance(firstStar.Center) > 150 && n.Distance(firstStar.Center) < 2000 && n.ai[1] == 0 && n.ai[2] == 0))
+                                break;
+
+                            Projectile secondStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.Distance(firstStar.Center) > 150 && n.Distance(firstStar.Center) < 2000 && n.ai[1] == 0 && n.ai[2] == 0).ToArray());
+                            secondStar.ai[2] = 1;
+
+                            Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
+                            line.ai[1] = firstStar.whoAmI;
+                            line.ai[2] = secondStar.whoAmI;
+                        }
+                    }
+                    break;
+
+                case 1:
+
+                    for (int i = 0; i < lineCount; i++)
+                    {
+                        if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 0 && n.ai[2] == 1))
+                        {
+                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 0 && n.ai[2] == 1).ToArray());
+                            firstStar.ai[2] = 2;
+
+                            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 1 && n.ai[2] == 0))
+                                break;
+
+                            Projectile secondStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 1 && n.ai[2] == 0).ToArray());
+                            secondStar.ai[2] = 1;
+
+                            Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
+                            line.ai[1] = firstStar.whoAmI;
+                            line.ai[2] = secondStar.whoAmI;
+                        }
+                    }
+
+                    break;
+
+                case 2:
+
+                    for (int i = 0; i < lineCount; i++)
+                    {
+                        if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 1))
+                        {
+                            Projectile firstStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 1).ToArray());
+                            firstStar.ai[2] = 2;
+
+                            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 2))
+                                break;
+
+                            Projectile secondStar = Main.rand.Next(Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && n.ai[1] == 2).ToArray());
+                            secondStar.ai[2] = 1;
+
+                            Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<ConstellationLine>(), GetDamage(1), 0);
+                            line.ai[1] = firstStar.whoAmI;
+                            line.ai[2] = secondStar.whoAmI;
+                        }
+                    }
+
+                    break;
 
             }
-        }        
-        
+        }
+
+        private Vector2 GetDesiredVelocityForDistance(Vector2 start, Vector2 end)
+        {
+            Vector2 velocity = start.DirectionTo(end).SafeNormalize(Vector2.Zero);
+            float velocityFactor = (float)Math.Sqrt(start.Distance(end)) * 1.84f;
+            return velocity * velocityFactor;
+        }
+
         public void Starfall()
         {
             int gelTime = 20;
@@ -244,7 +399,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public void BlackHole()
         {
-            Reset();
+            
         }
 
         private int GetDamage(int attack, float modifier = 1f)
@@ -252,7 +407,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int damage = attack switch
             {
                 0 => 70,//contact
-                1 => 40,//star gelatine
+                1 => 40,//constellation star
                 _ => 0
             };
 
@@ -288,7 +443,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
             effect.Parameters["uTextureClose"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
-            effect.Parameters["uTextureFar"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
+            effect.Parameters["uTextureFar"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space1").Value);
             effect.Parameters["uPosition"].SetValue(Main.screenPosition * 0.001f);
             effect.Parameters["uParallax"].SetValue(new Vector2(0.125f, 0.25f));
             effect.Parameters["uScrollClose"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.004f % 2f, Main.GlobalTimeWrappedHourly * 0.014f % 2f));
@@ -300,26 +455,26 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (NPC.IsABestiaryIconDummy)
             {
-                RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
-                Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
-                spriteBatch.End();
-                spriteBatch.GraphicsDevice.RasterizerState = priorRrasterizerState;
-                spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
-                effect.Parameters["uPosition"].SetValue(Vector2.Zero);
+                //RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
+                //Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
+                //spriteBatch.End();
+                //spriteBatch.GraphicsDevice.RasterizerState = priorRrasterizerState;
+                //spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
+                //effect.Parameters["uPosition"].SetValue(Vector2.Zero);
 
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.UIScaleMatrix);
+                //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.UIScaleMatrix);
 
-                spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                spriteBatch.Draw(texture.Value, NPC.Center - screenPos, frame, color, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
+                //spriteBatch.End();
+                //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
             }
             else
             {
                 //spriteBatch.End();
                 //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
 
-                spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                spriteBatch.Draw(texture.Value, NPC.Center - screenPos, frame, color, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
                 //spriteBatch.End();
                 //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);

@@ -87,8 +87,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         glowColor.A /= 2;
                         Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
                         
-                        if (Main.rand.NextBool(2))
-                            Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(54, 54), Main.rand.NextVector2Circular(15, 15) + Projectile.velocity * 0.4f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), 0.5f + Main.rand.NextFloat());
+                        if (Main.rand.NextBool(3))
+                            Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(54, 54), Main.rand.NextVector2Circular(10, 10) + Projectile.velocity * 0.1f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.5f, 0.5f + Main.rand.NextFloat());
                     }
 
                     break;
@@ -121,7 +121,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
             }
             if (Cooldown > 0)
+            {
                 Cooldown--;
+
+                if (Main.rand.NextBool())
+                    Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.1f) * 0.7f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), Projectile.scale + Main.rand.NextFloat(0.7f));
+            }
 
             if (HitCount > 2)
             {

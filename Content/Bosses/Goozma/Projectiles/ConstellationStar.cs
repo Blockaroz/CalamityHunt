@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -19,7 +20,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Type] = 20;
-            ProjectileID.Sets.TrailingMode[Type] = -1;
+            ProjectileID.Sets.TrailingMode[Type] = 2;
         }
 
         public override void SetDefaults()
@@ -36,8 +37,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public ref float Time => ref Projectile.ai[0];
         public ref float WhoAmI => ref Projectile.ai[1];
-
-        private Vector2 saveTarget;
+        public ref float Selected => ref Projectile.ai[2];
 
         public override void AI()
         {
@@ -50,6 +50,53 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active).whoAmI;
 
+            Projectile.velocity *= 0.95f;
+            Projectile.rotation = Projectile.velocity.ToRotation();
+
+            Projectile.velocity = Projectile.velocity.RotatedBy(0.02f * Projectile.direction);
+
+            if (Time % 83 == 30)
+                Projectile.velocity += Main.rand.NextVector2CircularEdge(3, 3) + Main.rand.NextVector2Circular(4, 4);
+
+            switch (WhoAmI)
+            {
+                case 0:
+                case 1:
+                case 2:
+
+                    break;
+
+                default:
+
+                    Projectile.Kill();
+
+                    break;
+            }
+
+            if (Time > 550 + WhoAmI * 2f)
+            {
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[owner].Center) * 0.1f, 0.1f);
+                Projectile.scale = Utils.GetLerpValue(50, 250, Projectile.Distance(Main.npc[owner].Center), true);
+            }
+
+            if (Main.rand.NextBool(10))
+                Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 8, 0), (0.2f + Main.rand.NextFloat()) * Projectile.scale);
+
+            Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Projectile.velocity * 2f, Main.rand.NextVector2Circular(7, 7) - Projectile.velocity * 0.1f, Color.White, (2f + Main.rand.NextFloat()) * Projectile.scale);
+            smoke.data = "Cosmos";
+
+            if (Time > 630)
+                Projectile.Kill();
+
+            Projectile.localAI[0]++;
+            Time++;
+        }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            if (Time > 30)
+                return base.Colliding(projHitbox, targetHitbox);
+            return false;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -57,11 +104,26 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> sparkle = TextureAssets.Extra[98];
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            ProjectileID.Sets.TrailingMode[Type] = 2;
 
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(50, 50, 50, 0), Projectile.rotation, sparkle.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(50, 50, 50, 0), Projectile.rotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(100, 100, 100, 0), Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(100, 100, 100, 0), Projectile.rotation + MathHelper.PiOver2, texture.Size() * 0.5f, Projectile.scale, 0, 0);
+            float wobble = 1f + (float)Math.Sin((Projectile.localAI[0] * 0.3f) % MathHelper.TwoPi) * 0.05f;
+
+            for (int i = 1; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
+            {
+                float prog = 1f - (i / (float)ProjectileID.Sets.TrailCacheLength[Type]);
+                Vector2 stretch;
+                if (i == 0)
+                    stretch = new Vector2(prog, Projectile.position.Distance(Projectile.oldPos[i]) / texture.Height() * 3.5f);
+                else
+                    stretch = new Vector2(prog, Projectile.oldPos[i].Distance(Projectile.oldPos[i - 1]) / texture.Height() * 3.5f);
+                Main.EntitySpriteDraw(sparkle.Value, Projectile.oldPos[i] + Projectile.Size * 0.5f - Main.screenPosition, null, new Color(30, 15, 10, 0) * prog, Projectile.oldRot[i] + MathHelper.PiOver2, sparkle.Size() * 0.5f, Projectile.scale * stretch * (0.5f + prog * 0.5f), 0, 0);
+            }
+
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(80, 50, 35, 0), 0, sparkle.Size() * 0.5f, Projectile.scale * new Vector2(0.5f, 1.5f), 0, 0);
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(80, 50, 35, 0), 0 + MathHelper.PiOver2, sparkle.Size() * 0.5f, Projectile.scale * new Vector2(0.5f, 2f), 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 235, 180, 0), 0, texture.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1f) * wobble, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 235, 180, 0), 0 + MathHelper.PiOver2, texture.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * wobble, 0, 0);
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, new Color(30, 12, 7, 0), 0, glow.Size() * 0.5f, Projectile.scale * 2f * wobble, 0, 0);
 
             return false;
         }

@@ -159,6 +159,7 @@ Projectiles: {
 	GoozmagaShrapnel.DisplayName: Microplanetary Glob
 	StellarGelatine.DisplayName: Stellar Gelatine
 	ConstellationStar.DisplayName: Constellation Star
+	ConstellationLine.DisplayName: Constellation Line
 }
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
 Bestiary: {

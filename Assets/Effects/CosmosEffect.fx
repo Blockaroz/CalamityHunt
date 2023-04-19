@@ -32,15 +32,15 @@ float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0)
 {
     float4 screen = tex2D(uImage0, coords);
     float4 spaceClose = tex2D(tex0, frac(coords * uImageRatio + (uPosition) * uParallax.x) + uScrollClose + sin(coords.y) * 0.01);
-    float4 spaceFar = tex2D(tex1, frac(coords * uImageRatio + (uPosition) * uParallax.y) + uScrollFar);
+    float4 spaceFar = tex2D(tex1, frac(coords * uImageRatio + (uPosition) * uParallax.y) + uScrollFar * 3);
+    float4 spaceFarther = tex2D(tex1, frac(coords * uImageRatio + (uPosition) * uParallax.y * 0.6) + uScrollFar);
     
     float4 backColor = lerp(uFarColor, float4(uFarColor.r * 0.7, uFarColor.g * 0.95, uFarColor.b * 1.1, uFarColor.a), sin(coords.x * 10 + uScrollClose.x * 50 + uPosition.x));
-    float4 final = pow(spaceClose, 1.33) * uCloseColor + pow(spaceClose * 1.4, 4) + spaceFar * 0.85 * backColor + pow(spaceFar * 1.1, 4);
-    //float outline = screen.g - screen.r - screen.b;
-    //if (outline > 0.4)
-    //    return (final * screen.a + outline * 3 * uOutlineColor);
-    
-    return final * screen.a;
+    float4 first = pow(spaceClose, 1.33) * uCloseColor + pow(spaceClose * 1.4, 4);
+    float4 second = spaceFar * 0.85 * backColor + pow(spaceFar, 4);
+    float4 third = spaceFarther * uFarColor + pow(spaceFarther, 4) * uCloseColor;
+
+    return (first + second + third) * screen.a;
 }
 
 technique Technique1

@@ -22,7 +22,7 @@ namespace CalamityHunt.Content.Particles
         {
             variant = Main.rand.Next(8);
             scale *= 0.5f + Main.rand.NextFloat(0.9f, 1.1f);
-            rotationalVelocity = Main.rand.NextFloat(-0.4f, 0.4f);
+            rotationalVelocity = Main.rand.NextFloat(-0.25f, 0.25f);
             rotation += Main.rand.NextFloat(-3f, 3f);
         }
 
@@ -31,14 +31,16 @@ namespace CalamityHunt.Content.Particles
             scale *= 0.99f;
             time++;
 
-            rotationalVelocity *= 0.97f * Math.Clamp(1 - time * 0.001f, 0.7f, 1f);
+            rotationalVelocity *= 0.96f * Math.Clamp(1 - time * 0.001f, 0.7f, 1f);
             rotation += rotationalVelocity;
 
             if (time > 10)
             {
                 scale *= 0.93f - Math.Clamp(scale * 0.0001f, 0f, 0.5f);
-                velocity *= 0.82f;
+                velocity *= 0.83f;
             }
+            else
+                velocity *= 1.01f;
             if (scale < 0.3f)
                 Active = false;
         }

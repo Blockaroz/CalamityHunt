@@ -89,7 +89,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     float progress = Main.rand.NextFloat(3300);
                     Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 60) * 0.6f * grow;
                     color.A = 0;
-                    Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-25f, 25f)).RotatedBy(Projectile.rotation);
+                    Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-80f, 80f) * (progress / 3300f)).RotatedBy(Projectile.rotation);
                     Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(3f));
                     smoke.behindEntities = true;
                     if (Main.rand.NextBool(5))
