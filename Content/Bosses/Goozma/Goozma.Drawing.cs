@@ -122,10 +122,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
-                Vector2 off = new Vector2(4, 0).RotatedBy(MathHelper.TwoPi / 4f * i + NPC.rotation);
-                DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, NPC.velocity, glowColor * trailStrength);
+                Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 8f * i + NPC.rotation);
+                DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, NPC.velocity, glowColor * 1.1f);
             }
 
             GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);

@@ -101,12 +101,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void AI()
         {
-            //if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
-            //    NPC.active = false;
-            //else
-            //    NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+                NPC.active = false;
+            else
+                NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
 
-            //NPC.realLife = Host.whoAmI;
+            NPC.realLife = Host.whoAmI;
 
             if (!NPC.HasPlayerTarget)
                 NPC.TargetClosestUpgraded();
@@ -194,6 +194,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             NPC.damage = 0;
             NPC.dontTakeDamage = true;
+            NPC.velocity *= 0.2f;
 
             if (Time >= 20 && Time < 80)
             {

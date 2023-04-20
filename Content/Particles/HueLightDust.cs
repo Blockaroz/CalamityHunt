@@ -34,10 +34,10 @@ namespace CalamityHunt.Content.Particles
             if (data is float)
                 color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt((float)data + life * 0.05f);
 
-            int chance = 70;
+            int chance = 75;
             if (!Collision.SolidTiles(position, 2, 2))
             {
-                chance += 10;
+                chance += 20;
                 scale *= 1.0005f;
                 Lighting.AddLight(position, color.ToVector3() * 0.2f * scale);
             }

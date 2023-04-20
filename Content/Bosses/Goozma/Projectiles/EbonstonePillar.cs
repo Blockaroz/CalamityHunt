@@ -16,7 +16,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Ebonstone Pillar");
             ProjectileID.Sets.DrawScreenCheckFluff[Type] = 20000;
         }
 
@@ -34,6 +33,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public ref float Time => ref Projectile.ai[0];
         public ref float Height => ref Projectile.ai[1];
+        public ref float MaxTime => ref Projectile.ai[2];
         private List<Vector2> position;
         private List<int> variant;
         private List<float> scale;
@@ -64,7 +64,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Vector2 offset = new Vector2(Main.rand.NextFloat(20, 25) * Main.rand.NextFloatDirection(), 0);
                 position.Add(Projectile.Center + new Vector2(offset.X * 0.5f, -35 * (Time / speed) - offset.Y));
                 variant.Add(Main.rand.Next(4));
-                rotation.Add(offset.X * 0.03f);
+                rotation.Add(offset.X * 0.04f);
                 scale.Add(0.4f);
                 time.Add(0);
                 for (int i = 0; i < Main.rand.Next(3, 5); i++)
@@ -73,7 +73,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                     position.Add(Projectile.Bottom + new Vector2(offset.X * 0.7f, -35 * (Time / speed) - offset.Y));
                     variant.Add(Main.rand.Next(4));
-                    rotation.Add(offset.X * 0.03f);
+                    rotation.Add(offset.X * 0.04f);
                     scale.Add(0.2f);
                     time.Add(0);
                 }
@@ -83,7 +83,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (position.Count > 0)
             {
-                if (Height <= 0 && Time > (maxHeight * speed) + waitTime)
+                if (Height <= 0 && Time > (maxHeight * speed) + MaxTime)
                 {
                     for (int i = 0; i < 6; i++)
                     {
@@ -121,7 +121,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             if (position.Count > 2)
             {
-                if (Height > 0 && Time < (maxHeight * speed) + waitTime)
+                if (Height > 0 && Time < (maxHeight * speed) + MaxTime)
                 {
                     hitbox.Y = (int)(Projectile.Bottom.Y - 35 * (maxHeight - Height));
                     hitbox.Height = (int)(35 * (maxHeight - Height));
@@ -160,8 +160,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     float rockScale = scale[i] + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.1f;
                     for (int j = 0; j < 4; j++)
                     {
-                        Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 4f * j) * rockScale;
-                        Main.EntitySpriteDraw(glow.Value, position[i] + off + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, glowColor, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * rockScale, 0, 0);
+                        Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * j) * rockScale;
+                        Main.EntitySpriteDraw(glow.Value, position[i] + off + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, glowColor * 0.7f, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * rockScale, 0, 0);
                     }
                 }                
                 for (int i = position.Count - 1; i > 0; i--)

@@ -234,7 +234,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
 
                 if (Time % 150 > 70 && Time % 150 < 100 && Time % 3 == 0)
-                    Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 10f * Utils.GetLerpValue(100, 70, Time % 150, true), 10, 12));
+                    Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 4f * Utils.GetLerpValue(100, 70, Time % 150, true), 10, 12));
 
 
                 if (Time % 150 == 5)

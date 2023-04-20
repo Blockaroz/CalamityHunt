@@ -29,7 +29,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.localAI[0] = Main.rand.NextFloat(0.9f, 1.15f);
             Projectile.localAI[1] = Main.rand.NextFloat(30f);
             Projectile.rotation = Main.rand.NextFloat(-1f, 1f);
 
@@ -58,8 +57,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 if (Time > 8)
                     Projectile.velocity *= 0.955f;
 
-                Projectile.rotation = (float)Math.Sin(Projectile.localAI[1] * 0.03f) * Projectile.direction * 0.1f + Projectile.velocity.X * 0.3f;
-                Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(-2, 17, Time, true)) * Projectile.localAI[0] + (float)Math.Pow(Utils.GetLerpValue(137, 150, Time, true), 2f) * 0.5f;
+                Projectile.rotation = (float)Math.Sin(Projectile.localAI[1] * 0.03f) * Projectile.direction * 0.1f + Projectile.velocity.X * 0.1f;
+                Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 17, Projectile.localAI[0], true)) + (float)Math.Pow(Utils.GetLerpValue(97, 100, Time, true), 2f) * 0.5f;
 
                 int target = -1;
                 if (Main.player.Any(n => n.active && !n.dead))
@@ -81,12 +80,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Projectile.frameCounter = 0;
                 }
 
-                if (Time > 150)
+                if (Time > 100)
                 {
                     Time = 0;
                     Projectile.ai[1]++;
                 }
-                if (Time == 45 && !Main.dedServ)
+                if (Time == 2 && !Main.dedServ)
                 {
                     SoundStyle chargeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaPureBallCharge");
                     chargeSound.MaxInstances = 0;
@@ -96,25 +95,22 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
             {
                 Projectile.scale = 1f;
-                Projectile.rotation = 0;
-                Projectile.frameCounter = 0;
-                Projectile.frame = 0;
 
                 if (Time == 1)
                 {
                     SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
                     explodeSound.MaxInstances = 0;
                     SoundEngine.PlaySound(explodeSound, Projectile.Center);
-                    SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion, Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.6f), Projectile.Center);
                 }
 
-                if (Time < 20)
+                if (Time < 10)
                 {
-                    for (int i = 0; i < 15; i++)
-                    {
-                        Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(25, 25), Color.White, 1.5f);
-                        hue.data = Projectile.localAI[1];
-                    }
+                    Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(25, 25), Color.White, 1.5f);
+                    hue.data = Projectile.localAI[1];
+
+                    for (int i = 0; i < 10; i++)
+                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.TintableDust, Main.rand.NextVector2Circular(10, 10), 100, Color.Black, 1f + Main.rand.NextFloat(2)).noGravity = true;
                 }
 
                 if (Time > 60)
@@ -122,6 +118,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             Time++;
+            Projectile.localAI[0]++;
             Projectile.localAI[1]++;
         }
 
@@ -135,8 +132,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Vector2 radius = Projectile.Center + new Vector2(maxDist, 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center()));
                 if (Time < 25)
                     return targetHitbox.Contains(radius.ToPoint());
-                else
-                    return false;
+                return false;
             }
             else
                 return projHitbox.Intersects(targetHitbox);
@@ -156,17 +152,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Projectile.ai[1] == 0)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
-                    Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale, 0, 0);
-                }
+                float ringScale = (float)Math.Cbrt(Utils.GetLerpValue(0, 100, Time, true));
+                float ringPower = 1f + (float)Math.Sin(Math.Pow(Time * 0.027f, 3f)) * 0.4f;
 
-                float ringScale = (float)Math.Cbrt(Time / 150f);
-                float ringPower = 1f + (float)Math.Sin(Math.Pow(Time * 0.022f, 3f)) * 0.4f;
-
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f * ringScale * ringPower, Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height() * 2f + 5f) * ringScale, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f * ringScale * ringPower, 0, glow.Size() * 0.5f, (250f / glow.Height() * 2f) * 0.6f * ringScale, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f * ringScale * ringPower, Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height() * 2f + 3f) * ringScale, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f * ringScale * ringPower, 0, glow.Size() * 0.5f, (250f / glow.Height() * 2f) * 0.5f * ringScale, 0, 0);
                 Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f * ringScale * ringPower, Projectile.rotation * 0.1f, ring.Size() * 0.5f, (250f / ring.Height() * 2f + 0.5f) * ringScale, 0, 0);
 
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale, 0, 0);
@@ -178,7 +168,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
             {
                 float ringScale = 1.01f + (float)Math.Sqrt(Time / 60f) * 0.3f;
-                float ringPower = (float)Math.Pow(Utils.GetLerpValue(60, 0, Time, true), 2f);
+                float ringPower = (float)Math.Pow(Utils.GetLerpValue(30, 0, Time, true), 3f);
 
                 Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f * Utils.GetLerpValue(30, 0, Time, true), Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height() * 2f + 5f) * ringScale * ringPower, 0, 0);
                 Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f * Utils.GetLerpValue(20, 0, Time, true), 0, glow.Size() * 0.5f, (250f / glow.Height() * 2f) * 0.6f * ringScale * ringPower, 0, 0);

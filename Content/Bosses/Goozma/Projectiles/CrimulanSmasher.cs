@@ -22,7 +22,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             // DisplayName.SetDefault("Smasher");
             ProjectileID.Sets.DrawScreenCheckFluff[Type] = 10000;
-            ProjectileID.Sets.TrailingMode[Type] = 1;
+            ProjectileID.Sets.TrailingMode[Type] = 2;
             ProjectileID.Sets.TrailCacheLength[Type] = 10;
         }
 
@@ -80,6 +80,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.Kill();
 
             Time++;
+            Projectile.localAI[0]++;
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -97,28 +98,37 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time < 0)
             {
-                float width = (float)Math.Pow(Utils.GetLerpValue(-70, -50, Time, true) * Utils.GetLerpValue(5, -60, Time, true), 0.5f) * Projectile.width * 0.025f;
-                Color tellColor = new Color(255, 0, 0, 0) * (float)Math.Pow(Utils.GetLerpValue(-70, -60, Time, true), 2f) * 0.6f;
-                Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, 0), null, tellColor, Projectile.rotation + MathHelper.Pi, tell.Size() * new Vector2(0.5f, 0.66f), new Vector2(width, 7f - width), 0, 0);
+                float width = (float)Math.Pow(Utils.GetLerpValue(0, 15, Projectile.localAI[0], true) * Utils.GetLerpValue(5, -60, Time, true), 0.5f) * Projectile.width * 0.015f;
+                Color tellColor = new Color(180, 30, 0, 0);
+                Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, width * 40 - 20), null, tellColor, Projectile.rotation + MathHelper.Pi, tell.Size() * new Vector2(0.5f, 0.66f), new Vector2(width, 7f - width), 0, 0);
                 return false;
 
             }
 
             Vector2 squish = new Vector2(0.5f, 1.5f);
+            Vector2 trailSquish = new Vector2(0.5f, 1.5f);
 
             if (Time > 9)
                 squish = new Vector2(1f + Utils.GetLerpValue(18, 10, Time, true) * 0.7f, 1f - Utils.GetLerpValue(18, 10, Time, true) * 0.7f);
-            
+
             float fadeOut = Utils.GetLerpValue(20, 15, Time, true) * Utils.GetLerpValue(-1, 5, Time, true);
-            float trailOut = fadeOut * Utils.GetLerpValue(14, 9, Time, true) * 0.9f;
+            float trailOut = fadeOut * Utils.GetLerpValue(15, 10, Time, true) * 0.9f;
+
             for (int i = 1; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
-                for (int j = 0; j <= 5; j++)
+            {
+                for (int j = 0; j < 5; j++)
                 {
+                    float superProg = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
                     float prog = j / 5f;
-                    float trailProgress = Utils.GetLerpValue(0, ProjectileID.Sets.TrailCacheLength[Type], i + prog, true);
-                    Vector2 position = Vector2.Lerp(Projectile.oldPos[i - 1], Projectile.oldPos[i], j) + Projectile.Size * new Vector2(0.5f, 1f);
-                    Main.EntitySpriteDraw(trail.Value, position - Main.screenPosition, null, new Color(40, 0, 0, 10) * (1f - trailProgress) * trailOut, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * (0.5f + trailOut * 0.5f), 0, 0);
+
+                    if (Time > 9)
+                        trailSquish = new Vector2(1f + Utils.GetLerpValue(18, 10, Time, true) * 0.7f * (1f - superProg - prog * 0.2f), 1f - Utils.GetLerpValue(18, 10, Time, true) * 0.7f * (1f - superProg - prog * 0.2f));
+
+                    float trailProgress = Utils.GetLerpValue(0, ProjectileID.Sets.TrailCacheLength[Type], i - prog, true);
+                    Vector2 position = Vector2.Lerp(Projectile.oldPos[i - 1], Projectile.oldPos[i], prog) + Projectile.Size * new Vector2(0.5f, 1f);
+                    Main.EntitySpriteDraw(trail.Value, position - Main.screenPosition, null, new Color(30, 4, 2, 10) * (1f - trailProgress) * trailOut, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * trailSquish * (0.5f + trailOut * 0.5f), 0, 0);
                 }
+            }
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Bottom - Main.screenPosition, null, Color.White, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish * (0.5f + fadeOut * 0.5f), 0, 0);
 

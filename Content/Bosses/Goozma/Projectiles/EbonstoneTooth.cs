@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
@@ -40,7 +42,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            Projectile.scale = (0.2f + Utils.GetLerpValue(10, 15, Time, true) * 0.8f) * Utils.GetLerpValue(OutTime, OutTime - 30, Time, true);
+            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(6, 10, Time, true) * Utils.GetLerpValue(OutTime, OutTime - 40, Time, true));
             Time++;
 
             if (Time > OutTime)
@@ -57,6 +59,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            Asset<Texture2D> sparkle = TextureAssets.Extra[98];
             Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
             Rectangle frame = texture.Frame(4, 1, (int)Projectile.localAI[0], 0);
 
@@ -72,12 +75,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < 4; i++)
             {
-                Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
+                Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
                 Main.EntitySpriteDraw(glow.Value, Projectile.Center + off - Main.screenPosition, frame, glowColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);
             }
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Lighting.GetColor(Projectile.Top.ToTileCoordinates()), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);
+            float sparklePower = (float)Math.Sqrt(Utils.GetLerpValue(8, 11, Time, true) * Utils.GetLerpValue(OutTime - 60, OutTime - 70, Time, true));
+            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, glowColor * sparklePower, Projectile.rotation, sparkle.Size() * new Vector2(0.5f, 0.66f), new Vector2(2f, 5f) * Projectile.scale, 0, 0);
 
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Lighting.GetColor(Projectile.Top.ToTileCoordinates()), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);
+            
             return false;
         }
     }

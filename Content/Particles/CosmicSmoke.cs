@@ -41,7 +41,7 @@ namespace CalamityHunt.Content.Particles
             }
             else
                 velocity *= 1.01f;
-            if (scale < 0.3f)
+            if (time > 26)
                 Active = false;
         }
         public override void Draw(SpriteBatch spriteBatch)

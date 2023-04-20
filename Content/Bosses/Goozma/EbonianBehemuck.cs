@@ -368,11 +368,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
         private void RockPillar()
         {
             int spikeCount = 2;
-            int spikeTime = 105;
+            int spikeTime = 140;
             if (Main.expertMode)
             {
                 spikeCount = 3;
-                spikeTime = 70;
+                spikeTime = 100;
             }
 
             if (Time < 61)
@@ -392,10 +392,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Projectile leftPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(-170, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
                     leftPillar.ai[0] = -25;
                     leftPillar.ai[1] = 45;
+                    leftPillar.ai[2] = spikeTime * spikeCount;
 
                     Projectile rightPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(170, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
                     rightPillar.ai[0] = -25;
                     rightPillar.ai[1] = 45;
+                    rightPillar.ai[2] = spikeTime * spikeCount;
 
                     NPC.velocity.Y -= 40;
                     saveTarget = saveTarget - new Vector2(0, 1400);
@@ -416,16 +418,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.rotation = 0;
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * NPC.Distance(saveTarget) * 0.5f, (float)Math.Pow(Utils.GetLerpValue(100, 70, Time, true), 2f) * 0.5f + 0.1f);
 
-                if (Time == 110)
+                if (Time == 120)
                 {
                     Projectile bottomLeftSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2(saveTarget.X + 155, saveTarget.Y + 1560), (-Vector2.UnitX).RotatedByRandom(0.05f), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
                     bottomLeftSpike.ai[0] = -5;
-                    bottomLeftSpike.ai[1] = 90 + spikeCount * spikeTime;
+                    bottomLeftSpike.ai[1] = 50 + spikeCount * spikeTime;
                     Projectile bottomRightSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2(saveTarget.X - 155, saveTarget.Y + 1560), Vector2.UnitX.RotatedByRandom(0.05f), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
                     bottomRightSpike.ai[0] = -5;
-                    bottomRightSpike.ai[1] = 90 + spikeCount * spikeTime;
+                    bottomRightSpike.ai[1] = 50 + spikeCount * spikeTime;
                 }
-                if (Time % spikeTime == 0 && Time > 100 && Time <= 100 + spikeCount * spikeTime)
+                if ((Time - 120) % spikeTime == 20 && Time > 100 && Time <= 100 + spikeCount * spikeTime)
                 {
                     int spikeNumber = Main.rand.Next(12, 15);
                     for (int i = 0; i < spikeNumber; i++)
@@ -433,38 +435,38 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Vector2 position = saveTarget + new Vector2(0, MathHelper.Lerp(100, 1600, i / (float)spikeNumber));
                         float randRot = Main.rand.NextFloat(-0.4f, 0.4f);
                         Projectile leftSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), position + new Vector2(162, Main.rand.Next(-5, 5)), (-Vector2.UnitX).RotatedByRandom(0.06f).RotatedBy(randRot), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
-                        leftSpike.ai[0] = -50 + Main.rand.Next(-5, 5);
-                        leftSpike.ai[1] = 80 + Main.rand.Next(-5, 5);
+                        leftSpike.ai[0] = -50 + Main.rand.Next(-4, 2) + (int)(i / (float)spikeNumber * 20f);
+                        leftSpike.ai[1] = 125 + Main.rand.Next(-2, 4);
                         Projectile rightSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), position + new Vector2(-162, Main.rand.Next(-5, 5)), Vector2.UnitX.RotatedByRandom(0.06f).RotatedBy(-randRot), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
-                        rightSpike.ai[0] = -50 + Main.rand.Next(-5, 5);
-                        rightSpike.ai[1] = 80 + Main.rand.Next(-5, 5);
+                        rightSpike.ai[0] = -50 + Main.rand.Next(-4, 2) + (int)(i / (float)spikeNumber * 20f);
+                        rightSpike.ai[1] = 125 + Main.rand.Next(-2, 4);
                     }
                 }
 
                 if (Time >= 150 && Time <= 150 + spikeCount * spikeTime && !Main.dedServ)
                 {
-                    if (Time % spikeTime == 5)
+                    if ((Time - 150) % spikeTime == 2)
                     {
                         SoundStyle spiking = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothTelegraph");
                         spiking.MaxInstances = 0;
                         spiking.PitchVariance = 0.2f;
                         SoundEngine.PlaySound(spiking, Main.LocalPlayer.MountedCenter);
                     }
-                    if (Time % spikeTime == 58)
+                    if ((Time - 150) % spikeTime > 35 && (Time - 150) % spikeTime < 41)
                     {
                         SoundStyle spiked = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothEmerge", 1, 2);
                         spiked.MaxInstances = 0;
-                        spiked.PitchVariance = 0.2f;
+                        spiked.PitchVariance = 0.3f;
                         SoundEngine.PlaySound(spiked, Main.LocalPlayer.MountedCenter);
                     }
                 }
             }
 
-            if (Time > 90 && Time < 190 + spikeCount * spikeTime)
+            if (Time > 90 && Time < 170 + spikeCount * spikeTime)
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                 {
                     if (player.Center.Y < NPC.Bottom.Y)
-                        player.velocity.Y = -player.velocity.Y + 15;
+                        player.velocity.Y = -player.velocity.Y + 7;
                     if (player.Center.Y > NPC.Bottom.Y + 1500)
                         player.velocity.Y -= Math.Max(player.Distance(NPC.Center) - 1500, 0) * 0.1f;
 

@@ -343,7 +343,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            currentSlime = 3;// (currentSlime + 1) % 3;
+                            currentSlime = (currentSlime + 1) % 4;
                             nextAttack[currentSlime]++;
 
                             for (int i = 0; i < nextAttack.Length; i++)
@@ -510,23 +510,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                     case 1:
                                     case 2:
 
-                                        if (Time >= 70 && Time < 550)
-                                        {
-                                            if ((Time - 70) % 160 > 100)
-                                            {
-                                                NPC.velocity *= 0.98f;
-                                                saveTarget = Vector2.Lerp(saveTarget, Target.Center, 0.01f);
-                                            }
-                                            else
-                                            {
-                                                saveTarget = Target.Center;
-                                                Fly();
-                                                NPC.velocity *= 1.01f;
-                                            }
+                                        if (Time < 5)
+                                            saveTarget = Target.Center;
+                                        else
+                                            saveTarget = Vector2.Lerp(saveTarget, Target.Center, 0.05f);
 
+                                        if (Time >= 70 && Time < 550)
                                             SortedProjectileAttack(saveTarget, SortedProjectileAttackTypes.StellarBarrage);
 
-                                        }
+                                        FlyTo(saveTarget);
+                                        NPC.velocity *= 0.96f;
 
                                         break;
                                 }
@@ -580,8 +573,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         crack.data = "GoozmaBlack";
                         crack.behindEntities = true;
                     }
-
-                    
 
                     //if (!Main.dedServ)
                     //{
@@ -1091,8 +1082,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             float volumeScale = (Phase > 1 ? 0.9f : 0.4f);
             if (Phase == 3)
                 volumeScale *= Utils.GetLerpValue(140, 0, Time, true);
-            goozmaWarbleVolume = Math.Clamp(1f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, 0, 1) * NPC.scale * volumeScale + NPC.velocity.Length() * 0.2f;
-            goozmaWarblePitch = Math.Clamp(NPC.velocity.Length() * 0.02f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, -0.8f, 0.8f);
+            goozmaWarbleVolume = MathHelper.Lerp(goozmaWarbleVolume, Math.Clamp(1f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, 0, 1) * NPC.scale * volumeScale + NPC.velocity.Length() * 0.2f, 0.1f);
+            goozmaWarblePitch = MathHelper.Lerp(goozmaWarblePitch, Math.Clamp(NPC.velocity.Length() * 0.02f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, -0.8f, 0.8f), 0.1f);
 
             bool active = SoundEngine.TryGetActiveSound(goozmaWarble, out ActiveSound sound);
             if (!active || !goozmaWarble.IsValid)
@@ -1153,7 +1144,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             dartSound.MaxInstances = 0;
             dartSound.PitchVariance = 0.2f;   
             
-            SoundStyle fireballSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShot", 1, 2);
+            SoundStyle fireballSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaRainbowShoot", 1, 2);
             fireballSound.MaxInstances = 0;
             fireballSound.PitchVariance = 0.15f;            
 
@@ -1303,17 +1294,20 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case SortedProjectileAttackTypes.StellarBarrage:
 
-                    if ((Time - 70) % 160 > 100)
+                    //if ((Time - 70) % 160 > 100)
+                    //{
+                    //    if ((Time - 70) % 5 == 0 && !Main.dedServ)
+                    //    {
+                    //        SoundEngine.PlaySound(fizzSound, NPC.Center);
+                    //        goozmaShootPowerTarget = 1f;
+                    //    }
+                    //    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 8f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
+                    //}
+                    if ((Time - 70) % 160 > 80 && (Time - 70) % 15 == 2)
                     {
-                        if ((Time - 70) % 5 == 0 && !Main.dedServ)
-                        {
-                            SoundEngine.PlaySound(fizzSound, NPC.Center);
-                            goozmaShootPowerTarget = 1f;
-                        }
-                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.7f) * 8f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
+                        Projectile pure = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1.3f) * (NPC.Distance(targetPos) + 220) * 0.02f * Main.rand.NextFloat(0.9f, 1.2f), ModContent.ProjectileType<PureSlimeball>(), GetDamage(2), 0);
+                        pure.ai[0] = (int)((Time - 70) % 160 / 1.5f) - 30;
                     }
-                    else if ((Time - 70) % 15 == 5)
-                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.8f) * NPC.Distance(targetPos) * 0.033f * Main.rand.NextFloat(0.5f, 1.5f), ModContent.ProjectileType<PureSlimeball>(), GetDamage(2), 0);
 
                     break;
 
@@ -1376,7 +1370,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     }
 
-                    if (Time * 4 % dashTime == 60)
+                    if (Time % 30 == 5)
                         Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f) * 10f, ModContent.ProjectileType<PureSlimeball>(), GetDamage(2), 0);
                     
                     if (Time % dashTime == 70)
