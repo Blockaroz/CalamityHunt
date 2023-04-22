@@ -143,15 +143,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //    spriteBatch.Draw(flare.Value, ornamentPos - Main.screenPosition, null, new Color(ornamentColor.R, ornamentColor.G, ornamentColor.B, 0) * 0.2f, ornamentRotation + MathHelper.PiOver2, flare.Size() * 0.5f, NPC.scale * new Vector2(1f, 2f), direction, 0);
             //}
 
+            spriteBatch.Draw(glow.Value, NPC.Center - screenPos, null, glowColor * 0.2f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 5f * NPC.scale, 0, 0);
 
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
             effect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.01f % 1f); 
             effect.Parameters["colors"].SetValue(colors);
             effect.Parameters["brightnesses"].SetValue(brightnesses);
-            effect.Parameters["baseToScreenPercent"].SetValue(1f);
-            effect.Parameters["baseToMapPercent"].SetValue(0f);
+            effect.Parameters["baseToScreenPercent"].SetValue(1.5f);
+            effect.Parameters["baseToMapPercent"].SetValue(-1f);
             if (Phase == 3)
-                effect.Parameters["baseToScreenPercent"].SetValue(1f - Utils.GetLerpValue(120, 220, Time, true));
+            {
+                effect.Parameters["baseToScreenPercent"].SetValue(1.5f - Utils.GetLerpValue(80, 180, Time, true) * 1.5f);
+                effect.Parameters["baseToMapPercent"].SetValue(-1f + Utils.GetLerpValue(20, 180, Time, true));
+            }
 
             FlipShadersOnOff(spriteBatch, effect);
             DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, NPC.velocity, Color.Lerp(drawColor, Color.White, 0.3f));
@@ -180,7 +184,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             spriteBatch.Draw(flare.Value, eyePos - screenPos, null, glowColor * 0.3f, eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.7f, 4f) + new Vector2(0, eyePower.X), 0, 0);
 
             spriteBatch.Draw(glow.Value, eyePos - screenPos, null, glowColor * 0.2f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 2f * eyeScale, 0, 0);
-            spriteBatch.Draw(glow.Value, eyePos - screenPos, null, glowColor * 0.2f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 5f * eyeScale, 0, 0);
+            spriteBatch.Draw(glow.Value, eyePos - screenPos, null, glowColor * 0.05f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 5f * eyeScale, 0, 0);
 
             return false;
         }

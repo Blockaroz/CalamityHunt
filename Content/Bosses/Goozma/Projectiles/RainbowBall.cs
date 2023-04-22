@@ -37,7 +37,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void AI()
         {
             if (Time == 0)
+            {
                 Projectile.localAI[0] = Main.rand.NextFloat(20);
+
+                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
+                {
+                    Projectile.oldPos[i] = Projectile.Center;
+                    Projectile.oldRot[i] = Projectile.rotation;
+                }
+            }
             Projectile.rotation += Projectile.velocity.X * 0.04f;
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 25, Time, true));
 
@@ -47,8 +55,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (target > -1)
             {
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * new Vector2(Main.rand.Next(18, 25), Main.rand.Next(18, 30)), 0.015f);
-                Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * 0.05f;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * new Vector2(Main.rand.Next(18, 25), Main.rand.Next(18, 30)), 0.02f);
+                Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * 0.06f;
             }
 
             Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity, -Projectile.velocity * 0.5f, Color.White, 2f * Projectile.scale);
@@ -56,11 +64,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
             {
-                Projectile.oldPos[i] = Projectile.oldPos[i - 1];
-                Projectile.oldRot[i] = Projectile.oldRot[i - 1];
+                Projectile.oldPos[i] = Vector2.Lerp(Projectile.oldPos[i], Projectile.oldPos[i - 1], 0.66f);
+                Projectile.oldRot[i] = MathHelper.Lerp(Projectile.oldRot[i], Projectile.oldRot[i - 1], 0.66f);
             }
-            Projectile.oldPos[0] = Projectile.Center;
-            Projectile.oldRot[0] = Projectile.rotation;
+            Projectile.oldPos[0] = Vector2.Lerp(Projectile.oldPos[0], Projectile.Center, 0.66f);
+            Projectile.oldRot[0] = MathHelper.Lerp(Projectile.oldRot[0], Projectile.rotation, 0.66f);
 
             Projectile.frameCounter++;
             if (Projectile.frameCounter > (int)Math.Clamp((10f - Projectile.velocity.Length() * 0.33f), 2, 20))

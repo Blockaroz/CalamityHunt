@@ -160,14 +160,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             for (int i = 0; i < (Projectile.ai[1] % 3) + 1; i++)
             {
                 Rectangle eyeFrame = eye.Frame(6, 1, eyeType[i], 0);
-                Vector2 offset = new Vector2((float)Math.Sin((Projectile.localAI[0] * 0.05f + i * 2f) % MathHelper.TwoPi) * 10 * (i % 2 == 0 ? 1 : -1), 0).RotatedBy((Projectile.localAI[0] * 0.008f + i * 2.4) % MathHelper.TwoPi);
-                Main.EntitySpriteDraw(eye.Value, Projectile.Center + offset * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, new Color(110, 50, 255, 20), Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
-                Main.EntitySpriteDraw(eye.Value, Projectile.Center + offset * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, Color.White, Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale, 0, 0);
+                Vector2 off = new Vector2((float)Math.Sin((Projectile.localAI[0] * 0.05f + i * 2f) % MathHelper.TwoPi) * 10 * (i % 2 == 0 ? 1 : -1), 0).RotatedBy((Projectile.localAI[0] * 0.008f + i * 2.4) % MathHelper.TwoPi);
+                Main.EntitySpriteDraw(eye.Value, Projectile.Center + off * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, new Color(110, 50, 255, 20), Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
+                Main.EntitySpriteDraw(eye.Value, Projectile.Center + off * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, Color.White, Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale, 0, 0);
             }
-            Vector2 shadow = Main.rand.NextVector2Circular(40, 10).RotatedBy(Projectile.rotation) * Projectile.scale;
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White * 0.8f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center + shadow - Main.screenPosition, frame, Color.LightBlue * 0.15f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish * scale, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - shadow - Main.screenPosition, frame, Color.LightBlue * 0.15f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * squish * scale, 0, 0);
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 off = new Vector2(10 + (float)Math.Sin(Projectile.localAI[0] * 0.05f + i * 2f), 0).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.localAI[0] * 0.08f);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, frame, Color.SlateBlue * 0.15f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * squish * scale, 0, 0);
+            }
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White * 0.8f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * squish, 0, 0);
 
             return false;
         }

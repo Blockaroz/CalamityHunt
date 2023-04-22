@@ -236,7 +236,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (Time % 150 > 70 && Time % 150 < 100 && Time % 3 == 0)
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 4f * Utils.GetLerpValue(100, 70, Time % 150, true), 10, 12));
 
-
                 if (Time % 150 == 5)
                 {
                     if (!Main.dedServ)
@@ -261,14 +260,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
 
                 foreach (Projectile proj in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<PrismDestroyer>() && n.ai[0] < 2))
-                    proj.ai[2] += (NPC.velocity.X > 0 ? 1 : -1) * 0.07f * Utils.GetLerpValue(70, 20, Time % 150, true);
+                    proj.ai[2] += (NPC.velocity.X > 0 ? 1 : -1) * 0.07f * Utils.GetLerpValue(53, 10, Time % 150, true);
 
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.07f * Utils.GetLerpValue(147, 40, Time % 150, true), 0.1f + 0.1f * Utils.GetLerpValue(170, 40, Time % 150, true));
 
                 float progress = MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(0, 110, (Time - 10) % 150, true) * Utils.GetLerpValue(150, 110, (Time - 10) % 150, true));
                 squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Cos(progress * MathHelper.Pi) * 0.2f, 1f + (float)Math.Cos(progress * MathHelper.Pi + MathHelper.Pi) * 0.4f), 0.3f);
             }
-            else
+            else 
             {
                 NPC.velocity *= 0.8f;
                 squishFactor = Vector2.Lerp(squishFactor, Vector2.One, 0.1f);
@@ -427,7 +426,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                 {
-                    player.Hurt(PlayerDeathReason.ByCustomReason("{0} saw the light."), 9999, -1, false, true, 200, false, 0, 0, 0);
+                    player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} saw the light."), 9999, -1, false, true, 200, false, 0, 0, 0);
                     player.statLife = Math.Min(5, player.statLife);
                     player.immuneTime += 120;
                 }

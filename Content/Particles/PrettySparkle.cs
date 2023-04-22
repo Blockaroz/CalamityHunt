@@ -16,7 +16,7 @@ namespace CalamityHunt.Content.Particles
         {
             scale *= Main.rand.NextFloat(0.9f, 1.1f);
             velocity *= Main.rand.NextFloat(0.9f, 1.1f);
-            rotation *= 0.2f;
+            rotation *= 0.05f;
         }
 
         public override void Update()
@@ -36,10 +36,10 @@ namespace CalamityHunt.Content.Particles
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
 
             float drawScale = scale * (float)Math.Sqrt(Utils.GetLerpValue(-5, 10, time, true));
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, new Color(color.R, color.G, color.B, color.A / 2), rotation, texture.Size() * 0.5f, drawScale * new Vector2(0.6f, 1f), 0, 0);
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, new Color(color.R, color.G, color.B, color.A / 2), rotation + MathHelper.PiOver2, texture.Size() * 0.5f, drawScale * new Vector2(0.6f, 0.7f), 0, 0);            
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, new Color(200, 200, 200, 0), rotation, texture.Size() * 0.5f, drawScale * 0.33f * new Vector2(0.4f, 1f), 0, 0);
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, new Color(200, 200, 200, 0), rotation + MathHelper.PiOver2, texture.Size() * 0.5f, drawScale * 0.33f * new Vector2(0.4f, 0.5f), 0, 0);
+            Color drawColor = Color.Lerp(color, Color.White, 0.6f);
+            drawColor.A = 0;
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, new Color(color.R, color.G, color.B, color.A / 2), rotation, texture.Size() * 0.5f, drawScale * 0.6f, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, drawColor, rotation, texture.Size() * 0.5f, drawScale * 0.3f, 0, 0);
         }
     }
 }

@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class PureSlimeball : ModProjectile
+    public class SlimeBomb : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -102,6 +102,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     explodeSound.MaxInstances = 0;
                     SoundEngine.PlaySound(explodeSound, Projectile.Center);
                     SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.6f), Projectile.Center);
+                }
+
+                if (Time < 3)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.3f);
+                        Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity, gooVelocity, Color.White, 1f + Main.rand.NextFloat(2f));
+                        goo.data = Projectile.localAI[1];
+                    }
                 }
 
                 if (Time < 10)

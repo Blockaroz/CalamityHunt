@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,6 +7,7 @@ using ReLogic.Content;
 using System;
 using System.Linq;
 using Terraria;
+using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Graphics
@@ -53,9 +55,9 @@ namespace CalamityHunt.Common.Graphics
                 {
                     Asset<Texture2D> texture = ModContent.Request<Texture2D>(smoke.Texture);
                     Rectangle frame = texture.Frame(4, 2, smoke.variant % 4, (int)(smoke.variant / 4f));
-                    float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, 7, smoke.time, true));
-                    float opacity = Utils.GetLerpValue(22, 0, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
-                    Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), frame, Color.White * 0.5f * opacity * grow, smoke.rotation, frame.Size() * 0.5f, smoke.scale * (0.5f + grow * 0.5f), 0, 0);
+                    float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.maxTime * 0.2f, smoke.time, true));
+                    float opacity = Utils.GetLerpValue(smoke.maxTime * 0.7f, smoke.maxTime * 0.2f, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
+                    Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), frame, Color.White * 0.5f * opacity * grow, smoke.rotation, frame.Size() * 0.5f, smoke.scale * grow * 0.5f, 0, 0);
                 }
             }
 
@@ -79,7 +81,7 @@ namespace CalamityHunt.Common.Graphics
                     float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, 7, smoke.time, true));
                     float opacity = Utils.GetLerpValue(22, 10, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
                     //new Color(20, 13, 11, 0)
-                    Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), null, new Color(15, 5, 35, 0) * 0.1f * opacity * grow, smoke.rotation, texture.Size() * 0.5f, smoke.scale * (0.5f + grow * 0.5f) * 2f, 0, 0);
+                    Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), null, new Color(13, 5, 15, 0) * 0.15f * opacity * grow, smoke.rotation, texture.Size() * 0.5f, smoke.scale * (0.5f + grow * 0.5f) * 2f, 0, 0);
                 }
             }
 
@@ -102,11 +104,25 @@ namespace CalamityHunt.Common.Graphics
 
             Main.spriteBatch.End();
 
-            //if (Main.mouseLeft)
+            //if (Main.UpdateTimeAccumulator < 0.0166666)
             //{
-            //    for (int i = 0; i < 10; i++)
+            //    if (Main.mouseLeft)
             //    {
-            //        Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Main.MouseWorld, Main.rand.NextVector2Circular(8, 8), Color.White, 2f + Main.rand.NextFloat()).data = "Cosmos";
+            //        for (int i = 0; i < 5; i++)
+            //        {
+            //            Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Main.MouseWorld, Main.rand.NextVector2Circular(8, 8), Color.White, 1f + Main.rand.NextFloat(2f));
+            //            smoke.data = "Cosmos";
+            //        }
+            //    }
+
+            //    if (Main.mouseRight)
+            //    {
+            //        for (int i = 0; i < 5; i++)
+            //        {
+            //            Color drawColor = new GradientColor(SlimeUtils.GoozColorArray, 0.1f, 0.1f).Value;
+            //            drawColor.A = 0;
+            //            Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Main.MouseWorld, Main.rand.NextVector2Circular(5, 5), drawColor, 1f + Main.rand.NextFloat(2f));
+            //        }
             //    }
             //}
 

@@ -20,6 +20,7 @@ namespace CalamityHunt.Content.Particles
     {
         private bool colorful;
         private int variant;
+        private int direction;
         private float colOffset;
         private int time;
         private Vector2 homePos;
@@ -28,9 +29,10 @@ namespace CalamityHunt.Content.Particles
         {
             scale *= Main.rand.NextFloat(1f, 1.1f);
             variant = Main.rand.Next(3);
+            direction = Main.rand.NextBool() ? 1 : -1;
             colOffset = Main.rand.NextFloat();
             homePos = position;
-            colorful = Main.rand.NextBool(8);
+            colorful = Main.rand.NextBool(3);
             behindEntities = true;
         }
 
@@ -49,6 +51,7 @@ namespace CalamityHunt.Content.Particles
                 else if (time > (int)data + 20)
                 {
                     velocity = Vector2.Lerp(velocity, position.DirectionTo(homePos).SafeNormalize(Vector2.Zero) * (position.Distance(homePos) + 10) * 0.02f, 0.1f * Utils.GetLerpValue((int)data + 20, (int)data + 40, time, true));
+                    velocity = velocity.RotatedBy(0.03f * direction);
                     if (position.Distance(homePos) < 30)
                         scale *= 0.9f;
                 }
@@ -59,15 +62,23 @@ namespace CalamityHunt.Content.Particles
             if (scale < 0.5f)
                 Active = false;
 
-            if (Main.rand.NextBool(20))
+            if (Main.rand.NextBool(50))
             {
                 Particle hue = NewParticle(ParticleType<HueLightDust>(), position + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 2f, Color.White, 1f);
                 hue.data = time * 2f + colOffset; 
-            }            
-            
-            if (Main.rand.NextBool(10))
-                Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(3, 3), 100, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
+            }
 
+
+            if (Main.rand.NextBool(120))
+            {
+                Vector2 gooVelocity = -velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.2f);
+                Particle goo = NewParticle(ParticleType<GooBurst>(), position + Main.rand.NextVector2Circular(30, 30), gooVelocity, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
+                goo.data = time * 2f + colOffset;
+
+            }
+
+            if (Main.rand.NextBool(70))
+                Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(3, 3), 100, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -87,7 +98,7 @@ namespace CalamityHunt.Content.Particles
                 Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + rotation);
                 spriteBatch.Draw(texture.Value, position + off - Main.screenPosition, frame, glowColor, rotation, frame.Size() * 0.5f, scale, 0, 0);
             }
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.4f), rotation, frame.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.6f), rotation, frame.Size() * 0.5f, scale, 0, 0);
 
             if (colorful)
                 spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor * 0.75f * scale, rotation, frame.Size() * 0.5f, scale, 0, 0);

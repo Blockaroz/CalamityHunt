@@ -38,14 +38,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 15, Time, true) * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true));
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Zero, 0.001f + Utils.GetLerpValue(50, 165, Time, true) * 0.05f) * (1f + 0.115f * Utils.GetLerpValue(50, 0, Time, true) * 0.9f);
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Zero, 0.001f + Utils.GetLerpValue(50, 165, Time, true) * 0.05f) * (1f + 0.115f * Utils.GetLerpValue(50, 0, Time, true));
 
             int target = -1;
             if (Main.player.Any(n => n.active && !n.dead))
                 target = Main.player.First(n => n.active && !n.dead).whoAmI;
 
             if (target > -1)
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * Projectile.oldVelocity.Length(), 0.008f);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * Projectile.oldVelocity.Length(), 0.015f);
 
             if (Main.rand.NextBool(5))
             {

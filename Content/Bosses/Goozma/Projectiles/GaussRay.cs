@@ -15,6 +15,7 @@ using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static tModPorter.ProgressUpdate;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -75,10 +76,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.028f);
             Projectile.rotation = Projectile.velocity.ToRotation() + totalOffRot;
             Projectile.localAI[0] = Main.npc[owner].localAI[0];
+            
+            float smokePower = Utils.GetLerpValue(0, ChargeTime * 0.9f, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 70, ChargeTime + LaserDuration + 40, Time, true);
+            Color smokeColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * (0.5f + smokePower * 0.5f);
+            smokeColor.A = 0;
+            int smokeCount = (int)(smokePower * 12f);
+            for (int i = 0; i < smokeCount; i++)
+                Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20, Projectile.rotation.ToRotationVector2().RotatedByRandom((float)Math.Sqrt(1f - smokePower * 0.5f)) * Main.rand.NextFloat(15f, 25f) * smokePower, smokeColor, 1f + Main.rand.NextFloat());
 
-            if (!Main.rand.NextBool((int)(Time * 0.5f + 2)))
+            if (!Main.rand.NextBool((int)(Time * 0.5f + 15)))
             {
-                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(0.4f) * Main.rand.NextFloat(5f, 25f), Color.White, 3f);
+                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(1f) * Main.rand.NextFloat(5f, 15f), Color.White, 2f);
                 hue.data = Projectile.localAI[0];
             }
             if (Time > ChargeTime - 15 && Time < ChargeTime + LaserDuration + 60)
@@ -87,10 +95,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     float grow = Utils.GetLerpValue(ChargeTime - 15, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration, Time, true);
                     float progress = Main.rand.NextFloat(3300);
-                    Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 60) * 0.6f * grow;
+                    Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 60) * grow;
                     color.A = 0;
                     Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-80f, 80f) * (progress / 3300f)).RotatedBy(Projectile.rotation);
-                    Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(3f));
+                    Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
                     smoke.behindEntities = true;
                     if (Main.rand.NextBool(5))
                     {

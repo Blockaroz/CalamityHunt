@@ -160,6 +160,9 @@ Projectiles: {
 	StellarGelatine.DisplayName: Stellar Gelatine
 	ConstellationStar.DisplayName: Constellation Star
 	ConstellationLine.DisplayName: Constellation Line
+	SlimeBomb.DisplayName: Slime Bomb
+	SpaceRock.DisplayName: Space Rock
+	StellarDebris.DisplayName: Stellar Debris
 }
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
 Bestiary: {

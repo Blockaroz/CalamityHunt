@@ -29,7 +29,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.width = 20;
             Projectile.height = 20;
             Projectile.tileCollide = false;
-            Projectile.hostile = false;
+            Projectile.hostile = true;
             Projectile.friendly = false;
             Projectile.penetrate = -1;
             Projectile.aiStyle = -1;
@@ -61,8 +61,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             //    smoke.data = "Cosmos";
             //}
 
-            if (Time > 85 && Time < 180)
-                Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, Main.rand.NextFloat()), Main.rand.NextVector2Circular(1, 1), new Color(30, 15, 8, 0), (0.2f + Main.rand.NextFloat()));
+            if (Time > 85 && Time < 180 && Main.rand.NextBool(5))
+                Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, Main.rand.NextFloat()), Main.rand.NextVector2Circular(1, 1), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()));
 
             if (Time > 180)
                 Projectile.Kill();
@@ -76,7 +76,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time > 85 && Time < 180)
             {
                 float point = 0f;
-                return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Main.projectile[(int)Start].Center, Main.projectile[(int)Start].Center, 40, ref point);
+                return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, 90, ref point);
             }
             return false;
         }
@@ -89,17 +89,22 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Rectangle glowHalf = glow.Frame(1, 2, 0, 0);
 
             float power = Utils.GetLerpValue(10, 85, Time, true) * Utils.GetLerpValue(180, 155, Time, true);
-            Color lineColor = Color.Lerp(new Color(130, 90, 40, 0), new Color(200, 140, 70, 0), Utils.GetLerpValue(50, 60, Time, true)) * MathHelper.SmoothStep(0.1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.1f, 1f, Utils.GetLerpValue(50, 85, Time, true)) * power;
+            Color lineColor = Color.Lerp(new Color(80, 50, 35, 0), new Color(255, 215, 180, 0), Utils.GetLerpValue(50, 60, Time, true) * 0.6f) * MathHelper.SmoothStep(0.1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.1f, 1f, Utils.GetLerpValue(50, 85, Time, true)) * power;
+            Color lineGlowColor = new Color(80, 50, 35, 0) * power;
             Color bloomColor = new Color(30, 12, 8, 0) * power;
             if (Time > 1)
             {
                 float wobble = 1f + (float)Math.Sin((Projectile.localAI[0] * 0.5f) % MathHelper.TwoPi) * 0.2f;
 
                 //double end
-                Vector2 distance = new Vector2(wobble * 0.2f + power * 0.1f, Projectile.Distance(Main.projectile[(int)End].Center) / half.Height * 0.8f);
+                Vector2 distance = new Vector2(wobble * 0.3f + power * 0.1f, Projectile.Distance(Main.projectile[(int)End].Center) / (half.Height * 1.5f));
                 Vector2 glowDistance = new Vector2(wobble, Projectile.Distance(Main.projectile[(int)End].Center) / glowHalf.Height);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, half, lineColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Main.projectile[(int)End].Center - Main.screenPosition, half, lineColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, half, lineGlowColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
+                Main.EntitySpriteDraw(texture.Value, Main.projectile[(int)End].Center - Main.screenPosition, half, lineGlowColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
+                
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, half, lineColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * new Vector2(0.33f, 1f) * distance, 0, 0);
+                Main.EntitySpriteDraw(texture.Value, Main.projectile[(int)End].Center - Main.screenPosition, half, lineColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * new Vector2(0.33f, 2f) * distance, 0, 0);
+                
                 Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glowHalf, bloomColor * wobble, Projectile.rotation + MathHelper.PiOver2, glowHalf.Size() * new Vector2(0.5f, 1f), Projectile.scale * glowDistance, 0, 0);
                 Main.EntitySpriteDraw(glow.Value, Main.projectile[(int)End].Center - Main.screenPosition, glowHalf, bloomColor * wobble, Projectile.rotation - MathHelper.PiOver2, glowHalf.Size() * new Vector2(0.5f, 1f), Projectile.scale * glowDistance, 0, 0);
 
