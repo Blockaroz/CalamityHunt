@@ -90,7 +90,10 @@ Items: {
 
 	SlimeMonsoonMonolith: {
 		DisplayName: Slime Monsoon Monolith
-		Tooltip: ""
+		Tooltip: 
+			'''
+			'Invoke a fairly large amount of slime'
+			'''
 	}
 
 	CrimulanMask: {
