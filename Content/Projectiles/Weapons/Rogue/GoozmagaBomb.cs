@@ -44,6 +44,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 			// orbit
 			if (target != null && target.chaseable && target.active)
 			{
+				Projectile.velocity = Vector2.Zero;
 				Projectile.localAI[1]++;
 				float distance = 100;
 				distance = target.width >= target.height ? target.width : target.height;
