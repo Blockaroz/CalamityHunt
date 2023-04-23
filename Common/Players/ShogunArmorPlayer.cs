@@ -73,6 +73,11 @@ namespace CalamityHunt.Common.Players
                 if (slamPower > 0f)
                     Main.SetCameraLerp(0.2f, 25);
             }
+            else
+            {
+                Player.fullRotation = 0;
+                slamPower = 0;
+            }
         }
 
         public override void ResetEffects()
