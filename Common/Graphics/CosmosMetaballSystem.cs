@@ -79,8 +79,8 @@ namespace CalamityHunt.Common.Graphics
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, absorbEffect);
 
-                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), Color.White, 0, bloom.Size() * 0.5f, projectile.scale * 20f, 0, 0);
+                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig");
+                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), Color.White, 0, bloom.Size() * 0.5f, projectile.scale * 7f, 0, 0);
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
@@ -104,18 +104,18 @@ namespace CalamityHunt.Common.Graphics
         {
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-            foreach (Particle particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
-            {
-                CosmicSmoke smoke = particle as CosmicSmoke;
-                if ((string)smoke.data == "Cosmos")
-                {
-                    Asset<Texture2D> texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-                    float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, 7, smoke.time, true));
-                    float opacity = Utils.GetLerpValue(22, 10, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
-                    //new Color(20, 13, 11, 0)
-                    Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), null, new Color(13, 5, 15, 0) * 0.15f * opacity * grow, smoke.rotation, texture.Size() * 0.5f, smoke.scale * (0.5f + grow * 0.5f) * 2f, 0, 0);
-                }
-            }
+            //foreach (Particle particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
+            //{
+            //    CosmicSmoke smoke = particle as CosmicSmoke;
+            //    if ((string)smoke.data == "Cosmos")
+            //    {
+            //        Asset<Texture2D> texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            //        float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, 7, smoke.time, true));
+            //        float opacity = Utils.GetLerpValue(22, 10, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
+            //        //new Color(20, 13, 11, 0)
+            //        Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), null, new Color(13, 7, 20, 0) * 0.1f, smoke.rotation, texture.Size() * 0.5f, smoke.scale * (0.5f + grow * 0.5f) * 4f * opacity, 0, 0);
+            //    }
+            //}
 
             Effect absorbEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceAbsorb", AssetRequestMode.ImmediateLoad).Value;
             absorbEffect.Parameters["uRepeats"].SetValue(1f);
@@ -124,16 +124,16 @@ namespace CalamityHunt.Common.Graphics
 
             foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is BlackHoleBlender))
             {
-                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-                Main.spriteBatch.Draw(bloom.Value, (projectile.Center - Main.screenPosition), null, new Color(33, 5, 65, 0) * (float)Math.Pow(projectile.scale, 2f), projectile.rotation, bloom.Size() * 0.5f, 18f, 0, 0);
+                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig");
+                Main.spriteBatch.Draw(bloom.Value, (projectile.Center - Main.screenPosition), null, new Color(33, 5, 65, 0) * (float)Math.Pow(projectile.scale, 1.5f), projectile.rotation, bloom.Size() * 0.5f, 3.5f, 0, 0);
 
                 absorbEffect.Parameters["uTime"].SetValue(projectile.localAI[0] * 0.002f % 1f);
-                absorbEffect.Parameters["uSize"].SetValue(new Vector2(9f));
+                absorbEffect.Parameters["uSize"].SetValue(new Vector2(8f));
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, absorbEffect);
 
-                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(255, 150, 60, 0) * projectile.scale, 0, bloom.Size() * 0.5f, projectile.scale * 20f, 0, 0);
+                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(255, 150, 60, 0) * projectile.scale, 0, bloom.Size() * 0.5f, projectile.scale * 6f, 0, 0);
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
@@ -148,7 +148,7 @@ namespace CalamityHunt.Common.Graphics
             effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, Main.GlobalTimeWrappedHourly * 0.0004f % 2f));
             effect.Parameters["uCloseColor"].SetValue(new Color(20, 50, 255).ToVector3());
             effect.Parameters["uFarColor"].SetValue(new Color(110, 20, 200).ToVector3());
-            effect.Parameters["uOutlineColor"].SetValue(Color.White.ToVector3());
+            effect.Parameters["uOutlineColor"].SetValue(new Color(20, 5, 45, 0).ToVector4());
             effect.Parameters["uImageRatio"].SetValue(new Vector2(Main.screenWidth / (float)Main.screenHeight, 1f));
 
             Main.spriteBatch.End();

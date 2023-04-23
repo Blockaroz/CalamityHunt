@@ -90,10 +90,7 @@ Items: {
 
 	SlimeMonsoonMonolith: {
 		DisplayName: Slime Monsoon Monolith
-		Tooltip: 
-			'''
-			'Invoke a fairly large amount of slime'
-			'''
+		Tooltip: "'Invoke a fairly large amount of slime'"
 	}
 
 	CrimulanMask: {
@@ -167,6 +164,7 @@ Projectiles: {
 	SpaceRock.DisplayName: Space Rock
 	StellarDebris.DisplayName: Stellar Debris
 	BlackHoleBlender.DisplayName: Black Hole Blender
+	CosmicDust.DisplayName: Cosmic Dust
 }
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
 Bestiary: {

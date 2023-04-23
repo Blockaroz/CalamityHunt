@@ -5,6 +5,7 @@ using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,6 +15,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
     {
         public override void SetStaticDefaults()
         {
+            ProjectileID.Sets.TrailCacheLength[Type] = 20;
+            ProjectileID.Sets.TrailingMode[Type] = 2;
             // DisplayName.SetDefault("Toxic Sludge");
         }
 
@@ -26,7 +29,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.friendly = false;
             Projectile.penetrate = -1;
             Projectile.aiStyle = -1;
-            Projectile.timeLeft = 180;
         }
 
         public ref float Time => ref Projectile.ai[0];
@@ -44,16 +46,21 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Main.rand.NextBool(3))
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height) * 0.5f, DustID.Stone, Main.rand.NextVector2Circular(3, 3) - Projectile.velocity, 0, Color.White, 1f + Main.rand.NextFloat(2f)).noGravity = true;
 
-            Size = 1f + (float)Math.Sin(Time * 0.2f) * 0.5f;
-            Vector2 sized = new Vector2(48 * (1f + Size));
+            Vector2 sized = new Vector2(42 * (1f + Size));
             if (Projectile.width != (int)sized.X || Projectile.height != (int)sized.Y)
             {
                 Projectile.Resize((int)sized.X, (int)sized.Y);
-                Projectile.scale = (Projectile.scale * 0.33f * Size) % 3f;
+                //Projectile.scale = (Projectile.scale * 0.33f * Size) % 1f;
             }
 
             Time++;
             Projectile.rotation += 0.1f * Projectile.direction;
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter > 1 + (int)(Size * 1.5f))
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame = (Projectile.frame + 1) % 4;
+            }
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -71,10 +78,28 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            Asset<Texture2D> flames = ModContent.Request<Texture2D>(Texture + "Flames");
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
 
             float power = Utils.GetLerpValue(0, 20, Time, true);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation, texture.Size() * 0.5f, new Vector2((float)Projectile.width / texture.Width(), (float)Projectile.height / texture.Height()), 0, 0);
+
+            for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
+            {
+                Vector2 oldPos = Projectile.oldPos[i] + Projectile.Size * 0.5f;
+                float fade = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
+                Main.EntitySpriteDraw(texture.Value, oldPos - Main.screenPosition, texture.Frame(), new Color(20, 15, 50, 0) * 0.1f * fade * power, Projectile.oldRot[i] * fade, texture.Size() * 0.5f, new Vector2((float)Projectile.width / texture.Width(), (float)Projectile.height / texture.Height()) * (0.7f + fade * 0.7f), 0, 0);
+                Main.EntitySpriteDraw(bloom.Value, oldPos - Main.screenPosition, bloom.Frame(), new Color(20, 15, 50, 0) * 0.1f * fade * power, Projectile.rotation, bloom.Size() * 0.5f, Size * Projectile.scale * 3f * fade, 0, 0);
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation) * power;
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, texture.Frame(), new Color(100, 60, 30, 0) * power, Projectile.rotation, texture.Size() * 0.5f, new Vector2((float)Projectile.width / texture.Width(), (float)Projectile.height / texture.Height()) * power, 0, 0);
+            }
+
+            Rectangle flamesFrame = flames.Frame(1, 4, 0, Projectile.frame);
+            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(20, 15, 50, 0) * power, Projectile.rotation, bloom.Size() * 0.5f, Size * Projectile.scale * 3f, 0, 0);
+            Main.EntitySpriteDraw(flames.Value, Projectile.Center - Main.screenPosition, flamesFrame, new Color(100, 60, 30, 0) * power, Projectile.velocity.ToRotation() - MathHelper.PiOver2, flamesFrame.Size() * new Vector2(0.5f, 0.7f), Size * Projectile.scale * 0.9f, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation, texture.Size() * 0.5f, new Vector2((float)Projectile.width / texture.Width(), (float)Projectile.height / texture.Height()) * power, 0, 0);
 
             return false;
         }

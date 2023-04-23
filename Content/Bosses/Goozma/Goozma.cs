@@ -514,7 +514,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             saveTarget = Vector2.Lerp(saveTarget, Target.Center, 0.05f);
 
                                         if (Time >= 70 && Time < 550)
-                                            SortedProjectileAttack(saveTarget, SortedProjectileAttackTypes.StellarBarrage);
+                                            SortedProjectileAttack(saveTarget, SortedProjectileAttackTypes.StellarDisruption);
 
                                         FlyTo(saveTarget);
                                         NPC.velocity *= 0.96f;
@@ -522,11 +522,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         break;
 
                                     case 1:
+                                        Fly();
+
+                                        break;
+
                                     case 2:
 
-                                        Vector2 outerRing = Target.Center.DirectionTo(ActiveSlime.Center) * 1200;
+                                        Vector2 outerRing = Target.Center.DirectionTo(ActiveSlime.Center) * 1500;
                                         FlyTo(ActiveSlime.Center - outerRing);
                                         NPC.velocity *= 0.6f;
+                                        if (Time < 590)
+                                            SortedProjectileAttack(ActiveSlime.Center, SortedProjectileAttackTypes.StellarTaunt);
 
                                         break;
                                 }
@@ -1075,7 +1081,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             PixieBallDisruption,
             CrimulanSlam,
             CrimulanHop,
-            StellarBarrage,
+            StellarDisruption,
+            StellarTaunt,
             BurstLightning,
             DrillDash,
             GaussRay
@@ -1310,7 +1317,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     break;
 
-                case SortedProjectileAttackTypes.StellarBarrage:
+                case SortedProjectileAttackTypes.StellarDisruption:
 
                     //if ((Time - 70) % 160 > 100)
                     //{
@@ -1326,6 +1333,24 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Projectile pure = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1.3f) * (NPC.Distance(targetPos) + 220) * 0.02f * Main.rand.NextFloat(0.9f, 1.2f), ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
                         pure.ai[0] = (int)((Time - 70) % 160 / 1.5f) - 30;
                     }
+
+                    break;
+
+                case SortedProjectileAttackTypes.StellarTaunt:
+
+                    if (Time % 100 == 40 || Main.rand.NextBool(180))
+                    {
+                        if (!Main.dedServ)
+                        {
+                            SoundEngine.PlaySound(fizzSound, NPC.Center);
+                            goozmaShootPowerTarget = 1f;
+                        }
+
+                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * 2f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
+                    }
+
+                    if (Time % 130 == 10)
+                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1.3f) * NPC.Distance(targetPos) * 0.016f * Main.rand.NextFloat(0.9f, 1.2f), ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
 
                     break;
 

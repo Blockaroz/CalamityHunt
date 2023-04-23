@@ -102,7 +102,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             else if (holeActive)
             {
-                holeSound.Volume = volume * 0.9f;
+                holeSound.Volume = volume * 0.8f;
                 holeSound.Pitch = pitch;
                 holeSound.Position = Projectile.Center;
             }            
@@ -144,7 +144,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 for (int i = 0; i < Main.musicFade.Length; i++)
                 {
-                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - projectile.scale * 0.6f);
+                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - projectile.scale * 0.5f);
                     float tempFade = Main.musicFade[i];
                     Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.15f);
                     Main.musicFade[i] = tempFade;
@@ -160,9 +160,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             Asset<Texture2D> shadowTexture = ModContent.Request<Texture2D>(Texture + "Shadow");
 
-            Main.EntitySpriteDraw(shadowTexture.Value, Projectile.Center - Main.screenPosition, shadowTexture.Frame(), Color.Black * 0.2f, -Projectile.rotation * 0.7f, shadowTexture.Size() * 0.5f, Projectile.scale * 1.1f, SpriteEffects.FlipHorizontally, 0);
-            Main.EntitySpriteDraw(shadowTexture.Value, Projectile.Center - Main.screenPosition, shadowTexture.Frame(), Color.Black * 0.4f, -Projectile.rotation * 0.5f, shadowTexture.Size() * 0.5f, Projectile.scale * 0.9f, SpriteEffects.FlipHorizontally, 0);
-            Main.EntitySpriteDraw(shadowTexture.Value, Projectile.Center - Main.screenPosition, shadowTexture.Frame(), Color.Black * 0.4f, Projectile.rotation * 0.33f, shadowTexture.Size() * 0.5f, Projectile.scale * 0.8f, 0, 0);
+            Main.EntitySpriteDraw(shadowTexture.Value, Projectile.Center - Main.screenPosition, shadowTexture.Frame(), Color.Black * 0.5f, -Projectile.rotation * 0.7f, shadowTexture.Size() * 0.5f, Projectile.scale * 1.3f, SpriteEffects.FlipHorizontally, 0);
+            Main.EntitySpriteDraw(shadowTexture.Value, Projectile.Center - Main.screenPosition, shadowTexture.Frame(), Color.Black * 0.2f, -Projectile.rotation * 0.5f, shadowTexture.Size() * 0.5f, Projectile.scale * 1.5f, SpriteEffects.FlipHorizontally, 0);
+            Main.EntitySpriteDraw(shadowTexture.Value, Projectile.Center - Main.screenPosition, shadowTexture.Frame(), Color.Black, Projectile.rotation * 0.33f, shadowTexture.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
 
             if (Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Active)
             {
@@ -170,7 +170,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     .UseColor(Color.White)
                     .UseTargetPosition(Projectile.Center)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.1f % 1f)
-                    .UseIntensity(Utils.GetLerpValue(0.2f, 0.9f, Projectile.scale, true) * 0.6f);
+                    .UseIntensity((float)Math.Sqrt(Utils.GetLerpValue(0.2f, 0.9f, Projectile.scale, true)) * 0.5f);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortionSample"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/DistortNoise").Value);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uSize"].SetValue(new Vector2(1f));

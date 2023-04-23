@@ -41,8 +41,8 @@ float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0)
     float2 targetCoords = (uTargetPosition - uScreenPosition) / uScreenResolution;
     float2 center = ((coords - targetCoords)) * (uScreenResolution / uScreenResolution.y) / uZoom / uSize;
     float2 polar = float2(atan2(center.x, center.y) / 6.28, length(center) * 0.6);
-    float4 distort = tex2D(distortTex, polar + float2(0, uProgress)) * (smoothstep(0.66 * uIntensity, 0, length(center))) * length(center);
-    return tex2D(uImage0, coords + length(distort) * center - center * (smoothstep(0.6 * uIntensity, 0, length(center)))) * (smoothstep(0.25 * uIntensity, 0.4 * uIntensity, length(center) - length(distort)));
+    float4 distort = tex2D(distortTex, polar + float2(0, uProgress)) * (smoothstep(1.1 * uIntensity, 0, length(center))) * length(center);
+    return tex2D(uImage0, coords + length(distort) * center - center * (smoothstep(0.8 * uIntensity, 0, length(center)))) * (smoothstep(0.25 * uIntensity, 0.4 * uIntensity, length(center) - length(distort)));
 
 }
 

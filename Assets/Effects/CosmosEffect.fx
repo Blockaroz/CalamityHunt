@@ -39,14 +39,16 @@ float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0)
     float4 first = pow(spaceClose, 1.33) * uCloseColor + pow(spaceClose * 1.4, 4);
     float4 second = spaceFar * 0.85 * backColor + pow(spaceFar, 4);
     float4 third = spaceFarther * uFarColor + pow(spaceFarther, 4) * uCloseColor;
+    float4 final = (first + second + third) * screen.a;
+    float outline = lerp(0, 10, smoothstep(0.01, 0, length(screen.rgb) * screen.a)) * screen.a;
 
-    return (first + second + third) * screen.a;
+    return (first + second + third) * screen.a + outline * uOutlineColor;
 }
 
 technique Technique1
 {
     pass GelPass
     {
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        PixelShader = compile ps_3_0 PixelShaderFunction();
     }
 }
