@@ -53,11 +53,8 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = Language.GetOrRegister("SetBonuses.Shogun").Value;
-
-            if (player.wingsLogic < 1)
-                player.wingsLogic = 34;
-
+            player.setBonus = Language.GetOrRegister($"{nameof(CalamityHunt)}.SetBonuses.Shogun").Value;
+            player.jumpSpeedBoost += 2f;
             player.GetModPlayer<ShogunArmorPlayer>().active = true;
             player.GetDamage(DamageClass.Generic) += 0.18f;
         }
@@ -74,7 +71,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             Asset<Texture2D> texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Armor/Shogun/ShogunHelm_Head_Ponytail");
 
             DrawData drawData = new DrawData(texture.Value, drawInfo.HeadPosition(), drawInfo.drawPlayer.legFrame, drawInfo.colorArmorHead.MultiplyRGBA(drawInfo.colorHair), drawInfo.drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect, 0);
-            drawData.shader = drawInfo.cHead;
+            drawData.shader = drawInfo.hairDyePacked;
             drawInfo.DrawDataCache.Add(drawData);
         }
     }
