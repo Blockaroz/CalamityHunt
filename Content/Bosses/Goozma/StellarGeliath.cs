@@ -103,12 +103,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void AI()
         {
-            //if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
-            //    NPC.active = false;
-            //else
-            //    NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+                NPC.active = false;
+            else
+                NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
 
-            //NPC.realLife = Host.whoAmI;
+            NPC.realLife = Host.whoAmI;
 
             if (!NPC.HasPlayerTarget)
                 NPC.TargetClosestUpgraded();
@@ -500,23 +500,61 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public void BlackHole()
         {
-            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.03f, 0.2f);
-            NPC.velocity *= 0.9f;
-            NPC.scale = 1f + (float)Math.Pow(Utils.GetLerpValue(0, 60, Time, true), 2f);
+            float holeSize = (float)Math.Sqrt(Utils.GetLerpValue(5, 550, Time, true) * Utils.GetLerpValue(600, 550, Time, true)) * 300;
+            if (Time < 60)
+                NPC.scale = 1f + (float)Math.Pow(Utils.GetLerpValue(0, 60, Time, true), 2f);
+
+            if (Time == 2)
+            {
+                Projectile hole = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<BlackHoleBlender>(), 9999, 0);
+                hole.ai[1] = 595;
+            }
 
             if (Time > 50 && Time < 600)
             {
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.03f, 0.2f);
+                NPC.velocity *= 0.9f;
+
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead))
                 {
-                    if (player.Distance(NPC.Center) < 300)
+                    if (player.Distance(NPC.Center) < holeSize)
                         player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} was shredded by gravity."), 100, -1, false, true, -1, false, 0, 0, 0);
 
-                    if (player.Distance(NPC.Center) > 400)
-                        player.velocity += player.DirectionTo(NPC.Center) * Utils.GetLerpValue(400, 900, player.Distance(NPC.Center));
+                    if (player.Distance(NPC.Center) > holeSize + 200)
+                        player.velocity += player.DirectionTo(NPC.Center) * Utils.GetLerpValue(holeSize + 200, holeSize + 500, player.Distance(NPC.Center));
+                }
+
+                if (Time % 5 == 0 && Time < 450)
+                {
+                    int size = Main.rand.Next(0, 3);
+                    Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Target.Center + Target.Velocity * 10 + Main.rand.NextVector2CircularEdge(2000, 2000), Vector2.Zero, ModContent.ProjectileType<SpaceRock>(), GetDamage(4 + size), 0);
+                    rock.ai[1] = size + 1;
+                }
+
+                foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<SpaceRock>()))
+                {
+                    projectile.velocity = Vector2.Lerp(projectile.velocity, projectile.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (3 - projectile.ai[1] * 0.5f) * 8, 0.1f);
+                    if (projectile.Distance(NPC.Center) < 300)
+                        projectile.Kill();
+                }
+            }
+            if (Time > 600)
+            {
+                NPC.velocity *= 0.92f;
+                NPC.scale = 1f + (float)Math.Sqrt(Utils.GetLerpValue(670, 650, Time, true));
+
+                if (Time == 660)
+                {
+
+                }
+
+                if (Time >= 660 && Time < 690)
+                {
+
                 }
             }
 
-            if (Time > 600)
+            if (Time > 730)
                 Reset();
         }
 
@@ -594,7 +632,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     break;
 
                 case (int)AttackList.BlackHole:
-                    color = Color.Lerp(Color.White, Color.Black, Utils.GetLerpValue(0, 45, Time, true)) * Utils.GetLerpValue(60, 20, Time, true);
+                    color = Color.White * (Utils.GetLerpValue(30, 20, Time, true) + Utils.GetLerpValue(600, 630, Time, true));
                     break;
             }
 

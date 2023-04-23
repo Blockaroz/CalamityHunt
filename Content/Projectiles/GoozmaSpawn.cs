@@ -104,11 +104,11 @@ namespace CalamityHunt.Content.Projectiles
                     Main.NewText(NetworkText.FromKey(slimeMonsoonText.Value), new Color(50, 255, 130));
             }
 
-            if (Time > 50 && Time % 20 == 0)
-            {
-                Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), Projectile.Center, Vector2.Zero, Color.DimGray, 5f + Time / 20f);
-                crack.data = "GoozmaBlack";
-            }
+            //if (Time > 50 && Time % 20 == 0)
+            //{
+            //    Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), Projectile.Center, Vector2.Zero, Color.DimGray, 5f + Time / 20f);
+            //    crack.data = "GoozmaBlack";
+            //}
 
             if (Time % 4 == 0 && Time > 600)
                 Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), (float)Math.Pow((Time - 700) / 600f, 3) * 10f, 4f, 40, 20000));

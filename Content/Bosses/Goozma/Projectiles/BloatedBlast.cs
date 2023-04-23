@@ -139,7 +139,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     SoundStyle dartSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDartShoot", 1, 2);
                     dartSound.PitchVariance = 0.2f;
                     dartSound.Pitch = 0.3f;
-                    SoundEngine.PlaySound(dartSound);
+                    SoundEngine.PlaySound(dartSound.WithVolumeScale(0.8f));
                 }
             }
 

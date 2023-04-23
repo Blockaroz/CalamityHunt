@@ -185,7 +185,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             bool active = SoundEngine.TryGetActiveSound(auraSound, out ActiveSound sound);
             if (!active || !auraSound.IsValid)
-                auraSound = SoundEngine.PlaySound(pixieBallSound, Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).Center);
+                auraSound = SoundEngine.PlaySound(pixieBallSound, Projectile.Center);
 
             else if (active)
             {

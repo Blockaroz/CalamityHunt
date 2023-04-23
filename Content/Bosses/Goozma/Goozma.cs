@@ -171,8 +171,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (!Main.dedServ)
             {
-                Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 36f);
-                crack.data = "GoozmaColor";
+                //Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 36f);
+                //crack.data = "GoozmaColor";
 
                 SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaAwaken");
                 SoundEngine.PlaySound(roar, NPC.Center);
@@ -267,12 +267,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
             else
                 NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
 
+            NPC.damage = 0;
+
             if (!NPC.dontTakeDamage)
             {
-                if (Time % 2 == 0)
-                    NPC.damage = GetDamage(0);
-                else
-                    NPC.damage = 0;
+                NPC.damage = GetDamage(0);
 
                 if (!noSlime)
                     if (NPC.Distance(ActiveSlime.Center) < 400)
@@ -343,8 +342,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            currentSlime = (currentSlime + 1) % 4;
-                            nextAttack[currentSlime]++;
+                            currentSlime = 3;// (currentSlime + 1) % 4;
+                            nextAttack[currentSlime] = 2;
 
                             for (int i = 0; i < nextAttack.Length; i++)
                                 nextAttack[i] = nextAttack[i] % 3;
@@ -575,12 +574,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     else
                         NPC.scale = MathHelper.Lerp(NPC.scale, MathHelper.SmoothStep(0f, 1f, Utils.GetLerpValue(400, 500, Time, true)), 0.2f);
 
-                    if (Time > 400 && Time % 12 == 0)
-                    {
-                        Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
-                        crack.data = "GoozmaBlack";
-                        crack.behindEntities = true;
-                    }
+                    //if (Time > 400 && Time % 12 == 0)
+                    //{
+                    //    Particle crack = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
+                    //    crack.data = "GoozmaBlack";
+                    //    crack.behindEntities = true;
+                    //}
 
                     if (Time < 70 || Time > 400)
                     {
@@ -759,8 +758,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time > 300)
                     {
-                        Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 36f);
-                        leave.data = "GoozmaBlack";
+                        //Particle kill = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 36f);
+                        //kill.data = "GoozmaBlack";
                         Main.musicFade[Main.curMusic] = 0f;
                         Main.curMusic = -1;
 
@@ -777,14 +776,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time > 30 && Time % 3 == 0)
                     {
-                        Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
-                        leave.data = "GoozmaBlack";
+                        //Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
+                        //leave.data = "GoozmaBlack";
                     }
 
                     if (Time == 50)
                     {
-                        Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
-                        leave.data = "GoozmaColor";
+                        //Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
+                        //leave.data = "GoozmaColor";
 
                         NPC.active = false;
                     }
@@ -1025,8 +1024,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void Dash(int dashCD)
         {
-            NPC.damage = GetDamage(0);
-
             if (NPC.Center.Y < Target.Center.Y + 90 && NPC.Center.Y > Target.Center.Y - 90)
             {
                 Time = 0;
@@ -1048,8 +1045,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
         
         private void DashTo(Vector2 targetPos, int time)
         {
-            NPC.damage = GetDamage(0);
-
             float power = 0.05f;
             if (Time > time - 6)
                 power = 0.2f;
@@ -1155,7 +1150,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             SoundStyle fizzSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeShoot", 1, 3);
             fizzSound.MaxInstances = 0;
-            fizzSound.Volume = 0.5f;
+            fizzSound.Volume = 0.66f;
             fizzSound.PitchVariance = 0.1f;  
             
             SoundStyle bloatSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
@@ -1164,6 +1159,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             
             SoundStyle dartSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDartShoot", 1, 2);
             dartSound.MaxInstances = 0;
+            dartSound.Volume = 0.66f;
             dartSound.PitchVariance = 0.2f;   
             
             SoundStyle fireballSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaRainbowShoot", 1, 2);
@@ -1477,7 +1473,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             orig(self);
 
-            if (Main.npc.Any(n => n.active && n.type == Type))
+            if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<Goozma>()))
             {
                 NPC goozma = Main.npc.FirstOrDefault(n => n.active && n.type == Type);
                 if (goozma.ai[2] == 1)

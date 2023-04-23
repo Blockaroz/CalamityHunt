@@ -41,11 +41,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (Main.rand.NextBool(2))
+            if (Main.rand.NextBool(3))
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height) * 0.5f, DustID.Stone, Main.rand.NextVector2Circular(3, 3) - Projectile.velocity, 0, Color.White, 1f + Main.rand.NextFloat(2f)).noGravity = true;
 
             Size = 1f + (float)Math.Sin(Time * 0.2f) * 0.5f;
-            Vector2 sized = new Vector2(24 * (1f + Size));
+            Vector2 sized = new Vector2(48 * (1f + Size));
             if (Projectile.width != (int)sized.X || Projectile.height != (int)sized.Y)
             {
                 Projectile.Resize((int)sized.X, (int)sized.Y);
@@ -59,7 +59,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             if (Time > 20)
-                return base.Colliding(projHitbox, targetHitbox);
+            {
+                Vector2 radialPoint = Projectile.Center + Projectile.DirectionTo(targetHitbox.Center()).SafeNormalize(Vector2.Zero) * Math.Min(Projectile.Distance(targetHitbox.Center()), Projectile.width);
+                if (targetHitbox.Contains(radialPoint.ToPoint()))
+                    return true;
+            }
 
             return false;
         }
@@ -69,7 +73,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, 0, 0);
+            float power = Utils.GetLerpValue(0, 20, Time, true);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation, texture.Size() * 0.5f, new Vector2((float)Projectile.width / texture.Width(), (float)Projectile.height / texture.Height()), 0, 0);
 
             return false;
         }

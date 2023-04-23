@@ -100,7 +100,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
                     explodeSound.MaxInstances = 0;
-                    SoundEngine.PlaySound(explodeSound, Projectile.Center);
+                    SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.8f), Projectile.Center);
                     SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.6f), Projectile.Center);
                 }
 

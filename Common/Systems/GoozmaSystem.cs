@@ -110,6 +110,19 @@ namespace CalamityHunt.Common.Systems
                 bool active = SoundEngine.TryGetActiveSound(GaussRay.laserSound, out ActiveSound sound);
                 if (active)
                     sound.Stop();
+            }            
+            
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BlackHoleBlender>()))
+            {
+                if (Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Active)
+                    Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
+
+                bool active = SoundEngine.TryGetActiveSound(BlackHoleBlender.holeSound, out ActiveSound sound);
+                if (active)
+                    sound.Stop();                
+                bool windActive = SoundEngine.TryGetActiveSound(BlackHoleBlender.windSound, out ActiveSound windSound);
+                if (windActive)
+                    windSound.Stop();
             }
         }
 

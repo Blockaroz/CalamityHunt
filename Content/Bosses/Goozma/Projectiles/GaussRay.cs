@@ -42,8 +42,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public ref float Time => ref Projectile.ai[0];
 
-        private int ChargeTime = 300;
-        private int LaserDuration = 700;
+        private static readonly int ChargeTime = 300;
+        private static readonly int LaserDuration = 700;
 
         public override void AI()
         {
@@ -137,7 +137,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             SoundStyle raySound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaGaussRayLoop");
             raySound.IsLooped = true;
 
-            pitch = MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(ChargeTime - 25, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f;
+            pitch = MathHelper.SmoothStep(0f, 0.9f, Utils.GetLerpValue(ChargeTime - 25, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.166f;
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
             bool active = SoundEngine.TryGetActiveSound(laserSound, out ActiveSound sound);
             if ((!active || !laserSound.IsValid) && Time > ChargeTime - 35)
@@ -166,6 +166,31 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 return targetHitbox.IntersectsConeFastInaccurate(Projectile.Center, 3500f * (0.5f + grow * 0.5f), Projectile.rotation, angle * grow);
             }
             return false;
+        }
+
+        public override void Load()
+        {
+            On_Main.UpdateAudio += QuietMusic;
+        }
+
+        private void QuietMusic(On_Main.orig_UpdateAudio orig, Main self)
+        {
+            orig(self);
+
+            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GaussRay>()))
+            {
+                Projectile projectile = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<GaussRay>());
+
+                for (int i = 0; i < Main.musicFade.Length; i++)
+                {
+                    float grow = Utils.GetLerpValue(ChargeTime - 15, ChargeTime + 40, projectile.ai[0], true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration, projectile.ai[0], true);
+
+                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - grow * 0.7f);
+                    float tempFade = Main.musicFade[i];
+                    Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.15f);
+                    Main.musicFade[i] = tempFade;
+                }
+            }
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => overPlayers.Add(index);

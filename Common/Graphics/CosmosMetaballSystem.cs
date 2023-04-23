@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -48,17 +49,48 @@ namespace CalamityHunt.Common.Graphics
             Main.graphics.GraphicsDevice.SetRenderTarget(spaceTarget);
             Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 
-            foreach (Particle p in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
+            foreach (Particle particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
             {
-                CosmicSmoke smoke = p as CosmicSmoke;
-                if ((string)smoke.data == "Cosmos")
+                if ((string)particle.data == "Cosmos")
                 {
+                    CosmicSmoke smoke = particle as CosmicSmoke;
                     Asset<Texture2D> texture = ModContent.Request<Texture2D>(smoke.Texture);
                     Rectangle frame = texture.Frame(4, 2, smoke.variant % 4, (int)(smoke.variant / 4f));
                     float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.maxTime * 0.2f, smoke.time, true));
                     float opacity = Utils.GetLerpValue(smoke.maxTime * 0.7f, smoke.maxTime * 0.2f, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
                     Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), frame, Color.White * 0.5f * opacity * grow, smoke.rotation, frame.Size() * 0.5f, smoke.scale * grow * 0.5f, 0, 0);
                 }
+            }
+
+            Effect absorbEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceAbsorb", AssetRequestMode.ImmediateLoad).Value;
+            absorbEffect.Parameters["uRepeats"].SetValue(1f);
+            absorbEffect.Parameters["uTexture0"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Noise/Noise0").Value);
+            absorbEffect.Parameters["uTexture1"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Noise/Noise1").Value);
+
+            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is BlackHoleBlender))
+            {
+                BlackHoleBlender blender = projectile.ModProjectile as BlackHoleBlender;
+                Asset<Texture2D> texture = ModContent.Request<Texture2D>(blender.Texture);
+                Asset<Texture2D> shadow = ModContent.Request<Texture2D>(blender.Texture + "Shadow");
+
+                absorbEffect.Parameters["uTime"].SetValue(projectile.localAI[0] * 0.002f % 1f);
+                absorbEffect.Parameters["uSize"].SetValue(projectile.scale * new Vector2(8f));
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, absorbEffect);
+
+                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), Color.White, 0, bloom.Size() * 0.5f, projectile.scale * 20f, 0, 0);
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
+
+                Main.spriteBatch.Draw(texture.Value, (projectile.Center - Main.screenPosition), texture.Frame(), Color.White * projectile.scale * 0.2f, projectile.rotation, texture.Size() * 0.5f, projectile.scale * 0.8f, 0, 0);
+                Main.spriteBatch.Draw(texture.Value, (projectile.Center - Main.screenPosition), texture.Frame(), Color.White * projectile.scale * 0.1f, projectile.rotation * 0.8f - 0.5f, texture.Size() * 0.5f, projectile.scale * 0.7f, 0, 0);
+                Main.spriteBatch.Draw(texture.Value, (projectile.Center - Main.screenPosition), texture.Frame(), Color.White * projectile.scale * 0.1f, -projectile.rotation * 0.9f - 1f, texture.Size() * 0.5f, projectile.scale * 0.5f, 0, 0);
+                Main.spriteBatch.Draw(texture.Value, (projectile.Center - Main.screenPosition), texture.Frame(), Color.White * projectile.scale * 0.1f, projectile.rotation * 0.9f - 0.2f, texture.Size() * 0.5f, projectile.scale * 0.9f, 0, 0);
+                Main.spriteBatch.Draw(shadow.Value, (projectile.Center - Main.screenPosition), shadow.Frame(), Color.White * projectile.scale * 0.1f, projectile.rotation, shadow.Size() * 0.5f, projectile.scale * 0.5f, 0, 0);
+                Main.spriteBatch.Draw(shadow.Value, (projectile.Center - Main.screenPosition), shadow.Frame(), Color.White * projectile.scale * 0.1f, projectile.rotation * 0.5f, shadow.Size() * 0.5f, projectile.scale * 0.7f, 0, 0);
             }
 
             Main.graphics.GraphicsDevice.SetRenderTarget(null);
@@ -72,9 +104,9 @@ namespace CalamityHunt.Common.Graphics
         {
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-            foreach (Particle p in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
+            foreach (Particle particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
             {
-                CosmicSmoke smoke = p as CosmicSmoke;
+                CosmicSmoke smoke = particle as CosmicSmoke;
                 if ((string)smoke.data == "Cosmos")
                 {
                     Asset<Texture2D> texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
@@ -85,6 +117,28 @@ namespace CalamityHunt.Common.Graphics
                 }
             }
 
+            Effect absorbEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceAbsorb", AssetRequestMode.ImmediateLoad).Value;
+            absorbEffect.Parameters["uRepeats"].SetValue(1f);
+            absorbEffect.Parameters["uTexture0"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Noise/Noise0").Value);
+            absorbEffect.Parameters["uTexture1"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Noise/Noise1").Value);
+
+            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is BlackHoleBlender))
+            {
+                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+                Main.spriteBatch.Draw(bloom.Value, (projectile.Center - Main.screenPosition), null, new Color(33, 5, 65, 0) * (float)Math.Pow(projectile.scale, 2f), projectile.rotation, bloom.Size() * 0.5f, 18f, 0, 0);
+
+                absorbEffect.Parameters["uTime"].SetValue(projectile.localAI[0] * 0.002f % 1f);
+                absorbEffect.Parameters["uSize"].SetValue(new Vector2(9f));
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, absorbEffect);
+
+                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(255, 150, 60, 0) * projectile.scale, 0, bloom.Size() * 0.5f, projectile.scale * 20f, 0, 0);
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
+            }
+            
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
             effect.Parameters["uTextureClose"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
             effect.Parameters["uTextureFar"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space1").Value);
