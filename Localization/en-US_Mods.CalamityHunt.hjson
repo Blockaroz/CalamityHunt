@@ -124,6 +124,21 @@ Items: {
 			Right click to kill all existing planets and planetoids
 			'''
 	}
+
+	ShogunChestplate: {
+		DisplayName: Shogun Chestplate
+		Tooltip: ""
+	}
+
+	ShogunHelm: {
+		DisplayName: Shogun Helm
+		Tooltip: ""
+	}
+
+	ShogunPants: {
+		DisplayName: Shogun Pants
+		Tooltip: ""
+	}
 }
 NPCs: {
 	Goozma.DisplayName: Goozma
