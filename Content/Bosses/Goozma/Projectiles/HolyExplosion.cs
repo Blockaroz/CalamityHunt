@@ -1,14 +1,12 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Common.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -42,9 +40,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time > 85)
                 Projectile.Kill();
 
-            float strength = Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(80, 40, Time, true);
-            if (Time % 4 == 0)
-                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), strength * 120, 20, 30));
+            if (Config.Instance.epilepsy)
+            {
+                float strength = Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(80, 40, Time, true);
+                if (Time % 4 == 0)
+                    Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), strength * 120, 20, 30));
+            }
             
             if (!Main.dedServ)
             {

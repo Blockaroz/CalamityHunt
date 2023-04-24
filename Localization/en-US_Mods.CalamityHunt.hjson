@@ -200,3 +200,11 @@ Tiles: {
 	GoozmaMusicBoxP1Tile.MapEntry: Music Box
 	GoozmaMusicBoxP2Tile.MapEntry: Music Box
 }
+Config: {
+	VisualHeader: Visuals
+
+	HolyExplosionToggle: {
+		Label: Holy Explosion Screenshake Toggle
+		Tooltip: Enables or disables the Divine Gargooptuar's holy explosion screenshake effect
+	}
+}
