@@ -342,8 +342,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            currentSlime = (currentSlime + 1) % 4;
-                            nextAttack[currentSlime]++;
+                            currentSlime = 1;// (currentSlime + 1) % 4;
+                            nextAttack[currentSlime] = 2;
 
                             for (int i = 0; i < nextAttack.Length; i++)
                                 nextAttack[i] = nextAttack[i] % 3;

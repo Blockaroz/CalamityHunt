@@ -395,7 +395,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     leftPillar.ai[2] = spikeTime * spikeCount;
 
                     Projectile rightPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(170, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
-                    rightPillar.ai[0] = -25;
+                    rightPillar.ai[0] = -35;
                     rightPillar.ai[1] = 45;
                     rightPillar.ai[2] = spikeTime * spikeCount;
 
@@ -427,7 +427,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     bottomRightSpike.ai[0] = -5;
                     bottomRightSpike.ai[1] = 50 + spikeCount * spikeTime;
                 }
-                if ((Time - 120) % spikeTime == 20 && Time > 100 && Time <= 100 + spikeCount * spikeTime)
+                if ((Time - 120) % spikeTime == 30 && Time > 100 && Time <= 100 + spikeCount * spikeTime)
                 {
                     int spikeNumber = Main.rand.Next(12, 15);
                     for (int i = 0; i < spikeNumber; i++)
@@ -435,24 +435,24 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Vector2 position = saveTarget + new Vector2(0, MathHelper.Lerp(100, 1600, i / (float)spikeNumber));
                         float randRot = Main.rand.NextFloat(-0.4f, 0.4f);
                         Projectile leftSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), position + new Vector2(162, Main.rand.Next(-5, 5)), (-Vector2.UnitX).RotatedByRandom(0.06f).RotatedBy(randRot), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
-                        leftSpike.ai[0] = -50 + Main.rand.Next(-4, 2) + (int)(i / (float)spikeNumber * 20f);
-                        leftSpike.ai[1] = 125 + Main.rand.Next(-2, 4);
+                        leftSpike.ai[0] = -60 + Main.rand.Next(-4, 2) + (int)(i / (float)spikeNumber * 15f);
+                        leftSpike.ai[1] = 65 + Main.rand.Next(-2, 4);
                         Projectile rightSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), position + new Vector2(-162, Main.rand.Next(-5, 5)), Vector2.UnitX.RotatedByRandom(0.06f).RotatedBy(-randRot), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
-                        rightSpike.ai[0] = -50 + Main.rand.Next(-4, 2) + (int)(i / (float)spikeNumber * 20f);
-                        rightSpike.ai[1] = 125 + Main.rand.Next(-2, 4);
+                        rightSpike.ai[0] = -60 + Main.rand.Next(-4, 2) + (int)(i / (float)spikeNumber * 15f);
+                        rightSpike.ai[1] = 65 + Main.rand.Next(-2, 4);
                     }
                 }
 
                 if (Time >= 150 && Time <= 150 + spikeCount * spikeTime && !Main.dedServ)
                 {
-                    if ((Time - 150) % spikeTime == 2)
+                    if ((Time - 150) % spikeTime == 30)
                     {
                         SoundStyle spiking = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothTelegraph");
                         spiking.MaxInstances = 0;
                         spiking.PitchVariance = 0.2f;
                         SoundEngine.PlaySound(spiking, Main.LocalPlayer.MountedCenter);
                     }
-                    if ((Time - 150) % spikeTime > 35 && (Time - 150) % spikeTime < 41)
+                    if ((Time - 150) % spikeTime > 55 && (Time - 150) % spikeTime < 61)
                     {
                         SoundStyle spiked = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothEmerge", 1, 2);
                         spiked.MaxInstances = 0;

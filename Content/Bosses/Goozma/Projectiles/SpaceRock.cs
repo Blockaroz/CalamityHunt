@@ -57,6 +57,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.velocity *= Utils.GetLerpValue(0, 50, Time, true) * 0.4f;
 
             Projectile.rotation += 0.1f * Projectile.direction;
+
             if (Time > 2000)
                 Projectile.Kill();
 

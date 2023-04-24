@@ -470,6 +470,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 if (Time < 40 + waitTime * 0.8f)
                     saveTarget = Target.Center + Target.Velocity * new Vector2(2f, 5f);
+
                 squishFactor = new Vector2(0.8f, 1.2f);
                 float newAngle = MathHelper.WrapAngle(NPC.AngleTo(saveTarget) + MathHelper.TwoPi * Utils.GetLerpValue(40, 40 + waitTime * 0.2f, Time, true) * NPC.direction + MathHelper.PiOver2);// Utils.AngleLerp(NPC.velocity.ToRotation(), NPC.AngleTo(saveTarget), Utils.GetLerpValue(waitTime * 0.4f, waitTime * 0.3f, Time, true));
                 NPC.rotation = NPC.rotation.AngleLerp(newAngle, 0.2f);
@@ -484,6 +485,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.scale = Utils.GetLerpValue(40 + waitTime + 10, 40 + waitTime + 5, Time, true);
                 if (Time > 40 + waitTime + 2)
                 {
+                    Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(3, 3), 8f, 10, 12));
+
                     int count = 2;
                     if (Main.expertMode)
                         count = 4;

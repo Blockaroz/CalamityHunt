@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Humanizer.In;
 using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
@@ -39,11 +40,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public ref float Cooldown => ref Projectile.ai[1];
         public ref float HitCount => ref Projectile.ai[2];
 
+        private int owner;
         public override void AI()
         {
             Projectile.rotation += Projectile.velocity.Length() * 0.01f * (Projectile.velocity.X > 0 ? 1 : -1);
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 17, Time, true) * Utils.GetLerpValue(480, 440, Time, true)) * 1.3f;
-            int owner = -1;
+            owner = -1;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active))
             {
                 Projectile.active = false;
@@ -51,6 +53,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active).whoAmI;
+
+
 
             if (HitCount < 0 || HitCount == 1)
             {
@@ -168,7 +172,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             HandleSound();
 
-            Projectile.localAI[1] = Projectile.Distance(Main.npc[owner].Center) * 0.1f;
+            Projectile.localAI[1] += (float)Math.Sqrt(Utils.GetLerpValue(1000, -250, Projectile.Distance(Main.npc[owner].Center), true) * 2f);
             Projectile.localAI[0]++;
             Time++;
         }
@@ -178,6 +182,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public void HandleSound()
         {
+            SoundStyle warningSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWarning");
+            warningSound.MaxInstances = 0;
+
+            if (Projectile.localAI[1] > 5f)
+            {
+                Projectile.localAI[1] = 0;
+                float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0008f, -2f, 2f);
+                float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, -2f, 2f);
+                SoundEngine.PlaySound(warningSound.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.5f), Projectile.Center);
+            }
+
             SoundStyle pixieBallSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixieBallLoop");
             pixieBallSound.IsLooped = true;
 

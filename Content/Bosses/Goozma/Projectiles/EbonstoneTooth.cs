@@ -42,7 +42,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(6, 10, Time, true) * Utils.GetLerpValue(OutTime, OutTime - 40, Time, true));
+            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(6, 10, Time, true) * Utils.GetLerpValue(OutTime, OutTime - 20, Time, true));
+            Projectile.localAI[1]++;
             Time++;
 
             if (Time > OutTime)
@@ -69,8 +70,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time < 10)
             {
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(0, 0, 0, 30), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true) * 0.6f, flip, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, glowColor * Utils.GetLerpValue(10, -10, Time, true), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(-30, -20, Time, true), flip, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(0, 0, 0, 60), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(20, 40, Projectile.localAI[1], true) * 0.8f, flip, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, glowColor * Utils.GetLerpValue(20, 80, Projectile.localAI[1], true), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(20, 40, Projectile.localAI[1], true), flip, 0);
             }
 
             for (int i = 0; i < 4; i++)
