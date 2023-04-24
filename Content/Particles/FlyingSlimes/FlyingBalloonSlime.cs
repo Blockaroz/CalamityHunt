@@ -1,54 +1,29 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Projectiles;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using Terraria;
-using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
-    public class FlyingBalloonSlime : Particle
+    public class FlyingBalloonSlime : FlyingSlime
     {
-        public int time;
-        public float distanceFade;
         public int balloonWobbleTime;
         public int balloonVariant;
+        public override bool ShouldDraw => false;
+        public override float SlimeSpeed => 13f;
+        public override float SlimeAcceleration => 0.2f;
 
         public override void OnSpawn()
         {
-            scale *= Main.rand.NextFloat(0.9f, 1.1f);
             balloonVariant = Main.rand.Next(7);
         }
 
-        public override void Update()
+        public override void PostUpdate()
         {
-            if (data is Vector2)
-            {
-                velocity = Vector2.Lerp(velocity, position.DirectionTo((Vector2)data).SafeNormalize(Vector2.Zero) * 13f, 0.2f);
-                if (position.Distance((Vector2)data) < 10)
-                {
-                    Active = false;
-                    SoundEngine.PlaySound(GoozmaSpawn.slimeabsorb, position);
-                }
-
-                distanceFade = Utils.GetLerpValue(20, 80, position.Distance((Vector2)data), true);
-            }
-            else
-                distanceFade = 1f;
-
-            time++;
-
-            if (time > 500)
-                Active = false;
-
-            velocity *= 0.98f;
-            rotation = velocity.ToRotation();
-
             if (color == Color.White)
             {
                 WeightedRandom<Color> slimeColor = new WeightedRandom<Color>();
@@ -56,7 +31,7 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
                 slimeColor.Add(ContentSamples.NpcsByNetId[NPCID.BlueSlime].color, 0.9f);
                 color = slimeColor.Get();
 
-                if (Main.rand.NextBool(1000))
+                if (Main.rand.NextBool(100))
                 {
                     color = ContentSamples.NpcsByNetId[NPCID.PurpleSlime].color;
                     scale = ContentSamples.NpcsByNetId[NPCID.PurpleSlime].scale;
@@ -69,7 +44,7 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void DrawSlime(SpriteBatch spriteBatch)
         {
             balloonWobbleTime++;
 

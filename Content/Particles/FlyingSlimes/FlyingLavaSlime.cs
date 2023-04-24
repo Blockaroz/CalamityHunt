@@ -9,46 +9,17 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
-    public class FlyingLavaSlime : Particle
+    public class FlyingLavaSlime : FlyingSlime
     {
-        public int time;
-        public float distanceFade;
+        public override float SlimeSpeed => 30f;
+        public override bool ShouldDraw => false;
 
-        public override void OnSpawn()
+        public override void PostUpdate()
         {
-            scale *= Main.rand.NextFloat(0.9f, 1.1f);
+            Lighting.AddLight(position + velocity, Color.Orange.ToVector3());
         }
 
-        public override void Update()
-        {
-            if (data is Vector2)
-            {
-                velocity = Vector2.Lerp(velocity, position.DirectionTo((Vector2)data).SafeNormalize(Vector2.Zero) * 30f, 0.1f);
-                if (position.Distance((Vector2)data) < 10)
-                {
-                    Active = false;
-                    SoundEngine.PlaySound(GoozmaSpawn.slimeabsorb, position);
-                }
-
-                distanceFade = Utils.GetLerpValue(20, 80, position.Distance((Vector2)data), true);
-            }
-            else
-                distanceFade = 1f;
-            
-            Lighting.AddLight(position + velocity, Color.Pink.ToVector3());
-
-            time++;
-
-            if (time > 500)
-                Active = false;
-
-            velocity *= 0.98f;
-            rotation = velocity.ToRotation();
-
-            color = Color.White;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void DrawSlime(SpriteBatch spriteBatch)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
 

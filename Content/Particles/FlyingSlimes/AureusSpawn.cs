@@ -1,54 +1,21 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Projectiles;
-using Terraria.Audio;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
-    public class AureusSpawn : Particle
+    public class AureusSpawn : FlyingSlime
     {
-        public int time;
         public int currentFrame = 0;
         public float frameCounter = 0;
-        public float distanceFade;
+        public override float SlimeSpeed => 16;
+        public override bool ShouldDraw => false;
 
-        public override void OnSpawn()
+        public override void PostUpdate()
         {
-            scale *= Main.rand.NextFloat(0.9f, 1.1f);
-        }
-
-        public override void Update()
-        {
-            if (data is Vector2)
-            {
-                velocity = Vector2.Lerp(velocity, position.DirectionTo((Vector2)data).SafeNormalize(Vector2.Zero) * 16f, 0.1f);
-                if (position.Distance((Vector2)data) < 10)
-                {
-                    Active = false;
-                    SoundEngine.PlaySound(GoozmaSpawn.slimeabsorb, position);
-                }
-
-                distanceFade = Utils.GetLerpValue(20, 80, position.Distance((Vector2)data), true);
-            }
-            else
-                distanceFade = 1f;
-
             Lighting.AddLight(position, 0.6f * distanceFade, 0.25f * distanceFade, 0f);
-
-            time++;
-
-            if (time > 500)
-                Active = false;
-
-            velocity *= 0.98f;
-            rotation = velocity.ToRotation();
-
-            color = Color.White;
 
             frameCounter += 0.22f;
             frameCounter %= 4;
@@ -56,7 +23,7 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
             currentFrame = frame * 62;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void DrawSlime(SpriteBatch spriteBatch)
         { 
             // 92 by 62
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
