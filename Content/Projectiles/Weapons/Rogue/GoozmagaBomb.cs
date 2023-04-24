@@ -13,6 +13,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 	{
 		const float maxStacks = 8;
 
+		public override void SetStaticDefaults()
+		{
+			Main.projFrames[Projectile.type] = 4;
+		}
+
 		public override void SetDefaults()
 		{
 			Projectile.width = 46;
@@ -46,8 +51,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 			{
 				Projectile.velocity = Vector2.Zero;
 				Projectile.localAI[1]++;
-				float distance = 100;
-				distance = target.width >= target.height ? target.width : target.height;
+				float distance = target.width >= target.height ? target.width : target.height;
 				distance += 30;
 				double deg = Main.GlobalTimeWrappedHourly * 360 * (1+ Math.Clamp(Projectile.localAI[0], 0, 0.5f * maxStacks)) + Projectile.localAI[1];
 				double rad = deg * (Math.PI / 180);
@@ -72,6 +76,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 			{
 				Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Vector2.Zero, 22, Color.Black, 2f).noGravity = true;
 			}
+			// animeme
+			Projectile.frameCounter++;
+			if (Projectile.frameCounter > 4)
+            {
+				Projectile.frame++;
+				Projectile.frameCounter = 0;
+            }
+			if (Projectile.frame > 3)
+            {
+				Projectile.frame = 0;
+            }
 		}
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
