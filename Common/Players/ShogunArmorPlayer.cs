@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
@@ -18,43 +20,42 @@ namespace CalamityHunt.Common.Players
         public float slamPower;
         private bool slamming;
         private int bunnyHopCounter;
+        private int dashTime;
 
         public override void PostUpdateRunSpeeds()
         {
+            bool inAir = !WorldGen.SolidOrSlopedTile(Main.tile[(Player.Bottom / 16f).ToPoint()]);
             if (active)
             {
-                if (Player.controlDown && Player.velocity.Y > 0.5f)
-                    slamPower += 0.2f;
-
+                if (Player.controlDown && Player.velocity.Y > 1f)
+                    slamPower += 0.5f;
                 else
                     slamPower = 0;
 
                 slamPower = Math.Clamp(slamPower, 0, 10);
-                ;
+
                 Player.maxFallSpeed += slamPower;
 
                 if (Player.dashDelay < 0)
                 {
                     Main.SetCameraLerp(0.2f, 20);
 
-                    Player.gravity *= 0.1f;
+                    Player.gravity *= 0.8f;
                     Player.fullRotation += Player.direction * 0.5f;
                     Player.fullRotationOrigin = Player.Size * 0.5f;
-                    Player.velocity *= 1.006f;
+                    Player.velocity *= 1.01f;
                     for (int i = 0; i < 6; i++)
                         Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(25, 25), DustID.TintableDust, Player.velocity * -Main.rand.NextFloat(-0.5f, 1f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
-                    Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(25, 25), Player.velocity * -Main.rand.NextFloat(-0.6f, 0.6f), Player.hairColor, 0.5f + Main.rand.NextFloat());
-
+                    Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(25, 25), Player.velocity * -Main.rand.NextFloat(-0.6f, 0.6f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
                 }
                 else if (slamPower > 0)
                 {
-                    if (slamPower < 3)
-                        Player.velocity.X *= 0.9f;
-
                     Player.velocity.X += (Player.direction * 0.2f - Player.velocity.X * 0.01f) * Math.Clamp(Player.velocity.X, 0, 1);
                     Player.fullRotation = Player.fullRotation.AngleLerp(-Player.velocity.X * 0.05f, 0.1f);
                     Player.fullRotationOrigin = Player.Size * 0.5f;
+
+                    Main.SetCameraLerp(0.2f, 25);
                 }
                 else
                     Player.fullRotation = 0;
@@ -62,17 +63,17 @@ namespace CalamityHunt.Common.Players
                 if (Player.dashDelay > 0 && Player.dashDelay % 2 == 0)
                     Player.dashDelay--;
 
-                if (Collision.SolidTiles(Player.position, Player.width, Player.height, true) && slamPower > 6)
+                if (!inAir && slamPower > 6)
                     slamming = true;
 
                 if (slamming)
                 {
-                    bunnyHopCounter += 20;
+                    bunnyHopCounter += 25;
                     for (int i = 0; i < 40; i++)
                         Dust.NewDustPerfect(Player.Bottom + Main.rand.NextVector2Circular(20, 5), DustID.TintableDust, Main.rand.NextVector2Circular(10, 1) - Vector2.UnitY * Main.rand.NextFloat(5f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
                     for (int i = 0; i < 5; i++)
-                        Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Bottom + Main.rand.NextVector2Circular(30, 5), Main.rand.NextVector2Circular(6, 1) - Vector2.UnitY * Main.rand.NextFloat(2f), Player.hairColor, 1f);
+                        Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Bottom + Main.rand.NextVector2Circular(30, 5), Main.rand.NextVector2Circular(6, 1) - Vector2.UnitY * Main.rand.NextFloat(2f), Player.shirtColor, 1f);
 
                     slamPower = 0;
                 }
@@ -81,22 +82,25 @@ namespace CalamityHunt.Common.Players
                 {
                     bunnyHopCounter--;
 
-                    if (Player.controlJump)
+                    if (Player.controlJump || Player.dashDelay < 0)
                     {
-                        bunnyHopCounter = 0;
-                        Player.velocity.X *= 2f;
-
+                        bunnyHopCounter = -20;
+                        Player.velocity.X *= 2.4f;
                         for (int i = 0; i < 40; i++)
                             Dust.NewDustPerfect(Player.Bottom + Main.rand.NextVector2Circular(20, 5), DustID.TintableDust, -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(7f) * (i / 40f) - new Vector2(Player.direction * 10f, 0f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
                         for (int i = 0; i < 5; i++)
-                            Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Bottom + Main.rand.NextVector2Circular(20, 5), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(2f) * (i / 40f) - new Vector2(Player.direction * 10f, 0f), Player.hairColor, 0.5f + Main.rand.NextFloat());
+                            Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Bottom + Main.rand.NextVector2Circular(20, 5), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(2f) * (i / 40f) - new Vector2(Player.direction * 10f, 0f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
 
                     }
                 }
+                if (bunnyHopCounter < 0)
+                {
+                    bunnyHopCounter++;
+                }
 
-                if (slamPower > 0f)
-                    Main.SetCameraLerp(0.2f, 25);
+                if (inAir)
+                    Player.maxRunSpeed *= 1.2f;
             }
             else
             {
@@ -104,6 +108,9 @@ namespace CalamityHunt.Common.Players
                 bunnyHopCounter = 0;
                 slamPower = 0;
             }
+
+            if (dashTime > 0)
+                dashTime--;
         }
 
         public override void ResetEffects()
@@ -112,31 +119,61 @@ namespace CalamityHunt.Common.Players
             slamming = false;
         }
 
-    //    public override void Load()
-    //    {
-    //        On_Player.DashMovement += ShogunDash;
-    //    }
+        public override void Load()
+        {
+            On_Player.DashMovement += ShogunDash;
+        }
 
-    //    private void ShogunDash(On_Player.orig_DashMovement orig, Player self)
-    //    {
-    //        if (self.GetModPlayer<ShogunArmorPlayer>().active)
-    //        {
-    //            if (self.dashDelay > 0)
-    //            {
-    //                if (self.eocDash > 0)
-    //                    self.eocDash--;
+        private void ShogunDash(On_Player.orig_DashMovement orig, Player self)
+        {
+            if (self.GetModPlayer<ShogunArmorPlayer>().active)
+            {
+                //if (self.dashDelay > 0)
+                //{
+                //    if (self.eocDash > 0)
+                //        self.eocDash--;
 
-    //                if (self.eocDash == 0)
-    //                    self.eocHit = -1;
+                //    if (self.eocDash == 0)
+                //        self.eocHit = -1;
 
-    //                self.dashDelay--;
-    //            }
-    //            else if (self.dashDelay < 0)
-    //            {
-    //            }
-    //        }
-    //        else
-    //            orig(self);
-    //    }
+                //    self.dashDelay--;
+                //}
+
+                //else if (self.dashDelay < 0)
+                //{
+                //    self.StopVanityActions();
+
+                //    self.doorHelper.AllowOpeningDoorsByVelocityAloneForATime(60);
+                //    self.vortexStealthActive = false;
+
+                //    self.dashDelay = 10;
+                //    if (self.velocity.X < 0f)
+                //        self.velocity.X = -Math.Max(self.accRunSpeed, self.maxRunSpeed) * 2f;
+                //    else if (self.velocity.X > 0f)
+                //        self.velocity.X = Math.Max(self.accRunSpeed, self.maxRunSpeed) * 2f;
+
+                //    //self.dashType = 5;
+                //}
+                //else
+                //{
+                //    object[] parameters = new object[] { 0, false, null };
+                //    self.GetType().GetMethod("DoCommonDashHandle", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(self, parameters);
+                //    int dir = (int)parameters[0];
+                //    bool dashing = (bool)parameters[1];
+                //    if (dashing)
+                //    {
+                //        if (self.mount.Active)
+                //            self.mount.Dismount(self);
+
+                //        self.dashDelay = -1;
+                //        self.velocity.X = dir * 20;
+                //    }
+                //}
+
+                self.dashType = 2;
+            }
+            
+                orig(self);
+        }
     }
 }

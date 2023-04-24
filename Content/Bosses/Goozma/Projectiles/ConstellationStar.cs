@@ -55,7 +55,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Projectile.velocity = Projectile.velocity.RotatedBy(0.017f * Projectile.direction);
 
-            if (Time % 83 < 4)
+            if (Time % 83 < 4 && Time > 40)
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.velocity + Main.rand.NextVector2CircularEdge(8, 8) + Main.rand.NextVector2Circular(5, 5), 0.2f);
 
             if (Time > 50 && Time + WhoAmI < 500)

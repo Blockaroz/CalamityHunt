@@ -180,6 +180,7 @@ Projectiles: {
 	StellarDebris.DisplayName: Stellar Debris
 	BlackHoleBlender.DisplayName: Black Hole Blender
 	CosmicDust.DisplayName: Cosmic Dust
+	InterstellarFlame.DisplayName: Interstellar Flame
 }
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
 Bestiary: {

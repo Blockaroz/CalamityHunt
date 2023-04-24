@@ -53,14 +53,21 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 //Projectile.scale = (Projectile.scale * 0.33f * Size) % 1f;
             }
 
-            Time++;
+            if (Time < 50)
+                Projectile.velocity *= Utils.GetLerpValue(0, 50, Time, true) * 0.4f;
+
             Projectile.rotation += 0.1f * Projectile.direction;
+            if (Time > 2000)
+                Projectile.Kill();
+
             Projectile.frameCounter++;
             if (Projectile.frameCounter > 1 + (int)(Size * 1.5f))
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = (Projectile.frame + 1) % 4;
             }
+
+            Time++;
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -87,8 +94,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 Vector2 oldPos = Projectile.oldPos[i] + Projectile.Size * 0.5f;
                 float fade = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
-                Main.EntitySpriteDraw(texture.Value, oldPos - Main.screenPosition, texture.Frame(), new Color(20, 15, 50, 0) * 0.1f * fade * power, Projectile.oldRot[i] * fade, texture.Size() * 0.5f, new Vector2((float)Projectile.width / texture.Width(), (float)Projectile.height / texture.Height()) * (0.7f + fade * 0.7f), 0, 0);
-                Main.EntitySpriteDraw(bloom.Value, oldPos - Main.screenPosition, bloom.Frame(), new Color(20, 15, 50, 0) * 0.1f * fade * power, Projectile.rotation, bloom.Size() * 0.5f, Size * Projectile.scale * 3f * fade, 0, 0);
+                Main.EntitySpriteDraw(bloom.Value, oldPos - Main.screenPosition, bloom.Frame(), new Color(10, 5, 40, 0) * 0.1f * power, Projectile.velocity.ToRotation() - MathHelper.PiOver2, bloom.Size() * 0.5f, Size * Projectile.scale * (1.5f + fade * 1f), 0, 0);
             }
             for (int i = 0; i < 8; i++)
             {
@@ -97,8 +103,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             Rectangle flamesFrame = flames.Frame(1, 4, 0, Projectile.frame);
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(20, 15, 50, 0) * power, Projectile.rotation, bloom.Size() * 0.5f, Size * Projectile.scale * 3f, 0, 0);
-            Main.EntitySpriteDraw(flames.Value, Projectile.Center - Main.screenPosition, flamesFrame, new Color(100, 60, 30, 0) * power, Projectile.velocity.ToRotation() - MathHelper.PiOver2, flamesFrame.Size() * new Vector2(0.5f, 0.7f), Size * Projectile.scale * 0.9f, 0, 0);
+            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(15, 5, 50, 0) * 0.2f * power, Projectile.rotation, bloom.Size() * 0.5f, Size * Projectile.scale * 3f, 0, 0);
+            Main.EntitySpriteDraw(flames.Value, Projectile.Center - Main.screenPosition, flamesFrame, new Color(100, 60, 30, 0) * 0.1f * power, Projectile.velocity.ToRotation() - MathHelper.PiOver2, flamesFrame.Size() * new Vector2(0.5f, 0.7f), Size * Projectile.scale * 1.2f, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation, texture.Size() * 0.5f, new Vector2((float)Projectile.width / texture.Width(), (float)Projectile.height / texture.Height()) * power, 0, 0);
 
             return false;

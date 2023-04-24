@@ -88,7 +88,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         private enum AttackList
         {
             StarSigns,
-            StarTrail,
+            CosmicStomp,
             BlackHole,
             TooFar,
             Interrupt
@@ -136,8 +136,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     case (int)AttackList.StarSigns:
                         StarSigns();
                         break;
-                    case (int)AttackList.StarTrail:
-                        StarTrail();
+                    case (int)AttackList.CosmicStomp:
+                        CosmicStomp();
                         break;
                     case (int)AttackList.BlackHole:
                         BlackHole();
@@ -223,8 +223,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 int count = 17 + Main.rand.Next(5, 8);
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(2200, 3500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.1f);
-                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1600, 2000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.1f);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
                     star.ai[0] = 0;
@@ -236,8 +236,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 int count = 15 + Main.rand.Next(4, 8);
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(2000, 3000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.2f);
-                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1000, 1500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.2f);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
                     star.ai[0] = -18;
@@ -252,7 +252,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(50, 1000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
-                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
                     star.ai[0] = i * 2;
@@ -263,7 +263,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(10, 500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
 
-                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), GetDesiredVelocityForDistance(NPC.Center, target), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
                     star.ai[0] = -35;
@@ -453,68 +453,195 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
         }
 
-        private Vector2 GetDesiredVelocityForDistance(Vector2 start, Vector2 end)
+        public void CosmicStomp()
         {
-            Vector2 velocity = start.DirectionTo(end).SafeNormalize(Vector2.Zero);
-            float velocityFactor = (float)Math.Sqrt(start.Distance(end)) * 1.84f;
-            return velocity * velocityFactor;
-        }
-
-        public void StarTrail()
-        {
-            int dashCount = 6;
-            int dashTime = 70;
+            int waitTime = 100;
             if (Main.expertMode)
+                waitTime = 80;
+            if (Time < 40)
             {
-                dashCount = 10;
-                dashTime = 58;
-            }
-            if (Time < 2)
-                saveTarget = Target.Center;
-
-            if (Time < dashCount * dashTime)
-            {
-                NPC.rotation = NPC.rotation.AngleLerp(NPC.AngleTo(Target.Center) - MathHelper.PiOver2, 0.08f);
-                squishFactor = new Vector2(1f - NPC.velocity.Length() * 0.005f, 1f + NPC.velocity.Length() * 0.006f);
-                if (Time % dashTime < (int)(dashTime * 0.6f))
-                {
-                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 300) * 0.16f, 0.07f);
-                    NPC.velocity *= 0.94f;
-
-                    saveTarget = NPC.Center + (NPC.DirectionTo(Target.Center + Target.Velocity * 50).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + Target.Velocity * 40));//Vector2.Lerp(saveTarget, NPC.Center + (NPC.DirectionTo(Target.Center + Target.Velocity * 22).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + Target.Velocity * 22)).RotatedByRandom(0.1f) * 1.7f, 0.5f);
-                }
+                squishFactor = Vector2.SmoothStep(Vector2.One, new Vector2(1.5f, 0.6f), Time / 40f);
+                if (Time > 38)
+                    NPC.velocity = new Vector2(Math.Sign(NPC.Center.X - Target.Center.X) * 40f, -30f);
                 else
+                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 140) * 0.2f, 0.2f) * Utils.GetLerpValue(40, 20, Time, true);
+            }
+            else if (Time < 40 + waitTime)
+            {
+                if (Time < 40 + waitTime * 0.8f)
+                    saveTarget = Target.Center + Target.Velocity * new Vector2(2f, 5f);
+                squishFactor = new Vector2(0.8f, 1.2f);
+                float newAngle = MathHelper.WrapAngle(NPC.AngleTo(saveTarget) + MathHelper.TwoPi * Utils.GetLerpValue(40, 40 + waitTime * 0.2f, Time, true) * NPC.direction + MathHelper.PiOver2);// Utils.AngleLerp(NPC.velocity.ToRotation(), NPC.AngleTo(saveTarget), Utils.GetLerpValue(waitTime * 0.4f, waitTime * 0.3f, Time, true));
+                NPC.rotation = NPC.rotation.AngleLerp(newAngle, 0.2f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center - Vector2.UnitY * 360 + Target.Velocity * new Vector2(2f, 5f)).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center - Vector2.UnitY * 360) * 0.15f, 0.1f);
+                NPC.velocity = NPC.velocity.RotatedBy(NPC.AngleTo(Target.Center) * 0.001f) * Utils.GetLerpValue(40 + waitTime, 40 + waitTime * 0.7f, Time, true);
+
+            }
+            else if (Time < 40 + waitTime + 12)
+            {
+                squishFactor = new Vector2(1.3f - NPC.velocity.Length() * 0.01f, 0.7f + NPC.velocity.Length() * 0.01f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(NPC.FindSmashSpot(saveTarget)).SafeNormalize(Vector2.Zero) * NPC.Distance(NPC.FindSmashSpot(saveTarget)) * 0.5f, 0.4f);
+                NPC.scale = Utils.GetLerpValue(40 + waitTime + 10, 40 + waitTime + 5, Time, true);
+                if (Time > 40 + waitTime + 2)
                 {
-                    NPC.rotation = NPC.rotation.AngleLerp(NPC.AngleTo(saveTarget) - MathHelper.PiOver2, 0.4f);
-                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * NPC.Distance(saveTarget) * 0.2f, 0.33f);
-                    if (Time % dashTime > (int)(dashTime * 0.95f))
-                        NPC.velocity = Main.rand.NextVector2CircularEdge(30, 30) + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 30f;
-
-                    //if (Time % dashTime == (int)(dashTime * 0.62f))
-                    //{
-                    //    int distanceCount = (int)(NPC.Distance(saveTarget) / 90f);
-                    //    for (int i = 0; i < distanceCount; i++)
-                    //    {
-                    //        Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Vector2.Lerp(NPC.Center, saveTarget, i / (float)distanceCount), Vector2.Zero, ModContent.ProjectileType<CosmicDust>(), GetDamage(4), 0);
-                    //        line.ai[0] = -50 - i * 8;
-                    //        line.ai[1] = (0.5f + (i / (float)distanceCount) * 0.5f) + Utils.GetLerpValue(dashTime * 0.6f, dashTime, Time % dashTime, true) * 0.5f;
-                    //        line.ai[2] = NPC.rotation + MathHelper.PiOver2;
-                    //    }
-                    //}
-
-                    Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), NPC.Center + Main.rand.NextVector2Circular(100, 100), Main.rand.NextVector2Circular(2, 2) + NPC.velocity * 0.3f, new Color(30, 15, 10, 0), (0.5f + Main.rand.NextFloat()));
+                    int count = 2;
+                    if (Main.expertMode)
+                        count = 4;
+                    for (int i = 0; i < count; i++)
+                    {
+                        Vector2 starPosition = new Vector2(Main.rand.Next(-50, 50), Main.rand.Next(-10, 10));
+                        Vector2 starVelocity = new Vector2(starPosition.X * 0.2f, -Main.rand.Next(15, 25)) + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Main.rand.Next(5);
+                        Projectile starbit = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + starPosition, starVelocity, ModContent.ProjectileType<StellarGelatine>(), GetDamage(4), 0f);
+                        starbit.ai[0] = (int)(Time * 0.2f) - (40 + waitTime + 12) + Utils.GetLerpValue(0, count, i, true) * 40 - 20;
+                    }
                 }
+            }
+            else if (Time < 40 + waitTime + 100)
+            {
+                NPC.damage = 0;
+                NPC.dontTakeDamage = true;
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 200) * 0.3f, 0.5f);
             }
             else
             {
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 400) * 0.16f, 0.07f);
-                NPC.velocity *= 0.8f;
-                NPC.rotation *= 0.9f;
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 300) * 0.07f, 0.1f) * Utils.GetLerpValue(40 + waitTime + 130, 40 + waitTime + 150, Time, true);
+
+                NPC.rotation = 0;
+                squishFactor = Vector2.Lerp(squishFactor, Vector2.One, Utils.GetLerpValue(40 + waitTime + 130, 40 + waitTime + 150, Time, true) * 0.2f);
+                NPC.scale = MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(40 + waitTime + 180, 40 + waitTime + 260, Time, true));
             }
 
-            if (Time > dashCount * dashTime + 30)
+            if (Time > 40 && Time < 40 + waitTime + 10)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    Vector2 rocketPosition = NPC.Center + (NPC.rotation + MathHelper.PiOver2).ToRotationVector2() * 30 + Main.rand.NextVector2Circular(70, 20).RotatedBy(NPC.rotation);
+                    Vector2 rocketVelocity = (NPC.rotation + MathHelper.PiOver2).ToRotationVector2().RotatedByRandom(2f) * Main.rand.Next(15, 30);
+                    Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), rocketPosition, rocketVelocity, ModContent.ProjectileType<InterstellarFlame>(), GetDamage(4), 0f);
+
+                }
+            }
+
+            if (Time > 40 + waitTime + 280)
                 Reset();
         }
+
+        public void BlackHole()
+        {
+            float holeSize = (float)Math.Sqrt(Utils.GetLerpValue(5, 550, Time, true) * Utils.GetLerpValue(600, 550, Time, true)) * 300;
+            if (Time < 60)
+                NPC.scale = (float)Math.Pow(Utils.GetLerpValue(90, 0, Time, true), 2f);
+
+            if (Time == 2)
+            {
+                Projectile hole = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<BlackHoleBlender>(), 9999, 0);
+                hole.ai[1] = 595;
+            }
+
+            if (Time > 50 && Time < 600)
+            {
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.03f, 0.2f);
+                NPC.velocity *= 0.75f;
+
+                foreach (Player player in Main.player.Where(n => n.active && !n.dead))
+                {
+                    if (player.Distance(NPC.Center) < holeSize)
+                        player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} was shredded by gravity."), 9999, -1, false, true, -1, false, 0, 0, 0);
+
+                    if (player.Distance(NPC.Center) > holeSize + 200)
+                        player.velocity += player.DirectionTo(NPC.Center) * Utils.GetLerpValue(holeSize + 200, holeSize + 500, player.Distance(NPC.Center));
+                }
+
+                if (Time % 14 == 5 && Time < 410)
+                {
+                    WeightedRandom<float> size = new WeightedRandom<float>();
+                    size.Add(1f, 0.8f);
+                    size.Add(2f, 0.3f);
+                    size.Add(3f, 0.1f);
+                    float chosenSize = size.Get();
+                    Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Target.Center + NPC.DirectionTo(Target.Center + Target.Velocity * 30).SafeNormalize(Vector2.Zero).RotatedByRandom(1.6f) * Main.rand.Next(1000, 1500), Vector2.Zero, ModContent.ProjectileType<SpaceRock>(), GetDamage(6 + (int)chosenSize), 0);
+                    rock.ai[1] = chosenSize + 1 + Main.rand.NextFloat(-0.1f, 0.1f);
+                }
+
+                if (Time % 2 == 0)
+                {
+                    float strength = Utils.GetLerpValue(50, 500, Time, true) * 10f;
+                    Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), strength, 4, 30, 20000));
+                }
+            }
+            if (Time > 600)
+            {
+                NPC.velocity *= 0.92f;
+                NPC.scale = 1f + (float)Math.Sqrt(Utils.GetLerpValue(630, 600, Time, true));
+            }
+
+            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<SpaceRock>()))
+            {
+                projectile.velocity = Vector2.Lerp(projectile.velocity, projectile.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (projectile.Distance(NPC.Center) + 500) * 0.0013f * (4f - projectile.ai[1] * 0.66f) * 4.5f, 0.3f);
+                projectile.velocity += NPC.velocity * 0.1f;
+                if (projectile.Distance(NPC.Center) < holeSize - 40)
+                    projectile.Kill();
+            }
+
+            if (Time > 670)
+                Reset();
+        }
+
+        //public void StarTrail()
+        //{
+        //    int dashCount = 6;
+        //    int dashTime = 70;
+        //    if (Main.expertMode)
+        //    {
+        //        dashCount = 10;
+        //        dashTime = 58;
+        //    }
+        //    if (Time < 2)
+        //        saveTarget = Target.Center;
+
+        //    if (Time < dashCount * dashTime)
+        //    {
+        //        NPC.rotation = NPC.rotation.AngleLerp(NPC.AngleTo(Target.Center) - MathHelper.PiOver2, 0.08f);
+        //        squishFactor = new Vector2(1f - NPC.velocity.Length() * 0.005f, 1f + NPC.velocity.Length() * 0.006f);
+        //        if (Time % dashTime < (int)(dashTime * 0.6f))
+        //        {
+        //            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 300) * 0.16f, 0.07f);
+        //            NPC.velocity *= 0.94f;
+
+        //            saveTarget = NPC.Center + (NPC.DirectionTo(Target.Center + Target.Velocity * 50).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + Target.Velocity * 40));//Vector2.Lerp(saveTarget, NPC.Center + (NPC.DirectionTo(Target.Center + Target.Velocity * 22).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + Target.Velocity * 22)).RotatedByRandom(0.1f) * 1.7f, 0.5f);
+        //        }
+        //        else
+        //        {
+        //            NPC.rotation = NPC.rotation.AngleLerp(NPC.AngleTo(saveTarget) - MathHelper.PiOver2, 0.4f);
+        //            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * NPC.Distance(saveTarget) * 0.2f, 0.33f);
+        //            if (Time % dashTime > (int)(dashTime * 0.95f))
+        //                NPC.velocity = Main.rand.NextVector2CircularEdge(30, 30) + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 30f;
+
+        //            //if (Time % dashTime == (int)(dashTime * 0.62f))
+        //            //{
+        //            //    int distanceCount = (int)(NPC.Distance(saveTarget) / 90f);
+        //            //    for (int i = 0; i < distanceCount; i++)
+        //            //    {
+        //            //        Projectile line = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Vector2.Lerp(NPC.Center, saveTarget, i / (float)distanceCount), Vector2.Zero, ModContent.ProjectileType<CosmicDust>(), GetDamage(4), 0);
+        //            //        line.ai[0] = -50 - i * 8;
+        //            //        line.ai[1] = (0.5f + (i / (float)distanceCount) * 0.5f) + Utils.GetLerpValue(dashTime * 0.6f, dashTime, Time % dashTime, true) * 0.5f;
+        //            //        line.ai[2] = NPC.rotation + MathHelper.PiOver2;
+        //            //    }
+        //            //}
+
+        //            Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), NPC.Center + Main.rand.NextVector2Circular(100, 100), Main.rand.NextVector2Circular(2, 2) + NPC.velocity * 0.3f, new Color(30, 15, 10, 0), (0.5f + Main.rand.NextFloat()));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 400) * 0.16f, 0.07f);
+        //        NPC.velocity *= 0.8f;
+        //        NPC.rotation *= 0.9f;
+        //    }
+
+        //    if (Time > dashCount * dashTime + 30)
+        //        Reset();
+        //}
 
         //public void Starfall()
         //{
@@ -555,67 +682,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
         //    }
         //}
 
-        public void BlackHole()
-        {
-            float holeSize = (float)Math.Sqrt(Utils.GetLerpValue(5, 550, Time, true) * Utils.GetLerpValue(600, 550, Time, true)) * 300;
-            if (Time < 60)
-                NPC.scale = (float)Math.Pow(Utils.GetLerpValue(60, 0, Time, true), 2f);
-
-            if (Time == 2)
-            {
-                Projectile hole = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<BlackHoleBlender>(), 9999, 0);
-                hole.ai[1] = 595;
-            }
-
-            if (Time > 50 && Time < 600)
-            {
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.03f, 0.2f);
-                NPC.velocity *= 0.75f;
-
-                foreach (Player player in Main.player.Where(n => n.active && !n.dead))
-                {
-                    if (player.Distance(NPC.Center) < holeSize)
-                        player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} was shredded by gravity."), 9999, -1, false, true, -1, false, 0, 0, 0);
-
-                    if (player.Distance(NPC.Center) > holeSize + 200)
-                        player.velocity += player.DirectionTo(NPC.Center) * Utils.GetLerpValue(holeSize + 200, holeSize + 500, player.Distance(NPC.Center));
-                }
-
-                if (Time % 14 == 5 && Time < 410)
-                {
-                    WeightedRandom<float> size = new WeightedRandom<float>();
-                    size.Add(1f, 0.6f);
-                    size.Add(2f, 0.3f);
-                    size.Add(3f, 0.1f);
-                    float chosenSize = size.Get();
-                    Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Target.Center + NPC.DirectionTo(Target.Center + Target.Velocity * 30).SafeNormalize(Vector2.Zero).RotatedByRandom(1.6f) * Main.rand.Next(1000, 1500), Vector2.Zero, ModContent.ProjectileType<SpaceRock>(), GetDamage(5 + (int)chosenSize), 0);
-                    rock.ai[1] = chosenSize + 1 + Main.rand.NextFloat(-0.1f, 0.1f);
-                }
-
-                if (Time % 2 == 0)
-                {
-                    float strength = Utils.GetLerpValue(50, 500, Time, true) * 10f;
-                    Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), strength, 4, 30, 20000));
-                }
-            }
-            if (Time > 600)
-            {
-                NPC.velocity *= 0.92f;
-                NPC.scale = 1f + (float)Math.Sqrt(Utils.GetLerpValue(630, 600, Time, true));
-            }
-
-            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<SpaceRock>()))
-            {
-                projectile.velocity = Vector2.Lerp(projectile.velocity, projectile.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (projectile.Distance(NPC.Center) + 500) * 0.0013f * (4f - projectile.ai[1] * 0.66f) * 4.5f, 0.3f);
-                projectile.velocity += NPC.velocity * 0.1f;
-                if (projectile.Distance(NPC.Center) < holeSize - 40)
-                    projectile.Kill();
-            }
-
-            if (Time > 670)
-                Reset();
-        }
-
         private int GetDamage(int attack, float modifier = 1f)
         {
             int damage = attack switch
@@ -624,10 +690,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 1 => 40,//constellation star
                 2 => 50,//constellation line
                 3 => 30,//constellation debris
-                4 => 30,//trail
-                5 => 60,//black hole large
-                6 => 50,//black hole medium
-                7 => 30,//black hole small
+                4 => 30,//rocket flame
+                5 => 30,//star bit
+                6 => 60,//black hole large
+                7 => 50,//black hole medium
+                8 => 30,//black hole small
                 _ => 0
             };
 
@@ -650,11 +717,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/ConstellationArea");
-            Asset<Texture2D> hollowRing = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
-            Asset<Texture2D> shockRing = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/ShockRing");
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
-            Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-
+            
             Color color = Color.White;
 
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
@@ -684,24 +748,33 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     //spriteBatch.End();
                     //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
                     
-                    Main.EntitySpriteDraw(ring.Value, saveTarget - Main.screenPosition, ring.Frame(), new Color(15, 5, 35, 0) * 0.6f * scaleIn * scaleOut, Time * 0.002f, ring.Size() * 0.5f, ringScale, 0, 0);
-                    Main.EntitySpriteDraw(ring.Value, saveTarget - Main.screenPosition, ring.Frame(), new Color(15, 5, 35, 0) * 0.6f * scaleIn * scaleOut, Time * 0.004f, ring.Size() * 0.5f, ringScale, 0, 0);
+                    Main.EntitySpriteDraw(ring.Value, saveTarget - screenPos, ring.Frame(), new Color(15, 5, 35, 0) * 0.6f * scaleIn * scaleOut, Time * 0.002f, ring.Size() * 0.5f, ringScale, 0, 0);
+                    Main.EntitySpriteDraw(ring.Value, saveTarget - screenPos, ring.Frame(), new Color(15, 5, 35, 0) * 0.6f * scaleIn * scaleOut, Time * 0.004f, ring.Size() * 0.5f, ringScale, 0, 0);
 
                     //spriteBatch.End();
                     //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
                     break;
 
-                case (int)AttackList.BlackHole:
+                case (int)AttackList.CosmicStomp:
 
-                    color = Color.White * (Utils.GetLerpValue(30, 20, Time, true) + Utils.GetLerpValue(600, 630, Time, true));
+
+
+                    break;
+
+                case (int)AttackList.BlackHole:
+                    
+                    color = Color.White * (Utils.GetLerpValue(50, 20, Time, true) + Utils.GetLerpValue(600, 630, Time, true));
+
+                    Asset<Texture2D> hollowRing = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
+                    Asset<Texture2D> shockRing = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/ShockRing");
 
                     for (int i = 0; i < 7; i++)
                     {
                         float exist = Utils.GetLerpValue(20, 120, Time + i * 3f, true) * Utils.GetLerpValue(600, 500, Time - i * 3f, true);
                         float comeIn = (float)Math.Pow(1f - ((Time + i / 7f * 70) % 70) / 70f, 2f);
-                        Main.EntitySpriteDraw(hollowRing.Value, NPC.Center - Main.screenPosition, hollowRing.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.04f, hollowRing.Size() * 0.5f, 70f * comeIn, 0, 0);
-                        Main.EntitySpriteDraw(shockRing.Value, NPC.Center - Main.screenPosition, shockRing.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.04f, shockRing.Size() * 0.5f, 35f * comeIn, 0, 0);
+                        Main.EntitySpriteDraw(hollowRing.Value, NPC.Center - screenPos, hollowRing.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.04f, hollowRing.Size() * 0.5f, 70f * comeIn, 0, 0);
+                        Main.EntitySpriteDraw(shockRing.Value, NPC.Center - screenPos, shockRing.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.04f, shockRing.Size() * 0.5f, 35f * comeIn, 0, 0);
                     }
 
                     break;
@@ -732,6 +805,20 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 //spriteBatch.End();
                 //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            }
+
+            if (Attack == (int)AttackList.BlackHole)
+            {
+                Asset<Texture2D> flash = TextureAssets.Extra[98];
+                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig");
+                float flashScale = Utils.GetLerpValue(3, 18, Time, true) * Utils.GetLerpValue(65, 40, Time, true) * 0.5f;
+                float flashRotation = (float)Math.Sqrt(Time * 0.17f) * 5f;
+                Main.EntitySpriteDraw(flash.Value, NPC.Center - screenPos, flash.Frame(), new Color(80, 50, 35, 0), flashRotation, flash.Size() * 0.5f, new Vector2(3f, 15f) * flashScale, 0, 0);
+                Main.EntitySpriteDraw(flash.Value, NPC.Center - screenPos, flash.Frame(), new Color(80, 50, 35, 0), flashRotation + MathHelper.PiOver2, flash.Size() * 0.5f, new Vector2(3f, 15f) * flashScale, 0, 0);
+                Main.EntitySpriteDraw(flash.Value, NPC.Center - screenPos, flash.Frame(), new Color(255, 225, 170, 0), flashRotation, flash.Size() * 0.5f, new Vector2(1f, 5f) * flashScale, 0, 0);
+                Main.EntitySpriteDraw(flash.Value, NPC.Center - screenPos, flash.Frame(), new Color(255, 225, 170, 0), flashRotation + MathHelper.PiOver2, flash.Size() * 0.5f, new Vector2(1f, 5f) * flashScale, 0, 0);
+                Main.EntitySpriteDraw(bloom.Value, NPC.Center - screenPos, bloom.Frame(), new Color(30, 15, 10, 0), flashRotation + MathHelper.PiOver2, bloom.Size() * 0.5f, 5f * flashScale, 0, 0);
+
             }
 
             return false;

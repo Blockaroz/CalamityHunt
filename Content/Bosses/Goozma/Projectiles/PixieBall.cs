@@ -196,8 +196,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreKill(int timeLeft)
         {
-            SoundEngine.TryGetActiveSound(auraSound, out ActiveSound sound);
-            sound.Stop();
+            bool active = SoundEngine.TryGetActiveSound(auraSound, out ActiveSound sound);
+            if (active)
+                sound.Stop();
+
             return true;
         }
 

@@ -29,7 +29,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.width = 60;
             Projectile.height = 60;
             Projectile.tileCollide = false;
-            Projectile.hostile = false;
+            Projectile.hostile = true;
             Projectile.friendly = false;
             Projectile.penetrate = -1;
             Projectile.aiStyle = -1;
@@ -37,7 +37,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         }
 
         public ref float Time => ref Projectile.ai[0];
-        public ref float WhoAmI => ref Projectile.ai[1];
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -60,70 +59,40 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active).whoAmI;
 
-            if (Projectile.ai[1] == 0)
-            {
-                if (Time < 0)
-                {
-                    Projectile.Center += Main.npc[owner].velocity * 0.8f;
-                    Projectile.velocity = Projectile.velocity.RotatedBy(0.02f * Projectile.direction);
-                    Projectile.velocity *= 0.92f;
-
-                    if (Time % 3 == 0)
-                        Projectile.velocity += Main.rand.NextVector2Circular(5, 5);
-
-                    Projectile.velocity += Projectile.DirectionTo(Main.npc[owner].Center) * (Projectile.Distance(Main.npc[owner].Center)) * 0.003f;
-                }
-                else
-                {
-                    Projectile.velocity.X *= 0.97f;
-                    Projectile.velocity.Y -= 0.5f;
-                }
-                if (Time > 100)
-                {
-                    saveTarget = new Vector2(Main.rand.Next(-1000, 1000), Main.rand.Next(-1500, -500));
-
-                    Projectile.ai[1] = 1;
-
-                    Time = -250;
-                    if (Main.expertMode)
-                        Time = -200;
-
-                }
-            }
-            if (Projectile.ai[1] == 1)
-            {
-                if (Time < 0)
-                {
-                    Projectile.direction = Math.Sign(Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero).X);
-                    direction = MathHelper.Lerp(direction, (float)Math.Cbrt(Math.Abs(Projectile.Center.X - Main.npc[owner].GetTargetData().Center.X) * 0.5f) * 0.01f * Projectile.direction, 0.08f);
-                    Projectile.velocity = Vector2.Zero;
-                    saveTarget.X *= 0.99f;
-                    Projectile.Center = Vector2.Lerp(Projectile.Center, Main.npc[owner].GetTargetData().Center + saveTarget, Utils.GetLerpValue(-20, -80, Time, true) * 0.2f);
-                }
-                else if (Time == 0)
-                {
-                    Projectile.extraUpdates = 1;
-                    Projectile.velocity = new Vector2(0, 20).RotatedBy(direction * 30);
-                    saveTarget = Projectile.Center;
-                }
-                else if (Time < 40)
-                    Projectile.velocity = Projectile.velocity.RotatedBy(-direction);
-                else
-                {
-                    Projectile.extraUpdates = 0;
-                    Projectile.velocity *= 0.1f;
-
-                }
-            }
-
             for (int i = 0; i < 2; i++)
             {
                 Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * i * 0.5f, Color.White, (0.5f + Main.rand.NextFloat()) * Projectile.scale);
                 smoke.data = "Cosmos";
             }
 
+            if (Projectile.ai[1] == 0)
+            {
+                Projectile.velocity += Main.npc[owner].GetTargetData().Velocity * 0.005f;
+                Projectile.velocity.Y += 0.3f;
+                Projectile.velocity.X += (Main.npc[owner].GetTargetData().Center.X - Projectile.Center.X) * 0.0001f;
+
+                foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 20))
+                {
+                    otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.1f;
+                    Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.1f;
+                }
+            }
+            else if (Time < 40)
+                Projectile.velocity *= 0.94f;
+            else
+            {
+                Projectile.scale = Utils.GetLerpValue(30, 100, Projectile.Distance(Main.npc[owner].Center), true);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[owner].GetTargetData().Center) * 0.07f, 0.15f * Utils.GetLerpValue(50, 150, Time, true)).RotatedBy(0.015f * Projectile.direction);
+            }
+            if (Time > 300 || Projectile.scale < 0.1f)
+                Projectile.Kill();
+
+
+            if (Time > 0)
+                Projectile.ai[1] = 1;
+
             if (Main.rand.NextBool(30))
-                Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(24, 24) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()) * Projectile.scale);
+                Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(12, 12) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.4f + Main.rand.NextFloat()) * Projectile.scale);
 
             Projectile.rotation += Projectile.velocity.Length() * Projectile.direction * 0.02f;
 

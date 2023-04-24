@@ -51,14 +51,23 @@ namespace CalamityHunt.Common.Graphics
 
             foreach (Particle particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
             {
+                CosmicSmoke smoke = particle as CosmicSmoke;
+
                 if ((string)particle.data == "Cosmos")
                 {
-                    CosmicSmoke smoke = particle as CosmicSmoke;
                     Asset<Texture2D> texture = ModContent.Request<Texture2D>(smoke.Texture);
                     Rectangle frame = texture.Frame(4, 2, smoke.variant % 4, (int)(smoke.variant / 4f));
                     float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.maxTime * 0.2f, smoke.time, true));
                     float opacity = Utils.GetLerpValue(smoke.maxTime * 0.7f, smoke.maxTime * 0.2f, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
-                    Main.spriteBatch.Draw(texture.Value, (smoke.position - Main.screenPosition), frame, Color.White * 0.5f * opacity * grow, smoke.rotation, frame.Size() * 0.5f, smoke.scale * grow * 0.5f, 0, 0);
+                    Main.spriteBatch.Draw(texture.Value, smoke.position - Main.screenPosition, frame, Color.White * 0.5f * opacity * grow, smoke.rotation, frame.Size() * 0.5f, smoke.scale * grow * 0.5f, 0, 0);
+                }
+                if ((string)particle.data == "Interstellar")
+                {
+                    Asset<Texture2D> texture = ModContent.Request<Texture2D>(smoke.Texture);
+                    Rectangle frame = texture.Frame(4, 2, smoke.variant % 4, (int)(smoke.variant / 4f));
+                    float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.maxTime * 0.2f, smoke.time, true));
+                    float opacity = Utils.GetLerpValue(smoke.maxTime * 0.7f, 0, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
+                    Main.spriteBatch.Draw(texture.Value, smoke.position - Main.screenPosition, frame, Color.White * 0.7f * opacity * smoke.color.ToVector4().Length(), smoke.rotation, frame.Size() * 0.5f, smoke.scale * grow * 0.5f, 0, 0);
                 }
             }
 

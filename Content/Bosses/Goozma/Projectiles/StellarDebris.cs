@@ -63,6 +63,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 15, 0.0001f);
 
+            foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 300))
+            {
+                otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.3f;
+                Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.3f;
+            }
+
             if (Time % TopTime == 1)
             {
                 Projectile.direction *= -1;
@@ -79,7 +85,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[owner].GetTargetData().Center) * 0.2f * Utils.GetLerpValue(500, 600, Time, true), 0.2f * Utils.GetLerpValue(500, 600, Time, true)).RotatedBy(0.01f * Projectile.direction);
             }
 
-            if (Time > 600)
+            if (Time > 600 || Projectile.scale < 0.1f)
                 Projectile.Kill();
 
             Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.2f, Color.White, (1f + Main.rand.NextFloat()) * Projectile.scale);

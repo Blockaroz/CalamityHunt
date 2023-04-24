@@ -4,6 +4,7 @@ using CalamityHunt.Content.Items.Consumable;
 using CalamityHunt.Content.Items.Dyes;
 using CalamityHunt.Content.Pets.BloatBabyPet;
 using CalamityHunt.Content.Projectiles;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -115,7 +116,11 @@ namespace CalamityHunt.Common.Systems
             if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BlackHoleBlender>()))
             {
                 if (Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Active)
+                {
+                    float intensity = Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Intensity;
+                    Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().UseIntensity(intensity * 0.5f);
                     Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
+                }
 
                 bool active = SoundEngine.TryGetActiveSound(BlackHoleBlender.holeSound, out ActiveSound sound);
                 if (active)

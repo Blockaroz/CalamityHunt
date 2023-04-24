@@ -52,13 +52,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             int owner = -1;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active))
             {
-                Projectile.active = false;
+                Projectile.scale *= 0.84f;
+                if (Projectile.scale < 0.01f)
+                    Projectile.Kill();
+
                 return;
             }
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active).whoAmI;
 
-            Projectile.scale = (float)Math.Sqrt(MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(0, MaxTime - 80, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime - 80, Time, true))) * 0.75f;
+            Projectile.scale = (float)Math.Sqrt(MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(40, MaxTime - 80, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime - 80, Time, true))) * 0.75f;
             Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[owner].Center) * 0.2f;
 
             for (int i = 0; i < 6; i++)
@@ -121,8 +124,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreKill(int timeLeft)
         {
-            SoundEngine.TryGetActiveSound(holeSound, out ActiveSound sound);
-            sound.Stop();
+            bool active = SoundEngine.TryGetActiveSound(holeSound, out ActiveSound sound);
+            if (active)
+                sound.Stop();
 
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
 
@@ -170,7 +174,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     .UseColor(Color.White)
                     .UseTargetPosition(Projectile.Center)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.1f % 1f)
-                    .UseIntensity((float)Math.Sqrt(Utils.GetLerpValue(0.2f, 0.9f, Projectile.scale, true)) * 0.5f);
+                    .UseIntensity((float)Math.Sqrt(Utils.GetLerpValue(0.1f, 0.9f, Projectile.scale, true)) * 0.4f);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortionSample"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/DistortNoise").Value);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uSize"].SetValue(new Vector2(1f));

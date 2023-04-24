@@ -19,5 +19,13 @@ namespace CalamityHunt
             value.Y -= 2f;
             drawPos += value * -drawInfo.playerEffect.HasFlag(SpriteEffects.FlipVertically).ToDirectionInt();
         }
+
+        public static Vector2 GetDesiredVelocityForDistance(Vector2 start, Vector2 end, float slowDownFactor, int time)
+        {
+            Vector2 velocity = start.DirectionTo(end).SafeNormalize(Vector2.Zero);
+            float distance = start.Distance(end);
+            float velocityFactor = (distance * (float)Math.Log(slowDownFactor)) / ((float)Math.Pow(slowDownFactor, time) - 1);
+            return velocity * velocityFactor;
+        }
     }
 }
