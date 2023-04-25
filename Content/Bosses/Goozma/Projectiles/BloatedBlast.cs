@@ -57,7 +57,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 if (target > -1 && Time < 59)
                 {
                     Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * (0.13f + Time * 0.015f);
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * 30f, 0.03f);
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * 20f, 0.03f);
                     Projectile.Center += Main.player[target].velocity * 0.15f * Utils.GetLerpValue(100, 0, Time, true);
                 }
                 else

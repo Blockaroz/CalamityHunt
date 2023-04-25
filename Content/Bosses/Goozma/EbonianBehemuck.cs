@@ -372,7 +372,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Main.expertMode)
             {
                 spikeCount = 3;
-                spikeTime = 100;
+                spikeTime = 120;
             }
 
             if (Time < 61)

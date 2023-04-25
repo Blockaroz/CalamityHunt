@@ -67,14 +67,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Projectile.ai[1] == 0)
             {
-                Projectile.velocity += Main.npc[owner].GetTargetData().Velocity * 0.005f;
+                Projectile.velocity += Main.npc[owner].GetTargetData().Velocity * 0.012f;
                 Projectile.velocity.Y += 0.3f;
                 Projectile.velocity.X += (Main.npc[owner].GetTargetData().Center.X - Projectile.Center.X) * 0.0001f;
 
-                foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 20))
+                foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 30))
                 {
-                    otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.1f;
-                    Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.1f;
+                    otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.15f;
+                    Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.15f;
                 }
             }
             else if (Time < 40)

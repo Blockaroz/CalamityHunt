@@ -140,6 +140,7 @@ Items: {
 		Tooltip: ""
 	}
 }
+
 NPCs: {
 	Goozma.DisplayName: Goozma
 	CrimulanGlopstrosity.DisplayName: Crimulan Glopstrosity
@@ -147,6 +148,7 @@ NPCs: {
 	EbonianBehemuck.DisplayName: Ebonian Behemuck
 	StellarGeliath.DisplayName: Stellar Geliath
 }
+
 Projectiles: {
 	EbonstonePillar.DisplayName: Ebonstone Pillar
 	EbonstoneTooth.DisplayName: Ebonstone Tooth
@@ -182,7 +184,9 @@ Projectiles: {
 	CosmicDust.DisplayName: Cosmic Dust
 	InterstellarFlame.DisplayName: Interstellar Flame
 }
+
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
+
 Bestiary: {
 	Goozma: A singularity of slimes assimilating to the point of criticality, engulfing an oversaturated core. It emits powerful pheromones that exert its will beyond its main body, affecting all slimes.
 	CrimulanGlopstrosity: A concentrated mass of visceral rot that ferociously defends its mucilaginous master with vicious, twisted fervor. Each of Goozma's paladins coagulated individually from unique cores.
@@ -190,16 +194,19 @@ Bestiary: {
 	EbonianBehemuck: A concentrated mass of virulent corrosion that ferociously defends its mucilaginous master with ruthless, determined zeal. Goozma's paladins are deliberately spared from assimilation.
 	StellarGeliath: A concentrated mass of empyrean infinity that ferociously defends its mucilaginous master with ethereal, unearthly vigor. Left alone, Goozma could assimilate all matter in the universe.
 }
+
 Buffs: {
 	BloatBabyBuff: {
 		DisplayName: Bloat Baby
 		Description: It seems to like you as much as the others.
 	}
 }
+
 Tiles: {
 	GoozmaMusicBoxP1Tile.MapEntry: Music Box
 	GoozmaMusicBoxP2Tile.MapEntry: Music Box
 }
+
 Config: {
 	VisualHeader: Visuals
 

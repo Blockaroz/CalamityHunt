@@ -51,7 +51,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
     float4 img0 = tex2D(tex, input.Coord * float2(3, 1) - float2(uTime, sin(uTime * 6.28) * 0.02));
     float4 img1 = tex2D(tex, input.Coord * float2(2, 1) - float2(uTime * 3, 0));
-    float4 flat = (length(img0 * img1) > 0.001 ? 1 : 0);    
+    float4 flat = (length(img0 * img1) > 0.1 ? 1 : 0);    
     float4 baseMap = img0 + img1;
     
     float4 colors = tex2D(map, float2(input.Coord.x - baseMap.r * 0.3, 0.25));

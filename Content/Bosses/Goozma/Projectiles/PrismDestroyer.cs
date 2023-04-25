@@ -51,9 +51,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time < 0)
                 Projectile.rotation += Projectile.direction * 0.16f * Utils.GetLerpValue(-18, -50, Time, true);
             else
-                Projectile.rotation += -Projectile.direction * 0.003f;
+                Projectile.rotation += -Projectile.direction * 0.002f;
 
-            Projectile.scale = Utils.GetLerpValue(0, 10, Time, true) * Utils.GetLerpValue(80, 70, Time, true) * 0.7f;
+            Projectile.scale = Utils.GetLerpValue(-2, 15, Time, true) * Utils.GetLerpValue(80, 60, Time, true) * 0.9f;
             Projectile.velocity *= 0.5f;      
 
             for (int i = 0; i < Rays; i++)
@@ -82,9 +82,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 float point = 0;
                 for (int i = 0; i < Rays; i++)
                 {
-                    bool wide = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(100 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 30f, ref point);
-                    bool mid = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(250 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 15f, ref point);
-                    bool tip = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(380 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 5f, ref point);
+                    bool wide = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(70 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 20f, ref point);
+                    bool mid = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(180 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 12f, ref point);
+                    bool tip = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(320 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 5f, ref point);
                     if (wide || mid || tip)
                         return true;
                 }
@@ -100,7 +100,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time <= 3)
             {
-                float tellScale = (float)Math.Cbrt(Utils.GetLerpValue(-60, -40, Time, true) * Utils.GetLerpValue(80, -50, Time, true)) * 0.5f;
+                float tellScale = (float)Math.Cbrt(Utils.GetLerpValue(-60, -40, Time, true) * Utils.GetLerpValue(80, -50, Time, true)) * 0.7f;
                 for (int i = 0; i < Rays; i++)
                 {
                     Color rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);

@@ -185,12 +185,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             SoundStyle warningSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWarning");
             warningSound.MaxInstances = 0;
 
-            if (Projectile.localAI[1] > 5f)
+            if (Projectile.localAI[1] > 8f)
             {
                 Projectile.localAI[1] = 0;
-                float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0008f, -2f, 2f);
-                float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, -2f, 2f);
-                SoundEngine.PlaySound(warningSound.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.5f), Projectile.Center);
+                float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f);
+                float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, -2f, 2f) * Projectile.scale;
+                SoundEngine.PlaySound(warningSound.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.3f), Projectile.Center);
             }
 
             SoundStyle pixieBallSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixieBallLoop");

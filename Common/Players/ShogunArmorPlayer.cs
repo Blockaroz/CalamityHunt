@@ -20,15 +20,19 @@ namespace CalamityHunt.Common.Players
         public float slamPower;
         private bool slamming;
         private int bunnyHopCounter;
+        private int inertiaTimer;
         private int dashTime;
 
         public override void PostUpdateRunSpeeds()
         {
-            bool inAir = !WorldGen.SolidOrSlopedTile(Main.tile[(Player.Bottom / 16f).ToPoint()]);
+            bool inAir = !WorldGen.SolidOrSlopedTile(Main.tile[(Player.Bottom / 16f).ToPoint()]) && !Collision.SolidCollision(Player.position, Player.width, Player.height);
             if (active)
             {
+                if (Player.controlDown)
+                    Player.gravity *= 1.1f;
+
                 if (Player.controlDown && Player.velocity.Y > 1f)
-                    slamPower += 0.5f;
+                    slamPower++;
                 else
                     slamPower = 0;
 
@@ -36,14 +40,27 @@ namespace CalamityHunt.Common.Players
 
                 Player.maxFallSpeed += slamPower;
 
+                if (inertiaTimer > 0)
+                {
+                    inertiaTimer--;
+                    Player.runSlowdown *= 0.33f;
+                }
+
                 if (Player.dashDelay < 0)
                 {
-                    Main.SetCameraLerp(0.2f, 20);
+                    inertiaTimer = 1;
 
-                    Player.gravity *= 0.8f;
-                    Player.fullRotation += Player.direction * 0.5f;
+                    Main.SetCameraLerp(0.2f, 20);
+                    Player.gravity *= 0.9f;
+                    Player.fullRotation += (float)Math.Cbrt(Player.velocity.X) * 0.2f;
                     Player.fullRotationOrigin = Player.Size * 0.5f;
                     Player.velocity *= 1.01f;
+                    if (Player.controlJump && Player.releaseJump)
+                    {
+                        Player.dashDelay = 0;
+                        inertiaTimer = 60;
+                    }
+
                     for (int i = 0; i < 6; i++)
                         Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(25, 25), DustID.TintableDust, Player.velocity * -Main.rand.NextFloat(-0.5f, 1f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
@@ -60,7 +77,7 @@ namespace CalamityHunt.Common.Players
                 else
                     Player.fullRotation = 0;
 
-                if (Player.dashDelay > 0 && Player.dashDelay % 2 == 0)
+                if (Player.dashDelay > 0)
                     Player.dashDelay--;
 
                 if (!inAir && slamPower > 6)
@@ -85,7 +102,7 @@ namespace CalamityHunt.Common.Players
                     if (Player.controlJump || Player.dashDelay < 0)
                     {
                         bunnyHopCounter = -20;
-                        Player.velocity.X *= 2.4f;
+                        Player.velocity.X *= 2f;
                         for (int i = 0; i < 40; i++)
                             Dust.NewDustPerfect(Player.Bottom + Main.rand.NextVector2Circular(20, 5), DustID.TintableDust, -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(7f) * (i / 40f) - new Vector2(Player.direction * 10f, 0f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
@@ -170,7 +187,7 @@ namespace CalamityHunt.Common.Players
                 //    }
                 //}
 
-                self.dashType = 2;
+                self.dashType = 1;
             }
             
                 orig(self);

@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Main.graphics.GraphicsDevice.Clear(Color.Transparent);
                     if (!switchedTargets)
                     {
-                        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null);
+                        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null);
                         switchedTargets = true;
                     }
 
@@ -75,10 +75,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     float partitions = 50;
                     for (int i = 0; i < partitions; i++)
                     {
-                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2f, i, true) * Utils.GetLerpValue(partitions * 1.5f, partitions / 2f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 16 * (i / partitions)), 0).RotatedBy(Math.Clamp((float)Math.Cbrt(npc.scale), 0, 1) * MathHelper.SmoothStep(0.1f, -3.5f, i / partitions));
+                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 16 * (i / partitions)), 0).RotatedBy(Math.Clamp((float)Math.Cbrt(npc.scale), 0, 1) * MathHelper.SmoothStep(0.15f, -3.5f, i / partitions));
                         offset.X *= npc.direction;
                         offset -= npc.velocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
-                        positions.Add((new Vector2(0, 30).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation)) * npc.scale);
+                        positions.Add((new Vector2(0, 20).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation)) * npc.scale);
                         rotations.Add(offset.RotatedBy(npc.rotation).ToRotation() - MathHelper.PiOver2 * (i / partitions) * npc.direction);
                     }
 
@@ -100,33 +100,31 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             int goozmaID = ModContent.NPCType<Goozma>();
-            Matrix realUIMatrix = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, -1, 1);
-
-            foreach (BestiaryEntry entry in Main.BestiaryDB.Entries.Where(n => n == BestiaryDatabaseNPCsPopulator.FindEntryByNPCID(goozmaID)))
+            foreach (BestiaryEntry entry in Main.BestiaryDB.Entries.Where(n => n == Main.BestiaryDB.FindEntryByNPCID(goozmaID)))
             {
-                NPC npc = ContentSamples.NpcsByNetId[goozmaID];//(NPC)(entry.Icon.GetType().GetField("_npcCache", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(entry.Icon));
-                Goozma targetOwner = npc.ModNPC as Goozma;
+                NPC bestiaryNPC = (NPC)(entry.Icon.GetType().GetField("_npcCache", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(entry.Icon));
+                Goozma bestiaryTargetOwner = bestiaryNPC.ModNPC as Goozma;
 
-                if (targetOwner.cordTarget == null || targetOwner.cordTarget.IsDisposed)
-                    targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2);
+                if (bestiaryTargetOwner.cordTarget == null || bestiaryTargetOwner.cordTarget.IsDisposed)
+                    bestiaryTargetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2);
 
-                else if (targetOwner.cordTarget.Size() != new Vector2(Main.screenWidth / 2, Main.screenHeight / 2))
+                else if (bestiaryTargetOwner.cordTarget.Size() != new Vector2(Main.screenWidth / 2, Main.screenHeight / 2))
                 {
                     Main.QueueMainThreadAction(() =>
                     {
-                        targetOwner.cordTarget.Dispose();
-                        targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2);
+                        bestiaryTargetOwner.cordTarget.Dispose();
+                        bestiaryTargetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2);
                     });
                     return;
                 }
 
-                if (targetOwner.cordTarget != null)
+                if (bestiaryTargetOwner.cordTarget != null)
                 {
-                    Main.graphics.GraphicsDevice.SetRenderTarget(targetOwner.cordTarget);
+                    Main.graphics.GraphicsDevice.SetRenderTarget(bestiaryTargetOwner.cordTarget);
                     Main.graphics.GraphicsDevice.Clear(Color.Transparent);
                     if (!switchedTargets)
                     {
-                        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null);
+                        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
                         switchedTargets = true;
                     }
 
@@ -136,15 +134,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     float partitions = 50;
                     for (int i = 0; i < partitions; i++)
                     {
-                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2f, i, true) * Utils.GetLerpValue(partitions * 1.5f, partitions / 2f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 16 * (i / partitions)), 0).RotatedBy(Math.Clamp((float)Math.Cbrt(npc.scale), 0, 1) * MathHelper.SmoothStep(0.1f, -3.5f, i / partitions));
-                        offset.X *= npc.direction;
-                        offset -= npc.velocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
-                        positions.Add((new Vector2(0, 30).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation)) * npc.scale);
-                        rotations.Add(offset.RotatedBy(npc.rotation).ToRotation() - MathHelper.PiOver2 * (i / partitions) * npc.direction);
+                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((bestiaryNPC.localAI[0] * 0.125f - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 16 * (i / partitions)), 0).RotatedBy(Math.Clamp((float)Math.Cbrt(bestiaryNPC.scale), 0, 1) * MathHelper.SmoothStep(0.15f, -3.5f, i / partitions));
+                        offset.X *= bestiaryNPC.direction;
+                        offset -= bestiaryNPC.velocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
+                        positions.Add((new Vector2(0, 20).RotatedBy(bestiaryNPC.rotation) + offset.RotatedBy(bestiaryNPC.rotation)) * bestiaryNPC.scale);
+                        rotations.Add(offset.RotatedBy(bestiaryNPC.rotation).ToRotation() - MathHelper.PiOver2 * (i / partitions) * bestiaryNPC.direction);
                     }
-                    
-                    effect.Parameters["uTransformMatrix"].SetValue(realUIMatrix);
-                    effect.Parameters["uTime"].SetValue(npc.localAI[0] * 0.005f % 1f);
+
+                    effect.Parameters["uTransformMatrix"].SetValue(realMatrix);
+                    effect.Parameters["uTime"].SetValue(bestiaryNPC.localAI[0] * 0.005f % 1f);
                     effect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LiquidTrail").Value);
                     effect.Parameters["uMap"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GoozmaColorMap").Value);
                     effect.CurrentTechnique.Passes[0].Apply();
@@ -152,22 +150,21 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     VertexStrip cord = new VertexStrip();
 
                     Color ColorFunc(float progress) => Color.White;
-                    float WidthFunc(float progress) => Utils.GetLerpValue(1.1f, 0.1f, progress, true) * 40f * npc.scale;
+                    float WidthFunc(float progress) => Utils.GetLerpValue(1.1f, 0.1f, progress, true) * 40f * bestiaryNPC.scale;
 
-                    cord.PrepareStripWithProceduralPadding(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, Vector2.Zero, true);
+                    cord.PrepareStripWithProceduralPadding(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, bestiaryNPC.Center, true);
                     cord.DrawTrail();
                     Main.pixelShader.CurrentTechnique.Passes[0].Apply();
                 }
-            }
 
-            //Go back to the backbuffer RT if we switched away from it.
-            //Putting it at the end like that avoids having to switch back and forth if somehow theres more than 1 goozma
-            //Also you don't have to clear it transparent when switching back to it
-
-            if (switchedTargets)
-            {
-                Main.graphics.GraphicsDevice.SetRenderTarget(null);
-                Main.spriteBatch.End();
+                //Go back to the backbuffer RT if we switched away from it.
+                //Putting it at the end like that avoids having to switch back and forth if somehow theres more than 1 goozma
+                //Also you don't have to clear it transparent when switching back to it
+                if (switchedTargets)
+                {
+                    Main.graphics.GraphicsDevice.SetRenderTarget(null);
+                    Main.spriteBatch.End();
+                }
             }
         }
     }

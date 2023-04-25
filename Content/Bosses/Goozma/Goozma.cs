@@ -12,6 +12,7 @@ using CalamityHunt.Content.Projectiles;
 using Humanizer;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
@@ -107,6 +108,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
             trophyType = BossDropAutoloader.AddBossTrophy("Goozma");          
             On_Main.UpdateAudio += FadeMusicOut;
             On_Main.CheckMonoliths += DrawCordShapes;
+
+            Main.QueueMainThreadAction(() =>
+            {
+                cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 2, Main.screenHeight / 2);
+            });
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
@@ -269,7 +275,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             NPC.damage = 0;
 
-            if (!NPC.dontTakeDamage)
+            if (!NPC.dontTakeDamage || Phase == 0)
             {
                 NPC.damage = GetDamage(0);
 
@@ -342,8 +348,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            currentSlime = 1;// (currentSlime + 1) % 4;
-                            nextAttack[currentSlime] = 2;
+                            currentSlime = 3;// (currentSlime + 1) % 4;
+                            nextAttack[currentSlime] = 0;
 
                             for (int i = 0; i < nextAttack.Length; i++)
                                 nextAttack[i] = nextAttack[i] % 3;
@@ -490,7 +496,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         break;
                                     case 2:
 
-                                        Orbit(200, new Vector2(720, 0));
+                                        Orbit(300, new Vector2(800, 0));
 
                                         if (Time > 40 && Time < 400)
                                             SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.CrimulanHop);
@@ -517,7 +523,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             SortedProjectileAttack(saveTarget, SortedProjectileAttackTypes.StellarDisruption);
 
                                         FlyTo(saveTarget);
-                                        NPC.velocity *= 0.96f;
+                                        NPC.velocity *= 0.96f * Utils.GetLerpValue(-50, 60, Time, true);
+                                        NPC.damage = 0;
 
                                         break;
 
@@ -1310,8 +1317,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         if (Time % 25 == 0)
                             Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 3f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
 
-                        if (Time % 50 == 0)
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f) * 10f, ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
+                        if (Time % 40 == 0)
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionFrom(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 4f, ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
 
                     }
 

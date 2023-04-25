@@ -28,8 +28,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = 180;
-            Projectile.height = 120;
+            Projectile.width = 120;
+            Projectile.height = 500;
             Projectile.tileCollide = false;
             Projectile.hostile = true;
             Projectile.friendly = false;
@@ -64,7 +64,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
                 else
                     Projectile.velocity.X = 0;
-                Projectile.position.Y = saveTarget.Y - 900 + (Projectile.height / 2);
+                Projectile.position.Y = saveTarget.Y - 1200 + (Projectile.height / 2);
             }
             else
                 Projectile.velocity.X = 0;
@@ -124,9 +124,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     if (Time > 9)
                         trailSquish = new Vector2(1f + Utils.GetLerpValue(18, 10, Time, true) * 0.7f * (1f - superProg - prog * 0.2f), 1f - Utils.GetLerpValue(18, 10, Time, true) * 0.7f * (1f - superProg - prog * 0.2f));
 
-                    float trailProgress = Utils.GetLerpValue(0, ProjectileID.Sets.TrailCacheLength[Type], i - prog, true);
+                    Color trailColor = Color.Lerp(Color.Black * 0.33f, new Color(30, 4, 2, 10), superProg);
+                    float trailProgress = Utils.GetLerpValue(0, ProjectileID.Sets.TrailCacheLength[Type], i + prog, true);
                     Vector2 position = Vector2.Lerp(Projectile.oldPos[i - 1], Projectile.oldPos[i], prog) + Projectile.Size * new Vector2(0.5f, 1f);
-                    Main.EntitySpriteDraw(trail.Value, position - Main.screenPosition, null, new Color(30, 4, 2, 10) * (1f - trailProgress) * trailOut, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * trailSquish * (0.5f + trailOut * 0.5f), 0, 0);
+                    Main.EntitySpriteDraw(trail.Value, position - Main.screenPosition, null, trailColor * (1f - trailProgress) * trailOut, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * trailSquish * (0.5f + trailOut * 0.5f), 0, 0);
                 }
             }
 
