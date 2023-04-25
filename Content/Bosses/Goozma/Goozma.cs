@@ -349,7 +349,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //}
 
                             currentSlime = 3;// (currentSlime + 1) % 4;
-                            nextAttack[currentSlime] = 0;
+                            nextAttack[currentSlime] = 1;
 
                             for (int i = 0; i < nextAttack.Length; i++)
                                 nextAttack[i] = nextAttack[i] % 3;
@@ -1473,7 +1473,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(1f), ModContent.ProjectileType<GooLightning>(), GetDamage(4), 0, -1, -50, 1500, 1);
 
                     if (Time == 250)
-                        Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<GaussRay>(), GetDamage(7), 0);
+                    {
+                        Projectile gaussRay = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<GaussRay>(), GetDamage(7), 0);
+                        gaussRay.ai[2] = NPC.whoAmI;
+                    }
 
                     break;
             }

@@ -38,6 +38,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public ref float Time => ref Projectile.ai[0];
         public ref float TopTime => ref Projectile.ai[1];
+        public ref float Owner => ref Projectile.ai[2];
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -45,6 +46,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.scale *= Main.rand.NextFloat(0.7f, 1.2f);
             Projectile.direction = Main.rand.NextBool().ToDirectionInt();
             TopTime = 5;
+            Owner = -1;
         }
 
         private Vector2 saveTarget;
@@ -52,16 +54,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            int owner = -1;
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active))
+            if (Owner < 0)
             {
                 Projectile.active = false;
                 return;
             }
-            else
-                owner = Main.npc.First(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active).whoAmI;
+            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>())
+            {
+                Projectile.active = false;
+                return;
+            }
 
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 15, 0.0001f);
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 15, 0.0001f);
 
             foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 300))
             {
@@ -81,8 +85,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time > 500)
             {
                 Projectile.damage = 0;
-                Projectile.scale = Utils.GetLerpValue(40, 120, Projectile.Distance(Main.npc[owner].Center), true);
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[owner].GetTargetData().Center) * 0.2f * Utils.GetLerpValue(500, 600, Time, true), 0.2f * Utils.GetLerpValue(500, 600, Time, true)).RotatedBy(0.01f * Projectile.direction);
+                Projectile.scale = Utils.GetLerpValue(40, 120, Projectile.Distance(Main.npc[(int)Owner].Center), true);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.2f * Utils.GetLerpValue(500, 600, Time, true), 0.2f * Utils.GetLerpValue(500, 600, Time, true)).RotatedBy(0.01f * Projectile.direction);
             }
 
             if (Time > 600 || Projectile.scale < 0.1f)

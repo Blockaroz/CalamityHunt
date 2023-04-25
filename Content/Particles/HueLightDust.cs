@@ -34,20 +34,18 @@ namespace CalamityHunt.Content.Particles
             if (data is float)
                 color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt((float)data + life * 0.05f);
 
-            int chance = 60;
             if (!Collision.SolidTiles(position, 2, 2))
             {
-                chance += 30;
                 scale *= 1.0004f;
                 Lighting.AddLight(position, color.ToVector3() * 0.2f * scale);
             }
-            if (Main.rand.NextBool(chance) && scale > 0.25f)
+            else if (Main.rand.NextBool(90) && scale > 0.25f)
             {
-                Particle hue = NewParticle(Type, position, Main.rand.NextVector2Circular(1, 1), color * 0.99f, MathHelper.Clamp(scale * 2.5f, 0.1f, 2f));
+                Particle hue = NewParticle(Type, position, Main.rand.NextVector2Circular(1, 1), color * 0.99f, MathHelper.Clamp(scale * 2f, 0.1f, 1.5f));
                 hue.data = data;
             }
 
-            if (scale < 0.1f)
+            if (scale < 0.5f)
                 Active = false;
         }
 

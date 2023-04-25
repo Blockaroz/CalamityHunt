@@ -41,6 +41,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         }
 
         public ref float Time => ref Projectile.ai[0];
+        public ref float Owner => ref Projectile.ai[2];
 
         private static readonly int ChargeTime = 300;
         private static readonly int LaserDuration = 700;

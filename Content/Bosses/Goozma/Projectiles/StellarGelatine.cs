@@ -37,12 +37,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         }
 
         public ref float Time => ref Projectile.ai[0];
+        public ref float Owner => ref Projectile.ai[2];
 
         public override void OnSpawn(IEntitySource source)
         {
+            Projectile.localAI[1] = Main.rand.NextFloat(0.8f, 1.4f);
             Projectile.frame = Main.rand.Next(3);
-            Projectile.scale *= Main.rand.NextFloat(0.6f, 1.3f);
             Projectile.direction = Main.rand.NextBool().ToDirectionInt();
+            Owner = -1;
         }
 
         private Vector2 saveTarget;
@@ -50,14 +52,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            int owner = -1;
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active))
+            if (Owner < 0)
             {
                 Projectile.active = false;
                 return;
             }
-            else
-                owner = Main.npc.First(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active).whoAmI;
+            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>())
+            {
+                Projectile.active = false;
+                return;
+            }
 
             for (int i = 0; i < 2; i++)
             {
@@ -67,9 +71,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Projectile.ai[1] == 0)
             {
-                Projectile.velocity += Main.npc[owner].GetTargetData().Velocity * 0.012f;
+                Projectile.velocity += Main.npc[(int)Owner].GetTargetData().Velocity * 0.012f;
                 Projectile.velocity.Y += 0.3f;
-                Projectile.velocity.X += (Main.npc[owner].GetTargetData().Center.X - Projectile.Center.X) * 0.0001f;
+                Projectile.velocity.X += (Main.npc[(int)Owner].GetTargetData().Center.X - Projectile.Center.X) * 0.0001f;
 
                 foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 30))
                 {
@@ -81,12 +85,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.velocity *= 0.94f;
             else
             {
-                Projectile.scale = Utils.GetLerpValue(30, 100, Projectile.Distance(Main.npc[owner].Center), true);
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[owner].GetTargetData().Center) * 0.07f, 0.15f * Utils.GetLerpValue(50, 150, Time, true)).RotatedBy(0.015f * Projectile.direction);
+                Projectile.scale = Utils.GetLerpValue(30, 100, Projectile.Distance(Main.npc[(int)Owner].Center), true);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.07f, 0.15f * Utils.GetLerpValue(50, 150, Time, true)).RotatedBy(0.015f * Projectile.direction);
             }
             if (Time > 300 || Projectile.scale < 0.1f)
                 Projectile.Kill();
-
 
             if (Time > 0)
                 Projectile.ai[1] = 1;
@@ -107,12 +110,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Rectangle frame = texture.Frame(3, 1, Projectile.frame, 0);
 
-            float scale = 1f;
+            float scale = Projectile.localAI[1];
 
             if (Projectile.ai[1] == 0)
-            {
-                scale = 1f;
-            }
+                scale = Utils.GetLerpValue(-15, 15, Projectile.localAI[0], true) * Projectile.localAI[1];
+
             if (Projectile.ai[1] == 1 && Time < 0)
             {
                 int telegraphCount = 150;

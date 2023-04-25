@@ -44,13 +44,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Projectile.velocity *= 0.9f;
             Projectile.scale += 0.1f;
-            Color flameColor = Color.Lerp(Color.Lerp(new Color(100, 60, 15, 0), new Color(30, 15, 10, 0), Utils.GetLerpValue(1, 3, Time, true)), Color.DarkBlue * 0.1f, Utils.GetLerpValue(3, 8, Time, true)) * Utils.GetLerpValue(15, 5, Time, true);
+            Color flameColor = Color.Lerp(Color.Lerp(new Color(150, 70, 35, 0), new Color(30, 15, 10, 0), Utils.GetLerpValue(1, 3, Time, true)), Color.DarkBlue * 0.1f, Utils.GetLerpValue(3, 8, Time, true)) * Utils.GetLerpValue(15, 5, Time, true);
             flameColor.A = 10;
-            for (int i = 0; i < 3; i++)
-            {
-                Particle interstellarFlame = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * Utils.GetLerpValue(0, 8, Time, true), flameColor, (1f + Main.rand.NextFloat()) * Projectile.scale);
-                interstellarFlame.data = "Interstellar";
-            }
+            Particle interstellarFlame = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * Utils.GetLerpValue(0, 8, Time, true), flameColor, (1f + Main.rand.NextFloat()) * Projectile.scale);
+            interstellarFlame.data = "Interstellar";
 
             Time++;
 

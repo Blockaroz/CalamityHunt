@@ -92,7 +92,7 @@ namespace CalamityHunt.Common.Graphics
                 Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), Color.White, 0, bloom.Size() * 0.5f, projectile.scale * 7f, 0, 0);
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
 
                 Main.spriteBatch.Draw(texture.Value, (projectile.Center - Main.screenPosition), texture.Frame(), Color.White * projectile.scale * 0.2f, projectile.rotation, texture.Size() * 0.5f, projectile.scale * 0.8f, 0, 0);
                 Main.spriteBatch.Draw(texture.Value, (projectile.Center - Main.screenPosition), texture.Frame(), Color.White * projectile.scale * 0.1f, projectile.rotation * 0.8f - 0.5f, texture.Size() * 0.5f, projectile.scale * 0.7f, 0, 0);
@@ -145,7 +145,7 @@ namespace CalamityHunt.Common.Graphics
                 Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(255, 150, 60, 0) * projectile.scale, 0, bloom.Size() * 0.5f, projectile.scale * 6f, 0, 0);
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
             }
             
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
