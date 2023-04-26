@@ -48,25 +48,27 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            int owner = -1;
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+            if (this.Owner < 0)
             {
                 Projectile.active = false;
                 return;
             }
-            else
-                owner = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
+            else if (!Main.npc[(int)this.Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<Goozma>())
+            {
+                Projectile.active = false;
+                return;
+            }
 
-            Projectile.Center = Main.npc[owner].Center + new Vector2(7 * Main.npc[owner].direction, -10);
-            Main.npc[owner].velocity += Projectile.rotation.ToRotationVector2() * -0.3f;
-            Main.npc[owner].velocity *= 0.8f;
+            Projectile.Center = Main.npc[(int)Owner].Center + new Vector2(7 * Main.npc[(int)Owner].direction, -10);
+            Main.npc[(int)Owner].velocity += Projectile.rotation.ToRotationVector2() * -0.3f;
+            Main.npc[(int)Owner].velocity *= 0.8f;
             if (Time > ChargeTime)
             {
                 if (Math.Abs(Projectile.velocity.X) > 0.9f)
-                    Main.npc[owner].direction = Projectile.velocity.X > 0 ? 1 : -1;
+                    Main.npc[(int)Owner].direction = Projectile.velocity.X > 0 ? 1 : -1;
             }
 
-            if (Main.npc[owner].ai[2] >= 3 && Time < ChargeTime + LaserDuration - 2)
+            if (Main.npc[(int)Owner].ai[2] >= 3 && Time < ChargeTime + LaserDuration - 2)
                 Time = ChargeTime + LaserDuration - 2;
 
             if (Time < ChargeTime)
@@ -74,9 +76,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             float totalOffRot = (float)Math.Sin(Time * 0.03f) * 0.07f * Utils.GetLerpValue(ChargeTime - 10, ChargeTime + 10, Time, true);
 
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.028f);
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.028f);
             Projectile.rotation = Projectile.velocity.ToRotation() + totalOffRot;
-            Projectile.localAI[0] = Main.npc[owner].localAI[0];
+            Projectile.localAI[0] = Main.npc[(int)Owner].localAI[0];
             
             float smokePower = Utils.GetLerpValue(0, ChargeTime * 0.9f, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 70, ChargeTime + LaserDuration + 40, Time, true);
             Color smokeColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * (0.5f + smokePower * 0.5f);

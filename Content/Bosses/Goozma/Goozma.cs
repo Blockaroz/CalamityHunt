@@ -348,8 +348,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            currentSlime = 3;// (currentSlime + 1) % 4;
-                            nextAttack[currentSlime] = 1;
+                            currentSlime = (currentSlime + 1) % 4;
+                            nextAttack[currentSlime]++;
 
                             for (int i = 0; i < nextAttack.Length; i++)
                                 nextAttack[i] = nextAttack[i] % 3;
@@ -1314,11 +1314,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             goozmaShootPowerTarget = 1f;
                         }
 
-                        if (Time % 25 == 0)
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 3f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
+                        if (Time % 100 == 0)
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1f), ModContent.ProjectileType<BloatedBlast>(), GetDamage(5), 0);
 
-                        if (Time % 40 == 0)
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionFrom(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 4f, ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
+                        if (Time % 60 == 0)
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 8f, ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
 
                     }
 
@@ -1431,7 +1431,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         int count = Main.rand.Next(18, 25);
                         for (int i = 0; i < count; i++)
                         {
-                            Projectile dart = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.Next(8, 15), 0).RotatedBy(MathHelper.TwoPi / count * i), ModContent.ProjectileType<BloatedBlast>(), GetDamage(1), 0);
+                            Projectile dart = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.Next(8, 15), 0).RotatedBy(MathHelper.TwoPi / count * i), ModContent.ProjectileType<BloatedBlast>(), GetDamage(5), 0);
                             dart.ai[1] = 1;
                             dart.localAI[0] = NPC.localAI[0] + i / (float)count * 90f;
                         }

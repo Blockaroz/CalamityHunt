@@ -139,6 +139,16 @@ Items: {
 		DisplayName: Shogun Pants
 		Tooltip: ""
 	}
+
+	AuricSole: {
+		DisplayName: Auric Sole
+		Tooltip: ""
+	}
+
+	DischargedAuricSole: {
+		DisplayName: Discharged Auric Sole
+		Tooltip: ""
+	}
 }
 
 NPCs: {

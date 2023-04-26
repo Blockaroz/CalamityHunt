@@ -42,7 +42,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public ref float Time => ref Projectile.ai[0];
         public ref float MaxTime => ref Projectile.ai[1];
-        public ref float Owner => ref Projectile.ai[1];
+        public ref float Owner => ref Projectile.ai[2];
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -51,6 +51,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
+            if (Owner < 0)
+            {
+                Projectile.active = false;
+                return;
+            }
+            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>())
+            {
+                Projectile.active = false;
+                return;
+            }
+
             Projectile.scale = (float)Math.Sqrt(MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(40, MaxTime - 80, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime - 80, Time, true))) * 0.75f;
             Projectile.velocity = Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].Center) * 0.2f;
 

@@ -63,7 +63,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time < 0)
             {
                 if (Collides == 0 || Collides == 2)
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.055f * Utils.GetLerpValue(0, -20, Time, true));
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.07f * Utils.GetLerpValue(0, -20, Time, true));
                 else if (Collides == 1)
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.01f * Utils.GetLerpValue(0, -20, Time, true));
             }
@@ -208,7 +208,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public float WidthFunction(float progress)
         {
             float width = (50f + (float)Math.Sqrt(Utils.GetLerpValue(0.1f, 0.5f, progress, true) * Utils.GetLerpValue(0.9f, 0.5f, progress, true)) * 100f) * (float)Math.Pow(1f - (Time / 30f), 0.8f);
-            float small = Collides == 0 || Collides == 2 ? (Collides == 2 ? 1f : 1.4f) : 0.33f;
+            float small = Collides == 0 ? (Collides == 2 ? 1f : 1.4f) : 0.33f;
             return width * small;
         }
     }

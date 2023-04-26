@@ -16,6 +16,7 @@ using Terraria.ModLoader;
 using System.Collections.Generic;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
+using Terraria.GameContent.Drawing;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -117,6 +118,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void AI()
         {
+            if (Main.rand.NextBool(30))
+            {
+                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.PooFly, new ParticleOrchestraSettings
+                {
+                    MovementVector = Main.rand.NextVector2Circular(5, 5) + NPC.velocity * 0.5f,
+                    PositionInWorld = NPC.Center + Main.rand.NextVector2Circular(100, 70).RotatedBy(NPC.rotation) * NPC.scale, 
+                });
+            }
+
             if (NPC.ai[2] < 0)
                 NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))

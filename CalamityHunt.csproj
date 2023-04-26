@@ -21,6 +21,7 @@
   <ItemGroup>
     <Folder Include="Assets\Sounds\SlimeMonsoon\" />
     <Folder Include="Content\Bosses\Goozma\Slimes\" />
+    <Folder Include="Content\Items\Accessories\" />
     <Folder Include="Content\Items\Weapons\Melee\" />
     <Folder Include="Content\Items\Weapons\Ranged\" />
     <Folder Include="Content\Projectiles\Weapons\Magic\" />
