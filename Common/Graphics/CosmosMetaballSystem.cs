@@ -155,9 +155,9 @@ namespace CalamityHunt.Common.Graphics
             effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
             effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));
             effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, Main.GlobalTimeWrappedHourly * 0.0004f % 2f));
-            effect.Parameters["uCloseColor"].SetValue(new Color(20, 50, 255).ToVector3());
-            effect.Parameters["uFarColor"].SetValue(new Color(110, 20, 200).ToVector3());
-            effect.Parameters["uOutlineColor"].SetValue(new Color(20, 5, 45, 0).ToVector4());
+            effect.Parameters["uCloseColor"].SetValue(new Color(20, 80, 255).ToVector3());
+            effect.Parameters["uFarColor"].SetValue(new Color(110, 50, 200).ToVector3());
+            effect.Parameters["uOutlineColor"].SetValue(new Color(10, 5, 45, 0).ToVector4());
             effect.Parameters["uImageRatio"].SetValue(new Vector2(Main.screenWidth / (float)Main.screenHeight, 1f));
 
             Main.spriteBatch.End();

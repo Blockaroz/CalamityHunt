@@ -44,6 +44,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.localAI[1] = Main.rand.NextFloat(0.8f, 1.4f);
             Projectile.frame = Main.rand.Next(3);
             Projectile.direction = Main.rand.NextBool().ToDirectionInt();
+            Projectile.rotation = Main.rand.NextFloat(-0.3f, 0.3f);
+
             Owner = -1;
         }
 
@@ -82,7 +84,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
             }
             else if (Time < 40)
-                Projectile.velocity *= 0.94f;
+                Projectile.velocity *= 0.945f;
             else
             {
                 Projectile.scale = Utils.GetLerpValue(30, 100, Projectile.Distance(Main.npc[(int)Owner].Center), true);
@@ -101,11 +103,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Time++;
             Projectile.localAI[0]++;
+            Projectile.localAI[0] += Projectile.velocity.Length() * 0.01f;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            Asset<Texture2D> aura = ModContent.Request<Texture2D>(Texture + "Aura");
             Asset<Texture2D> sparkle = TextureAssets.Extra[98];
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Rectangle frame = texture.Frame(3, 1, Projectile.frame, 0);
@@ -131,6 +135,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
             }
 
+            Vector2 flameSquish = new Vector2(1f + (float)Math.Sin(Projectile.localAI[0] * 0.2f) * 0.2f, 1f + (float)Math.Cos(Projectile.localAI[0] * 0.2f) * 0.2f);
+
+            Main.EntitySpriteDraw(aura.Value, Projectile.Center - Main.screenPosition, aura.Frame(), new Color(10, 30, 110, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, aura.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * scale * flameSquish, 0, 0);
+            Main.EntitySpriteDraw(aura.Value, Projectile.Center - Main.screenPosition, aura.Frame(), new Color(20, 100, 150, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, aura.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * 0.66f * scale * flameSquish, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scale, 0, 0);
 
             return false;

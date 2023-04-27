@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class SlimeBomb : ModProjectile
+    public class SlimeBomb : ModProjectile, IDieWithGoozmaProjectile
     {
         public override void SetDefaults()
         {

@@ -15,7 +15,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class GooLightning : ModProjectile
+    public class GooLightning : ModProjectile, IDieWithGoozmaProjectile
     {
         public override void SetDefaults()
         {
@@ -63,7 +63,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time < 0)
             {
                 if (Collides == 0 || Collides == 2)
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.07f * Utils.GetLerpValue(0, -20, Time, true));
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.066f * Utils.GetLerpValue(-10, -30, Time, true));
                 else if (Collides == 1)
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.01f * Utils.GetLerpValue(0, -20, Time, true));
             }

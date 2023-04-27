@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common;
+using CalamityHunt.Common.Graphics.SlimeMonsoon;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Camera;
 using CalamityHunt.Common.Systems.Particles;
@@ -22,6 +23,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.Events;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
@@ -282,6 +284,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (!noSlime)
                     if (NPC.Distance(ActiveSlime.Center) < 400)
                         NPC.damage = 0;
+
+                if (Phase <= 1 && Time < 15)
+                    NPC.damage = 0;
             }
 
             switch (Phase)
@@ -487,6 +492,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         //}
                                         //else
                                         //    Fly();
+
+                                        Orbit(1000, new Vector2(500, 0));
+
                                         break;
                                     case 1:
 
@@ -645,7 +653,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                            
                             if (Time > 640)
                             {
-                                Time = 0;
+                                Time = -60;
                                 Attack = (int)AttackList.DrillDash;
                             }
 
@@ -661,42 +669,47 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 dashTime = 90;
                             }
 
-                            if (Time <= dashTime * dashCount)
+                            if (Time >= 0)
                             {
-                                if (Time % dashTime == 21 && !Main.dedServ)
+                                if (Time <= dashTime * dashCount)
                                 {
-                                    SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDash", 1, 2);
-                                    roar.MaxInstances = 0;
-                                    roar.PitchVariance = 0.15f;
-                                    SoundEngine.PlaySound(roar, NPC.Center);
-                                }
-
-                                if (Time % dashTime < 20)
-                                {
-                                    NPC.Center = Vector2.Lerp(NPC.Center, NPC.Center + NPC.DirectionTo(Target.Center) * (NPC.Distance(Target.Center) - 300) * 0.2f, 0.6f);
-                                    NPC.velocity = NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero);
-                                }
-                                else if (Time % dashTime < 74)
-                                {
-                                    for (int i = 0; i < 8; i++)
+                                    if (Time % dashTime == 21 && !Main.dedServ)
                                     {
-                                        Vector2 position = Vector2.Lerp(NPC.position, NPC.oldPos[0], i / 24f) + NPC.Size * 0.5f;
-
-                                        Particle hueTop = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity, -NPC.velocity.RotatedBy((float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f), Color.White, 2f);
-                                        hueTop.data = NPC.localAI[0];
-
-                                        Particle hueBot = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity, -NPC.velocity.RotatedBy(-(float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f), Color.White, 2f);
-                                        hueBot.data = NPC.localAI[0];
+                                        SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDash", 1, 2);
+                                        roar.MaxInstances = 0;
+                                        roar.PitchVariance = 0.15f;
+                                        SoundEngine.PlaySound(roar, NPC.Center);
                                     }
 
-                                    NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (4f - Time % dashTime * 0.07f);
-                                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedBy(0.05f) * 50f, 0.01f);
-                                }
-                                else
-                                    NPC.velocity *= 0.6f;
+                                    if (Time % dashTime < 20)
+                                    {
+                                        NPC.Center = Vector2.Lerp(NPC.Center, NPC.Center + NPC.DirectionTo(Target.Center) * (NPC.Distance(Target.Center) - 300) * 0.2f, 0.6f);
+                                        NPC.velocity = NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero);
+                                    }
+                                    else if (Time % dashTime < 74)
+                                    {
+                                        for (int i = 0; i < 8; i++)
+                                        {
+                                            Vector2 position = Vector2.Lerp(NPC.position, NPC.oldPos[0], i / 24f) + NPC.Size * 0.5f;
 
-                                SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.DrillDash);
+                                            Particle hueTop = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity, -NPC.velocity.RotatedBy((float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f), Color.White, 2f);
+                                            hueTop.data = NPC.localAI[0];
+
+                                            Particle hueBot = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity, -NPC.velocity.RotatedBy(-(float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f), Color.White, 2f);
+                                            hueBot.data = NPC.localAI[0];
+                                        }
+
+                                        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (4f - Time % dashTime * 0.07f);
+                                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedBy(0.05f) * 50f, 0.01f);
+                                    }
+                                    else
+                                        NPC.velocity *= 0.6f;
+
+                                    SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.DrillDash);
+                                }
                             }
+                            else
+                                Fly();
 
                             if (Time > dashTime * dashCount + 20)
                             {
@@ -743,6 +756,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.dontTakeDamage = true;
                     NPC.life = 1;
 
+                    if (Time % 3 == 0)
+                    {
+                        foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is IDieWithGoozmaProjectile))
+                            projectile.Kill();
+                    }
+
                     if (Time == 2)
                     {
                         Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GoozmaDeathGodrays>(), 0, 0, ai1: NPC.whoAmI);
@@ -766,6 +785,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         deathGoo.data = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f);
                     }
 
+                    if (Time > 250)
+                        MoonlordDeathDrama.RequestLight(Utils.GetLerpValue(250, 290, Time, true), NPC.Center);
+
                     if (Time > 290)
                         headScale += 0.15f;
 
@@ -776,6 +798,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Main.musicFade[Main.curMusic] = 0f;
                         Main.curMusic = -1;
 
+                        SlimeMonsoonBackground.forceStrength = 0f;
                         NPC.justHit = true;
                         NPC.life = 0;
                         NPC.checkDead();

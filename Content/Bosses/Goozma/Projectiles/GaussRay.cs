@@ -15,7 +15,6 @@ using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static tModPorter.ProgressUpdate;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -41,6 +40,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         }
 
         public ref float Time => ref Projectile.ai[0];
+        public ref float TargetRotation => ref Projectile.ai[1];
         public ref float Owner => ref Projectile.ai[2];
 
         private static readonly int ChargeTime = 300;
@@ -48,12 +48,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (this.Owner < 0)
+            if (Owner < 0)
             {
                 Projectile.active = false;
                 return;
             }
-            else if (!Main.npc[(int)this.Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<Goozma>())
+            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<Goozma>())
             {
                 Projectile.active = false;
                 return;
@@ -71,13 +71,23 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Main.npc[(int)Owner].ai[2] >= 3 && Time < ChargeTime + LaserDuration - 2)
                 Time = ChargeTime + LaserDuration - 2;
 
-            if (Time < ChargeTime)
-                Projectile.direction = Main.rand.NextBool().ToDirectionInt();
+            float firstWave = MathHelper.SmoothStep(-1.5f, 0.6f, Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration * 0.3f, Time, true));
+            float secondWave = MathHelper.SmoothStep(0f, -0.7f, Utils.GetLerpValue(ChargeTime + LaserDuration * 0.3f, ChargeTime + LaserDuration * 0.8f, Time, true)) - MathHelper.SmoothStep(0, MathHelper.TwoPi, Utils.GetLerpValue(ChargeTime + LaserDuration * 0.3f, ChargeTime + LaserDuration * 0.8f, Time, true));
+            float thirdWave = MathHelper.SmoothStep(1f, 0f, Utils.GetLerpValue(ChargeTime + LaserDuration * 0.66f, ChargeTime + LaserDuration, Time, true));
+            float totalOffRot = (firstWave + secondWave) * thirdWave * Projectile.direction + (float)Math.Sin(Time * 0.1f) * 0.03f * Utils.GetLerpValue(ChargeTime - 10, ChargeTime + 10, Time, true);
 
-            float totalOffRot = (float)Math.Sin(Time * 0.03f) * 0.07f * Utils.GetLerpValue(ChargeTime - 10, ChargeTime + 10, Time, true);
+            if (Time < 12)
+            {
+                Projectile.direction = Main.rand.NextBool() ? -1 : 1;
+                TargetRotation = Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center);
+            }
+            else
+                TargetRotation = TargetRotation.AngleLerp(Main.npc[(int)Owner].AngleTo(Main.npc[(int)Owner].GetTargetData().Center), 0.033f);
 
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center).SafeNormalize(Vector2.Zero), 0.028f);
-            Projectile.rotation = Projectile.velocity.ToRotation() + totalOffRot;
+            Main.npc[(int)Owner].direction = -Math.Sign(Projectile.rotation.ToRotationVector2().X);
+
+            Projectile.rotation = TargetRotation + totalOffRot * Utils.GetLerpValue(ChargeTime * 0.8f, ChargeTime, Time, true);
+            Projectile.velocity = Projectile.rotation.ToRotationVector2();
             Projectile.localAI[0] = Main.npc[(int)Owner].localAI[0];
             
             float smokePower = Utils.GetLerpValue(0, ChargeTime * 0.9f, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 70, ChargeTime + LaserDuration + 40, Time, true);
@@ -140,7 +150,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             SoundStyle raySound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaGaussRayLoop");
             raySound.IsLooped = true;
 
-            pitch = MathHelper.SmoothStep(0f, 0.9f, Utils.GetLerpValue(ChargeTime - 25, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.166f;
+            pitch = MathHelper.SmoothStep(0f, 1f, Utils.GetLerpValue(ChargeTime - 25, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.133f;
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
             bool active = SoundEngine.TryGetActiveSound(laserSound, out ActiveSound sound);
             if ((!active || !laserSound.IsValid) && Time > ChargeTime - 35)

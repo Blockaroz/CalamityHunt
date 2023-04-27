@@ -126,28 +126,40 @@ Items: {
 	}
 
 	ShogunChestplate: {
-		DisplayName: Shogun Chestplate
+		DisplayName: Slippery Shogun Chestplate
 		Tooltip: ""
 	}
 
 	ShogunHelm: {
-		DisplayName: Shogun Helm
+		DisplayName: Slippery Shogun Helm
 		Tooltip: ""
 	}
 
 	ShogunPants: {
-		DisplayName: Shogun Pants
+		DisplayName: Slippery Shogun Pants
 		Tooltip: ""
 	}
 
 	AuricSole: {
 		DisplayName: Auric Sole
-		Tooltip: ""
+		Tooltip:
+			'''
+			Power on to enable
+			Allows you to slide on every surface
+			Warning: May result in exceedingly high speeds
+			'Yharim would hate you for this'
+			'''
 	}
 
 	DischargedAuricSole: {
 		DisplayName: Discharged Auric Sole
-		Tooltip: ""
+		Tooltip:
+			'''
+			Power on to enable
+			Allows you to slide on every surface
+			Warning: May result in exceedingly high speeds
+			'Yharim would hate you for this'
+			'''
 	}
 }
 
@@ -193,6 +205,7 @@ Projectiles: {
 	BlackHoleBlender.DisplayName: Black Hole Blender
 	CosmicDust.DisplayName: Cosmic Dust
 	InterstellarFlame.DisplayName: Interstellar Flame
+	ThrowableChunk.DisplayName: Throwable Chunk
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

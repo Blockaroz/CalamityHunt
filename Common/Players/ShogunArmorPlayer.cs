@@ -28,10 +28,10 @@ namespace CalamityHunt.Common.Players
             bool inAir = !WorldGen.SolidOrSlopedTile(Main.tile[(Player.Bottom / 16f).ToPoint()]) && !Collision.SolidCollision(Player.position, Player.width, Player.height);
             if (active)
             {
-                if (Player.controlDown)
-                    Player.gravity *= 1.1f;
+                if (Player.controlDown && !Player.mount.Active)
+                    Player.gravity *= 1.1111f;
 
-                if (Player.controlDown && Player.velocity.Y > 1f)
+                if (Player.controlDown && Player.velocity.Y > 1f && !Player.mount.Active)
                     slamPower++;
                 else
                     slamPower = 0;
@@ -50,11 +50,9 @@ namespace CalamityHunt.Common.Players
                 {
                     inertiaTimer = 1;
 
-                    Main.SetCameraLerp(0.2f, 20);
-                    Player.gravity *= 0.9f;
+                    Main.SetCameraLerp(0.2f, 25);
                     Player.fullRotation += (float)Math.Cbrt(Player.velocity.X) * 0.2f;
                     Player.fullRotationOrigin = Player.Size * 0.5f;
-                    Player.velocity *= 1.01f;
                     if (Player.controlJump && Player.releaseJump)
                     {
                         Player.dashDelay = 0;

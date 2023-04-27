@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class RainbowBall : ModProjectile
+    public class RainbowBall : ModProjectile, IDieWithGoozmaProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -59,8 +59,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * 0.03f;
                // Projectile.velocity *= Utils.GetLerpValue(-500, 100, Projectile.Distance(Main.player[target].MountedCenter), true);
 
-                if (Math.Abs(Projectile.velocity.ToRotation() - Projectile.AngleTo(Main.player[target].MountedCenter)) < 0.5f)
-                    Projectile.velocity *= 1.05f;
+                if (Math.Abs(Projectile.velocity.ToRotation() - Projectile.AngleTo(Main.player[target].MountedCenter)) < 0.5f && Time > 40)
+                    Projectile.velocity *= 1.03f;
             }
 
             Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity, -Projectile.velocity * 0.5f, Color.White, 2f * Projectile.scale);

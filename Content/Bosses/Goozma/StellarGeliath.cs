@@ -282,12 +282,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time > 58 && Time < 70)
             {
                 NPC.scale = MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(70, 62, Time, true));
-                int debrisCount = Main.rand.Next(1, 2);
+                int debrisCount = Main.rand.Next(1, 3);
                 if (Main.expertMode)
                     debrisCount++;
                 for (int i = 0; i < debrisCount; i++)
                 {
-                    Projectile debris = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(70, 60), Main.rand.NextVector2Circular(9, 9), ModContent.ProjectileType<StellarDebris>(), GetDamage(3), 0);
+                    Projectile debris = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(70, 60), NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) + Main.rand.NextVector2Circular(30, 30), ModContent.ProjectileType<StellarDebris>(), GetDamage(3), 0);
                     debris.ai[2] = NPC.whoAmI;
                 }
             }
@@ -575,13 +575,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 if (Time % 14 == 5 && Time < 410)
                 {
-                    WeightedRandom<float> size = new WeightedRandom<float>();
-                    size.Add(1f, 0.8f);
-                    size.Add(2f, 0.3f);
-                    size.Add(3f, 0.1f);
-                    float chosenSize = size.Get();
-                    Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Target.Center + NPC.DirectionTo(Target.Center + Target.Velocity * 30).SafeNormalize(Vector2.Zero).RotatedByRandom(1.6f) * Main.rand.Next(1000, 1500), Vector2.Zero, ModContent.ProjectileType<SpaceRock>(), GetDamage(6 + (int)chosenSize), 0);
-                    rock.ai[1] = chosenSize + 1 + Main.rand.NextFloat(-0.1f, 0.1f);
+                    WeightedRandom<int> size = new WeightedRandom<int>();
+                    size.Add(0, 0.8f);
+                    size.Add(1, 0.3f);
+                    size.Add(2, 0.1f);
+                    int chosenSize = size.Get();
+                    Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Target.Center + NPC.DirectionTo(Target.Center + Target.Velocity * 30).SafeNormalize(Vector2.Zero).RotatedByRandom(1.6f) * Main.rand.Next(1000, 1500), Vector2.Zero, ModContent.ProjectileType<ThrowableChunk>(), GetDamage(6 + chosenSize), 0);
+                    rock.ai[1] = chosenSize;
                 }
 
                 if (Time % 2 == 0)
@@ -590,13 +590,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), strength, 4, 30, 20000));
                 }
             }
-            if (Time > 600)
+            if (Time > 570)
             {
                 NPC.velocity *= 0.92f;
-                NPC.scale = 1f + (float)Math.Sqrt(Utils.GetLerpValue(630, 600, Time, true));
+                NPC.scale = 1f + (float)Math.Sqrt(Utils.GetLerpValue(610, 572, Time, true));
             }
 
-            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<SpaceRock>()))
+            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ThrowableChunk>()))
             {
                 projectile.velocity = Vector2.Lerp(projectile.velocity, projectile.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (projectile.Distance(NPC.Center) + 500) * 0.0013f * (4f - projectile.ai[1] * 0.66f) * 4.5f, 0.3f);
                 projectile.velocity += NPC.velocity * 0.1f;
@@ -820,43 +820,88 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     break;
             }
 
+            Color ColorFunction(float progress) => Color.White * NPC.scale;
+            float BotWidthFunction(float progress) => (50 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + (progress * 2.5f + 0.5f) * MathHelper.TwoPi) * starnessThick) * NPC.scale;//(35f + (float)Math.Sin(progress * MathHelper.TwoPi - NPC.localAI[0] * 0.5f) * 7f) * NPC.scale;
+            float TopWidthFunction(float progress) => (50 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + progress * 2.5f * MathHelper.TwoPi) * starnessThick) * NPC.scale;//(35f + (float)Math.Sin(progress * MathHelper.TwoPi - NPC.localAI[0] * 0.5f) * 7f) * NPC.scale;
+
+            discPos = NPC.Center - NPC.velocity * 1.5f + new Vector2((float)Math.Sin(NPC.localAI[0] * 0.03f % MathHelper.TwoPi) * 12, 22 + (float)Math.Cos(NPC.localAI[0] * 0.02f % MathHelper.TwoPi) * 16f) * squishFactor;
+            discRot = (float)Math.Sin(NPC.localAI[0] * 0.013f % MathHelper.TwoPi) * 0.15f;
+
+            Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/StellarRing", AssetRequestMode.ImmediateLoad).Value;
+            lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+            lightningEffect.Parameters["uTexture0"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpaceTrail").Value);
+            lightningEffect.Parameters["uTexture1"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Stars").Value);
+            lightningEffect.Parameters["uColorLight"].SetValue(new Color(255, 225, 150).ToVector3());
+            lightningEffect.Parameters["uColorAura"].SetValue(new Color(150, 30, 30).ToVector3());
+            lightningEffect.Parameters["uColorDark"].SetValue(new Color(50, 70, 200).ToVector3());//new Color(80, 50, 35)
+            lightningEffect.Parameters["uDarkSpecial"].SetValue(new Vector2(0.1f, 0.8f));
+            lightningEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.015f % 1f);
+
             if (NPC.IsABestiaryIconDummy)
             {
-                //RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
-                //Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
-                //spriteBatch.End();
-                //spriteBatch.GraphicsDevice.RasterizerState = priorRrasterizerState;
-                //spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
-                //effect.Parameters["uPosition"].SetValue(Vector2.Zero);
+                NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 25f;
+                discScale = oldDiscScale * 0.8f;
 
-                //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.UIScaleMatrix);
-
-                spriteBatch.Draw(texture.Value, NPC.Center - screenPos, frame, color, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
-
-                //spriteBatch.End();
-                //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
-            }
-            else
-            {
-                discPos = NPC.Center - NPC.velocity * 1.5f + new Vector2((float)Math.Sin(NPC.localAI[0] * 0.03f % MathHelper.TwoPi) * 12, 22 + (float)Math.Cos(NPC.localAI[0] * 0.02f % MathHelper.TwoPi) * 16f) * squishFactor;
-                discRot = (float)Math.Sin(NPC.localAI[0] * 0.013f % MathHelper.TwoPi) * 0.15f;
-
-                Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/StellarRing", AssetRequestMode.ImmediateLoad).Value;
-                lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-                lightningEffect.Parameters["uTexture0"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpaceTrail").Value);
-                lightningEffect.Parameters["uTexture1"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Stars").Value);
-                lightningEffect.Parameters["uColorLight"].SetValue(new Color(255, 225, 150).ToVector3());
-                lightningEffect.Parameters["uColorAura"].SetValue(new Color(140, 40, 25).ToVector3());
-                lightningEffect.Parameters["uColorDark"].SetValue(new Color(80, 20, 200).ToVector3());//new Color(80, 50, 35)
-                lightningEffect.Parameters["uDarkSpecial"].SetValue(new Vector2(0.1f, 0.8f));
-                lightningEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.015f % 1f);
+                RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
+                Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
+                spriteBatch.End();
+                spriteBatch.GraphicsDevice.RasterizerState = priorRrasterizerState;
+                spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
 
                 VertexStrip bottomStrip = new VertexStrip();
                 VertexStrip topStrip = new VertexStrip();
 
-                Color ColorFunction(float progress) => Color.White * NPC.scale;
-                float BotWidthFunction(float progress) => (50 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + (progress * 2.5f + 0.5f) * MathHelper.TwoPi) * starnessThick) * NPC.scale;//(35f + (float)Math.Sin(progress * MathHelper.TwoPi - NPC.localAI[0] * 0.5f) * 7f) * NPC.scale;
-                float TopWidthFunction(float progress) => (50 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + progress * 2.5f * MathHelper.TwoPi) * starnessThick) * NPC.scale;//(35f + (float)Math.Sin(progress * MathHelper.TwoPi - NPC.localAI[0] * 0.5f) * 7f) * NPC.scale;
+                List<Vector2> bottomDiscPos = new List<Vector2>();
+                List<float> bottomDiscRot = new List<float>();
+                for (int i = 100; i <= 200; i++)
+                {
+                    Vector2 rotatedRing = new Vector2((150 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + (i - 200) / 40f * MathHelper.TwoPi) * starnessSize) * discScale.X, 0).RotatedBy(MathHelper.TwoPi / 200f * i) * (0.7f + NPC.scale * 0.3f);
+                    rotatedRing.Y *= 0.1f * discScale.Y;
+                    bottomDiscPos.Add(rotatedRing.RotatedBy(discRot));
+                    bottomDiscRot.Add(MathHelper.TwoPi / 200f * i + MathHelper.PiOver2 + discRot);
+                }
+                bottomStrip.PrepareStrip(bottomDiscPos.ToArray(), bottomDiscRot.ToArray(), ColorFunction, BotWidthFunction, discPos - screenPos, bottomDiscRot.Count, true);
+
+                List<Vector2> topDiscPos = new List<Vector2>();
+                List<float> topDiscRot = new List<float>();
+                for (int i = 0; i <= 100; i++)
+                {
+                    Vector2 rotatedRing = new Vector2((150 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + i / 40f * MathHelper.TwoPi) * starnessSize) * discScale.X, 0).RotatedBy(MathHelper.TwoPi / 200f * i) * (0.7f + NPC.scale * 0.3f);
+                    rotatedRing.Y *= 0.12f * discScale.Y;
+                    topDiscPos.Add(rotatedRing.RotatedBy(discRot));
+                    topDiscRot.Add(MathHelper.TwoPi / 200f * i + MathHelper.PiOver2 + discRot);
+                }
+                topStrip.PrepareStrip(topDiscPos.ToArray(), topDiscRot.ToArray(), ColorFunction, TopWidthFunction, discPos - screenPos, topDiscPos.Count, true);
+
+                lightningEffect.CurrentTechnique.Passes[0].Apply();
+                bottomStrip.DrawTrail();
+                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
+
+                spriteBatch.Draw(bloom.Value, NPC.Center - screenPos, bloom.Frame(), new Color(20, 20, 80, 0) * NPC.scale, NPC.rotation, bloom.Size() * 0.5f, NPC.scale * squishFactor * new Vector2(1.1f, 0.8f), 0, 0);
+                spriteBatch.Draw(texture.Value, NPC.Center - screenPos, frame, color, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector2 off = new Vector2(15 + (float)Math.Sin(NPC.localAI[0] * 0.1f + i / 5f * 3f) * 8).RotatedBy(MathHelper.TwoPi / 5f * i + NPC.rotation * 0.5f - NPC.localAI[0] * 0.02f);
+                    spriteBatch.Draw(texture.Value, NPC.Center + off - screenPos, frame, new Color(80, 40, 35, 0).MultiplyRGBA(color) * 0.4f, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                }
+
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
+
+                lightningEffect.CurrentTechnique.Passes[0].Apply();
+                topStrip.DrawTrail();
+                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
+            }
+            else
+            {
+                VertexStrip bottomStrip = new VertexStrip();
+                VertexStrip topStrip = new VertexStrip();
 
                 List<Vector2> bottomDiscPos = new List<Vector2>();
                 List<float> bottomDiscRot = new List<float>();
@@ -887,8 +932,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-                spriteBatch.Draw(bloom.Value, NPC.Center - screenPos, bloom.Frame(), new Color(20, 0, 50, 0) * NPC.scale, NPC.rotation, bloom.Size() * 0.5f, NPC.scale * squishFactor * new Vector2(1.1f, 0.8f), 0, 0);
-                spriteBatch.Draw(bloom.Value, NPC.Center - screenPos, bloom.Frame(), new Color(30, 0, 70, 0) * NPC.scale, NPC.rotation, bloom.Size() * 0.5f, NPC.scale * squishFactor * new Vector2(1.1f, 0.8f), 0, 0);
+                spriteBatch.Draw(bloom.Value, NPC.Center - screenPos, bloom.Frame(), new Color(20, 20, 80, 0) * NPC.scale, NPC.rotation, bloom.Size() * 0.5f, NPC.scale * squishFactor * new Vector2(1.1f, 0.8f), 0, 0);
                 spriteBatch.Draw(texture.Value, NPC.Center - screenPos, frame, color, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
                 for (int i = 0; i < 5; i++)

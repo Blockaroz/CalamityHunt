@@ -66,6 +66,8 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
         private static Asset<Texture2D>[] lightningTexture;
         private static Asset<Texture2D>[] skyTexture;
 
+        public static float? forceStrength;
+
         public override Color OnTileColor(Color inColor)
         {
             if (inColor.R + inColor.G + inColor.B > 20)
@@ -93,6 +95,12 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                     _strength = Math.Min(strengthTarget * _distanceMod, _strength + 0.005f);
                 else
                     _strength = Math.Max(0, _strength - 0.005f);
+
+                if (forceStrength.HasValue)
+                {
+                    _strength = forceStrength.Value;
+                    forceStrength = null;
+                }
             }
             if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>()))
                 radialDistortPos = Vector2.Lerp(radialDistortPos, Vector2.Lerp(Main.LocalPlayer.Center, Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>()).Center, 0.5f), 0.1f);

@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class BloatedBlast : ModProjectile
+    public class BloatedBlast : ModProjectile, IDieWithGoozmaProjectile
     {
         public override void SetDefaults()
         {

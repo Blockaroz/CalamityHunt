@@ -42,10 +42,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
-            //Projectile.frame = Main.rand.Next(3);
+            Projectile.frame = Main.rand.Next(3);
             Projectile.scale *= Main.rand.NextFloat(0.7f, 1.2f);
-            Projectile.direction = Main.rand.NextBool().ToDirectionInt();
+            Projectile.rotation = Main.rand.NextFloat(-0.3f, 0.3f);
+            Projectile.direction = Main.rand.NextBool() ? -1 : 1;
             TopTime = 5;
+
             Owner = -1;
         }
 
@@ -67,10 +69,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 15, 0.0001f);
 
-            foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 300))
+            foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 200))
             {
-                otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.3f;
-                Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.3f;
+                otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.1f;
+                Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.1f;
             }
 
             if (Time % TopTime == 1)
@@ -79,8 +81,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 TopTime = Main.rand.Next(80, 140);
             }
 
-            if (Time % TopTime > TopTime * 0.8f)
-                Projectile.velocity = Projectile.velocity.RotatedBy(0.1f * Projectile.direction);
+            if (Time % TopTime > TopTime * 0.7f)
+                Projectile.velocity = Projectile.velocity.RotatedBy(0.05f * Projectile.direction);
+            else
+                Projectile.velocity = Projectile.velocity.RotatedBy((Projectile.velocity.ToRotation() - Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center)) * 0.01f * Projectile.direction);
+            
+            Projectile.velocity *= 0.99f;
 
             if (Time > 500)
             {
@@ -98,7 +104,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Main.rand.NextBool(50))
                 Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(24, 24) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()) * Projectile.scale);
 
-            Projectile.rotation += Projectile.velocity.Length() * Projectile.direction * 0.02f;
+            Projectile.rotation += Projectile.velocity.Length() * Projectile.direction * 0.0015f;
+
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter > 15)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame = (Projectile.frame + 1) % 3;
+            }
 
             Time++;
             Projectile.localAI[0]++;
@@ -109,16 +122,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> aura = ModContent.Request<Texture2D>(Texture + "Aura");
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Rectangle frame = texture.Frame(3, 1, Projectile.frame, 0);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 float wobble = (float)Math.Sin(Projectile.localAI[0] * 0.15f + i * 1.3f) * 0.05f;
                 float rotation = Projectile.rotation * (0.5f + i * 0.1f);
-                Main.EntitySpriteDraw(aura.Value, Projectile.Center - Main.screenPosition, aura.Frame(), new Color(30, 15, 10, 0) * 0.5f, rotation, aura.Size() * 0.5f, Projectile.scale * (0.8f + wobble + i * 0.3f), 0, 0);
+                Main.EntitySpriteDraw(aura.Value, Projectile.Center - Main.screenPosition, aura.Frame(), new Color(20, 100, 150, 0) * 0.5f * (i > 0 ? 0.1f / i : 1f), rotation, aura.Size() * 0.5f, Projectile.scale * (0.8f + wobble + i * 0.3f), 0, 0);
             }
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(30, 15, 10, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
+            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(10, 30, 110, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), Color.White, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, 0, 0);
 
             return false;
         }
