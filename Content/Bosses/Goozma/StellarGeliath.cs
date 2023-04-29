@@ -496,6 +496,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.scale = Utils.GetLerpValue(40 + waitTime + 14, 40 + waitTime + 6, Time, true);
                 if (Time > 40 + waitTime + 2)
                 {
+                    for (int i = 0; i < Main.rand.Next(2, 5); i++)
+                    {
+                        Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(10f, 20f);
+                        Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 12f, 32f);
+                        Particle.NewParticle(Particle.ParticleType<StarBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                    }
+
                     NPC.localAI[0] = 0;
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(3, 3), 8f, 10, 12));
 

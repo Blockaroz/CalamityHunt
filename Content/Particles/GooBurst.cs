@@ -34,6 +34,8 @@ namespace CalamityHunt.Content.Particles
         public override void Update()
         {
             frameCounter++;
+            if (frame < 3)
+                frameCounter++;
             if (frameCounter % 4 == 0)
                 frame++;
             if (frame > 7)

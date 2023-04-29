@@ -103,7 +103,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (oldVel == null)
                 oldVel = new Vector2[NPCID.Sets.TrailCacheLength[Type]];
 
-            float trailStrength = (Phase > 1 || Phase == -22) ? 1.3f : 0.5f;
+            float trailStrength = Phase > 1 ? 1.3f : 0.5f;
 
             if (!(Phase == 2 && Attack == (int)AttackList.GaussRay && Time > 520))
                 drawVelocity = NPC.velocity;
@@ -235,37 +235,42 @@ namespace CalamityHunt.Content.Bosses.Goozma
             Vector2 basePos = position + new Vector2(0, 10).RotatedBy(-extraTilt * 0.4f + rotation) * NPC.scale;
 
             float tentaCount = 5;
-            for (int j = 0; j < tentaCount; j++)
+            int segmentCount = 11;
+            if (tentacle != null)
             {
-                SpriteEffects spriteEffects = NPC.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                float rot = rotation + (0.4f - j * 0.15f) * NPC.direction + MathHelper.PiOver2;
-                Vector2 pos = basePos + new Vector2(0, 20).RotatedBy(MathHelper.Lerp(0.5f, -1.3f, j / tentaCount) * NPC.direction + rotation + extraTilt) * NPC.scale;
-                Vector2 stick = (rot.ToRotationVector2() * 12 - tentacleVelocity * 0.01f) * (0.5f + headScale * 0.5f) * NPC.scale;
-                int segments = 11 - Math.Clamp(Math.Abs(j - (int)(tentaCount / 2f)), 1, 2);
-                Vector2 lastPos = pos;
-                float freq = 1.5f;
-                for (int i = 0; i < segments; i++)
+                for (int j = 0; j < tentaCount; j++)
                 {
-                    float prog = i / (float)segments;
-                    Rectangle frame = tentacle.Frame(1, 10, 0, Math.Clamp((int)(prog * 8f) + 1, 2, 9));
-                    if (i == 0)
-                        frame = tentacle.Frame(1, 5, 0, 0);
-                    if (i >= segments - 1)
-                        frame = tentacle.Frame(1, 5, 0, 4);
+                    SpriteEffects spriteEffects = NPC.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    float rot = rotation + (0.4f - (j / tentaCount) * 0.6f) * NPC.direction + MathHelper.PiOver2;
+                    Vector2 pos = basePos + new Vector2(0, 20).RotatedBy(MathHelper.Lerp(0.5f, -1.3f, j / tentaCount) * NPC.direction + rotation + extraTilt) * NPC.scale;
+                    Vector2 stick = (rot.ToRotationVector2() * 12 - tentacleVelocity * 0.01f) * (0.5f + headScale * 0.5f) * NPC.scale;
+                    int segments = segmentCount - Math.Clamp(Math.Abs(j - (int)(tentaCount / 2f)), 1, 2);
+                    Vector2 lastPos = pos;
+                    float freq = 6f;
+                    for (int i = 0; i < segments; i++)
+                    {
+                        float prog = i / (float)segments;
+                        Rectangle frame = tentacle.Frame(1, 10, 0, Math.Clamp((int)(prog * 8f) + 1, 2, 9));
+                        if (i == 0)
+                            frame = tentacle.Frame(1, 5, 0, 0);
+                        if (i >= segments - 1)
+                            frame = tentacle.Frame(1, 5, 0, 4);
 
-                    float tentacleLerp = Utils.GetLerpValue(tentaCount * 0.5f, tentaCount, j - Math.Abs(tentacleVelocity.X) * 0.001f * (1f - prog)) * (i / (float)segments);
-                    float newRot = Math.Clamp(tentacleVelocity.X * 0.01f, -1, 1) * prog - Math.Clamp(tentacleVelocity.Y * 0.015f, -0.6f, 1f) * tentacleLerp * NPC.direction;
-                    float tentacleWobble = (float)Math.Sin((NPC.localAI[0] * 0.06f - i / freq - j * 0.15f) % MathHelper.TwoPi) * (1f - tentacleVelocity.Length() * 0.01f);
-                    Vector2 nextStick = stick.RotatedBy(newRot + tentacleWobble * tentacleLerp);
-                    Vector2 stretch = new Vector2(1f * NPC.scale * (0.5f + prog * 0.8f), lastPos.Distance(lastPos + nextStick) / (frame.Height - 4)) * MathHelper.Lerp(headScale, 1f, i / (float)segments);
-                    if (i == 0 || i >= segments - 1)
-                        stretch = new Vector2(NPC.scale);
+                        float tentacleLerp = Utils.GetLerpValue(tentaCount * 0.5f, tentaCount, j - Math.Abs(tentacleVelocity.X) * 0.001f * (1f - prog)) * (i / (float)segments);
+                        float newRot = Math.Clamp(tentacleVelocity.X * 0.01f, -1, 1) * prog - Math.Clamp(tentacleVelocity.Y * 0.015f, -0.6f, 1f) * tentacleLerp * NPC.direction;
+                        float tentacleWobble = (float)Math.Sin((NPC.localAI[0] * 0.06f - prog * freq - (j / tentaCount) * 0.5f) % MathHelper.TwoPi) * (1f - tentacleVelocity.Length() * 0.01f);
+                        Vector2 nextStick = stick.RotatedBy(newRot + tentacleWobble * tentacleLerp);
+                        Vector2 stretch = new Vector2(1f * NPC.scale * (0.6f + prog * 0.7f), lastPos.Distance(lastPos + nextStick) / (frame.Height - 4)) * MathHelper.Lerp(headScale, 1f, i / (float)segments);
+                        if (i == 0 || i >= segments - 1)
+                            stretch = new Vector2(NPC.scale);
 
-                    float stickRot = (lastPos + nextStick).AngleTo(lastPos) + MathHelper.Pi;
-                    lastPos += nextStick;
-                    Color tentaColor = Color.Lerp(Color.Black * (color.A / 255), color, (float)Math.Sqrt(prog));
-                    spriteBatch.Draw(tentacle.Value, lastPos + drawOffset - screenPos, frame, tentaColor, stickRot - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, spriteEffects, 0);
+                        float stickRot = lastPos.AngleTo(lastPos + nextStick);
+                        lastPos += nextStick;
+                        Color tentaColor = Color.Lerp(Color.Black * (color.A / 255), color, (float)Math.Sqrt(prog));
+                        spriteBatch.Draw(tentacle.Value, lastPos + drawOffset - screenPos, frame, tentaColor, stickRot - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, spriteEffects, 0);
+                    }
                 }
+
             }
 
             spriteBatch.Draw(dress.Value, dressPos - screenPos, null, color, extraTilt * 0.2f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dress.Size() * new Vector2(0.5f, 0f), headScale * NPC.scale, direction, 0);

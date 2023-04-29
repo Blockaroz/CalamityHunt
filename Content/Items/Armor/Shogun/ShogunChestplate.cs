@@ -16,7 +16,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
         public override void Load()
         {
             if (Main.netMode != NetmodeID.Server)
-                EquipLoader.AddEquipTexture(Mod, $"{nameof(CalamityHunt)}/Content/Items/Armor/Shogun/ShogunChestplate_Waist", EquipType.Waist, this);
+                EquipLoader.AddEquipTexture(Mod, Texture + "_Waist", EquipType.Waist, this);
         }
 
         public override void SetDefaults()
@@ -34,6 +34,11 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             player.GetDamage(DamageClass.Generic) += 0.15f;
             player.statLifeMax2 += 150;
             player.statManaMax2 += 150;
+        }
+
+        public override void EquipFrameEffects(Player player, EquipType type)
+        {
+            player.waist = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Waist);
         }
     }
 }
