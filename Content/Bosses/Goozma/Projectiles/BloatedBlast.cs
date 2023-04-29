@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class BloatedBlast : ModProjectile, IDieWithGoozmaProjectile
+    public class BloatedBlast : ModProjectile, IDieWithGoozma
     {
         public override void SetDefaults()
         {
@@ -44,7 +44,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Speed = Projectile.velocity.Length();
 
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(-4, 8, Time, true) * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true));
+            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(-1, 8, Projectile.localAI[0], true));
 
             Time++;
 
@@ -54,16 +54,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 if (Main.player.Any(n => n.active && !n.dead))
                     target = Main.player.First(n => n.active && !n.dead).whoAmI;
 
-                if (target > -1 && Time < 59)
+                if (target > -1 && Time < 55)
                 {
                     Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * (0.13f + Time * 0.015f);
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * 20f, 0.03f);
                     Projectile.Center += Main.player[target].velocity * 0.15f * Utils.GetLerpValue(100, 0, Time, true);
                 }
                 else
-                    Projectile.velocity *= 0.85f;
+                    Projectile.velocity *= 0.866f;
 
-                if (Time > 65)
+                if (Time > 75)
                     Projectile.Kill();
             }
             else
@@ -165,12 +165,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Projectile.ai[1] == 0)
             {
-                Color growColor = Color.Lerp(Color.Transparent, bloomColor, Utils.GetLerpValue(3, 40, Time, true));
+                Color growColor = Color.Lerp(Color.Transparent, bloomColor, Utils.GetLerpValue(3, 40, Projectile.localAI[0], true));
                 Rectangle baseFrame = texture.Frame(3, 1, 0, 0);
                 Rectangle glowFrame = texture.Frame(3, 1, 1, 0);
                 Rectangle outlineFrame = texture.Frame(3, 1, 2, 0);
 
-                float aboutToExplode = 0.4f + (float)Math.Cbrt(Utils.GetLerpValue(30, 65, Time, true)) * 0.7f;
+                float aboutToExplode = 0.4f + (float)Math.Cbrt(Utils.GetLerpValue(50, 65, Time, true)) * 0.7f;
                 Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.3f * aboutToExplode, 0, glow.Size() * 0.5f, Projectile.scale * 5f * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(ring.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.1f * aboutToExplode, 0, ring.Size() * 0.5f, Projectile.scale * 2.5f * aboutToExplode, 0, 0);
 

@@ -27,7 +27,7 @@ namespace CalamityHunt.Content.Particles
         {
             scale *= Main.rand.NextFloat(0.9f, 1.1f);
             variant = Main.rand.Next(0, 2);
-            rotation = velocity.ToRotation();
+            rotation = velocity.ToRotation() + MathHelper.PiOver2;
             velocity = Vector2.Zero;
         }
 

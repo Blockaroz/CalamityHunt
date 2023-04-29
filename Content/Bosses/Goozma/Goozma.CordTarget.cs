@@ -77,8 +77,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 16 * (i / partitions)), 0).RotatedBy(Math.Clamp((float)Math.Cbrt(npc.scale), 0, 1) * MathHelper.SmoothStep(0.15f, -3.5f, i / partitions));
                         offset.X *= npc.direction;
-                        offset -= npc.velocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
-                        positions.Add((new Vector2(0, 20).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation)) * npc.scale);
+                        offset -= targetOwner.drawVelocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
+                        positions.Add((new Vector2(0, 25).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation)) * npc.scale);
                         rotations.Add(offset.RotatedBy(npc.rotation).ToRotation() - MathHelper.PiOver2 * (i / partitions) * npc.direction);
                     }
 

@@ -161,6 +161,26 @@ Items: {
 			'Yharim would hate you for this'
 			'''
 	}
+
+	EbonianBehemuckTrophyItem: {
+		DisplayName: Ebonian Behemuck Trophy Item
+		Tooltip: ""
+	}
+
+	DivineGargooptuarTrophyItem: {
+		DisplayName: Divine Gargooptuar Trophy Item
+		Tooltip: ""
+	}
+
+	CrimulanGlopstrosityTrophyItem: {
+		DisplayName: Crimulan Glopstrosity Trophy Item
+		Tooltip: ""
+	}
+
+	StellarGeliathTrophyItem: {
+		DisplayName: Stellar Geliath Trophy Item
+		Tooltip: ""
+	}
 }
 
 NPCs: {

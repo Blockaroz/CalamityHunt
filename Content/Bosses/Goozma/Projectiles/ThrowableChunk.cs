@@ -41,6 +41,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Meteor,
             Rock,
             DirtGrass,
+            Comet,
             Count
         }
 
@@ -52,9 +53,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.localAI[1] = Main.rand.Next(250);
             Projectile.rotation = Main.rand.NextFloat(-1f, 1f);
             WeightedRandom<ThrowableChunkStyle> styleRandom = new WeightedRandom<ThrowableChunkStyle>();
-            styleRandom.Add(ThrowableChunkStyle.DirtGrass, 0.6f);
+            styleRandom.Add(ThrowableChunkStyle.DirtGrass, 0.7f);
             styleRandom.Add(ThrowableChunkStyle.Rock, 0.5f);
-            styleRandom.Add(ThrowableChunkStyle.Meteor, 0.3f);
+            styleRandom.Add(ThrowableChunkStyle.Meteor, 0.4f);
+            styleRandom.Add(ThrowableChunkStyle.Comet, 0.1f);
             chunkStyle = styleRandom.Get();
         }
 
@@ -64,10 +66,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Projectile.width != (int)sized.X || Projectile.height != (int)sized.Y)
                 Projectile.Resize((int)sized.X, (int)sized.Y);
 
-            if (Time < 50)
-                Projectile.velocity *= Utils.GetLerpValue(0, 50, Time, true) * 0.4f;
+            //if (Time < 50)
+            //    Projectile.velocity *= Utils.GetLerpValue(0, 50, Time, true) * 1.4f;
 
-            Projectile.rotation = Utils.AngleLerp(0, Projectile.velocity.ToRotation(), Projectile.velocity.X * 0.1f) + (float)Math.Sin(Projectile.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.3f;
+            Projectile.rotation = Utils.AngleLerp(Projectile.velocity.X * 0.01f, Projectile.velocity.ToRotation() + MathHelper.PiOver2, Projectile.velocity.X * 0.1f) + (float)Math.Sin(Projectile.localAI[0] * 0.08f % MathHelper.TwoPi) * 0.2f;
 
             if (Time > 2000)
                 Projectile.Kill();
@@ -84,23 +86,34 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 case ThrowableChunkStyle.Meteor:
 
                     if (Main.rand.NextBool(3))
-                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height) * 0.5f, DustID.InfernoFork, Main.rand.NextVector2Circular(3, 3) - Projectile.velocity * 0.5f, 0, Color.White, 1f + Main.rand.NextFloat((Size + 1) * 0.5f)).noGravity = true;
+                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), DustID.InfernoFork, Main.rand.NextVector2Circular(3, 3) - Projectile.velocity * 0.5f, 0, Color.White, 1f + Main.rand.NextFloat((Size + 1) * 0.5f)).noGravity = true;
 
-                    Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height) * 0.5f, DustID.Torch, Main.rand.NextVector2Circular(3, 3) - Projectile.velocity, 0, Color.White, 0.3f + Main.rand.NextFloat((Size + 1) * 0.5f)).noGravity = true;
+                    Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), DustID.Torch, Main.rand.NextVector2Circular(3, 3) - Projectile.velocity, 0, Color.White, 0.3f + Main.rand.NextFloat((Size + 1) * 0.5f)).noGravity = true;
 
                     break;
 
                 case ThrowableChunkStyle.DirtGrass:
 
-                    if (Main.rand.NextBool())
-                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height) * 0.5f, DustID.Grass, Main.rand.NextVector2Circular(5, 5) - Projectile.velocity, 0, Color.White, 1f + Main.rand.NextFloat()).noGravity = true;
+                    if (Main.rand.NextBool() && Size >= 2)
+                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), DustID.Grass, Main.rand.NextVector2Circular(5, 5) - Projectile.velocity, 0, Color.White, 1f + Main.rand.NextFloat()).noGravity = true;
                     
                     if (Main.rand.NextBool(3))
-                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height) * 0.5f, DustID.Dirt, Main.rand.NextVector2Circular(5, 5) - Projectile.velocity * 0.5f, 0, Color.White, 1f + Main.rand.NextFloat((Size + 1) * 0.5f)).noGravity = true;
+                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), DustID.Dirt, Main.rand.NextVector2Circular(5, 5) - Projectile.velocity * 0.5f, 0, Color.White, 1f + Main.rand.NextFloat((Size + 1) * 0.5f)).noGravity = true;
 
                     break;
 
                 case ThrowableChunkStyle.Rock:
+
+                    break;                
+                
+                case ThrowableChunkStyle.Comet:
+
+                    Size = 0;
+
+                    Projectile.velocity *= 1.005f;
+
+                    Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), DustID.Snow, Main.rand.NextVector2Circular(5, 5) - Projectile.velocity * 0.5f, 0, Color.White, 1f + Main.rand.NextFloat((Size + 1) * 0.5f)).noGravity = true;
+                    Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), DustID.IceTorch, Main.rand.NextVector2Circular(5, 5) - Projectile.velocity, 0, Color.White, 0.5f + Main.rand.NextFloat((Size + 1))).noGravity = true;
 
                     break;
 
@@ -110,7 +123,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             if (Time % 35 == 20)
-                Projectile.velocity += Main.rand.NextVector2Circular(5, 5);
+                Projectile.velocity += Main.rand.NextVector2Circular(2, 2);
 
             Projectile.localAI[0]++;
             Time++;
@@ -139,11 +152,30 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Rectangle frame = texture.Frame(1, 3, 0, (int)Size);
-            float power = Utils.GetLerpValue(0, 30, Projectile.localAI[0], true);
+            float power = (float)Math.Sqrt(Utils.GetLerpValue(0, 30, Projectile.localAI[0], true));
 
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(13, 13, 41, 0) * 0.7f * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 3f, 0, 0);
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(150, 50, 20, 0) * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power *  (Size + 1) * 1.66f, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.White, 0.2f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
+            if (chunkStyle != ThrowableChunkStyle.Comet)
+            {
+                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(13, 13, 41, 0) * 0.7f * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 3f, 0, 0);
+                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(150, 50, 20, 0) * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 1.66f, 0, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.White, 0.05f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
+            }
+            else
+            {
+                lightColor = Color.White;
+                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
+                {
+                    float prog = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
+                    Main.EntitySpriteDraw(bloom.Value, Projectile.oldPos[i] + Projectile.Size * 0.5f - Main.screenPosition, bloom.Frame(), Color.Lerp(new Color(53, 90, 200, 0), new Color(13, 13, 41, 0), prog) * 0.3f * (1f - prog), Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (1f - prog) * 2f, 0, 0);
+                    Main.EntitySpriteDraw(texture.Value, Projectile.oldPos[i] + Projectile.Size * 0.5f - Main.screenPosition, frame, Color.Lerp(new Color(53, 90, 200, 0), new Color(13, 13, 41, 0), prog) * 0.2f * (1f - prog), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power * (1f - prog) * 1.1f, 0, 0);
+                }
+
+                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(13, 90, 200, 0) * 0.8f * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 1.7f, 0, 0);
+
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.White, 0.05f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
+
+                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(13, 13, 41, 0) * 0.7f * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 3f, 0, 0);
+            }
 
             return false;
         }

@@ -138,7 +138,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     }
                 }
                 if (distance > 36)
-                    player.velocity.Y += distance * 0.09f;
+                {
+                    player.velocity.Y += distance * 0.3f;
+                    player.maxFallSpeed += distance;
+                    player.gravity *= 10;
+                }
                 //inflict debuff
             }
 

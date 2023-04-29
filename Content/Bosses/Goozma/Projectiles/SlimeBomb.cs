@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class SlimeBomb : ModProjectile, IDieWithGoozmaProjectile
+    public class SlimeBomb : ModProjectile, IDieWithGoozma
     {
         public override void SetDefaults()
         {
@@ -108,8 +108,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     for (int i = 0; i < 5; i++)
                     {
-                        Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.3f);
-                        Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity, gooVelocity, Color.White, 1f + Main.rand.NextFloat(2f));
+                        Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
+                        Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, (3f - Time) + Main.rand.NextFloat());
                         goo.data = Projectile.localAI[1];
                     }
                 }

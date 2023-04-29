@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public interface IDieWithGoozmaProjectile
+    public interface IDieWithGoozma
     {
     }
 }

@@ -576,9 +576,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (Time % 14 == 5 && Time < 410)
                 {
                     WeightedRandom<int> size = new WeightedRandom<int>();
-                    size.Add(0, 0.8f);
-                    size.Add(1, 0.3f);
-                    size.Add(2, 0.1f);
+                    size.Add(0, 0.7f);
+                    size.Add(1, 0.5f);
+                    size.Add(2, 0.4f);
                     int chosenSize = size.Get();
                     Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Target.Center + NPC.DirectionTo(Target.Center + Target.Velocity * 30).SafeNormalize(Vector2.Zero).RotatedByRandom(1.6f) * Main.rand.Next(1000, 1500), Vector2.Zero, ModContent.ProjectileType<ThrowableChunk>(), GetDamage(6 + chosenSize), 0);
                     rock.ai[1] = chosenSize;
@@ -773,8 +773,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     //spriteBatch.End();
                     //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
 
-                    spriteBatch.Draw(ring.Value, saveTarget - screenPos, ring.Frame(), new Color(15, 5, 35, 0) * 0.6f * scaleIn * scaleOut, Time * 0.002f, ring.Size() * 0.5f, ringScale, 0, 0);
-                    spriteBatch.Draw(ring.Value, saveTarget - screenPos, ring.Frame(), new Color(15, 5, 35, 0) * 0.6f * scaleIn * scaleOut, Time * 0.004f, ring.Size() * 0.5f, ringScale, 0, 0);
+                    spriteBatch.Draw(ring.Value, saveTarget - screenPos, ring.Frame(), new Color(40, 15, 55, 0) * 0.5f * scaleIn * scaleOut, Time * 0.002f, ring.Size() * 0.5f, ringScale, 0, 0);
+                    spriteBatch.Draw(ring.Value, saveTarget - screenPos, ring.Frame(), new Color(20, 15, 90, 0) * 0.8f * scaleIn * scaleOut, Time * 0.004f, ring.Size() * 0.5f, ringScale, 0, 0);
 
                     //spriteBatch.End();
                     //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);

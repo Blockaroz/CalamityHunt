@@ -10,6 +10,7 @@ using Terraria.Graphics;
 using Terraria.ID;
 using System.Linq;
 using System.Drawing.Drawing2D;
+using Terraria.Graphics.Shaders;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -81,12 +82,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
         }
 
-        public override void FindFrame(int frameHeight)
-        {
-            if (NPC.IsABestiaryIconDummy)
-                NPC.localAI[0]++;
-        }
-
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Asset<Texture2D> crownMask = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaCrown_Mask");
@@ -110,6 +105,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             float trailStrength = (Phase > 1 || Phase == -22) ? 1.3f : 0.5f;
 
+            if (!(Phase == 2 && Attack == (int)AttackList.GaussRay && Time > 520))
+                drawVelocity = NPC.velocity;
+
+            //FlipShadersOnOff(spriteBatch, null, true);
+            //GameShaders.Armor.Apply(ContentSamples.CommonlyUsedContentSamples.ColorOnlyShaderIndex, NPC);
+
             if (NPC.IsABestiaryIconDummy)
                 headScale = 1f;
             else
@@ -118,15 +119,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     Color trailColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
                     trailColor.A = 0;
-                    DrawGoozma(spriteBatch, screenPos, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], trailColor * trailStrength * NPC.scale);
+                    DrawGoozma(spriteBatch, screenPos, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], oldTentacleVel[i], trailColor * trailStrength * NPC.scale);
                 }
             }
 
             for (int i = 0; i < 8; i++)
             {
-                Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 8f * i + NPC.rotation);
-                DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, NPC.velocity, glowColor * 1.1f);
+                Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + NPC.rotation);
+                DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, drawVelocity, tentacleVelocity, glowColor);
             }
+
+            //FlipShadersOnOff(spriteBatch, null, false);
 
             GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
 
@@ -156,14 +159,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 effect.Parameters["baseToMapPercent"].SetValue(0);//-1f + Utils.GetLerpValue(20, 180, Time, true)
             }
 
-            FlipShadersOnOff(spriteBatch, effect);
-            DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, NPC.velocity, Color.Lerp(drawColor, Color.White, 0.3f));
-            FlipShadersOnOff(spriteBatch, null);
+            FlipShadersOnOff(spriteBatch, effect, false);
+            DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, drawVelocity, tentacleVelocity, Color.Lerp(drawColor, Color.White, 0.3f));
+            FlipShadersOnOff(spriteBatch, null, false);
 
             Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * headScale * NPC.scale;
             spriteBatch.Draw(crownMask.Value, crownPos - screenPos, null, Color.White, extraTilt + NPC.rotation, crownMask.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
 
-            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.7f + NPC.rotation) * headScale * NPC.scale;
+            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.9f + NPC.rotation) * headScale * NPC.scale;
             float eyeRot = -MathHelper.PiOver4;
             float eyeScale = (1.1f + (float)Math.Sin(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 0.15f);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.7f, 0.8f), 0, 0);
@@ -196,7 +199,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             return false;
         }
 
-        public void FlipShadersOnOff(SpriteBatch spriteBatch, Effect effect)
+        public void FlipShadersOnOff(SpriteBatch spriteBatch, Effect effect, bool immediate)
         {
             if (NPC.IsABestiaryIconDummy)
             {
@@ -210,11 +213,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
             else
             {
                 spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
+                SpriteSortMode sortMode = SpriteSortMode.Deferred;
+                if (immediate)
+                    sortMode = SpriteSortMode.Immediate;
+                spriteBatch.Begin(sortMode, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
             }
         }
 
-        private void DrawGoozma(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 position, float rotation, Vector2 velocity, Color color)
+        private void DrawGoozma(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 position, float rotation, Vector2 velocity, Vector2 tentacleVelocity, Color color)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> dress = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/GoozmaDress");
@@ -227,47 +233,53 @@ namespace CalamityHunt.Content.Bosses.Goozma
             Vector2 dressPos = position + drawOffset + new Vector2(4 * NPC.direction, 16).RotatedBy(-extraTilt * 0.4f + rotation) * headScale * NPC.scale;
 
             Vector2 basePos = position + new Vector2(0, 10).RotatedBy(-extraTilt * 0.4f + rotation) * NPC.scale;
-            headScale = 1f;
 
             float tentaCount = 5;
             for (int j = 0; j < tentaCount; j++)
             {
-                float rot = rotation + (0.4f - j * 0.1f) * NPC.direction + MathHelper.PiOver2;
-                Vector2 pos = basePos + new Vector2(0, 30).RotatedBy(MathHelper.Lerp(0.5f, -1.3f, j / tentaCount) * NPC.direction + rotation) * NPC.scale;
-                Vector2 stick = (rot.ToRotationVector2() * 12 - velocity * 0.1f) * (0.5f + headScale * 0.5f) * NPC.scale;
-                int segments = 12 - Math.Clamp(Math.Abs(j - (int)(tentaCount / 2f)), 1, 2);
-
+                SpriteEffects spriteEffects = NPC.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                float rot = rotation + (0.4f - j * 0.15f) * NPC.direction + MathHelper.PiOver2;
+                Vector2 pos = basePos + new Vector2(0, 20).RotatedBy(MathHelper.Lerp(0.5f, -1.3f, j / tentaCount) * NPC.direction + rotation + extraTilt) * NPC.scale;
+                Vector2 stick = (rot.ToRotationVector2() * 12 - tentacleVelocity * 0.01f) * (0.5f + headScale * 0.5f) * NPC.scale;
+                int segments = 11 - Math.Clamp(Math.Abs(j - (int)(tentaCount / 2f)), 1, 2);
                 Vector2 lastPos = pos;
+                float freq = 1.5f;
                 for (int i = 0; i < segments; i++)
                 {
                     float prog = i / (float)segments;
-                    int segFrame = Math.Clamp((int)(prog * 5f), 1, 3);
+                    Rectangle frame = tentacle.Frame(1, 10, 0, Math.Clamp((int)(prog * 8f) + 1, 2, 9));
                     if (i == 0)
-                        segFrame = 0;
-                    if (i == segments - 1)
-                        segFrame = 4;
-                    Rectangle frame = tentacle.Frame(1, 5, 0, segFrame);
-                    Vector2 nextStick = stick.RotatedBy(Math.Clamp(velocity.X * 0.03f, -1, 1) * prog + (float)Math.Sin((NPC.localAI[0] * 0.06 - i * 0.8f) % MathHelper.TwoPi) * 1f * Utils.GetLerpValue(tentaCount / 2f, tentaCount, j - velocity.X * 0.001f * NPC.direction * (1f - prog)) * (i / (float)segments));
-                    float stickRot = lastPos.AngleTo(lastPos + nextStick);
-                    Vector2 stretch = new Vector2(1f * NPC.scale, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(headScale, 1f, i / (float)segments);
+                        frame = tentacle.Frame(1, 5, 0, 0);
+                    if (i >= segments - 1)
+                        frame = tentacle.Frame(1, 5, 0, 4);
+
+                    float tentacleLerp = Utils.GetLerpValue(tentaCount * 0.5f, tentaCount, j - Math.Abs(tentacleVelocity.X) * 0.001f * (1f - prog)) * (i / (float)segments);
+                    float newRot = Math.Clamp(tentacleVelocity.X * 0.01f, -1, 1) * prog - Math.Clamp(tentacleVelocity.Y * 0.015f, -0.6f, 1f) * tentacleLerp * NPC.direction;
+                    float tentacleWobble = (float)Math.Sin((NPC.localAI[0] * 0.06f - i / freq - j * 0.15f) % MathHelper.TwoPi) * (1f - tentacleVelocity.Length() * 0.01f);
+                    Vector2 nextStick = stick.RotatedBy(newRot + tentacleWobble * tentacleLerp);
+                    Vector2 stretch = new Vector2(1f * NPC.scale * (0.5f + prog * 0.8f), lastPos.Distance(lastPos + nextStick) / (frame.Height - 4)) * MathHelper.Lerp(headScale, 1f, i / (float)segments);
+                    if (i == 0 || i >= segments - 1)
+                        stretch = new Vector2(NPC.scale);
+
+                    float stickRot = (lastPos + nextStick).AngleTo(lastPos) + MathHelper.Pi;
                     lastPos += nextStick;
                     Color tentaColor = Color.Lerp(Color.Black * (color.A / 255), color, (float)Math.Sqrt(prog));
-                    spriteBatch.Draw(tentacle.Value, lastPos + drawOffset - screenPos, frame, tentaColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
+                    spriteBatch.Draw(tentacle.Value, lastPos + drawOffset - screenPos, frame, tentaColor, stickRot - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, spriteEffects, 0);
                 }
             }
+
+            spriteBatch.Draw(dress.Value, dressPos - screenPos, null, color, extraTilt * 0.2f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dress.Size() * new Vector2(0.5f, 0f), headScale * NPC.scale, direction, 0);
 
             if (cordTarget != null)
             {
                 if (NPC.IsABestiaryIconDummy)
-                {
-                    spriteBatch.Draw(cordTarget, Vector2.Zero, null, color * 2f, 0, Vector2.Zero, 2f, 0, 0);
-                }
+                    spriteBatch.Draw(cordTarget, Vector2.Zero, null, color, 0, Vector2.Zero, 2f, 0, 0);
+
                 else
-                    spriteBatch.Draw(cordTarget, Vector2.Zero + (position - NPC.Center), null, color * 2f, 0, Vector2.Zero, 2f, 0, 0);
+                    spriteBatch.Draw(cordTarget, Vector2.Zero + (position - NPC.Center), null, color, 0, Vector2.Zero, 2f, 0, 0);
             }
 
-            spriteBatch.Draw(dress.Value, dressPos - screenPos, null, color, -extraTilt * 0.66f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dress.Size() * new Vector2(0.5f, 0f), headScale * NPC.scale, direction, 0);
-            spriteBatch.Draw(texture.Value, position + drawOffset - screenPos, null, color, extraTilt * 0.4f + rotation * 0.7f, texture.Size() * 0.5f, headScale * NPC.scale, direction, 0);
+            spriteBatch.Draw(texture.Value, position + drawOffset - screenPos, null, color, extraTilt * 0.9f + rotation, texture.Size() * 0.5f, headScale * NPC.scale, direction, 0);
             spriteBatch.Draw(crown.Value, crownPos - screenPos, null, color, extraTilt + rotation, crown.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
         } 
     }

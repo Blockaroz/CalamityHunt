@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class RainbowBall : ModProjectile, IDieWithGoozmaProjectile
+    public class RainbowBall : ModProjectile, IDieWithGoozma
     {
         public override void SetStaticDefaults()
         {
@@ -55,12 +55,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (target > -1)
             {
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * new Vector2(Main.rand.Next(18, 25), Main.rand.Next(18, 30)), 0.02f);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * new Vector2(Main.rand.Next(22, 25), Main.rand.Next(22, 30)), 0.03f);
                 Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * 0.03f;
-               // Projectile.velocity *= Utils.GetLerpValue(-500, 100, Projectile.Distance(Main.player[target].MountedCenter), true);
+                Projectile.velocity *= (0.7f + Utils.GetLerpValue(0, 600, Projectile.Distance(Main.player[target].MountedCenter), true) * 0.3f);
 
                 if (Math.Abs(Projectile.velocity.ToRotation() - Projectile.AngleTo(Main.player[target].MountedCenter)) < 0.5f && Time > 40)
-                    Projectile.velocity *= 1.03f;
+                    Projectile.velocity *= 1.02f;
             }
 
             Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity, -Projectile.velocity * 0.5f, Color.White, 2f * Projectile.scale);
