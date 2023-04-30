@@ -55,12 +55,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (target > -1)
             {
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * new Vector2(Main.rand.Next(22, 25), Main.rand.Next(22, 30)), 0.03f);
-                Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * 0.03f;
-                Projectile.velocity *= (0.955f + Utils.GetLerpValue(0, 600, Projectile.Distance(Main.player[target].MountedCenter), true) * 0.1f);
-
-                if (Math.Abs(Projectile.velocity.ToRotation() - Projectile.AngleTo(Main.player[target].MountedCenter)) < 0.5f && Time > 40)
-                    Projectile.velocity *= 1.02f;
+                Projectile.extraUpdates = 1;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * new Vector2(Main.rand.Next(22, 25), Main.rand.Next(22, 30)), 0.04f * Utils.GetLerpValue(0, 1400, Projectile.Distance(Main.player[target].MountedCenter), true));
+                Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f) * 0.4f * Utils.GetLerpValue(0, 1000, Projectile.Distance(Main.player[target].MountedCenter), true);
+                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 13 * (1f + Utils.GetLerpValue(0, 600, Projectile.Distance(Main.player[target].MountedCenter), true) * 0.5f);
             }
 
             Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity, -Projectile.velocity * 0.5f, Color.White, 2f * Projectile.scale);

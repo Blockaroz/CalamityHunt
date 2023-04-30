@@ -58,8 +58,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void SetDefaults()
         {
-            NPC.width = 150;
-            NPC.height = 100;
+            NPC.width = 140;
+            NPC.height = 120;
             NPC.damage = 12;
             NPC.defense = 500;
             NPC.lifeMax = 3000000;
@@ -512,7 +512,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
 
             Color rainbowColor = Main.hslToRgb((NPC.localAI[0] * 0.03f) % 1f, 1f, 0.7f, 0) * 0.8f;
-            Vector2 corePos = NPC.Bottom + new Vector2(0, -45 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor;
+            Vector2 corePos = NPC.Bottom + new Vector2(0, -50 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor;
+            if ((Attack == (int)AttackList.PixieBall && (Time > 50 && Time < 540)) || Attack == (int)AttackList.BlowUp)
+                corePos = NPC.Center + new Vector2(0, 4 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor; ;
             Vector2 leftWingPos = corePos + new Vector2(-12, 2).RotatedBy(NPC.rotation) * NPC.scale;
             Vector2 rightWingPos = corePos + new Vector2(12, 2).RotatedBy(NPC.rotation) * NPC.scale;
             
@@ -589,6 +591,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     }
                     else
                         goto default;
+
                     break;
 
                 default:

@@ -13,7 +13,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static log4net.Appender.ColoredConsoleAppender;
 
 namespace CalamityHunt.Content.Particles
 {
@@ -29,7 +28,10 @@ namespace CalamityHunt.Content.Particles
         public override void OnSpawn()
         {
             scale *= Main.rand.NextFloat(1f, 1.1f);
-            variant = Main.rand.Next(3);
+            variant = Main.rand.Next(5);
+            if (Main.rand.NextBool(1000))
+                variant = Main.rand.Next(5, 7);            
+
             direction = Main.rand.NextBool() ? 1 : -1;
             colOffset = Main.rand.NextFloat();
             homePos = position;
@@ -86,7 +88,7 @@ namespace CalamityHunt.Content.Particles
         { 
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Rectangle frame = texture.Frame(3, 1, variant, 0);
+            Rectangle frame = texture.Frame(7, 1, variant, 0);
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
             glowColor.A = 0;

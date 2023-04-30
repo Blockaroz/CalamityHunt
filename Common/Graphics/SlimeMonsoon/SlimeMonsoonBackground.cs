@@ -223,11 +223,13 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                 maxTime = this.time;
                 colorOffset = _random.NextFloat(0, 100f);
 
-                LightningData data = new LightningData(this.position + _random.NextVector2CircularEdge(200, 200) - Vector2.UnitY * 1000, this.position - _random.NextVector2Circular(1500, 800), this.position + _random.NextVector2CircularEdge(800, 400) + Vector2.UnitY * 1500, 1f);
+                LightningData data = new LightningData(this.position + _random.NextVector2CircularEdge(800, 200) - Vector2.UnitY * 800, this.position - _random.NextVector2Circular(1000, 300), this.position + _random.NextVector2CircularEdge(100, 200) + Vector2.UnitY * 900, 0.2f);
                 points = data.Value;
+
+
                 rots = new List<float>();
                 for (int i = 0; i < data.Value.Count - 1; i++)
-                    rots.Add(points[i].AngleTo(points[i + 1]));
+                    rots.Add(points[i].AngleFrom(points[i + 1]));
 
                 rots.Add(points[data.Value.Count - 2].AngleTo(points[data.Value.Count - 1]));
 
@@ -281,7 +283,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
             public float WidthFunction(float progress)
             {
-                return 1600f * (float)Math.Pow((float)time / maxTime, 0.3f) * Utils.GetLerpValue(maxTime, maxTime * 0.8f, time, true) * progress * (1f - progress);
+                return 1800f * (float)Math.Pow((float)time / maxTime, 0.3f) * Utils.GetLerpValue(maxTime, maxTime * 0.8f, time, true) * (float)Math.Pow(progress, 2f) * (1f - progress);
             }
         }
     }

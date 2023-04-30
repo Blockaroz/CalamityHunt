@@ -59,7 +59,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
             
-            Projectile.Center = Main.npc[owner].Center + new Vector2(12 * Main.npc[owner].direction, -18f);
+            Projectile.Center = Main.npc[owner].Center + new Vector2(13 * Main.npc[owner].direction, -20f);
 
             if (Time < 0)
             {

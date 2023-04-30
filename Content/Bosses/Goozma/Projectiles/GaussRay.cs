@@ -16,6 +16,7 @@ using Terraria.Graphics;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Humanizer.In;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -61,7 +62,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             Main.npc[(int)Owner].direction = Math.Sign(Projectile.rotation.ToRotationVector2().X);
-            Projectile.Center = Main.npc[(int)Owner].Center;
+            Projectile.Center = Main.npc[(int)Owner].Center + new Vector2(13 * Main.npc[(int)Owner].direction, -20f);
             (Main.npc[(int)Owner].ModNPC as Goozma).drawVelocity = Projectile.rotation.ToRotationVector2() * 12f;
             Main.npc[(int)Owner].velocity += Projectile.rotation.ToRotationVector2() * -0.1f;
             Main.npc[(int)Owner].velocity *= 0.9f;

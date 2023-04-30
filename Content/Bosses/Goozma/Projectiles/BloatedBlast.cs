@@ -50,8 +50,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Projectile.ai[1] == 0)
             {
-                Projectile.damage = 0;
-
                 int target = -1;
                 if (Main.player.Any(n => n.active && !n.dead))
                     target = Main.player.First(n => n.active && !n.dead).whoAmI;
@@ -100,6 +98,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             oldVels[0] = Vector2.Lerp(oldVels[0], (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2(), 0.6f);
 
             Projectile.localAI[0]++;
+        }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            if (Projectile.ai[1] == 0)
+                return false;
+            return base.Colliding(projHitbox, targetHitbox);
         }
 
         public Vector2[] oldVels;

@@ -592,7 +592,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         player.velocity += player.DirectionTo(NPC.Center) * Utils.GetLerpValue(holeSize + 200, holeSize + 500, player.Distance(NPC.Center));
                 }
 
-                if (Time % 11 == 5 && Time < 430)
+                if (Time % 13 == 5 && Time < 430)
                 {
                     int chosenSize = Main.rand.Next(0, 3);
                     Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Target.Center + NPC.DirectionTo(Target.Center + Target.Velocity * 30).SafeNormalize(Vector2.Zero).RotatedByRandom(1.6f) * Main.rand.Next(1300, 1600), Vector2.Zero, ModContent.ProjectileType<ThrowableChunk>(), GetDamage(6 + chosenSize), 0);

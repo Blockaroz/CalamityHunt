@@ -54,8 +54,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active).whoAmI;
 
-
-
             if (HitCount < 0 || HitCount == 1)
             {
                 Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 36f;
@@ -72,6 +70,20 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Cooldown <= 0)
             {
+                if (Projectile.Distance(Main.npc[owner].Center) < 84 && Time > 60)
+                {
+                    HitCount++;
+                    Main.npc[owner].localAI[1]++;
+                    Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * (Main.npc[owner].GetTargetData().Velocity.Length() * 0.2f + Projectile.velocity.Length());
+                    Cooldown = 15;
+                    for (int i = 0; i < 40; i++)
+                    {
+                        Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
+                        glowColor.A /= 2;
+                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
+                    }
+                }
+
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(Projectile.Center) < 64))
                 {
                     if (HitCount < 0 || HitCount == 1)
@@ -109,20 +121,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 //        Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(5, 5) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
                 //    }
                 //}
-
-                if (Projectile.Distance(Main.npc[owner].Center) < 64 && Time > 60)
-                {
-                    HitCount++;
-                    Main.npc[owner].localAI[1]++;
-                    Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * (12f + Projectile.velocity.Length());
-                    Cooldown = 15;
-                    for (int i = 0; i < 40; i++)
-                    {
-                        Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
-                        glowColor.A /= 2;
-                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
-                    }
-                }
             }
             if (Cooldown > 0)
             {
@@ -207,6 +205,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 sound.Volume = volume;
                 sound.Position = Projectile.Center;
             }
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            if (Math.Abs(oldVelocity.X - Projectile.velocity.X) > 1)
+                Projectile.velocity.X = -oldVelocity.X;
+            if (Math.Abs(oldVelocity.Y - Projectile.velocity.Y) > 1)
+                Projectile.velocity.Y = -oldVelocity.Y;
+
+            return false;
         }
 
         public override bool PreKill(int timeLeft)
