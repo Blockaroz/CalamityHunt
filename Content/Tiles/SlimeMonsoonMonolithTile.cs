@@ -47,9 +47,7 @@ namespace CalamityHunt.Content.Tiles
             if (player is null)
                 return;
             if (player.active)
-            {
-                Main.LocalPlayer.GetModPlayer<MonolithPlayer>().monolithCount = 40;
-            }
+                Main.LocalPlayer.GetModPlayer<MonolithPlayer>().monolithCount = 30;
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)

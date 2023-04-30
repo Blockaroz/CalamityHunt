@@ -163,22 +163,22 @@ Items: {
 	}
 
 	EbonianBehemuckTrophyItem: {
-		DisplayName: Ebonian Behemuck Trophy Item
+		DisplayName: Ebonian Behemuck Trophy
 		Tooltip: ""
 	}
 
 	DivineGargooptuarTrophyItem: {
-		DisplayName: Divine Gargooptuar Trophy Item
+		DisplayName: Divine Gargooptuar Trophy
 		Tooltip: ""
 	}
 
 	CrimulanGlopstrosityTrophyItem: {
-		DisplayName: Crimulan Glopstrosity Trophy Item
+		DisplayName: Crimulan Glopstrosity Trophy
 		Tooltip: ""
 	}
 
 	StellarGeliathTrophyItem: {
-		DisplayName: Stellar Geliath Trophy Item
+		DisplayName: Stellar Geliath Trophy
 		Tooltip: ""
 	}
 }

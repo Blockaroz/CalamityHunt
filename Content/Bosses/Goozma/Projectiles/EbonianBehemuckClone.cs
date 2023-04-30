@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
@@ -68,55 +70,61 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<EbonianBehemuck>() && n.active).whoAmI;
 
-            if (owner > -1)
+            int slimeCount = 3;
+
+            NPCAimedTarget target = Main.npc[owner].GetTargetData();
+            if (Time < 0)
             {
-                int slimeCount = 3;
+                Projectile.scale = MathHelper.Lerp(Projectile.scale, 0.8f, 0.1f);
+                Projectile.rotation = Projectile.AngleTo(Main.npc[owner].Center) - MathHelper.PiOver2;
 
-                NPCAimedTarget target = Main.npc[owner].GetTargetData();
-                if (Time < 0)
-                {
-                    Projectile.scale = MathHelper.Lerp(Projectile.scale, 0.8f, 0.1f);
-                    Projectile.rotation = Projectile.AngleTo(Main.npc[owner].Center) - MathHelper.PiOver2;
-                    Vector2 outerTarget = Main.npc[owner].Center + new Vector2(300 * (float)Math.Sqrt(Utils.GetLerpValue(-150, -80, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
+                float distanceOut = 150 + (float)Math.Pow(Utils.GetLerpValue(-30, 0, Time, true), 2f) * 200;
+                Vector2 outerTarget = Main.npc[owner].Center + new Vector2(distanceOut * (float)Math.Sqrt(Utils.GetLerpValue(-150, -80, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
 
-                    if (Projectile.ai[1] >= 3)
-                        outerTarget = Main.npc[owner].Center - new Vector2(300 * (float)Math.Sqrt(Utils.GetLerpValue(-150, -90, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
+                if (Projectile.ai[1] >= 3)
+                    outerTarget = Main.npc[owner].Center - new Vector2(distanceOut * (float)Math.Sqrt(Utils.GetLerpValue(-150, -90, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
 
-                    CupGameRotation += Main.npc[owner].velocity.X * 0.001f;
-                    Projectile.velocity = Projectile.DirectionTo(outerTarget).SafeNormalize(Vector2.Zero) * Projectile.Distance(outerTarget) * 0.5f;
-                    saveTarget = target.Center;
-                    squish = Vector2.SmoothStep(Vector2.One, new Vector2(1.3f, 0.8f), Utils.GetLerpValue(-20, 0, Time, true));
-                }
-                else if (Projectile.ai[1] >= 0)
-                {
-                    squish = new Vector2(0.6f, 1.5f);
-                    Projectile.velocity = Projectile.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * Utils.GetLerpValue(5, 10, Time, true) * (float)Math.Pow(Utils.GetLerpValue(0, 30, Time, true), 1.5f) * 70;
-                    if (Projectile.Distance(saveTarget) < 50)
-                    {
-                        Projectile.Center = saveTarget;// + (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2();
-                        Projectile.velocity = Vector2.Zero;
-                        Projectile.ai[1] = -1;
-                        Time = 0;
-
-                        for (int i = 0; i < Main.rand.Next(1, 3); i++)
-                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextVector2Circular(5, 5), ModContent.ProjectileType<ToxicSludge>(), Projectile.damage / 2, 0);
-
-                        if (!Main.dedServ)
-                            SoundEngine.PlaySound(SoundID.Item167.WithPitchOffset(0.2f), Projectile.Center);
-
-                    }
-                }
-                else
-                {
-                    Projectile.velocity = Vector2.Zero;
-                    squish = Vector2.Lerp(new Vector2(0.6f, 1.5f), Vector2.One, Utils.GetLerpValue(15, 1, Time, true)) * Utils.GetLerpValue(20, 8, Time, true);
-                    if (Time > 20)
-                        Projectile.Kill();
-                }
-
-                if (Main.rand.NextBool(3))
-                    Dust.NewDustPerfect(Projectile.Center + new Vector2(0, Projectile.height / 2).RotatedBy(Projectile.rotation) * Projectile.scale * squish + Main.rand.NextVector2Circular(60, 48).RotatedBy(Projectile.rotation), 4, Projectile.velocity * 0.5f, 150, Color.DarkOrchid, 2f).noGravity = true;
+                CupGameRotation += Main.npc[owner].velocity.X * 0.001f;
+                Projectile.velocity = Projectile.DirectionTo(outerTarget).SafeNormalize(Vector2.Zero) * Projectile.Distance(outerTarget) * 0.33f;
+                saveTarget = target.Center;
+                squish = Vector2.SmoothStep(Vector2.One, new Vector2(1.3f, 0.8f), Utils.GetLerpValue(-20, 0, Time, true));
             }
+            else if (Projectile.ai[1] >= 0)
+            {
+                squish = new Vector2(0.6f, 1.5f);
+                Projectile.velocity = Projectile.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * Utils.GetLerpValue(5, 10, Time, true) * (float)Math.Pow(Utils.GetLerpValue(0, 30, Time, true), 1.5f) * 70;
+                if (Projectile.Distance(saveTarget) < 60)
+                {
+                    Projectile.Center = saveTarget;// + (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2();
+                    Projectile.velocity = Vector2.Zero;
+                    Projectile.ai[1] = -1;
+                    Time = 0;
+                    for (int i = 0; i < Main.rand.Next(30, 40); i++)
+                    {
+                        Vector2 velocity = Main.rand.NextVector2Circular(16, 16) - Projectile.rotation.ToRotationVector2() * 10f;
+                        Vector2 position = Projectile.Center + Main.rand.NextVector2Circular(30, 30) + new Vector2(velocity.X * 15f, 32f);
+                        Particle.NewParticle(Particle.ParticleType<EbonBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                    }
+
+                    for (int i = 0; i < Main.rand.Next(1, 3); i++)
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextVector2Circular(5, 5), ModContent.ProjectileType<ToxicSludge>(), Projectile.damage / 2, 0);
+
+                    if (!Main.dedServ)
+                        SoundEngine.PlaySound(SoundID.Item167.WithPitchOffset(0.2f), Projectile.Center);
+
+                }
+            }
+            else
+            {
+                Projectile.velocity = Vector2.Zero;
+                squish = Vector2.Lerp(new Vector2(0.6f, 1.5f), Vector2.One, Utils.GetLerpValue(15, 1, Time, true)) * Utils.GetLerpValue(20, 8, Time, true);
+                if (Time > 20)
+                    Projectile.Kill();
+            }
+
+            if (Main.rand.NextBool(3))
+                Dust.NewDustPerfect(Projectile.Center + new Vector2(0, Projectile.height / 2).RotatedBy(Projectile.rotation) * Projectile.scale * squish + Main.rand.NextVector2Circular(60, 48).RotatedBy(Projectile.rotation), 4, Projectile.velocity * 0.5f, 150, Color.DarkOrchid, 2f).noGravity = true;
+
 
             Projectile.frameCounter++;
 
@@ -147,7 +155,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Rectangle frame = texture.Frame(1, 4, 0, Projectile.frame);
             Asset<Texture2D> eye = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CorruptEye");
-            Asset<Texture2D> tell = TextureAssets.Extra[178];
+            Asset<Texture2D> tell = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             float scale = 1f;
 
             if (Time < -10)
@@ -166,9 +174,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
             for (int i = 0; i < 4; i++)
             {
-                Vector2 off = new Vector2(10 + (float)Math.Sin(Projectile.localAI[0] * 0.05f + i * 2f), 0).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.localAI[0] * 0.08f);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, frame, Color.SlateBlue * 0.15f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * squish * scale, 0, 0);
+                Vector2 off = new Vector2(15 + (float)Math.Sin(Projectile.localAI[0] * 0.05f + i * 2f), 0).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.localAI[0] * 0.08f);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, frame, Color.SlateBlue * 0.1f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * squish * scale, 0, 0);
             }
+            if (Projectile.ai[1] >= 0)
+            {
+                float tellFade = (float)Math.Sqrt(Utils.GetLerpValue(-20, 0, Time, true) * Utils.GetLerpValue(10, 0, Time, true)) * 2f;
+                Main.EntitySpriteDraw(tell.Value, Projectile.Center - Main.screenPosition, tell.Frame(), new Color(18, 8, 40, 0) * 0.8f * tellFade, Projectile.rotation, tell.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * (7f + Utils.GetLerpValue(-20, 10, Time, true)), 0, 0);
+            }
+
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White * 0.8f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * squish, 0, 0);
 
             return false;

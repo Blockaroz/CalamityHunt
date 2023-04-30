@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -42,7 +43,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.localAI[1] = Main.rand.NextFloat(0.8f, 1.4f);
-            Projectile.frame = Main.rand.Next(3);
+            WeightedRandom<int> typeOfStarBit = new WeightedRandom<int>();
+            typeOfStarBit.Add(0, 0.2f);
+            typeOfStarBit.Add(1, 0.3f);
+            typeOfStarBit.Add(2, 0.3f);
+            typeOfStarBit.Add(3, 0.6f);
+            Projectile.frame = typeOfStarBit;
             Projectile.direction = Main.rand.NextBool().ToDirectionInt();
             Projectile.rotation = Main.rand.NextFloat(-0.3f, 0.3f);
 
@@ -103,7 +109,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Time++;
             Projectile.localAI[0]++;
-            Projectile.localAI[0] += Projectile.velocity.Length() * 0.01f;
+            Projectile.localAI[0] += Projectile.velocity.Length() * 0.015f;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -112,7 +118,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> aura = ModContent.Request<Texture2D>(Texture + "Aura");
             Asset<Texture2D> sparkle = TextureAssets.Extra[98];
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Rectangle frame = texture.Frame(3, 1, Projectile.frame, 0);
+            Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
             float scale = Projectile.localAI[1];
 
@@ -140,6 +146,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Main.EntitySpriteDraw(aura.Value, Projectile.Center - Main.screenPosition, aura.Frame(), new Color(10, 30, 110, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, aura.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * scale * flameSquish, 0, 0);
             Main.EntitySpriteDraw(aura.Value, Projectile.Center - Main.screenPosition, aura.Frame(), new Color(20, 100, 150, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, aura.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * 0.66f * scale * flameSquish, 0, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scale, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(70, 40, 35, 0), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.3f * scale, 0, 0);
 
             return false;
         }

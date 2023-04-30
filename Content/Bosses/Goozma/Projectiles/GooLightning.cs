@@ -12,6 +12,7 @@ using Terraria.Graphics;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Humanizer.In;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -58,7 +59,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
             
-            Projectile.Center = Main.npc[owner].Center;
+            Projectile.Center = Main.npc[owner].Center + new Vector2(12 * Main.npc[owner].direction, -18f);
 
             if (Time < 0)
             {
@@ -105,17 +106,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         SoundEngine.PlaySound(lightningMiniSound, Projectile.Center);
                     }
 
-                points = new List<Vector2>();
+                LightningData data = new LightningData(Projectile.Center, endPoint, 1f);
+                points = data.Value;
                 pointVelocities = new List<Vector2>();
-                int totalPoints = Math.Max(4, (int)(Projectile.Distance(endPoint) * 0.006f));
-                for (int i = 0; i < totalPoints + 1; i++)
+                for (int i = 0; i < points.Count; i++)
                     pointVelocities.Add(Main.rand.NextVector2CircularEdge(1, 1) * Math.Min(1f, Projectile.Distance(endPoint) * 0.0012f));
 
-                for (int i = 0; i < totalPoints + 1; i++)
-                {
-                    Vector2 lerp = Vector2.Lerp(Projectile.Center, endPoint, (float)i / totalPoints);
-                    points.Add(lerp + pointVelocities[i] * 30 * Math.Min(1f, Projectile.Distance(endPoint) * 0.001f) * Utils.GetLerpValue(0, 2, i, true) * Utils.GetLerpValue(totalPoints, totalPoints - 2, i, true));
-                }
+                //for (int i = 0; i < totalPoints; i++)
+                //{
+                //    Vector2 lerp = Vector2.Lerp(Projectile.Center, endPoint, (float)i / totalPoints);
+                //    points.Add(lerp + pointVelocities[i] * 30 * Math.Min(1f, Projectile.Distance(endPoint) * 0.001f) * Utils.GetLerpValue(0, 2, i, true) * Utils.GetLerpValue(totalPoints, totalPoints - 2, i, true));
+                //}
             }
 
             if (Time >= 0)

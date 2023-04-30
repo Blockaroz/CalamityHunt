@@ -50,6 +50,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Projectile.ai[1] == 0)
             {
+                Projectile.damage = 0;
+
                 int target = -1;
                 if (Main.player.Any(n => n.active && !n.dead))
                     target = Main.player.First(n => n.active && !n.dead).whoAmI;

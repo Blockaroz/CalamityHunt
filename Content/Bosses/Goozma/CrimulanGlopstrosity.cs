@@ -70,7 +70,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
-            NPC.noTileCollide = false;
+            NPC.noTileCollide = true;
             NPC.value = Item.buyPrice(gold: 5);
             NPC.SpawnWithHigherTime(30);
             NPC.npcSlots = 10f;
@@ -92,7 +92,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             CollidingCrush,
             EndlessChase,
             TooFar,
-            Interrupt
+            Interrupt,
+            SlamDown = -1
         }
 
         public ref float Time => ref NPC.ai[0];
@@ -117,33 +118,36 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (!NPC.HasPlayerTarget)
                 NPC.active = false;
 
-            foreach (Player player in Main.player.Where(n => n.active && !n.dead))
+            if (Attack != (int)AttackList.TooFar && Attack != (int)AttackList.SlamDown)
             {
-                float distance = 0;
-                for (int i = 0; i < Main.tile.Height; i++)
+                foreach (Player player in Main.player.Where(n => n.active && !n.dead))
                 {
-                    Point playerTile = player.MountedCenter.ToTileCoordinates();
-                    if (WorldGen.InWorld(playerTile.X, playerTile.Y + i))
+                    float distance = 0;
+                    for (int i = 0; i < Main.tile.Height; i++)
                     {
-                        if (WorldGen.SolidTileAllowTopSlope(playerTile.X, playerTile.Y + i))
+                        Point playerTile = player.MountedCenter.ToTileCoordinates();
+                        if (WorldGen.InWorld(playerTile.X, playerTile.Y + i))
+                        {
+                            if (WorldGen.SolidTileAllowTopSlope(playerTile.X, playerTile.Y + i))
+                            {
+                                distance = i;
+                                break;
+                            }
+                        }
+                        else
                         {
                             distance = i;
                             break;
                         }
                     }
-                    else
+                    if (distance > 36)
                     {
-                        distance = i;
-                        break;
+                        player.velocity.Y += distance * 0.3f;
+                        player.maxFallSpeed += distance;
+                        player.gravity *= 10;
                     }
+                    //inflict debuff
                 }
-                if (distance > 36)
-                {
-                    player.velocity.Y += distance * 0.3f;
-                    player.maxFallSpeed += distance;
-                    player.gravity *= 10;
-                }
-                //inflict debuff
             }
 
             NPC.damage = GetDamage(0);
@@ -153,11 +157,39 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.velocity *= 0.9f;
                 NPC.damage = 0;
                 squishFactor = new Vector2(1f - (float)Math.Pow(Utils.GetLerpValue(-10, -45, Time, true), 2) * 0.5f, 1f + (float)Math.Pow(Utils.GetLerpValue(-10, -45, Time, true), 2) * 0.4f);
-                if (Time == -2 && NPC.Distance(Target.Center) > 1000)
+                if (Time == -2)
                 {
-                    RememberAttack = Attack;
-                    Attack = (int)AttackList.TooFar;
+                    if (NPC.Distance(Target.Center) > 1000)
+                    {
+                        RememberAttack = Attack;
+                        Attack = (int)AttackList.TooFar;
+                    }
+
+                    float distance = 0;
+                    for (int i = 0; i < Main.tile.Height; i++)
+                    {
+                        Point playerTile = Target.Center.ToTileCoordinates();
+                        if (WorldGen.InWorld(playerTile.X, playerTile.Y + i))
+                        {
+                            if (WorldGen.SolidTile3(playerTile.X, playerTile.Y + i))
+                            {
+                                distance = i;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            distance = i;
+                            break;
+                        }
+                    }
+                    if (distance > 36)
+                    {
+                        RememberAttack = Attack;
+                        Attack = (int)AttackList.SlamDown;
+                    }
                 }
+
                 NPC.frameCounter++;
             }
             else switch (Attack)
@@ -165,12 +197,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     case (int)AttackList.SlamRain:
                         SlamRain();
                         break;
+
                     case (int)AttackList.CollidingCrush:
                         CollidingCrush();
                         break;
+
                     case (int)AttackList.EndlessChase:
                         EndlessChase();
+                        break;                    
+                    
+                    case (int)AttackList.SlamDown:
+                        SlamDown();
                         break;
+
                     case (int)AttackList.Interrupt:
                         NPC.noTileCollide = true;
                         NPC.damage = 0;
@@ -253,7 +292,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 else if (localTime < 35)
                 {
-                    NPC.noTileCollide = true;
                     NPC.velocity.Y = -14;
                     squishFactor = new Vector2(0.5f, 1.4f);
                 }
@@ -272,7 +310,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     else
                     {
                         NPC.rotation = NPC.rotation.AngleLerp(NPC.Top.AngleTo(NPC.FindSmashSpot(saveTarget)) - MathHelper.PiOver2, 0.2f);
-                        NPC.noTileCollide = false;
                         NPC.Center = Vector2.Lerp(NPC.Center, NPC.FindSmashSpot(saveTarget), Utils.GetLerpValue(75, 100, localTime, true));
                         NPC.velocity *= 0.5f;
 
@@ -358,7 +395,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             else if (Time < 65)
             {
-                NPC.noTileCollide = true;
                 NPC.velocity.Y = -14;
                 squishFactor = new Vector2(0.5f, 1.4f);
             }
@@ -379,7 +415,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 else
                 {
                     NPC.rotation = NPC.rotation.AngleLerp(NPC.Top.AngleTo(NPC.FindSmashSpot(saveTarget)) - MathHelper.PiOver2, 0.2f);
-                    NPC.noTileCollide = false;
                     NPC.Center = Vector2.Lerp(NPC.Center, NPC.FindSmashSpot(saveTarget), Utils.GetLerpValue(waitTime + 53, waitTime + 60, Time, true));
                     NPC.velocity *= 0.5f;
 
@@ -447,7 +482,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
                 else if (Time < waitTime + 130)
                 {
-                    NPC.noTileCollide = true;
                     NPC.velocity.Y = -14 * Utils.GetLerpValue(waitTime + 150, waitTime + 110, Time, true);
                     squishFactor = new Vector2(1f - Utils.GetLerpValue(waitTime + 150, waitTime + 110, Time, true) * 0.5f, 1f + Utils.GetLerpValue(waitTime + 150, waitTime + 110, Time, true) * 0.5f);
                 }
@@ -534,6 +568,85 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 Reset();
         }
 
+        private void SlamDown()
+        {
+            NPC.damage = 0;
+
+            if (Time < 20)
+            {
+                squishFactor = Vector2.Lerp(squishFactor, new Vector2(1.4f, 0.7f), Time / 40f);
+                if (Time == 18)
+                    NPC.velocity.Y = -20;
+            }
+            else if (Time < 70)
+            {
+                squishFactor = Vector2.Lerp(new Vector2(0.6f, 1.5f), Vector2.One, Utils.GetLerpValue(40, 60, Time, true));
+                Vector2 airTarget = Target.Center - Vector2.UnitY * 120;
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(airTarget).SafeNormalize(Vector2.Zero) * Math.Max(2, NPC.Distance(airTarget)) * 0.3f, 0.4f * (float)Math.Pow(Utils.GetLerpValue(20, 60, Time, true), 1.5f));
+            }
+            else
+            {
+                float distance = 0;
+                for (int i = 0; i < Main.tile.Height; i++)
+                {
+                    Point playerTile = Target.Center.ToTileCoordinates();
+                    if (WorldGen.InWorld(playerTile.X, playerTile.Y + i))
+                    {
+                        if (WorldGen.SolidTile3(playerTile.X, playerTile.Y + i))
+                        {
+                            distance = i;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        distance = i;
+                        break;
+                    }
+                }
+
+                if (distance > 4 && Time < 90)
+                {
+                    squishFactor = new Vector2(0.7f, 1.4f);
+                    Time = 80;
+                    NPC.velocity.X *= 0.7f;
+                    NPC.velocity.Y = 40;
+                    NPC.noTileCollide = true;
+                    if (Target.Type == Terraria.Enums.NPCTargetType.Player)
+                    {
+                        Main.player[NPC.target].Bottom = NPC.Bottom;
+                        Main.player[NPC.target].velocity.X *= 0.3f;
+                        Main.player[NPC.target].AddBuff(BuffID.Slow, 30, true);
+                    }
+                }
+                else if (Time < 90)
+                    Time = 90;
+
+                if (Time == 90)
+                {
+                    squishFactor = new Vector2(1.5f, 0.6f);
+                    NPC.velocity.Y = -16;
+                    for (int i = 0; i < Main.rand.Next(40, 60); i++)
+                    {
+                        Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(15f, 20f);
+                        Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
+                        Particle.NewParticle(Particle.ParticleType<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                    }
+                }
+                if (Time > 90)
+                {
+                    NPC.velocity *= 0.9f;
+                    squishFactor = Vector2.Lerp(squishFactor * new Vector2(0.98f, 1.02f), Vector2.One, 0.13f);
+                }
+            }
+
+            if (Time > 140)
+            {
+                Time = 0;
+                Attack = RememberAttack;
+            }
+        }
+
         private int GetDamage(int attack, float modifier = 1f)
         {
             int damage = attack switch
@@ -598,8 +711,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
             {
-                Vector2 oldPos = NPC.oldPos[i] + NPC.Size * 0.5f;
-                Color trailColor = Color.Lerp(new Color(255, 10, 10, 0), new Color(0, 0, 0, 100), (float)Math.Sqrt(i / 10f)) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1) * 0.5f;
+                Vector2 oldPos = NPC.oldPos[i] + NPC.Size * new Vector2(0.5f, 0f);
+                Color trailColor = Color.Lerp(new Color(40, 0, 0, 255), new Color(70, 10, 10, 0), i / (float)NPCID.Sets.TrailCacheLength[Type]) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1) * 0.5f;
                 spriteBatch.Draw(texture.Value, oldPos - screenPos, frame, trailColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
             }
 

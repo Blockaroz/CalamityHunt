@@ -318,17 +318,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.dontTakeDamage = true;
 
                 Vector2 squishBounce = new Vector2(1f - (float)Math.Sin(Time * 0.15f) * 0.3f, 1f - (float)Math.Cos(Time * 0.15f) * 0.3f);
-                squishFactor = Vector2.Lerp(Vector2.One, squishBounce, Utils.GetLerpValue(0, 10, Time, true)) * (float)Math.Pow(Utils.GetLerpValue(55, 10, Time, true), 2f);
+                squishFactor = Vector2.Lerp(Vector2.One, squishBounce, Utils.GetLerpValue(0, 15, Time, true)) * (float)Math.Sqrt(Utils.GetLerpValue(60, 20, Time, true));
 
-                if (Time > 10 && Time < 30)
-                    for (int i = 0; i < Main.rand.Next(2, 3); i++)
+                if (Time > 15 && Time < 30)
+                    for (int i = 0; i < Main.rand.Next(3, 5); i++)
                     {
-                        Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 12f);
-                        Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
+                        Vector2 velocity = Main.rand.NextVector2Circular(16, 16);
+                        Vector2 position = NPC.Center + Main.rand.NextVector2Circular(50, 50) + new Vector2(velocity.X * 15f, 32f);
                         Particle.NewParticle(Particle.ParticleType<EbonBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
 
-                if (Time == 40)
+                if (Time == 30)
                 {
                     List<int> randLeft = new List<int>()
                     {
@@ -348,7 +348,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            if (Time > 30 && Time < waitTime + pairTime * pairCount + 20)
+            if (Time > 30 && Time < waitTime + pairTime * pairCount + 30)
             {
                 if (Time > waitTime && (Time - waitTime) % pairTime > 30)
                     NPC.velocity *= 0.2f;
@@ -359,11 +359,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     saveTarget.X = Main.rand.NextFloatDirection() * Main.rand.NextFloat(0.9f, 1.1f);
 
                 foreach (Projectile proj in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<EbonianBehemuckClone>()))
-                    proj.ai[2] += saveTarget.X * Math.Abs(0.2f * (float)Math.Cbrt(Utils.GetLerpValue(pairTime, 0, (Time - waitTime) % pairTime, true) * Utils.GetLerpValue(waitTime, waitTime + 5, Time, true)));
+                    proj.ai[2] += saveTarget.X * Math.Abs(0.2f * (float)Math.Sqrt(Utils.GetLerpValue(pairTime, 0, (Time - waitTime) % pairTime, true) * Utils.GetLerpValue(waitTime * 0.9f, waitTime * 0.97f, Time, true)));
 
                 Vector2 squishBounce = new Vector2(1f - (float)Math.Sin(Time * 0.15f) * 0.3f, 1f - (float)Math.Cos(Time * 0.15f) * 0.3f);
                 squishFactor = Vector2.Lerp(Vector2.One, squishBounce, Utils.GetLerpValue(30, 15, Time - waitTime - pairTime * pairCount, true)) * (float)Math.Sqrt(Utils.GetLerpValue(0, 10, Time - waitTime - pairTime * pairCount, true));
-                NPC.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 30, Time - waitTime - pairTime * pairCount, true));
+                NPC.scale = (float)Math.Sqrt(Utils.GetLerpValue(20, 26, Time - waitTime - pairTime * pairCount, true));
             }
             if (Time > waitTime + pairTime * pairCount + 20)
                 NPC.velocity *= 0.9f;

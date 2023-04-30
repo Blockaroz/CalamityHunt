@@ -53,16 +53,27 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             if (Owner < 0)
             {
-                Projectile.active = false;
-                return;
+                Projectile.velocity *= 0.9f;
+                Projectile.scale *= 0.8f;
+                if (Projectile.scale < 0.01f)
+                    Projectile.Kill(); return;
             }
             else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>())
             {
-                Projectile.active = false;
+                Projectile.velocity *= 0.9f;
+                Projectile.scale *= 0.8f;
+                if (Projectile.scale < 0.01f)
+                    Projectile.Kill();
                 return;
             }
 
-            Projectile.scale = (float)Math.Sqrt(MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(40, MaxTime - 80, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime - 80, Time, true))) * 0.75f;
+            if (Time == 1 && !Main.dedServ)
+            {
+                SoundStyle invocation = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarBlackHoleSummon");
+                SoundEngine.PlaySound(invocation.WithVolumeScale(1.5f), Projectile.Center);
+            }
+
+            Projectile.scale = (float)Math.Sqrt(MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(10, MaxTime * 0.2f, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime - 20, Time, true))) * 0.75f;
             Projectile.velocity = Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].Center) * 0.2f;
 
             for (int i = 0; i < 6; i++)
@@ -97,8 +108,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             SoundStyle windBlowingSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWindLoop");
             windBlowingSound.IsLooped = true;
 
-            volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
-            pitch = (float)Math.Sqrt(Utils.GetLerpValue(0, MaxTime - 80, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime - 80, Time, true)) * 1.5f - 1f;
+            volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * (0.8f + Projectile.scale * 0.5f);
+            pitch = (float)Math.Sqrt(Utils.GetLerpValue(-MaxTime * 0.5f, MaxTime, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime * 0.8f, Time, true)) * 1.5f - 1f;
 
             bool holeActive = SoundEngine.TryGetActiveSound(BlackHoleBlender.holeSound, out ActiveSound holeSound);
             if (!holeActive || !BlackHoleBlender.holeSound.IsValid)

@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -42,7 +43,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.frame = Main.rand.Next(3);
+            WeightedRandom<int> typeOfStarBit = new WeightedRandom<int>();
+            typeOfStarBit.Add(0, 0.2f);
+            typeOfStarBit.Add(1, 0.3f);
+            typeOfStarBit.Add(2, 0.3f);
+            typeOfStarBit.Add(3, 0.6f);
+            Projectile.frame = typeOfStarBit;
             Projectile.scale *= Main.rand.NextFloat(0.7f, 1.2f);
             Projectile.rotation = Main.rand.NextFloat(-0.3f, 0.3f);
             Projectile.direction = Main.rand.NextBool() ? -1 : 1;
@@ -106,15 +112,22 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Projectile.rotation += Projectile.velocity.Length() * Projectile.direction * 0.0015f;
 
-            Projectile.frameCounter++;
-            if (Projectile.frameCounter > 15)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = (Projectile.frame + 1) % 3;
-            }
+            //Projectile.frameCounter++;
+            //if (Projectile.frameCounter > 15)
+            //{
+            //    Projectile.frameCounter = 0;
+            //    Projectile.frame = (Projectile.frame + 1) % 3;
+            //}
 
             Time++;
             Projectile.localAI[0]++;
+        }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            if (Time > 60)
+                return base.Colliding(projHitbox, targetHitbox);
+            return false;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -122,7 +135,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> aura = ModContent.Request<Texture2D>(Texture + "Aura");
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Rectangle frame = texture.Frame(3, 1, Projectile.frame, 0);
+            Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
             for (int i = 0; i < 3; i++)
             {
@@ -133,6 +146,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(10, 30, 110, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(70, 40, 35, 0), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.3f, 0, 0);
 
             return false;
         }

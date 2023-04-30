@@ -21,12 +21,11 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
     {
         public override void OnLoad()
         {
-            lightningTexture = new Asset<Texture2D>[3];
+            lightningTexture = new Asset<Texture2D>[2];
             skyTexture = new Asset<Texture2D>[3];
 
-            lightningTexture[0] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Lightning");
-            lightningTexture[1] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow");
-            lightningTexture[2] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/Thunder");
+            lightningTexture[0] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/Lightning");
+            lightningTexture[1] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/LightningGlow");
 
             skyTexture[0] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/SkyNoise");
             skyTexture[1] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/DistortNoise");
@@ -38,6 +37,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             _active = true;
             radialDistortPos = position;
             strengthTarget = 1f;
+            additionalLightningChance = 0;
         }
 
         public override void Deactivate(params object[] args)
@@ -52,6 +52,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
         {
             _active = false;
             strengthTarget = 0;
+            additionalLightningChance = 0;
         }
 
         private static UnifiedRandom _random = new UnifiedRandom();
@@ -62,6 +63,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
         private float _brightness;
         public static Vector2 radialDistortPos;
         public static float strengthTarget;
+        public static int additionalLightningChance;
 
         private static Asset<Texture2D>[] lightningTexture;
         private static Asset<Texture2D>[] skyTexture;
@@ -123,8 +125,8 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
             for (int i = 0; i < thunder.Length; i++)
             {
-                if (_random.NextBool(150) && _strength > 0.5f)
-                    thunder[i].Add(new GooThunder(Main.screenPosition.X, _random.NextFloat(0.5f, 1.4f), _random.Next(50, 100), i));
+                if (_random.NextBool(Math.Clamp(100 + additionalLightningChance, 2, 1000)) && _strength > 0.5f)
+                    thunder[i].Add(new GooThunder(Main.LocalPlayer.Center, _random.NextFloat(0.5f, 1.4f), _random.Next(50, 100), i));
 
                 for (int j = 0; j < thunder[i].Count; j++)
                 {
@@ -211,38 +213,33 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
         private class GooThunder
         {
-            public GooThunder(float position, float strength, int time, int layer)
+            public GooThunder(Vector2 position, float strength, int time, int layer)
             {
-                this.position = position / (2 + layer * 3f) + Main.screenWidth / 2 + _random.NextFloat(-1000, 1000);
-                rotation = _random.NextFloat(-0.2f, 0.2f);
+                this.position = position * 0.5f / (1 + layer) + _random.NextVector2Circular(800, 100);
+                rotation = _random.NextFloat(-0.5f, 0.5f);
                 this.strength = strength;
                 this.time = (int)(time / (0.5f + strength * 0.5f));
                 this.layer = layer;
                 maxTime = this.time;
                 colorOffset = _random.NextFloat(0, 100f);
 
-                points = new List<Vector2>();
+                LightningData data = new LightningData(this.position + _random.NextVector2CircularEdge(200, 200) - Vector2.UnitY * 1000, this.position - _random.NextVector2Circular(1500, 800), this.position + _random.NextVector2CircularEdge(800, 400) + Vector2.UnitY * 1500, 1f);
+                points = data.Value;
                 rots = new List<float>();
-                int totalPoints = (int)(Main.worldSurface / 13f) + _random.Next(-2, 5);
-                for (int i = 0; i < totalPoints; i++)
-                {
-                    float yPos = MathHelper.Lerp(-3200, (float)Main.worldSurface * 13f, i / (float)totalPoints);
-                    points.Add((new Vector2(this.position, yPos) + _random.NextVector2Circular(50, 20)).RotatedBy(rotation));
-                }
-                for (int i = 0; i < totalPoints - 1; i++)
+                for (int i = 0; i < data.Value.Count - 1; i++)
                     rots.Add(points[i].AngleTo(points[i + 1]));
 
-                rots.Add(points[totalPoints - 2].AngleTo(points[totalPoints - 1]));
+                rots.Add(points[data.Value.Count - 2].AngleTo(points[data.Value.Count - 1]));
 
                 if (!Main.dedServ)
                 {
                     SoundStyle thunderSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SlimeMonsoon/GoozmaMonsoonThunder", 3, SoundType.Ambient);
                     thunderSound.MaxInstances = 0;
-                    SoundEngine.PlaySound(thunderSound.WithVolumeScale(0.1f + strength * 0.2f).WithPitchOffset(Main.rand.NextFloat(-0.1f, 0.4f)), Main.LocalPlayer.Center);
+                    SoundEngine.PlaySound(thunderSound.WithVolumeScale(0.05f + strength * 0.15f).WithPitchOffset(Main.rand.NextFloat(-0.1f, 0.4f)), Main.LocalPlayer.Center);
                 }
             }
 
-            public float position;
+            public Vector2 position;
             public float rotation;
             public float strength;
             public int time;
@@ -255,37 +252,36 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             public void Draw(SpriteBatch spriteBatch)
             {
                 VertexStrip strip = new VertexStrip();
-                strip.PrepareStrip(points.ToArray(), rots.ToArray(), ColorFunction, WidthFunction, -Main.screenPosition / (2 + layer * 3f), points.Count, true);
+                strip.PrepareStrip(points.ToArray(), rots.ToArray(), ColorFunction, WidthFunction, -Main.screenPosition * 0.5f / (1 + layer) + Main.ScreenSize.ToVector2() * 0.25f, points.Count, true);
 
                 Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.BackgroundViewMatrix.NormalizedTransformationmatrix);
                 lightningEffect.Parameters["uTexture"].SetValue(lightningTexture[0].Value);
                 lightningEffect.Parameters["uGlow"].SetValue(lightningTexture[1].Value);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
-                lightningEffect.Parameters["uTime"].SetValue(time * 0.0033f);
+                lightningEffect.Parameters["uTime"].SetValue(-(float)Math.Cbrt(maxTime - time) * 0.2f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
 
                 strip.DrawTrail();
 
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
-                Color drawColor = new GradientColor(SlimeUtils.GoozColorArray, 0.5f, 0.5f).ValueAt(time * 3 + colorOffset);
-                drawColor.A = 0;
-                float power = Utils.GetLerpValue(maxTime, maxTime * 0.9f, time, true) * Utils.GetLerpValue(0, maxTime, time, true);
-                spriteBatch.Draw(lightningTexture[2].Value, new Vector2(points[0].X, 0) - Main.screenPosition / (2 + layer * 3f), null, drawColor * 0.3f * strength * power, rotation, lightningTexture[2].Size() * new Vector2(0.5f, 0f), new Vector2(20 * strength, Main.screenHeight), 0, 0);
-
+                //Color drawColor = new GradientColor(SlimeUtils.GoozColorArray, 0.5f, 0.5f).ValueAt(time * 3 + colorOffset);
+                //drawColor.A = 0;
+                //float power = Utils.GetLerpValue(maxTime, maxTime * 0.9f, time, true) * Utils.GetLerpValue(0, maxTime, time, true);
+                //spriteBatch.Draw(lightningTexture[2].Value, new Vector2(points[0].X, 0) - Main.screenPosition / (1 + layer), null, drawColor * 0.3f * strength * power, rotation, lightningTexture[2].Size() * new Vector2(0.5f, 0f), new Vector2(20 * strength, Main.screenHeight), 0, 0);
             }
 
             public Color ColorFunction(float progress)
             {
-                Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.5f, 0.5f).ValueAt(time * 3 + colorOffset + progress) * (1f / layer);
+                Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.5f, 0.5f).ValueAt(time * 3 + colorOffset + progress) * (2f / layer);
                 color.A /= 2;
                 return color * ((float)time / maxTime);
             }
 
             public float WidthFunction(float progress)
             {
-                return 300f * (float)Math.Pow((float)time / maxTime, 0.6f) * Utils.GetLerpValue(maxTime, maxTime * 0.9f, time, true);
+                return 1600f * (float)Math.Pow((float)time / maxTime, 0.3f) * Utils.GetLerpValue(maxTime, maxTime * 0.8f, time, true) * progress * (1f - progress);
             }
         }
     }

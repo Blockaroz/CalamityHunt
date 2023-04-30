@@ -81,6 +81,7 @@ namespace CalamityHunt.Common.Graphics
                 BlackHoleBlender blender = projectile.ModProjectile as BlackHoleBlender;
                 Asset<Texture2D> texture = ModContent.Request<Texture2D>(blender.Texture);
                 Asset<Texture2D> shadow = ModContent.Request<Texture2D>(blender.Texture + "Shadow");
+                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig");
 
                 absorbEffect.Parameters["uTime"].SetValue(projectile.localAI[0] * 0.002f % 1f);
                 absorbEffect.Parameters["uSize"].SetValue(projectile.scale * new Vector2(8f));
@@ -88,8 +89,7 @@ namespace CalamityHunt.Common.Graphics
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, absorbEffect);
 
-                Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig");
-                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), Color.White, 0, bloom.Size() * 0.5f, projectile.scale * 7f, 0, 0);
+                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), Color.White, 0, bloom.Size() * 0.5f, projectile.scale * 7.5f, 0, 0);
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
@@ -135,6 +135,7 @@ namespace CalamityHunt.Common.Graphics
             {
                 Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig");
                 Main.spriteBatch.Draw(bloom.Value, (projectile.Center - Main.screenPosition), null, new Color(33, 5, 65, 0) * (float)Math.Pow(projectile.scale, 1.5f), projectile.rotation, bloom.Size() * 0.5f, 3.5f, 0, 0);
+                Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(33, 5, 65, 0), 0, bloom.Size() * 0.5f, projectile.scale * 7.5f, 0, 0);
 
                 absorbEffect.Parameters["uTime"].SetValue(projectile.localAI[0] * 0.002f % 1f);
                 absorbEffect.Parameters["uSize"].SetValue(new Vector2(8f));

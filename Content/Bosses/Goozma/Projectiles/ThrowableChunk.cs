@@ -34,6 +34,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public ref float Time => ref Projectile.ai[0];
         public ref float Size => ref Projectile.ai[1];
+        public ref float ChunkStyleInt => ref Projectile.ai[2];
 
         public enum ThrowableChunkStyle
         {
@@ -56,12 +57,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             styleRandom.Add(ThrowableChunkStyle.DirtGrass, 0.7f);
             styleRandom.Add(ThrowableChunkStyle.Rock, 0.5f);
             styleRandom.Add(ThrowableChunkStyle.Meteor, 0.4f);
-            styleRandom.Add(ThrowableChunkStyle.Comet, 0.1f);
+            styleRandom.Add(ThrowableChunkStyle.Comet, 0.2f);
             chunkStyle = styleRandom.Get();
+            ChunkStyleInt = (int)chunkStyle;
         }
 
         public override void AI()
         {
+            ChunkStyleInt = (int)chunkStyle;
+
             Vector2 sized = new Vector2(42 + 42 * Size);
             if (Projectile.width != (int)sized.X || Projectile.height != (int)sized.Y)
                 Projectile.Resize((int)sized.X, (int)sized.Y);
@@ -103,6 +107,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     break;
 
                 case ThrowableChunkStyle.Rock:
+
+                    if (Main.rand.NextBool(3))
+                        Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), DustID.Stone, Main.rand.NextVector2Circular(3, 3) - Projectile.velocity * 0.5f, 0, Color.White, 1f + Main.rand.NextFloat((Size + 1) * 0.5f)).noGravity = true;
 
                     break;                
                 
@@ -157,8 +164,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (chunkStyle != ThrowableChunkStyle.Comet)
             {
                 Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(13, 13, 41, 0) * 0.7f * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 3f, 0, 0);
-                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(150, 50, 20, 0) * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 1.66f, 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.White, 0.05f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
+                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(150, 50, 20, 0) * 0.7f * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 1.33f, 0, 0);
+                
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation);
+                    Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, frame, new Color(150, 50, 20, 0) * power, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
+                }
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.White, 0.2f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
             }
             else
             {
@@ -172,7 +185,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(13, 90, 200, 0) * 0.8f * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 1.7f, 0, 0);
 
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.White, 0.05f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.White, 0.5f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
 
                 Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), new Color(13, 13, 41, 0) * 0.7f * power, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 3f, 0, 0);
             }

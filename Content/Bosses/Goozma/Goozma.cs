@@ -68,8 +68,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void SetDefaults()
         {
-            NPC.width = 120;
-            NPC.height = 130;
+            NPC.width = 150;
+            NPC.height = 150;
             NPC.damage = 0;
             NPC.defense = 100;
             NPC.lifeMax = 3500000;
@@ -139,6 +139,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             //Master Drop
             npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<ImperialGelato>()));
+
+            //Lore
+            npcLoot.Add(ItemDropRule.ByCondition())
 
             //Masks
             LeadingConditionRule classic = new LeadingConditionRule(new Conditions.NotExpert());
@@ -236,6 +239,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         NPC.life = 1;
                         NPC.lifeMax = (int)(NPC.lifeMax * 0.3f);
                         NPC.dontTakeDamage = true;
+                        if (!Main.expertMode && !Main.masterMode)
+                            Phase = 3;
 
                         break;
 
@@ -289,7 +294,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (NPC.Distance(ActiveSlime.Center) < 400)
                         NPC.damage = 0;
 
-                if (Phase <= 1 && Time < 15)
+                if (Phase <= 1 && Time < 60)
                     NPC.damage = 0;
             }
 
@@ -816,14 +821,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 case -5:
 
                     NPC.velocity *= 0.8f;
-
+                    NPC.velocity.Y--;
                     if (Time > 30 && Time % 3 == 0)
                     {
                         //Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
                         //leave.data = "GoozmaBlack";
                     }
 
-                    if (Time == 50)
+                    if (Time >= 50)
                     {
                         //Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
                         //leave.data = "GoozmaColor";
@@ -902,6 +907,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Phase = -5;
                     break;
             };
+
+            if (Phase >= 2)
+                SlimeMonsoonBackground.additionalLightningChance = -55;
 
             HandleLoopedSounds();
 
@@ -1081,26 +1089,26 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(target).SafeNormalize(Vector2.Zero) * Math.Max(1, NPC.Distance(target) * 0.4f), 0.27f);
         }
 
-        private void Dash(int dashCD)
-        {
-            if (NPC.Center.Y < Target.Center.Y + 90 && NPC.Center.Y > Target.Center.Y - 90)
-            {
-                Time = 0;
-                NPC.velocity.Y = MathHelper.Lerp(NPC.velocity.Y, (NPC.Center.Y - Target.Center.Y) * 0.2f, 0.1f);
-                Fly();
-            }
+        //private void Dash(int dashCD)
+        //{
+        //    if (NPC.Center.Y < Target.Center.Y + 90 && NPC.Center.Y > Target.Center.Y - 90)
+        //    {
+        //        Time = 0;
+        //        NPC.velocity.Y = MathHelper.Lerp(NPC.velocity.Y, (NPC.Center.Y - Target.Center.Y) * 0.2f, 0.1f);
+        //        Fly();
+        //    }
 
-                float power = 0.05f;
-            if (Time > dashCD - 6)
-                power = 0.2f;
-            else if (Time > dashCD - 15)
-                NPC.velocity *= 0.9f;
+        //        float power = 0.05f;
+        //    if (Time > dashCD - 6)
+        //        power = 0.2f;
+        //    else if (Time > dashCD - 15)
+        //        NPC.velocity *= 0.9f;
 
-            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Math.Clamp(NPC.Distance(Target.Center) * power * 1.5f, 20, 100), power > 0.05f ? 0.1f : 0.03f);
+        //    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Math.Clamp(NPC.Distance(Target.Center) * power * 1.5f, 20, 100), power > 0.05f ? 0.1f : 0.03f);
 
-            if (Time > dashCD)
-                Time = 0;
-        }
+        //    if (Time > dashCD)
+        //        Time = 0;
+        //}
         
         private void DashTo(Vector2 targetPos, int time)
         {
@@ -1361,10 +1369,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         }
 
                         if (Time % 100 == 0)
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionFrom(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1f), ModContent.ProjectileType<BloatedBlast>(), GetDamage(5), 0, ai0: -60);
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<BloatedBlast>(), GetDamage(5), 0, ai0: -60);
 
                         if (Time % 60 == 0)
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 8f, ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionFrom(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 8f, ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
 
                     }
 
@@ -1381,7 +1389,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     //    }
                     //    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * 8f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
                     //}
-                    if ((Time - 70) % 160 > 80 && (Time - 70) % 15 == 2)
+                    if ((Time - 75) % 160 > 80 && (Time - 75) % 15 == 10)
                     {
                         Projectile pure = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1.3f) * (NPC.Distance(targetPos) + 220) * 0.02f * Main.rand.NextFloat(0.9f, 1.2f), ModContent.ProjectileType<SlimeBomb>(), GetDamage(2), 0);
                         pure.ai[0] = (int)((Time - 70) % 160 / 1.5f) - 30;
@@ -1573,7 +1581,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     oldVel[i] = NPC.velocity;
             }
 
-            drawOffset = new Vector2(-5f * NPC.direction, 8f) + new Vector2((float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 2, (float)Math.Cos(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 4);
+            drawOffset = new Vector2((float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 2, (float)Math.Cos(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 3);
             float offsetWobble = (float)Math.Cos(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 0.07f;
             NPC.rotation = MathHelper.Lerp(NPC.rotation, Math.Clamp(drawVelocity.X * 0.01f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.2f);
             extraTilt = MathHelper.Lerp(extraTilt, Math.Clamp(-drawVelocity.X * 0.025f, -1f, 1f) - 0.09f * NPC.direction, 0.15f);

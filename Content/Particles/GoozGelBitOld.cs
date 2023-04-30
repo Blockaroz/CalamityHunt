@@ -13,11 +13,10 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static log4net.Appender.ColoredConsoleAppender;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class GoozGelBit : Particle
+    public class GoozGelBitOld : Particle
     {
         private bool colorful;
         private int variant;
@@ -33,7 +32,7 @@ namespace CalamityHunt.Content.Particles
             direction = Main.rand.NextBool() ? 1 : -1;
             colOffset = Main.rand.NextFloat();
             homePos = position;
-            colorful = !Main.rand.NextBool(4);
+            colorful = Main.rand.NextBool(3);
             behindEntities = true;
         }
 
@@ -86,85 +85,24 @@ namespace CalamityHunt.Content.Particles
         { 
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Rectangle frame = texture.Frame(3, 1, variant, 0);
+            Rectangle frame = texture.Frame(3, 2, variant, 0);
+            Rectangle glowFrame = texture.Frame(3, 2, variant, 1);
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
             glowColor.A = 0;
+            if (colorful)
+                spriteBatch.Draw(glow.Value, position - Main.screenPosition, null, glowColor * 0.1f, rotation, glow.Size() * 0.5f, scale * 2f, 0, 0);
 
             for (int i = 0; i < 4; i++)
             {
                 Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + rotation);
                 spriteBatch.Draw(texture.Value, position + off - Main.screenPosition, frame, glowColor, rotation, frame.Size() * 0.5f, scale, 0, 0);
             }
-
-            if (colorful)
-            {
-                GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
-                Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
-                effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
-                effect.Parameters["colors"].SetValue(colors);
-                effect.Parameters["brightnesses"].SetValue(brightnesses);
-                effect.Parameters["baseToScreenPercent"].SetValue(1f);
-                effect.Parameters["baseToMapPercent"].SetValue(0f);
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
-            }
-
             spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.6f), rotation, frame.Size() * 0.5f, scale, 0, 0);
 
             if (colorful)
-            {
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-            }
-        }
+                spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor * 0.75f * scale, rotation, frame.Size() * 0.5f, scale, 0, 0);
 
-        public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
-        {
-            float maxBright = 0.667f;
-            brightnesses = new float[10];
-            colors = new Vector3[10];
-
-            float rainbowStartOffset = 0.35f + time * 0.01f % (maxBright * 2f);
-            //Calculate and store every non-modulo brightness, with the shifting offset. 
-            //The first brightness is ignored for the moment, it will be relevant later. Setting it to -1 temporarily
-            brightnesses[0] = -1;
-            brightnesses[1] = rainbowStartOffset + 0.35f;
-            brightnesses[2] = rainbowStartOffset + 0.42f;
-            brightnesses[3] = rainbowStartOffset + 0.47f;
-            brightnesses[4] = rainbowStartOffset + 0.51f;
-            brightnesses[5] = rainbowStartOffset + 0.56f;
-            brightnesses[6] = rainbowStartOffset + 0.61f;
-            brightnesses[7] = rainbowStartOffset + 0.64f;
-            brightnesses[8] = rainbowStartOffset + 0.72f;
-            brightnesses[9] = rainbowStartOffset + 0.75f;
-
-            //Pass the entire rainbow through modulo 1
-            for (int i = 1; i < 10; i++)
-                brightnesses[i] = HuntOfTheOldGodUtils.Modulo(brightnesses[i], maxBright) * maxBright;
-
-            //Store the first element's value so we can find it again later
-            float firstBrightnessValue = brightnesses[1];
-
-            //Sort the values from lowest to highest
-            Array.Sort(brightnesses);
-
-            //Find the new index of the original first element after the list being sorted
-            int rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
-            //Substract 1 from the index, because we are ignoring the currently negative first array slot.
-            rainbowStartIndex--;
-
-            //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
-            for (int i = 0; i < 9; i++)
-            {
-                colors[1 + (rainbowStartIndex + i) % 9] = Goozma.gradientColors[i];
-            }
-
-            //We always want a brightness at index 0 to be the lower bound
-            brightnesses[0] = 0;
-            //Make the color at index 0 be a mix between the first and last colors in the list, based on the distance between the 2.
-            float interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
-            colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
         }
     }
 }

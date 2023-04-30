@@ -62,7 +62,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     //return (stars * darkColor * (1.2 - pow(stars, 1.5)) + stars * uColorAura + pow(stars, 5) * uColorLight * 0.7);
     
     float glowLine = smoothstep(0.9, 0.95, base.g);
-    return dark + base.g * uColorAura * 0.5 + glowLine * uColorLight + base.b * uColorDark * 0.2;
+    return dark + base.g * uColorAura * 0.5 + glowLine * uColorLight + base.b * uColorDark * 0.2 + tex2D(tex1, float2(frac(input.Coord.x + uTime * 2), 1 - input.Coord.y)) * uColorAura;
 }
 
 technique Technique1

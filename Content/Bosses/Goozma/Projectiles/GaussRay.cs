@@ -61,7 +61,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             Main.npc[(int)Owner].direction = Math.Sign(Projectile.rotation.ToRotationVector2().X);
-            Projectile.Center = Main.npc[(int)Owner].Center + new Vector2(5 * Main.npc[(int)Owner].direction, -10);
+            Projectile.Center = Main.npc[(int)Owner].Center;
             (Main.npc[(int)Owner].ModNPC as Goozma).drawVelocity = Projectile.rotation.ToRotationVector2() * 12f;
             Main.npc[(int)Owner].velocity += Projectile.rotation.ToRotationVector2() * -0.1f;
             Main.npc[(int)Owner].velocity *= 0.9f;

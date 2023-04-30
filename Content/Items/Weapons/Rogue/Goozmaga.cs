@@ -18,7 +18,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 		public override void SetDefaults()
 		{
 			Item.width = 100;
-			Item.damage = 20000; 
+			Item.damage = 200000; 
 			Item.noMelee = true;
 			Item.noUseGraphic = true;
 			Item.useAnimation = Item.useTime = 40;

@@ -19,8 +19,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         private static float maxBright;
 
-        public static float Modulo(float dividend, float divisor) => dividend - (float)Math.Floor(dividend / divisor) * divisor;
-
         public static readonly Vector3[] gradientColors = new Vector3[]
         {
             new Color(0, 0, 0).ToVector3(),
@@ -56,7 +54,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             //Pass the entire rainbow through modulo 1
             for (int i = 1; i < 10; i++)
-                brightnesses[i] = Modulo(brightnesses[i], maxBright) * maxBright;
+                brightnesses[i] = HuntOfTheOldGodUtils.Modulo(brightnesses[i], maxBright) * maxBright;
 
             //Store the first element's value so we can find it again later
             float firstBrightnessValue = brightnesses[1];
