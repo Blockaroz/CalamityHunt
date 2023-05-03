@@ -16,20 +16,20 @@ namespace CalamityHunt.Content.Particles
         public override void OnSpawn()
         {
             rotation += Main.rand.NextFloat(-3f, 3f);
-            scale *= 1.2f;
+            scale *= 1.5f;
             frame = Main.rand.Next(3);
         }
 
         public override void Update()
         {
             life += 0.1f;
-            scale *= 0.96f;
+            scale *= 0.94f;
             rotation += velocity.X * 0.2f;
 
-            scale -= 0.01f;
+            scale -= 0.02f;
             velocity *= 0.97f;
-            velocity.X += Main.rand.Next(-5, 5) * 0.01f;
-            velocity.Y += Main.rand.Next(-5, 5) * 0.02f;
+            velocity.X += Main.rand.Next(-3, 3) * 0.005f;
+            velocity.Y += Main.rand.Next(-3, 3) * 0.008f;
 
             if (data is float)
                 color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt((float)data + life * 0.05f);
@@ -45,7 +45,7 @@ namespace CalamityHunt.Content.Particles
                 hue.data = data;
             }
 
-            if (scale < 0.5f)
+            if (scale < 0.1f)
                 Active = false;
         }
 
@@ -64,7 +64,7 @@ namespace CalamityHunt.Content.Particles
             spriteBatch.Draw(texture.Value, position - Main.screenPosition, rect, drawColor, rotation, rect.Size() * 0.5f, scale, 0, 0);
             spriteBatch.Draw(glowSoft.Value, position - Main.screenPosition, null, glowColor * 0.5f, rotation, glowSoft.Size() * 0.5f, scale * 0.5f, 0, 0);
 
-            float innerGlowScale = 0.7f - Utils.GetLerpValue(0f, 1f, life, true) * 0.3f;
+            float innerGlowScale = 0.7f - Utils.GetLerpValue(0f, 1f, life, true) * 0.2f;
             //spriteBatch.Draw(glowSoft.Value, position - Main.screenPosition, null, whiteColor * 0.6f, rotation, glowSoft.Size() * 0.5f, scale * 0.1f * innerGlowScale, 0, 0);
             spriteBatch.Draw(texture.Value, position - Main.screenPosition, rect, whiteColor, rotation, rect.Size() * 0.5f, scale * innerGlowScale * 0.7f, 0, 0);
         }

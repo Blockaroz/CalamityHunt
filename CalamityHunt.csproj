@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Sounds\SlimeMonsoon\" />
+    <Folder Include="Common\Bestiary\" />
     <Folder Include="Content\Items\Accessories\" />
     <Folder Include="Content\Items\Weapons\Melee\" />
     <Folder Include="Content\Items\Weapons\Ranged\" />

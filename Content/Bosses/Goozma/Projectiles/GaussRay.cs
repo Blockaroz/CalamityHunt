@@ -130,7 +130,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time % 4 == 0 && Time > ChargeTime && Time < ChargeTime + LaserDuration)
             {
                 float shakeStrength = Utils.GetLerpValue(ChargeTime - LaserDuration * 0.5f, ChargeTime + LaserDuration, Time, true);
-                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 11f, 12, 20, 5000));
+                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 18f, 12, 20, 5000));
             }
 
             Time++;
@@ -152,11 +152,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             SoundStyle raySound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaGaussRayLoop");
             raySound.IsLooped = true;
 
-            pitch = MathHelper.SmoothStep(0f, 1f, Utils.GetLerpValue(ChargeTime - 25, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.133f;
+            pitch = MathHelper.SmoothStep(0.1f, 1f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.133f;
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
             bool active = SoundEngine.TryGetActiveSound(laserSound, out ActiveSound sound);
             if ((!active || !laserSound.IsValid) && Time > ChargeTime - 35)
-                laserSound = SoundEngine.PlaySound(raySound, Projectile.Center);
+                laserSound = SoundEngine.PlaySound(raySound.WithVolumeScale(1.1f), Projectile.Center);
 
             if (active)
             {

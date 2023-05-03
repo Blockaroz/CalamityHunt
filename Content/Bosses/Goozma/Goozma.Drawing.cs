@@ -149,16 +149,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f); 
             effect.Parameters["colors"].SetValue(colors);
             effect.Parameters["brightnesses"].SetValue(brightnesses);
-            effect.Parameters["baseToScreenPercent"].SetValue(1f);//1.5f
-            effect.Parameters["baseToMapPercent"].SetValue(0f);//-1
+            effect.Parameters["baseToScreenPercent"].SetValue(1.1f);//1.5f
+            effect.Parameters["baseToMapPercent"].SetValue(-0.1f);//-1
             if (Phase == 3)
             {
-                effect.Parameters["baseToScreenPercent"].SetValue(1f - Utils.GetLerpValue(80, 180, Time, true));
-                effect.Parameters["baseToMapPercent"].SetValue(0);//-1f + Utils.GetLerpValue(20, 180, Time, true)
+                effect.Parameters["baseToScreenPercent"].SetValue(1.1f - Utils.GetLerpValue(80, 180, Time, true) * 1.1f);
+                effect.Parameters["baseToMapPercent"].SetValue(-0.1f + Utils.GetLerpValue(20, 150, Time, true) * 0.1f);//-1f + Utils.GetLerpValue(20, 180, Time, true)
             }
 
             FlipShadersOnOff(spriteBatch, effect, false);
-            DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, drawVelocity, tentacleVelocity, Color.Lerp(drawColor, Color.White, 0.3f));
+            DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, drawVelocity, tentacleVelocity, Color.White);
             FlipShadersOnOff(spriteBatch, null, false);
 
             Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * headScale * NPC.scale;
@@ -206,7 +206,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.End();
                 spriteBatch.GraphicsDevice.RasterizerState = priorRasterizer;
                 spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.UIScaleMatrix);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRasterizer, effect, Main.UIScaleMatrix);
             }
             else
             {
@@ -276,10 +276,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (cordTarget != null)
             {
                 if (NPC.IsABestiaryIconDummy)
-                    spriteBatch.Draw(cordTarget, Vector2.Zero, null, color, 0, Vector2.Zero, 2f, 0, 0);
+                    spriteBatch.Draw(cordTarget, position, null, color, 0, cordTarget.Size() * 0.5f, NPC.scale * 2f, 0, 0);
 
                 else
-                    spriteBatch.Draw(cordTarget, Vector2.Zero + (position - NPC.Center), null, color, 0, Vector2.Zero, 2f, 0, 0);
+                    spriteBatch.Draw(cordTarget, position - screenPos, null, color, 0, cordTarget.Size() * 0.5f, NPC.scale * 2f, 0, 0);
             }
 
             spriteBatch.Draw(texture.Value, position + drawOffset - screenPos, null, color, extraTilt * 0.9f + rotation, texture.Size() * 0.5f, headScale * NPC.scale, direction, 0);

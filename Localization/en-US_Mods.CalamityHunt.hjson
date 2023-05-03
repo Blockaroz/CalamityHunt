@@ -189,6 +189,7 @@ NPCs: {
 	DivineGargooptuar.DisplayName: Divine Gargooptuar
 	EbonianBehemuck.DisplayName: Ebonian Behemuck
 	StellarGeliath.DisplayName: Stellar Geliath
+	Goozmite.DisplayName: Goozmite
 }
 
 Projectiles: {
@@ -226,6 +227,8 @@ Projectiles: {
 	CosmicDust.DisplayName: Cosmic Dust
 	InterstellarFlame.DisplayName: Interstellar Flame
 	ThrowableChunk.DisplayName: Throwable Chunk
+	MiniRainbowBall.DisplayName: Mini Rainbow Ball
+	RainbowLaser.DisplayName: Rainbow Laser
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
@@ -236,6 +239,7 @@ Bestiary: {
 	DivineGargooptuar: A concentrated mass of resplendent divinity that ferociously defends its mucilaginous master with dazzling, flamboyant ardor. As extensions of its body, Goozma's paladins possess only limited autonomy.
 	EbonianBehemuck: A concentrated mass of virulent corrosion that ferociously defends its mucilaginous master with ruthless, determined zeal. Goozma's paladins are deliberately spared from assimilation.
 	StellarGeliath: A concentrated mass of empyrean infinity that ferociously defends its mucilaginous master with ethereal, unearthly vigor. Left alone, Goozma could assimilate all matter in the universe.
+	Goozmite: Not strictly an autonomous individual; rather, an amorphous portion of Goozma's body that has cellularly differentiated to siphon matter for slime self-replication. Goozma's slime is versatile and physically paradoxical, being an amalgamation of nearly every type of substance to exist.
 }
 
 Buffs: {
