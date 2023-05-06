@@ -181,6 +181,16 @@ Items: {
 		DisplayName: Stellar Geliath Trophy
 		Tooltip: ""
 	}
+
+	PumpActionSwampgun: {
+		DisplayName: Pump Action Swampgun
+		Tooltip: ""
+	}
+
+	Parasanguine: {
+		DisplayName: Parasanguine
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -229,6 +239,8 @@ Projectiles: {
 	ThrowableChunk.DisplayName: Throwable Chunk
 	MiniRainbowBall.DisplayName: Mini Rainbow Ball
 	RainbowLaser.DisplayName: Rainbow Laser
+	PumpActionSwampgunHeld.DisplayName: Pump Action Swampgun Held
+	ParasanguineHeld.DisplayName: Parasanguine Held
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

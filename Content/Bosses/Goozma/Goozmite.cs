@@ -130,7 +130,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(NPC.GetTargetData().Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f), ModContent.ProjectileType<RainbowLaser>(), GetDamage(1), 0, ai0: -10, ai1: NPC.whoAmI);
 
                     int rateOfFiring = 30 + Main.npc.Count(n => n.active && n.type == ModContent.NPCType<Goozmite>()) * 5;
-                    if (Time % rateOfFiring == 20 && Main.rand.NextBool(3))
+                    if (Time % rateOfFiring == 10 && Main.rand.NextBool(3))
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(NPC.GetTargetData().Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f), ModContent.ProjectileType<RainbowLaser>(), GetDamage(1), 0, ai0: -Main.rand.Next(20, 30), ai1: NPC.whoAmI);
 
                 }
@@ -215,8 +215,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.localAI[0]++;
             NPC.localAI[1]++;
 
-
-
             int randCounter = Main.rand.Next(35, 50);
             if ((Time - 40) % randCounter < Main.rand.Next(3))
             {
@@ -288,11 +286,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void FindFrame(int frameHeight)
         {
             if (NPC.IsABestiaryIconDummy)
-            {
-                lookVector = Vector2.Zero;
-                NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 66f;
-                NPC.localAI[1] = Main.GlobalTimeWrappedHourly * 66f;
-            }
+                lookVector = Vector2.Lerp(lookVector, NPC.DirectionTo(Main.MouseScreen).SafeNormalize(Vector2.Zero) * Math.Clamp(NPC.Distance(Main.MouseScreen) * 0.5f, 0, 5f), 0.05f);
         }
 
         private Vector2 lookVector;
@@ -307,6 +301,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             Asset<Texture2D> flare = TextureAssets.Extra[89];
 
             SpriteEffects spriteEffect = NPC.direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            if (NPC.IsABestiaryIconDummy)
+                NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 66.6666f;
 
             Color myColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
             myColor.A = 0;

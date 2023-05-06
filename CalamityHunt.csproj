@@ -22,10 +22,8 @@
     <Folder Include="Assets\Sounds\SlimeMonsoon\" />
     <Folder Include="Common\Bestiary\" />
     <Folder Include="Content\Items\Accessories\" />
-    <Folder Include="Content\Items\Weapons\Melee\" />
     <Folder Include="Content\Items\Weapons\Ranged\" />
     <Folder Include="Content\Projectiles\Weapons\Magic\" />
-    <Folder Include="Content\Projectiles\Weapons\Melee\" />
     <Folder Include="Content\Projectiles\Weapons\Ranged\" />
   </ItemGroup>
 </Project>

@@ -130,11 +130,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Main.EntitySpriteDraw(bloom.Value, oldPos - Main.screenPosition, bloom.Frame(), trailColor * 0.1f, Projectile.oldRot[i] + addRot, bloom.Size() * 0.5f, Projectile.scale * new Vector2(Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f, 0.5f) * (1f - prog), 0, 0);
             }
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(2.33f, 5f), 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(1.5f, 4f) * 0.7f, 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(3f, 5f), 0, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(2f, 4f) * 0.7f, 0, 0);
             Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.1f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 3f, 0, 0);
             Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.2f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
             Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 0.5f, 0, 0);
 
             return false;
         }
