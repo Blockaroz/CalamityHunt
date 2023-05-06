@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Content.Items.Rarities;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
@@ -12,7 +13,6 @@ namespace CalamityHunt.Content.Items.Lore
     {
         public override void SetStaticDefaults()
         {
-            ItemID.Sets.ItemIconPulse[Type] = true;
             ItemID.Sets.ItemNoGravity[Type] = true;
         }
 
@@ -20,22 +20,28 @@ namespace CalamityHunt.Content.Items.Lore
         {
             Item.width = 40;
             Item.height = 40;
-            Item.value = Item.sellPrice(0, 30);
             Item.rare = ModContent.RarityType<VioletRarity>();
-            Item.maxStack = Item.CommonMaxStack;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip0");
             if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
+            {
+                if (line != null)
+                    line.Text = Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.LoreGeneric").Value;
                 return;
+            }
 
             //stuff is in HuntOfTheoldGodUtils
-            string tooltip = Language.GetOrRegister($"{nameof(CalamityHunt)}.Lore.Goozma").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.LoreGoozma").Value;
 
-            TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip2");
             if (line != null)
                 line.Text = tooltip;
         }
+
+        public override bool CanUseItem(Player player) => false;
+
+        public override Color? GetAlpha(Color lightColor) => Color.White;
     }
 }

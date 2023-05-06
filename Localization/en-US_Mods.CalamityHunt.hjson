@@ -144,7 +144,7 @@ Items: {
 		DisplayName: Auric Sole
 		Tooltip:
 			'''
-			Power on to enable
+			Right click to disable
 			Allows you to slide on every surface
 			Warning: May result in exceedingly high speeds
 			'Yharim would hate you for this'
@@ -155,7 +155,7 @@ Items: {
 		DisplayName: Discharged Auric Sole
 		Tooltip:
 			'''
-			Power on to enable
+			Right click to enable
 			Allows you to slide on every surface
 			Warning: May result in exceedingly high speeds
 			'Yharim would hate you for this'
@@ -274,3 +274,19 @@ Config: {
 		Tooltip: Enables or disables the Divine Gargooptuar's holy explosion screenshake effect
 	}
 }
+
+LoreGeneric:
+	'''
+	[c/E3AF40:Whispers from on high dance in your ears...]
+	[c/BEBEBE:Press "Left Shift" to listen closer]
+	'''
+LoreGoozma:
+	'''
+	A most chilling upset, in the hierarchical dominion of all things living.
+	To think the culmination of the lowest echelon of creatures could nevertheless possess an Auric soul, despite lacking any draconic heritage…
+	It became something greater, approaching a perfect being comprised of naught but imperfect parts...perhaps what truly makes a God will forever be unknown.
+	My apprehension towards your catalysis of this veritable harbinger of destruction’s cultivation is outweighed by my curiosity towards it.
+	What could have influenced the form that it took? Its appearance belies the finesse and sophistication of the manipulation of its subjects.
+	What a pity it is that the fruits of its effort came to nothing, in the end. An unremitting pattern in the cyclic annals of history.
+	Perhaps, from the perspective of Terraria, our own achievements amount to little more than the impotent writhing of slimes.
+	'''

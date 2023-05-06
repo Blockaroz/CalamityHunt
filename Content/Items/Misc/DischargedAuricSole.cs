@@ -18,8 +18,10 @@ namespace CalamityHunt.Content.Items.Misc
         public override void RightClick(Player player)
         {
             Terraria.Audio.SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact);
+            bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<AuricSole>());
             Item.stack++;
+            Item.favorited = favorited;
         }
     }
 }
