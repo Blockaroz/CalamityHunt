@@ -1710,8 +1710,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             drawOffset = new Vector2((float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 2, (float)Math.Cos(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 3);
             float offsetWobble = (float)Math.Cos(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 0.07f;
-            NPC.rotation = MathHelper.Lerp(NPC.rotation, Math.Clamp(drawVelocity.X * 0.01f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.2f);
-            extraTilt = MathHelper.Lerp(extraTilt, Math.Clamp(-drawVelocity.X * 0.025f, -1f, 1f) - 0.09f * NPC.direction, 0.15f);
+
+            NPC.rotation = MathHelper.Lerp(NPC.rotation, Math.Clamp(drawVelocity.X * 0.012f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.2f);
+            extraTilt = MathHelper.Lerp(extraTilt, Math.Clamp(-drawVelocity.X * 0.025f, -1f, 1f) - 0.01f * NPC.direction, 0.15f);
             headScale = MathHelper.Lerp(headScale, 1f, 0.05f);
 
             tentacleVelocity *= 0.8f;

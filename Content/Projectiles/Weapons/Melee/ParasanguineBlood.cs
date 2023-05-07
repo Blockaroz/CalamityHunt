@@ -65,6 +65,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
             if (StickHost > -1)
             {
+                if (Time < 200)
+                    Time = 200;
+
                 if (!Main.npc[(int)StickHost].active)
                     Projectile.Kill();
 
@@ -74,7 +77,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             }
 
             if (Mode == 2)
-                Projectile.rotation = Projectile.rotation.AngleLerp(MathHelper.PiOver2, 0.1f);
+                Projectile.rotation = Projectile.rotation.AngleLerp(MathHelper.PiOver2, 0.5f);
 
             Projectile.frame = (Mode > 0 ? 2 : 0) + (int)Projectile.localAI[0];
 
@@ -117,11 +120,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
             Vector2 squish = new Vector2(1.05f - Projectile.velocity.Length() * 0.005f, 1.05f + Projectile.velocity.Length() * 0.01f);
             if (Mode == 2)
-                squish = new Vector2(1.4f, 0.8f);
+                squish = new Vector2(1.2f, 0.8f);
 
             SpriteEffects spriteEffects = Projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 
-            Main.EntitySpriteDraw(texture, Projectile.Center + new Vector2(0, Projectile.height * 0.5f * (Mode == 2 ? 1 : 0)) - Main.screenPosition, frame, new Color(255, 30, 50).MultiplyRGBA(lightColor), Projectile.rotation - MathHelper.PiOver2 * Projectile.spriteDirection, frame.Size() * new Vector2(0.5f, 0.5f + 0.4f * Projectile.spriteDirection), Projectile.scale * Projectile.localAI[1] * squish, spriteEffects, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center + new Vector2(0, Projectile.height * 0.5f * (Mode == 2 ? 1 : 0)) - Main.screenPosition, frame, new Color(180, 10, 30).MultiplyRGBA(lightColor), Projectile.rotation - MathHelper.PiOver2 * Projectile.spriteDirection, frame.Size() * new Vector2(0.5f, 0.5f + 0.4f * Projectile.spriteDirection), Projectile.scale * Projectile.localAI[1] * squish, spriteEffects, 0);
         }
     }
 }

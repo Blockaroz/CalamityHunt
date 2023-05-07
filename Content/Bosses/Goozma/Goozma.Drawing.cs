@@ -77,9 +77,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //Rectangle ornamentBase = ornament.Frame(1, 2, 0, 0);
             //Rectangle ornamentGlow = ornament.Frame(1, 2, 0, 1);
 
-            if (NPC.IsABestiaryIconDummy)
-                NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 66.6666f;
-
             SpriteEffects direction = NPC.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
             glowColor.A = 0;

@@ -184,10 +184,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         }
                     }
                     if (distance > 36)
-                    {
-                        RememberAttack = Attack;
                         Attack = (int)AttackList.SlamDown;
-                    }
                 }
 
                 NPC.frameCounter++;

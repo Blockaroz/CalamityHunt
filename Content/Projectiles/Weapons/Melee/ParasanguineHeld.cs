@@ -95,7 +95,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     if (Time > 16 && Time < 33 && Time % 2 == 0)
                     {
                         Vector2 stickyVelocity = (Projectile.velocity.ToRotation() + (rotation * 0.6f - 0.3f) * Projectile.direction).ToRotationVector2() * Main.rand.NextFloat(8f, 18f) * Utils.GetLerpValue(0, 35, Time, true);
-                        Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20f, stickyVelocity, ModContent.ProjectileType<ParasanguineBlood>(), Projectile.damage / 3, 0.5f, Owner.whoAmI);
+                        Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 70f, stickyVelocity + Owner.velocity, ModContent.ProjectileType<ParasanguineBlood>(), Projectile.damage / 3, 0.5f, Owner.whoAmI);
                     }
 
                     if (Time > 45)
@@ -126,10 +126,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
                     rotation = 2f - SwingProgress(MathF.Pow(Utils.GetLerpValue(0, 35, Time, true), 3f)) * 4f;
 
-                    if (Time > 22 && Time < 32)
+                    if (Time > 20 && Time < 32)
                     {
-                        Vector2 stickyVelocity = (Projectile.velocity.ToRotation() + (rotation * 0.7f - 0.4f) * Projectile.direction).ToRotationVector2() * Main.rand.NextFloat(15f, 20f) * Utils.GetLerpValue(0, 35, Time, true) * Utils.GetLerpValue(35, 30, Time, true) * 1.1f;
-                        Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20f, stickyVelocity, ModContent.ProjectileType<ParasanguineBlood>(), Projectile.damage / 3, 0.5f, Owner.whoAmI);
+                        Vector2 stickyVelocity = (Projectile.velocity.ToRotation() + (rotation * 0.3f - 0.77f) * Projectile.direction).ToRotationVector2() * Main.rand.NextFloat(15f, 20f) * Utils.GetLerpValue(0, 35, Time, true) * Utils.GetLerpValue(35, 30, Time, true) * 1.1f;
+                        Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 70f, stickyVelocity + Owner.velocity, ModContent.ProjectileType<ParasanguineBlood>(), Projectile.damage / 3, 0.5f, Owner.whoAmI);
                     }
 
                     if (Time > 40)
@@ -199,7 +199,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                         for (int i = 0; i < 5; i++)
                         {
                             Vector2 stickyVelocity = Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(1f) * Main.rand.NextFloat(18f, 32f) * Utils.GetLerpValue(0, 35, Time, true);
-                            Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 20f, stickyVelocity, ModContent.ProjectileType<ParasanguineBlood>(), Owner.GetWeaponDamage(Owner.HeldItem) / 2, 0.5f, Owner.whoAmI);
+                            Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 70f, stickyVelocity + Owner.velocity, ModContent.ProjectileType<ParasanguineBlood>(), Owner.GetWeaponDamage(Owner.HeldItem) / 2, 0.5f, Owner.whoAmI);
                         }
                     }
 
@@ -249,7 +249,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                         for (int i = 0; i < 2; i++)
                         {
                             Vector2 stickyVelocity = (Projectile.rotation + i * 0.2f * Projectile.direction).ToRotationVector2() * Main.rand.NextFloat(18f, 32f) * Utils.GetLerpValue(0, 35, Time, true);
-                            Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 20f, stickyVelocity, ModContent.ProjectileType<ParasanguineBlood>(), Projectile.damage / 2, 0.5f, Owner.whoAmI);
+                            Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 60f, stickyVelocity + Owner.velocity, ModContent.ProjectileType<ParasanguineBlood>(), Projectile.damage / 2, 0.5f, Owner.whoAmI);
                         }
 
                         if ((Time - 20) % 10 == 0 && !Main.dedServ)
@@ -275,7 +275,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
             if (Projectile.damage > 0)
             {
-                Projectile.EmitEnchantmentVisualsAt(Projectile.Center + Projectile.rotation.ToRotationVector2() * 200 - new Vector2(100), 200, 200);
+                Projectile.EmitEnchantmentVisualsAt(Projectile.Center + Projectile.rotation.ToRotationVector2() * 100 - new Vector2(50), 100, 100);
 
                 if (Mode < 2)
                 {
@@ -422,8 +422,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 for (int i = 0; i < 6; i++)
                 {
                     Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 6f * i + Projectile.rotation);
-                    Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, Color.Black * 0.15f * strength, Projectile.rotation - MathHelper.PiOver4 * Projectile.direction, origin, Projectile.scale, spriteEffects, 0);
-                    Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, new Color(255, 20, 30, 0) * strength, Projectile.rotation - MathHelper.PiOver4 * Projectile.direction, origin, Projectile.scale, spriteEffects, 0);
+                    Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, Color.Black * 0.5f * strength, Projectile.rotation - MathHelper.PiOver4 * Projectile.direction, origin, Projectile.scale, spriteEffects, 0);
+                }                
+                for (int i = 0; i < 6; i++)
+                {
+                    Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 6f * i + Projectile.rotation);
+                    Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, new Color(211, 10, 15, 0) * strength, Projectile.rotation - MathHelper.PiOver4 * Projectile.direction, origin, Projectile.scale, spriteEffects, 0);
                 }
             }
 
@@ -432,10 +436,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             if (Owner.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent > 0.5f && Mode < 2)
             {
                 Vector2 tip = new Vector2(Projectile.scale * 92, -5 * Projectile.direction).RotatedBy(Projectile.rotation);
-                Main.EntitySpriteDraw(flare, Projectile.Center + tip - Main.screenPosition, flare.Frame(), Color.Black * 0.7f * strength, 0, flare.Size() * 0.5f, new Vector2(0.3f, 1.5f), spriteEffects, 0);
-                Main.EntitySpriteDraw(flare, Projectile.Center + tip - Main.screenPosition, flare.Frame(), Color.Black * 0.7f * strength, MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(0.3f, 2f), spriteEffects, 0);
-                Main.EntitySpriteDraw(flare, Projectile.Center + tip - Main.screenPosition, flare.Frame(), new Color(255, 20, 30, 0) * strength, 0, flare.Size() * 0.5f, new Vector2(0.4f, 1.5f), spriteEffects, 0);
-                Main.EntitySpriteDraw(flare, Projectile.Center + tip - Main.screenPosition, flare.Frame(), new Color(255, 20, 30, 0) * strength, MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(0.4f, 2f), spriteEffects, 0);
+                Main.EntitySpriteDraw(flare, Projectile.Center + tip - Main.screenPosition, flare.Frame(), Color.Black * 0.9f * strength, 0, flare.Size() * 0.5f, new Vector2(0.4f, 1.5f), spriteEffects, 0);
+                Main.EntitySpriteDraw(flare, Projectile.Center + tip - Main.screenPosition, flare.Frame(), Color.Black * 0.9f * strength, MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(0.4f, 2f), spriteEffects, 0);
+                Main.EntitySpriteDraw(flare, Projectile.Center + tip - Main.screenPosition, flare.Frame(), new Color(211, 10, 15, 0) * strength, 0, flare.Size() * 0.5f, new Vector2(0.5f, 1.5f), spriteEffects, 0);
+                Main.EntitySpriteDraw(flare, Projectile.Center + tip - Main.screenPosition, flare.Frame(), new Color(211, 10, 15, 0) * strength, MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(0.5f, 2f), spriteEffects, 0);
             }
        
             if (Mode == 2 && Time >= 25 && Time <= 45)

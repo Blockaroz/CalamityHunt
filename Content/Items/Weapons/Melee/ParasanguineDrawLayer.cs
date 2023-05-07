@@ -33,9 +33,13 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
                     for (int i = 0; i < 6; i++)
                     {
                         Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 6f * i + drawRotation);
-                        DrawData outlineDarkData = new DrawData(texture, drawCenter + off - Main.screenPosition, texture.Frame(), Color.Black * 0.15f * strength, drawRotation + MathHelper.PiOver4 * drawInfo.drawPlayer.direction, texture.Size() * 0.5f, 1f, drawInfo.playerEffect, 0);
-                        DrawData outlineData = new DrawData(texture, drawCenter + off - Main.screenPosition, texture.Frame(), new Color(255, 20, 30, 0) * strength, drawRotation + MathHelper.PiOver4 * drawInfo.drawPlayer.direction, texture.Size() * 0.5f, 1f, drawInfo.playerEffect, 0);
+                        DrawData outlineDarkData = new DrawData(texture, drawCenter + off - Main.screenPosition, texture.Frame(), Color.Black * 0.5f * strength, drawRotation + MathHelper.PiOver4 * drawInfo.drawPlayer.direction, texture.Size() * 0.5f, 1f, drawInfo.playerEffect, 0);
                         drawInfo.DrawDataCache.Add(outlineDarkData);
+                    }
+                    for (int i = 0; i < 6; i++)
+                    {
+                        Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 6f * i + drawRotation);
+                        DrawData outlineData = new DrawData(texture, drawCenter + off - Main.screenPosition, texture.Frame(), new Color(211, 10, 15, 0) * strength, drawRotation + MathHelper.PiOver4 * drawInfo.drawPlayer.direction, texture.Size() * 0.5f, 1f, drawInfo.playerEffect, 0);
                         drawInfo.DrawDataCache.Add(outlineData);
                     }
                 }

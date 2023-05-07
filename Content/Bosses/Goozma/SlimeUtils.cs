@@ -46,28 +46,42 @@ namespace CalamityHunt.Content.Bosses.Goozma
             return pos;
         }
 
-        public static Color[] GoozColors
+        public static Color[] GoozColors => new Color[]
         {
-            get
-            {
-                return new Color[]
-                {
-                    new Color(GoozColorsVector3[3]),
-                    new Color(GoozColorsVector3[4]),
-                    new Color(GoozColorsVector3[5]),
-                    new Color(GoozColorsVector3[6]),
-                    new Color(GoozColorsVector3[7]),
-                };
-            }
-        }
+            new Color(GoozColorsVector3[3]),
+            new Color(GoozColorsVector3[4]),
+            new Color(GoozColorsVector3[5]),
+            new Color(GoozColorsVector3[6]),
+            new Color(GoozColorsVector3[7]),
+        };
 
         public static Vector3[] GoozColorsVector3
         {
             get
             {
-                if (true)
+                if (Main.drunkWorld)
+                    return ColorsForFunnyWorlds(GoozmaColorType);                
+                
+                if (Main.getGoodWorld)
+                    return GoozmaColorUtils.Masterful;                
+                
+                if (Main.getGoodWorld && Main.masterMode)
                     return GoozmaColorUtils.Nuclear;
-                else
+
+                if (Main.notTheBeesWorld)
+                    return GoozmaColorUtils.Honey;
+
+                return GoozmaColorUtils.Oil;
+            }
+        }
+
+        public static int GoozmaColorType;
+
+        private static Vector3[] ColorsForFunnyWorlds(int type)
+        {
+            switch (GoozmaColorType)
+            {
+                default:
                     return GoozmaColorUtils.Oil;
             }
         }

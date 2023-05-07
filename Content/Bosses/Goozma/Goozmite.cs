@@ -286,7 +286,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void FindFrame(int frameHeight)
         {
             if (NPC.IsABestiaryIconDummy)
-                lookVector = Vector2.Lerp(lookVector, NPC.DirectionTo(Main.MouseScreen).SafeNormalize(Vector2.Zero) * Math.Clamp(NPC.Distance(Main.MouseScreen) * 0.5f, 0, 5f), 0.05f);
+                NPC.localAI[0]++;
         }
 
         private Vector2 lookVector;
@@ -301,9 +301,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             Asset<Texture2D> flare = TextureAssets.Extra[89];
 
             SpriteEffects spriteEffect = NPC.direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-
-            if (NPC.IsABestiaryIconDummy)
-                NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 66.6666f;
 
             Color myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
             myColor.A = 0;

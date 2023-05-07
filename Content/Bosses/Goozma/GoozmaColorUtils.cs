@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Terraria;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -55,25 +56,44 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(187, 187, 187).ToVector3(),
             new Color(0, 0, 0).ToVector3()
         };
-
-        public static Vector3[] Test 
+                
+        public static Vector3[] Honey = new Vector3[]
         {
-            get
-            {
-                return Oil;
-                return new Vector3[]
-                {
-                    new Color(0, 0, 0).ToVector3(),
-                    new Color(23, 16, 9).ToVector3(),
-                    new Color(40, 28, 15).ToVector3(),
-                    new Color(213, 150, 78).ToVector3(),
-                    new Color(242, 192, 100).ToVector3(),
-                    new Color(255, 255, 147).ToVector3(),
-                    new Color(143, 99, 52).ToVector3(),
-                    new Color(111, 80, 41).ToVector3(),
-                    new Color(0, 0, 0).ToVector3()
-                };
-            }
-        }
+            new Color(0, 0, 0).ToVector3(),
+            new Color(51, 4, 19).ToVector3(),
+            new Color(135, 58, 6).ToVector3(),
+            new Color(216, 93, 10).ToVector3(),
+            new Color(216, 163, 24).ToVector3(),
+            new Color(240, 198, 24).ToVector3(),
+            new Color(225, 140, 24).ToVector3(),
+            new Color(225, 85, 143).ToVector3(),
+            new Color(0, 0, 0).ToVector3()
+        };        
+        
+        public static Vector3[] Masterful = new Vector3[]
+        {
+            new Color(0, 0, 0).ToVector3(),
+            new Color(200, 0, 10).ToVector3(),
+            new Color(235, 50, 20).ToVector3(),
+            new Color(255, 100, 0).ToVector3(),
+            new Color(255, 150, 0).ToVector3(),
+            new Color(255, 100, 0).ToVector3(),
+            new Color(235, 50, 0).ToVector3(),
+            new Color(220, 0, 10).ToVector3(),
+            new Color(0, 0, 0).ToVector3()
+        };
+
+        public static Vector3[] Test => new Vector3[]
+        {
+            new Color(0, 0, 0).ToVector3(),
+            new Color(0, 0, 0).ToVector3(),
+            new Color(0, 0, 0).ToVector3(),
+            new Color(0, 0, 0).ToVector3(),
+            new Color(0, 0, 0).ToVector3(),
+            new Color(0, 0, 0).ToVector3(),
+            new Color(0, 0, 0).ToVector3(),
+            new Color(0, 0, 0).ToVector3(),
+            new Color(0, 0, 0).ToVector3()
+        };
     }
 }

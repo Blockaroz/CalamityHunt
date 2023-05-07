@@ -79,7 +79,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     float partitions = 50;
                     for (int i = 0; i < partitions; i++)
                     {
-                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 16 * (i / partitions)), 0).RotatedBy(Math.Clamp((float)Math.Cbrt(npc.scale), 0, 1) * MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
+                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(Math.Clamp((float)Math.Cbrt(npc.scale), 0, 1) * MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
                         offset.X *= npc.direction;
                         offset -= targetOwner.drawVelocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
                         offset *= 0.5f;
@@ -139,7 +139,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     float partitions = 50;
                     for (int i = 0; i < partitions; i++)
                     {
-                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.04f)) % MathHelper.TwoPi) * 16 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
+                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
                         offset.X *= npc.direction;
                         offset -= targetOwner.drawVelocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
                         offset *= 0.5f;
