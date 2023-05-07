@@ -8,8 +8,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             new Color(0, 0, 0).ToVector3(),
             new Color(51, 46, 78).ToVector3(),
+            new Color(113, 53, 146).ToVector3(),
             new Color(174, 23, 189).ToVector3(),
-            new Color(255, 61, 200).ToVector3(),
             new Color(237, 128, 60).ToVector3(),
             new Color(247, 255, 101).ToVector3(),
             new Color(176, 234, 85).ToVector3(),

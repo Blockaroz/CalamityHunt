@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             get
             {
-                if (false)
+                if (true)
                     return GoozmaColorUtils.Nuclear;
                 else
                     return GoozmaColorUtils.Oil;
