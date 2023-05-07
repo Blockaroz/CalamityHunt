@@ -9,10 +9,10 @@ namespace CalamityHunt.Common.Systems
 {
     public class GoozmaWeaponsPlayer : ModPlayer
     {
-        public static int ParasolBloodMinimum = 2000;
-        public static int ParasolBloodMaximum = 5000;
+        public static int ParasolBloodMax = 8000;
         public int parasolBlood;
         public int parasolBloodWaitTime;
+        public float ParasolBloodPercent => Math.Clamp((float)parasolBlood / ParasolBloodMax, 0, 1);
 
         public override void PostUpdateMiscEffects()
         {
@@ -20,9 +20,9 @@ namespace CalamityHunt.Common.Systems
                 parasolBloodWaitTime--;
 
             if (parasolBlood > 0 && parasolBloodWaitTime <= 0)
-                parasolBlood -= 150;
+                parasolBlood -= 100;
 
-            parasolBlood = Math.Clamp(parasolBlood, 0, ParasolBloodMaximum);
+            parasolBlood = Math.Clamp(parasolBlood, 0, ParasolBloodMax);
         }
     }
 }

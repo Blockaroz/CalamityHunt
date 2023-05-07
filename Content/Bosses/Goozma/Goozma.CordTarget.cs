@@ -22,6 +22,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void Unload()
         {
+            nPCsToDrawCordOn = null;
             Main.QueueMainThreadAction(() =>
             {
                 foreach (NPC npc in Main.npc.Where(n => n.ModNPC is Goozma))

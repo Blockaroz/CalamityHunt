@@ -241,6 +241,7 @@ Projectiles: {
 	RainbowLaser.DisplayName: Rainbow Laser
 	PumpActionSwampgunHeld.DisplayName: Pump Action Swampgun Held
 	ParasanguineHeld.DisplayName: Parasanguine Held
+	ParasanguineBlood.DisplayName: Parasanguine Blood
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

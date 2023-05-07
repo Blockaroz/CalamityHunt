@@ -99,7 +99,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     }
                     else
                     {
-                        SoundStyle lightningMiniSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShot", 1, 2);
+                        SoundStyle lightningMiniSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSmallThunder", 1, 3);
                         lightningMiniSound.MaxInstances = 0;
                         lightningMiniSound.PitchVariance = 0.15f;
 
