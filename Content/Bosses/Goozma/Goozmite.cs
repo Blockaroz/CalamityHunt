@@ -305,7 +305,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (NPC.IsABestiaryIconDummy)
                 NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 66.6666f;
 
-            Color myColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
+            Color myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
             myColor.A = 0;
 
             if (Time > 40 && NPC.ai[3] == 0)
@@ -387,9 +387,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             VertexStrip strip = new VertexStrip();
 
-            Color myColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
+            Color myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
             myColor.A = 0;
-            Color goozmaColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Host.localAI[0]);
+            Color goozmaColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Host.localAI[0]);
             goozmaColor.A = 0;
 
             Color StripColor(float progress)
@@ -458,7 +458,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
             for (int i = 0; i < 9; i++)
             {
-                colors[1 + (rainbowStartIndex + i) % 9] = Goozma.gradientColors[i];
+                colors[1 + (rainbowStartIndex + i) % 9] = SlimeUtils.GoozColorsVector3[i];
             }
 
             //We always want a brightness at index 0 to be the lower bound

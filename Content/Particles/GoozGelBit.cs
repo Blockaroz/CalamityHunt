@@ -35,7 +35,7 @@ namespace CalamityHunt.Content.Particles
             direction = Main.rand.NextBool() ? 1 : -1;
             colOffset = Main.rand.NextFloat();
             homePos = position;
-            colorful = !Main.rand.NextBool(4);
+            colorful = Main.rand.NextBool(2);
             behindEntities = true;
         }
 
@@ -90,7 +90,7 @@ namespace CalamityHunt.Content.Particles
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Rectangle frame = texture.Frame(7, 1, variant, 0);
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
             glowColor.A = 0;
 
             for (int i = 0; i < 4; i++)
@@ -159,7 +159,7 @@ namespace CalamityHunt.Content.Particles
             //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
             for (int i = 0; i < 9; i++)
             {
-                colors[1 + (rainbowStartIndex + i) % 9] = Goozma.gradientColors[i];
+                colors[1 + (rainbowStartIndex + i) % 9] = SlimeUtils.GoozColorsVector3[i];
             }
 
             //We always want a brightness at index 0 to be the lower bound

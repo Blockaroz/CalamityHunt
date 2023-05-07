@@ -106,11 +106,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         SoundEngine.PlaySound(lightningMiniSound, Projectile.Center);
                     }
 
-                LightningData data = new LightningData(Projectile.Center, endPoint, 1f);
+                LightningData data = new LightningData(Projectile.Center, endPoint, 0.5f);
                 points = data.Value;
                 pointVelocities = new List<Vector2>();
                 for (int i = 0; i < points.Count; i++)
-                    pointVelocities.Add(Main.rand.NextVector2CircularEdge(1, 1) * Math.Min(1f, Projectile.Distance(endPoint) * 0.0012f));
+                    pointVelocities.Add(Main.rand.NextVector2Circular(1, 1) * Math.Min(1f, Projectile.Distance(endPoint) * 0.0012f));
 
                 //for (int i = 0; i < totalPoints; i++)
                 //{
@@ -135,9 +135,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 if (!Main.dedServ)
                 {
-                    Dust start = Dust.NewDustPerfect(Projectile.Center, DustID.FireworksRGB, Main.rand.NextVector2Circular(4, 4), 0, new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Time * 3 + colOffset + 60), 1 + Main.rand.NextFloat());
+                    Dust start = Dust.NewDustPerfect(Projectile.Center, DustID.FireworksRGB, Main.rand.NextVector2Circular(4, 4), 0, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time * 3 + colOffset + 60), 1 + Main.rand.NextFloat());
                     start.noGravity = true;
-                    Dust contact = Dust.NewDustPerfect(endPoint, DustID.FireworksRGB, Main.rand.NextVector2Circular(4, 4), 0, new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Time * 3 + colOffset + 60), 1 + Main.rand.NextFloat());
+                    Dust contact = Dust.NewDustPerfect(endPoint, DustID.FireworksRGB, Main.rand.NextVector2Circular(4, 4), 0, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time * 3 + colOffset + 60), 1 + Main.rand.NextFloat());
                     contact.noGravity = true;
                 }
             }
@@ -166,7 +166,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time <= 0)
             {
                 float small = Collides == 0 ? 1f : 0.7f;
-                Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.1f, 0.1f).ValueAt(Time + colOffset) * small;
+                Color color = new GradientColor(SlimeUtils.GoozColors, 0.1f, 0.1f).ValueAt(Time + colOffset) * small;
                 color.A = 0;
                 Asset<Texture2D> tell = TextureAssets.Extra[178];
                 Main.EntitySpriteDraw(tell.Value, Projectile.Center - Main.screenPosition, null, color * 0.7f * Utils.GetLerpValue(-50, 0, Time, true), Projectile.velocity.ToRotation(), Vector2.UnitY, new Vector2(2f * small, 5f), 0, 0);
@@ -201,7 +201,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public Color ColorFunction(float progress)
         {
-            Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + progress * 60);
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + progress * 120);
             float small = Collides == 0 ? 1f : 0.7f;
             return color * (float)Math.Pow(1f - (Time / 30f), 0.6f) * small;
         }

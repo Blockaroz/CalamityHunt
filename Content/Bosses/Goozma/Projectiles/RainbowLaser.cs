@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Asset<Texture2D> ray = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRay");//ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             glowColor.A = 0;
 
             float tellStrength = (float)Math.Sqrt(Utils.GetLerpValue(0, 40, Projectile.localAI[1], true));
@@ -121,7 +121,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
             {
                 float prog = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
-                Color trailColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 5) * (1f - prog);
+                Color trailColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 5) * (1f - prog);
                 trailColor.A = 0;
                 float addRot = (-0.003f * i * Projectile.direction);
                 Vector2 oldPos = Projectile.oldPos[i] + Projectile.Size * 0.5f - Projectile.velocity.RotatedBy(addRot) * i * Utils.GetLerpValue(0, 60, Time, true); //Projectile.Distance(Projectile.oldPos[i] + Projectile.Size * 0.5f) * 0.1f;

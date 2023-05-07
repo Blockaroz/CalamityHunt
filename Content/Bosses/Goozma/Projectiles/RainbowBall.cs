@@ -99,7 +99,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Rectangle frame = speed.Frame(3, 1, Projectile.frame, 0);
 
-            Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
+            Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             bloomColor.A = 0;
             Color solidColor = bloomColor;
             solidColor.A = 100;
@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
             {
-                Color trailColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 2f) * 0.15f;
+                Color trailColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 2f) * 0.15f;
                 trailColor.A = 0;
                 float fadeOut = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
                 float outScale = (float)Math.Pow(fadeOut, 1.5f);

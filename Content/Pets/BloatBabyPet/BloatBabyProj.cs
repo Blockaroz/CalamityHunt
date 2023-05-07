@@ -100,7 +100,7 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
                 hue.data = Projectile.localAI[0];
             }
 
-            Lighting.AddLight(Projectile.Center, new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]).ToVector3() * 0.2f);
+            Lighting.AddLight(Projectile.Center, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]).ToVector3() * 0.2f);
             HandleTravelSound();
         }
 
@@ -140,7 +140,7 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
             SpriteEffects flip = SpriteEffects.None;// Projectile.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             glowColor.A = 0;
             if (Main.player[Projectile.owner].cPet <= 0)
             {

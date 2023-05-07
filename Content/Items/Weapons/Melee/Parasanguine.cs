@@ -33,13 +33,18 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            Texture2D bar = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/Style0_0").Value;
-            Texture2D barCharge = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/Style0_1").Value;
+            if (Main.LocalPlayer.HeldItem == Item || Main.mouseItem == Item)
+            {
+                Texture2D bar = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/Style0_0").Value;
+                Texture2D barCharge = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/Style0_1").Value;
 
-            Rectangle chargeFrame = new Rectangle(0, 0, (int)(barCharge.Width * Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent), barCharge.Height);
+                Rectangle chargeFrame = new Rectangle(0, 0, (int)(barCharge.Width * Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent), barCharge.Height);
 
-            spriteBatch.Draw(bar, position + new Vector2(0, 60) * scale, bar.Frame(), Color.DarkRed, 0, bar.Size() * 0.5f, scale * 1.75f, 0, 0);
-            spriteBatch.Draw(barCharge, position + new Vector2(0, 60) * scale, chargeFrame, new Color(255, 20, 30), 0, barCharge.Size() * 0.5f, scale * 1.75f, 0, 0);
+                Color barColor = Color.Lerp(Color.DarkRed * 0.5f, Color.Red, Utils.GetLerpValue(0.5f, 1f, Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true));
+                Vector2 off = Main.rand.NextVector2Circular(2, 2) * Utils.GetLerpValue(0.9f, 1f, Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true);
+                spriteBatch.Draw(bar, position + off + new Vector2(0, 50) * scale, bar.Frame(), Color.DarkRed, 0, bar.Size() * 0.5f, scale * 1.75f, 0, 0);
+                spriteBatch.Draw(barCharge, position + off + new Vector2(0, 50) * scale, chargeFrame, barColor, 0, barCharge.Size() * 0.5f, scale * 1.75f, 0, 0);
+            }
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<ParasanguineHeld>()] <= 0;

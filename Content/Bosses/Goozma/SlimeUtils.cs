@@ -46,16 +46,31 @@ namespace CalamityHunt.Content.Bosses.Goozma
             return pos;
         }
 
-        public static Color[] GoozColorArray = new Color[]
+        public static Color[] GoozColors
         {
-            new Color(174, 23, 189),
-            new Color(255, 85, 228),
-            new Color(237, 128, 60),
-            new Color(247, 255, 101),
-            new Color(176, 234, 85),
-            new Color(102, 219, 249),
-            new Color(113, 53, 146)
-        };
+            get
+            {
+                return new Color[]
+                {
+                    new Color(GoozColorsVector3[3]),
+                    new Color(GoozColorsVector3[4]),
+                    new Color(GoozColorsVector3[5]),
+                    new Color(GoozColorsVector3[6]),
+                    new Color(GoozColorsVector3[7]),
+                };
+            }
+        }
+
+        public static Vector3[] GoozColorsVector3
+        {
+            get
+            {
+                if (false)
+                    return GoozmaColorUtils.Nuclear;
+                else
+                    return GoozmaColorUtils.Oil;
+            }
+        }
 
         public static void DrawWormhole(Vector2 position, Color innerColor, float rotation, float scale)
         {

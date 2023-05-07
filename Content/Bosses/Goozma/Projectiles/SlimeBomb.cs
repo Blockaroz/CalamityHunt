@@ -41,7 +41,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 SoundEngine.PlaySound(shootSound, Projectile.Center);
                 for (int i = 0; i < 5; i++)
                 {
-                    Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.4f, 0.5f).ValueAt(Projectile.localAI[1]);
+                    Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.4f, 0.5f).ValueAt(Projectile.localAI[1]);
                     glowColor.A /= 2;
                     Dust.NewDustPerfect(Projectile.Center, DustID.RainbowMk2, Projectile.velocity + Main.rand.NextVector2Circular(5, 5), 0, glowColor, 1.5f).noGravity = true;
                 }
@@ -157,7 +157,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Rectangle glowFrame = texture.Frame(3, 4, 1, Projectile.frame);
             Rectangle outlineFrame = texture.Frame(3, 4, 2, Projectile.frame);
 
-            Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[1]);
+            Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[1]);
             bloomColor.A = 0;
 
             if (Projectile.ai[1] == 0)

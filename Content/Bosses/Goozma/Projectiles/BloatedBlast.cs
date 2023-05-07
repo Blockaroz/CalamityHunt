@@ -120,7 +120,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                     for (int j = 0; j < 30; j++)
                     {
-                        Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 2f, 2f).ValueAt(j * 30f + i);
+                        Color glowColor = new GradientColor(SlimeUtils.GoozColors, 2f, 2f).ValueAt(j * 30f + i);
                         glowColor.A /= 2;
                         Vector2 outward = new Vector2(size + Main.rand.NextFloat(), 0).RotatedBy(MathHelper.TwoPi / 30f * j);
                         outward.X *= 0.4f;
@@ -167,7 +167,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
             Vector2 squishFactor = new Vector2(1f - Projectile.velocity.Length() * 0.0045f, 1f + Projectile.velocity.Length() * 0.0075f);
 
-            Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
+            Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             bloomColor.A = 0;
 
             if (Projectile.ai[1] == 0)

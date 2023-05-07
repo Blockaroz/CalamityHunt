@@ -39,6 +39,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         public override void SetStaticDefaults()
         {
+            if (nPCsToDrawCordOn == null)
+                nPCsToDrawCordOn = new List<NPC>();
+
             // DisplayName.SetDefault("Goozma");
             NPCID.Sets.TrailCacheLength[Type] = 10;
             NPCID.Sets.TrailingMode[Type] = -1;
@@ -99,9 +102,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
                 calamity.Call("SetDefenseDamageNPC", Type, true);
             }
-
-            //if (nPCsToDrawCordOn == null)
-            //    nPCsToDrawCordOn = new List<NPC>();
 
             if (NPC.IsABestiaryIconDummy)
                 nPCsToDrawCordOn.Add(NPC);

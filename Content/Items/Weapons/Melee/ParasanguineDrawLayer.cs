@@ -26,13 +26,15 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             
             if (drawInfo.shadow <= 0.1f)
             {
-                if (drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().parasolBlood > GoozmaWeaponsPlayer.ParasolBloodMax)
+                float strength = Utils.GetLerpValue(0.5f, 0.6f, drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true);
+
+                if (drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent > 0.5f)
                 {
                     for (int i = 0; i < 6; i++)
                     {
                         Vector2 off = new Vector2(3).RotatedBy(MathHelper.TwoPi / 6f * i + drawRotation);
-                        DrawData outlineDarkData = new DrawData(texture, drawCenter + off - Main.screenPosition, texture.Frame(), Color.Black * 0.15f, drawRotation + MathHelper.PiOver4 * drawInfo.drawPlayer.direction, texture.Size() * 0.5f, 1f, drawInfo.playerEffect, 0);
-                        DrawData outlineData = new DrawData(texture, drawCenter + off - Main.screenPosition, texture.Frame(), new Color(255, 20, 30, 0), drawRotation + MathHelper.PiOver4 * drawInfo.drawPlayer.direction, texture.Size() * 0.5f, 1f, drawInfo.playerEffect, 0);
+                        DrawData outlineDarkData = new DrawData(texture, drawCenter + off - Main.screenPosition, texture.Frame(), Color.Black * 0.15f * strength, drawRotation + MathHelper.PiOver4 * drawInfo.drawPlayer.direction, texture.Size() * 0.5f, 1f, drawInfo.playerEffect, 0);
+                        DrawData outlineData = new DrawData(texture, drawCenter + off - Main.screenPosition, texture.Frame(), new Color(255, 20, 30, 0) * strength, drawRotation + MathHelper.PiOver4 * drawInfo.drawPlayer.direction, texture.Size() * 0.5f, 1f, drawInfo.playerEffect, 0);
                         drawInfo.DrawDataCache.Add(outlineDarkData);
                         drawInfo.DrawDataCache.Add(outlineData);
                     }

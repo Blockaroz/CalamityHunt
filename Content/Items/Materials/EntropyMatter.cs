@@ -69,7 +69,7 @@ namespace CalamityHunt.Content.Items.Materials
         {
             Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>(Texture + "Aura");
-            Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 10f);
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 10f);
             spriteBatch.Draw(glow.Value, position, frame, color * 0.8f, 0, origin, scale, 0, 0);
             spriteBatch.Draw(glow.Value, position, frame, new Color(color.R, color.G, color.B, 0), 0, origin, scale, 0, 0);
             spriteBatch.Draw(bloom.Value, position, null, new Color(color.R, color.G, color.B, 0) * 0.5f, 0, bloom.Size() * 0.5f, scale, 0, 0);
@@ -80,7 +80,7 @@ namespace CalamityHunt.Content.Items.Materials
             Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>(Texture + "Aura");
             Rectangle frame = Main.itemAnimations[Type].GetFrame(glow.Value, Main.itemFrameCounter[whoAmI]);
-            Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 10f);
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 10f);
             spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, frame, color * 0.8f, rotation, Item.Size * 0.5f, scale, 0, 0);
             spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, frame, new Color(color.R, color.G, color.B, 0), rotation, Item.Size * 0.5f, scale, 0, 0);
             spriteBatch.Draw(bloom.Value, Item.Center - Main.screenPosition, null, new Color(color.R, color.G, color.B, 0) * 0.5f, rotation, bloom.Size() * 0.5f, scale * 1.5f, 0, 0);

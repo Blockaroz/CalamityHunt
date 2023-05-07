@@ -41,7 +41,7 @@ namespace CalamityHunt.Content.Particles
             if (frame > 7)
                 Active = false;
             if (data is float)
-                color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt((float)data + frameCounter);
+                color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt((float)data + frameCounter);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

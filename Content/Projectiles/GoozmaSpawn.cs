@@ -245,7 +245,7 @@ namespace CalamityHunt.Content.Projectiles
             Asset<Texture2D> body = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/Goozma");
             Asset<Texture2D> dress = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/GoozmaDress");
             Asset<Texture2D> crown = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaCrown");
-            Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).Value * 1.5f;
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value * 1.5f;
             glowColor.A = 0;
             Vector2 drawOffset = new Vector2(14, 20).RotatedBy(Projectile.rotation) * Projectile.scale;
 

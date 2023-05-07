@@ -86,7 +86,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Rectangle glowFrame = texture.Frame(3, 3, 1, Projectile.frame);
             Rectangle outlineFrame = texture.Frame(3, 3, 2, Projectile.frame);
 
-            Color bloomColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * Utils.GetLerpValue(0, 25, Time, true);
+            Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * Utils.GetLerpValue(0, 25, Time, true);
             bloomColor.A = 0;
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);

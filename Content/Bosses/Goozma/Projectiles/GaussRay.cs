@@ -89,7 +89,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time > ChargeTime * 0.7f)
             {
                 float smokePower = Utils.GetLerpValue(ChargeTime * 0.7f, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 70, ChargeTime + LaserDuration + 40, Time, true);
-                Color smokeColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * (0.5f + smokePower * 0.5f);
+                Color smokeColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * (0.5f + smokePower * 0.5f);
                 smokeColor.A = 0;
                 int smokeCount = (int)(smokePower * 12f);
                 for (int i = 0; i < smokeCount; i++)
@@ -107,7 +107,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     float grow = Utils.GetLerpValue(ChargeTime - 15, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration, Time, true);
                     float progress = Main.rand.NextFloat(3300);
-                    Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 60) * grow;
+                    Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 60) * grow;
                     color.A = 0;
                     Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-80f, 80f) * (progress / 3300f)).RotatedBy(Projectile.rotation);
                     Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
@@ -220,7 +220,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
             Asset<Texture2D> spark = ModContent.Request<Texture2D>(Texture + "Spark");
 
-            Color startColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
+            Color startColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             startColor.A = 0;
 
             float laserCharge = Utils.GetLerpValue(50, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration + 20, Time, true);
@@ -256,7 +256,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 strip.DrawTrail();
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
-                Color endColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - 60f);
+                Color endColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - 60f);
                 endColor.A = 0;
 
                 for (int i = 0; i < 12; i++)
@@ -276,7 +276,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             float grow = 0.1f + (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
 
-            Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - progress * 60f);
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - progress * 60f);
             color.A = 0;
             return color * grow;
         }

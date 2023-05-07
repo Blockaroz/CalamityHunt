@@ -86,7 +86,7 @@ namespace CalamityHunt.Content.Particles
                 glowFrame = texture.Frame(4, 2, variant + 2, 1);
                 squish = new Vector2(1f + (float)Math.Sqrt(Utils.GetLerpValue(20, 0, time, true)) * 0.33f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(20, 0, time, true)) * 0.33f);
             }
-            Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
             glowColor.A = 0; 
             Color lightColor = Lighting.GetColor(position.ToTileCoordinates());
 

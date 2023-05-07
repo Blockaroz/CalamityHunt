@@ -19,19 +19,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         private static float maxBright;
 
-        public static readonly Vector3[] gradientColors = new Vector3[]
-        {
-            new Color(0, 0, 0).ToVector3(),
-            new Color(51, 46, 78).ToVector3(),
-            new Color(113, 53, 146).ToVector3(),
-            new Color(174, 23, 189).ToVector3(),
-            new Color(237, 128, 60).ToVector3(),
-            new Color(247, 255, 101).ToVector3(),
-            new Color(176, 234, 85).ToVector3(),
-            new Color(102, 219, 249).ToVector3(),
-            new Color(0, 0, 0).ToVector3()
-        };
-
         public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
         {
             maxBright = 0.667f;
@@ -70,7 +57,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
             for (int i = 0; i < 9; i++)
             {
-                colors[1 + (rainbowStartIndex + i) % 9] = gradientColors[i];
+                colors[1 + (rainbowStartIndex + i) % 9] = SlimeUtils.GoozColorsVector3[i];
             }
 
             //We always want a brightness at index 0 to be the lower bound
@@ -94,7 +81,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 66.6666f;
 
             SpriteEffects direction = NPC.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
             glowColor.A = 0;
             //config?
             //Asset<Texture2D> stick = TextureAssets.FishingLine;
@@ -118,7 +105,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
                 {
-                    Color trailColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
+                    Color trailColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
                     trailColor.A = 0;
                     DrawGoozma(spriteBatch, screenPos, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], oldTentacleVel[i], trailColor * trailStrength * NPC.scale);
                 }
@@ -152,12 +139,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f); 
             effect.Parameters["colors"].SetValue(colors);
             effect.Parameters["brightnesses"].SetValue(brightnesses);
-            effect.Parameters["baseToScreenPercent"].SetValue(1.1f);//1.5f
-            effect.Parameters["baseToMapPercent"].SetValue(-0.1f);//-1
+            effect.Parameters["baseToScreenPercent"].SetValue(1.05f);
+            effect.Parameters["baseToMapPercent"].SetValue(-0.05f);
             if (Phase == 3)
             {
-                effect.Parameters["baseToScreenPercent"].SetValue(1.1f - Utils.GetLerpValue(80, 180, Time, true) * 1.1f);
-                effect.Parameters["baseToMapPercent"].SetValue(-0.1f + Utils.GetLerpValue(20, 150, Time, true) * 0.1f);//-1f + Utils.GetLerpValue(20, 180, Time, true)
+                effect.Parameters["baseToScreenPercent"].SetValue(1.05f - Utils.GetLerpValue(80, 180, Time, true) * 1.05f);
+                effect.Parameters["baseToMapPercent"].SetValue(-0.05f + Utils.GetLerpValue(20, 150, Time, true) * 0.1f);//-1f + Utils.GetLerpValue(20, 180, Time, true)
             }
 
             FlipShadersOnOff(spriteBatch, effect, false);

@@ -416,7 +416,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 }
             }
 
-            float strength = Utils.GetLerpValue(0.5f, 0.9f, Owner.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true);
+            float strength = Utils.GetLerpValue(0.5f, 0.6f, Owner.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true);
             if (Owner.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent > 0.5f || Mode > 1)
             {
                 for (int i = 0; i < 6; i++)

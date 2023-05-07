@@ -64,6 +64,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
         public static Vector2 radialDistortPos;
         public static float strengthTarget;
         public static int additionalLightningChance;
+        public static Color lightColor;
 
         private static Asset<Texture2D>[] lightningTexture;
         private static Asset<Texture2D>[] skyTexture;
@@ -76,7 +77,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             {
                 float fastStrength = Math.Clamp(_strength * 3f, 0, 1f);
                 Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, Color.Black, fastStrength);
-                return inColor.MultiplyRGBA(Color.Lerp(Color.White, new Color(50, 35, 120, 255), fastStrength));
+                return inColor.MultiplyRGBA(Color.Lerp(Color.White, lightColor, fastStrength));
             }
             return inColor;
         }
@@ -125,7 +126,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
             for (int i = 0; i < thunder.Length; i++)
             {
-                if (_random.NextBool(Math.Clamp(100 + additionalLightningChance, 2, 1000)) && _strength > 0.5f)
+                if (_random.NextBool(Math.Clamp(120 + additionalLightningChance, 2, 1000)) && _strength > 0.5f)
                     thunder[i].Add(new GooThunder(Main.LocalPlayer.Center, _random.NextFloat(0.5f, 1.4f), _random.Next(50, 100), i));
 
                 for (int j = 0; j < thunder[i].Count; j++)
@@ -146,10 +147,15 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             float yOffPower = (float)Utils.GetLerpValue(200, Main.rockLayer - 100, Main.LocalPlayer.Center.Y / 16f, true);
             int yOffset = (int)(yOffPower * 1600f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 0.275f % MathHelper.TwoPi) * 100f);
 
+            //gold: new Color(40, 22, 15);
+            Color brightColor = new Color(22, 10, 32);
+            Color darkColor = Color.Lerp(brightColor, Color.Black, 0.3f);
+            lightColor = Color.Lerp(Color.DimGray, brightColor, 0.9f);
+
             if (maxDepth >= float.MaxValue && minDepth < float.MaxValue)
             {
                 spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
-                spriteBatch.Draw(skyTexture[0].Value, new Rectangle(0, -yOffset, Main.screenWidth, Main.screenHeight * 2), new Color(15, 0, 18) * _strength * 0.66f);
+                spriteBatch.Draw(skyTexture[0].Value, new Rectangle(0, -yOffset, Main.screenWidth, Main.screenHeight * 2), darkColor * _strength * 0.66f);
             }
 
             Effect skyClouds = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad).Value;
@@ -177,7 +183,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                     thunder[i].ForEach(n => n.Draw(spriteBatch));
 
                 skyClouds.Parameters["uWorldPos"].SetValue(Main.screenPosition / (7000f - i * 500f));
-                skyClouds.Parameters["uColorBase"].SetValue(Color.Lerp(new Color(15, 0, 18), new Color(25, 10, 35, 255), Utils.GetLerpValue(0, 4, i, true)).ToVector4());
+                skyClouds.Parameters["uColorBase"].SetValue(Color.Lerp(darkColor, brightColor, Utils.GetLerpValue(0, 4, i, true)).ToVector4());
                 skyClouds.Parameters["uTime"].SetValue(_windSpeed + i * 200);
                 skyClouds.Parameters["uStrength"].SetValue(Math.Clamp((float)Math.Cbrt(_strength) * 0.9f - Utils.GetLerpValue(0, 2, i, true) * 0.2f, 0.0001f, 1f));
 
@@ -276,7 +282,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
             public Color ColorFunction(float progress)
             {
-                Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.5f, 0.5f).ValueAt(time * 3 + colorOffset + progress) * (2f / layer);
+                Color color = new GradientColor(SlimeUtils.GoozColors, 0.5f, 0.5f).ValueAt(time * 5 + colorOffset + progress * 150f) * (2f / layer);
                 color.A /= 2;
                 return color * ((float)time / maxTime);
             }

@@ -31,7 +31,7 @@ namespace CalamityHunt.Content.Items.Masks
             for (int i = 0; i < 3; i++)
             {
                 Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow" + i);
-                Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 30f + i * 5f) * 0.8f;
+                Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 30f + i * 5f) * 0.8f;
                 spriteBatch.Draw(glow.Value, position, frame, color, 0, origin, scale, 0, 0);
                 spriteBatch.Draw(glow.Value, position, frame, new Color(color.R, color.G, color.B, 0) * 0.5f, 0, origin, scale, 0, 0);
             }
@@ -42,7 +42,7 @@ namespace CalamityHunt.Content.Items.Masks
             for (int i = 0; i < 3; i++)
             {
                 Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow" + i);
-                Color color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 30f + i * 5f) * 0.8f;
+                Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 30f + i * 5f) * 0.8f;
                 spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, null, color, rotation, Item.Size * 0.5f, scale, 0, 0);
                 spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, null, new Color(color.R, color.G, color.B, 0) * 0.5f, rotation, Item.Size * 0.5f, scale, 0, 0);
             }
@@ -63,7 +63,7 @@ namespace CalamityHunt.Content.Items.Masks
             {
                 Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Masks/GoozmaMask_HeadGlow" + i);
 
-                Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 30f + i * 5f) * 0.8f;
+                Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 30f + i * 5f) * 0.8f;
                 if (drawInfo.cHead > 0)
                     glowColor = new GradientColor(new Color[] { Color.DimGray, Color.DarkGray }, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 30f + i * 5f) * 0.8f;
 

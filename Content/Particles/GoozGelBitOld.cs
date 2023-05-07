@@ -88,7 +88,7 @@ namespace CalamityHunt.Content.Particles
             Rectangle frame = texture.Frame(3, 2, variant, 0);
             Rectangle glowFrame = texture.Frame(3, 2, variant, 1);
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
             glowColor.A = 0;
             if (colorful)
                 spriteBatch.Draw(glow.Value, position - Main.screenPosition, null, glowColor * 0.1f, rotation, glow.Size() * 0.5f, scale * 2f, 0, 0);

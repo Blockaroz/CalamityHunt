@@ -32,7 +32,7 @@ namespace CalamityHunt.Content.Particles
             velocity.Y += Main.rand.Next(-3, 3) * 0.008f;
 
             if (data is float)
-                color = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt((float)data + life * 0.05f);
+                color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt((float)data + life * 0.05f);
 
             if (!Collision.SolidTiles(position, 2, 2))
             {
