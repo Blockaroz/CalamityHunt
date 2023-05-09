@@ -145,16 +145,16 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             if (Main.player[Projectile.owner].cPet <= 0)
             {
                 float auraSize = 0.8f + (float)Math.Sin(Projectile.localAI[0] * 0.04f) * 0.2f;
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.14f * auraSize, 0, glow.Size() * 0.5f, Projectile.scale * 5f * auraSize, 0, 0);
-                //Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, ring.Frame(), glowColor * 0.07f * auraSize, 0, ring.Size() * 0.5f, Projectile.scale * 2f * auraSize, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f * auraSize, 0, glow.Size() * 0.5f, Projectile.scale * 5f * auraSize, 0, 0);
+                Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, ring.Frame(), glowColor * 0.02f * auraSize, 0, ring.Size() * 0.5f, Projectile.scale * 2f * auraSize, 0, 0);
             }
             DrawTentacles(lightColor, glowColor);
 
             Rectangle frame = texture.Frame(3, 1, 0, 0);
             Rectangle glowFrame = texture.Frame(3, 1, 1, 0);
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, glowColor * 0.9f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, glowColor * 0.5f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale * 1.05f, flip, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, glowColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
+            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, glowColor * 0.1f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale * 1.05f, flip, 0);
             
             crownRotation = Math.Clamp(-Projectile.velocity.X * 0.06f, -1f, 1f);
 
@@ -163,9 +163,9 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             
             if (Main.player[Projectile.owner].cPet <= 0)
             {
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.4f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, 0, 0);
 
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
             }
         }
 
@@ -215,10 +215,10 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
                     float bloomScale = (float)Math.Pow(prog, 1.25f);
                     Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, frame, lightColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
                     Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
-                    Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * 0.8f * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch * 1.05f, 0, 0);
+                    Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * 0.1f * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch * 1.05f, 0, 0);
 
                     if (Main.player[Projectile.owner].cPet <= 0)
-                        Main.EntitySpriteDraw(glow.Value, lastPos + oldVels[i] * 0.1f - Main.screenPosition, glow.Frame(), growColor * bloomScale * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);
+                        Main.EntitySpriteDraw(glow.Value, lastPos + oldVels[i] * 0.1f - Main.screenPosition, glow.Frame(), growColor * bloomScale * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);
                 }
             }
         }

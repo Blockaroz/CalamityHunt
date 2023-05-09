@@ -14,7 +14,7 @@ namespace CalamityHunt.Content.Items.Misc
     {
         public override void SetDefaults()
         {
-            Item.width = 32;
+            Item.width = 90;
             Item.height = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useTime = 30;

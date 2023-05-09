@@ -12,7 +12,6 @@ using Terraria.Graphics;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Humanizer.In;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -53,7 +52,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             int owner = -1;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
             {
-                Projectile.active = false;
+                Projectile.Kill();
                 return;
             }
             else

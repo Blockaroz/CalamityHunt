@@ -84,9 +84,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     {
                         Projectile.damage = Owner.GetWeaponDamage(Owner.HeldItem);
 
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < 5; i++)
                         {
-                            Vector2 pos = Projectile.Center + Projectile.rotation.ToRotationVector2() * 70f + Main.rand.NextVector2Circular(70, 60).RotatedBy(Projectile.rotation);
+                            Vector2 pos = Projectile.Center + Projectile.rotation.ToRotationVector2() * 70f + Main.rand.NextVector2Circular(70, 30).RotatedBy(Projectile.rotation);
                             Dust blood = Dust.NewDustPerfect(pos, DustID.Blood, Main.rand.NextVector2Circular(4, 4), 0, Color.DarkRed, 1f + Main.rand.NextFloat());
                             blood.noGravity = true;
                         }
@@ -154,9 +154,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     {
                         Projectile.damage = Owner.GetWeaponDamage(Owner.HeldItem);
 
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < 5; i++)
                         {
-                            Vector2 pos = Projectile.Center + Projectile.rotation.ToRotationVector2() * 70f + Main.rand.NextVector2Circular(70, 60).RotatedBy(Projectile.rotation);
+                            Vector2 pos = Projectile.Center + Projectile.rotation.ToRotationVector2() * 70f + Main.rand.NextVector2Circular(70, 30).RotatedBy(Projectile.rotation);
                             Dust blood = Dust.NewDustPerfect(pos, DustID.Blood, Main.rand.NextVector2Circular(4, 4), 0, Color.DarkRed, 1f + Main.rand.NextFloat());
                             blood.noGravity = true;
                         }
@@ -233,9 +233,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                         Owner.GetModPlayer<GoozmaWeaponsPlayer>().parasolBlood -= 100;
                         Projectile.damage = Owner.GetWeaponDamage(Owner.HeldItem);
 
-                        for (int i = 0; i < 7; i++)
+                        for (int i = 0; i < 10; i++)
                         {
-                            Vector2 pos = Projectile.Center + Projectile.rotation.ToRotationVector2() * 80f + Main.rand.NextVector2Circular(120, 60).RotatedBy(Projectile.rotation);
+                            Vector2 pos = Projectile.Center + Projectile.rotation.ToRotationVector2() * 80f + Main.rand.NextVector2Circular(120, 40).RotatedBy(Projectile.rotation);
                             Vector2 vel = (Projectile.rotation - MathHelper.PiOver2 * Projectile.spriteDirection).ToRotationVector2() * Main.rand.NextFloat(5f);
                             Dust blood = Dust.NewDustPerfect(pos, DustID.Blood, vel.RotatedByRandom(1f), 0, Color.DarkRed, 1f + Main.rand.NextFloat());
                             blood.noGravity = true;
@@ -411,12 +411,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
                     SpriteEffects slashEffects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                     Rectangle slashFrame = slash.Frame(1, 4, 0, i);
-                    Color slashColor = Color.Lerp(new Color(8, 0, 0), new Color(180, 8, 20, 230), (i / 3f + 0.01f) * (0.3f + slashPower * 0.7f)) * 0.7f;
-                    Main.EntitySpriteDraw(slash, Projectile.Center - Main.screenPosition, slashFrame, slashColor * slashPower, Projectile.oldRot[i] - MathHelper.PiOver2 - (MathHelper.PiOver2 - 0.3f) * Projectile.spriteDirection, slashFrame.Size() * new Vector2(0.5f + 0.03f * Projectile.spriteDirection, 0.53f), Projectile.scale * 1.8f, slashEffects, 0);
+                    Color slashColor = Color.Lerp(new Color(8, 0, 0), new Color(255, 0, 0), (i / 3f + 0.01f) * (0.3f + slashPower * 0.7f)) * 0.7f;
+                    Main.EntitySpriteDraw(slash, Projectile.Center - Main.screenPosition, slashFrame, slashColor * slashPower, Projectile.oldRot[Math.Clamp(i, 0, 3)] - MathHelper.PiOver2 - (MathHelper.PiOver2 - 0.3f + (i == 3 ? 0.3f : 0)) * Projectile.spriteDirection, slashFrame.Size() * new Vector2(0.5f + 0.02f * Projectile.spriteDirection, 0.53f), Projectile.scale * 1.8f, slashEffects, 0);
                 }
             }
 
             float strength = Utils.GetLerpValue(0.5f, 0.6f, Owner.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true);
+            if (Mode > 1)
+                strength = 1f;
             if (Owner.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent > 0.5f || Mode > 1)
             {
                 for (int i = 0; i < 6; i++)

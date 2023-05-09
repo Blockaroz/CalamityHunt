@@ -69,20 +69,20 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
             {
                 Projectile.Resize(24, 24);
-                if (Time < 60)
-                    Projectile.velocity = Projectile.oldVelocity.SafeNormalize(Vector2.Zero) * Utils.GetLerpValue(0, 60, Time, true) * Speed * 1.1f;
+                if (Time <= 100)
+                    Projectile.velocity = Projectile.oldVelocity.SafeNormalize(Vector2.Zero) * MathF.Pow(Utils.GetLerpValue(0, 100, Time, true), 1.2f) * Speed * 1.75f;
 
                 Projectile.velocity.Y *= 1.007f;
 
-                if (Main.rand.NextBool(3))
+                if (Main.rand.NextBool(5))
                 {
                     Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Projectile.velocity, Main.rand.NextVector2Circular(2, 2), Color.White, 1f);
                     hue.data = Projectile.localAI[0];
                 }
 
-                for (int i = 0; i < 2; i++)
+                if (Main.rand.NextBool())
                     Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.8f, DustID.TintableDust, Projectile.velocity * 0.4f, 100, Color.Black, 1f + Main.rand.NextFloat()).noGravity = true;
-                
+
                 if (Time > 250)
                     Projectile.Kill();
             }
@@ -93,9 +93,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 for (int i = 0; i < oldVels.Length; i++)
                     oldVels[i] = Projectile.velocity;
             }
-            for (int i = 9; i > 0; i--)
-                oldVels[i] = Vector2.Lerp(oldVels[i], oldVels[i - 1] * 1.2f, 0.6f);
-            oldVels[0] = Vector2.Lerp(oldVels[0], (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2(), 0.6f);
+            else
+            {
+                for (int i = 9; i > 0; i--)
+                    oldVels[i] = Vector2.Lerp(oldVels[i], oldVels[i - 1] * 1.2f, 0.6f);
+                oldVels[0] = Vector2.Lerp(oldVels[0], (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2(), 0.6f);
+            }
 
             Projectile.localAI[0]++;
         }
@@ -187,11 +190,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 //    Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, outlineFrame, growColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 //}
 
-                DrawTentacles(lightColor, growColor);
+                if (oldVels != null)
+                    DrawTentacles(lightColor, growColor);
 
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, growColor * 1.2f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.7f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
+                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, growColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
             }
             if (Projectile.ai[1] == 1)
             {
@@ -200,10 +204,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Rectangle outlineFrame = textureSmall.Frame(3, 1, 2, 0);
 
                 Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
-                Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 1.2f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 16f - Main.screenPosition, null, bloomColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * squishFactor * 2.5f, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 16f - Main.screenPosition, null, bloomColor * 0.3f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
-
+                Main.EntitySpriteDraw(textureSmall.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
+                Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 12f - Main.screenPosition, null, bloomColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * squishFactor * new Vector2(1.5f, 2f), 0, 0);
             }
 
             return false;
@@ -213,13 +215,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             Asset<Texture2D> tentacleTexture = ModContent.Request<Texture2D>(Texture + "Tentacle");
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-
-            if (oldVels == null)
-            {
-                oldVels = new Vector2[10];
-                for (int i = 0; i < oldVels.Length; i++)
-                    oldVels[i] = Projectile.velocity;
-            }
 
             float tentaCount = 2;
             for (int j = 0; j < tentaCount; j++)

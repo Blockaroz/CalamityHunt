@@ -59,12 +59,19 @@ namespace CalamityHunt.Content.Projectiles
                 {
                     Projectile.velocity = Owner.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 5f;
                     Projectile.direction = Projectile.velocity.X < 0 ? -1 : 1;
-                    //
                 }
+
                 if (Time == 2)
                     Projectile.frame = 2;
                 if (Time == 8)
+                {
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 30f, Projectile.velocity.SafeNormalize(Vector2.Zero) * 20f, ModContent.ProjectileType<SwampBall>(), 0, 0);
+
+                    for (int i = 0; i < Main.rand.Next(3, 5); i++)
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 30f, Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * Main.rand.Next(5, 20), ModContent.ProjectileType<SwampBall>(), 0, 0, ai1: -Main.rand.NextFloat(0.3f, 0.6f));
+
                     Projectile.frame = 1;
+                }
 
                 if (Time == 5 && !Main.dedServ)
                     SoundEngine.PlaySound(SoundID.Item38, Projectile.Center);

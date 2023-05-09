@@ -41,15 +41,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            int owner = -1;
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active))
-            {
-                Projectile.active = false;
-                return;
-            }
-            else
-                owner = Main.npc.First(n => n.type == ModContent.NPCType<StellarGeliath>() && n.active).whoAmI;
-
             Projectile.velocity *= 0.95f;
             Projectile.rotation = Projectile.velocity.ToRotation();
 
@@ -58,7 +49,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time % 83 < 4 && Time > 40)
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.velocity + Main.rand.NextVector2CircularEdge(8, 8) + Main.rand.NextVector2Circular(5, 5), 0.2f);
 
-            if (Time > 50 && Time + WhoAmI < 500)
+            if (Time > 50 && Time + WhoAmI < 500 && Time % 2 == 0)
             {
                 foreach (Projectile otherStar in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 300))
                 {

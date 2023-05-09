@@ -44,7 +44,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             Matrix realMatrix = Matrix.CreateOrthographicOffCenter(0, targetSize.X, targetSize.Y, 0, -1, 1);
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoozmaCordMap", AssetRequestMode.ImmediateLoad).Value;
 
-            foreach (NPC npc in Main.npc.Where(n => n.active && n.ModNPC is Goozma))
+            foreach (NPC npc in Main.npc.ToArray().Where(n => n.active && n.ModNPC is Goozma))
             {
                 Goozma targetOwner = npc.ModNPC as Goozma;
 
@@ -96,7 +96,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     VertexStrip cord = new VertexStrip();
 
                     Color ColorFunc(float progress) => Color.White;
-                    float WidthFunc(float progress) => Utils.GetLerpValue(1.1f, 0.1f, progress, true) * 20f;
+                    float WidthFunc(float progress) => MathF.Pow(Utils.GetLerpValue(1.1f, 0.1f, progress, true), 0.7f) * 18f;
 
                     cord.PrepareStripWithProceduralPadding(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, targetSize * 0.5f, true);
                     cord.DrawTrail();
@@ -104,8 +104,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            foreach (NPC npc in nPCsToDrawCordOn)
+            foreach (NPC npc in nPCsToDrawCordOn.ToArray())
             {
+                Goozma targetOwner = npc.ModNPC as Goozma;
+            }
+
+            int a = 0;
+            foreach (NPC npc in nPCsToDrawCordOn.ToArray())
+            {
+                a++;
+
                 Goozma targetOwner = npc.ModNPC as Goozma;
 
                 if (targetOwner.cordTarget == null || targetOwner.cordTarget.IsDisposed)
@@ -156,7 +164,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     VertexStrip cord = new VertexStrip();
 
                     Color ColorFunc(float progress) => Color.White;
-                    float WidthFunc(float progress) => Utils.GetLerpValue(1.1f, 0.1f, progress, true) * 20f;
+                    float WidthFunc(float progress) => MathF.Pow(Utils.GetLerpValue(1.1f, 0.1f, progress, true), 0.7f) * 18f;
 
                     cord.PrepareStripWithProceduralPadding(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, targetSize * 0.5f, true);
                     cord.DrawTrail();

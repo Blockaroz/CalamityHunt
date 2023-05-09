@@ -103,8 +103,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 calamity.Call("SetDefenseDamageNPC", Type, true);
             }
 
+            if (Main.drunkWorld)
+                SlimeUtils.GoozmaColorType = Main.rand.Next(10);
+
             if (NPC.IsABestiaryIconDummy)
+            {
+                if (nPCsToDrawCordOn.Count > 10)
+                    nPCsToDrawCordOn.RemoveAt(5);//preserve 5 of them
+
                 nPCsToDrawCordOn.Add(NPC);
+            }
         }
 
         public int Music2;
@@ -270,16 +278,22 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Phase == 0 && noSlime)
                 Attack = (int)AttackList.SpawnSlime;
 
+            if (NPC.velocity.HasNaNs())
+                NPC.velocity = Vector2.Zero;
+
             if (Target.Invalid)
                 NPC.TargetClosestUpgraded();
+
             if (NPC.GetTargetData().Invalid && Phase != -5)
             {
                 Phase = -5;
                 Time = 0;
                 NPC.dontTakeDamage = true;
+                NPC.velocity = Vector2.Zero;
+                return;
             }
 
-            if (NPC.Distance(Target.Center) > 800 && Phase != 1 && Phase != 3 && Phase != -22)
+            if (NPC.Distance(Target.Center) > 800 && Phase == 0 || Phase == 2)
                 NPC.Center = Vector2.Lerp(NPC.Center, NPC.Center + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Math.Max(0, NPC.Distance(Target.Center) - 800), 0.01f);
 
             if (NPC.velocity.Length() < 50f)
@@ -319,7 +333,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         headScale = 1f;
                     }
 
-                    Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(10, 10), 200, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
+                    Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(10, 10), 200, Color.Black, Main.rand.NextFloat(2f, 4f)).noGravity = true;
 
                     break;
 
@@ -919,20 +933,32 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case -5:
 
+                    if (NPC.ai[3] > -1 && NPC.ai[3] <= Main.maxNPCs)
+                        if (ActiveSlime.active)
+                            ActiveSlime.active = false;
+
                     NPC.velocity *= 0.8f;
-                    NPC.velocity.Y--;
-                    if (Time > 30 && Time % 3 == 0)
-                    {
-                        //Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 40f);
-                        //leave.data = "GoozmaBlack";
-                    }
+                    NPC.velocity.Y -= (-31 - Time) * 0.025f;
+                    NPC.scale *= 0.9999f;
+                    NPC.dontTakeDamage = true;
 
-                    if (Time >= 50)
-                    {
-                        //Particle leave = Particle.NewParticle(Particle.ParticleType<CrackSpot>(), NPC.Center, Vector2.Zero, Color.Black, 50f);
-                        //leave.data = "GoozmaColor";
+                    if (Time > 0)
+                        Time = 0;
 
+                    if (Time > -15)
+                        KillSlime(currentSlime);
+
+                    if (Time < -30)
+                        NPC.EncourageDespawn(30);
+
+                    if (Time < -300)
                         NPC.active = false;
+
+                    if (Main.rand.NextBool(3))
+                    {
+                        Vector2 deathGooVelocity = Main.rand.NextVector2CircularEdge(2, 3);
+                        Particle deathGoo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), NPC.Center + deathGooVelocity * Main.rand.NextFloat(4, 16) * NPC.scale, deathGooVelocity, Color.White, 0.75f + Main.rand.NextFloat());
+                        deathGoo.data = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f);
                     }
 
                     break;
@@ -1003,7 +1029,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     break;
 
                 default:
+
                     Phase = -5;
+
                     break;
             };
 
@@ -1012,7 +1040,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             HandleLoopedSounds();
 
-            Time++;
+            if (Phase != -5)
+                Time++;
+            else
+                Time--;
 
             if (!Main.dedServ)
             {

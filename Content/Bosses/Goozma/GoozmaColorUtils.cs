@@ -62,11 +62,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(0, 0, 0).ToVector3(),
             new Color(51, 4, 19).ToVector3(),
             new Color(135, 58, 6).ToVector3(),
+            new Color(154, 255, 24).ToVector3(),
             new Color(216, 93, 10).ToVector3(),
             new Color(216, 163, 24).ToVector3(),
-            new Color(240, 198, 24).ToVector3(),
-            new Color(225, 140, 24).ToVector3(),
-            new Color(225, 85, 143).ToVector3(),
+            new Color(150, 150, 24).ToVector3(),
+            new Color(190, 85, 143).ToVector3(),
             new Color(0, 0, 0).ToVector3()
         };        
         
@@ -86,14 +86,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public static Vector3[] Test => new Vector3[]
         {
             new Color(0, 0, 0).ToVector3(),
-            new Color(0, 0, 0).ToVector3(),
-            new Color(0, 0, 0).ToVector3(),
-            new Color(0, 0, 0).ToVector3(),
-            new Color(0, 0, 0).ToVector3(),
-            new Color(0, 0, 0).ToVector3(),
-            new Color(0, 0, 0).ToVector3(),
-            new Color(0, 0, 0).ToVector3(),
-            new Color(0, 0, 0).ToVector3()
+            new Color(51, 4, 19).ToVector3(),
+            new Color(135, 58, 6).ToVector3(),
+            new Color(154, 255, 24).ToVector3(),
+            new Color(216, 93, 10).ToVector3(),
+            new Color(216, 163, 24).ToVector3(),
+            new Color(150, 150, 24).ToVector3(),
+            new Color(190, 85, 143).ToVector3(),
+            new Color(0, 0, 0).ToVector3()        
         };
     }
 }

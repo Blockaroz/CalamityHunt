@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (Main.getGoodWorld)
                     return GoozmaColorUtils.Masterful;                
                 
-                if (Main.getGoodWorld && Main.masterMode)
+                if ((Main.getGoodWorld && Main.masterMode) || Main.zenithWorld)
                     return GoozmaColorUtils.Nuclear;
 
                 if (Main.notTheBeesWorld)
@@ -76,7 +76,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         }
 
         public static int GoozmaColorType;
-
+        
         private static Vector3[] ColorsForFunnyWorlds(int type)
         {
             switch (GoozmaColorType)

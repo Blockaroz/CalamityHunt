@@ -242,6 +242,7 @@ Projectiles: {
 	PumpActionSwampgunHeld.DisplayName: Pump Action Swampgun Held
 	ParasanguineHeld.DisplayName: Parasanguine Held
 	ParasanguineBlood.DisplayName: Parasanguine Blood
+	SwampBall.DisplayName: Swamp Ball
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

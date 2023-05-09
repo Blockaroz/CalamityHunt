@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
                 if (Time == 2 && !Main.dedServ)
                 {
-                    SoundStyle chargeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaPureBallCharge");
+                    SoundStyle chargeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBombCharge");
                     chargeSound.MaxInstances = 0;
                     SoundEngine.PlaySound(chargeSound, Projectile.Center);
                 }
