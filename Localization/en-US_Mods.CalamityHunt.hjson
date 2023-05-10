@@ -277,6 +277,11 @@ Buffs: {
 		DisplayName: Swamped
 		Description: Mods.CalamityHunt.Buffs.Swamped.Description
 	}
+
+	Absorption: {
+		DisplayName: Absorption
+		Description: Mods.CalamityHunt.Buffs.Absorption.Description
+	}
 }
 
 Tiles: {

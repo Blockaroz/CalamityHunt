@@ -25,8 +25,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public override void SetDefaults()
         {
             Projectile.DefaultToWhip();
-            Projectile.WhipSettings.Segments = 25;
-            Projectile.WhipSettings.RangeMultiplier = 1.5f;
+            Projectile.WhipSettings.Segments = 22;
         }
 
         public override bool PreAI()
@@ -51,6 +50,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<Gobbed>(), 240);
+            if (!Main.player[Projectile.owner].HasBuff<Absorption>())
+                Main.player[Projectile.owner].AddBuff(ModContent.BuffType<Absorption>(), 240);
             Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
         }
 
@@ -113,7 +114,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 float rotation = change.ToRotation() - MathHelper.PiOver2;
                 Rectangle frame = texture.Frame(1, 5, 0, frameY);
 
-                Color glowColor = Color.Lerp(Color.CornflowerBlue, Color.AliceBlue, (float)i / points.Count * 0.33f);
+                Color glowColor = Color.Lerp(Color.CornflowerBlue, Color.AliceBlue, (float)i / points.Count * 0.5f);
                 glowColor.A /= 2;
                 Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, Lighting.GetColor(points[i].ToTileCoordinates()), rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale, spriteEffects, 0);
                 Main.EntitySpriteDraw(glow, drawPosition - Main.screenPosition, frame, Color.DimGray, rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale, spriteEffects, 0);
