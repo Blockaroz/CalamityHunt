@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityHunt.Content.Buffs;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace CalamityHunt.Content.Projectiles
                         Rectangle value4 = new Rectangle((int)Main.npc[npc].position.X, (int)Main.npc[npc].position.Y, Main.npc[npc].width, Main.npc[npc].height);
                         if (rectangle4.Intersects(value4))
                         {
-                            //Main.npc[npc].AddBuff(BuffID.Poisoned, 1500);
+                            Main.npc[npc].AddBuff(ModContent.BuffType<Swamped>(), 1500);
                             Projectile.Kill();
                         }
                     }
@@ -63,7 +64,7 @@ namespace CalamityHunt.Content.Projectiles
                         Rectangle value5 = new Rectangle((int)Main.player[player].position.X, (int)Main.player[player].position.Y, Main.player[player].width, Main.player[player].height);
                         if (rectangle4.Intersects(value5))
                         {
-                            //Main.player[player].AddBuff(BuffID.Poisoned, 1500);
+                            Main.player[player].AddBuff(ModContent.BuffType<Swamped>(), 1500);
                             Projectile.Kill();
                         }
                     }

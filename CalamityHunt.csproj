@@ -23,9 +23,7 @@
     <Folder Include="Common\Bestiary\" />
     <Folder Include="Content\Items\Accessories\" />
     <Folder Include="Content\Items\Weapons\Ranged\" />
-    <Folder Include="Content\Items\Weapons\Summoner\" />
     <Folder Include="Content\Projectiles\Weapons\Magic\" />
-    <Folder Include="Content\Projectiles\Weapons\Summoner\" />
     <Folder Include="Content\Projectiles\Weapons\Ranged\" />
   </ItemGroup>
 </Project>

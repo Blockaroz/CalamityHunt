@@ -371,9 +371,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             hitbox.Location = (Projectile.Center + Projectile.rotation.ToRotationVector2() * 100f - new Vector2(size * 0.5f)).ToPoint();
         }
 
-        public override bool PreDraw(ref Color lightColor) => false;
-
-        public override void PostDraw(Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D flare = TextureAssets.Extra[89].Value;
@@ -451,6 +449,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 Main.EntitySpriteDraw(splatTexture, Projectile.Center + tip * 1.03f - Main.screenPosition, splatFrame, Color.Black * 0.8f, Projectile.rotation + MathHelper.PiOver2, splatFrame.Size() * new Vector2(0.5f, 1f), 0.7f + Projectile.scale * 0.5f, 0, 0);
                 Main.EntitySpriteDraw(splatTexture, Projectile.Center + tip - Main.screenPosition, splatFrame, new Color(255, 8, 20) * 0.6f, Projectile.rotation + MathHelper.PiOver2, splatFrame.Size() * new Vector2(0.5f, 1f), 0.66f + Projectile.scale * 0.5f, 0, 0);
             }
+
+            return false;
         }
     }
 }

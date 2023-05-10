@@ -112,9 +112,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             return false;
         }
 
-        public override bool PreDraw(ref Color lightColor) => false;
-
-        public override void PostDraw(Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
             Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
@@ -125,6 +123,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             SpriteEffects spriteEffects = Projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 
             Main.EntitySpriteDraw(texture, Projectile.Center + new Vector2(0, Projectile.height * 0.5f * (Mode == 2 ? 1 : 0)) - Main.screenPosition, frame, new Color(180, 10, 30).MultiplyRGBA(lightColor), Projectile.rotation - MathHelper.PiOver2 * Projectile.spriteDirection, frame.Size() * new Vector2(0.5f, 0.5f + 0.4f * Projectile.spriteDirection), Projectile.scale * Projectile.localAI[1] * squish, spriteEffects, 0);
+
+            return false;
         }
     }
 }

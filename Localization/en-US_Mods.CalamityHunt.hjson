@@ -191,6 +191,11 @@ Items: {
 		DisplayName: Parasanguine
 		Tooltip: ""
 	}
+
+	Gobflogger: {
+		DisplayName: Gobflogger
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -243,6 +248,7 @@ Projectiles: {
 	ParasanguineHeld.DisplayName: Parasanguine Held
 	ParasanguineBlood.DisplayName: Parasanguine Blood
 	SwampBall.DisplayName: Swamp Ball
+	GobfloggerProj.DisplayName: Gobflogger Proj
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
@@ -260,6 +266,16 @@ Buffs: {
 	BloatBabyBuff: {
 		DisplayName: Bloat Baby
 		Description: It seems to like you as much as the others.
+	}
+
+	Gobbed: {
+		DisplayName: Gobbed
+		Description: Mods.CalamityHunt.Buffs.Gobbed.Description
+	}
+
+	Swamped: {
+		DisplayName: Swamped
+		Description: Mods.CalamityHunt.Buffs.Swamped.Description
 	}
 }
 
