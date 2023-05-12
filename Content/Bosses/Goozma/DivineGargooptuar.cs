@@ -61,8 +61,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.width = 140;
             NPC.height = 120;
             NPC.damage = 12;
-            NPC.defense = 500;
-            NPC.lifeMax = 3000000;
+            NPC.defense = 100;
+            NPC.lifeMax = 3500000;
+            NPC.takenDamageMultiplier = 0.5f;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0f;
@@ -72,8 +73,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.SpawnWithHigherTime(30);
             NPC.npcSlots = 10f;
             NPC.aiStyle = -1;
-            NPC.immortal = true;
-            NPC.takenDamageMultiplier = 0.33f;
             if (ModLoader.HasMod("CalamityMod"))
             {
                 Mod calamity = ModLoader.GetMod("CalamityMod");

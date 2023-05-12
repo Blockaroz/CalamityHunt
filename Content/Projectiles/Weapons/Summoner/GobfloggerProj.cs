@@ -11,7 +11,6 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 {
