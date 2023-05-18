@@ -32,13 +32,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.localAI[1] = Main.rand.NextFloat(30f);
             Projectile.rotation = Main.rand.NextFloat(-1f, 1f);
 
+            SoundStyle shootSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShot", 1, 2);
+            shootSound.Pitch = -0.3f;
+            shootSound.MaxInstances = 0;
+
+            SoundEngine.PlaySound(shootSound, Projectile.Center);
+
             if (!Main.dedServ)
             {
-                SoundStyle shootSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShot", 1, 2);
-                shootSound.Pitch = -0.3f;
-                shootSound.MaxInstances = 0;
-
-                SoundEngine.PlaySound(shootSound, Projectile.Center);
                 for (int i = 0; i < 5; i++)
                 {
                     Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.4f, 0.5f).ValueAt(Projectile.localAI[1]);
@@ -85,7 +86,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Time = 0;
                     Projectile.ai[1]++;
                 }
-                if (Time == 1 && !Main.dedServ)
+                if (Time == 1)
                 {
                     SoundStyle chargeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBombCharge");
                     chargeSound.MaxInstances = 0;

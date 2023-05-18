@@ -31,6 +31,13 @@ namespace CalamityHunt.Content.Items.Materials
             Item.value = Item.sellPrice(0, 30);
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.maxStack = Item.CommonMaxStack;
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                ModRarity r;
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.TryFind<ModRarity>("Violet", out r);
+                Item.rare = r.Type;
+            }
         }
 
         public override void PostUpdate()

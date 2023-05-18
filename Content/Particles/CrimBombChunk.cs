@@ -40,8 +40,7 @@ namespace CalamityHunt.Content.Particles
 
                 if (Collision.SolidTiles(position - new Vector2(0, 12) + velocity * 2f, 4, 4) && time > 20)
                 {
-                    if (!Main.dedServ)
-                        SoundEngine.PlaySound(SoundID.NPCDeath9.WithPitchOffset(Main.rand.NextFloat(-0.2f, 0.3f)), position);
+                    SoundEngine.PlaySound(SoundID.NPCDeath9.WithPitchOffset(Main.rand.NextFloat(-0.2f, 0.3f)), position);
                     if (Main.rand.NextBool())
                     {
                         time = 0;

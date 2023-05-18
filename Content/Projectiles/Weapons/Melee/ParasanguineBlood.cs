@@ -101,8 +101,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 if (Time < 200)
                     Time = 200;
 
-                if (!Main.dedServ)
-                    SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
 
             }
 

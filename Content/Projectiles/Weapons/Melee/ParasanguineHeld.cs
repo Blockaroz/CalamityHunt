@@ -116,7 +116,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                         }
                     }
 
-                    if (Time == 22 && !Main.dedServ)
+                    if (Time == 22)
                         SoundEngine.PlaySound(swingSound.WithPitchOffset(0.2f), Projectile.Center);
 
                     Projectile.spriteDirection = -Projectile.direction;
@@ -162,7 +162,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                             blood.noGravity = true;
                         }
                     }
-                    if (Time == 15 && !Main.dedServ)
+                    if (Time == 15)
                         SoundEngine.PlaySound(swingSound.WithPitchOffset(0.2f), Projectile.Center);
                     
                     Projectile.spriteDirection = Projectile.direction;
@@ -253,7 +253,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                             Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 60f, stickyVelocity + Owner.velocity, ModContent.ProjectileType<ParasanguineBlood>(), Projectile.damage / 2, 0.5f, Owner.whoAmI);
                         }
 
-                        if ((Time - 20) % 10 == 0 && !Main.dedServ)
+                        if ((Time - 20) % 10 == 0)
                             SoundEngine.PlaySound(swingSound.WithPitchOffset(0.5f), Projectile.Center);
 
                     }
@@ -345,8 +345,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 CombatText.NewText(new Rectangle((int)Owner.position.X, (int)Owner.position.Y - 30, Owner.width, 30), new Color(150, 10, 0), 500 + (int)(damageDone * 0.01f), true, true);
             }
 
-            if (!Main.dedServ)
-                SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundMiss, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundMiss, Projectile.Center);
 
             WeaponBars.DisplayBar();
         }
@@ -361,8 +360,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 CombatText.NewText(new Rectangle((int)Owner.position.X, (int)Owner.position.Y - 30, Owner.width, 30), new Color(150, 10, 0), 500 + (int)(info.Damage * 0.01f), true, true);
             }
 
-            if (!Main.dedServ)
-                SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundMiss, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundMiss, Projectile.Center);
 
             WeaponBars.DisplayBar();
         }

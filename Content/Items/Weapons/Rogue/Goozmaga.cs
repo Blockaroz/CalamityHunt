@@ -32,9 +32,12 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 			if (ModLoader.HasMod("CalamityMod"))
             {
 				DamageClass d;
+				ModRarity r;
 				Mod calamity = ModLoader.GetMod("CalamityMod");
 				calamity.TryFind<DamageClass>("RogueDamageClass", out d);
+				calamity.TryFind<ModRarity>("Violet", out r);
 				Item.DamageType = d;
+				Item.rare = r.Type;
             }
 			Item.shoot = ModContent.ProjectileType<GoozmagaBomb>();
 		}

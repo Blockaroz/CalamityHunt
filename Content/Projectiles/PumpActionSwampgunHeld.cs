@@ -73,7 +73,7 @@ namespace CalamityHunt.Content.Projectiles
                     Projectile.frame = 1;
                 }
 
-                if (Time == 5 && !Main.dedServ)
+                if (Time == 5)
                     SoundEngine.PlaySound(SoundID.Item38, Projectile.Center);
 
                 if (Time > 5)
@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Projectiles
             }
             else
             {
-                if (Time == 15 && !Main.dedServ)
+                if (Time == 15)
                 {
                     SoundStyle cock = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GunCocking");
                     cock.MaxInstances = 0;

@@ -28,6 +28,13 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             Item.value = Item.sellPrice(gold: 10);
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.defense = 45;
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                ModRarity r;
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.TryFind<ModRarity>("Violet", out r);
+                Item.rare = r.Type;
+            }
         }
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)

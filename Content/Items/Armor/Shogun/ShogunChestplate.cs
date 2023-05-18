@@ -27,6 +27,13 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.defense = 50;
             Item.lifeRegen = 3;
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                ModRarity r;
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.TryFind<ModRarity>("Violet", out r);
+                Item.rare = r.Type;
+            }
         }
 
         public override void UpdateEquip(Player player)

@@ -15,6 +15,13 @@ namespace CalamityHunt.Content.Items.Placeable
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.accessory = true;
             Item.vanity = true;
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                ModRarity r;
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.TryFind<ModRarity>("Violet", out r);
+                Item.rare = r.Type;
+            }
         }
 
         public override void UpdateAccessory(Player player, bool visual)

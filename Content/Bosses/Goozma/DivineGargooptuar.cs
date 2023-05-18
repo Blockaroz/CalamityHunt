@@ -107,7 +107,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
                 NPC.active = false;
 
-            if (wingFrame == 2 && NPC.frameCounter % 8 == 0 && !Main.dedServ)
+            if (wingFrame == 2 && NPC.frameCounter % 8 == 0)
                 SoundEngine.PlaySound(SoundID.Item32.WithVolumeScale(2f), NPC.Center);
 
             NPC.realLife = Host.whoAmI;
@@ -229,8 +229,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         prism.ai[2] = randSpin;
                     }              
 
-                    if (!Main.dedServ)
-                        SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
+                    SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
 
                 if (Time % 150 > 70 && Time % 150 < 100 && Time % 3 == 0)
@@ -238,20 +237,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 if (Time % 150 == 5)
                 {
-                    if (!Main.dedServ)
-                    {
-                        SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PrismDestroyerTelegraph");
-                        createSound.PitchVariance = 0.1f;
-                        createSound.MaxInstances = 0;
-                        SoundEngine.PlaySound(createSound, NPC.Center);
-                    }
+                    SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PrismDestroyerTelegraph");
+                    createSound.PitchVariance = 0.1f;
+                    createSound.MaxInstances = 0;
+                    SoundEngine.PlaySound(createSound, NPC.Center);
 
                     for (int i = 0; i < Main.rand.Next(14, 20); i++)
                         Particle.NewParticle(Particle.ParticleType<HolyBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(80, 50), NPC.velocity.RotatedByRandom(1f) * Main.rand.NextFloat(), Color.White, 0.1f + Main.rand.NextFloat(2f));
 
                 }
 
-                if (Time % 150 == 70 && !Main.dedServ)
+                if (Time % 150 == 70)
                 {
                     SoundStyle expandSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PrismDestroyerExpand");
                     expandSound.PitchVariance = 0.1f;
@@ -350,7 +346,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.velocity *= 0.9f;
             }
 
-            if (Time == 60 && !Main.dedServ)
+            if (Time == 60)
                 SoundEngine.PlaySound(SoundID.Shatter, NPC.Center);
 
             if (Time > 60)
@@ -388,12 +384,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     for (int i = 0; i < 14; i++)
                         Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(12, 12), ModContent.GoreType<CrystalShieldFragment9>(), 1f);
 
-                    if (!Main.dedServ)
-                    {
-                        SoundStyle shatter = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixiePrismDestroyed");
-                        shatter.MaxInstances = 0;
-                        SoundEngine.PlaySound(shatter, NPC.Center);
-                    }
+                    SoundStyle shatter = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixiePrismDestroyed");
+                    shatter.MaxInstances = 0;
+                    SoundEngine.PlaySound(shatter, NPC.Center);
                 }
             }
 

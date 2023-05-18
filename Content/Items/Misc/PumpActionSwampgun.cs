@@ -24,6 +24,13 @@ namespace CalamityHunt.Content.Items.Misc
             Item.value = Item.sellPrice(silver: 50);
             Item.shoot = ModContent.ProjectileType<PumpActionSwampgunHeld>();
             Item.shootSpeed = 5f;
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                ModRarity r;
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.TryFind<ModRarity>("Violet", out r);
+                Item.rare = r.Type;
+            }
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<PumpActionSwampgunHeld>()] <= 0;

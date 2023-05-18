@@ -66,7 +66,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Speed = Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.012f * Main.rand.NextFloat(0.8f, 1.2f);
             }
 
-            if (Time == 1 && !Main.dedServ)
+            if (Time == 1)
             {
                 SoundStyle shootSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmiteShoot", 1, 2);
                 shootSound.MaxInstances = 0;

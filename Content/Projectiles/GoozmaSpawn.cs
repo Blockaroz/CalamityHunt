@@ -76,7 +76,7 @@ namespace CalamityHunt.Content.Projectiles
                 hue.data = Time * 0.33f;
             }
 
-            if (Time == 0 && !Main.dedServ)
+            if (Time == 0)
             {
                 SoundStyle devour = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaIntro");
                 devour.MaxInstances = 0;
@@ -88,7 +88,7 @@ namespace CalamityHunt.Content.Projectiles
                 for (int i = 0; i < 1 + (int)(Utils.GetLerpValue(400, 900, Time, true) * 10); i++)
                     SpawnSlimes();
 
-            if (Time == 650 && !Main.dedServ)
+            if (Time == 650)
             {
                 SoundStyle intro = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaIntro");
                 intro.MaxInstances = 0;

@@ -87,23 +87,22 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 else
                     endPoint = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.05f) * Length;
 
-                if (!Main.dedServ)
-                    if (Collides == 0)
-                    {
-                        SoundStyle lightningSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBigThunder");
-                        lightningSound.MaxInstances = 0;
-                        lightningSound.PitchVariance = 0.15f;
+                if (Collides == 0)
+                {
+                    SoundStyle lightningSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBigThunder");
+                    lightningSound.MaxInstances = 0;
+                    lightningSound.PitchVariance = 0.15f;
 
-                        SoundEngine.PlaySound(lightningSound, Projectile.Center);
-                    }
-                    else
-                    {
-                        SoundStyle lightningMiniSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSmallThunder", 1, 3);
-                        lightningMiniSound.MaxInstances = 0;
-                        lightningMiniSound.PitchVariance = 0.15f;
+                    SoundEngine.PlaySound(lightningSound, Projectile.Center);
+                }
+                else
+                {
+                    SoundStyle lightningMiniSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSmallThunder", 1, 3);
+                    lightningMiniSound.MaxInstances = 0;
+                    lightningMiniSound.PitchVariance = 0.15f;
 
-                        SoundEngine.PlaySound(lightningMiniSound, Projectile.Center);
-                    }
+                    SoundEngine.PlaySound(lightningMiniSound, Projectile.Center);
+                }
 
                 LightningData data = new LightningData(Projectile.Center, endPoint, 0.5f);
                 points = data.Value;
@@ -141,7 +140,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
             }
 
-            //if (Time == 0 && !Main.dedServ)
+            //if (Time == 0)
             //    SoundEngine.PlaySound(SoundID.Thunder.WithVolumeScale(0.7f), Projectile.Center);
 
             if (Time > 30)

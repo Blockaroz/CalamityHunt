@@ -264,7 +264,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 float localTime = Time % 170;
 
-                if (localTime == 35 && !Main.dedServ)
+                if (localTime == 35)
                 {
                     SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
                     SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
@@ -274,7 +274,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     NPC.velocity *= 0.1f;
                     squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(10, 26, localTime, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(10, 26, localTime, true)) * 0.5f);
-                    if (localTime == 25 && !Main.dedServ)
+                    if (localTime == 25)
                     {
                         SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
                         hop.MaxInstances = 0;
@@ -339,12 +339,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                                 player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 5;
 
-                            if (!Main.dedServ)
-                            {
-                                SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                                slam.MaxInstances = 0;
-                                SoundEngine.PlaySound(slam, NPC.Center);
-                            }
+                            SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                            slam.MaxInstances = 0;
+                            SoundEngine.PlaySound(slam, NPC.Center);
 
                             for (int i = 0; i < Main.rand.Next(30, 40); i++)
                             {
@@ -368,7 +365,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         private void CollidingCrush()
         {
             int waitTime = 70;
-            if (Time == waitTime + 5 && !Main.dedServ)
+            if (Time == waitTime + 5)
             {
                 SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
                 SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
@@ -378,7 +375,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.velocity *= 0.1f;
                 squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(15, 56, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(15, 56, Time, true)) * 0.5f);
-                if (Time == 58 && !Main.dedServ)
+                if (Time == 58)
                 {
                     SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
                     hop.MaxInstances = 0;
@@ -441,12 +438,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             rightProj.localAI[0] = 1;
                         }
 
-                        if (!Main.dedServ)
-                        {
-                            SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                            slam.MaxInstances = 0;
-                            SoundEngine.PlaySound(slam, NPC.Center);
-                        }
+                        SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                        slam.MaxInstances = 0;
+                        SoundEngine.PlaySound(slam, NPC.Center);
 
                         for (int i = 0; i < Main.rand.Next(30, 40); i++)
                         {
@@ -467,7 +461,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     NPC.velocity *= 0.1f;
                     squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.5f);
-                    if (Time == waitTime + 95 && !Main.dedServ)
+                    if (Time == waitTime + 95)
                     {
                         SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
                         hop.MaxInstances = 0;
@@ -482,7 +476,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            if (Time == waitTime + 125 && !Main.dedServ)
+            if (Time == waitTime + 125)
             {
                 SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
                 SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
@@ -502,12 +496,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time == waitTime + 180)
             {
-                if (!Main.dedServ)
-                {
-                    SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                    slam.MaxInstances = 0;
-                    SoundEngine.PlaySound(slam, NPC.Center);
-                }
+                SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                slam.MaxInstances = 0;
+                SoundEngine.PlaySound(slam, NPC.Center);
 
                 for (int i = 0; i < Main.rand.Next(30, 40); i++)
                 {
@@ -547,13 +538,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     NPC.velocity.Y -= 30;
                     saveTarget = Target.Center + new Vector2((Main.rand.Next(0, 50) + Math.Abs(Target.Velocity.X) * 25 + 360) * (Target.Center.X > NPC.Center.X ? 1 : -1), NPC.height);
-                    if (!Main.dedServ)
-                    {
-                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
-                        hop.MaxInstances = 0;
-                        hop.PitchVariance = 0.1f;
-                        SoundEngine.PlaySound(hop, NPC.Center);
-                    }
+                    
+                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                    hop.MaxInstances = 0;
+                    hop.PitchVariance = 0.1f;
+                    SoundEngine.PlaySound(hop, NPC.Center);
                 }
                 else if (localTime < (int)(jumpTime * 0.72f))
                 {
@@ -583,12 +572,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                         player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 3;
 
-                    if (!Main.dedServ)
-                    {
-                        SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                        slam.MaxInstances = 0;
-                        SoundEngine.PlaySound(slam, NPC.Center);
-                    }
+                    SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                    slam.MaxInstances = 0;
+                    SoundEngine.PlaySound(slam, NPC.Center);
 
                     for (int i = 0; i < Main.rand.Next(20, 30); i++)
                     {

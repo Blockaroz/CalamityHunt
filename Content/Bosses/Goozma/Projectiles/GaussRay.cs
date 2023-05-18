@@ -153,7 +153,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
             }
 
-            if (Time == ChargeTime + LaserDuration + 20 && !Main.dedServ)
+            if (Time == ChargeTime + LaserDuration + 20)
             {
                 SoundStyle sizzle = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSizzle");
                 sizzle.MaxInstances = 0;

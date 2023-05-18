@@ -67,7 +67,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 return;
             }
 
-            if (Time == 1 && !Main.dedServ)
+            if (Time == 1)
             {
                 SoundStyle invocation = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarBlackHoleSummon");
                 SoundEngine.PlaySound(invocation.WithVolumeScale(1.5f), Projectile.Center);

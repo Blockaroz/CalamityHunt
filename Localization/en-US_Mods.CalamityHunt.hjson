@@ -258,6 +258,7 @@ Projectiles: {
 	CrystalLightning.DisplayName: Crystal Lightning
 	CrystalGauntletBallThrown.DisplayName: Crystal Gauntlet Ball Thrown
 	CrystalPiercer.DisplayName: Crystal Piercer
+	CrystalBoom.DisplayName: Crystal Boom
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

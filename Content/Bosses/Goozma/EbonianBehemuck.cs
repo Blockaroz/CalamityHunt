@@ -243,14 +243,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (localTime == 0)
                 {
                     NPC.velocity.Y -= 10;
-                    if (!Main.dedServ)
-                    {
-                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
-                        hop.MaxInstances = 0;
-                        hop.PitchVariance = 0.1f;
-                        SoundEngine.PlaySound(hop, NPC.Center);
-                        SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
-                    }
+                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                    hop.MaxInstances = 0;
+                    hop.PitchVariance = 0.1f;
+                    SoundEngine.PlaySound(hop, NPC.Center);
+                    SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
                 else if (localTime < (int)(jumpTime * 0.8f))
                 {
@@ -283,12 +280,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                         player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 3;
 
-                    if (!Main.dedServ)
-                    {
-                        SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                        slam.MaxInstances = 0;
-                        SoundEngine.PlaySound(slam, NPC.Center);
-                    }
+                    SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
+                    slam.MaxInstances = 0;
+                    SoundEngine.PlaySound(slam, NPC.Center);
 
                     for (int i = 0; i < Main.rand.Next(14, 20); i++)
                     {
@@ -411,12 +405,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.velocity.Y -= 40;
                     saveTarget = saveTarget - new Vector2(0, 1400);
 
-                    if (!Main.dedServ)
-                    {
-                        SoundStyle raise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneRaise");
-                        raise.MaxInstances = 0;
-                        SoundEngine.PlaySound(raise, NPC.Center);
-                    }
+                    SoundStyle raise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneRaise");
+                    raise.MaxInstances = 0;
+                    SoundEngine.PlaySound(raise, NPC.Center);
                 }
             }
             else
@@ -452,7 +443,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     }
                 }
 
-                if (Time >= 150 && Time <= 150 + spikeCount * spikeTime && !Main.dedServ)
+                if (Time >= 150 && Time <= 150 + spikeCount * spikeTime)
                 {
                     if ((Time - 150) % spikeTime == 30)
                     {
@@ -492,7 +483,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //    foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 10000))
             //        player.AddBuff(BuffID.Obstructed, 20, true);
 
-            if (Time == 150 + spikeCount * spikeTime && !Main.dedServ)
+            if (Time == 150 + spikeCount * spikeTime)
             {
                 SoundStyle crumble = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneCrumble");
                 crumble.MaxInstances = 0;

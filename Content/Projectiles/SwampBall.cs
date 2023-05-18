@@ -91,8 +91,7 @@ namespace CalamityHunt.Content.Projectiles
                 slime.noGravity = Main.rand.NextBool();
             }
 
-            if (!Main.dedServ)
-                SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
         }
     }
 }

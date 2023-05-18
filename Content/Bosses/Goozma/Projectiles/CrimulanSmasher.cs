@@ -73,7 +73,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time > 0)
                 Projectile.Center = Vector2.Lerp(Projectile.Center, saveTarget, 0.001f + Utils.GetLerpValue(0, 10, Time, true));
 
-            if (Time == 8 && !Main.dedServ)
+            if (Time == 8)
                 SoundEngine.PlaySound(SoundID.Item167.WithPitchOffset(0.2f), Projectile.Center);
 
             if (Time > 20)

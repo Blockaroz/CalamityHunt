@@ -109,8 +109,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     for (int i = 0; i < Main.rand.Next(1, 3); i++)
                         Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextVector2Circular(5, 5), ModContent.ProjectileType<ToxicSludge>(), Projectile.damage / 2, 0);
 
-                    if (!Main.dedServ)
-                        SoundEngine.PlaySound(SoundID.Item167.WithPitchOffset(0.2f), Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.Item167.WithPitchOffset(0.2f), Projectile.Center);
 
                 }
             }

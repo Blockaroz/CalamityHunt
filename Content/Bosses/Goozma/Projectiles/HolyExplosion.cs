@@ -46,19 +46,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 if (Time % 4 == 0)
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), strength * 120, 20, 30));
             }
-            
-            if (!Main.dedServ)
+
+            if (Time == 0)
             {
-                if (Time == 0)
-                {
-                    SoundStyle explosion = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixieBallExplode");
-                    SoundEngine.PlaySound(explosion, Projectile.Center);
-                }
-                if (Time == 35)
-                {
-                    SoundStyle ringing = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaEarRinging");
-                    SoundEngine.PlaySound(ringing.WithVolumeScale(2f), Projectile.Center);
-                }
+                SoundStyle explosion = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixieBallExplode");
+                SoundEngine.PlaySound(explosion, Projectile.Center);
+            }
+            if (Time == 35)
+            {
+                SoundStyle ringing = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaEarRinging");
+                SoundEngine.PlaySound(ringing.WithVolumeScale(2f), Projectile.Center);
             }
 
             if (Time < 50)
