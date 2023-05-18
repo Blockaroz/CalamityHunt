@@ -184,7 +184,7 @@ Items: {
 
 	PumpActionSwampgun: {
 		DisplayName: Pump Action Swampgun
-		Tooltip: ""
+		Tooltip: Blasts a harmless spread of slime
 	}
 
 	Parasanguine: {
@@ -194,6 +194,11 @@ Items: {
 
 	Gobflogger: {
 		DisplayName: Gobflogger
+		Tooltip: ""
+	}
+
+	CrystalGauntlets: {
+		DisplayName: Crystal Gauntlets
 		Tooltip: ""
 	}
 }
@@ -249,6 +254,10 @@ Projectiles: {
 	ParasanguineBlood.DisplayName: Parasanguine Blood
 	SwampBall.DisplayName: Swamp Ball
 	GobfloggerProj.DisplayName: Gobflogger Proj
+	CrystalGauntletBall.DisplayName: Crystal Gauntlet Ball
+	CrystalLightning.DisplayName: Crystal Lightning
+	CrystalGauntletBallThrown.DisplayName: Crystal Gauntlet Ball Thrown
+	CrystalPiercer.DisplayName: Crystal Piercer
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...
@@ -270,17 +279,17 @@ Buffs: {
 
 	Gobbed: {
 		DisplayName: Gobbed
-		Description: Mods.CalamityHunt.Buffs.Gobbed.Description
+		Description: You are afflicted.
 	}
 
 	Swamped: {
 		DisplayName: Swamped
-		Description: Mods.CalamityHunt.Buffs.Swamped.Description
+		Description: You've been swamped!
 	}
 
 	Absorption: {
 		DisplayName: Absorption
-		Description: Mods.CalamityHunt.Buffs.Absorption.Description
+		Description: You are absorbing the energy released by your victims
 	}
 }
 

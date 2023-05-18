@@ -268,6 +268,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                 lightningEffect.Parameters["uGlow"].SetValue(lightningTexture[1].Value);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
                 lightningEffect.Parameters["uTime"].SetValue(-(float)Math.Cbrt(maxTime - time) * 0.2f);
+                lightningEffect.Parameters["uBackPower"].SetValue(0f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
 
                 strip.DrawTrail();

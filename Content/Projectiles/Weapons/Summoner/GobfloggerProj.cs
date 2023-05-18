@@ -91,7 +91,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             for (int i = 0; i < points.Count - 1; i++)
             {
                 int frameY = 0;
-                float scale = 1;
+                float scale = 0.6f + Utils.GetLerpValue(0, points.Count, i, true) * 0.8f;
 
                 if (i == points.Count - 2)
                 {
@@ -107,7 +107,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     frameY = 2;
                 else if (i > 0)
                     frameY = 1;
-                
+
                 Vector2 change = points[i + 1] - points[i];
 
                 float rotation = change.ToRotation() - MathHelper.PiOver2;
@@ -115,9 +115,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
                 Color glowColor = Color.Lerp(Color.CornflowerBlue, Color.AliceBlue, (float)i / points.Count * 0.5f);
                 glowColor.A /= 2;
+                Main.EntitySpriteDraw(glow, drawPosition - Main.screenPosition, frame, Color.Black * 0.5f, rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale * 1.1f, spriteEffects, 0);
                 Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, Lighting.GetColor(points[i].ToTileCoordinates()), rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale, spriteEffects, 0);
-                Main.EntitySpriteDraw(glow, drawPosition - Main.screenPosition, frame, Color.DimGray, rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale, spriteEffects, 0);
-                Main.EntitySpriteDraw(glow, drawPosition - Main.screenPosition, frame, Color.CornflowerBlue, rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale, spriteEffects, 0);
+                Main.EntitySpriteDraw(glow, drawPosition - Main.screenPosition, frame, Color.CornflowerBlue * 0.33f, rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale, spriteEffects, 0);
                 Main.EntitySpriteDraw(glow, drawPosition - Main.screenPosition, frame, glowColor, rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale * 1.15f, spriteEffects, 0);
 
                 drawPosition += change;

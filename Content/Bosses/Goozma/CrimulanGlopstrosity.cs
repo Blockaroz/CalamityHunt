@@ -158,11 +158,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 squishFactor = new Vector2(1f - (float)Math.Pow(Utils.GetLerpValue(-10, -45, Time, true), 2) * 0.5f, 1f + (float)Math.Pow(Utils.GetLerpValue(-10, -45, Time, true), 2) * 0.4f);
                 if (Time == -2)
                 {
+                    RememberAttack = Attack;
+
                     if (NPC.Distance(Target.Center) > 1000)
-                    {
-                        RememberAttack = Attack;
                         Attack = (int)AttackList.TooFar;
-                    }
 
                     float distance = 0;
                     for (int i = 0; i < Main.tile.Height; i++)

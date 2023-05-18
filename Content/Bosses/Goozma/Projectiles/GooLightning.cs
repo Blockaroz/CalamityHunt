@@ -188,6 +188,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 lightningEffect.Parameters["uGlow"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
                 lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.05f);
+                lightningEffect.Parameters["uBackPower"].SetValue(0.5f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
 
                 strip.DrawTrail();

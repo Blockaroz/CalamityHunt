@@ -2,7 +2,6 @@
 float4 uColor;
 matrix uTransformMatrix;
 float uTime;
-float uBackPower;
 
 texture uTexture;
 sampler tex = sampler_state
@@ -50,10 +49,10 @@ VertexShaderOutput VertexShaderFunction(in VertexShaderInput input)
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-    float4 base = tex2D(tex, input.Coord + float2(frac(uTime * 2), 0)) * tex2D(tex, input.Coord + float2(frac(uTime) + 0.5, 0)) * float4(1, 1, 1, 0);
-    float4 baseGlow = tex2D(glow, input.Coord + float2(frac(uTime), 0)) * float4(1, 1, 1, 0);
-    float4 back = length(baseGlow + base * 2) * float4(input.Color.rgb * 0.1, 0.2);
-    return back * uBackPower + (pow(base * 2 + baseGlow, 2) + baseGlow) * input.Color;
+    float4 base = tex2D(tex, float2(frac(input.Coord.x * 2 + uTime), input.Coord.y)) * float4(1, 1, 1, 0);
+    float4 baseGlow = tex2D(glow, float2(frac(input.Coord.x * 2 + uTime), input.Coord.y)) * float4(1, 1, 1, 0);
+    float4 back = length(baseGlow + base * 2) * float4(input.Color.rgb * 0.3, 0.2) * input.Color.a;
+    return back * 0.1 + (pow(base * 2 + baseGlow, 2) + baseGlow * 0.5) * input.Color;
 }
 
 technique Technique1

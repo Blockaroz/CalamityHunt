@@ -64,7 +64,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.height = 80;
             NPC.damage = 0;
             NPC.defense = 100;
-            NPC.lifeMax = 30000;
+            NPC.lifeMax = 10000;
             NPC.HitSound = SoundID.NPCDeath9;
             NPC.DeathSound = SoundID.NPCDeath9;
             NPC.knockBackResist = 0.1f;
@@ -115,13 +115,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (NPC.velocity.Length() > 0.5f)
                     NPC.velocity *= 0.9f;
 
-                NPC.dontTakeDamage = Time < 50 && Time > TimeUntilDeath;
+                NPC.dontTakeDamage = Time < 120 || Time > TimeUntilDeath;
 
                 lookVector = Vector2.Lerp(lookVector, NPC.DirectionTo(Host.GetTargetData().Center).SafeNormalize(Vector2.Zero) * Math.Clamp(NPC.Distance(Host.GetTargetData().Center) * 0.5f, 0, 5f), 0.1f);
                 if (!NPC.IsABestiaryIconDummy)
                     NPC.scale = Utils.GetLerpValue(-20, 20, NPC.localAI[1], true);
 
-                if (Time > 50 && Time < TimeUntilDeath)
+                if (Time > 120 && Time < TimeUntilDeath)
                 {
                     if (Time % 100 == 5)
                         NPC.velocity += Main.rand.NextVector2Circular(9, 9);
@@ -140,9 +140,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 if (Time > TimeUntilDeath)
                 {
-                    Host.life += NPC.life * 2;
-                    if (Host.life > Host.lifeMax)
-                        Host.life = Host.lifeMax;
+                    Host.life += (int)(NPC.life * 4f);
+                    if (Host.life > Host.lifeMax * 0.8f)
+                        Host.life = (int)(Host.lifeMax * 0.8f);
                     for (int i = 0; i < 50; i++)
                     {
                         Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(9, 9), Color.White, 1f + Main.rand.NextFloat());
@@ -221,20 +221,20 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 zapPoints = new List<Vector2>();
                 zapVelocities = new List<Vector2>();
                 zapPoints.Add(NPC.Center);
-                int count = 8;
-                Vector2 offMid = Main.rand.NextVector2Circular(10, 150).RotatedBy(NPC.AngleTo(Host.Center));
+                int count = 6;
+                Vector2 offMid = Main.rand.NextVector2Circular(10, 120).RotatedBy(NPC.AngleTo(Host.Center));
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 point = Vector2.Lerp(NPC.Center, Host.Center, i / (float)count) + (offMid + Main.rand.NextVector2Circular(10, 15).RotatedBy(NPC.AngleTo(Host.Center))) * (float)Math.Sin(i / (float)count * MathHelper.Pi);
+                    float prog = Utils.GetLerpValue(0, count, i, true);
+                    Vector2 point = Vector2.Lerp(NPC.Center, Host.Center, i / (float)count) + (offMid * 0.2f + Main.rand.NextVector2Circular(5, 25).RotatedBy(NPC.AngleTo(Host.Center))) * prog;
                     zapPoints.Add(point);
                 }
-
                 zapPoints.Add(Host.Center);
 
                 for (int i = 0; i < zapPoints.Count; i++)
                 {
-                    Vector2 direction = NPC.DirectionTo(Host.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f).RotatedBy(MathHelper.PiOver2) * Main.rand.NextFloat(-1f, 1f);
-                    zapVelocities.Add((direction + offMid * 0.0008f) * (float)Math.Sin(i / (float)count * MathHelper.Pi));
+                    Vector2 direction = NPC.DirectionTo(Host.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f);
+                    zapVelocities.Add(direction * -Main.rand.NextFloat(-1f, 5f) + Main.rand.NextVector2Circular(1f, 2f).RotatedBy(direction.ToRotation()) + offMid * 0.05f);
                 }
 
                 if (zapPointsReal == null)
@@ -248,13 +248,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time > 40)
             {
                 for (int i = 0; i < zapPoints.Count; i++)
+                {
+                    if ((Time + i) % randCounter > 15)
+                        zapVelocities[i] *= 0.93f;
                     zapPoints[i] += zapVelocities[i] * (float)Math.Sin(i / (float)zapPoints.Count * MathHelper.Pi);
-
-                for (int i = 0; i < zapPoints.Count; i++)
                     zapPoints[i] += NPC.velocity * (1f - i / (float)zapPoints.Count);
+                }
 
                 for (int i = 0; i < zapPointsReal.Count; i++)
-                    zapPointsReal[i] = Vector2.Lerp(zapPointsReal[i], zapPoints[i], 0.2f + 0.8f * (Utils.GetLerpValue(0.1f, 0f, i / (float)zapPointsReal.Count, true) + Utils.GetLerpValue(0.9f, 1f, i / (float)zapPointsReal.Count, true))) + Main.rand.NextVector2CircularEdge(2, 2) * (float)Math.Sin(i / (float)zapPointsReal.Count * MathHelper.Pi);
+                    zapPointsReal[i] = Vector2.Lerp(zapPointsReal[i], zapPoints[i], 0.8f + 0.2f * (Utils.GetLerpValue(0.1f, 0f, i / (float)zapPointsReal.Count, true) + Utils.GetLerpValue(0.9f, 1f, i / (float)zapPointsReal.Count, true))) + Main.rand.NextVector2CircularEdge(2, 2) * (float)Math.Sin(i / (float)zapPointsReal.Count * MathHelper.Pi);
             }
         }
 
@@ -409,6 +411,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             lightningEffect.Parameters["uGlow"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
             lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
             lightningEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.02f % 1f);
+            lightningEffect.Parameters["uBackPower"].SetValue(0.2f);
             lightningEffect.CurrentTechnique.Passes[0].Apply();
 
             strip.DrawTrail();

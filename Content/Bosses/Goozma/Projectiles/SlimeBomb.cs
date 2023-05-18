@@ -85,11 +85,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Time = 0;
                     Projectile.ai[1]++;
                 }
-                if (Time == 2 && !Main.dedServ)
+                if (Time == 1 && !Main.dedServ)
                 {
                     SoundStyle chargeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBombCharge");
                     chargeSound.MaxInstances = 0;
-                    SoundEngine.PlaySound(chargeSound, Projectile.Center);
+                    SoundEngine.PlaySound(chargeSound.WithVolumeScale(0.33f), Projectile.Center);
                 }
             }
             else
@@ -100,8 +100,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
                     explodeSound.MaxInstances = 0;
-                    SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.8f), Projectile.Center);
-                    SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.6f), Projectile.Center);
+                    SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.7f), Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.8f), Projectile.Center);
                 }
 
                 if (Time < 3)

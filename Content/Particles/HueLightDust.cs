@@ -40,7 +40,8 @@ namespace CalamityHunt.Content.Particles
                 if (WorldGen.InWorld((int)(position.X / 16), (int)(position.X / 16)))
                     Lighting.AddLight(position, color.ToVector3() * 0.2f * scale);
             }
-            else if (Main.rand.NextBool(90) && scale > 0.25f)
+            
+            if (Main.rand.NextBool(150) && scale > 0.25f)
             {
                 Particle hue = NewParticle(Type, position, Main.rand.NextVector2Circular(1, 1), color * 0.99f, MathHelper.Clamp(scale * 2f, 0.1f, 1.5f));
                 hue.data = data;

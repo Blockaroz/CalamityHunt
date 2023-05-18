@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems;
+using CalamityHunt.Common.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -346,6 +347,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
             if (!Main.dedServ)
                 SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundMiss, Projectile.Center);
+
+            WeaponBars.DisplayBar();
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -360,6 +363,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
             if (!Main.dedServ)
                 SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundMiss, Projectile.Center);
+
+            WeaponBars.DisplayBar();
         }
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)

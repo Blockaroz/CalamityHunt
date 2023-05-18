@@ -30,7 +30,7 @@ namespace CalamityHunt.Content.Particles
             scale *= Main.rand.NextFloat(1f, 1.1f);
             variant = Main.rand.Next(5);
             if (Main.rand.NextBool(1000))
-                variant = Main.rand.Next(5, 7);            
+                variant = Main.rand.Next(5, 8);            
 
             direction = Main.rand.NextBool() ? 1 : -1;
             colOffset = Main.rand.NextFloat();
@@ -88,7 +88,7 @@ namespace CalamityHunt.Content.Particles
         { 
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Rectangle frame = texture.Frame(7, 1, variant, 0);
+            Rectangle frame = texture.Frame(8, 1, variant, 0);
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
             glowColor.A = 0;

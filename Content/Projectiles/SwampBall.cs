@@ -76,7 +76,7 @@ namespace CalamityHunt.Content.Projectiles
 
             for (int i = 0; i < 3; i++)
             {
-                Dust slime = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(7, 7), DustID.SlimeBunny, Projectile.velocity.RotatedByRandom(0.1f) * 0.33f * Main.rand.NextFloat(-1f, 1f), 222, new Color(0, 235, 90, 128), 1f + Main.rand.NextFloat());
+                Dust slime = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(7, 7), DustID.SlimeBunny, Projectile.velocity.RotatedByRandom(0.1f) * 0.33f * Main.rand.NextFloat(-1f, 1f), 210, new Color(0, 235, 90, 100), 1f + Main.rand.NextFloat());
                 slime.noGravity = !Main.rand.NextBool(20);
             }
 
@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Projectiles
         {
             for (int i = 0; i < Main.rand.Next(10, 20); i++)
             {
-                Dust slime = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(7, 7), DustID.SlimeBunny, -Projectile.velocity * 0.1f + Main.rand.NextVector2Circular(4, 4), 222, new Color(0, 235, 90, 128), 1f + Main.rand.NextFloat());
+                Dust slime = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(7, 7), DustID.SlimeBunny, -Projectile.velocity * 0.1f + Main.rand.NextVector2Circular(4, 4), 210, new Color(0, 235, 90, 100), 1f + Main.rand.NextFloat());
                 slime.noGravity = Main.rand.NextBool();
             }
 

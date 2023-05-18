@@ -13,11 +13,17 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
 {
     public class Parasanguine : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.HasAProjectileThatHasAUsabilityCheck[Type] = true;
+            ItemID.Sets.gunProj[Type] = true;
+        }
+
         public override void SetDefaults()
         {
             Item.width = 78;
             Item.height = 72;
-            Item.damage = 16000;
+            Item.damage = 1500;
             Item.DamageType = DamageClass.Melee;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.useStyle = ItemUseStyleID.Swing;
@@ -41,9 +47,8 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
                 Rectangle chargeFrame = new Rectangle(0, 0, (int)(barCharge.Width * Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent), barCharge.Height);
 
                 Color barColor = Color.Lerp(Color.DarkRed * 0.5f, Color.Red, Utils.GetLerpValue(0.5f, 1f, Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true));
-                Vector2 off = Main.rand.NextVector2Circular(2, 2) * Utils.GetLerpValue(0.9f, 1f, Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true);
-                spriteBatch.Draw(bar, position + off + new Vector2(0, 50) * scale, bar.Frame(), Color.DarkRed, 0, bar.Size() * 0.5f, scale * 1.75f, 0, 0);
-                spriteBatch.Draw(barCharge, position + off + new Vector2(0, 50) * scale, chargeFrame, barColor, 0, barCharge.Size() * 0.5f, scale * 1.75f, 0, 0);
+                spriteBatch.Draw(bar, position + new Vector2(0, 50) * scale, bar.Frame(), Color.DarkRed, 0, bar.Size() * 0.5f, scale * 1.75f, 0, 0);
+                spriteBatch.Draw(barCharge, position + new Vector2(0, 50) * scale, chargeFrame, barColor, 0, barCharge.Size() * 0.5f, scale * 1.75f, 0, 0);
             }
         }
 

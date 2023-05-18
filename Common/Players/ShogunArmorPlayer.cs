@@ -51,7 +51,7 @@ namespace CalamityHunt.Common.Players
                     inertiaTimer = 1;
 
                     Main.SetCameraLerp(0.2f, 25);
-                    Player.fullRotation += (float)Math.Cbrt(Player.velocity.X) * 0.2f;
+                    Player.fullRotation += (float)Math.Cbrt(Player.velocity.X) * 0.2f * (1 + dashTime);
                     Player.fullRotationOrigin = Player.Size * 0.5f;
                     if (Player.controlJump && Player.releaseJump)
                     {
@@ -72,8 +72,11 @@ namespace CalamityHunt.Common.Players
 
                     Main.SetCameraLerp(0.2f, 25);
                 }
+                else if (bunnyHopCounter < 0)
+                    Player.fullRotation = Player.velocity.X * 0.01f;
+
                 else
-                    Player.fullRotation = 0;
+                    Player.fullRotation = Player.fullRotation.AngleLerp(0f, 0.15f);
 
                 if (Player.dashDelay > 0)
                     Player.dashDelay--;
