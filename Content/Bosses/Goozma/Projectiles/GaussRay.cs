@@ -104,7 +104,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         float shakeStrength = Utils.GetLerpValue(ChargeTime - LaserDuration * 0.5f, ChargeTime + LaserDuration, Time, true);
                         Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 18f, 12, 20, 5000));
                     }
-
+                    
                     Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center), 0.03f);
 
                     if (Time > ChargeTime + LaserDuration - 4 && Time < ChargeTime + LaserDuration - 2)
@@ -140,7 +140,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     float grow = Utils.GetLerpValue(ChargeTime - 15, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration, Time, true);
                     float progress = Main.rand.NextFloat(3300);
-                    Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 60) * grow;
+                    Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 100) * grow;
                     color.A = 0;
                     Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-80f, 80f) * (progress / 3300f)).RotatedBy(Projectile.rotation);
                     Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
@@ -304,7 +304,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             float grow = 0.1f + (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
 
-            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - progress * 60f);
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - progress * 100f);
             color.A = 0;
             return color * grow;
         }

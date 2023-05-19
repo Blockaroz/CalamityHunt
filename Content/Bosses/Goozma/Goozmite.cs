@@ -115,13 +115,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (NPC.velocity.Length() > 0.5f)
                     NPC.velocity *= 0.9f;
 
-                NPC.dontTakeDamage = Time < 120 || Time > TimeUntilDeath;
+                NPC.dontTakeDamage = Time < 70 || Time > TimeUntilDeath;
 
                 lookVector = Vector2.Lerp(lookVector, NPC.DirectionTo(Host.GetTargetData().Center).SafeNormalize(Vector2.Zero) * Math.Clamp(NPC.Distance(Host.GetTargetData().Center) * 0.5f, 0, 5f), 0.1f);
                 if (!NPC.IsABestiaryIconDummy)
                     NPC.scale = Utils.GetLerpValue(-20, 20, NPC.localAI[1], true);
 
-                if (Time > 120 && Time < TimeUntilDeath)
+                if (Time > 100 && Time < TimeUntilDeath)
                 {
                     if (Time % 100 == 5)
                         NPC.velocity += Main.rand.NextVector2Circular(9, 9);
@@ -141,8 +141,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (Time > TimeUntilDeath)
                 {
                     Host.life += (int)(NPC.life * 4f);
-                    if (Host.life > Host.lifeMax * 0.8f)
-                        Host.life = (int)(Host.lifeMax * 0.8f);
+                    if (Host.life > Host.lifeMax)
+                        Host.life = Host.lifeMax;
                     for (int i = 0; i < 50; i++)
                     {
                         Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(9, 9), Color.White, 1f + Main.rand.NextFloat());

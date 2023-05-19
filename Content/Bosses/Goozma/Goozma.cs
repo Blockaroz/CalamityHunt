@@ -720,15 +720,20 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         SoundEngine.PlaySound(roar, NPC.Center);
                                     }
 
-                                    if (Time % dashTime < 20)
+                                    if (Time % dashTime <= 15)
                                     {
                                         NPC.Center = Vector2.Lerp(NPC.Center, NPC.Center + NPC.DirectionTo(Target.Center) * (NPC.Distance(Target.Center) - 300) * 0.2f, 0.6f);
                                         NPC.velocity = NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero);
-                                        if (Time % dashTime == 18)
-                                            NPC.velocity -= NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 10f;
+
+                                        if (Time % dashTime == 15)
+                                            NPC.velocity -= NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 15f;
+
                                     }
-                                    else if (Time % dashTime < 74)
+                                    if (Time % dashTime > 25 && Time % dashTime < 74)
                                     {
+                                        rotate = true;
+                                        NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.33f * Utils.GetLerpValue(20, 70, Time % dashTime, true));
+
                                         for (int i = 0; i < 8; i++)
                                         {
                                             Vector2 position = Vector2.Lerp(NPC.position, NPC.oldPos[0], i / 24f) + NPC.Size * 0.5f;
@@ -740,7 +745,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             hueBot.data = NPC.localAI[0];
                                         }
 
-                                        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (3.7f - Time % dashTime * 0.05f);
+                                        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (3f - Time % dashTime * 0.03f);
                                         NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedBy(0.05f) * 50f, 0.01f);
                                     }
                                     else
@@ -1065,8 +1070,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (Main.mouseRight)
                         NPC.velocity += NPC.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * NPC.Distance(Main.MouseWorld) * 0.1f;
 
-                    if (NPC.velocity.Length() > 5)
+                    if (NPC.velocity.Length() > 4)
                     {
+                        rotate = true;
+                        NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.4f);
+
                         //for (int i = 0; i < 5; i++)
                         //{
                         //    Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
@@ -1089,6 +1097,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     break;
             };
+
+            Phase = 2;
+            Attack = (int)AttackList.DrillDash;
 
             if (Phase >= 2)
                 SlimeMonsoonBackground.additionalLightningChance = -53;
@@ -1686,10 +1697,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Phase == -2)
                     {
-                        if (Time == 5)
+                        if (Time == 2)
                         {
                             Projectile gaussRay = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<GaussRay>(), GetDamage(7), 0);
-                            gaussRay.ai[0] = 250;
+                            gaussRay.ai[0] = 200;
                             gaussRay.ai[1] = 1;
                             gaussRay.ai[2] = NPC.whoAmI;
                         }
@@ -1777,6 +1788,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         private Vector2 tentacleVelocity;
         private Vector2 tentacleAcceleration;
         private Vector2[] oldTentacleVel;
+        public bool rotate;
 
         public override void FindFrame(int frameHeight)
         {
@@ -1793,13 +1805,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
             drawOffset = new Vector2((float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 2, (float)Math.Cos(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 3);
             float offsetWobble = (float)Math.Cos(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 0.07f;
 
-            NPC.rotation = MathHelper.Lerp(NPC.rotation, Math.Clamp(drawVelocity.X * 0.012f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.2f);
+            if (!rotate)
+                NPC.rotation = NPC.rotation.AngleLerp(Math.Clamp(drawVelocity.X * 0.012f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.2f);
+
             extraTilt = MathHelper.Lerp(extraTilt, Math.Clamp(-drawVelocity.X * 0.025f, -1f, 1f) - 0.01f * NPC.direction, 0.15f);
             headScale = MathHelper.Lerp(headScale, 1f, 0.05f);
 
             tentacleVelocity *= 0.8f;
             tentacleAcceleration = NPC.velocity - oldVel[(int)(oldVel.Length / 2f)];
-            tentacleVelocity += tentacleAcceleration * 0.5f;
+            tentacleVelocity += tentacleAcceleration.RotatedBy(-NPC.rotation) * 0.5f;
 
             if (oldTentacleVel != null)
             {
@@ -1807,6 +1821,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     oldTentacleVel[i] = Vector2.Lerp(oldTentacleVel[i], oldTentacleVel[i - 1], 0.3f);
                 oldTentacleVel[0] = Vector2.Lerp(oldTentacleVel[0], tentacleVelocity, 0.3f);
             }
+
+            rotate = false;
         }
 
         private void FadeMusicOut(On_Main.orig_UpdateAudio orig, Main self)

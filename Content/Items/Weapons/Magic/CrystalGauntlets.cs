@@ -98,7 +98,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
 
             if (player.altFunctionUse > 0)
             {
-                player.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsClapTime = 50;
+                player.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsClapTime = 30;
                 player.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsClapDir = player.DirectionTo(Main.MouseWorld);
 
                 //Projectile piercer = Projectile.NewProjectileDirect(source, position, velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.05f) * 18f, ModContent.ProjectileType<CrystalPiercer>(), damage, 0, player.whoAmI);

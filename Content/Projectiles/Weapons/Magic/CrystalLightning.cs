@@ -25,8 +25,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.tileCollide = false;
             Projectile.ownerHitCheck = true;
             Projectile.manualDirectionChange = true;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 20;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 10;
             Projectile.extraUpdates = 2;
             Owner = -1;
         }
