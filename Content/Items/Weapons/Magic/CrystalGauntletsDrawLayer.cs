@@ -17,7 +17,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Texture2D texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Weapons/Magic/CrystalGauntlets_HandsOn").Value;
-            if (drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsFingerGunTime > 1)
+            if (drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsUseFingers)
                 texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Weapons/Magic/CrystalGauntlets_HandsOnPoint").Value;
 
             Vector2 position = drawInfo.BodyPosition() + drawInfo.frontShoulderOffset + HuntOfTheOldGodUtils.GetCompositeOffset_FrontArm(ref drawInfo);
@@ -40,7 +40,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Texture2D texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Weapons/Magic/CrystalGauntlets_HandsOff").Value;
-            if (drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsFingerGunTime > 1)
+            if (drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsUseFingers)
                 texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Weapons/Magic/CrystalGauntlets_HandsOffPoint").Value;
 
             Vector2 position = drawInfo.BodyPosition() + drawInfo.backShoulderOffset + HuntOfTheOldGodUtils.GetCompositeOffset_BackArm(ref drawInfo);

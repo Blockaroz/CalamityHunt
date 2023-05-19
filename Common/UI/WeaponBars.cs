@@ -82,8 +82,9 @@ namespace CalamityHunt.Common.UI
                                 Rectangle fillFrame = new Rectangle(0, 0, fillAmount, barCharge.Height);
                                 Vector2 position = (Main.LocalPlayer.Center - Main.screenPosition) / Main.UIScale - new Vector2(barCharge.Width / 2f, 48f / Main.UIScale);
 
-                                Main.spriteBatch.Draw(bar, position, bar.Frame(), baseColor, 0, Vector2.Zero, 1f, 0, 0);
-                                Main.spriteBatch.Draw(barCharge, position, fillFrame, fillColor, 0, Vector2.Zero, 1f, 0, 0);
+                                float fadeOut = Utils.GetLerpValue(0, 30, showTime, true);
+                                Main.spriteBatch.Draw(bar, position, bar.Frame(), baseColor * fadeOut, 0, Vector2.Zero, 1f, 0, 0);
+                                Main.spriteBatch.Draw(barCharge, position, fillFrame, fillColor * fadeOut, 0, Vector2.Zero, 1f, 0, 0);
                             }
 
                             return true;

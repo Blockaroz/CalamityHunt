@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.UI;
 using CalamityHunt.Content.Gores.CrystalShieldGores;
 using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Content.Particles;
@@ -71,7 +72,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     }
 
                     Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Vector2.Zero, Main.hslToRgb(Time * 0.03f % 1f, 0.5f, 0.5f, 128), 0.5f + Main.rand.NextFloat());
-
                     Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Projectile.velocity, ModContent.ProjectileType<CrystalLightning>(), Owner.HeldItem.damage, 1f, Owner.whoAmI, ai1: Projectile.whoAmI);
                 }
             }
@@ -163,6 +163,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     mainGlow.noLightEmittence = true;
                 }
             }
+
+            WeaponBars.DisplayBar();
         }
 
         public override bool PreDraw(ref Color lightColor)

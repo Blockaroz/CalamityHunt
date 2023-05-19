@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Content.Items.Weapons.Summoner;
+using CalamityHunt.Content.Projectiles.Weapons.Magic;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Systems
@@ -22,14 +25,13 @@ namespace CalamityHunt.Common.Systems
         public bool gobfloggerBuff;
 
         public bool crystalGauntletsHeld;
-        public bool crystalGauntletsClapping;
+        public bool crystalGauntletsUseFingers;
 
         public int crystalGauntletsWaitTime;
         public float CrystalGauntletsCharge;
 
-        public int crystalGauntletsFingerGunTime;
-        public Vector2 crystalGauntletsFingerGunDirection;
-        public bool crystalGauntletsFingerGunOff;
+        public int crystalGauntletsClapTime;
+        public Vector2 crystalGauntletsClapDir;
 
         public override void PostUpdateMiscEffects()
         {
@@ -50,27 +52,33 @@ namespace CalamityHunt.Common.Systems
 
             parasolBlood = Math.Clamp(parasolBlood, 0, ParasolBloodMax);
             CrystalGauntletsCharge = Math.Clamp(CrystalGauntletsCharge, 0f, 1f);
+
+            if (crystalGauntletsClapTime == 15)
+            {
+                SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Player.Center);
+
+                Projectile boom = Projectile.NewProjectileDirect(Player.GetSource_ItemUse(Player.HeldItem), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<CrystalBoom>(), Player.HeldItem.damage / 2, 0, Player.whoAmI);
+                boom.localAI[0] = Main.GlobalTimeWrappedHourly * 7f;
+
+                foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<CrystalGauntletBallThrown>() && n.owner == Player.whoAmI))
+                {
+                    projectile.Kill();
+                    Projectile newBoom = Projectile.NewProjectileDirect(projectile.GetSource_Death(), projectile.Center, Vector2.Zero, ModContent.ProjectileType<CrystalBoom>(), Player.HeldItem.damage, 0, Player.whoAmI);
+                    newBoom.ai[1] = 0.5f;
+                    newBoom.localAI[0] = projectile.localAI[0];
+                }
+            }
         }
 
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
             if (drawInfo.shadow == 0f)
             {
-                if (crystalGauntletsFingerGunTime > 0)
+                if (crystalGauntletsClapTime > 0)
                 {
-                    float recoil = -MathHelper.SmoothStep(0, 1, MathF.Pow(Utils.GetLerpValue(30, 47, crystalGauntletsFingerGunTime, true), 0.6f)) * Utils.GetLerpValue(50, 47, crystalGauntletsFingerGunTime, true);
-                    float backArmFly = -MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(0, 40, crystalGauntletsFingerGunTime, true) * Utils.GetLerpValue(50, 40, crystalGauntletsFingerGunTime, true)) * 0.5f - 1.8f;
-
-                    if (!crystalGauntletsFingerGunOff)
-                    {
-                        Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, crystalGauntletsFingerGunDirection.ToRotation() - MathHelper.PiOver2 - backArmFly * Player.direction);
-                        Player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, crystalGauntletsFingerGunDirection.ToRotation() - MathHelper.PiOver2 + recoil * Player.direction);
-                    }
-                    else
-                    {
-                        Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, crystalGauntletsFingerGunDirection.ToRotation() - MathHelper.PiOver2 + recoil * Player.direction);
-                        Player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, crystalGauntletsFingerGunDirection.ToRotation() - MathHelper.PiOver2 - backArmFly * Player.direction);
-                    }
+                    float clapRotation = -0.4f + MathF.Sqrt(Utils.GetLerpValue(40, 15, crystalGauntletsClapTime, true)) * Utils.GetLerpValue(20, 25, crystalGauntletsClapTime, true) * 2f + MathHelper.SmoothStep(0, 0.5f, MathF.Sqrt(Utils.GetLerpValue(24, 5, crystalGauntletsClapTime, true)));
+                    Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (-MathHelper.PiOver2 + clapRotation) * Player.direction);
+                    Player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.ThreeQuarters, (-MathHelper.PiOver2 - clapRotation) * Player.direction);
                 }
             }
         }
@@ -87,13 +95,9 @@ namespace CalamityHunt.Common.Systems
             gobfloggerBuff = false;
 
             crystalGauntletsHeld = false;
-            crystalGauntletsClapping = false;
 
-            if (crystalGauntletsFingerGunTime > 0)
-                crystalGauntletsFingerGunTime--;
-
-            if (Player.HeldItem.type != ModContent.ItemType<CrystalGauntlets>())
-                crystalGauntletsFingerGunOff = false;
+            if (crystalGauntletsClapTime > 0)
+                crystalGauntletsClapTime--;
         }
     }
 }

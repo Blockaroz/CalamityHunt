@@ -183,12 +183,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            WeaponBars.DisplayBar();
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            WeaponBars.DisplayBar();
         }
 
         public override bool PreDraw(ref Color lightColor)
