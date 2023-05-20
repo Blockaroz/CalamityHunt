@@ -17,8 +17,8 @@ namespace CalamityHunt.Content.Projectiles
     {
         public override void SetDefaults()
         {
-            Projectile.width = 26;
-            Projectile.height = 26;
+            Projectile.width = 24;
+            Projectile.height = 24;
             Projectile.timeLeft = 10000;
             Projectile.tileCollide = true;
             Projectile.friendly = true;

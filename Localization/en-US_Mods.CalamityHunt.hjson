@@ -258,6 +258,11 @@ Items: {
 			'Not to be confused with The Crimslime'
 			'''
 	}
+
+	AuricSoul: {
+		DisplayName: Auric Soul
+		Tooltip: ""
+	}
 }
 
 NPCs: {

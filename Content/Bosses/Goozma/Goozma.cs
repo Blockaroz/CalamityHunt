@@ -9,6 +9,7 @@ using CalamityHunt.Content.Items.BossBags;
 using CalamityHunt.Content.Items.Lore;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
+using CalamityHunt.Content.Items.Misc;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Pets.BloatBabyPet;
 using CalamityHunt.Content.Projectiles;
@@ -137,6 +138,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
+            //Soul
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<AuricSoul>()));
+
             //Bag
             if (Main.rand.NextBool(20))
                 npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureBucket>()));

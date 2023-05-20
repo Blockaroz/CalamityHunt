@@ -243,8 +243,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (localTime == 0)
                 {
                     NPC.velocity.Y -= 10;
-                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
-                    hop.MaxInstances = 0;
+                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
+                    hop.MaxInstances = 0; 
                     hop.PitchVariance = 0.1f;
                     SoundEngine.PlaySound(hop, NPC.Center);
                     SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);

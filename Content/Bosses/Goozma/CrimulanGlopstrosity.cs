@@ -276,7 +276,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(10, 26, localTime, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(10, 26, localTime, true)) * 0.5f);
                     if (localTime == 25)
                     {
-                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
                         hop.MaxInstances = 0;
                         hop.PitchVariance = 0.1f;
                         SoundEngine.PlaySound(hop, NPC.Center);
@@ -379,7 +379,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(15, 56, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(15, 56, Time, true)) * 0.5f);
                 if (Time == 58)
                 {
-                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
                     hop.MaxInstances = 0;
                     hop.PitchVariance = 0.1f;
                     SoundEngine.PlaySound(hop, NPC.Center);
@@ -465,7 +465,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.5f);
                     if (Time == waitTime + 95)
                     {
-                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
                         hop.MaxInstances = 0;
                         hop.PitchVariance = 0.1f;
                         SoundEngine.PlaySound(hop, NPC.Center);
@@ -543,7 +543,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.velocity.Y -= 30;
                     saveTarget = Target.Center + new Vector2((Main.rand.Next(0, 50) + Math.Abs(Target.Velocity.X) * 25 + 360) * (Target.Center.X > NPC.Center.X ? 1 : -1), NPC.height);
                     
-                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeHop");
+                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
                     hop.MaxInstances = 0;
                     hop.PitchVariance = 0.1f;
                     SoundEngine.PlaySound(hop, NPC.Center);
