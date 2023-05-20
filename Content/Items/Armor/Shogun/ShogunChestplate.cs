@@ -39,6 +39,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
         public override void UpdateEquip(Player player)
         {
             player.GetDamage(DamageClass.Generic) += 0.15f;
+            player.endurance += 0.09f;
             player.statLifeMax2 += 150;
             player.statManaMax2 += 150;
         }

@@ -127,17 +127,32 @@ Items: {
 
 	ShogunChestplate: {
 		DisplayName: Slippery Shogun Chestplate
-		Tooltip: ""
+		Tooltip: 
+			'''
+			15% increased damage
+			Reduces damage taken by 9% and greatly increases life regeneration
+			Increases max life and mana by 150
+			'''
 	}
 
 	ShogunHelm: {
 		DisplayName: Slippery Shogun Helm
-		Tooltip: ""
+		Tooltip: 
+			'''
+			15% increased damage
+			10% increased critital strike chance
+			15% increased melee speed
+			'''
 	}
 
 	ShogunPants: {
 		DisplayName: Slippery Shogun Pants
-		Tooltip: ""
+		Tooltip: 
+			'''
+			15% increased damage
+			50% increased movement speed 
+			Greatly improved acceleration and maneuverability 
+			'''
 	}
 
 	AuricSole: {
@@ -184,22 +199,63 @@ Items: {
 
 	PumpActionSwampgun: {
 		DisplayName: Pump Action Swampgun
-		Tooltip: Blasts a harmless spread of slime
+		Tooltip: 
+			'''
+			Blasts a generally harmless spread of slime
+			'''
 	}
 
 	Parasanguine: {
 		DisplayName: Parasanguine
-		Tooltip: ""
+		Tooltip: 
+			'''
+			Holding left click or hitting enemies builds up excess blood
+			Right click when your blood meter is high to expel your excess 
+			Left click after right clicking to perform a devastating twirl
+			'What do you get when you feed a slime? A bigger slime.'
+			'''
 	}
 
 	Gobflogger: {
 		DisplayName: Gobflogger
-		Tooltip: ""
+		Tooltip: 
+			'''
+			Your summons will focus struck enemies
+			Strike enemies to gain a small boost to whip attack speed
+			'Slow and steady wins the race'
+			'''
 	}
 
 	CrystalGauntlets: {
 		DisplayName: Crystal Gauntlets
-		Tooltip: ""
+		Tooltip: 
+			'''
+			Charges up a powerful burst of ball lightning
+			When charge is full, release left click to unleash the ball lightning upon your foes
+			Right click to clap, detonating all unleashed ball lightning and [WHATEVER IT DOES]
+			'Unlimited power!... within safe limits'
+			'''
+	}
+
+	SplendorJam: {
+		DisplayName: Splendor Jam
+		Tooltip: 
+			'''
+			uhh
+			fuck
+			'???? what should this thing do'
+			'''
+	}
+
+	TheSlimer: {
+		DisplayName: The Slimer
+		Tooltip: 
+			'''
+			Sprays a sizable slurry of sticky slime
+			Slime gets stuck as it is spewed, building up a blockage
+			Right click when blocked to blast out a bile bomb
+			'Not to be confused with The Crimslime'
+			'''
 	}
 }
 
@@ -232,7 +288,7 @@ Projectiles: {
 	HolyExplosion.DisplayName: Holy Explosion
 	CrimulanSmasher.DisplayName: Crimulan Smasher
 	GaussRay.DisplayName: Gauss Ray
-	GoozmaDeathGodrays.DisplayName: Goozma Death Godrays
+	GoozmaDeathGodrays.DisplayName: Goozma Death Godray
 	BloatBabyProj.DisplayName: Bloat Baby
 	ShootingStar.DisplayName: Shooting Star
 	GoozmagaBomb.DisplayName: Planetary Glob
@@ -240,7 +296,7 @@ Projectiles: {
 	StellarGelatine.DisplayName: Stellar Gelatine
 	ConstellationStar.DisplayName: Constellation Star
 	ConstellationLine.DisplayName: Constellation Line
-	SlimeBomb.DisplayName: Slime Bomb
+	SlimeBomb.DisplayName: a Ticking Slime Bomb
 	SpaceRock.DisplayName: Space Rock
 	StellarDebris.DisplayName: Stellar Debris
 	BlackHoleBlender.DisplayName: Black Hole Blender
@@ -275,12 +331,12 @@ Bestiary: {
 Buffs: {
 	BloatBabyBuff: {
 		DisplayName: Bloat Baby
-		Description: It seems to like you as much as the others.
+		Description: It seems to like you as much as the others
 	}
 
 	Gobbed: {
 		DisplayName: Gobbed
-		Description: You are afflicted.
+		Description: You are afflicted
 	}
 
 	Swamped: {
@@ -290,7 +346,7 @@ Buffs: {
 
 	Absorption: {
 		DisplayName: Absorption
-		Description: You are absorbing the energy released by your victims
+		Description: Whip speed is increased by just a tiny bit, just a tiny little bit, it's not increased by much, you might not even notice it because of how small it is
 	}
 }
 
