@@ -1,7 +1,11 @@
 Items: {
 	OverloadedSludge: {
 		DisplayName: Overloaded Sludge
-		Tooltip: ""
+		Tooltip:
+			'''
+			It looks corrupted
+			Summons the Slime God
+			'''
 	}
 
 	StormCatcher: {
@@ -16,7 +20,7 @@ Items: {
 
 	EntropyMatter: {
 		DisplayName: Entropy Matter
-		Tooltip: ""
+		Tooltip: "'The purest, densest possible combination of gel'"
 	}
 
 	ShatteredHeartOfDarkness: {
