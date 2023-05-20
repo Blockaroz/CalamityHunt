@@ -17,12 +17,15 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Misc
 {
-    public class AuricSoul : ModItem
+    public class PureAuricSoul : ModItem
     {
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemNoGravity[Type] = true;
             ItemID.Sets.IsAPickup[Type] = true;
+            ItemID.Sets.ItemsThatShouldNotBeInInventory[Type] = true;
+            ItemID.Sets.IgnoresEncumberingStone[Type] = true;
+            ItemID.Sets.ItemSpawnDecaySpeed[Type] = 4;
         }
 
         public override void SetDefaults()
@@ -37,6 +40,11 @@ namespace CalamityHunt.Content.Items.Misc
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }
+        }
+
+        public override bool OnPickup(Player player)
+        {
+            return false;
         }
 
         public override Color? GetAlpha(Color lightColor)

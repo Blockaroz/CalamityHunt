@@ -615,7 +615,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 for (int i = 0; i < Main.tile.Height; i++)
                 {
                     Point playerTile = Target.Center.ToTileCoordinates();
-                    if (WorldGen.InWorld(playerTile.X, playerTile.Y + i))
+                    if (WorldGen.InWorld(playerTile.X, playerTile.Y + i) && WorldGen.InWorld(playerTile.X, playerTile.Y + i + 10))
                     {
                         if (WorldGen.SolidTile3(playerTile.X, playerTile.Y + i))
                         {

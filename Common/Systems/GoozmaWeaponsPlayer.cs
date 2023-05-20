@@ -56,8 +56,10 @@ namespace CalamityHunt.Common.Systems
 
             if (crystalGauntletsClapTime == 10)
             {
-                SoundEngine.PlaySound(SoundID.DD2_GoblinBomb, Player.Center);
-                SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithPitchOffset(1f), Player.Center);
+                SoundStyle clapSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/CrystalGauntletClap");
+                clapSound.MaxInstances = 2;
+                clapSound.PitchVariance = 0.1f;
+                SoundEngine.PlaySound(clapSound.WithVolumeScale(0.5f), Player.Center);
 
                 Projectile boom = Projectile.NewProjectileDirect(Player.GetSource_ItemUse(Player.HeldItem), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<CrystalBoom>(), Player.HeldItem.damage, 0, Player.whoAmI);
                 boom.ai[1] = 1f;
@@ -72,6 +74,7 @@ namespace CalamityHunt.Common.Systems
 
                     projectile.velocity = Vector2.Zero;
                     projectile.timeLeft = 17;
+                    SoundEngine.PlaySound(clapSound.WithVolumeScale(0.2f), Player.Center);
 
                     Vector2 oldDir = dir;
                     for (int i = 0; i < 10; i++)

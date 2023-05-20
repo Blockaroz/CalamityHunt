@@ -263,6 +263,11 @@ Items: {
 		DisplayName: Auric Soul
 		Tooltip: ""
 	}
+
+	PureAuricSoul: {
+		DisplayName: Pure Auric Soul
+		Tooltip: ""
+	}
 }
 
 NPCs: {

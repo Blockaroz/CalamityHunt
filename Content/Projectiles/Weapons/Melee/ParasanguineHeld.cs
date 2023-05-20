@@ -69,7 +69,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             float addRot = 0;
             bool canKill = false;
 
-            SoundStyle swingSound = SoundID.DD2_SonicBoomBladeSlash;
+            SoundStyle swingSound = SoundID.DD2_MonkStaffSwing;
             swingSound.MaxInstances = 0;
             swingSound.Volume = 1.5f;
 
@@ -195,6 +195,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                         Projectile.scale = 1.1f * Owner.GetAdjustedItemScale(Owner.HeldItem) * (0.7f + MathF.Sqrt(Utils.GetLerpValue(25, 27, Time, true)) * 0.3f);
                     }
 
+                    if (Time == 27)
+                    {
+                        SoundEngine.PlaySound(SoundID.NPCDeath1.WithPitchOffset(-0.5f).WithVolumeScale(0.5f), Projectile.Center);
+                        SoundEngine.PlaySound(SoundID.Item100, Projectile.Center);
+                    }
                     if (Time > 25 && Time < 35)
                     {
                         for (int i = 0; i < 5; i++)

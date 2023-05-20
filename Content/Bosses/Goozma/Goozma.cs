@@ -78,7 +78,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.height = 150;
             NPC.damage = 0;
             NPC.defense = 100;
-            NPC.lifeMax = 3500000;
+            NPC.lifeMax = 5000000;
             NPC.HitSound = null;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0f;
@@ -139,7 +139,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             //Soul
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<AuricSoul>()));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PureAuricSoul>()));
 
             //Bag
             if (Main.rand.NextBool(20))
@@ -587,12 +587,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Main.expertMode || Main.masterMode)
                     {
-                        if (NPC.life <= NPC.lifeMax * 0.4f)
+                        if (NPC.life <= NPC.lifeMax * 0.33f)
                         {
                             Time = -1;
                             Phase++;
                             NPC.dontTakeDamage = true;
-                            NPC.life = (int)(NPC.lifeMax * 0.4f);
+                            NPC.life = (int)(NPC.lifeMax * 0.33f);
                         }    
                     }    
 
@@ -609,8 +609,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     drawOffset += Main.rand.NextVector2Circular(10, 10) * Utils.GetLerpValue(0, 300, Time, true) * Utils.GetLerpValue(302, 300, Time, true);
                     NPC.dontTakeDamage = true;
-                    if (NPC.life < NPC.lifeMax * 0.4f)
-                        NPC.life = (int)(NPC.lifeMax * 0.4f);
+                    if (NPC.life < NPC.lifeMax * 0.33f)
+                        NPC.life = (int)(NPC.lifeMax * 0.33f);
                     //NPC.life = 1 + (int)((float)Math.Pow(Utils.GetLerpValue(300, 530, Time, true), 3) * (NPC.lifeMax - 1));
                     eyePower = Vector2.SmoothStep(Vector2.One * 1.5f, new Vector2(5f, 3.6f), Utils.GetLerpValue(300, 500, Time, true));
                     
@@ -772,15 +772,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             if (Time > dashTime * dashCount + 20)
                             {
                                 Time = -30;
-                                if (NPC.life < NPC.lifeMax * 0.3f)
-                                    Attack = (int)AttackList.Absorption;
-                                else
-                                {
-                                    if (NPC.life > (NPC.lifeMax * 0.25f))
-                                        Attack = (int)AttackList.GaussRay;
-                                    else
-                                        Attack = (int)AttackList.BurstLightning;
-                                }
+                                Attack = (int)AttackList.Absorption;
                             }
 
                             NPC.damage = GetDamage(6, 0.9f + Time % dashTime / dashTime * 0.2f);
@@ -854,7 +846,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 NPC.dontTakeDamage = false;
                                 Time = 0;
                                 
-                                if (NPC.life > (NPC.lifeMax * 0.2f))
+                                if (NPC.life > (NPC.lifeMax * 0.15f))
                                     Attack = (int)AttackList.GaussRay;
                                 else
                                     Attack = (int)AttackList.BurstLightning;
@@ -885,7 +877,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             break;
                     }
 
-                    if (NPC.life < NPC.lifeMax * 0.133f)
+                    if (NPC.life < NPC.lifeMax * 0.1f)
                     {
                         NPC.defense = 200;
                         NPC.takenDamageMultiplier = 0.9f;
@@ -921,7 +913,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         goozmite.velocity = velocity * Main.rand.Next(20, 70);
                         goozmite.ai[1] = killTime;
                         goozmite.localAI[0] = NPC.localAI[0] + 20f;
-                        goozmite.lifeMax = (int)(goozmite.lifeMax * 0.4f);
+                        goozmite.lifeMax = (int)(goozmite.lifeMax * 0.33f);
                         goozmite.life = goozmite.lifeMax;
                     }
 
@@ -1005,10 +997,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case -5:
 
-                    if (NPC.ai[3] > -1 && NPC.ai[3] <= Main.maxNPCs)
-                        if (ActiveSlime.active)
-                            ActiveSlime.active = false;
-
                     NPC.velocity *= 0.8f;
                     NPC.velocity.Y -= (-31 - Time) * 0.025f;
                     NPC.scale *= 0.9999f;
@@ -1016,6 +1004,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time > 0)
                         Time = 0;
+
+                    if (Time == -1)
+                    {
+                        if (NPC.ai[3] > -1 && NPC.ai[3] <= Main.maxNPCs)
+                            if (ActiveSlime.active)
+                                ActiveSlime.active = false;
+                    }
 
                     if (Time > -15)
                         KillSlime(currentSlime);
