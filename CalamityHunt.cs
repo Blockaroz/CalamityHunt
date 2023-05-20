@@ -26,7 +26,10 @@ namespace CalamityHunt
 
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonBackground();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
+        } 
 
+        public override void PostSetupContent()
+        { 
             // Kill Old Duke and inject Goozma into boss rush
             if (ModLoader.HasMod("CalamityMod"))
             {
@@ -50,9 +53,9 @@ namespace CalamityHunt
                     }
                 }
 
-                brEntries.Insert(ODID - 1, (ModContent.NPCType<Goozma>(), -1, pr, 180, false, 0f, slimeIDs, goozmaID));
+                brEntries.Insert(ODID, (ModContent.NPCType<Goozma>(), -1, pr, 180, false, 0f, slimeIDs, goozmaID));
                 cal.Call("SetBossRushEntries", brEntries);
             }
-        }         
+        }        
     }
 }

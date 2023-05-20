@@ -1,3 +1,4 @@
 displayName = Hunt of the Old God
+loadAfter = CalamityMod
 author = Blockaroz
 version = 0.2

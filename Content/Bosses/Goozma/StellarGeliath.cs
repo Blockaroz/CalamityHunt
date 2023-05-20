@@ -80,7 +80,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
-                calamity.Call("SetDefenseDamageNPC", Type, true);
+                //calamity.Call("SetDefenseDamageNPC", Type, true);
                 SpawnModBiomes = new int[1] { calamity.Find<ModBiome>("AbovegroundAstralBiome").Type };
             }
         }
