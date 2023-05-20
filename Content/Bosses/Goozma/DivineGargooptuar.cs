@@ -417,8 +417,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
             squishFactor = Vector2.Lerp(squishFactor * 0.98f, squishFactor * 1.1f, 0.05f + Time / 60f);
             NPC.frameCounter += 2;
 
+            Particle.NewParticle(Particle.ParticleType<HolyBombChunk>(), NPC.Center, Main.rand.NextVector2Circular(50, 50), Color.White, Time / 30f + Main.rand.NextFloat());
+
             if (Time == 1)
                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HolyExplosion>(), 0, 0);
+            
+            if (Time < 5)
+                Host.ai[0] = 0;
 
             if (Time > 30)
             {
@@ -428,10 +433,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     player.statLife = Math.Min(5, player.statLife);
                     player.immuneTime += 120;
                 }
-                
+
                 NPC.active = false;
-                Host.ai[0] = 0;
-                Host.ai[3] = -1;
             }
         }
 

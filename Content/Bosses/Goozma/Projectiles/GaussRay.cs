@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     if (Time < 3)
                         Projectile.direction = Main.rand.NextBool() ? -1 : 1;
 
-                    targetRotation = targetRotation.AngleTowards(Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center), Utils.GetLerpValue(ChargeTime + LaserDuration * 0.1f, ChargeTime, Time, true) * 0.05f + Utils.GetLerpValue(ChargeTime + LaserDuration * 0.3f, ChargeTime + LaserDuration * 0.6f, Time, true) * 0.01f + Utils.GetLerpValue(ChargeTime + LaserDuration * 0.6f, ChargeTime + LaserDuration * 1.5f, Time, true) * 0.04f);
+                    targetRotation = targetRotation.AngleTowards(Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center), Utils.GetLerpValue(ChargeTime + LaserDuration * 0.1f, ChargeTime, Time, true) * 0.04f + Utils.GetLerpValue(ChargeTime + LaserDuration * 0.3f, ChargeTime + LaserDuration * 0.6f, Time, true) * 0.01f);
 
                     float waveChange = MathHelper.SmoothStep(0f, 1f, Utils.GetLerpValue(ChargeTime * 0.8f, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration * 0.9f, ChargeTime + LaserDuration * 0.5f, Time, true));
                     Projectile.rotation = targetRotation + totalOffRot * Projectile.direction * waveChange;

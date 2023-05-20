@@ -68,7 +68,7 @@ namespace CalamityHunt.Common.UI
                 if (mouseTextIndex != -1)
                 {
                     layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                        "CalamityHunt: Weapon Charge Bars",
+                        "HuntOfTheOldGod: Weapon Charge Bars",
                         delegate
                         {
                             if (anyBar)

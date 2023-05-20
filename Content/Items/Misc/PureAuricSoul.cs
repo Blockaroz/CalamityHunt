@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using CalamityHunt.Common.Players;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
@@ -22,7 +23,6 @@ namespace CalamityHunt.Content.Items.Misc
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemNoGravity[Type] = true;
-            ItemID.Sets.IsAPickup[Type] = true;
             ItemID.Sets.ItemsThatShouldNotBeInInventory[Type] = true;
             ItemID.Sets.IgnoresEncumberingStone[Type] = true;
             ItemID.Sets.ItemSpawnDecaySpeed[Type] = 4;
@@ -30,8 +30,8 @@ namespace CalamityHunt.Content.Items.Misc
 
         public override void SetDefaults()
         {
-            Item.width = 80;
-            Item.height = 80;
+            Item.width = 16;
+            Item.height = 16;
             Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {
@@ -44,6 +44,27 @@ namespace CalamityHunt.Content.Items.Misc
 
         public override bool OnPickup(Player player)
         {
+            for (int i = 0; i < 150; i++)
+            {
+                if (Main.rand.NextBool(5))
+                {
+                    Vector2 off = Main.rand.NextVector2Circular(60, 40);
+                    float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
+                    Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(1, 1), GetAlpha(Color.White).Value * 0.2f, scale);
+                }
+
+                if (Main.rand.NextBool(5))
+                {
+                    Vector2 off = Main.rand.NextVector2Circular(20, 20);
+                    float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
+                    Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Item.Center + off, Main.rand.NextVector2Circular(7, 4), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
+                }
+
+                Dust soul = Dust.NewDustDirect(Item.Center - new Vector2(30, 18), 60, 40, DustID.PortalBoltTrail, 0f, -Main.rand.NextFloat(1f, 2f), 0, GetAlpha(Color.White).Value, Main.rand.NextFloat(2f));
+                soul.noGravity = true;
+            }
+            player.GetModPlayer<AuricSoulPlayer>().pureSoul = true;
+
             return false;
         }
 
