@@ -772,7 +772,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                     Attack = (int)AttackList.Absorption;
                                 else
                                 {
-                                    if (NPC.life > (NPC.lifeMax * 0.3f))
+                                    if (NPC.life > (NPC.lifeMax * 0.25f))
                                         Attack = (int)AttackList.GaussRay;
                                     else
                                         Attack = (int)AttackList.BurstLightning;

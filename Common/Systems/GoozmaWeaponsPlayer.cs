@@ -65,10 +65,10 @@ namespace CalamityHunt.Common.Systems
 
                 foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<CrystalGauntletBallThrown>() && n.owner == Player.whoAmI))
                 {
-                    int target = projectile.FindTargetWithLineOfSight(2400);
+                    NPC target = projectile.FindTargetWithinRange(2400);
                     Vector2 dir = Vector2.Zero;
-                    if (target >= 0)
-                        dir = Main.npc[target].Center - projectile.Center;
+                    if (target != null)
+                        dir = target.Center - projectile.Center;
 
                     projectile.velocity = Vector2.Zero;
                     projectile.timeLeft = 17;
@@ -79,7 +79,7 @@ namespace CalamityHunt.Common.Systems
                         if (oldDir.LengthSquared() < 5)
                             dir = new Vector2(700, 0).RotatedBy(MathHelper.TwoPi / 10f * i);
 
-                        Projectile shock = Projectile.NewProjectileDirect(projectile.GetSource_Death(), projectile.Center, dir.SafeNormalize(Vector2.Zero), ModContent.ProjectileType<CrystalLightning>(), Player.HeldItem.damage / 2, 1f, Player.whoAmI, ai1: projectile.whoAmI);
+                        Projectile shock = Projectile.NewProjectileDirect(projectile.GetSource_Death(), projectile.Center, dir.SafeNormalize(Vector2.Zero), ModContent.ProjectileType<CrystalLightning>(), Player.HeldItem.damage, 1f, Player.whoAmI, ai1: projectile.whoAmI);
                         shock.ai[2] = dir.Length();
                     }
                 }

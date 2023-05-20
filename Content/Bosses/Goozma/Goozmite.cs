@@ -97,7 +97,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.TargetClosestUpgraded();
 
             if (TimeUntilDeath < 5)
-                TimeUntilDeath = 800;
+                TimeUntilDeath = 400;
 
             if (NPC.ai[3] != -1)
             {
@@ -125,10 +125,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.scale = Utils.GetLerpValue(-20, 20, NPC.localAI[1], true);
 
                 ambientCounter++;
-                if (ambientCounter > Main.rand.Next(60, 160))
+                if (ambientCounter > Main.rand.Next(100, 160))
                 {
                     ambientCounter = 0;
                     SoundStyle ambientNoise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Goozmite/GoozmiteAmbient", 1, 3);
+                    ambientNoise.Volume = 0.5f;
+                    ambientNoise.MaxInstances = 0;
                     SoundEngine.PlaySound(ambientNoise, NPC.Center);
                 }
 
@@ -285,6 +287,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 SoundStyle deathNoise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Goozmite/GoozmiteDeath", 1, 3);
                 SoundEngine.PlaySound(deathNoise, NPC.Center);
             }
+            else if (NPC.ai[3] == 1)
+            {
+                SoundStyle impactNoise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Goozmite/GoozmiteImpact", 1, 3);
+                SoundEngine.PlaySound(impactNoise, NPC.Center);
+            }
             return (NPC.ai[3] == 0 && Time > TimeUntilDeath) || (NPC.ai[3] == 1 && Time > 10);
         }
 
@@ -357,9 +364,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (NPC.ai[3] <= 0 && !NPC.IsABestiaryIconDummy)
             {
-                float power = (float)Math.Pow(Utils.GetLerpValue(TimeUntilDeath - 15, TimeUntilDeath, Time, true), 2f) * 0.5f;
+                float power = (float)Math.Pow(Utils.GetLerpValue(TimeUntilDeath - 20, TimeUntilDeath, Time, true), 2f);
                 if (NPC.ai[3] < 0)
-                    power = (float)Math.Pow(Utils.GetLerpValue(0f, 8f, Time, true), 2f) * 0.5f;
+                    power = (float)Math.Pow(Utils.GetLerpValue(0f, 8f, Time, true), 2f);
 
                 spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(1f, 5f) * power, 0, 0);
                 spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(1f, 5f) * power, 0, 0);
