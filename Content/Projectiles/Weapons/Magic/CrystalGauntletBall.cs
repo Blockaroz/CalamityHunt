@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             if (canKill && Projectile.timeLeft > 10)
                 Projectile.timeLeft = 10;
 
-            if (canKill && Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge > 0.99f && Projectile.timeLeft > 3)
+            if (canKill && Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge > 0.999f && Projectile.timeLeft > 3)
             {
                 Projectile.timeLeft = 3;
                 Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge = 0;
@@ -95,7 +95,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             }
             else
             {
-                Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge += 0.002f + Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge * 0.01f;
+                Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge += 0.001f + Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge * 0.005f;
                 Owner.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsWaitTime = 50;
             }
 

@@ -16,6 +16,7 @@ using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Common;
 using Terraria.Graphics;
 using Terraria.Map;
+using Terraria.Audio;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -88,6 +89,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public ref float TimeUntilDeath => ref NPC.ai[1];
         public ref NPC Host => ref Main.npc[(int)NPC.ai[2]];
 
+        private float ambientCounter;
+
         public override void AI()
         {
             NPC.damage = GetDamage(0);
@@ -120,6 +123,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 lookVector = Vector2.Lerp(lookVector, NPC.DirectionTo(Host.GetTargetData().Center).SafeNormalize(Vector2.Zero) * Math.Clamp(NPC.Distance(Host.GetTargetData().Center) * 0.5f, 0, 5f), 0.1f);
                 if (!NPC.IsABestiaryIconDummy)
                     NPC.scale = Utils.GetLerpValue(-20, 20, NPC.localAI[1], true);
+
+                ambientCounter++;
+                if (ambientCounter > Main.rand.Next(60, 160))
+                {
+                    ambientCounter = 0;
+                    SoundStyle ambientNoise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Goozmite/GoozmiteAmbient", 1, 3);
+                    SoundEngine.PlaySound(ambientNoise, NPC.Center);
+                }
 
                 if (Time > 100 && Time < TimeUntilDeath)
                 {
@@ -270,6 +281,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.life = 1;
                 NPC.dontTakeDamage = true;
                 NPC.ai[3] = 1;
+
+                SoundStyle deathNoise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Goozmite/GoozmiteDeath", 1, 3);
+                SoundEngine.PlaySound(deathNoise, NPC.Center);
             }
             return (NPC.ai[3] == 0 && Time > TimeUntilDeath) || (NPC.ai[3] == 1 && Time > 10);
         }

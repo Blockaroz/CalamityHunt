@@ -127,7 +127,7 @@ Items: {
 
 	ShogunChestplate: {
 		DisplayName: Slippery Shogun Chestplate
-		Tooltip: 
+		Tooltip:
 			'''
 			15% increased damage
 			Reduces damage taken by 9% and greatly increases life regeneration
@@ -137,7 +137,7 @@ Items: {
 
 	ShogunHelm: {
 		DisplayName: Slippery Shogun Helm
-		Tooltip: 
+		Tooltip:
 			'''
 			15% increased damage
 			10% increased critital strike chance
@@ -147,7 +147,7 @@ Items: {
 
 	ShogunPants: {
 		DisplayName: Slippery Shogun Pants
-		Tooltip: 
+		Tooltip:
 			'''
 			15% increased damage
 			50% increased movement speed 
@@ -199,15 +199,12 @@ Items: {
 
 	PumpActionSwampgun: {
 		DisplayName: Pump Action Swampgun
-		Tooltip: 
-			'''
-			Blasts a generally harmless spread of slime
-			'''
+		Tooltip: Blasts a generally harmless spread of slime
 	}
 
 	Parasanguine: {
 		DisplayName: Parasanguine
-		Tooltip: 
+		Tooltip:
 			'''
 			Holding left click or hitting enemies builds up excess blood
 			Right click when your blood meter is high to expel your excess 
@@ -218,7 +215,7 @@ Items: {
 
 	Gobflogger: {
 		DisplayName: Gobflogger
-		Tooltip: 
+		Tooltip:
 			'''
 			Your summons will focus struck enemies
 			Strike enemies to gain a small boost to whip attack speed
@@ -228,7 +225,7 @@ Items: {
 
 	CrystalGauntlets: {
 		DisplayName: Crystal Gauntlets
-		Tooltip: 
+		Tooltip:
 			'''
 			Charges up a powerful burst of ball lightning
 			When charge is full, release left click to unleash the ball lightning upon your foes
@@ -239,7 +236,7 @@ Items: {
 
 	SplendorJam: {
 		DisplayName: Splendor Jam
-		Tooltip: 
+		Tooltip:
 			'''
 			uhh
 			fuck
@@ -249,7 +246,7 @@ Items: {
 
 	TheSlimer: {
 		DisplayName: The Slimer
-		Tooltip: 
+		Tooltip:
 			'''
 			Sprays a sizable slurry of sticky slime
 			Slime gets stuck as it is spewed, building up a blockage

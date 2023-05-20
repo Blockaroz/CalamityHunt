@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using CalamityHunt.Common.Systems;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.UI;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
@@ -25,8 +26,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.tileCollide = false;
             Projectile.ownerHitCheck = true;
             Projectile.manualDirectionChange = true;
-            Projectile.usesIDStaticNPCImmunity = true;
-            Projectile.idStaticNPCHitCooldown = 10;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 10;
             Projectile.extraUpdates = 2;
             Owner = -1;
         }
@@ -183,10 +184,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            Main.player[Main.projectile[(int)Owner].owner].GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge += 0.0005f;
+            Main.player[Main.projectile[(int)Owner].owner].GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsWaitTime = 50;
+
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
+            Main.player[Main.projectile[(int)Owner].owner].GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge += 0.0005f;
+            Main.player[Main.projectile[(int)Owner].owner].GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsWaitTime = 50;
         }
 
         public override bool PreDraw(ref Color lightColor)

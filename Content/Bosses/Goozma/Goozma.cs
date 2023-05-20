@@ -670,7 +670,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time > 570)
                     {
-                        SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaAwaken");
+                        SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaReawaken");
                         SoundEngine.PlaySound(roar, NPC.Center);
 
                         Music = Music2;
@@ -1262,7 +1262,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             SoundStyle deathSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaPop");
             SoundEngine.PlaySound(deathSound, NPC.Center);
             SoundStyle boomSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaExplode");
-            SoundEngine.PlaySound(boomSound.WithPitchOffset(0.2f).WithVolumeScale(0.5f), NPC.Center);
+            SoundEngine.PlaySound(boomSound.WithPitchOffset(0.2f).WithVolumeScale(0.9f), NPC.Center);
 
             for (int i = 0; i < 200; i++)
                 Particle.NewParticle(Particle.ParticleType<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(30, 30) - Vector2.UnitY * 15f, Color.White, 0.1f + Main.rand.NextFloat(2f));

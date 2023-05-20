@@ -12,6 +12,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Humanizer.In;
 
 namespace CalamityHunt.Common.Systems
 {
@@ -53,19 +54,34 @@ namespace CalamityHunt.Common.Systems
             parasolBlood = Math.Clamp(parasolBlood, 0, ParasolBloodMax);
             CrystalGauntletsCharge = Math.Clamp(CrystalGauntletsCharge, 0f, 1f);
 
-            if (crystalGauntletsClapTime == 15)
+            if (crystalGauntletsClapTime == 10)
             {
-                SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Player.Center);
+                SoundEngine.PlaySound(SoundID.DD2_GoblinBomb, Player.Center);
+                SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithPitchOffset(1f), Player.Center);
 
-                Projectile boom = Projectile.NewProjectileDirect(Player.GetSource_ItemUse(Player.HeldItem), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<CrystalBoom>(), Player.HeldItem.damage / 2, 0, Player.whoAmI);
+                Projectile boom = Projectile.NewProjectileDirect(Player.GetSource_ItemUse(Player.HeldItem), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<CrystalBoom>(), Player.HeldItem.damage, 0, Player.whoAmI);
+                boom.ai[1] = 1f;
                 boom.localAI[0] = Main.GlobalTimeWrappedHourly * 7f;
 
                 foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<CrystalGauntletBallThrown>() && n.owner == Player.whoAmI))
                 {
-                    projectile.Kill();
-                    Projectile newBoom = Projectile.NewProjectileDirect(projectile.GetSource_Death(), projectile.Center, Vector2.Zero, ModContent.ProjectileType<CrystalBoom>(), Player.HeldItem.damage, 0, Player.whoAmI);
-                    newBoom.ai[1] = 0.5f;
-                    newBoom.localAI[0] = projectile.localAI[0];
+                    int target = projectile.FindTargetWithLineOfSight(2400);
+                    Vector2 dir = Vector2.Zero;
+                    if (target >= 0)
+                        dir = Main.npc[target].Center - projectile.Center;
+
+                    projectile.velocity = Vector2.Zero;
+                    projectile.timeLeft = 17;
+
+                    Vector2 oldDir = dir;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (oldDir.LengthSquared() < 5)
+                            dir = new Vector2(700, 0).RotatedBy(MathHelper.TwoPi / 10f * i);
+
+                        Projectile shock = Projectile.NewProjectileDirect(projectile.GetSource_Death(), projectile.Center, dir.SafeNormalize(Vector2.Zero), ModContent.ProjectileType<CrystalLightning>(), Player.HeldItem.damage / 2, 1f, Player.whoAmI, ai1: projectile.whoAmI);
+                        shock.ai[2] = dir.Length();
+                    }
                 }
             }
         }
@@ -76,7 +92,7 @@ namespace CalamityHunt.Common.Systems
             {
                 if (crystalGauntletsClapTime > 0)
                 {
-                    float clapRotation = -0.4f + MathF.Sqrt(Utils.GetLerpValue(40, 15, crystalGauntletsClapTime, true)) * Utils.GetLerpValue(20, 25, crystalGauntletsClapTime, true) * 2f + MathHelper.SmoothStep(0, 0.5f, MathF.Sqrt(Utils.GetLerpValue(24, 5, crystalGauntletsClapTime, true)));
+                    float clapRotation = -0.4f + MathF.Sqrt(Utils.GetLerpValue(40, 10, crystalGauntletsClapTime, true)) * Utils.GetLerpValue(10, 15, crystalGauntletsClapTime, true) * 2f + MathHelper.SmoothStep(0, 0.5f, MathF.Sqrt(Utils.GetLerpValue(10, 0, crystalGauntletsClapTime, true)));
                     Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (-MathHelper.PiOver2 + clapRotation) * Player.direction);
                     Player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.ThreeQuarters, (-MathHelper.PiOver2 - clapRotation) * Player.direction);
                 }

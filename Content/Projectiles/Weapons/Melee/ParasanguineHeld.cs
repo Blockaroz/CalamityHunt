@@ -280,6 +280,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
                 if (Mode < 2)
                 {
+                    WeaponBars.DisplayBar();
                     Owner.GetModPlayer<GoozmaWeaponsPlayer>().parasolBlood += 10;
                     Owner.GetModPlayer<GoozmaWeaponsPlayer>().parasolBloodWaitTime += 10;
                 }
