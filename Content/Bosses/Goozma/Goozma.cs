@@ -893,8 +893,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case -2:
 
-                    NPC.defense = 200;
-                    NPC.takenDamageMultiplier = 0.9f;
+                    NPC.defense = 175;
 
                     Fly();
                     NPC.velocity *= 1.0002f;
