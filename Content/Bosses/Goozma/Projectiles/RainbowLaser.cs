@@ -50,7 +50,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.active = false;
                 return;
             }
-            else if (!Main.npc[(int)Owner].active)
+            else if (!Main.npc[(int)Owner].active || (Main.npc[(int)Owner].type != ModContent.NPCType<Goozmite>() && Main.npc[(int)Owner].type != ModContent.NPCType<Goozma>()))
             {
                 Projectile.active = false;
                 return;
@@ -58,12 +58,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time < 1)
             {
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center) * Projectile.oldVelocity.Length(), 0.07f);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center) * Projectile.oldVelocity.Length(), 0.05f);
 
                 Projectile.Center = Main.npc[(int)Owner].Center;
                 Projectile.oldVelocity = Projectile.velocity;
                 Projectile.direction = Main.rand.NextBool() ? -1 : 1;
-                Speed = Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.012f * Main.rand.NextFloat(0.8f, 1.2f);
+                Speed = Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.015f * Main.rand.NextFloat(0.7f, 1.3f);
             }
 
             if (Time == 1)

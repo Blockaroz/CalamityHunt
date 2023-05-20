@@ -111,7 +111,11 @@ namespace CalamityHunt.Common.Systems
 
                 bool shootActive = SoundEngine.TryGetActiveSound(Goozma.goozmaShoot, out ActiveSound shootSound);
                 if (shootActive)
-                    shootSound.Stop();
+                    shootSound.Stop();                
+                
+                bool simmerActive = SoundEngine.TryGetActiveSound(Goozma.goozmaSimmer, out ActiveSound simmerSound);
+                if (simmerActive)
+                    simmerSound.Stop();
 
             }
 

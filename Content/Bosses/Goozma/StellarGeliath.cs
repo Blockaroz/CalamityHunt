@@ -587,8 +587,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (player.Distance(NPC.Center) < holeSize)
                         player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} was shredded by gravity."), 9999, -1, false, true, -1, false, 0, 0, 0);
 
-                    if (player.Distance(NPC.Center) > holeSize + 200)
-                        player.velocity += player.DirectionTo(NPC.Center) * Utils.GetLerpValue(holeSize + 200, holeSize + 500, player.Distance(NPC.Center));
+                    if (player.Distance(NPC.Center) > holeSize + 400)
+                        player.velocity += player.DirectionTo(NPC.Center) * Utils.GetLerpValue(holeSize + 400, holeSize + 700, player.Distance(NPC.Center));
                 }
 
                 if (Time % 13 == 5 && Time < 430)

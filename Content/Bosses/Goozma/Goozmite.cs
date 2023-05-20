@@ -252,7 +252,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if ((Time + i) % randCounter > 15)
                         zapVelocities[i] *= 0.93f;
                     zapPoints[i] += zapVelocities[i] * (float)Math.Sin(i / (float)zapPoints.Count * MathHelper.Pi);
-                    zapPoints[i] += NPC.velocity * (1f - i / (float)zapPoints.Count);
+                    zapPoints[i] += (NPC.position - NPC.oldPosition) * Utils.GetLerpValue(zapPoints.Count, 0, i, true);
+                    zapPoints[i] += (Host.position - Host.oldPosition) * Utils.GetLerpValue(0, zapPoints.Count, i, true);
                 }
 
                 for (int i = 0; i < zapPointsReal.Count; i++)

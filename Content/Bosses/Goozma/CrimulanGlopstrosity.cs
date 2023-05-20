@@ -327,6 +327,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             if (Main.expertMode)
                                 extension = 16;
 
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), GetDamage(2), 0, ai1: 2500);
+
                             for (int i = 0; i < extension; i++)
                             {
                                 Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2((Target.Center.X - NPC.Center.X) * 0.02f + i * Main.rand.NextFloat(-8f, 8f), 0), ModContent.ProjectileType<CrimulanSmasher>(), 15, 0);
@@ -496,6 +498,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time == waitTime + 180)
             {
+                Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), GetDamage(2), 0, ai1: 2500);
+
                 SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
                 slam.MaxInstances = 0;
                 SoundEngine.PlaySound(slam, NPC.Center);
@@ -548,7 +552,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     Vector2 midPoint = new Vector2((NPC.Center.X + saveTarget.X) / 2f, NPC.Center.Y - NPC.height * 2f);
                     Vector2 jumpTarget = Vector2.Lerp(Vector2.Lerp(NPC.Center, midPoint, Utils.GetLerpValue(0, jumpTime * 0.3f, localTime, true)), Vector2.Lerp(midPoint, NPC.FindSmashSpot(saveTarget), Utils.GetLerpValue(jumpTime * 0.1f, jumpTime * 0.6f, localTime, true)), Utils.GetLerpValue(0, jumpTime * 0.6f, localTime, true));
-                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(jumpTarget).SafeNormalize(Vector2.Zero) * NPC.Distance(jumpTarget) * 0.3f * Utils.GetLerpValue(0, jumpTime * 0.7f, localTime, true), Utils.GetLerpValue(0, jumpTime * 0.7f, localTime, true));
+                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(NPC.FindSmashSpot(jumpTarget)).SafeNormalize(Vector2.Zero) * NPC.Distance(NPC.FindSmashSpot(jumpTarget)) * 0.3f * Utils.GetLerpValue(0, jumpTime * 0.7f, localTime, true), Utils.GetLerpValue(0, jumpTime * 0.7f, localTime, true));
                     NPC.rotation = -NPC.velocity.Y * 0.008f * Math.Sign(NPC.velocity.X);
 
                     float resquish = Utils.GetLerpValue(jumpTime * 0.4f, 0, localTime, true) + Utils.GetLerpValue(jumpTime * 0.4f, jumpTime * 0.7f, localTime, true);
@@ -565,7 +569,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (localTime % 2 == 0)
                         Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 5f, 10, 12));
 
-                    squishFactor = new Vector2(1f + (float)Math.Pow(Utils.GetLerpValue(jumpTime, jumpTime * 0.74f, localTime, true), 2) * 0.6f, 1f - (float)Math.Pow(Utils.GetLerpValue(jumpTime, jumpTime * 0.74f, localTime, true), 2) * 0.5f);
+                    squishFactor = new Vector2(1f + (float)Math.Pow(Utils.GetLerpValue(jumpTime, jumpTime * 0.74f, localTime, true), 2) * 0.8f, 1f - (float)Math.Pow(Utils.GetLerpValue(jumpTime, jumpTime * 0.74f, localTime, true), 2) * 0.7f);
                 }
                 if (localTime == (int)(jumpTime * 0.74f))
                 {
@@ -672,10 +676,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int damage = attack switch
             {
-                0 => 70,//contact
-                1 => 0,// 
-                2 => 0,//
-                3 => 0,//
+                0 => 100,//contact
+                1 => 80,//smasher
+                2 => 50,//shockwave
                 _ => damage = 0
             };
 
