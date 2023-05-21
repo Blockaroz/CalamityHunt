@@ -10,7 +10,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameContent;
+using Terraria.Graphics.Renderers;
+using Terraria.Map;
 using Terraria.ModLoader;
+using static Terraria.GameContent.Animations.IL_Actions.NPCs;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 {
@@ -19,7 +24,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
         public override void Load()
         {
             On_Main.CheckMonoliths += DrawShapes;
-            On_Main.DrawProjectiles += DrawSludge;
+            On_Main.DoDraw_Tiles_Solid += DrawSludge; ;
         }
 
         public static RenderTarget2D SludgeTarget { get; set; }
@@ -51,17 +56,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 Rectangle frame = texture.Frame(4, 1, projectile.frame, 0);
 
                 Vector2 squish = new Vector2(1f - projectile.velocity.Length() * 0.01f, 1f + projectile.velocity.Length() * 0.01f) * 0.8f;
-                if (projectile.frame > 2)
-                    squish = new Vector2(2f + MathF.Sin(projectile.ai[0] * 0.1f) * 0.1f, 1.7f + MathF.Cos(projectile.ai[0] * 0.1f) * 0.3f) * 0.7f;
+                if (projectile.frame > 1)
+                    squish = new Vector2(2f + MathF.Sin(projectile.ai[0] * 0.1f) * 0.1f, 2.3f + MathF.Cos(projectile.ai[0] * 0.1f) * 0.2f) * 0.7f;
 
-                Main.spriteBatch.Draw(texture, (projectile.Bottom - Main.screenPosition) / 2f, frame, Color.DimGray * 0.2f, projectile.rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0.8f), projectile.scale * squish * 0.5f, 0, 0);
+                Main.spriteBatch.Draw(texture, (projectile.Bottom - Main.screenPosition) / 2f, frame, new Color(255, 255, 255, 0), projectile.rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0.8f), projectile.scale * squish * 0.5f, 0, 0);
             }
 
             foreach (DarkSludgeChunk particle in ParticleSystem.particle.Where(n => n.Active && n is DarkSludgeChunk))
             {
                 if (particle.time > 0)
                 {
-                    Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+                    Asset<Texture2D> texture = ModContent.Request<Texture2D>(particle.Texture);
                     Rectangle frame = texture.Frame(4, 1, particle.variant, 0);
                     Vector2 squish = new Vector2(1f - particle.velocity.Length() * 0.01f, 1f + particle.velocity.Length() * 0.01f);
                     float grow = (float)Math.Sqrt(Utils.GetLerpValue(-20, 40, particle.time, true));
@@ -72,8 +77,20 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                         squish = new Vector2(1f + (float)Math.Sqrt(Utils.GetLerpValue(20, 0, particle.time, true)) * 0.33f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(20, 0, particle.time, true)) * 0.33f);
                     }
 
-                    Color lightColor = Lighting.GetColor(particle.position.ToTileCoordinates());
-                    Main.spriteBatch.Draw(texture.Value, (particle.position - Main.screenPosition) / 2f, frame, Color.DimGray * 0.2f, particle.rotation, frame.Size() * new Vector2(0.5f, 0.84f), particle.scale * grow * squish * 0.5f, 0, 0);
+                    Main.spriteBatch.Draw(texture.Value, (particle.position - Main.screenPosition) / 2f, frame, new Color(255, 255, 255, 0), particle.rotation, frame.Size() * new Vector2(0.5f, 0.84f), particle.scale * grow * squish * 0.5f, 0, 0);
+                }
+            }
+
+            foreach (MegaFlame particle in ParticleSystem.particle.Where(n => n.Active && n is MegaFlame && n.data is string))
+            {
+                if ((string)particle.data == "Sludge")
+                {
+                    Asset<Texture2D> texture = ModContent.Request<Texture2D>(particle.Texture + "Sludge");
+                    Rectangle frame = texture.Frame(4, 2, particle.variant % 4, (int)(particle.variant / 4f));
+                    float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, particle.maxTime * 0.3f, particle.time, true));
+                    float opacity = Utils.GetLerpValue(particle.maxTime * 0.8f, particle.maxTime * 0.3f, particle.time, true) * Math.Clamp(particle.scale, 0, 1);
+
+                    Main.spriteBatch.Draw(texture.Value, (particle.position - Main.screenPosition) / 2f, frame, new Color(255, 255, 255, 0) * opacity, particle.rotation - MathHelper.PiOver2, frame.Size() * 0.5f, particle.scale * grow * 0.5f, 0, 0);
                 }
             }
 
@@ -84,26 +101,23 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             orig();
         }
 
-        private void DrawSludge(On_Main.orig_DrawProjectiles orig, Main self)
+        private void DrawSludge(On_Main.orig_DoDraw_Tiles_Solid orig, Main self)
         {
-            //Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SludgeEffect", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
-            effect.Parameters["uTextureClose"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
-            effect.Parameters["uTextureFar"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space1").Value);
-            effect.Parameters["uPosition"].SetValue((Main.LocalPlayer.oldPosition - Main.LocalPlayer.oldVelocity) * 0.001f);
-            effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
-            effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));
-            effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, Main.GlobalTimeWrappedHourly * 0.0004f % 2f));
-            effect.Parameters["uCloseColor"].SetValue(Color.Chartreuse.ToVector3());
-            effect.Parameters["uFarColor"].SetValue(Color.SeaGreen.ToVector3());
-            effect.Parameters["uOutlineColor"].SetValue(Color.Chartreuse.ToVector4());
-            effect.Parameters["uImageRatio"].SetValue(new Vector2(Main.screenWidth / (float)Main.screenHeight, 1f));
+            Texture2D baseTex = TextureAssets.Extra[193].Value;
+            Texture2D glowTex = TextureAssets.Extra[193].Value;
+            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SludgeEffect", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            effect.Parameters["uPosition"].SetValue(Main.screenPosition / 2f);
+            effect.Parameters["uBaseTexture"].SetValue(baseTex);
+            effect.Parameters["uGlowTexture"].SetValue(glowTex);
+            effect.Parameters["uSize"].SetValue(Vector2.One * 10);
+            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.003f % 1f);
+            effect.Parameters["uScreenSize"].SetValue(Main.ScreenSize.ToVector2());
 
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
 
             if (SludgeTarget != null)
                 Main.spriteBatch.Draw(SludgeTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 2f, 0, 0);
-            
+
             Main.spriteBatch.End();
 
             orig(self);

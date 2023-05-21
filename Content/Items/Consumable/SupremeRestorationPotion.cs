@@ -43,7 +43,7 @@ namespace CalamityHunt.Content.Items.Consumable
         {
             if (sItem.type == ModContent.ItemType<SupremeRestorationPotion>())
             {
-                self.potionDelay = self.restorationDelayTime;
+                self.potionDelay = self.restorationDelayTime; 
                 self.AddBuff(21, self.potionDelay);
             }
             else

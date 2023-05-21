@@ -24,6 +24,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.extraUpdates = 1;
+            Projectile.noEnchantmentVisuals = true;
         }
 
         public override void AI()

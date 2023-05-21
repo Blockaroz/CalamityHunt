@@ -1,5 +1,7 @@
 ﻿using CalamityHunt.Common.Systems;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.UI;
+using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -63,7 +65,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             Projectile.direction = Projectile.velocity.X > 0 ? 1 : -1;
             Owner.SetDummyItemTime(3);
             Owner.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
-            Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.rotation.AngleTowards(Owner.AngleTo(Main.MouseWorld), 0.3f), 0.2f) + MathF.Sin(Time * 0.1f * MathHelper.Pi) * 0.01f;
+            Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.rotation.AngleTowards(Owner.AngleTo(Main.MouseWorld), 0.4f), 0.5f * Utils.GetLerpValue(5, 10, Time % 10, true));
             Projectile.velocity = Projectile.rotation.ToRotationVector2();
             Projectile.Center = Owner.MountedCenter - new Vector2(0, 6 * Owner.gravDir) + Projectile.velocity.SafeNormalize(Vector2.Zero) * 10;
             bool canKill = false;
@@ -76,9 +78,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 sludge.noGravity = !Main.rand.NextBool(25);
             }
 
-            if (Time % 2 == 0)
+            if (Time % 3 == 0)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 40, Projectile.velocity.RotatedByRandom(0.05f) * Main.rand.Next(13, 16), ModContent.ProjectileType<DarkSludge>(), Owner.HeldItem.damage, 1f, Owner.whoAmI);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.05f) * Main.rand.Next(15, 20), ModContent.ProjectileType<DarkSludge>(), Owner.HeldItem.damage, 1f, Owner.whoAmI);
             }
 
             if (Time % 10 == 2)

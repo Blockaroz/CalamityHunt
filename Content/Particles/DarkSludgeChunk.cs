@@ -34,7 +34,7 @@ namespace CalamityHunt.Content.Particles
             if (!stuck)
             {
                 if (velocity.Y < 30)
-                    velocity.Y += 0.5f;
+                    velocity.Y += 0.4f;
 
                 rotation = velocity.ToRotation() - MathHelper.PiOver2;
 
