@@ -1,4 +1,6 @@
-﻿using log4net.Util;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
+using log4net.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -42,17 +44,37 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             Main.graphics.GraphicsDevice.SetRenderTarget(SludgeTarget);
             Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 
-            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<DarkSludge>()))
+            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ai[0] > 0 && n.type == ModContent.ProjectileType<DarkSludge>()))
             {
                 Texture2D texture = ModContent.Request<Texture2D>(projectile.ModProjectile.Texture).Value;
-                projectile.frame = (projectile.ai[1] > 0 ? 2 : 0) + (int)projectile.localAI[0];
+                projectile.frame = (projectile.ai[1] == 1 ? 2 : 0) + (int)projectile.localAI[0];
                 Rectangle frame = texture.Frame(4, 1, projectile.frame, 0);
 
-                Vector2 squish = new Vector2(1f - projectile.velocity.Length() * 0.01f, 1f + projectile.velocity.Length() * 0.01f) * 2f;
-                if (projectile.ai[1] == 2)
-                    squish = new Vector2(3f + MathF.Sin(projectile.ai[0] * 0.1f) * 0.2f, 2f + MathF.Cos(projectile.ai[0] * 0.1f) * 0.2f);
+                Vector2 squish = new Vector2(1f - projectile.velocity.Length() * 0.01f, 1f + projectile.velocity.Length() * 0.01f) * 0.8f;
+                if (projectile.frame > 2)
+                    squish = new Vector2(2f + MathF.Sin(projectile.ai[0] * 0.1f) * 0.1f, 1.7f + MathF.Cos(projectile.ai[0] * 0.1f) * 0.3f) * 0.7f;
 
-                Main.spriteBatch.Draw(texture, projectile.Center - Main.screenPosition, frame, Color.DarkSlateBlue * 0.7f, projectile.rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0.8f), projectile.scale * squish, 0, 0);
+                Main.spriteBatch.Draw(texture, (projectile.Bottom - Main.screenPosition) / 2f, frame, Color.DimGray * 0.2f, projectile.rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0.8f), projectile.scale * squish * 0.5f, 0, 0);
+            }
+
+            foreach (DarkSludgeChunk particle in ParticleSystem.particle.Where(n => n.Active && n is DarkSludgeChunk))
+            {
+                if (particle.time > 0)
+                {
+                    Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+                    Rectangle frame = texture.Frame(4, 1, particle.variant, 0);
+                    Vector2 squish = new Vector2(1f - particle.velocity.Length() * 0.01f, 1f + particle.velocity.Length() * 0.01f);
+                    float grow = (float)Math.Sqrt(Utils.GetLerpValue(-20, 40, particle.time, true));
+                    if (particle.stuck)
+                    {
+                        grow = 1f;
+                        frame = texture.Frame(4, 1, particle.variant + 2, 0);
+                        squish = new Vector2(1f + (float)Math.Sqrt(Utils.GetLerpValue(20, 0, particle.time, true)) * 0.33f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(20, 0, particle.time, true)) * 0.33f);
+                    }
+
+                    Color lightColor = Lighting.GetColor(particle.position.ToTileCoordinates());
+                    Main.spriteBatch.Draw(texture.Value, (particle.position - Main.screenPosition) / 2f, frame, Color.DimGray * 0.2f, particle.rotation, frame.Size() * new Vector2(0.5f, 0.84f), particle.scale * grow * squish * 0.5f, 0, 0);
+                }
             }
 
             Main.graphics.GraphicsDevice.SetRenderTarget(null);
@@ -72,15 +94,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
             effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));
             effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, Main.GlobalTimeWrappedHourly * 0.0004f % 2f));
-            effect.Parameters["uCloseColor"].SetValue(new Color(20, 80, 255).ToVector3());
-            effect.Parameters["uFarColor"].SetValue(new Color(110, 50, 200).ToVector3());
-            effect.Parameters["uOutlineColor"].SetValue(new Color(10, 5, 45, 0).ToVector4());
+            effect.Parameters["uCloseColor"].SetValue(Color.Chartreuse.ToVector3());
+            effect.Parameters["uFarColor"].SetValue(Color.SeaGreen.ToVector3());
+            effect.Parameters["uOutlineColor"].SetValue(Color.Chartreuse.ToVector4());
             effect.Parameters["uImageRatio"].SetValue(new Vector2(Main.screenWidth / (float)Main.screenHeight, 1f));
 
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
 
             if (SludgeTarget != null)
-                Main.spriteBatch.Draw(SludgeTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, 0, 0);
+                Main.spriteBatch.Draw(SludgeTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 2f, 0, 0);
             
             Main.spriteBatch.End();
 
