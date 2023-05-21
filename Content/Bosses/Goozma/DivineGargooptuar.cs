@@ -38,12 +38,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     BuffID.CursedInferno,
                     BuffID.Poisoned,
                     BuffID.Confused
-				}
+                }
             };
             NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
-
-            //NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0) { };
-            //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -78,7 +75,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
-                //calamity.Call("SetDefenseDamageNPC", Type, true);
             }
         }
 
@@ -118,6 +114,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.active = false;
 
             NPC.damage = 0;
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                NPC.buffImmune[ModLoader.GetMod("CalamityMod").Find<ModBuff>("MiracleBlight").Type] = true;
+            }
 
             if (Time < 0)
             {
@@ -652,6 +652,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             return false;
+        }
+
+        public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
+        {
+            GoozmaResistances.GoozmaItemResistances(item, ref modifiers);
+        }
+        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            GoozmaResistances.GoozmaProjectileResistances(projectile, ref modifiers);
         }
     }
 }
