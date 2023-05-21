@@ -5,6 +5,7 @@ Items: {
 			'''
 			It looks corrupted
 			Summons the Slime God
+			Not consumable
 			'''
 	}
 
@@ -266,6 +267,11 @@ Items: {
 
 	PureAuricSoul: {
 		DisplayName: Pure Auric Soul
+		Tooltip: ""
+	}
+
+	SludgeShaker: {
+		DisplayName: Sludge Shaker
 		Tooltip: ""
 	}
 }

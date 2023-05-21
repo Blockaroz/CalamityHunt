@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace CalamityHunt.Content.Items.Weapons.Ranged
 {
-    internal class TheSlimer : ModItem
+    internal class SludgeShaker : ModItem
     {
 		public override void SetStaticDefaults()
 		{
