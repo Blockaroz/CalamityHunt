@@ -347,6 +347,7 @@ Projectiles: {
 	CrimulanShockwave.DisplayName: Crimulan Shockwave
 	SludgeShakerHeld.DisplayName: Sludge Shaker Held
 	DarkSludge.DisplayName: Dark Sludge
+	SludgeLighter.DisplayName: Sludge Lighter
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

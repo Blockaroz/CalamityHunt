@@ -39,22 +39,17 @@ namespace CalamityHunt.Content.Particles
 
                 rotation = velocity.ToRotation() - MathHelper.PiOver2;
 
-                if (Collision.SolidTiles(position - new Vector2(0, 12) + velocity * 2f, 4, 4) && time > 10)
+                if (Collision.IsWorldPointSolid(position + velocity) && time > 2)
                 {
-                    SoundEngine.PlaySound(SoundID.NPCDeath9.WithPitchOffset(Main.rand.NextFloat(-0.2f, 0.3f)), position);
-                    if (Main.rand.NextBool())
+                    time = 0;
+                    stuck = true;
+                    position.Y = (int)(position.Y / 16f) * 16 + 16;
+                    for (int i = 0; i < 8; i++)
                     {
-                        time = 0;
-                        stuck = true;
+                        if (Collision.IsWorldPointSolid(position + velocity - new Vector2(0, 8 * i)))
+                            position.Y -= 8;
                     }
-                    else
-                    {
-                        Active = false;
-
-                        for (int i = 0; i < 8; i++)
-                            Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(4, 4), DustID.TintableDust, -velocity * 0.1f + Main.rand.NextVector2Circular(2, 2), 200, Color.DeepPink, Main.rand.NextFloat(2f) * scale);
-
-                    }
+                    position.Y -= 3;
                 }
             }
             else

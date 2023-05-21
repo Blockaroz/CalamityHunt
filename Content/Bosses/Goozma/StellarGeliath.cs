@@ -80,7 +80,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
-                //calamity.Call("SetDefenseDamageNPC", Type, true);
+                calamity.Call("SetDefenseDamageNPC", NPC, true);
                 SpawnModBiomes = new int[1] { calamity.Find<ModBiome>("AbovegroundAstralBiome").Type };
             }
         }
@@ -134,6 +134,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.active = false;
 
             NPC.damage = GetDamage(0);
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                NPC.buffImmune[ModLoader.GetMod("CalamityMod").Find<ModBuff>("MiracleBlight").Type] = true;
+            }
 
             if (Time < 0)
             {
@@ -1024,6 +1028,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             return false;
+        }
+
+        public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
+        {
+            GoozmaResistances.GoozmaItemResistances(item, ref modifiers);
+        }
+        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            GoozmaResistances.GoozmaProjectileResistances(projectile, ref modifiers);
         }
     }
 }

@@ -101,7 +101,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
-                //calamity.Call("SetDefenseDamageNPC", Type, true);
+                calamity.Call("SetDefenseDamageNPC", NPC, true);
             }
 
             if (Main.drunkWorld)
@@ -1879,6 +1879,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     }
                 }
             }
+        }
+
+        public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
+        {
+            GoozmaResistances.GoozmaItemResistances(item, ref modifiers);
+        }
+        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            GoozmaResistances.GoozmaProjectileResistances(projectile, ref modifiers);
         }
     }
 }
