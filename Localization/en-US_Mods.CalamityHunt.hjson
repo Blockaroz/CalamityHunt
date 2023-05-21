@@ -333,6 +333,8 @@ Projectiles: {
 	CrystalPiercer.DisplayName: Crystal Piercer
 	CrystalBoom.DisplayName: Crystal Boom
 	CrimulanShockwave.DisplayName: Crimulan Shockwave
+	SludgeShakerHeld.DisplayName: Sludge Shaker Held
+	DarkSludge.DisplayName: Dark Sludge
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

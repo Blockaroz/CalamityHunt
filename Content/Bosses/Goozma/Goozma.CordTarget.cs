@@ -104,73 +104,69 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            foreach (NPC npc in nPCsToDrawCordOn.ToArray())
+            if (nPCsToDrawCordOn != null)
             {
-                Goozma targetOwner = npc.ModNPC as Goozma;
-            }
-
-            int a = 0;
-            foreach (NPC npc in nPCsToDrawCordOn.ToArray())
-            {
-                a++;
-
-                Goozma targetOwner = npc.ModNPC as Goozma;
-
-                if (targetOwner.cordTarget == null || targetOwner.cordTarget.IsDisposed)
-                    targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)targetSize.X, (int)targetSize.Y);
-
-                else if (targetOwner.cordTarget.Size() != targetSize)
+                foreach (NPC npc in nPCsToDrawCordOn.ToArray())
                 {
-                    Main.QueueMainThreadAction(() =>
-                    {
-                        targetOwner.cordTarget.Dispose();
+                    Goozma targetOwner = npc.ModNPC as Goozma;
+
+                    if (targetOwner.cordTarget == null || targetOwner.cordTarget.IsDisposed)
                         targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)targetSize.X, (int)targetSize.Y);
-                    });
-                    return;
-                }
 
-                if (targetOwner.cordTarget != null)
-                {
-                    //Be sure to switch to the **TARGET OWNER's** cordTarget, not just cordTarget
-                    //If you just use cordTarget that'll use the one from the autoloaded instance who loaded the detour
-                    Main.graphics.GraphicsDevice.SetRenderTarget(targetOwner.cordTarget);
-                    Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-                    if (!switchedTargets)
+                    else if (targetOwner.cordTarget.Size() != targetSize)
                     {
-                        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null);
-                        switchedTargets = true;
+                        Main.QueueMainThreadAction(() =>
+                        {
+                            targetOwner.cordTarget.Dispose();
+                            targetOwner.cordTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)targetSize.X, (int)targetSize.Y);
+                        });
+                        return;
                     }
 
-                    List<Vector2> positions = new List<Vector2>();
-                    List<float> rotations = new List<float>();
-
-                    float partitions = 50;
-                    for (int i = 0; i < partitions; i++)
+                    if (targetOwner.cordTarget != null)
                     {
-                        Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
-                        offset.X *= npc.direction;
-                        offset -= targetOwner.drawVelocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
-                        offset *= 0.5f;
-                        positions.Add(new Vector2(0, 8).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation));
-                        rotations.Add(offset.RotatedBy(npc.rotation).ToRotation() - MathHelper.PiOver2 * (i / partitions) * npc.direction);
+                        //Be sure to switch to the **TARGET OWNER's** cordTarget, not just cordTarget
+                        //If you just use cordTarget that'll use the one from the autoloaded instance who loaded the detour
+                        Main.graphics.GraphicsDevice.SetRenderTarget(targetOwner.cordTarget);
+                        Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+                        if (!switchedTargets)
+                        {
+                            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null);
+                            switchedTargets = true;
+                        }
+
+                        List<Vector2> positions = new List<Vector2>();
+                        List<float> rotations = new List<float>();
+
+                        float partitions = 50;
+                        for (int i = 0; i < partitions; i++)
+                        {
+                            Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((npc.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
+                            offset.X *= npc.direction;
+                            offset -= targetOwner.drawVelocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
+                            offset *= 0.5f;
+                            positions.Add(new Vector2(0, 8).RotatedBy(npc.rotation) + offset.RotatedBy(npc.rotation));
+                            rotations.Add(offset.RotatedBy(npc.rotation).ToRotation() - MathHelper.PiOver2 * (i / partitions) * npc.direction);
+                        }
+
+                        effect.Parameters["uTransformMatrix"].SetValue(realMatrix);
+                        effect.Parameters["uTime"].SetValue(npc.localAI[0] * 0.005f % 1f);
+                        effect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LiquidTrail").Value);
+                        effect.Parameters["uMap"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GoozmaColorMap").Value);
+                        effect.CurrentTechnique.Passes[0].Apply();
+
+                        VertexStrip cord = new VertexStrip();
+
+                        Color ColorFunc(float progress) => Color.White;
+                        float WidthFunc(float progress) => MathF.Pow(Utils.GetLerpValue(1.1f, 0.1f, progress, true), 0.7f) * 18f;
+
+                        cord.PrepareStripWithProceduralPadding(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, targetSize * 0.5f, true);
+                        cord.DrawTrail();
+                        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
                     }
-
-                    effect.Parameters["uTransformMatrix"].SetValue(realMatrix);
-                    effect.Parameters["uTime"].SetValue(npc.localAI[0] * 0.005f % 1f);
-                    effect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LiquidTrail").Value);
-                    effect.Parameters["uMap"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GoozmaColorMap").Value);
-                    effect.CurrentTechnique.Passes[0].Apply();
-
-                    VertexStrip cord = new VertexStrip();
-
-                    Color ColorFunc(float progress) => Color.White;
-                    float WidthFunc(float progress) => MathF.Pow(Utils.GetLerpValue(1.1f, 0.1f, progress, true), 0.7f) * 18f;
-
-                    cord.PrepareStripWithProceduralPadding(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, targetSize * 0.5f, true);
-                    cord.DrawTrail();
-                    Main.pixelShader.CurrentTechnique.Passes[0].Apply();
                 }
             }
+            
 
             //int goozmaID = ModContent.NPCType<Goozma>();
             //foreach (BestiaryEntry entry in Main.BestiaryDB.Entries.Where(n => n == Main.BestiaryDB.FindEntryByNPCID(goozmaID)))

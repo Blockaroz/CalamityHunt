@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
@@ -114,6 +115,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Projectile.frame = (Mode > 0 ? 2 : 0) + (int)Projectile.localAI[0];
             Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
             Vector2 squish = new Vector2(1.05f - Projectile.velocity.Length() * 0.005f, 1.05f + Projectile.velocity.Length() * 0.01f);
             if (Mode == 2)

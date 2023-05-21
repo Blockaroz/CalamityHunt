@@ -24,29 +24,29 @@ namespace CalamityHunt.Common.Graphics
         {
             On_Main.CheckMonoliths -= DrawSpaceShapes;
             On_Main.DoDraw_DrawNPCsOverTiles -= DrawSpace;
-            Main.QueueMainThreadAction(spaceTarget.Dispose);
+            Main.QueueMainThreadAction(SpaceTarget.Dispose);
         }
 
-        public RenderTarget2D spaceTarget;
+        public RenderTarget2D SpaceTarget { get; set; }
 
         private void DrawSpaceShapes(On_Main.orig_CheckMonoliths orig)
         {
-            if (spaceTarget == null || spaceTarget.IsDisposed)
-                spaceTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+            if (SpaceTarget == null || SpaceTarget.IsDisposed)
+                SpaceTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
 
-            else if (spaceTarget.Size() != new Vector2(Main.screenWidth, Main.screenHeight))
+            else if (SpaceTarget.Size() != new Vector2(Main.screenWidth, Main.screenHeight))
             {
                 Main.QueueMainThreadAction(() =>
                 {
-                    spaceTarget.Dispose();
-                    spaceTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+                    SpaceTarget.Dispose();
+                    SpaceTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
                 });
                 return;
             }
 
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
 
-            Main.graphics.GraphicsDevice.SetRenderTarget(spaceTarget);
+            Main.graphics.GraphicsDevice.SetRenderTarget(SpaceTarget);
             Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 
             foreach (Particle particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
@@ -164,7 +164,7 @@ namespace CalamityHunt.Common.Graphics
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
 
-            Main.spriteBatch.Draw(spaceTarget, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 1f, 0, 0);
+            Main.spriteBatch.Draw(SpaceTarget, Vector2.Zero, null, Color.White, 0, Vector2.Zero, 1f, 0, 0);
 
             Main.spriteBatch.End();
 

@@ -21,6 +21,5 @@
   <ItemGroup>
     <Folder Include="Assets\Sounds\SlimeMonsoon\" />
     <Folder Include="Common\Bestiary\" />
-    <Folder Include="Content\Projectiles\Weapons\Ranged\" />
   </ItemGroup>
 </Project>
