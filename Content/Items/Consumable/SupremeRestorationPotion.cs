@@ -11,12 +11,8 @@ namespace CalamityHunt.Content.Items.Consumable
 {
     public class SupremeRestorationPotion : ModItem
     {
-        public static LocalizedText RestoreLifeText { get; private set; }
-
         public override void SetStaticDefaults()
         {
-            RestoreLifeText = this.GetLocalization(nameof(RestoreLifeText));
-
             Item.ResearchUnlockCount = 30;
         }
 
@@ -37,5 +33,21 @@ namespace CalamityHunt.Content.Items.Consumable
 			Item.healLife = 225; // While we change the actual healing value in GetHealLife, Item.healLife still needs to be higher than 0 for the item to be considered a healing item
 			Item.potion = true; // Makes it so this item applies potion sickness on use and allows it to be used with quick heal
 		}
+
+        public override void Load()
+        {
+            On_Player.ApplyPotionDelay += PotionDelay_SupremeRestoration;
+        }
+
+        private void PotionDelay_SupremeRestoration(On_Player.orig_ApplyPotionDelay orig, Player self, Item sItem)
+        {
+            if (sItem.type == ModContent.ItemType<SupremeRestorationPotion>())
+            {
+                self.potionDelay = self.restorationDelayTime;
+                self.AddBuff(21, self.potionDelay);
+            }
+            else
+                orig(self, sItem);
+        }
     }
 }
