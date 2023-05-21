@@ -272,6 +272,18 @@ Items: {
 
 	SludgeShaker: {
 		DisplayName: Sludge Shaker
+		Tooltip:
+			'''
+			Sprays a sizable slurry of sticky slime
+			Slime gets stuck as it is spewed, building up a blockage
+			Right click when blocked to blast out a bile bomb
+			'Shaken, not stirred'
+			'''
+	}
+
+	SupremeRestorationPotion: {
+		RestoreLifeText: Mods.CalamityHunt.Items.SupremeRestorationPotion.RestoreLifeText
+		DisplayName: Supreme Restoration Potion
 		Tooltip: ""
 	}
 }
