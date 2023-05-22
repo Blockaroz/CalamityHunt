@@ -87,7 +87,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                         if (IgnitionLevel > otherSludge.ai[2])
                             IgnitionLevel = otherSludge.ai[2];
                     }
-
                 }
             }
             

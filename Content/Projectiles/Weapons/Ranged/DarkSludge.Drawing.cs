@@ -58,8 +58,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 Vector2 squish = new Vector2(1f - projectile.velocity.Length() * 0.01f, 1f + projectile.velocity.Length() * 0.01f) * 0.8f;
                 if (projectile.frame > 1)
                     squish = new Vector2(2f + MathF.Sin(projectile.ai[0] * 0.1f) * 0.1f, 2.3f + MathF.Cos(projectile.ai[0] * 0.1f) * 0.2f) * 0.7f;
-
-                Main.spriteBatch.Draw(texture, (projectile.Bottom - Main.screenPosition) / 2f, frame, new Color(255, 255, 255, 0), projectile.rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0.8f), projectile.scale * squish * 0.5f, 0, 0);
+                
+                Color color = Lighting.GetColor(projectile.Center.ToTileCoordinates());
+                Main.spriteBatch.Draw(texture, (projectile.Bottom - Main.screenPosition) / 2f, frame, color, projectile.rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0.8f), projectile.scale * squish * 0.5f, 0, 0);
             }
 
             foreach (DarkSludgeChunk particle in ParticleSystem.particle.Where(n => n.Active && n is DarkSludgeChunk))
@@ -77,7 +78,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                         squish = new Vector2(1f + (float)Math.Sqrt(Utils.GetLerpValue(20, 0, particle.time, true)) * 0.33f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(20, 0, particle.time, true)) * 0.33f);
                     }
 
-                    Main.spriteBatch.Draw(texture.Value, (particle.position - Main.screenPosition) / 2f, frame, new Color(255, 255, 255, 0), particle.rotation, frame.Size() * new Vector2(0.5f, 0.84f), particle.scale * grow * squish * 0.5f, 0, 0);
+                    Color color = Lighting.GetColor(particle.position.ToTileCoordinates());
+                    Main.spriteBatch.Draw(texture.Value, (particle.position - Main.screenPosition) / 2f, frame, color, particle.rotation, frame.Size() * new Vector2(0.5f, 0.84f), particle.scale * grow * squish * 0.5f, 0, 0);
                 }
             }
 
@@ -90,7 +92,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                     float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, particle.maxTime * 0.3f, particle.time, true));
                     float opacity = Utils.GetLerpValue(particle.maxTime * 0.8f, particle.maxTime * 0.3f, particle.time, true) * Math.Clamp(particle.scale, 0, 1);
 
-                    Main.spriteBatch.Draw(texture.Value, (particle.position - Main.screenPosition) / 2f, frame, new Color(255, 255, 255, 0) * opacity, particle.rotation - MathHelper.PiOver2, frame.Size() * 0.5f, particle.scale * grow * 0.5f, 0, 0);
+                    Color color = Lighting.GetColor(particle.position.ToTileCoordinates());
+                    Main.spriteBatch.Draw(texture.Value, (particle.position - Main.screenPosition) / 2f, frame, color * opacity, particle.rotation - MathHelper.PiOver2, frame.Size() * 0.5f, particle.scale * grow * 0.5f, 0, 0);
                 }
             }
 
@@ -103,14 +106,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         private void DrawSludge(On_Main.orig_DoDraw_Tiles_Solid orig, Main self)
         {
-            Texture2D baseTex = TextureAssets.Extra[193].Value;
-            Texture2D glowTex = TextureAssets.Extra[193].Value;
-            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SludgeEffect", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            effect.Parameters["uPosition"].SetValue(Main.screenPosition / 2f);
+            Texture2D baseTex = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DarkSludgeTexture").Value;
+            Texture2D glowTex = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DarkSludgeTextureGlow").Value;
+            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SludgeEffect", AssetRequestMode.ImmediateLoad).Value;
+            effect.Parameters["uPosition"].SetValue(Main.screenPosition * 0.5f);
             effect.Parameters["uBaseTexture"].SetValue(baseTex);
             effect.Parameters["uGlowTexture"].SetValue(glowTex);
-            effect.Parameters["uSize"].SetValue(Vector2.One * 10);
-            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.003f % 1f);
+            effect.Parameters["uSize"].SetValue(Vector2.One * 5);
+            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.002f % 1f);
             effect.Parameters["uScreenSize"].SetValue(Main.ScreenSize.ToVector2());
 
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
