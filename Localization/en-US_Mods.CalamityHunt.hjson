@@ -286,6 +286,11 @@ Items: {
 		DisplayName: Supreme Restoration Potion
 		Tooltip: ""
 	}
+
+	EntropicTorch: {
+		DisplayName: Entropic Torch
+		Tooltip: ""
+	}
 }
 
 NPCs: {
