@@ -4,6 +4,7 @@ using CalamityHunt.Common.Graphics.SlimeMonsoon;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Camera;
 using CalamityHunt.Common.Systems.Particles;
+using static CalamityHunt.Common.Systems.DifficultySystem;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Items.BossBags;
 using CalamityHunt.Content.Items.Lore;
@@ -224,7 +225,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            //target.AddBuff(BuffID.VortexDebuff, 480);
+            if (Main.zenithWorld && Main.masterMode && RevengeanceMode)
+            {
+                target.AddBuff(BuffID.VortexDebuff, 480);
+            }
         }
 
         private void ChangeWeather()
@@ -386,11 +390,23 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
+                            //if (Main.getGoodWorld)
+                            {
+                                NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 100, (int)NPC.Center.Y, ModContent.NPCType<Goozmite>());
+                                NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X + 100, (int)NPC.Center.Y, ModContent.NPCType<Goozmite>());
+                            }
+
                             currentSlime = (currentSlime + 1) % 4;
                             nextAttack[currentSlime]++;
 
                             for (int i = 0; i < nextAttack.Length; i++)
                                 nextAttack[i] = nextAttack[i] % 3;
+
+                            if (Main.zenithWorld)
+                            {
+                                currentSlime = Main.rand.Next(0, 4);
+                                nextAttack[currentSlime] = Main.rand.Next(0, 3);
+                            }
 
                             int[] slimeTypes = new int[]
                             {
@@ -712,13 +728,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                         case (int)AttackList.DrillDash:
 
-                            int dashCount = 4;
-                            int dashTime = 110;
-                            if (Main.expertMode)
-                            {
-                                dashCount = 6;
-                                dashTime = 90;
-                            }
+                            int dashCount = (int)DifficultyBasedValue(4, 5, 6, 7);
+                            int dashTime = (int)DifficultyBasedValue(110, 100, 90, 80);
 
                             if (Time >= 0)
                             {
@@ -772,7 +783,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             if (Time > dashTime * dashCount + 20)
                             {
                                 Time = -30;
-                                Attack = (int)AttackList.Absorption;
+                                Attack = RevengeanceMode ? (int)AttackList.Absorption : (int)AttackList.GaussRay;
                             }
 
                             NPC.damage = GetDamage(6, 0.9f + Time % dashTime / dashTime * 0.2f);
@@ -789,11 +800,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             int waitTimeMultiplier = 7;
                             int waitTime = goozmiteCount * waitTimeMultiplier;
 
-                            if (Main.expertMode)
-                            {
-                                goozmiteCount = 12;
-                                killTime = 750;
-                            }
+                            goozmiteCount += (int)DifficultyBasedValue(0, 3, 6, 9);
+                            killTime -= (int)DifficultyBasedValue(0, 50, 100, 150);
 
                             if (Time < 10)
                             {
@@ -1633,9 +1641,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time % 170 > 130)
                     {
-                        int freq = 10;
-                        if (Main.expertMode)
-                            freq = 7;
+                        int freq = (int)DifficultyBasedValue(10, 9, 7, 6);
                         if ((Time % 170) % freq == 0)
                         {
                             SoundEngine.PlaySound(fireballSound, NPC.Center);
@@ -1672,9 +1678,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case SortedProjectileAttackTypes.DrillDash:
 
-                    int dashTime = 110;
-                    if (Main.expertMode)
-                        dashTime = 90;
+                    int dashTime = (int)DifficultyBasedValue(110, 100, 90, 80);
 
                     if (Time % dashTime > 24)
                     {
