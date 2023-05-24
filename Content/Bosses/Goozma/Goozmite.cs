@@ -99,6 +99,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (TimeUntilDeath < 5)
                 TimeUntilDeath = 400;
 
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                NPC.buffImmune[ModLoader.GetMod("CalamityMod").Find<ModBuff>("MiracleBlight").Type] = true;
+            }
+
             if (NPC.ai[3] != -1)
             {
                 if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active && n.ai[2] != 3))
