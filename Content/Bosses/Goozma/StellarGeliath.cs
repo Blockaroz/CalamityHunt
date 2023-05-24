@@ -52,11 +52,21 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             database.FindEntryByNPCID(Type).UIInfoProvider = new HighestOfMultipleUICollectionInfoProvider(new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[ModContent.NPCType<Goozma>()], true));
-            bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.StellarGeliath"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
-                ModLoader.HasMod("CalamityMod") ? null : BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
             });
+            }
+            else
+            {
+                bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
+                new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.StellarGeliath"),
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Sky,
+            });
+            }
         }
 
         public override void SetDefaults()
@@ -82,7 +92,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
                 calamity.Call("SetDefenseDamageNPC", NPC, true);
-                SpawnModBiomes = new int[1] { calamity.Find<ModBiome>("AbovegroundAstralBiome").Type };
+                ModBiome astral = calamity.Find<ModBiome>("AbovegroundAstralBiome");
+                SpawnModBiomes = new int[1] { astral.Type };
             }
         }
 
