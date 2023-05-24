@@ -20,6 +20,8 @@ namespace CalamityHunt.Content.Items.Placeable
 			Item.ResearchUnlockCount = 100;
 
 			ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.ShimmerTorch;
+			ItemID.Sets.Torches[Item.type] = true;
+			ItemID.Sets.WaterTorches[Item.type] = true;
 		}
 
 		public override void SetDefaults()
@@ -52,12 +54,6 @@ namespace CalamityHunt.Content.Items.Placeable
 		public override void PostUpdate()
 		{
 			Lighting.AddLight(Item.Center, rainbowGlow.ToVector3());
-		}
-
-		public override void AutoLightSelect(ref bool dryTorch, ref bool wetTorch, ref bool glowstick)
-		{
-			dryTorch = true; // This makes our item eligible for being selected with smart select at a short distance when not underwater.
-			wetTorch = true;
 		}
 
 		// Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
