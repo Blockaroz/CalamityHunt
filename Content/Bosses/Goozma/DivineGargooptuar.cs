@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using static CalamityHunt.Common.Systems.DifficultySystem;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Gores.CrystalShieldGores;
 using CalamityHunt.Content.Particles;
@@ -207,10 +208,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void PrismDestroyer()
         {
-            int danceCount = 3;
-            int prismCount = 3;
-            if (Main.expertMode)
-                prismCount = 5;
+            int prismCount = (int)DifficultyBasedValue(3, 4, 5);
+            int danceCount = (int)DifficultyBasedValue(3, death: 4);
 
             NPC.rotation = NPC.velocity.X * 0.02f;
 
@@ -278,12 +277,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void CrystalStorm()
         {
-            int lengthOfAttack = 240;
-            if (Main.expertMode)
-                lengthOfAttack = 360;
-            int crystalFrequency = 1;
-            if (Main.expertMode)
-                crystalFrequency = 3;
+            int crystalFrequency = (int)DifficultyBasedValue(1, 2, 3);
+            int lengthOfAttack = (int)DifficultyBasedValue(240, 300, 360, 420);
 
             if (Time < 40)
             {
@@ -316,7 +311,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (Time == 50)
                 {
                     NPC.velocity = Vector2.UnitY * 5f;
-                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Host.Center, Host.DirectionTo(Target.Center - Vector2.UnitY * 15).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<PixieBall>(), 0, 0, ai1: 15, ai2: -1);
+                    int damage = Main.zenithWorld ? 5 : 0;
+                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Host.Center, Host.DirectionTo(Target.Center - Vector2.UnitY * 15).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<PixieBall>(), damage, 0, ai1: 15, ai2: -1);
 
                     //if (!Main.dedServ)
                     //{

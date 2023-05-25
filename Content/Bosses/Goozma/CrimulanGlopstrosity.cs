@@ -1,6 +1,7 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Particles;
+using static CalamityHunt.Common.Systems.DifficultySystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -261,9 +262,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void SlamRain()
         {
-            int ceilingCount = 2;
-            if (Main.expertMode)
-                ceilingCount = 3;
+            int ceilingCount = (int)DifficultyBasedValue(2, 2, 3, 4);
 
             if (Time <= ceilingCount * 170)
             {
@@ -328,9 +327,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                         if (localTime == 100)
                         {
-                            int extension = 10;
-                            if (Main.expertMode)
-                                extension = 16;
+                            int extension = (int)DifficultyBasedValue(10, 12, 16, 18, 20);
 
                             Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), GetDamage(2), 0, ai1: 2500);
 
@@ -428,10 +425,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time == waitTime + 60)
                     {
-                        int count = 12;
-                        int time = 6;
-                        if (Main.expertMode)
-                            time = 4;
+                        int count = (int)DifficultyBasedValue(12, death: 16);
+                        int time = (int)DifficultyBasedValue(6, 5, 4, 3);
 
                         for (int i = 0; i < count; i++)
                         {
@@ -528,13 +523,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void EndlessChase()
         {
-            int jumpCount = 8;
-            int jumpTime = 50;
-            if (Main.expertMode)
-            {
-                jumpCount = 10;
-                jumpTime = 40;
-            }
+            int jumpCount = (int)DifficultyBasedValue(8, 9, 10, 11, 12);
+            int jumpTime = (int)DifficultyBasedValue(50, 45, 40, 35);
 
             if (Time < 35)
                 squishFactor = new Vector2(1f + (float)Math.Pow(Utils.GetLerpValue(5, 35, Time, true), 2) * 0.5f, 1f - (float)Math.Pow(Utils.GetLerpValue(5, 35, Time, true), 2) * 0.5f);

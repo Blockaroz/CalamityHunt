@@ -136,12 +136,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 for (int i = 0; i < 80; i++)
                     Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(15, 15), 100, Color.Black, 2f).noGravity = true;
 
-
-                for (int i = 0; i < 16; i++)
+                int dartCount = (int)Common.Systems.DifficultySystem.DifficultyBasedValue(8, 12, 16, 18);
+                for (int i = 0; i < dartCount; i++)
                 {
-                    Projectile dart = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(20, 0).RotatedBy(MathHelper.TwoPi / 16f * i), Type, Projectile.damage, 0, ai1: 1);
+                    Projectile dart = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(20, 0).RotatedBy(MathHelper.TwoPi / dartCount * i), Type, Projectile.damage, 0, ai1: 1);
                     dart.ai[1] = 1;
-                    dart.localAI[0] = Projectile.localAI[0] + i / 16f * 90f;
+                    dart.localAI[0] = Projectile.localAI[0] + i / dartCount * 90f;
                 }
 
                 SoundStyle dartSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDartShoot", 1, 2);

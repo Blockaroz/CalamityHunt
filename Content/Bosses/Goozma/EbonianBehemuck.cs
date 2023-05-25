@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Content.Bosses.Goozma.Projectiles;
+using static CalamityHunt.Common.Systems.DifficultySystem;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -222,13 +223,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void ToxicBubbles()
         {
-            int jumpCount = 3;
-            int jumpTime = 120;
-            if (Main.expertMode)
-            {
-                jumpCount = 5;
-                jumpTime = 70;
-            }
+            int jumpCount = (int)DifficultyBasedValue(3, 4, 5, 6);
+            int jumpTime = (int)DifficultyBasedValue(120, 100, 70, 60);
 
             if (Time < 40)
             {
@@ -374,13 +370,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void RockPillar()
         {
-            int spikeCount = 2;
-            int spikeTime = 140;
-            if (Main.expertMode)
-            {
-                spikeCount = 3;
-                spikeTime = 120;
-            }
+            int spikeCount = (int)DifficultyBasedValue(2, 3, 3, 4);
+            int spikeTime = (int)DifficultyBasedValue(140, 130, 120, 120);
 
             if (Time < 61)
             {
