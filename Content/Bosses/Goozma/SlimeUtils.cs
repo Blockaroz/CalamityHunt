@@ -62,11 +62,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (Main.drunkWorld)
                     return ColorsForFunnyWorlds(GoozmaColorType);                
                 
-                if (Main.getGoodWorld)
-                    return GoozmaColorUtils.Masterful;                
-                
                 if ((Main.getGoodWorld && Main.masterMode) || Main.zenithWorld)
                     return GoozmaColorUtils.Nuclear;
+
+                else if (Main.getGoodWorld)
+                    return GoozmaColorUtils.Masterful;
 
                 if (Main.notTheBeesWorld)
                     return GoozmaColorUtils.Honey;

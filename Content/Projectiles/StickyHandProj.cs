@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityHunt.Common.Players;
+using CalamityHunt.Content.Items.Misc;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -59,17 +62,19 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Projectile.ai[0] == 0f)
             {
-                Projectile.extraUpdates = 2;
+                Projectile.extraUpdates = 1;
 
-                if (distance > GrappleRange()) 
+                if (distance > GrappleRange())
+                {
                     Projectile.ai[0] = 1f;
+                    Projectile.ai[1] = 0f;
+                }
 
                 GrappleTile();
 
             }
             else if (Projectile.ai[0] == 1f)
             {
-                Projectile.ai[1]++;
                 Projectile.extraUpdates = 2;
 
                 if (distance < 24f)
@@ -82,15 +87,41 @@ namespace CalamityHunt.Content.Projectiles
             else if (Projectile.ai[0] == 2f)
             {
                 if (distance > GrappleRange() * 2f)
+                {
                     Projectile.ai[0] = 1f;
+                    Projectile.ai[1] = 0f;
+                }
 
                 Point tile = Projectile.Center.ToTileCoordinates();
                 if (Main.tile[tile] == null)
                     Main.tile[tile.X, tile.Y].ClearEverything();
 
-                if (!CanLatchToTile(tile.X, tile.Y))
+                if (!CanLatchToTile(tile.X, tile.Y) || player.controlJump)
                     Projectile.ai[0] = 1f;
+
+                if (distance < 32f)
+                    Projectile.Kill();
+
+                player.GetModPlayer<MovementModifyPlayer>().stickyHand = true;
+
+                float factor = 1f;
+                if (player.controlHook)
+                {
+                    player.velocity = Vector2.Lerp(player.velocity, player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero), 0.015f);
+                    factor = 2f;
+                }
+
+                player.velocity += player.DirectionTo(Projectile.Center) * 0.5f * factor;
+                player.ChangeDir(player.velocity.X > 0 ? 1 : -1);
+
+                Vector2 normVelocity = player.velocity.SafeNormalize(Vector2.Zero);
+                normVelocity *= player.GetModPlayer<MovementModifyPlayer>().preHookVelocity * 0.99f;
+                float circleLength = player.GetModPlayer<MovementModifyPlayer>().preHookVelocity.Length() * 20f;
+
+                player.velocity = Vector2.Lerp(player.velocity, normVelocity, 0.02f);
             }
+
+            Projectile.ai[1]++;
 
             return false;
         }
@@ -119,7 +150,7 @@ namespace CalamityHunt.Content.Projectiles
                 yBottomLimit = Main.maxTilesY;
 
             Player player = Main.player[Projectile.owner];
-            Vector2 tileWorldCoordinates = Vector2.Zero;
+            Vector2 tileWorldCoordinates = default;
             for (int l = xLeftLimit; l < xRightLimit; l++)
             {
                 for (int m = yTopLimit; m < yBottomLimit; m++)
@@ -141,7 +172,6 @@ namespace CalamityHunt.Content.Projectiles
 
                     int grappleCount = 0;
                     int projID = -1;
-                    int projTime = 100000;
                     int maxGrappleCount = 1;
 
                     NumGrappleHooks(player, ref maxGrappleCount);
@@ -151,13 +181,10 @@ namespace CalamityHunt.Content.Projectiles
                         if (Main.projectile[proj].active && Main.projectile[proj].owner == Projectile.owner && Main.projectile[proj].type == ModContent.ProjectileType<StickyHandProj>())
                         {
                             if (Main.projectile[proj].whoAmI != Projectile.whoAmI)
-                            {
                                 projID = proj;
-                                projTime = Main.projectile[proj].timeLeft;
-                            }
 
                             grappleCount++;
-                            if (grappleCount > maxGrappleCount)
+                            if (grappleCount > 1)
                                 Main.projectile[projID].ai[0] = 1f;
 
                         }
@@ -165,8 +192,7 @@ namespace CalamityHunt.Content.Projectiles
 
                     WorldGen.KillTile(l, m, fail: true, effectOnly: true);
                     SoundEngine.PlaySound(SoundID.Dig, new Vector2(l, m));
-                    Projectile.velocity.X = 0f;
-                    Projectile.velocity.Y = 0f;
+                    Projectile.velocity = Vector2.Zero;
                     Projectile.ai[0] = 2f;
                     Projectile.position.X = l * 16 + 8 - Projectile.width / 2;
                     Projectile.position.Y = m * 16 + 8 - Projectile.height / 2;
@@ -183,7 +209,10 @@ namespace CalamityHunt.Content.Projectiles
                 }
 
                 if (Projectile.ai[0] == 2f)
+                {
+                    Projectile.ai[1] = 0f;
                     break;
+                }
             }
         }
 
@@ -214,13 +243,13 @@ namespace CalamityHunt.Content.Projectiles
             speed = 15f;
         }
 
-        public override float GrappleRange() => 500f;
+        public override float GrappleRange() => 700f;
 
         private bool CanLatchToTile(int x, int y)
         {
             Tile theTile = Main.tile[x, y];
             bool vanilla = Main.tileSolid[theTile.TileType] | (theTile.TileType == 314);
-            vanilla &= !theTile.IsActuated;
+            vanilla &= theTile.HasUnactuatedTile;
 
             if (GrappleCanLatchOnTo(Main.player[Projectile.owner], x, y) is bool modOverride)
                 return modOverride;
@@ -228,8 +257,13 @@ namespace CalamityHunt.Content.Projectiles
             return vanilla;
         }
 
+        public override bool PreDrawExtras() => false;
+
         public override bool PreDraw(ref Color lightColor)
         {
+            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Rectangle frame = texture.Frame(1, 2, 0, (Projectile.ai[0] == 2f ? 0 : 1));
+
             return false;
         }
     }
