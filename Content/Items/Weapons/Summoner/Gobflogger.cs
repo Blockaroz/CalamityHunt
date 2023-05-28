@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Content.Items.Rarities;
+﻿using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,7 +36,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Texture2D glow = ModContent.Request<Texture2D>(Texture + "Glow").Value;
-            Color glowColor = Color.CornflowerBlue;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).Value;
             glowColor.A /= 2;
             spriteBatch.Draw(glow, position, frame, glowColor, 0, origin, scale, 0, 0);
             spriteBatch.Draw(glow, position, frame, glowColor, 0, origin, scale, 0, 0);
@@ -44,7 +45,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Texture2D glow = ModContent.Request<Texture2D>(Texture + "Glow").Value;
-            Color glowColor = Color.CornflowerBlue;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).Value;
             glowColor.A /= 2;
             spriteBatch.Draw(glow, Item.Center - Main.screenPosition, glow.Frame(), glowColor, rotation, Item.Size * 0.5f, scale, 0, 0);
             spriteBatch.Draw(glow, Item.Center - Main.screenPosition, glow.Frame(), glowColor, rotation, Item.Size * 0.5f, scale, 0, 0);

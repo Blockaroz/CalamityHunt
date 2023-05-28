@@ -210,8 +210,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     for (int i = 0; i < 3; i++)
                     {
                         Vector2 gooVelocity = new Vector2(1).RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(0.6f);
-                        Particle hue = Particle.NewParticle(Particle.ParticleType<GooBurst>(), NPC.Center + gooVelocity, gooVelocity, Color.White, 0.5f + Main.rand.NextFloat(0.5f));
-                        hue.data = NPC.localAI[0];
+                        Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), NPC.Center + gooVelocity, gooVelocity, Color.White, 0.5f + Main.rand.NextFloat(0.5f));
+                        goo.data = NPC.localAI[0];
                     }
 
                     NPC.active = false;

@@ -54,6 +54,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(GoozColorsVector3[6]),
             new Color(GoozColorsVector3[7]),
         };
+                
+        
+        public static Color[] GoozOilColors => new Color[]
+        {
+            new Color(GoozmaColorUtils.Oil[3]),
+            new Color(GoozmaColorUtils.Oil[4]),
+            new Color(GoozmaColorUtils.Oil[5]),
+            new Color(GoozmaColorUtils.Oil[6]),
+            new Color(GoozmaColorUtils.Oil[7]),
+        };
 
         public static Vector3[] GoozColorsVector3
         {
@@ -82,7 +92,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
             switch (GoozmaColorType)
             {
                 default:
-                    return GoozmaColorUtils.Oil;
+                    return GoozmaColorUtils.Oil;                
+                case 0:
+                    return GoozmaColorUtils.Nuclear;
+                case 1:
+                    return GoozmaColorUtils.Gold;
+                case 2:
+                    return GoozmaColorUtils.DarkEnergy;
             }
         }
 

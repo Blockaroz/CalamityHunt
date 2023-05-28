@@ -32,8 +32,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             List<Vector2> points = new List<Vector2>();
             Projectile.FillWhipControlPoints(Projectile, points);
 
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] * 2f - Projectile.WhipSettings.Segments * 5f);
             float scale = 0.1f + Utils.GetLerpValue(-150, 250, points[points.Count - 1].Distance(Main.player[Projectile.owner].Center) * 0.5f);
-            Dust light = Dust.NewDustPerfect(points[points.Count - 3] + Main.rand.NextVector2Circular(12, 12), DustID.AncientLight, Projectile.velocity * Main.rand.NextFloat(5f) + Main.rand.NextVector2Circular(12, 12), 0, Color.CornflowerBlue, scale * (1f + Main.rand.NextFloat()));
+            Dust light = Dust.NewDustPerfect(points[points.Count - 3] + Main.rand.NextVector2Circular(12, 12), DustID.AncientLight, Projectile.velocity * Main.rand.NextFloat(5f) + Main.rand.NextVector2Circular(12, 12), 0, glowColor, scale * (1f + Main.rand.NextFloat()));
             light.noGravity = true;
             light.noLightEmittence = true;
                       
@@ -42,6 +43,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Dust dark = Dust.NewDustPerfect(points[points.Count - 3] + Main.rand.NextVector2Circular(12, 12), DustID.TintableDust, Projectile.velocity * Main.rand.NextFloat(5f) + Main.rand.NextVector2Circular(7, 7), 50, Color.Black, scale * (1f + Main.rand.NextFloat()));
                 dark.noGravity = true;
             }
+
+            Projectile.localAI[0] = Main.GlobalTimeWrappedHourly * 170f;
 
             return true;
         }
@@ -68,9 +71,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 float rotation = change.ToRotation() - MathHelper.PiOver2;
                 Vector2 scale = new Vector2(1, (change.Length() + 4) / frame.Height);
 
-                Color glowColor = Color.Lerp(Color.CornflowerBlue, Color.CornflowerBlue, (float)i / points.Count);
-                glowColor.A /= 3;
-                Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, Color.Black, rotation, origin, scale, 0, 0);
+                Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 5f);
+                glowColor.A /= 2;
+                Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, glowColor, rotation, origin, scale, 0, 0);
 
                 drawPosition += change;
             }
@@ -113,7 +116,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 float rotation = change.ToRotation() - MathHelper.PiOver2;
                 Rectangle frame = texture.Frame(1, 5, 0, frameY);
 
-                Color glowColor = Color.Lerp(Color.CornflowerBlue, Color.AliceBlue, (float)i / points.Count * 0.5f);
+                Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 5f);
                 glowColor.A /= 2;
                 Main.EntitySpriteDraw(glow, drawPosition - Main.screenPosition, frame, Color.Black * 0.5f, rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale * 1.1f, spriteEffects, 0);
                 Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, frame, Lighting.GetColor(points[i].ToTileCoordinates()), rotation, frame.Size() * new Vector2(0.5f, 0.4f), scale, spriteEffects, 0);

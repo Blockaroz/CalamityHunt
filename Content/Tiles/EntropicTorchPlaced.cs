@@ -22,7 +22,7 @@ namespace CalamityHunt.Content.Tiles
 	public class EntropicTorchPlaced : ModTile
 	{
 		private Asset<Texture2D> flameTexture;
-		public Color rainbowGlow => new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 100f);
+		public Color rainbowGlow => new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 100f);
 
 		public override void SetStaticDefaults()
 		{
