@@ -106,7 +106,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 case 5:
                     return GoozmaColorUtils.DarkEnergy;
                 case 6:
-                    return GoozmaColorUtils.SquidGirl;
+                    return GoozmaColorUtils.Frigid;
                 case 7:
                     return GoozmaColorUtils.Tritanopic;
                 case 8:

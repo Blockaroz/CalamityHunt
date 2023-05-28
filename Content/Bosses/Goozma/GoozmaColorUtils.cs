@@ -96,7 +96,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(0, 0, 0).ToVector3()
         };
 
-        public static Vector3[] Frigid = new Vector3[] //white and blue; oroginally squid girl
+        public static Vector3[] Frigid = new Vector3[] //white and blue; formerly squid girl
         {
             new Color(0, 0, 0).ToVector3(),
             new Color(43, 109, 196).ToVector3(),
