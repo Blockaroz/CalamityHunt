@@ -296,6 +296,11 @@ Items: {
 		DisplayName: Sticky Hand
 		Tooltip: ""
 	}
+
+	Trailblazer: {
+		DisplayName: Trailblazer
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -359,6 +364,7 @@ Projectiles: {
 	DarkSludge.DisplayName: Dark Sludge
 	SludgeLighter.DisplayName: Sludge Lighter
 	StickyHandProj.DisplayName: Sticky Hand Proj
+	TrailblazerFlame.DisplayName: Trailblazer Flame
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

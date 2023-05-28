@@ -8,13 +8,8 @@ using Microsoft.Xna.Framework;
 
 namespace CalamityHunt.Content.Items.Weapons.Ranged
 {
-    internal class SludgeShaker : ModItem
+    public class SludgeShaker : ModItem
     {
-		public override void SetStaticDefaults()
-		{
-			Item.ResearchUnlockCount = 1;
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 116;
