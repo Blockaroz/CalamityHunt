@@ -21,8 +21,8 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 			Item.useTime = 3;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 10f;
-			SoundStyle useSound = SoundID.DD2_DarkMageSummonSkeleton;
-			useSound.Pitch = -0.5f;
+			SoundStyle useSound = SoundID.DD2_DrakinShot;
+			useSound.Pitch = 0.1f;
 			useSound.MaxInstances = 0;
 			Item.UseSound = useSound;
 			Item.channel = true;
