@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Players
@@ -11,6 +12,7 @@ namespace CalamityHunt.Common.Players
     public class MovementModifyPlayer : ModPlayer
     {
         public bool stickyHand;
+        public int stickyHandTime;
         public Vector2 preHookVelocity;
 
         public override void PostUpdateRunSpeeds()
@@ -26,11 +28,19 @@ namespace CalamityHunt.Common.Players
             else
                 preHookVelocity = Player.velocity;
 
+            if (stickyHandTime > 0)
+            {
+                Player.gravity *= Utils.GetLerpValue(30, 0, stickyHandTime, true);
+                Player.runSlowdown *= Utils.GetLerpValue(30, 0, stickyHandTime, true);
+            }
+
             stickyHand = false;
         }
 
         public override void ResetEffects()
         {
+            if (stickyHandTime > 0)
+                stickyHandTime--;
         }
     }
 }

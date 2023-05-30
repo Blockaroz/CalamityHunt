@@ -52,7 +52,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ai[0] > 0 && n.type == ModContent.ProjectileType<DarkSludge>()))
             {
                 Texture2D texture = ModContent.Request<Texture2D>(projectile.ModProjectile.Texture).Value;
-                projectile.frame = (projectile.ai[1] == 1 ? 2 : 0) + (int)projectile.localAI[0];
+                projectile.frame = (projectile.ai[1] == 1 || projectile.ai[2] > -1 ? 2 : 0) + (int)projectile.localAI[0];
                 Rectangle frame = texture.Frame(4, 1, projectile.frame, 0);
 
                 Vector2 squish = new Vector2(1f - projectile.velocity.Length() * 0.01f, 1f + projectile.velocity.Length() * 0.01f) * 0.8f;

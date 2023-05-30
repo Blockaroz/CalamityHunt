@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CalamityHunt.Content.Buffs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
@@ -157,6 +158,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, endPoint, 50f * small * (1f - Time / 30f), ref discard))
                 return Time > 0 && Time < 20;
             return false;
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            target.AddBuff(ModContent.BuffType<FusionBurn>(), 180);
         }
 
         public override bool PreDraw(ref Color lightColor)

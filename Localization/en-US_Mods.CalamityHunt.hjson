@@ -301,6 +301,11 @@ Items: {
 		DisplayName: Trailblazer
 		Tooltip: ""
 	}
+
+	SlimeCane: {
+		DisplayName: Slime Cane
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -331,8 +336,8 @@ Projectiles: {
 	EbonianBehemuckClone.DisplayName: Ebonian Behemuck Clone
 	HolyExplosion.DisplayName: Holy Explosion
 	CrimulanSmasher.DisplayName: Crimulan Smasher
-	GaussRay.DisplayName: Gauss Ray
-	GoozmaDeathGodrays.DisplayName: Goozma Death Godray
+	FusionRay.DisplayName: Fusion Ray
+	GoozmaDeathGodrays.DisplayName: Godrays
 	BloatBabyProj.DisplayName: Bloat Baby
 	ShootingStar.DisplayName: Shooting Star
 	GoozmagaBomb.DisplayName: Planetary Glob
@@ -397,6 +402,11 @@ Buffs: {
 	Absorption: {
 		DisplayName: Absorption
 		Description: Whip speed is increased by just a tiny bit, just a tiny little bit, it's not increased by much, you might not even notice it because of how small it is
+	}
+
+	FusionBurn: {
+		DisplayName: Fusion Burn
+		Description: Mods.CalamityHunt.Buffs.FusionBurn.Description
 	}
 }
 

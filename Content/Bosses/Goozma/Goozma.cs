@@ -33,6 +33,11 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using CalamityHunt.Content.Items.Weapons.Melee;
+using CalamityHunt.Content.Items.Weapons.Rogue;
+using CalamityHunt.Content.Items.Weapons.Ranged;
+using CalamityHunt.Content.Items.Weapons.Magic;
+using CalamityHunt.Content.Items.Weapons.Summoner;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -92,6 +97,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.npcSlots = 10f;
             NPC.aiStyle = -1;
             NPC.dontTakeDamage = true;
+
             if (!Main.dedServ)
             {
                 Music = MusicLoader.GetMusicSlot($"{nameof(CalamityHunt)}/Assets/Music/GlutinousArbitration");
@@ -115,6 +121,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 nPCsToDrawCordOn.Add(NPC);
             }
+
+            SlimeUtils.GoozmaColorType = Main.rand.Next(23);
         }
 
         public int Music2;
@@ -166,9 +174,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>()));
-                       
-            //Weapon
-            //classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>()));
+            
+            //Weapon 1
+            classic.OnSuccess(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<Goozmaga>()));
         }
 
         public ref float Time => ref NPC.ai[0];
@@ -189,7 +197,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             BurstLightning,
             Absorption,
             DrillDash,
-            GaussRay
+            FusionRay
         }
 
         public override void OnSpawn(IEntitySource source)
@@ -783,7 +791,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             if (Time > dashTime * dashCount + 20)
                             {
                                 Time = -30;
-                                Attack = RevengeanceMode ? (int)AttackList.Absorption : (int)AttackList.GaussRay;
+                                Attack = RevengeanceMode ? (int)AttackList.Absorption : (int)AttackList.FusionRay;
                             }
 
                             NPC.damage = GetDamage(6, 0.9f + Time % dashTime / dashTime * 0.2f);
@@ -855,16 +863,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 Time = 0;
                                 
                                 if (NPC.life > (NPC.lifeMax * 0.15f))
-                                    Attack = (int)AttackList.GaussRay;
+                                    Attack = (int)AttackList.FusionRay;
                                 else
                                     Attack = (int)AttackList.BurstLightning;
                             }
 
                             break;
 
-                        case (int)AttackList.GaussRay:
+                        case (int)AttackList.FusionRay:
 
-                            SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.GaussRay);
+                            SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.FusionRay);
 
                             Fly();
 
@@ -890,7 +898,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         NPC.defense = 200;
                         NPC.takenDamageMultiplier = 0.9f;
 
-                        if (Attack != (int)AttackList.GaussRay)
+                        if (Attack != (int)AttackList.FusionRay)
                         {
                             Time = 0;
                             Phase = -2;
@@ -924,7 +932,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         goozmite.life = goozmite.lifeMax;
                     }
 
-                    SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.GaussRay);
+                    SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.FusionRay);
 
                     break;
 
@@ -1353,7 +1361,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             BurstLightning,
             Absorption,
             DrillDash,
-            GaussRay
+            FusionRay
         }
 
         private void HandleLoopedSounds()
@@ -1475,8 +1483,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             fireballSound.MaxInstances = 0;
             fireballSound.PitchVariance = 0.15f;            
 
-            SoundStyle gaussSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShot", 1, 2);
-            gaussSound.MaxInstances = 0;
+            SoundStyle fusionSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShot", 1, 2);
+            fusionSound.MaxInstances = 0;
 
             switch (type)
             {
@@ -1723,16 +1731,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     break;
                 
-                case SortedProjectileAttackTypes.GaussRay:
+                case SortedProjectileAttackTypes.FusionRay:
 
                     if (Phase == -2)
                     {
                         if (Time == 2)
                         {
-                            Projectile gaussRay = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<GaussRay>(), GetDamage(7), 0);
-                            gaussRay.ai[0] = 200;
-                            gaussRay.ai[1] = 1;
-                            gaussRay.ai[2] = NPC.whoAmI;
+                            Projectile fusionRay = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<FusionRay>(), GetDamage(7), 0);
+                            fusionRay.ai[0] = 200;
+                            fusionRay.ai[1] = 1;
+                            fusionRay.ai[2] = NPC.whoAmI;
                         }
                     }
                     else
@@ -1768,8 +1776,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                         if (Time == 250)
                         {
-                            Projectile gaussRay = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<GaussRay>(), GetDamage(7), 0);
-                            gaussRay.ai[2] = NPC.whoAmI;
+                            Projectile fusionRay = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<FusionRay>(), GetDamage(7), 0);
+                            fusionRay.ai[2] = NPC.whoAmI;
                         }
 
                         if (Time > 500)
@@ -1804,7 +1812,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 4 => 60, //static
                 5 => 50, //bloat
                 6 => 60, //drill dash
-                7 => 150, //gauss ray
+                7 => 150, //fusion ray
                 _ => 0
             };
 

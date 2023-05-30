@@ -62,7 +62,7 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Projectile.ai[0] == 0f)
             {
-                Projectile.extraUpdates = 1;
+                Projectile.extraUpdates = 2;
 
                 if (distance > GrappleRange())
                 {
@@ -70,12 +70,14 @@ namespace CalamityHunt.Content.Projectiles
                     Projectile.ai[1] = 0f;
                 }
 
+                Projectile.ai[2] = player.Distance(Projectile.Center);
+
                 GrappleTile();
 
             }
             else if (Projectile.ai[0] == 1f)
             {
-                Projectile.extraUpdates = 2;
+                Projectile.extraUpdates = 4;
 
                 if (distance < 24f)
                     Projectile.Kill();
@@ -99,26 +101,13 @@ namespace CalamityHunt.Content.Projectiles
                 if (!CanLatchToTile(tile.X, tile.Y) || player.controlJump)
                     Projectile.ai[0] = 1f;
 
-                if (distance < 32f)
-                    Projectile.Kill();
-
                 player.GetModPlayer<MovementModifyPlayer>().stickyHand = true;
 
-                float factor = 1f;
-                if (player.controlHook)
-                {
-                    player.velocity = Vector2.Lerp(player.velocity, player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero), 0.015f);
-                    factor = 2f;
-                }
+                player.velocity += player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.5f;
+                player.velocity = Vector2.Lerp(player.velocity, player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * (player.velocity.Length() + 0.1f), Utils.GetLerpValue(30, 200, Projectile.ai[1], true) * 0.1f);
 
-                player.velocity += player.DirectionTo(Projectile.Center) * 0.5f * factor;
-                player.ChangeDir(player.velocity.X > 0 ? 1 : -1);
-
-                Vector2 normVelocity = player.velocity.SafeNormalize(Vector2.Zero);
-                normVelocity *= player.GetModPlayer<MovementModifyPlayer>().preHookVelocity * 0.99f;
-                float circleLength = player.GetModPlayer<MovementModifyPlayer>().preHookVelocity.Length() * 20f;
-
-                player.velocity = Vector2.Lerp(player.velocity, normVelocity, 0.02f);
+                if (distance < 64f)
+                    Projectile.Kill();
             }
 
             Projectile.ai[1]++;
@@ -243,7 +232,13 @@ namespace CalamityHunt.Content.Projectiles
             speed = 15f;
         }
 
-        public override float GrappleRange() => 700f;
+        public override float GrappleRange()
+        {
+            if (Projectile.ai[0] == 0f)
+                return 900f;
+
+            return 500f;
+        }
 
         private bool CanLatchToTile(int x, int y)
         {
@@ -257,12 +252,14 @@ namespace CalamityHunt.Content.Projectiles
             return vanilla;
         }
 
-        public override bool PreDrawExtras() => false;
+        public override bool PreDrawExtras() => true;
 
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
             Rectangle frame = texture.Frame(1, 2, 0, (Projectile.ai[0] == 2f ? 0 : 1));
+
+
 
             return false;
         }

@@ -22,14 +22,15 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 10f;
 			SoundStyle useSound = SoundID.DD2_DrakinShot;
-			useSound.Pitch = 0.1f;
+			useSound.Pitch = 0.5f;
 			useSound.MaxInstances = 0;
 			Item.UseSound = useSound;
 			Item.channel = true;
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<TrailblazerFlame>();
-			Item.shootSpeed = 12f;
+			Item.shootSpeed = 8f;
 			Item.rare = ModContent.RarityType<VioletRarity>();
+			Item.useAmmo = AmmoID.Gel;
             if (ModLoader.HasMod("CalamityMod"))
             {
                 ModRarity r;
@@ -40,6 +41,11 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             Item.DamageType = DamageClass.Ranged;
 		}
 
-		public override Vector2? HoldoutOffset() => new Vector2(-24f, -2f);
+        public override bool CanConsumeAmmo(Item ammo, Player player)
+        {
+			return player.itemAnimation == Item.useAnimation;
+        }
+
+        public override Vector2? HoldoutOffset() => new Vector2(-24f, -2f);
     }
 }

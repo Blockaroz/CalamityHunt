@@ -90,7 +90,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             float trailStrength = Phase > 1 ? 1.3f : 0.5f;
 
-            if (!(Phase == 2 && Attack == (int)AttackList.GaussRay && Time > 520))
+            if (!(Phase == 2 && Attack == (int)AttackList.FusionRay && Time > 520))
                 drawVelocity = NPC.velocity;
 
             //FlipShadersOnOff(spriteBatch, null, true);

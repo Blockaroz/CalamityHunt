@@ -133,9 +133,9 @@ namespace CalamityHunt.Common.Systems
                     sound.Stop();
             }
             
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GaussRay>()))
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>()))
             {
-                bool active = SoundEngine.TryGetActiveSound(GaussRay.laserSound, out ActiveSound sound);
+                bool active = SoundEngine.TryGetActiveSound(FusionRay.laserSound, out ActiveSound sound);
                 if (active)
                     sound.Stop();
             }            

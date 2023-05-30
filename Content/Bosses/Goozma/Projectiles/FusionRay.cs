@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
@@ -20,7 +21,7 @@ using static Humanizer.In;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class GaussRay : ModProjectile
+    public class FusionRay : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -177,7 +178,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public void HandleSound()
         {
-            SoundStyle raySound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaGaussRayLoop");
+            SoundStyle raySound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaFusionRayLoop");
             raySound.IsLooped = true;
 
             pitch = MathHelper.SmoothStep(0.1f, 1f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.5f;
@@ -211,6 +212,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             return false;
         }
 
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            target.AddBuff(ModContent.BuffType<FusionBurn>(), 180);
+        }
+
         public override void Load()
         {
             On_Main.UpdateAudio += QuietMusic;
@@ -220,9 +226,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             orig(self);
 
-            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GaussRay>()))
+            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>()))
             {
-                Projectile projectile = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<GaussRay>());
+                Projectile projectile = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<FusionRay>());
 
                 for (int i = 0; i < Main.musicFade.Length; i++)
                 {
@@ -272,7 +278,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 VertexStrip strip = new VertexStrip();
                 strip.PrepareStripWithProceduralPadding(positions, rotations, StripColor, StripWidth, -Main.screenPosition, true);
 
-                Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GaussRayEffect", AssetRequestMode.ImmediateLoad).Value;
+                Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/FusionRayEffect", AssetRequestMode.ImmediateLoad).Value;
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
                 lightningEffect.Parameters["uTexture0"].SetValue(texture.Value);
                 lightningEffect.Parameters["uTexture1"].SetValue(textureSecond.Value);
