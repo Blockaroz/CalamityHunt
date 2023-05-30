@@ -68,7 +68,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            Projectile.velocity *= 0.85f;
+            //Projectile.velocity *= 0.85f;
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 180);
         }
 

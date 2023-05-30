@@ -17,7 +17,7 @@ namespace CalamityHunt.Content.Items.Materials
     {
         public override void SetStaticDefaults()
         {
-            Main.RegisterItemAnimation(Type, new DrawAnimationVertical(8, 5));
+            Main.RegisterItemAnimation(Type, new DrawAnimationVertical(6, 5));
             ItemID.Sets.AnimatesAsSoul[Type] = true;
 
             ItemID.Sets.ItemNoGravity[Type] = true;
@@ -26,8 +26,8 @@ namespace CalamityHunt.Content.Items.Materials
 
         public override void SetDefaults()
         {
-            Item.width = 34;
-            Item.height = 30;
+            Item.width = 30;
+            Item.height = 28;
             Item.value = Item.sellPrice(0, 30);
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.maxStack = Item.CommonMaxStack;
@@ -59,7 +59,7 @@ namespace CalamityHunt.Content.Items.Materials
         {
             Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Aura");
             float backScale = 1f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 8f % MathHelper.TwoPi) * 0.1f;
-            spriteBatch.Draw(glow.Value, position, null, Color.Black * 0.4f, 1f, glow.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
+            spriteBatch.Draw(glow.Value, position, null, Color.Black * 0.3f, 1f, glow.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
 
             return true;
         }
@@ -68,7 +68,7 @@ namespace CalamityHunt.Content.Items.Materials
         {
             Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Aura");
             float backScale = 1f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 8f % MathHelper.TwoPi) * 0.1f;
-            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, null, Color.Black * 0.7f, 1f, glow.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
+            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, null, Color.Black * 0.4f, 1f, glow.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
             return true;
         }
 
@@ -78,8 +78,8 @@ namespace CalamityHunt.Content.Items.Materials
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>(Texture + "Aura");
             Color color = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 40f);
             spriteBatch.Draw(glow.Value, position, frame, Color.White, 0, origin, scale, 0, 0);
-            spriteBatch.Draw(glow.Value, position, frame, new Color(100, 100, 100, 0), 0, origin, scale, 0, 0);
-            spriteBatch.Draw(bloom.Value, position, null, new Color(color.R, color.G, color.B, 0) * 0.2f, 0, bloom.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glow.Value, position, frame, new Color(50, 50, 50, 0), 0, origin, scale, 0, 0);
+            spriteBatch.Draw(bloom.Value, position, null, new Color(color.R, color.G, color.B, 0) * 0.1f, 0, bloom.Size() * 0.5f, scale, 0, 0);
         }
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
@@ -88,9 +88,9 @@ namespace CalamityHunt.Content.Items.Materials
             Asset<Texture2D> bloom = ModContent.Request<Texture2D>(Texture + "Aura");
             Rectangle frame = Main.itemAnimations[Type].GetFrame(glow.Value, Main.itemFrameCounter[whoAmI]);
             Color color = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 40f);
-            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, frame, Color.White, rotation, Item.Size * 0.5f, scale, 0, 0);
-            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, frame, new Color(100, 100, 100, 0), rotation, Item.Size * 0.5f, scale, 0, 0);
-            spriteBatch.Draw(bloom.Value, Item.Center - Main.screenPosition, null, new Color(color.R, color.G, color.B, 0) * 0.2f, rotation, bloom.Size() * 0.5f, scale * 1.5f, 0, 0);
+            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, frame, Color.White, rotation, frame.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glow.Value, Item.Center - Main.screenPosition, frame, new Color(50, 50, 50, 0), rotation, frame.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(bloom.Value, Item.Center - Main.screenPosition, null, new Color(color.R, color.G, color.B, 0) * 0.1f, rotation, bloom.Size() * 0.5f, scale * 1.5f, 0, 0);
         }
     }
 }

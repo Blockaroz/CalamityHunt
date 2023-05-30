@@ -59,7 +59,8 @@ namespace CalamityHunt.Content.Items.Placeable
 		// Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
 		public override void AddRecipes()
 		{
-			CreateRecipe()
+			CreateRecipe(100)
+				.AddIngredient(ItemID.Torch, 100)
 				.AddIngredient<EntropyMatter>()
 				//.AddTile<Tiles.Furniture.ExampleWorkbench>()
 				.Register();
