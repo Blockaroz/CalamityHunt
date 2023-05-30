@@ -6,12 +6,14 @@ using CalamityHunt.Content.Projectiles.Weapons.Ranged;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
+using Terraria.GameContent;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CalamityHunt.Content.Items.Weapons.Ranged
 {
     public class Trailblazer : ModItem
     {
-		public override void SetDefaults()
+        public override void SetDefaults()
 		{
 			Item.width = 90;
 			Item.height = 38;
@@ -39,13 +41,28 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
                 Item.rare = r.Type;
             }
             Item.DamageType = DamageClass.Ranged;
+            Item.consumeAmmoOnFirstShotOnly = true;
 		}
 
-        public override bool CanConsumeAmmo(Item ammo, Player player)
-        {
-			return player.itemAnimation == Item.useAnimation;
-        }
 
-        public override Vector2? HoldoutOffset() => new Vector2(-24f, -2f);
+        public override Vector2? HoldoutOffset() => new Vector2(-16f, 0f);
+    }
+
+    public class TrailblazerBackpackLayer : PlayerDrawLayer
+    {
+        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Backpacks);
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && !drawInfo.drawPlayer.turtleArmor && drawInfo.drawPlayer.body != 106 && drawInfo.drawPlayer.body != 170 && drawInfo.drawPlayer.backpack <= 0 && !drawInfo.drawPlayer.mount.Active;
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            Texture2D backpackTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Weapons/Ranged/Trailblazer_Back").Value;
+
+            Vector2 vec5 = drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f);
+            vec5 = vec5.Floor();
+
+            DrawData item = new DrawData(backpackTexture, vec5, new Rectangle(0, drawInfo.drawPlayer.bodyFrame.Y, backpackTexture.Width, drawInfo.drawPlayer.bodyFrame.Height), drawInfo.colorArmorBody, drawInfo.drawPlayer.bodyRotation, new Vector2(backpackTexture.Width * 0.5f, drawInfo.bodyVect.Y), 1f, drawInfo.playerEffect);
+            drawInfo.DrawDataCache.Add(item);
+        }
     }
 }
