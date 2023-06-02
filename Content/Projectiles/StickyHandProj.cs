@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Humanizer.In;
@@ -30,6 +31,7 @@ namespace CalamityHunt.Content.Projectiles
             Projectile.timeLeft *= 10;
             Projectile.aiStyle = 7;
             Projectile.damage = 0;
+            Projectile.manualDirectionChange = true;
         }
 
         public override bool PreAI()
@@ -54,6 +56,9 @@ namespace CalamityHunt.Content.Projectiles
                 }
             }
 
+            Projectile.direction = player.MountedCenter.X > Projectile.Center.X ? -1 : 1;
+            Projectile.frame = 1;
+
             Projectile.rotation = Projectile.AngleFrom(player.MountedCenter);
             float distance = Projectile.Distance(player.MountedCenter);
 
@@ -70,13 +75,19 @@ namespace CalamityHunt.Content.Projectiles
                     Projectile.ai[1] = 0f;
                 }
 
-                Projectile.ai[2] = player.Distance(Projectile.Center);
+                Projectile.ai[2] = distance;
+
+                if (Projectile.ai[1] > 3)
+                    Projectile.frame = 0;
 
                 GrappleTile();
 
             }
             else if (Projectile.ai[0] == 1f)
             {
+                bendPoint = Vector2.Lerp(bendPoint, Vector2.Lerp(player.MountedCenter, Projectile.Center, 0.3f) - player.velocity, 0.1f * Utils.GetLerpValue(10, 70, Projectile.ai[1], true));
+                gravPoint = Vector2.Lerp(gravPoint, Vector2.Lerp(player.MountedCenter, Projectile.Center, 0.3f) - player.velocity * 3f, 0.1f * Utils.GetLerpValue(10, 70, Projectile.ai[1], true));
+                Projectile.frame = 0;
                 Projectile.extraUpdates = 4;
 
                 if (distance < 24f)
@@ -88,6 +99,12 @@ namespace CalamityHunt.Content.Projectiles
             }
             else if (Projectile.ai[0] == 2f)
             {
+                bendPoint += (player.AngleTo(Projectile.Center) - MathHelper.PiOver2).ToRotationVector2() * 6f * Utils.GetLerpValue(8, 5, Projectile.ai[1], true);
+                gravPoint += (player.AngleTo(Projectile.Center) + MathHelper.PiOver2).ToRotationVector2() * 6f * Utils.GetLerpValue(8, 5, Projectile.ai[1], true);
+
+                bendPoint = Vector2.Lerp(bendPoint, Projectile.Center, 0.1f * Utils.GetLerpValue(10, 70, Projectile.ai[1], true));
+                gravPoint = Vector2.Lerp(gravPoint, player.MountedCenter, 0.1f * Utils.GetLerpValue(10, 70, Projectile.ai[1], true));
+
                 if (distance > GrappleRange() * 2f)
                 {
                     Projectile.ai[0] = 1f;
@@ -103,11 +120,23 @@ namespace CalamityHunt.Content.Projectiles
 
                 player.GetModPlayer<MovementModifyPlayer>().stickyHand = true;
 
-                player.velocity += player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.5f;
-                player.velocity = Vector2.Lerp(player.velocity, player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * (player.velocity.Length() + 0.1f), Utils.GetLerpValue(30, 200, Projectile.ai[1], true) * 0.1f);
+                float factor = 0.2f;
+                if (player.controlHook)
+                {
+                    factor = 0.33f;
+                    player.velocity = Vector2.Lerp(player.velocity, player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * (player.velocity.Length() + 0.01f), 0.01f);
+                }
+                player.velocity += player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * factor;
+                player.velocity = Vector2.Lerp(player.velocity, player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * (player.velocity.Length() + 0.01f), Utils.GetLerpValue(10, 240, Projectile.ai[1], true) * 0.1f * factor);
 
-                if (distance < 64f)
-                    Projectile.Kill();
+                if (player.velocity.Length() > 31f)
+                    player.velocity *= 0.9f;
+
+                if (distance < 96f && !player.controlHook)
+                {
+                    Projectile.ai[0] = 1f;
+                    Projectile.ai[1] = 0f;
+                }
             }
 
             Projectile.ai[1]++;
@@ -252,14 +281,50 @@ namespace CalamityHunt.Content.Projectiles
             return vanilla;
         }
 
-        public override bool PreDrawExtras() => true;
+        public Vector2 gravPoint;
+        public Vector2 bendPoint;
+
+        public override bool PreDrawExtras() => false;
 
         public override bool PreDraw(ref Color lightColor)
         {
+            Vector2 playerCenter = Main.player[Projectile.owner].MountedCenter;
+
+            if (Projectile.ai[1] < 2f)
+            {
+                gravPoint = Vector2.Lerp(playerCenter, Projectile.Center, 0.3f);
+                bendPoint = Vector2.Lerp(playerCenter, Projectile.Center, 0.7f);
+            }
+
+            Texture2D lineTexture = TextureAssets.FishingLine.Value;
+
+            List<Vector2> controls = new List<Vector2>()
+            {
+                playerCenter,
+                gravPoint,
+                bendPoint,
+                Projectile.Center
+            };
+
+            BezierCurve curve = new BezierCurve(controls);
+
+            int pointCount = 3 + (int)(curve.Distance(300) * 0.1f);
+            List<Vector2> points = curve.GetPoints(pointCount);
+            points.Add(Projectile.Center);
+
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-            Rectangle frame = texture.Frame(1, 2, 0, (Projectile.ai[0] == 2f ? 0 : 1));
+            Rectangle frame = texture.Frame(1, 2, 0, Projectile.frame);
+            SpriteEffects effects = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
+            for (int i = 1; i < points.Count; i++)
+            {
+                float rotation = points[i - 1].AngleTo(points[i]);
+                Vector2 stretch = new Vector2(Projectile.scale, points[i-1].Distance(points[i]) / (lineTexture.Height));
+                Color drawColor = Lighting.GetColor(points[i].ToTileCoordinates());
+                Main.EntitySpriteDraw(lineTexture, points[i] - Main.screenPosition, lineTexture.Frame(), drawColor, rotation + MathHelper.PiOver2, lineTexture.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
+            }
 
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, lightColor, points[pointCount - 2].AngleTo(points[pointCount - 1]) + MathHelper.PiOver2, frame.Size() * 0.5f, Projectile.scale, effects, 0);
 
             return false;
         }

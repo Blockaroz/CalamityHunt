@@ -30,7 +30,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 			Item.channel = true;
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<TrailblazerFlame>();
-			Item.shootSpeed = 8f;
+			Item.shootSpeed = 9.5f;
 			Item.rare = ModContent.RarityType<VioletRarity>();
 			Item.useAmmo = AmmoID.Gel;
             if (ModLoader.HasMod("CalamityMod"))
