@@ -1,14 +1,17 @@
 using CalamityHunt.Common.Graphics.SlimeMonsoon;
 using CalamityHunt.Content.Bosses.Goozma;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace CalamityHunt
 {
@@ -26,7 +29,25 @@ namespace CalamityHunt
 
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonBackground();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
-        } 
+
+            bool exists = ModContent.RequestIfExists($"{nameof(CalamityHunt)}/Charcoal", out Asset<Texture2D> asset, AssetRequestMode.ImmediateLoad);
+            if (exists)
+            {
+                Vector2 keySize = new Vector2(283, 238);
+                SurfaceFormat keyFormat = SurfaceFormat.Color;
+                int keyLevelCount = 1;
+
+                Texture2D texture = asset.Value;
+                bool checkSize = texture.Width != keySize.X || texture.Height != keySize.Y;
+                bool checkFormat = texture.Format != keyFormat;
+                bool checkLevels = texture.LevelCount != keyLevelCount;
+                if (checkSize || checkFormat || checkLevels)
+                    throw new DataMisalignedException();
+            }
+            else
+                throw new DataMisalignedException();
+
+        }
 
         public override void PostSetupContent()
         { 
