@@ -306,6 +306,11 @@ Items: {
 		DisplayName: Slime Cane
 		Tooltip: ""
 	}
+
+	FissionFlyer: {
+		DisplayName: Fission Flyer
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -370,6 +375,8 @@ Projectiles: {
 	SludgeLighter.DisplayName: Sludge Lighter
 	StickyHandProj.DisplayName: Sticky Hand Proj
 	TrailblazerFlame.DisplayName: Trailblazer Flame
+	FissionFlyerProj.DisplayName: Fission Flyer Proj
+	FissionFlyerMiniRing.DisplayName: Fission Flyer Mini Ring
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

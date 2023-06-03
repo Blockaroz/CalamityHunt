@@ -10,11 +10,6 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 {
 	public class Goozmaga : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			Item.ResearchUnlockCount = 1;
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 100;
