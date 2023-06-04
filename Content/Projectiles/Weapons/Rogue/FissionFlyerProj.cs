@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -47,6 +48,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 Projectile.scale = 0.3f + Utils.GetLerpValue(0, 60, Time, true) * 0.7f;
                 if (Time == 105)
                 {
+                    SoundEngine.PlaySound(SoundID.Item84, Projectile.Center);
+
                     for (int i = 0; i < 3; i++)
                     {
                         Vector2 velocity = new Vector2(0, 10).RotatedBy(MathHelper.TwoPi / 3f * i);

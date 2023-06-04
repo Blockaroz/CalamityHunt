@@ -15,15 +15,16 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 		{
 			Item.width = 50;
 			Item.height = 50;
-			Item.damage = 1200; 
+			Item.damage = 1866; 
 			Item.noMelee = true;
 			Item.noUseGraphic = true;
-			Item.useAnimation = 50;
-			Item.useTime = 5;
+			Item.useAnimation = 10;
+			Item.useTime = 10;
+			Item.reuseDelay = 20;
 			Item.useLimitPerAnimation = 3;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.knockBack = 5f;
-			Item.UseSound = SoundID.DD2_LightningBugHurt;
+			Item.UseSound = SoundID.DD2_SkyDragonsFuryShot;
 			Item.autoReuse = true;
 			Item.shootSpeed = 15f;
 			Item.rare = ModContent.RarityType<VioletRarity>();

@@ -76,5 +76,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
 
             return false;
         }
+
+        public override bool MeleePrefix() => true;
     }
 }

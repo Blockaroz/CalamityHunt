@@ -25,7 +25,7 @@ namespace CalamityHunt.Content.Items.Misc
 
         public override void Load()
         {
-            chainTexture = ModContent.Request<Texture2D>(Texture + "Chain").Value;
+            chainTexture = ModContent.Request<Texture2D>(Texture + "Chain", AssetRequestMode.ImmediateLoad).Value;
         }
 
         public override void SetStaticDefaults()
@@ -33,11 +33,11 @@ namespace CalamityHunt.Content.Items.Misc
             ItemID.Sets.ItemNoGravity[Type] = true;
             ItemID.Sets.ItemsThatShouldNotBeInInventory[Type] = true;
             ItemID.Sets.IgnoresEncumberingStone[Type] = true;
-            ItemID.Sets.ItemSpawnDecaySpeed[Type] = 4;
 
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(5, 4));
             ItemID.Sets.AnimatesAsSoul[Type] = true;
             ItemID.Sets.ItemIconPulse[Type] = true;
+            ItemID.Sets.IsLavaImmuneRegardlessOfRarity[Type] = true;
         }
 
         public override void SetDefaults()
@@ -85,10 +85,13 @@ namespace CalamityHunt.Content.Items.Misc
             Color[] array = new Color[]
             {
                 new Color(255, 160, 20, 0),
+                new Color(255, 200, 80, 0),
+                new Color(255, 160, 20, 0),
                 new Color(255, 80, 120, 0),
                 new Color(255, 160, 20, 0),
                 new Color(255, 80, 120, 0),
                 new Color(30, 120, 255, 0),
+                new Color(255, 80, 120, 0),
             };
             Color final = new GradientColor(array, 0.15f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 15f);
             return final;
@@ -119,7 +122,7 @@ namespace CalamityHunt.Content.Items.Misc
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            bool includeChains = false;
+            bool includeChains = true;
             bool includeLensFlare = true;
 
             Texture2D texture = TextureAssets.Item[Type].Value;
@@ -129,8 +132,10 @@ namespace CalamityHunt.Content.Items.Misc
             float soulScale = scale;
             scale = 1f + MathF.Sin(Main.GlobalTimeWrappedHourly * 3f % MathHelper.TwoPi) * 0.01f;
 
-            spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), Color.Black * 0.1f, -MathHelper.PiOver4, sparkTexture.Size() * 0.5f, scale * new Vector2(2f, 0.5f), 0, 0);
-            spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), Color.Black * 0.1f, MathHelper.PiOver4, sparkTexture.Size() * 0.5f, scale * new Vector2(2f, 0.5f), 0, 0);
+            spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), Color.Black * 0.1f, -MathHelper.PiOver4, sparkTexture.Size() * 0.5f, scale * new Vector2(3f, 0.8f), 0, 0);
+            spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), Color.Black * 0.1f, MathHelper.PiOver4, sparkTexture.Size() * 0.5f, scale * new Vector2(3f, 0.8f), 0, 0);
+            spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), Color.Black * 0.1f, 0, sparkTexture.Size() * 0.5f, scale * new Vector2(3f, 0.8f), 0, 0);
+            spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), Color.Black * 0.1f, MathHelper.PiOver2, sparkTexture.Size() * 0.5f, scale * new Vector2(3f, 0.8f), 0, 0);
 
             if (includeChains)
             {
@@ -146,20 +151,21 @@ namespace CalamityHunt.Content.Items.Misc
                 float[] offRots2 = new float[count];
                 float[] offRots3 = new float[count];
 
+                float time = Main.GlobalTimeWrappedHourly;
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 x = new Vector2(35 + MathF.Sin(Main.GlobalTimeWrappedHourly - i * 0.04f) * 10f, 0).RotatedBy(MathHelper.TwoPi / 120f * i - Main.GlobalTimeWrappedHourly);
-                    x.X *= 1f + MathF.Cos(Main.GlobalTimeWrappedHourly * 1.5f) * 0.2f;
-                    Vector2 y = new Vector2(40 + MathF.Cos(Main.GlobalTimeWrappedHourly - i * 0.07f) * 17f, 0).RotatedBy(MathHelper.TwoPi / 130f * i - Main.GlobalTimeWrappedHourly * 0.7f + 2f);
-                    y.Y *= 0.6f + MathF.Sin(Main.GlobalTimeWrappedHourly * 1.2f) * 0.1f;
-                    Vector2 z = new Vector2(60 + MathF.Cos(Main.GlobalTimeWrappedHourly - i * 0.01f) * 10f, 0).RotatedBy(MathHelper.TwoPi / 150f * i + Main.GlobalTimeWrappedHourly * 2f + 2f);
-                    z.Y *= 0.8f + MathF.Sin(Main.GlobalTimeWrappedHourly) * 0.1f;
-                    offs1[i] = x.RotatedBy(-Main.GlobalTimeWrappedHourly * 1f);
-                    offs2[i] = y.RotatedBy(-Main.GlobalTimeWrappedHourly * 0.8f);
-                    offs3[i] = z.RotatedBy(-Main.GlobalTimeWrappedHourly * 0.1f) * new Vector2(1f, 0.8f);
+                    Vector2 x = new Vector2(35 + MathF.Sin(time - i * 0.04f) * 10f, 0).RotatedBy(MathHelper.TwoPi / 120f * i - time);
+                    x.X *= 1f + MathF.Cos(time * 1.5f) * 0.2f;
+                    Vector2 y = new Vector2(40 + MathF.Cos(time - i * 0.07f) * 17f, 0).RotatedBy(MathHelper.TwoPi / 130f * i - time * 0.7f + 2f);
+                    y.Y *= 0.5f + MathF.Sin(time * 1.2f) * 0.1f;
+                    Vector2 z = new Vector2(60 + MathF.Cos(time - i * 0.01f) * 10f, 0).RotatedBy(MathHelper.TwoPi / 150f * i + time * 2f + 2f);
+                    z.Y *= 0.8f + MathF.Sin(time) * 0.1f;
+                    offs1[i] = x.RotatedBy(-time * 1f);
+                    offs2[i] = y.RotatedBy(time * 0.8f);
+                    offs3[i] = z.RotatedBy(-time * 0.1f) * new Vector2(1f, 0.8f) * 0.7f;
 
-                    Vector2 f = new Vector2(20 + (Main.GlobalTimeWrappedHourly * 0.4f % 1f) * 150f, 0).RotatedBy(MathHelper.TwoPi / 80f * i - Main.GlobalTimeWrappedHourly + 2f);
-                    f.Y *= 1f + MathF.Sin(Main.GlobalTimeWrappedHourly * 2f) * 0.1f;
+                    Vector2 f = new Vector2(20 + (time * 0.4f % 1f) * 150f, 0).RotatedBy(MathHelper.TwoPi / 80f * i - time + 2f);
+                    f.Y *= 1f + MathF.Sin(time * 2f) * 0.1f;
                 }
 
                 offRots1[0] = offs1[0].AngleTo(offs1[1]);
@@ -177,10 +183,13 @@ namespace CalamityHunt.Content.Items.Misc
                     Color[] array = new Color[]
                     {
                         new Color(255, 160, 20, 0),
+                        new Color(255, 200, 80, 0),
+                        new Color(255, 160, 20, 0),
                         new Color(255, 80, 120, 0),
                         new Color(255, 160, 20, 0),
                         new Color(255, 80, 120, 0),
                         new Color(30, 120, 255, 0),
+                        new Color(255, 80, 120, 0),
                     };
                     Color final = new GradientColor(array, 0.15f, 0.5f).ValueAt((p * 0.6f + Main.GlobalTimeWrappedHourly) * 15f);
                     return final * 0.8f;
@@ -203,7 +212,7 @@ namespace CalamityHunt.Content.Items.Misc
                 strip2.DrawTrail();
                 strip3.DrawTrail();
 
-                spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), GetAlpha(Color.White).Value * 0.3f, 0, glowTexture.Size() * 0.5f, scale, 0, 0);
+                spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), GetAlpha(Color.White).Value * 0.1f, 0, glowTexture.Size() * 0.5f, scale, 0, 0);
 
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
             }
@@ -214,14 +223,14 @@ namespace CalamityHunt.Content.Items.Misc
                 spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), GetAlpha(Color.White).Value * 0.3f, MathHelper.PiOver2, sparkTexture.Size() * 0.5f, scale * new Vector2(0.2f, 15f), 0, 0);
                 spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), GetAlpha(Color.White).Value * 0.3f, 0, sparkTexture.Size() * 0.5f, scale * new Vector2(2f, 0.5f), 0, 0);
                 spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), GetAlpha(Color.White).Value * 0.3f, MathHelper.PiOver2, sparkTexture.Size() * 0.5f, scale * new Vector2(2f, 0.5f), 0, 0);
-                spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), GetAlpha(Color.White).Value * 0.1f, 0, glowTexture.Size() * 0.5f, scale * 1.5f, 0, 0);
+                spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), GetAlpha(Color.White).Value * 0.05f, 0, glowTexture.Size() * 0.5f, scale * 1.5f, 0, 0);
             }
 
             spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), GetAlpha(Color.White).Value * 0.1f, 0, glowTexture.Size() * 0.5f, scale, 0, 0);
 
             Rectangle frame = Main.itemAnimations[Type].GetFrame(texture, Main.itemFrameCounter[whoAmI]);
             spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, GetAlpha(Color.White).Value, 0, frame.Size() * 0.5f, soulScale + 0.2f, 0, 0);
-            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, new Color(200, 200, 200, 0), 0, frame.Size() * 0.5f, soulScale + 0.2f, 0, 0);
+            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, new Color(200, 200, 200, 0), 0, frame.Size() * 0.5f, soulScale + 0.1f, 0, 0);
 
             spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), GetAlpha(Color.White).Value * 0.1f, 0, glowTexture.Size() * 0.5f, scale * 0.5f, 0, 0);
             spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), GetAlpha(Color.White).Value, 0, glowTexture.Size() * 0.5f, scale * 0.17f, 0, 0);
@@ -235,7 +244,7 @@ namespace CalamityHunt.Content.Items.Misc
             Texture2D glowTexture = AssetDirectory.Textures.Extra.BigGlow;
 
             spriteBatch.Draw(texture, position, frame, GetAlpha(Color.White).Value, 0, frame.Size() * 0.5f, scale + 0.2f, 0, 0);
-            spriteBatch.Draw(texture, position, frame, new Color(200, 200, 200, 0), 0, frame.Size() * 0.5f, scale + 0.2f, 0, 0);
+            spriteBatch.Draw(texture, position, frame, new Color(200, 200, 200, 0), 0, frame.Size() * 0.5f, scale + 0.1f, 0, 0);
 
             spriteBatch.Draw(glowTexture, position, glowTexture.Frame(), GetAlpha(Color.White).Value * 0.1f, 0, glowTexture.Size() * 0.5f, scale * 0.5f, 0, 0);
             spriteBatch.Draw(glowTexture, position, glowTexture.Frame(), GetAlpha(Color.White).Value, 0, glowTexture.Size() * 0.5f, scale * 0.17f, 0, 0);

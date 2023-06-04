@@ -2,22 +2,23 @@
 using CalamityHunt.Common.DropRules;
 using CalamityHunt.Common.Graphics.SlimeMonsoon;
 using CalamityHunt.Common.Systems;
-using CalamityHunt.Common.Systems.Camera;
 using CalamityHunt.Common.Systems.Particles;
-using static CalamityHunt.Common.Systems.DifficultySystem;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Items.BossBags;
 using CalamityHunt.Content.Items.Lore;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Misc;
+using CalamityHunt.Content.Items.Weapons.Magic;
+using CalamityHunt.Content.Items.Weapons.Melee;
+using CalamityHunt.Content.Items.Weapons.Ranged;
+using CalamityHunt.Content.Items.Weapons.Rogue;
+using CalamityHunt.Content.Items.Weapons.Summoner;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Pets.BloatBabyPet;
 using CalamityHunt.Content.Projectiles;
-using Humanizer;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
@@ -25,19 +26,12 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using CalamityHunt.Content.Items.Weapons.Melee;
-using CalamityHunt.Content.Items.Weapons.Rogue;
-using CalamityHunt.Content.Items.Weapons.Ranged;
-using CalamityHunt.Content.Items.Weapons.Magic;
-using CalamityHunt.Content.Items.Weapons.Summoner;
+using static CalamityHunt.Common.Systems.DifficultySystem;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -148,7 +142,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             //Soul
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PureAuricSoul>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaAuricSoul>()));
 
             //Bag
             if (Main.rand.NextBool(20))

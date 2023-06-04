@@ -24,12 +24,12 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
         {
             Item.width = 128;
             Item.height = 128;
-            Item.damage = 1500;
+            Item.damage = 3300;
             Item.DamageType = DamageClass.Melee;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 30;
-            Item.useAnimation = 30;
+            Item.useTime = 35;
+            Item.useAnimation = 35;
             Item.channel = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;
@@ -43,6 +43,8 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }
+            swingStyle = 0;
+
         }
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -50,7 +52,6 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             Texture2D glow = ModContent.Request<Texture2D>(Texture + "Glow").Value;
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).Value;
             glowColor.A /= 2;
-            spriteBatch.Draw(glow, position, frame, glowColor, 0, origin, scale, 0, 0);
             spriteBatch.Draw(glow, position, frame, glowColor, 0, origin, scale, 0, 0);
         }
 
@@ -60,25 +61,26 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).Value;
             glowColor.A /= 2;
             spriteBatch.Draw(glow, Item.Center - Main.screenPosition, glow.Frame(), glowColor, rotation, Item.Size * 0.5f, scale, 0, 0);
-            spriteBatch.Draw(glow, Item.Center - Main.screenPosition, glow.Frame(), glowColor, rotation, Item.Size * 0.5f, scale, 0, 0);
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<ScytheOfTheOldGodHeld>()] <= 0;
 
-        public override bool AltFunctionUse(Player player) => true;
+        public override bool AltFunctionUse(Player player) => false;
 
         public int swingStyle = 0;
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            //if (player.ownedProjectileCounts[ModContent.ProjectileType<ScytheOfTheOldGodHeld>()] <= 0)
-            //{
-            //    swingStyle = (swingStyle + 1) % 4;
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<ScytheOfTheOldGodHeld>()] <= 0)
+            {
+                Projectile.NewProjectileDirect(source, position, velocity, type, damage, 0, player.whoAmI, ai0: -1, ai1: swingStyle);
+                swingStyle = (swingStyle + 1) % 3;
 
-            //    Projectile.NewProjectileDirect(source, position, velocity, type, damage, 0, player.whoAmI, ai1: swingStyle);
-            //}
+            }
 
             return false;
         }
+
+        public override bool MeleePrefix() => true;
     }
 }
