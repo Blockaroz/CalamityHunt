@@ -12,21 +12,26 @@ namespace CalamityHunt.Common.Players
     public class AuricSoulPlayer : ModPlayer
     {
         public bool pureSoul;
-        public bool corruptSoul;
+        public bool goozmaSoul;
+        public bool yharonSoul;
 
         public override void SaveData(TagCompound tag)
         {
             tag["HuntOfTheOldGod:PureSoul"] = pureSoul;
+            tag["HuntOfTheOldGod:GoozmaSoul"] = goozmaSoul;
+            tag["HuntOfTheOldGod:YharonSoul"] = yharonSoul;
         }
 
         public override void LoadData(TagCompound tag)
         {
             pureSoul = tag.GetBool("HuntOfTheOldGod:PureSoul");
+            goozmaSoul = tag.GetBool("HuntOfTheOldGod:GoozmaSoul");
+            yharonSoul = tag.GetBool("HuntOfTheOldGod:YharonSoul");
         }
 
         public override void PostUpdate()
         {
-            if (pureSoul)
+            if (goozmaSoul)
             {
                 Player.GetDamage(DamageClass.Generic) += 0.03f;
                 Player.GetCritChance(DamageClass.Generic) += 0.03f;

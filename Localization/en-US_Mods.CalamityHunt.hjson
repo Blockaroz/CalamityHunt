@@ -260,13 +260,8 @@ Items: {
 			'''
 	}
 
-	AuricSoul: {
-		DisplayName: Auric Soul
-		Tooltip: ""
-	}
-
 	PureAuricSoul: {
-		DisplayName: Pure Auric Soul
+		DisplayName: Auric Soul
 		Tooltip: ""
 	}
 
@@ -309,6 +304,16 @@ Items: {
 
 	FissionFlyer: {
 		DisplayName: Fission Flyer
+		Tooltip: ""
+	}
+
+	GoozmaAuricSoul: {
+		DisplayName: Goozma Auric Soul
+		Tooltip: ""
+	}
+
+	ScytheOfTheOldGod: {
+		DisplayName: Scythe Of The Old God
 		Tooltip: ""
 	}
 }
@@ -377,6 +382,7 @@ Projectiles: {
 	TrailblazerFlame.DisplayName: Trailblazer Flame
 	FissionFlyerProj.DisplayName: Fission Flyer Proj
 	FissionFlyerMiniRing.DisplayName: Fission Flyer Mini Ring
+	ScytheOfTheOldGodHeld.DisplayName: Scythe Of The Old God Held
 }
 
 Chat.SlimeMonsoon: The Slime Monsoon has begun...

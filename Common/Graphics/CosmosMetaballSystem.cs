@@ -141,12 +141,12 @@ namespace CalamityHunt.Common.Graphics
                 absorbEffect.Parameters["uSize"].SetValue(new Vector2(8f));
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, absorbEffect);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, absorbEffect, Main.Transform);
 
                 Main.spriteBatch.Draw(bloom.Value, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(255, 150, 60, 0) * projectile.scale, 0, bloom.Size() * 0.5f, projectile.scale * 6f, 0, 0);
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
             }
             
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
