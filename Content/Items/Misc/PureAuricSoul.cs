@@ -126,7 +126,7 @@ namespace CalamityHunt.Content.Items.Misc
             bool includeLensFlare = true;
 
             Texture2D texture = TextureAssets.Item[Type].Value;
-            Texture2D sparkTexture = AssetDirectory.Textures.Extra.Spark;
+            Texture2D sparkTexture = AssetDirectory.Textures.Extra.Sparkle;
             Texture2D glowTexture = AssetDirectory.Textures.Extra.BigGlow;
 
             float soulScale = scale;

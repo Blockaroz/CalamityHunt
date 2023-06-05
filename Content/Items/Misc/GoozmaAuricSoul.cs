@@ -118,7 +118,7 @@ namespace CalamityHunt.Content.Items.Misc
             bool includeLensFlare = false;
 
             Texture2D texture = TextureAssets.Item[Type].Value;
-            Texture2D sparkTexture = AssetDirectory.Textures.Extra.Spark;
+            Texture2D sparkTexture = AssetDirectory.Textures.Extra.Sparkle;
             Texture2D glowTexture = AssetDirectory.Textures.Extra.BigGlow;
 
             Color glowColor = GetAlpha(Color.White).Value;

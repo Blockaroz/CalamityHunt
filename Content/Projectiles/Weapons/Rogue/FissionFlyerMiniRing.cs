@@ -52,8 +52,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
             Projectile.rotation += Projectile.direction;
 
-            if (Main.rand.NextBool(3))
-                Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center - Main.rand.NextVector2Circular(20, 20), Projectile.velocity * Main.rand.NextFloat(), glowColor, 0.5f + Main.rand.NextFloat());
+            Dust splode = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.AncientLight, -Projectile.velocity * Main.rand.NextFloat(3f), 0, glowColor, 1f + Main.rand.NextFloat());
+            splode.noGravity = true;
 
             Dust dust = Dust.NewDustPerfect(Projectile.Center - Main.rand.NextVector2Circular(30, 30), DustID.Sand, Projectile.velocity * Main.rand.NextFloat(), 0, Color.Black, Main.rand.NextFloat());
             dust.noGravity = true;

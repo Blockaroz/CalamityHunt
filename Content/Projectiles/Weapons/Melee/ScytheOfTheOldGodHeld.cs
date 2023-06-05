@@ -1,19 +1,16 @@
-﻿using CalamityHunt.Common.Systems;
-using CalamityHunt.Common.UI;
+﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -40,7 +37,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Projectile.hide = true;
             Projectile.manualDirectionChange = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
+            Projectile.localNPCHitCooldown = 15;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.noEnchantmentVisuals = true;
         }
@@ -50,6 +47,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public ref Player Player => ref Main.player[Projectile.owner];
 
+        private float shakeStrength;
         private float slashRotation;
         private float swingPercent;
         private float swingPercent2;
@@ -77,10 +75,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             float addRot = 0;
             bool canKill = false;
 
-            SoundStyle swingSound = SoundID.Item71;
+            SoundStyle swingSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwing;
             swingSound.MaxInstances = 0;
-            swingSound.Pitch = -0.2f;
-            swingSound.Volume = 2f;
+            swingSound.PitchVariance = 0.1f;
 
             float speed = Player.itemAnimationMax / 30f * 0.85f;
 
@@ -95,7 +92,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     rotation = MathHelper.Lerp(-3f, 2f, swingPercent);
 
                     if (Time == (int)(35 * speed))
+                    {
+                        shakeStrength = 1f;
                         SoundEngine.PlaySound(swingSound, Projectile.Center);
+                    }
 
                     if (Time > (int)(60 * speed))
                     {
@@ -113,15 +113,18 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     swingPercent2 = Utils.GetLerpValue((int)(0 * speed), (int)(80 * speed), Time, true);
                     swingPercent = SwingProgress(MathHelper.SmoothStep(0, 1, swingPercent2));
                     rotation = MathHelper.Lerp(2f, -3f, swingPercent);
-                    addRot = -MathHelper.TwoPi * MathHelper.SmoothStep(0, 1, MathHelper.SmoothStep(0, 1, Utils.GetLerpValue((int)(-10 * speed), (int)(70 * speed), Time, true)));
+                    addRot = -MathHelper.TwoPi * MathHelper.SmoothStep(0, 1, MathHelper.SmoothStep(0, 1, Utils.GetLerpValue((int)(-10 * speed), (int)(75 * speed), Time, true)));
 
                     if (Time == (int)(20 * speed))
                         SoundEngine.PlaySound(swingSound.WithVolumeScale(0.3f).WithPitchOffset(-0.2f), Projectile.Center);
                     
                     if (Time == (int)(45 * speed))
+                    {
+                        shakeStrength = 1f;
                         SoundEngine.PlaySound(swingSound, Projectile.Center);
+                    }
 
-                    if (Time > (int)(70 * speed))
+                    if (Time > (int)(75 * speed))
                     {
                         Time = -1;
                         SwingStyle--;
@@ -141,7 +144,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     addRot = -MathHelper.Pi * MathF.Sqrt(MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(0, (int)(60 * speed), Time, true)));
 
                     if (Time == (int)(30 * speed))
+                    {
+                        shakeStrength = 1f;
                         SoundEngine.PlaySound(swingSound, Projectile.Center);
+                    }
 
                     if (Time > (int)(50 * speed))
                     {
@@ -154,22 +160,27 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     break;
             }
 
-            Vector2 scytheEnd = Projectile.Center + Projectile.rotation.ToRotationVector2() * 90 * (Projectile.scale + (1f - swingPercent) * swingPercent * 4f);
+            Vector2 scytheEnd = Projectile.Center + Projectile.rotation.ToRotationVector2() * 100 * (Projectile.scale + (1f - swingPercent) * swingPercent * 4f);
 
             if (swingPercent2 > 0.2f && swingPercent2 < 0.8f)
             {
-                for (int i = 0; i < 5; i++)
+                Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).Value;
+
+                for (int i = 0; i < 3; i++)
                 {
-                    Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).Value;
-                    glowColor.A = 240;
                     float scale = 0.8f + Main.rand.NextFloat();
-                    Dust light = Dust.NewDustPerfect(scytheEnd + Main.rand.NextVector2Circular(20, 70).RotatedBy(Projectile.rotation), DustID.AncientLight, (Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection).ToRotationVector2().RotatedByRandom(0.5f) * Main.rand.NextFloat(-5f, 15f), 0, glowColor, scale);
+                    Dust light = Dust.NewDustPerfect(scytheEnd + Main.rand.NextVector2Circular(70, 70).RotatedBy(Projectile.rotation), DustID.AncientLight, (Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection).ToRotationVector2().RotatedByRandom(0.5f) * Main.rand.NextFloat(-5f, 15f), 0, glowColor, scale);
                     light.noGravity = true;
                     light.noLightEmittence = true;
                 }
-            }
 
-            Projectile.EmitEnchantmentVisualsAt(scytheEnd - new Vector2(75), 150, 150);
+                Projectile.EmitEnchantmentVisualsAt(scytheEnd - new Vector2(75), 150, 150);
+
+                if (Main.rand.NextBool(5))
+                {
+                    Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), scytheEnd + Main.rand.NextVector2Circular(70, 70), Vector2.Zero, glowColor, Main.rand.NextFloat(1.5f));
+                }
+            }
 
             Projectile.rotation = Projectile.velocity.ToRotation() + (rotation + MathHelper.WrapAngle(addRot)) * Projectile.direction;
             Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.PiOver2);
@@ -184,6 +195,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Player.heldProj = Projectile.whoAmI;
 
             Time++;
+            RibbonPhysics();
+
+            shakeStrength = MathHelper.Clamp(shakeStrength, 0f, 2.4f);
+            if (shakeStrength >= 0f)
+                shakeStrength *= 0.85f;
+            if (shakeStrength < 0.2f)
+                shakeStrength = 0f;
+
+            if (Main.myPlayer == Projectile.owner && shakeStrength > 0f)
+                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 4f, 10, 10));
 
             slashRotation = Projectile.rotation;
             for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
@@ -212,28 +233,71 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 return MathHelper.Lerp(functions[2], functions[3], Utils.GetLerpValue(0.8f, 1f, x, true));
         }
 
+        private Vector2[] ribbonPoints;
+        private Vector2[] ribbonVels;
+
+        public void RibbonPhysics()
+        {
+            int length = 14;
+            if (ribbonVels != null)
+            {
+                for (int i = 0; i < ribbonVels.Length; i++)
+                {
+                    ribbonVels[i] = (Projectile.rotation - (1.3f + i * 0.01f) * Projectile.spriteDirection).ToRotationVector2() * 8f;
+                }
+            }
+            else
+                ribbonVels = new Vector2[length];
+
+            if (ribbonPoints != null)
+            {
+                float drawScale = Projectile.scale + (1f - swingPercent) * swingPercent * 4f;
+                ribbonPoints[0] = Projectile.Center + new Vector2(49, -13 * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * drawScale;
+
+                for (int i = 1; i < ribbonPoints.Length; i++)
+                {
+                    ribbonPoints[i] += ribbonVels[i];
+                    if (ribbonPoints[i].Distance(ribbonPoints[i - 1]) > 10)
+                        ribbonPoints[i] = Vector2.Lerp(ribbonPoints[i], ribbonPoints[i - 1] + new Vector2(10, 0).RotatedBy(ribbonPoints[i - 1].AngleTo(ribbonPoints[i])), 0.8f);
+                }
+            }
+            else
+            {
+                ribbonPoints = new Vector2[length];
+                for (int i = 0; i < ribbonPoints.Length; i++)
+                    ribbonPoints[i] = Projectile.Center;
+            }
+        }
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).Value;
+            Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 300);
+            shakeStrength *= 1.5f;
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).Value;
+            Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 300);
+            shakeStrength *= 1.5f;
         }
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
-            int size = (int)(400 * Player.GetAdjustedItemScale(Player.HeldItem));
+            float itemScale = Player.GetAdjustedItemScale(Player.HeldItem);
+            int size = (int)(600 * itemScale);
 
             hitbox.Width = size;
             hitbox.Height = size;
-            hitbox.Location = (Projectile.Center + Projectile.rotation.ToRotationVector2() * 150f - new Vector2(size * 0.5f)).ToPoint();
+            hitbox.Location = (Projectile.Center + Projectile.rotation.ToRotationVector2() * 220f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 150 * itemScale - new Vector2(size * 0.5f)).ToPoint();
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (swingPercent2 > 0.2f && swingPercent2 < 0.8f)
+            if (swingPercent2 > 0.5f && swingPercent2 < 0.6f || (SwingStyle == 1 && swingPercent2 > 0.3f && swingPercent2 < 0.4f))
                 return base.Colliding(projHitbox, targetHitbox);
             return false;
         }
@@ -252,10 +316,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         {
             glowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
             bladeTexture = ModContent.Request<Texture2D>(Texture + "Blade", AssetRequestMode.ImmediateLoad).Value;
+            ribbonTexture = ModContent.Request<Texture2D>(Texture + "Ribbon", AssetRequestMode.ImmediateLoad).Value;
         }
 
         public static Texture2D glowTexture;
         public static Texture2D bladeTexture;
+        public static Texture2D ribbonTexture;
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -265,7 +331,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D swingTexture = AssetDirectory.Textures.SwordSwing.Basic;
 
-            Vector2 endOrigin = new Vector2(0.35f, 0.5f + 0.25f * Projectile.spriteDirection);
+            Vector2 endOrigin = new Vector2(0.35f, 0.5f + 0.3f * Projectile.spriteDirection);
             Vector2 origin = endOrigin;
             SpriteEffects spriteEffects = Projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 
@@ -279,7 +345,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             {
                 case 1:
 
-                    origin = Vector2.Lerp(endOrigin, new Vector2(0.5f), Utils.GetLerpValue(0f, 0.4f, swingPercent * (0.7f - swingPercent) * 4f, true));
+                    //origin = Vector2.Lerp(endOrigin, new Vector2(0.45f, 0.5f + 0.08f * Projectile.spriteDirection), Utils.GetLerpValue(0.6f, 0.55f, swingPercent2, true));
                     swingStrength = Utils.GetLerpValue(0.1f, 0.7f, swingPercent2, true) * Utils.GetLerpValue(0.9f, 0.6f, swingPercent2, true);
 
                     break;
@@ -296,31 +362,41 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 }
             }
 
+            DrawRibbon();
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
             Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
+            Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.5f, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale * 1.01f, spriteEffects, 0);
 
             for (int i = 0; i < 4; i++)
             {
-                Color trailBackColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 4) * 0.7f * (1f - (float)i / Projectile.oldRot.Length);
+                Color trailBackColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 6) * 0.7f * (1f - (float)i / Projectile.oldRot.Length);
                 trailBackColor.A = 200;
 
                 Rectangle frame = swingTexture.Frame(1, 4, 0, i);
-                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailBackColor * 0.8f * swingStrength * (1f - i / 4f) * swingStrength, Projectile.oldRot[i ] - (0.3f + i * 0.2f) * Projectile.spriteDirection, frame.Size() * 0.5f, drawScale + 2.5f, spriteEffects, 0);
+                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailBackColor * 0.8f * swingStrength * (1f - i / 4f) * swingStrength, Projectile.oldRot[i ] - (0.5f + i * 0.2f) * Projectile.spriteDirection, frame.Size() * 0.5f, drawScale + 2.5f, spriteEffects, 0);
             }            
             for (int i = 0; i < 4; i++)
             {
-                Color trailGlowColor = Color.Lerp(new Color(200, 200, 200, 0), new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 4), 0.6f + i / 10f) * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
+                Color trailGlowColor = Color.Lerp(new Color(200, 200, 200, 0), new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 6), 0.6f + i / 10f) * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
                 trailGlowColor.A = 0;
 
                 Rectangle frame = swingTexture.Frame(1, 4, 0, i);
                 Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailGlowColor * 0.5f * (1f - i / 4f) * swingStrength, Projectile.oldRot[i * 2] - (0.3f + i * 0.1f) * Projectile.spriteDirection, frame.Size() * 0.5f, drawScale + 2.7f, spriteEffects, 0);
-                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailGlowColor * 0.5f * (1f - i / 4f) * swingStrength, Projectile.oldRot[i] - (0.4f + i * 0.3f) * Projectile.spriteDirection, frame.Size() * 0.5f, (drawScale + 2.5f) * (1f + i / 10f), spriteEffects, 0);
+                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailGlowColor * 0.5f * (1f - i / 4f) * swingStrength, Projectile.oldRot[i] - (1f + i * 0.3f) * Projectile.spriteDirection, frame.Size() * 0.5f, (drawScale + 2.5f) * (1f + i / 10f), spriteEffects, 0);
             }
 
             Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, swingTexture.Frame(1, 4, 0, 3), new Color(50, 50, 50, 0) * swingStrength, Projectile.rotation - 0.3f * Projectile.spriteDirection, swingTexture.Frame(1, 4, 0, 3).Size() * 0.5f, drawScale + 1.85f, spriteEffects, 0);
             Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, swingTexture.Frame(1, 4, 0, 3), new Color(150, 150, 150, 0) * swingStrength, Projectile.rotation - 0.5f * Projectile.spriteDirection, swingTexture.Frame(1, 4, 0, 3).Size() * 0.5f, drawScale + 2.55f, spriteEffects, 0);
 
+            Vector2 waveOff = new Vector2(swingPercent * 200, 0).RotatedBy(Projectile.velocity.ToRotation());
+            float waveSrength = Utils.GetLerpValue(0.5f, 0.8f, swingPercent2, true) * Utils.GetLerpValue(1f, 0.9f, swingPercent, true);
+            Main.EntitySpriteDraw(swingTexture, Projectile.Center + waveOff - Main.screenPosition, swingTexture.Frame(1, 4, 0, 0), glowColor * waveSrength * 0.2f, Projectile.velocity.ToRotation(), swingTexture.Frame(1, 4, 0, 1).Size() * 0.5f, drawScale + swingPercent * 5f, spriteEffects, 0);
+            Main.EntitySpriteDraw(swingTexture, Projectile.Center + waveOff - Main.screenPosition, swingTexture.Frame(1, 4, 0, 2), glowColor * waveSrength * 0.1f, Projectile.velocity.ToRotation(), swingTexture.Frame(1, 4, 0, 1).Size() * 0.5f, drawScale + swingPercent * 3f, spriteEffects, 0);
+
             float sparkStrength = (1f - swingPercent2) * swingPercent2 * 4f * Utils.GetLerpValue(0.3f, 0.5f, swingPercent, true);
+
+            DrawSpark(Projectile.Center + new Vector2(130, 10 * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * drawScale, glowColor, sparkStrength);
+
             DrawSpark(Projectile.Center + new Vector2(75, 0).RotatedBy(Projectile.rotation + 0.2f * Projectile.spriteDirection) * (drawScale + 2.7f), glowColor * 0.5f * sparkStrength, sparkStrength);
             DrawSpark(Projectile.Center + new Vector2(75, 0).RotatedBy(Projectile.rotation - 0.5f * Projectile.spriteDirection) * (drawScale + 2.7f), glowColor * 0.7f * sparkStrength, 2f * sparkStrength);
             DrawSpark(Projectile.Center + new Vector2(75, 0).RotatedBy(Projectile.rotation - 1f * Projectile.spriteDirection) * (drawScale + 2.7f), glowColor * sparkStrength, 1.5f * sparkStrength);
@@ -332,11 +408,30 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public void DrawSpark(Vector2 position, Color color, float scale)
         {
-            Texture2D texture = AssetDirectory.Textures.Extra.Spark;
+            Texture2D texture = AssetDirectory.Textures.Extra.Sparkle;
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), color, MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(1f, 2f) * scale, 0, 0);
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), color, -MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(1f, 2f) * scale, 0, 0);
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), new Color(200, 200, 200, 0), MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(0.5f, 1f) * scale, 0, 0);
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), new Color(200, 200, 200, 0), -MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(0.5f, 1f) * scale, 0, 0);
+        }
+
+        private void DrawRibbon()
+        {
+            if (ribbonPoints != null)
+            {
+                for (int i = 0; i < ribbonPoints.Length - 1; i++)
+                {
+                    int style = 0;
+                    if (i == ribbonPoints.Length - 3)
+                        style = 1;                    
+                    if (i > ribbonPoints.Length - 3)
+                        style = 2;
+                    Rectangle frame = ribbonTexture.Frame(1, 3, 0, style);
+                    float rotation = ribbonPoints[i].AngleTo(ribbonPoints[i + 1]);
+                    Vector2 stretch = new Vector2(0.5f + Utils.GetLerpValue(0, ribbonPoints.Length - 2, i, true) * 0.8f, ribbonPoints[i].Distance(ribbonPoints[i + 1]) / (frame.Height - 5));
+                    Main.EntitySpriteDraw(ribbonTexture, ribbonPoints[i] - Main.screenPosition, frame, Color.Lerp(Color.DimGray, Color.White, (float)i / ribbonPoints.Length), rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
+                }
+            }
         }
     }
 }

@@ -59,8 +59,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
                     for (int j = 0; j < 40; j++)
                     {
-                        Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(5, 5), glowColor, 1f + Main.rand.NextFloat());
-                        Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(2, 2), glowColor, Main.rand.NextFloat());
+                        Dust splode = Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(15, 15), 0, glowColor, 1f + Main.rand.NextFloat());
+                        splode.noGravity = true;
                     }
                 }
 
@@ -88,23 +88,25 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             if (Projectile.ai[1] == 1f)
             {
                 Projectile.tileCollide = false;
-                Projectile.extraUpdates = 2;
+                Projectile.extraUpdates = 1;
 
                 Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-                Projectile.scale = 0.1f + Utils.GetLerpValue(0, 600, Projectile.Distance(Main.player[Projectile.owner].MountedCenter), true) * 0.9f;
+                Projectile.scale = 0.5f + Utils.GetLerpValue(0, 600, Projectile.Distance(Main.player[Projectile.owner].MountedCenter), true) * 0.5f;
 
-                Projectile.velocity += Projectile.DirectionTo(Main.player[Projectile.owner].MountedCenter);
+                Projectile.velocity += Projectile.DirectionTo(Main.player[Projectile.owner].MountedCenter) * 0.2f;
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[Projectile.owner].MountedCenter) * Projectile.oldVelocity.Length(), 0.1f);
 
                 if (Projectile.Distance(Main.player[Projectile.owner].MountedCenter) < 40)
                     Projectile.Kill();
             }
 
-            if (Time < 60 || Time > 120)
+            if (Time < 70 || Time > 120)
             {
                 Vector2 off = new Vector2(22, 0).RotatedBy(Projectile.rotation) * Projectile.scale;
-                Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + off, Projectile.velocity * 0.1f, glowColor, 2f * Projectile.scale);
-                Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center - off, Projectile.velocity * 0.1f, glowColor, 2f * Projectile.scale);
+                Dust left = Dust.NewDustPerfect(Projectile.Center - off, DustID.AncientLight, -Projectile.velocity * 0.5f, 0, glowColor, 2f * Projectile.scale);
+                left.noGravity = true;              
+                Dust right = Dust.NewDustPerfect(Projectile.Center + off, DustID.AncientLight, -Projectile.velocity * 0.5f, 0, glowColor, 2f * Projectile.scale);
+                right.noGravity = true;
             }
 
             if (Main.rand.NextBool(3))

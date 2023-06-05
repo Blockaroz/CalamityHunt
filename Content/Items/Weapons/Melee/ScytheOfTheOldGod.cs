@@ -50,17 +50,19 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Texture2D glow = ModContent.Request<Texture2D>(Texture + "Glow").Value;
-            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).Value;
-            glowColor.A /= 2;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.33f, 0.33f).Value;
+            glowColor.A = 0;
             spriteBatch.Draw(glow, position, frame, glowColor, 0, origin, scale, 0, 0);
+            spriteBatch.Draw(glow, position, frame, glowColor * 0.5f, 0, origin, scale * 1.02f, 0, 0);
         }
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Texture2D glow = ModContent.Request<Texture2D>(Texture + "Glow").Value;
-            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).Value;
-            glowColor.A /= 2;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.33f, 0.33f).Value;
+            glowColor.A = 0;
             spriteBatch.Draw(glow, Item.Center - Main.screenPosition, glow.Frame(), glowColor, rotation, Item.Size * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glow, Item.Center - Main.screenPosition, glow.Frame(), glowColor * 0.5f, rotation, Item.Size * 0.5f, scale * 1.02f, 0, 0);
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<ScytheOfTheOldGodHeld>()] <= 0;
@@ -75,7 +77,6 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             {
                 Projectile.NewProjectileDirect(source, position, velocity, type, damage, 0, player.whoAmI, ai0: -1, ai1: swingStyle);
                 swingStyle = (swingStyle + 1) % 3;
-
             }
 
             return false;
