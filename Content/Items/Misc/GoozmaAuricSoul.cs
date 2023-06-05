@@ -59,21 +59,20 @@ namespace CalamityHunt.Content.Items.Misc
         {
             for (int i = 0; i < 150; i++)
             {
-                if (Main.rand.NextBool(15))
+                if (Main.rand.NextBool(3))
+                {
+                    Vector2 off = Main.rand.NextVector2Circular(20, 20);
+                    Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(5, 5), GetAlpha(Color.White).Value * 0.2f, 1f + Main.rand.NextFloat());
+                }
+
+                if (Main.rand.NextBool(8))
                 {
                     Vector2 off = Main.rand.NextVector2Circular(20, 20);
                     float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                    Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Item.Center + off, Main.rand.NextVector2Circular(15, 15), GetAlpha(Color.White).Value * 0.2f, scale);
+                    Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Item.Center + off, Main.rand.NextVector2Circular(7, 7), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
                 }
 
-                if (Main.rand.NextBool(5))
-                {
-                    Vector2 off = Main.rand.NextVector2Circular(20, 20);
-                    float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                    Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(5, 5), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
-                }
-
-                Dust soul = Dust.NewDustDirect(Item.Center - new Vector2(30, 18), 60, 40, DustID.PortalBoltTrail, 0f, -Main.rand.NextFloat(1f, 2f), 0, GetAlpha(Color.White).Value, Main.rand.NextFloat(2f));
+                Dust soul = Dust.NewDustPerfect(Item.Center, DustID.PortalBoltTrail, Main.rand.NextVector2Circular(10, 10), 0, GetAlpha(Color.White).Value, Main.rand.NextFloat(2f));
                 soul.noGravity = true;
             }
             player.GetModPlayer<AuricSoulPlayer>().goozmaSoul = true;
@@ -126,6 +125,7 @@ namespace CalamityHunt.Content.Items.Misc
             glowColor.A = 0;
 
             float soulScale = scale;
+            float fastScale = 1f + MathF.Sin(Main.GlobalTimeWrappedHourly * 25f % MathHelper.TwoPi) * 0.1f;
             scale = 1f + MathF.Sin(Main.GlobalTimeWrappedHourly * 3f % MathHelper.TwoPi) * 0.1f;
 
             //spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), Color.Black * 0.1f, -MathHelper.PiOver4, sparkTexture.Size() * 0.5f, scale * new Vector2(3f, 0.8f), 0, 0);
@@ -156,8 +156,8 @@ namespace CalamityHunt.Content.Items.Misc
                     y.Y *= 0.4f + MathF.Sin(time * 0.1f) * 0.1f;
                     Vector2 z = new Vector2(80 + MathF.Cos(time - i * 0.01f) * 10f, 0).RotatedBy(MathHelper.TwoPi / 150f * i + time * 2f + 2f);
                     z.Y *= 0.6f + MathF.Sin(time) * 0.2f;
-                    offs1[i] = x.RotatedBy(time * 2f) * 0.8f;
-                    offs2[i] = y.RotatedBy(time * 0.3f) * 0.6f;
+                    offs1[i] = x.RotatedBy(time * 2f) * 0.7f;
+                    offs2[i] = y.RotatedBy(time * 0.3f) * 0.5f;
                     offs3[i] = z.RotatedBy(-time * 0.5f) * new Vector2(1f, 0.8f) * 0.4f;
 
                     Vector2 f = new Vector2(20 + (time * 0.4f % 1f) * 150f, 0).RotatedBy(MathHelper.TwoPi / 80f * i - time + 2f);
@@ -176,10 +176,10 @@ namespace CalamityHunt.Content.Items.Misc
 
                 Color StripColor(float p)
                 {
-                    Color final = new GradientColor(SlimeUtils.GoozColors, 0.5f, 0.5f).ValueAt(p * 10 - 5 + Main.GlobalTimeWrappedHourly * 30);
-                    return final * 0.5f;
+                    Color final = new GradientColor(SlimeUtils.GoozColors, 0.5f, 0.5f).ValueAt(p * 20 - 10 + Main.GlobalTimeWrappedHourly * 30);
+                    return final * 0.9f;
                 }
-                float StripWidth(float p) => Utils.GetLerpValue(0f, 0.7f, p, true) * Utils.GetLerpValue(1f, 0.7f, p, true) * 25f * (1f + MathF.Sin(p * MathHelper.TwoPi * 3f) * 0.33f);
+                float StripWidth(float p) => Utils.GetLerpValue(0f, 0.5f, p, true) * Utils.GetLerpValue(1f, 0.5f, p, true) * 20f;
 
                 strip1.PrepareStrip(offs1, offRots1, StripColor, StripWidth, Item.Center - Main.screenPosition, offs1.Length, true);
                 strip2.PrepareStrip(offs2, offRots2, StripColor, StripWidth, Item.Center - Main.screenPosition, offs2.Length, true);
@@ -190,7 +190,7 @@ namespace CalamityHunt.Content.Items.Misc
                 effect.Parameters["uTexture"].SetValue(trailTexture);
                 effect.Parameters["uGlow"].SetValue(TextureAssets.Extra[197].Value);
                 effect.Parameters["uColor"].SetValue(Vector3.One);
-                effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.33f % 1f);
+                effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.66f % 1f);
                 effect.Parameters["uBackPower"].SetValue(0.6f);
                 effect.CurrentTechnique.Passes[0].Apply();
 
@@ -206,11 +206,12 @@ namespace CalamityHunt.Content.Items.Misc
                 spriteBatch.Draw(eyeTexture, Item.Center - Main.screenPosition, eyeTexture.Frame(), new Color(100, 100, 100, 0), -MathHelper.PiOver4, eyeTexture.Size() * 0.5f, scale * 0.8f, 0, 0);
             }
             Rectangle frame = Main.itemAnimations[Type].GetFrame(texture, Main.itemFrameCounter[whoAmI]);
-            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, GetAlpha(Color.White).Value, 0, frame.Size() * 0.5f, soulScale * 0.9f, 0, 0);
-            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, new Color(200, 200, 200, 0), 0, frame.Size() * 0.5f, soulScale * 0.9f, 0, 0);
+            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, GetAlpha(Color.White).Value, 0, frame.Size() * 0.5f, soulScale * 0.6f, 0, 0);
+            spriteBatch.Draw(texture, Item.Center - Main.screenPosition, frame, new Color(200, 200, 200, 0), 0, frame.Size() * 0.5f, soulScale * 0.6f, 0, 0);
 
             spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.2f, 0, glowTexture.Size() * 0.5f, scale * 0.4f, 0, 0);
-            spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.2f, 0, glowTexture.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.4f, 0, glowTexture.Size() * 0.5f, 0.2f + fastScale * 0.4f, 0, 0);
+            spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.2f, 0, glowTexture.Size() * 0.5f, fastScale, 0, 0);
 
             spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.7f, 0, glowTexture.Size() * 0.5f, scale * 0.2f, 0, 0);
 

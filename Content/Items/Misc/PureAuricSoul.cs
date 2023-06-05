@@ -58,21 +58,20 @@ namespace CalamityHunt.Content.Items.Misc
         {
             for (int i = 0; i < 150; i++)
             {
-                if (Main.rand.NextBool(15))
+                if (Main.rand.NextBool(5))
                 {
                     Vector2 off = Main.rand.NextVector2Circular(20, 20);
-                    float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                    Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(1, 1), GetAlpha(Color.White).Value * 0.2f, scale);
+                    Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(5, 5), GetAlpha(Color.White).Value * 0.2f, 1f + Main.rand.NextFloat());
                 }
 
-                if (Main.rand.NextBool(5))
+                if (Main.rand.NextBool(8))
                 {
                     Vector2 off = Main.rand.NextVector2Circular(20, 20);
                     float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
                     Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Item.Center + off, Main.rand.NextVector2Circular(7, 7), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
                 }
 
-                Dust soul = Dust.NewDustDirect(Item.Center - new Vector2(30, 18), 60, 40, DustID.PortalBoltTrail, 0f, -Main.rand.NextFloat(1f, 2f), 0, GetAlpha(Color.White).Value, Main.rand.NextFloat(2f));
+                Dust soul = Dust.NewDustPerfect(Item.Center, DustID.PortalBoltTrail, Main.rand.NextVector2Circular(10, 10), 0, GetAlpha(Color.White).Value, Main.rand.NextFloat(2f));
                 soul.noGravity = true;
             }
             player.GetModPlayer<AuricSoulPlayer>().pureSoul = true;
@@ -122,7 +121,7 @@ namespace CalamityHunt.Content.Items.Misc
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            bool includeChains = false;
+            bool includeChains = true;
             bool includeLensFlare = true;
 
             Texture2D texture = TextureAssets.Item[Type].Value;
@@ -163,8 +162,8 @@ namespace CalamityHunt.Content.Items.Misc
                     y.Y *= 0.5f + MathF.Sin(time * 1.2f) * 0.1f;
                     Vector2 z = new Vector2(60 + MathF.Cos(time - i * 0.01f) * 10f, 0).RotatedBy(MathHelper.TwoPi / 150f * i + time * 2f + 2f);
                     z.Y *= 0.8f + MathF.Sin(time) * 0.1f;
-                    offs1[i] = x.RotatedBy(-time * 1f);
-                    offs2[i] = y.RotatedBy(time * 0.8f);
+                    offs1[i] = x.RotatedBy(-time * 1f) * 0.8f;
+                    offs2[i] = y.RotatedBy(time * 0.8f) * 0.9f;
                     offs3[i] = z.RotatedBy(-time * 0.1f) * new Vector2(1f, 0.8f) * 0.7f;
 
                     Vector2 f = new Vector2(20 + (time * 0.4f % 1f) * 150f, 0).RotatedBy(MathHelper.TwoPi / 80f * i - time + 2f);
@@ -223,10 +222,10 @@ namespace CalamityHunt.Content.Items.Misc
             if (includeLensFlare)
             {
                 float lensScale = scale + MathF.Sin(Main.GlobalTimeWrappedHourly * 35) * 0.4f;
-                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor * 0.1f, -MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.4f, 4f + lensScale * 5f), 0, 0);
-                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor * 0.1f, MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.4f, 4f + lensScale * 5f), 0, 0);
-                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor * 0.5f, -MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.4f, 1f + lensScale), 0, 0);
-                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor * 0.5f, MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.4f, 1f + lensScale), 0, 0);
+                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor * 0.1f, -MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.5f, 4f + lensScale * 5f), 0, 0);
+                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor * 0.1f, MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.5f, 4f + lensScale * 5f), 0, 0);
+                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor, -MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.5f, 1f + lensScale), 0, 0);
+                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor, MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.5f, 1f + lensScale), 0, 0);
                 spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.05f, 0, glowTexture.Size() * 0.5f, lensScale * 1.5f, 0, 0);
             }
 
