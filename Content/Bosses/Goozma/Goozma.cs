@@ -137,6 +137,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             On_Main.CheckMonoliths += DrawCordShapes;
 
             nPCsToDrawCordOn = new List<NPC>();
+
+            LoadAssets();
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)

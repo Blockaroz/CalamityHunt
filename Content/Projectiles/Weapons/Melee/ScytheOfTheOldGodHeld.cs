@@ -295,7 +295,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (swingPercent2 > 0.5f && swingPercent2 < 0.6f || (SwingStyle == 1 && swingPercent2 > 0.3f && swingPercent2 < 0.4f))
+            if (swingPercent2 > 0.5f && swingPercent2 < 0.7f || (SwingStyle == 1 && swingPercent2 > 0.25f && swingPercent2 < 0.35f))
                 return base.Colliding(projHitbox, targetHitbox);
             return false;
         }
@@ -393,8 +393,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
             Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
             Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.5f, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale * 1.01f, spriteEffects, 0);
-
-            DrawSpark(Projectile.Center + new Vector2(130, 10 * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * drawScale, glowColor, sparkStrength);
 
             DrawSpark(Projectile.Center + new Vector2(75, 0).RotatedBy(Projectile.rotation + 0.2f * Projectile.spriteDirection) * (drawScale + 2.7f), glowColor * 0.5f * sparkStrength, sparkStrength);
             DrawSpark(Projectile.Center + new Vector2(75, 0).RotatedBy(Projectile.rotation - 0.5f * Projectile.spriteDirection) * (drawScale + 2.7f), glowColor * 0.7f * sparkStrength, 2f * sparkStrength);
