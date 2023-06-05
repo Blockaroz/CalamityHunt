@@ -139,6 +139,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     return GoozmaColorUtils.Rubicon;
                 case 22:
                     return GoozmaColorUtils.DoubleRainbow;
+                case 23:
+                    return GoozmaColorUtils.Unpleasant;
+                case 24:
+                    return GoozmaColorUtils.OceanJasper;
             }
         }
 

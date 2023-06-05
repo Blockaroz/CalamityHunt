@@ -317,6 +317,32 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(0, 0, 0).ToVector3()
         };
 
+        public static Vector3[] Unpleasant => new Vector3[] //this unpleasant goozma shows up at your front door
+        {
+            new Color(0, 0, 0).ToVector3(),
+            new Color(158, 83, 0).ToVector3(),
+            new Color(181, 75, 59).ToVector3(),
+            new Color(210, 63, 108).ToVector3(),
+            new Color(245, 58, 253).ToVector3(),
+            new Color(185, 106, 195).ToVector3(),
+            new Color(132, 144, 144).ToVector3(),
+            new Color(38, 211, 41).ToVector3(),
+            new Color(0, 0, 0).ToVector3()
+        };
+
+        public static Vector3[] OceanJasper => new Vector3[] //ocean jasper; willowmaine
+        {
+            new Color(240, 111, 60).ToVector3(),
+            new Color(196, 52, 0).ToVector3(),
+            new Color(240, 111, 60).ToVector3(),
+            new Color(250, 193, 132).ToVector3(),
+            new Color(255, 255, 212).ToVector3(),
+            new Color(134, 166, 153).ToVector3(),
+            new Color(46, 83, 75).ToVector3(),
+            new Color(12, 141, 31).ToVector3(),
+            new Color(46, 83, 75).ToVector3()
+           };
+
         public static Vector3[] Test => new Vector3[]
         {
             new Color(0, 0, 0).ToVector3(),
