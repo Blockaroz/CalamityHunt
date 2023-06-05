@@ -37,7 +37,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Projectile.hide = true;
             Projectile.manualDirectionChange = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 15;
+            Projectile.localNPCHitCooldown = 3;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.noEnchantmentVisuals = true;
         }
@@ -76,8 +76,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             bool canKill = false;
 
             SoundStyle swingSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwing;
-            swingSound.MaxInstances = 0;
-            swingSound.PitchVariance = 0.1f;
 
             float speed = Player.itemAnimationMax / 30f * 0.85f;
 
@@ -355,38 +353,34 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             {
                 for (int i = 0; i < Projectile.oldRot.Length; i++)
                 {
-                    Color trailGlowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 4) * 0.5f * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
+                    Color trailGlowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 4) * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
                     trailGlowColor.A = 0;
 
-                    Main.EntitySpriteDraw(bladeTexture, Projectile.Center - Main.screenPosition, bladeTexture.Frame(), trailGlowColor, Projectile.oldRot[i] + MathHelper.PiOver4 * Projectile.spriteDirection, bladeTexture.Size() * origin, drawScale * (1.1f + i * 0.07f), spriteEffects, 0);
+                    Main.EntitySpriteDraw(bladeTexture, Projectile.Center - Main.screenPosition, bladeTexture.Frame(), trailGlowColor, Projectile.oldRot[i] + MathHelper.PiOver4 * Projectile.spriteDirection, bladeTexture.Size() * origin, drawScale * (1f + MathF.Sqrt(i) * 0.1f), spriteEffects, 0);
                 }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Color trailBackColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 6) * 0.7f * (1f - (float)i / Projectile.oldRot.Length);
+                    trailBackColor.A = 200;
+
+                    Rectangle frame = swingTexture.Frame(1, 4, 0, i);
+                    Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailBackColor * 0.8f * swingStrength * (1f - i / 4f) * swingStrength, Projectile.oldRot[i] - (0.5f + i * 0.2f) * Projectile.spriteDirection, frame.Size() * 0.5f, drawScale + 2.5f, spriteEffects, 0);
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    Color trailGlowColor = Color.Lerp(new Color(200, 200, 200, 0), new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 6), 0.6f + i / 10f) * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
+                    trailGlowColor.A = 0;
+
+                    Rectangle frame = swingTexture.Frame(1, 4, 0, i);
+                    Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailGlowColor * 0.5f * (1f - i / 4f) * swingStrength, Projectile.oldRot[i * 2] - (0.3f + i * 0.1f) * Projectile.spriteDirection, frame.Size() * 0.5f, drawScale + 2.7f, spriteEffects, 0);
+                    Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailGlowColor * 0.5f * (1f - i / 4f) * swingStrength, Projectile.oldRot[i] - (1f + i * 0.3f) * Projectile.spriteDirection, frame.Size() * 0.5f, (drawScale + 2.5f) * (1f + i / 10f), spriteEffects, 0);
+                }
+
+                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, swingTexture.Frame(1, 4, 0, 3), new Color(50, 50, 50, 0) * swingStrength, Projectile.rotation - 0.3f * Projectile.spriteDirection, swingTexture.Frame(1, 4, 0, 3).Size() * 0.5f, drawScale + 1.85f, spriteEffects, 0);
+                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, swingTexture.Frame(1, 4, 0, 3), new Color(150, 150, 150, 0) * swingStrength, Projectile.rotation - 0.5f * Projectile.spriteDirection, swingTexture.Frame(1, 4, 0, 3).Size() * 0.5f, drawScale + 2.55f, spriteEffects, 0);
+
             }
-
-            DrawRibbon(lightColor);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
-            Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
-            Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.5f, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale * 1.01f, spriteEffects, 0);
-
-            for (int i = 0; i < 4; i++)
-            {
-                Color trailBackColor = new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 6) * 0.7f * (1f - (float)i / Projectile.oldRot.Length);
-                trailBackColor.A = 200;
-
-                Rectangle frame = swingTexture.Frame(1, 4, 0, i);
-                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailBackColor * 0.8f * swingStrength * (1f - i / 4f) * swingStrength, Projectile.oldRot[i ] - (0.5f + i * 0.2f) * Projectile.spriteDirection, frame.Size() * 0.5f, drawScale + 2.5f, spriteEffects, 0);
-            }            
-            for (int i = 0; i < 4; i++)
-            {
-                Color trailGlowColor = Color.Lerp(new Color(200, 200, 200, 0), new GradientColor(SlimeUtils.GoozOilColors, 0.15f, 0.15f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 6), 0.6f + i / 10f) * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
-                trailGlowColor.A = 0;
-
-                Rectangle frame = swingTexture.Frame(1, 4, 0, i);
-                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailGlowColor * 0.5f * (1f - i / 4f) * swingStrength, Projectile.oldRot[i * 2] - (0.3f + i * 0.1f) * Projectile.spriteDirection, frame.Size() * 0.5f, drawScale + 2.7f, spriteEffects, 0);
-                Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, frame, trailGlowColor * 0.5f * (1f - i / 4f) * swingStrength, Projectile.oldRot[i] - (1f + i * 0.3f) * Projectile.spriteDirection, frame.Size() * 0.5f, (drawScale + 2.5f) * (1f + i / 10f), spriteEffects, 0);
-            }
-
-            Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, swingTexture.Frame(1, 4, 0, 3), new Color(50, 50, 50, 0) * swingStrength, Projectile.rotation - 0.3f * Projectile.spriteDirection, swingTexture.Frame(1, 4, 0, 3).Size() * 0.5f, drawScale + 1.85f, spriteEffects, 0);
-            Main.EntitySpriteDraw(swingTexture, Projectile.Center - Main.screenPosition, swingTexture.Frame(1, 4, 0, 3), new Color(150, 150, 150, 0) * swingStrength, Projectile.rotation - 0.5f * Projectile.spriteDirection, swingTexture.Frame(1, 4, 0, 3).Size() * 0.5f, drawScale + 2.55f, spriteEffects, 0);
 
             Vector2 waveOff = new Vector2(swingPercent * 200, 0).RotatedBy(Projectile.velocity.ToRotation());
             float waveSrength = Utils.GetLerpValue(0.5f, 0.8f, swingPercent2, true) * Utils.GetLerpValue(1f, 0.9f, swingPercent, true);
@@ -394,6 +388,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Main.EntitySpriteDraw(swingTexture, Projectile.Center + waveOff - Main.screenPosition, swingTexture.Frame(1, 4, 0, 2), glowColor * waveSrength * 0.1f, Projectile.velocity.ToRotation(), swingTexture.Frame(1, 4, 0, 1).Size() * 0.5f, drawScale + swingPercent * 3f, spriteEffects, 0);
 
             float sparkStrength = (1f - swingPercent2) * swingPercent2 * 4f * Utils.GetLerpValue(0.3f, 0.5f, swingPercent, true);
+            
+            DrawRibbon(lightColor);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
+            Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
+            Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.5f, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale * 1.01f, spriteEffects, 0);
 
             DrawSpark(Projectile.Center + new Vector2(130, 10 * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * drawScale, glowColor, sparkStrength);
 
