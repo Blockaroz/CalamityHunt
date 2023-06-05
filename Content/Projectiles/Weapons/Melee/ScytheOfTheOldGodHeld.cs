@@ -238,7 +238,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public void RibbonPhysics()
         {
-            int length = 14;
+            int length = 12;
             if (ribbonVels != null)
             {
                 for (int i = 0; i < ribbonVels.Length; i++)
@@ -362,7 +362,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 }
             }
 
-            DrawRibbon();
+            DrawRibbon(lightColor);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), lightColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
             Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale, spriteEffects, 0);
             Main.EntitySpriteDraw(glowTexture, Projectile.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.5f, Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection, texture.Size() * origin, drawScale * 1.01f, spriteEffects, 0);
@@ -415,7 +415,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), new Color(200, 200, 200, 0), -MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(0.5f, 1f) * scale, 0, 0);
         }
 
-        private void DrawRibbon()
+        private void DrawRibbon(Color lightColor)
         {
             if (ribbonPoints != null)
             {
@@ -429,7 +429,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     Rectangle frame = ribbonTexture.Frame(1, 3, 0, style);
                     float rotation = ribbonPoints[i].AngleTo(ribbonPoints[i + 1]);
                     Vector2 stretch = new Vector2(0.5f + Utils.GetLerpValue(0, ribbonPoints.Length - 2, i, true) * 0.8f, ribbonPoints[i].Distance(ribbonPoints[i + 1]) / (frame.Height - 5));
-                    Main.EntitySpriteDraw(ribbonTexture, ribbonPoints[i] - Main.screenPosition, frame, Color.Lerp(Color.DimGray, Color.White, (float)i / ribbonPoints.Length), rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
+                    Main.EntitySpriteDraw(ribbonTexture, ribbonPoints[i] - Main.screenPosition, frame, lightColor.MultiplyRGBA(Color.Lerp(Color.DimGray, Color.White, (float)i / ribbonPoints.Length)), rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
                 }
             }
         }

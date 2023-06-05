@@ -745,15 +745,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         SoundEngine.PlaySound(roar, NPC.Center);
                                     }
 
-                                    if (Time % dashTime <= 15)
+                                    if (Time % dashTime <= 13)
                                     {
-                                        NPC.Center = Vector2.Lerp(NPC.Center, NPC.Center + NPC.DirectionTo(Target.Center) * (NPC.Distance(Target.Center) - 300) * 0.2f, 0.6f);
+                                        NPC.Center = Vector2.Lerp(NPC.Center, NPC.Center + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 300) * 0.2f, 0.6f);
                                         NPC.velocity = NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero);
 
-                                        if (Time % dashTime == 15)
-                                            NPC.velocity -= NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 15f;
+                                        if (Time % dashTime == 13)
+                                            NPC.velocity -= NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 20f;
 
                                     }
+
                                     if (Time % dashTime > 25 && Time % dashTime < 74)
                                     {
                                         rotate = true;
@@ -770,8 +771,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             hueBot.data = NPC.localAI[0];
                                         }
 
-                                        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (3f - Time % dashTime * 0.03f);
-                                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero).RotatedBy(0.05f) * 50f, 0.01f);
+                                        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 0.2f;
+                                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 50f, 0.01f);
                                     }
                                     else
                                         NPC.velocity *= 0.6f;
@@ -1454,8 +1455,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 sound.Position = NPC.Center;
             }
         }
-
-
 
         private void SortedProjectileAttack(Vector2 targetPos, SortedProjectileAttackTypes type)
         {
