@@ -28,8 +28,8 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             Item.DamageType = DamageClass.Melee;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 35;
-            Item.useAnimation = 35;
+            Item.useTime = 40;
+            Item.useAnimation = 40;
             Item.channel = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;

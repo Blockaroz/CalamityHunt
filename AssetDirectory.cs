@@ -36,7 +36,7 @@ namespace CalamityHunt
                 public static SoundStyle ScytheOfTheOldGodSwing => new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/OldGodScytheSwing")
                 {
                     MaxInstances = 0,
-                    PitchVariance = 0.2f
+                    PitchVariance = 0.1f
                 };
             }
 
