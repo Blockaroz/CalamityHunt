@@ -33,65 +33,62 @@ namespace CalamityHunt.Common.Systems
             bool king = true;
             if (Main.slimeRain && Main.hardMode)
             {
-                foreach (NPC nPC in Main.npc.Where(n => (n.type == NPCID.KingSlime || n.type == NPCID.QueenSlimeBoss) && n.active))
+                foreach (NPC nPC in Main.npc.Where(n => (n.type == NPCID.KingSlime || n.type == NPCID.QueenSlimeBoss) && n.boss && n.active))
                 {
                     slimeBoss = nPC.whoAmI;
                     if (nPC.type == NPCID.QueenSlimeBoss)
                         king = false;
+
                     break;
                 }
                 if (slimeBoss > -1)
                 {
-                    Mod cal;
-                    ModLoader.TryGetMod("CalamityMod", out cal);
-                    if (cal != null)
+                    ModLoader.TryGetMod("CalamityMod", out Mod calamity);
+                    if (calamity != null)
                     {
-                        foreach (Item item in Main.item.Where(n => n.active && n.type == cal.Find<ModItem>("OverloadedSludge").Type))
+                        foreach (Item item in Main.item.Where(n => n.active && n.type == calamity.Find<ModItem>("OverloadedSludge").Type))
                             if (Main.npc[slimeBoss].Hitbox.Intersects(item.Hitbox))
                             {
                                 item.active = false;
                                 conditionsMet = true;
                             }
                     }
-                    else
-                    {
-                        foreach (Item item in Main.item.Where(n => n.active && n.type == ModContent.ItemType<OverloadedSludge>()))
-                            if (Main.npc[slimeBoss].Hitbox.Intersects(item.Hitbox))
-                            {
-                                spawnPos = item.Center;
-                                item.active = false;
-                                conditionsMet = true;
-                            }
-                    }
+
+                    foreach (Item item in Main.item.Where(n => n.active && n.type == ModContent.ItemType<OverloadedSludge>()))
+                        if (Main.npc[slimeBoss].Hitbox.Intersects(item.Hitbox))
+                        {
+                            spawnPos = item.Center;
+                            item.active = false;
+                            conditionsMet = true;
+                        }
+
                 }
             }
 
             if (conditionsMet)
             {
-                if (!Main.dedServ)
+                if (king)
                 {
-                    if (king)
+                    for (int i = 0; i < 200; i++)
                     {
-                        for (int i = 0; i < 200; i++)
-                        {
-                            Dust slime = Dust.NewDustPerfect(Main.npc[slimeBoss].Center + Main.rand.NextVector2Circular(200, 110), 4, Main.rand.NextVector2Circular(15, 12) - Vector2.UnitY * 6f, 150, new Color(78, 136, 255, 80), 2f);
-                            slime.noGravity = true;
-                            slime.velocity *= 2f;
-                        }
+                        Dust slime = Dust.NewDustPerfect(Main.npc[slimeBoss].Center + Main.rand.NextVector2Circular(200, 110), 4, Main.rand.NextVector2Circular(15, 12) - Vector2.UnitY * 6f, 150, new Color(78, 136, 255, 80), 2f);
+                        slime.noGravity = true;
+                        slime.velocity *= 2f;
                     }
-                    else
-                    {
-                        for (int i = 0; i < 200; i++)
-                        {
-                            Color qsColor = NPC.AI_121_QueenSlime_GetDustColor();
-                            qsColor.A = 150;
-                            Dust slime = Dust.NewDustPerfect(Main.npc[slimeBoss].Center + Main.rand.NextVector2Circular(200, 110), 4, Main.rand.NextVector2Circular(15, 12) - Vector2.UnitY * 6f, 50, qsColor, 2f);
-                            slime.noGravity = true;
-                            slime.velocity *= 2f;
-                        }
-                    }
-                    SoundEngine.PlaySound(SoundID.NPCDeath1.WithPitchOffset(-0.5f), spawnPos);
                 }
+                else
+                {
+                    for (int i = 0; i < 200; i++)
+                    {
+                        Color qsColor = NPC.AI_121_QueenSlime_GetDustColor();
+                        qsColor.A = 150;
+                        Dust slime = Dust.NewDustPerfect(Main.npc[slimeBoss].Center + Main.rand.NextVector2Circular(200, 110), 4, Main.rand.NextVector2Circular(15, 12) - Vector2.UnitY * 6f, 50, qsColor, 2f);
+                        slime.noGravity = true;
+                        slime.velocity *= 2f;
+                    }
+                }
+
+                SoundEngine.PlaySound(SoundID.NPCDeath1.WithPitchOffset(-0.5f), spawnPos);
 
                 Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), spawnPos, Vector2.Zero, ModContent.ProjectileType<GoozmaSpawn>(), 0, 0);
                 Gore.NewGore(Entity.GetSource_NaturalSpawn(), Main.npc[slimeBoss].Top, -Vector2.UnitY, GoreID.KingSlimeCrown);

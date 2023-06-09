@@ -34,13 +34,5 @@ namespace CalamityHunt.Content.Items.Consumable
             Main.StartSlimeRain(true);
             return true;
         }
-
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient<EntropyMatter>(10)
-                .AddIngredient(ItemID.Gel, 90)
-                .Register();
-        }
     }
 }
