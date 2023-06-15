@@ -51,41 +51,51 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Owner.SetDummyItemTime(1);
             SetMagicHands();
             Owner.heldProj = Projectile.whoAmI;
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Owner.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * Owner.HeldItem.shootSpeed, 0.04f);
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Owner.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * Owner.HeldItem.shootSpeed, 0.07f);
             Projectile.Center = Owner.MountedCenter + Projectile.velocity * (2f + 8f * Projectile.scale);
 
-            if ((Time - 8) % (8 + (int)(Owner.itemAnimationMax * 1.77f)) < 12)
-            {
-                if ((Time - 8) % (8 + (int)(Owner.itemAnimationMax * 1.77f)) == 2)
-                    Owner.CheckMana(35, true);
+            if ((Time - 8) % (8 + (int)(Owner.itemAnimationMax)) == 1)
+                Owner.CheckMana(15, true);
 
-                if ((Time - 8) % 4 == 1)
+            if ((Time - 8) % 4 == 1)
+            {
+                SoundStyle lightning = SoundID.DD2_LightningBugZap;
+                lightning.MaxInstances = 0;
+                lightning.PitchVariance = 0.1f;
+                SoundEngine.PlaySound(lightning.WithPitchOffset(1f), Projectile.Center);
+
+                for (int i = 0; i < 7; i++)
                 {
-                    SoundEngine.PlaySound(SoundID.DD2_SkyDragonsFuryShot, Projectile.Center);
-
-                    for (int i = 0; i < 7; i++)
-                    {
-                        Color color = Main.hslToRgb((Time + i) * 0.03f % 1f, 0.5f, 0.5f, 128);
-                        Dust sparkle = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(32, 32), DustID.PortalBolt, Projectile.velocity * Main.rand.NextFloat(2f), 0, color, 1f + Main.rand.NextFloat());
-                        sparkle.noGravity = true;
-                        sparkle.noLightEmittence = true;
-                    }
-
-                    Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Vector2.Zero, Main.hslToRgb(Time * 0.03f % 1f, 0.5f, 0.5f, 128), 0.5f + Main.rand.NextFloat());
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Projectile.velocity, ModContent.ProjectileType<CrystalLightning>(), Owner.HeldItem.damage, 1f, Owner.whoAmI, ai1: Projectile.whoAmI);
+                    Color color = Main.hslToRgb((Time + i) * 0.03f % 1f, 0.5f, 0.5f, 128);
+                    Dust sparkle = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(32, 32), DustID.PortalBolt, Projectile.velocity * Main.rand.NextFloat(2f), 0, color, 1f + Main.rand.NextFloat());
+                    sparkle.noGravity = true;
+                    sparkle.noLightEmittence = true;
                 }
+
+                Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Vector2.Zero, Main.hslToRgb(Time * 0.03f % 1f, 0.5f, 0.5f, 128), 0.5f + Main.rand.NextFloat());
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16), Projectile.velocity, ModContent.ProjectileType<CrystalLightning>(), Owner.HeldItem.damage, 1f, Owner.whoAmI, ai1: Projectile.whoAmI);
             }
-            else
-            {
-                if (!Owner.channel || !Owner.CheckMana(35))
-                    canKill = true;
-            }
+
+            //if ((Time - 8) % 5 == 1)
+            //{
+            //    Vector2 piercerVelocity = Projectile.velocity;
+
+            //    if (Main.myPlayer == Projectile.owner)
+            //    {
+            //        piercerVelocity = (Main.MouseWorld - Projectile.Center).RotatedByRandom(0.2f) * (0.06f / MathHelper.E);
+            //        Projectile.netUpdate = true;
+            //    }
+            //    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(10, 10), piercerVelocity, ModContent.ProjectileType<CrystalPiercer>(), Owner.HeldItem.damage, 1f, Owner.whoAmI, ai1: Projectile.whoAmI);
+            //}
+
+            if ((!Owner.channel || !Owner.CheckMana(15)) && ((Time - 8) % 20 > 0))
+                canKill = true;
 
             if (!canKill)
                 Projectile.timeLeft = 10000;
 
-            if (canKill && Projectile.timeLeft > 10)
-                Projectile.timeLeft = 10;
+            if (canKill && Projectile.timeLeft > 5)
+                Projectile.timeLeft = 5;
 
             if (canKill && Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge > 0.999f && Projectile.timeLeft > 3)
             {

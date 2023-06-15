@@ -26,9 +26,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.tileCollide = false;
             Projectile.ownerHitCheck = true;
             Projectile.manualDirectionChange = true;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
-            Projectile.extraUpdates = 2;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 3;
+            Projectile.extraUpdates = 3;
             Owner = -1;
         }
 
@@ -139,28 +139,33 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         private void FindEndpoint()
         {
-            Vector2 mouse = Main.MouseWorld;
-
-            if (Distance > 10f)
+            if (Main.myPlayer == Projectile.owner)
             {
-                endPoint = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * Distance;
-                return;
-            }
+                Vector2 mouse = Main.MouseWorld;
 
-            if (mouse.Distance(Projectile.Center) > 1100)
-                mouse = Projectile.Center + Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 1100;
-
-            int target = Projectile.FindTargetWithLineOfSight(1500);
-            if (target >= 0)
-            {
-                if (Main.npc[target].Distance(Main.MouseWorld) < 600)
+                if (Distance > 10f)
                 {
-                    endPoint = Main.npc[target].Center;
+                    endPoint = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * Distance;
                     return;
                 }
-            }
 
-            endPoint = mouse + Main.rand.NextVector2Circular(100, 100);
+                if (mouse.Distance(Projectile.Center) > 1100)
+                    mouse = Projectile.Center + Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 1100;
+
+                int target = Projectile.FindTargetWithLineOfSight(1500);
+                if (target >= 0)
+                {
+                    if (Main.npc[target].Distance(Main.MouseWorld) < 600)
+                    {
+                        endPoint = Main.rand.NextVector2FromRectangle(Main.npc[target].Hitbox);
+                        Projectile.netUpdate = true;
+                        return;
+                    }
+                }
+
+                endPoint = mouse + Main.rand.NextVector2Circular(50, 50);
+                Projectile.netUpdate = true;
+            }
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
