@@ -413,7 +413,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public void DrawSpark(Vector2 position, Color color, float scale)
         {
-            Texture2D texture = AssetDirectory.Textures.Extra.Sparkle;
+            Texture2D texture = AssetDirectory.Textures.Sparkle;
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), color, MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(1f, 2f) * scale, 0, 0);
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), color, -MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(1f, 2f) * scale, 0, 0);
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), new Color(200, 200, 200, 0), MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(0.5f, 1f) * scale, 0, 0);

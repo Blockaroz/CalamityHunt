@@ -34,7 +34,7 @@ namespace CalamityHunt.Content.Particles
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture = AssetDirectory.Textures.Extra.Sparkle;
+            Texture2D texture = AssetDirectory.Textures.Sparkle;
 
             float power = scale * MathF.Pow(Utils.GetLerpValue(15, 6, time, true), 2.5f) * Utils.GetLerpValue(0, 5, time, true);
             Color drawColor = color;

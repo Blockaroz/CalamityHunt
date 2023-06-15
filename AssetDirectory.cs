@@ -16,7 +16,7 @@ namespace CalamityHunt
         {
             public static Texture2D Sparkle => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/SharpSpark", AssetRequestMode.ImmediateLoad).Value;
 
-            public struct GoozmaExtra
+            public struct TempGoozmaExtras
             {
                 public static Texture2D Glow => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft", AssetRequestMode.ImmediateLoad).Value;
                 public static Texture2D BigGlow => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig", AssetRequestMode.ImmediateLoad).Value;

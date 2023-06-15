@@ -117,9 +117,9 @@ namespace CalamityHunt.Content.Items.Misc
             bool includeTrails = true;
 
             Texture2D texture = TextureAssets.Item[Type].Value;
-            Texture2D sparkTexture = AssetDirectory.Textures.Extra.Sparkle;
-            Texture2D glowTexture = AssetDirectory.Textures.Extra.BigGlow;
-            Texture2D eyeTexture = AssetDirectory.Textures.Extra.GoozmaEye;
+            Texture2D sparkTexture = AssetDirectory.Textures.Sparkle;
+            Texture2D glowTexture = AssetDirectory.Textures.TempGoozmaExtras.BigGlow;
+            Texture2D eyeTexture = AssetDirectory.Textures.TempGoozmaExtras.GoozmaEye;
 
             Color glowColor = GetAlpha(Color.White).Value;
             glowColor.A = 0;
@@ -226,7 +226,7 @@ namespace CalamityHunt.Content.Items.Misc
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Texture2D texture = TextureAssets.Item[Type].Value;
-            Texture2D glowTexture = AssetDirectory.Textures.Extra.BigGlow;
+            Texture2D glowTexture = AssetDirectory.Textures.TempGoozmaExtras.BigGlow;
 
             spriteBatch.Draw(texture, position, frame, GetAlpha(Color.White).Value, 0, frame.Size() * 0.5f, scale + 0.2f, 0, 0);
             spriteBatch.Draw(texture, position, frame, new Color(200, 200, 200, 0), 0, frame.Size() * 0.5f, scale + 0.2f, 0, 0);

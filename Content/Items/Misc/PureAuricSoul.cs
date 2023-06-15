@@ -125,8 +125,8 @@ namespace CalamityHunt.Content.Items.Misc
             bool includeLensFlare = true;
 
             Texture2D texture = TextureAssets.Item[Type].Value;
-            Texture2D sparkTexture = AssetDirectory.Textures.Extra.Sparkle;
-            Texture2D glowTexture = AssetDirectory.Textures.Extra.BigGlow;
+            Texture2D sparkTexture = AssetDirectory.Textures.Sparkle;
+            Texture2D glowTexture = AssetDirectory.Textures.TempGoozmaExtras.BigGlow;
 
             Color glowColor = GetAlpha(Color.White).Value;
             glowColor.A = 0;
@@ -243,7 +243,7 @@ namespace CalamityHunt.Content.Items.Misc
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Texture2D texture = TextureAssets.Item[Type].Value;
-            Texture2D glowTexture = AssetDirectory.Textures.Extra.BigGlow;
+            Texture2D glowTexture = AssetDirectory.Textures.TempGoozmaExtras.BigGlow;
 
             Color glowColor = GetAlpha(Color.White).Value;
             glowColor.A = 0;

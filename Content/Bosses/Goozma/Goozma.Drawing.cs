@@ -69,8 +69,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Texture2D glow = AssetDirectory.Textures.Extra.Glow;
-            Texture2D flare = AssetDirectory.Textures.Extra.Sparkle;
+            Texture2D glow = AssetDirectory.Textures.TempGoozmaExtras.Glow;
+            Texture2D flare = AssetDirectory.Textures.Sparkle;
 
             //Rectangle ornamentBase = ornament.Frame(1, 2, 0, 0);
             //Rectangle ornamentGlow = ornament.Frame(1, 2, 0, 1);
@@ -163,7 +163,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.5f) + new Vector2(0, eyePower.Y), 0, 0);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.1f) + new Vector2(0, eyePower.X), 0, 0);
 
-            Texture2D godEye = AssetDirectory.Textures.Extra.GoozmaEye;
+            Texture2D godEye = AssetDirectory.Textures.TempGoozmaExtras.GoozmaEye;
 
             if (Phase == 1 && Time >= 50)
             {
