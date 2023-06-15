@@ -14,18 +14,19 @@ namespace CalamityHunt
     {
         public struct Textures
         {
-            public struct Extra
+            public static Texture2D Sparkle => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/SharpSpark", AssetRequestMode.ImmediateLoad).Value;
+
+            public struct GoozmaExtra
             {
                 public static Texture2D Glow => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft", AssetRequestMode.ImmediateLoad).Value;
                 public static Texture2D BigGlow => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig", AssetRequestMode.ImmediateLoad).Value;
-                public static Texture2D Sparkle => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/SharpSpark", AssetRequestMode.ImmediateLoad).Value;
-                public static Texture2D GoozmaEye => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/SpecialEye", AssetRequestMode.ImmediateLoad).Value;
+                public static Texture2D GoozmaEye => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpecialEye", AssetRequestMode.ImmediateLoad).Value;
             }
 
             public struct SwordSwing
             {
-                public static Texture2D Basic => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/SwordSwing", AssetRequestMode.ImmediateLoad).Value;
-                public static Texture2D Bloody => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/BloodSwing", AssetRequestMode.ImmediateLoad).Value;
+                public static TextureAsset Basic => new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/SwordSwing");
+                public static TextureAsset Bloody => new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/BloodSwing");
             }
         }
 
