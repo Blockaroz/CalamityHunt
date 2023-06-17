@@ -29,7 +29,7 @@ namespace CalamityHunt.Common.Systems
         
         public static float DifficultyBasedValue(float? normal = null, float? expert = null, float? revengeance = null, float? death = null, float? bossrush = null, float? ftw = null, float? gfb = null, float? legendary = null)
         {
-            if (Main.zenithWorld && Main.masterMode && RevengeanceMode && legendary != null)
+            if (Main.getGoodWorld && Main.masterMode && RevengeanceMode && legendary != null)
             {
                 return (float)legendary;
             }

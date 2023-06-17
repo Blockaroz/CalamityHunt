@@ -396,7 +396,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             //    }
                             //}
 
-                            //if (Main.getGoodWorld)
+                            if (Main.getGoodWorld)
                             {
                                 NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 100, (int)NPC.Center.Y, ModContent.NPCType<Goozmite>());
                                 NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X + 100, (int)NPC.Center.Y, ModContent.NPCType<Goozmite>());
