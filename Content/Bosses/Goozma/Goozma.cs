@@ -229,7 +229,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            if (Main.zenithWorld && Main.masterMode && RevengeanceMode)
+            if (Main.getGoodWorld && Main.masterMode && RevengeanceMode)
             {
                 target.AddBuff(BuffID.VortexDebuff, 480);
             }
