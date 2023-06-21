@@ -19,19 +19,6 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 {
     public class SlimeMonsoonBackground : CustomSky
     {
-        public override void OnLoad()
-        {
-            lightningTexture = new Asset<Texture2D>[2];
-            skyTexture = new Asset<Texture2D>[3];
-
-            lightningTexture[0] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/Lightning");
-            lightningTexture[1] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/LightningGlow");
-
-            skyTexture[0] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/SkyNoise");
-            skyTexture[1] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/DistortNoise");
-            skyTexture[2] = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/ColorMap");
-        }
-
         public override void Activate(Vector2 position, params object[] args)
         {
             _active = true;
@@ -65,9 +52,6 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
         public static float strengthTarget;
         public static int additionalLightningChance;
         public static Color lightColor;
-
-        private static Asset<Texture2D>[] lightningTexture;
-        private static Asset<Texture2D>[] skyTexture;
 
         public static float? forceStrength;
 
@@ -155,13 +139,13 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             if (maxDepth >= float.MaxValue && minDepth < float.MaxValue)
             {
                 spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
-                spriteBatch.Draw(skyTexture[0].Value, new Rectangle(0, -yOffset, Main.screenWidth, Main.screenHeight * 2), darkColor * _strength * 0.66f);
+                spriteBatch.Draw(AssetDirectory.Textures.SlimeMonsoon.SkyTexture, new Rectangle(0, -yOffset, Main.screenWidth, Main.screenHeight * 2), darkColor * _strength * 0.66f);
             }
 
             Effect skyClouds = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad).Value;
-            skyClouds.Parameters["uTex0"].SetValue(skyTexture[0].Value);
-            skyClouds.Parameters["uTex1"].SetValue(skyTexture[1].Value);
-            skyClouds.Parameters["uMap"].SetValue(skyTexture[2].Value);
+            skyClouds.Parameters["uTex0"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyTexture.Texture);
+            skyClouds.Parameters["uTex1"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
+            skyClouds.Parameters["uMap"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyColorMap.Texture);
             skyClouds.Parameters["uBrightness"].SetValue(_brightness - yOffPower * 0.1f);
 
             for (int i = 0; i < 4; i++)
@@ -205,8 +189,8 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
                     .UseIntensity(1f)
                     .UseOpacity(_strength * 0.1f);
-                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample0"].SetValue(skyTexture[1].Value);
-                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample1"].SetValue(skyTexture[1].Value);
+                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
+                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["inEdge"].SetValue(-1f);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["outEdge"].SetValue(0.8f - Main.LocalPlayer.Distance(radialDistortPos) * 0.0001f);
@@ -261,8 +245,8 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
                 Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.BackgroundViewMatrix.NormalizedTransformationmatrix);
-                lightningEffect.Parameters["uTexture"].SetValue(lightningTexture[0].Value);
-                lightningEffect.Parameters["uGlow"].SetValue(lightningTexture[1].Value);
+                lightningEffect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Texture);
+                lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Texture);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
                 lightningEffect.Parameters["uTime"].SetValue(-(float)Math.Cbrt(maxTime - time) * 0.2f);
                 lightningEffect.Parameters["uBackPower"].SetValue(0f);
