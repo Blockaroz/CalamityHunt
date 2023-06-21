@@ -22,11 +22,11 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
                 slimeColor.Add(ContentSamples.NpcsByNetId[NPCID.BlueSlime].color, 0.9f);
                 slimeColor.Add(ContentSamples.NpcsByNetId[NPCID.RedSlime].color, 0.3f);
                 slimeColor.Add(ContentSamples.NpcsByNetId[NPCID.YellowSlime].color, 0.2f);
-                //slimeColor.Add(ContentSamples.NpcsByNetId[NPCID.BlackSlime].color, 0.1f); // this looks bad
+                slimeColor.Add(Color.Gray, 0.1f);
                 slimeColor.Add(ContentSamples.NpcsByNetId[NPCID.JungleSlime].color, 0.3f);
                 color = slimeColor.Get();
 
-                if (Main.rand.NextBool(100))
+                if (Main.rand.NextBool(20))
                 {
                     color = ContentSamples.NpcsByNetId[NPCID.PurpleSlime].color;
                     scale = ContentSamples.NpcsByNetId[NPCID.PurpleSlime].scale;

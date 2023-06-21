@@ -25,6 +25,7 @@ namespace CalamityHunt.Content.Projectiles
     public class GoozmaSpawn : ModProjectile
     {
         public static readonly SoundStyle slimeabsorb = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeAbsorb", 8) with { MaxInstances = 100, Volume = 0.1f};
+        public WeightedRandom<int> randomType = new WeightedRandom<int>();
         public override void SetDefaults()
         {
             Projectile.width = 92;
@@ -172,9 +173,8 @@ namespace CalamityHunt.Content.Projectiles
             Vector2 position = Projectile.Center + Main.rand.NextVector2CircularEdge(1100, 1100) + Main.rand.NextVector2Circular(600, 600);
             Vector2 velocity = position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(3f);
 
-            WeightedRandom<int> randomType = new WeightedRandom<int>();
             randomType.Add(Particle.ParticleType<FlyingNormalSlime>(), 1f / 50f);
-            //randomType.Add(Particle.ParticleType<FlyingBigSlime>(), 1f / 100f); // this looks bad
+            randomType.Add(Particle.ParticleType<FlyingBigSlime>(), 1f / 100f); // this looks bad
             randomType.Add(Particle.ParticleType<FlyingBalloonSlime>(), 1f / 500f);
             randomType.Add(Particle.ParticleType<FlyingGastropod>(), 1f / 800f);
             randomType.Add(Particle.ParticleType<FlyingIlluminantSlime>(), 1f / 800f);
