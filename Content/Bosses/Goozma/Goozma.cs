@@ -1802,14 +1802,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int damage = attack switch
             {
-                0 => 5,//contact
-                1 => 40,//slime balls
-                2 => 80,//pure gel
-                3 => 120, //lightning
+                0 => 300,//contact
+                1 => 75,//slime balls
+                2 => 105,//pure gel
+                3 => 125, //lightning
                 4 => 60, //static
                 5 => 50, //bloat
-                6 => 60, //drill dash
-                7 => 150, //fusion ray
+                6 => 75, //drill dash
+                7 => 200, //fusion ray
                 _ => 0
             };
 

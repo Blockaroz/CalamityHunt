@@ -20,7 +20,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("LaserFountain").Type, 0.35f));
                 projectiles.Add((calamity.Find<ModProjectile>("TaintedBladeSlasher").Type, 0.5f));
                 projectiles.Add((calamity.Find<ModProjectile>("GaelSkull").Type, 0.6f));
-                projectiles.Add((calamity.Find<ModProjectile>("LaceratorYoyo").Type, 3f));
+                projectiles.Add((calamity.Find<ModProjectile>("LaceratorYoyo").Type, 4f));
                 projectiles.Add((calamity.Find<ModProjectile>("CosmicDischargeFlail").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("CosmicIceBurst").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("DragonPowFlail").Type, 0.6f));
@@ -35,9 +35,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("EonBolt").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("RendingNeedle").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("MurasamaSlash").Type, 0.6f));
+                projectiles.Add((calamity.Find<ModProjectile>("PhaseslayerBeam").Type, 0.85f));
+                projectiles.Add((calamity.Find<ModProjectile>("PhaseslayerProjectile").Type, 0.85f));
                 projectiles.Add((calamity.Find<ModProjectile>("PrismTooth").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("PhotonRipperProjectile").Type, 0.25f));
                 projectiles.Add((calamity.Find<ModProjectile>("DragonRageStaff").Type, 0.4f));
+                projectiles.Add((calamity.Find<ModProjectile>("FuckYou").Type, 0.4f));
                 projectiles.Add((calamity.Find<ModProjectile>("DracoBeam").Type, 0.4f));
                 projectiles.Add((calamity.Find<ModProjectile>("EarthProj").Type, 0.1f));
                 projectiles.Add((calamity.Find<ModProjectile>("Earth2").Type, 0.1f));
