@@ -36,7 +36,7 @@ namespace CalamityHunt
 
                 public static TextureAsset SkyTexture = new TextureAsset($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/SkyNoise");
                 public static TextureAsset SkyDistortion = new TextureAsset($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/DistortNoise");
-                public static TextureAsset SkyColorMap =>new TextureAsset($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/ColorMap");
+                public static TextureAsset SkyColorMap = new TextureAsset($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/ColorMap");
             }
         }
 
