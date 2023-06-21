@@ -75,6 +75,7 @@ namespace CalamityHunt.Common.Systems
                         slime.noGravity = true;
                         slime.velocity *= 2f;
                     }
+                    Gore.NewGore(Entity.GetSource_NaturalSpawn(), Main.npc[slimeBoss].Top, -Vector2.UnitY, GoreID.KingSlimeCrown);
                 }
                 else
                 {
@@ -86,12 +87,12 @@ namespace CalamityHunt.Common.Systems
                         slime.noGravity = true;
                         slime.velocity *= 2f;
                     }
+                    Gore.NewGore(Entity.GetSource_NaturalSpawn(), Main.npc[slimeBoss].Top, -Vector2.UnitY, GoreID.QueenSlimeCrown);
                 }
 
                 SoundEngine.PlaySound(SoundID.NPCDeath1.WithPitchOffset(-0.5f), spawnPos);
 
                 Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), spawnPos, Vector2.Zero, ModContent.ProjectileType<GoozmaSpawn>(), 0, 0);
-                Gore.NewGore(Entity.GetSource_NaturalSpawn(), Main.npc[slimeBoss].Top, -Vector2.UnitY, GoreID.KingSlimeCrown);
                 Main.npc[slimeBoss].active = false;
             }
 
