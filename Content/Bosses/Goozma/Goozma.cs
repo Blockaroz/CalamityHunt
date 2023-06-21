@@ -26,6 +26,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
 using Terraria.GameContent.ItemDropRules;
@@ -78,7 +79,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.height = 150;
             NPC.damage = 0;
             NPC.defense = 100;
-            NPC.lifeMax = 5000000;
+            NPC.lifeMax = 1500000;
             NPC.HitSound = null;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0f;
@@ -97,12 +98,20 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 Music = MusicLoader.GetMusicSlot($"{nameof(CalamityHunt)}/Assets/Music/GlutinousArbitration");
                 Music2 = MusicLoader.GetMusicSlot($"{nameof(CalamityHunt)}/Assets/Music/ViscousDesperation");
             }
+            if (Main.expertMode)
+            {
+                NPC.lifeMax = 2200000;
+            }
             if (ModLoader.HasMod("CalamityMod"))
             {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
                 calamity.Call("SetDefenseDamageNPC", NPC, true);
+                if ((bool)calamity.Call("GetDifficultyActive", "revengeance"))
+                {
+                    NPC.lifeMax = 3500000;
+                }
             }
 
             if (Main.drunkWorld)
@@ -1802,7 +1811,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int damage = attack switch
             {
-                0 => 300,//contact
+                0 => Main.expertMode ? 600 : 300,//contact
                 1 => 75,//slime balls
                 2 => 105,//pure gel
                 3 => 125, //lightning
@@ -1894,9 +1903,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             GoozmaResistances.GoozmaItemResistances(item, ref modifiers);
         }
+
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             GoozmaResistances.GoozmaProjectileResistances(projectile, ref modifiers);
+        }
+
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+        {
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
         }
     }
 }

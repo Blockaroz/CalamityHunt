@@ -438,7 +438,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int damage = attack switch
             {
-                0 => 70,//contact
+                0 => Main.expertMode ? 140 : 70,//contact
                 1 => 40,//Prism Destroyer
                 2 => 30,//Crystal Storm
                 3 => 5,//Pixieball Crystal Shard
@@ -654,6 +654,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             GoozmaResistances.GoozmaItemResistances(item, ref modifiers);
         }
+
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             GoozmaResistances.GoozmaProjectileResistances(projectile, ref modifiers);

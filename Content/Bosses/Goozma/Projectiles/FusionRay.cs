@@ -168,8 +168,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time > ChargeTime + LaserDuration + 100)
                 Projectile.Kill();
-
-            Projectile.damage = 20;
         }
 
         public static SlotId laserSound;

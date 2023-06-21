@@ -744,7 +744,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int damage = attack switch
             {
-                0 => 70,//contact
+                0 => Main.expertMode ? 140 : 70,//contact
                 1 => 40,//constellation star
                 2 => 50,//constellation line
                 3 => 30,//constellation debris
@@ -1039,6 +1039,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             GoozmaResistances.GoozmaItemResistances(item, ref modifiers);
         }
+
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             GoozmaResistances.GoozmaProjectileResistances(projectile, ref modifiers);

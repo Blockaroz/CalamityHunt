@@ -671,7 +671,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int damage = attack switch
             {
-                0 => 100,//contact
+                0 => Main.expertMode ? 200 : 100,//contact
                 1 => 80,//smasher
                 2 => 50,//shockwave
                 _ => damage = 0
@@ -756,6 +756,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             GoozmaResistances.GoozmaItemResistances(item, ref modifiers);
         }
+
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             GoozmaResistances.GoozmaProjectileResistances(projectile, ref modifiers);
