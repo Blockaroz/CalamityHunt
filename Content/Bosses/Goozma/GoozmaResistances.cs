@@ -191,7 +191,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     if (projectile.type == projectiles[i].Item1)
                     {
-                        modifiers.SourceDamage *= projectiles[i].Item2;
+                        //modifiers.SourceDamage *= projectiles[i].Item2;
                     }
                 }
             }
@@ -213,7 +213,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     if (item.type == items[i].Item1)
                     {
-                        modifiers.SourceDamage *= items[i].Item2;
+                        //modifiers.SourceDamage *= items[i].Item2;
                     }
                 }
             }
