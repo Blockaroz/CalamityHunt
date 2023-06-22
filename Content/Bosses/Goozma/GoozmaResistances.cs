@@ -218,5 +218,21 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
         }
+
+        public static void DisablePointBlank()
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    Projectile proj = Main.projectile[i];
+                    if (proj.active && (int)calamity.Call("GetPointBlankDuration", proj) > 0)
+                    {
+                        calamity.Call("SetPointBlankDuration", proj, 0);
+                    }
+                }
+            }
+        }
     }
 }

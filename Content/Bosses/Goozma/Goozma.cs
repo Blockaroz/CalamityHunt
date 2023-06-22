@@ -293,6 +293,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void AI()
         {
             ChangeWeather();
+            GoozmaResistances.DisablePointBlank();
             bool noSlime = NPC.ai[3] < 0 || NPC.ai[3] >= Main.maxNPCs || ActiveSlime.ai[1] > 3 || !ActiveSlime.active;
             if (Phase == 0 && noSlime)
                 Attack = (int)AttackList.SpawnSlime;
