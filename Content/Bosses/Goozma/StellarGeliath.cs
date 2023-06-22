@@ -744,15 +744,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int damage = attack switch
             {
-                0 => Main.expertMode ? 140 : 70,//contact
-                1 => 40,//constellation star
-                2 => 50,//constellation line
-                3 => 30,//constellation debris
-                4 => 30,//rocket flame
-                5 => 30,//star bit
-                6 => 60,//black hole large
-                7 => 50,//black hole medium
-                8 => 30,//black hole small
+                0 => Main.expertMode ? 280 : 140,//contact
+                1 => 80,//constellation star
+                2 => 100,//constellation line
+                3 => 60,//constellation debris
+                4 => 60,//rocket flame
+                5 => 60,//star bit
+                6 => 120,//black hole large
+                7 => 100,//black hole medium
+                8 => 60,//black hole small
                 _ => 0
             };
 

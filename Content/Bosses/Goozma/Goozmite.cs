@@ -305,7 +305,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int damage = attack switch
             {
                 0 => 0,//contact
-                1 => 50,//mini rainbow balls
+                1 => 100,//mini rainbow balls
                 _ => 0
             };
 

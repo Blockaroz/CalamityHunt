@@ -493,11 +493,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int damage = attack switch
             {
-                0 => Main.expertMode ? 140 : 70,//contact
-                1 => 40,//bubble
-                2 => 70,//clone
-                3 => 40,//pillar
-                4 => 50,//tooth
+                0 => Main.expertMode ? 280 : 140,//contact
+                1 => 80,//bubble
+                2 => 140,//clone
+                3 => 80,//pillar
+                4 => 100,//tooth
                 _ => damage = 0
             };
 
