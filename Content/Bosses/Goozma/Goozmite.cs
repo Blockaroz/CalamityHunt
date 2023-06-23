@@ -158,7 +158,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 if (Time > TimeUntilDeath)
                 {
-                    Host.life += (int)(NPC.life * 4f);
+                    Host.life += (int)(NPC.life * 6f);
                     if (Host.life > Host.lifeMax)
                         Host.life = Host.lifeMax;
                     for (int i = 0; i < 50; i++)
