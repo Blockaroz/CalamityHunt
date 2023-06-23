@@ -387,12 +387,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                         player.velocity.Y = -20;
 
-                    Projectile leftPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(-170, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
+                    Projectile leftPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(-190, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
                     leftPillar.ai[0] = -25;
                     leftPillar.ai[1] = 45;
                     leftPillar.ai[2] = spikeTime * spikeCount;
 
-                    Projectile rightPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(170, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
+                    Projectile rightPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(190, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
                     rightPillar.ai[0] = -35;
                     rightPillar.ai[1] = 45;
                     rightPillar.ai[2] = spikeTime * spikeCount;
@@ -429,10 +429,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 position = saveTarget + new Vector2(0, MathHelper.Lerp(100, 1600, i / (float)spikeNumber));
                         float randRot = Main.rand.NextFloat(-0.4f, 0.4f);
-                        Projectile leftSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), position + new Vector2(162, Main.rand.Next(-5, 5)), (-Vector2.UnitX).RotatedByRandom(0.06f).RotatedBy(randRot), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
+                        Projectile leftSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), position + new Vector2(182, Main.rand.Next(-8, 8)), (-Vector2.UnitX).RotatedByRandom(0.06f).RotatedBy(randRot), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
                         leftSpike.ai[0] = -60 + Main.rand.Next(-4, 2) + (int)(i / (float)spikeNumber * 15f);
                         leftSpike.ai[1] = 65 + Main.rand.Next(-2, 4);
-                        Projectile rightSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), position + new Vector2(-162, Main.rand.Next(-5, 5)), Vector2.UnitX.RotatedByRandom(0.06f).RotatedBy(-randRot), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
+                        Projectile rightSpike = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), position + new Vector2(-182, Main.rand.Next(-8, 8)), Vector2.UnitX.RotatedByRandom(0.06f).RotatedBy(-randRot), ModContent.ProjectileType<EbonstoneTooth>(), GetDamage(4), 0);
                         rightSpike.ai[0] = -60 + Main.rand.Next(-4, 2) + (int)(i / (float)spikeNumber * 15f);
                         rightSpike.ai[1] = 65 + Main.rand.Next(-2, 4);
                     }
@@ -465,9 +465,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (player.Center.Y > NPC.Bottom.Y + 1500)
                         player.velocity.Y -= Math.Max(player.Distance(NPC.Center) - 1500, 0) * 0.1f;
 
-                    if (player.Center.X > NPC.Bottom.X + 120 || player.Center.X < NPC.Bottom.X - 120)
+                    if (player.Center.X > NPC.Bottom.X + 140 || player.Center.X < NPC.Bottom.X - 140)
                     {
-                        player.velocity.X = -player.velocity.X * 0.1f;
+                        player.velocity.X = -player.velocity.X * 0.05f;
                         player.velocity.X -= (player.Center.X - NPC.Center.X) * 0.07f;
                     }
                 }
