@@ -282,14 +282,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time < 40)
             {
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center + new Vector2(0, -170)).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + new Vector2(0, -170)) * 0.2f, 0.1f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center + new Vector2(0, -260)).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + new Vector2(0, -170)) * 0.2f, 0.1f);
                 squishFactor = Vector2.Lerp(squishFactor, new Vector2(1.5f, 0.6f), Time / 60f);
             }
             else
             {
                 Vector2 wobble = Vector2.Lerp(new Vector2(0.5f, 1.6f), new Vector2(1.3f, 1f), 0.5f + (float)Math.Sin(Time * 0.2f) * 0.5f);
                 squishFactor = Vector2.Lerp(Vector2.Lerp(squishFactor, wobble, Utils.GetLerpValue(40, lengthOfAttack, Time, true) * 0.2f), Vector2.Lerp(squishFactor, Vector2.One, 0.1f), Utils.GetLerpValue(40 + lengthOfAttack, 110 + lengthOfAttack, Time, true)); 
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center + new Vector2(0, -170)).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + new Vector2(0, -170)) * 0.2f, 0.2f + (float)Math.Sin(Time * 0.3f) * 0.1f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center + new Vector2(0, -260)).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + new Vector2(0, -170)) * 0.2f, 0.2f + (float)Math.Sin(Time * 0.3f) * 0.1f);
 
                 if (Time <= lengthOfAttack + 100 && Time % 15 == 0)
                     for (int i = 0; i < crystalFrequency; i++)

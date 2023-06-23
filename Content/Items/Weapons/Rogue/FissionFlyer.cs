@@ -51,30 +51,20 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
 				if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
 					stealth = true;
-
-            }
+			}
 			else if (player.vortexStealthActive || player.shroomiteStealth)
-                stealth = true;
-
-			if (stealth)
-			{
-
-			}
-			else
-			{
-
-			}
+			stealth = true;
 
 			if (Main.myPlayer == player.whoAmI)
 			{
 				Vector2 mouseWorld = Main.MouseWorld;
 				player.LimitPointToPlayerReachableArea(ref mouseWorld);
 				velocity = velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * Main.rand.NextFloat(0.8f, 1.3f) * Math.Max(170, player.Distance(mouseWorld)) * MathF.E * 0.009f;
-                Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+                Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 0, stealth ? 1 : 0);
 
-            }
+			}
 
-            return false;
+            		return false;
 		}
 	}
 }

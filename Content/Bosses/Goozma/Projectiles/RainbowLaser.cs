@@ -79,7 +79,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (target > -1 && Time >= 0)
             {
-                Projectile.extraUpdates = 10;
+                Projectile.extraUpdates = Main.npc[(int)Owner].type == ModContent.NPCType<Goozma>() ? 10 : 5;
                 Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Speed * Utils.GetLerpValue(-10, 150, Projectile.timeLeft, true);
                 Projectile.velocity = Projectile.velocity.RotatedBy(0.0015f * Projectile.direction);
             }

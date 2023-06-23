@@ -70,7 +70,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<EbonianBehemuck>() && n.active).whoAmI;
 
-            int slimeCount = 3;
+            int slimeCount = 5;
 
             NPCAimedTarget target = Main.npc[owner].GetTargetData();
             if (Time < 0)
@@ -78,14 +78,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.scale = MathHelper.Lerp(Projectile.scale, 0.8f, 0.1f);
                 Projectile.rotation = Projectile.AngleTo(Main.npc[owner].Center) - MathHelper.PiOver2;
 
-                float distanceOut = 150 + (float)Math.Pow(Utils.GetLerpValue(-30, 0, Time, true), 2f) * 200;
-                Vector2 outerTarget = Main.npc[owner].Center + new Vector2(distanceOut * (float)Math.Sqrt(Utils.GetLerpValue(-150, -80, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
+                float distanceOut = 220 + (float)Math.Pow(Utils.GetLerpValue(-30, 0, Time, true), 2f) * 200;
+                Vector2 outerTarget = Main.npc[owner].Center + new Vector2(distanceOut * (float)Math.Sqrt(Utils.GetLerpValue(-150, -80, Time + (WhichOne % slimeCount) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
 
-                if (Projectile.ai[1] >= 3)
-                    outerTarget = Main.npc[owner].Center - new Vector2(distanceOut * (float)Math.Sqrt(Utils.GetLerpValue(-150, -90, Time + (WhichOne % 3) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
+                if (Projectile.ai[1] >= slimeCount)
+                    outerTarget = Main.npc[owner].Center - new Vector2(distanceOut * (float)Math.Sqrt(Utils.GetLerpValue(-150, -90, Time + (WhichOne % slimeCount) * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
 
                 CupGameRotation += Main.npc[owner].velocity.X * 0.001f;
-                Projectile.velocity = Projectile.DirectionTo(outerTarget).SafeNormalize(Vector2.Zero) * Projectile.Distance(outerTarget) * 0.33f;
+                Projectile.velocity = Projectile.DirectionTo(outerTarget).SafeNormalize(Vector2.Zero) * Projectile.Distance(outerTarget) * 0.2f;
                 saveTarget = target.Center;
                 squish = Vector2.SmoothStep(Vector2.One, new Vector2(1.3f, 0.8f), Utils.GetLerpValue(-20, 0, Time, true));
             }

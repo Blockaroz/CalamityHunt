@@ -49,10 +49,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 if (Time == 105)
                 {
                     SoundEngine.PlaySound(SoundID.Item84, Projectile.Center);
-
-                    for (int i = 0; i < 3; i++)
+                    int amt = Projectile.ai[2] == 1 ? 5 : 3;
+                    for (int i = 0; i < amt; i++)
                     {
-                        Vector2 velocity = new Vector2(0, 10).RotatedBy(MathHelper.TwoPi / 3f * i);
+                        Vector2 velocity = new Vector2(0, 10).RotatedBy(MathHelper.TwoPi / amt * i);
                         Projectile ring = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, velocity, ModContent.ProjectileType<FissionFlyerMiniRing>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         ring.ai[0] = Time;
                     }

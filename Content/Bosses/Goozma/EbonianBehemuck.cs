@@ -238,7 +238,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 float localTime = (Time - 40) % jumpTime;
 
                 if (localTime < (int)(jumpTime * 0.2f))
-                    saveTarget = Target.Center + new Vector2(Target.Velocity.X * 45, 200);
+                    saveTarget = Target.Center + new Vector2(Target.Velocity.X * 45, 380);
 
                 if (localTime == 0)
                 {
@@ -299,9 +299,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void Trifecta()
         {
-            int pairCount = 3;
-            int pairTime = 40;
-            int waitTime = 150;
+            int pairCount = 5;
+            int pairTime = 30;
+            int waitTime = 100;
             int countOfMe = Main.projectile.Count(n => n.type == ModContent.ProjectileType<EbonianBehemuckClone>() && n.active);
 
             NPC.damage = 0;
@@ -325,7 +325,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     List<int> randLeft = new List<int>()
                     {
-                        0, 1, 2
+                        0, 1, 2, 3, 4
                     };
                     for (int i = 0; i < pairCount; i++)
                     {
@@ -335,7 +335,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         clone.ai[1] = randLeft[randChosen];
                         Projectile cloneBottom = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(5, 0).RotatedBy(MathHelper.TwoPi / pairCount * i), ModContent.ProjectileType<EbonianBehemuckClone>(), GetDamage(2), 0);
                         cloneBottom.ai[0] = -waitTime - randLeft[randChosen] * pairTime;
-                        cloneBottom.ai[1] = randLeft[randChosen] + 3;
+                        cloneBottom.ai[1] = randLeft[randChosen] + pairCount;
                         randLeft.RemoveAt(randChosen);
                     }
                 }

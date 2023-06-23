@@ -423,6 +423,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 currentSlime = Main.rand.Next(0, 4);
                                 nextAttack[currentSlime] = Main.rand.Next(0, 3);
                             }
+                            //currentSlime = 2;
+                            //nextAttack[currentSlime] = 1;
 
                             int[] slimeTypes = new int[]
                             {
@@ -560,8 +562,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         break;
                                     case 1:
 
-                                        Fly();
-                                        NPC.velocity *= 0.9f;
+                                        Orbit(1000, new Vector2(500, 0));
+                                        if (Time > 50)
+                                        {
+                                            SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.CrimulanHop);
+                                        }
+                                        //Fly();
+                                        //NPC.velocity *= 0.9f;
 
                                         break;
                                     case 2:
@@ -593,7 +600,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             SortedProjectileAttack(saveTarget, SortedProjectileAttackTypes.StellarDisruption);
 
                                         FlyTo(saveTarget);
-                                        NPC.velocity *= 0.80f * Utils.GetLerpValue(-50, 60, Time, true);
+                                        NPC.velocity *= 0.78f * Utils.GetLerpValue(-50, 60, Time, true);
                                         NPC.damage = 0;
 
                                         break;
@@ -1596,9 +1603,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         }
 
                         if ((Time + Main.rand.Next(0, 2)) % 8 == 0)
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.15f).RotatedBy(0.4f) * 20f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.15f).RotatedBy(0.8f) * 20f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
                         if ((Time + Main.rand.Next(0, 2)) % 8 == 0)
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.15f).RotatedBy(-0.4f) * 20f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(0.15f).RotatedBy(-0.8f) * 20f, ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
 
                     }
 
