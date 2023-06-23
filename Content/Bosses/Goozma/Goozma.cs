@@ -593,7 +593,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             SortedProjectileAttack(saveTarget, SortedProjectileAttackTypes.StellarDisruption);
 
                                         FlyTo(saveTarget);
-                                        NPC.velocity *= 0.96f * Utils.GetLerpValue(-50, 60, Time, true);
+                                        NPC.velocity *= 0.80f * Utils.GetLerpValue(-50, 60, Time, true);
                                         NPC.damage = 0;
 
                                         break;
@@ -1509,7 +1509,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             goozmaShootPowerTarget = 1f;
                         }
 
-                        float angle = MathHelper.SmoothStep(1.3f, 0.7f, Time / 350f);
+                        float angle = MathHelper.SmoothStep(1.5f, 0.9f, Time / 350f);
                         if (Time % 6 == 0)
                         {
                             Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.UnitY.RotatedBy(angle).RotatedByRandom(0.3f) * Main.rand.Next(4, 7), ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
@@ -1552,7 +1552,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             goozmaShootPowerTarget = 1f;
                         }
 
-                        float angle = MathHelper.SmoothStep(-1.3f, -0.8f, Time / 350f);
+                        float angle = MathHelper.SmoothStep(-1.5f, -1.0f, Time / 350f);
                         if (Time % 15 == 0)
                         {
                             Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, -Vector2.UnitY.RotatedBy(angle).RotatedByRandom(0.2f) * Main.rand.Next(4, 7), ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);

@@ -100,7 +100,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 float width = (float)Math.Pow(Utils.GetLerpValue(0, 15, Projectile.localAI[0], true) * Utils.GetLerpValue(5, -60, Time, true), 0.5f) * Projectile.width * 0.015f;
                 Color tellColor = new Color(180, 30, 0, 0);
-                Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, width * 40 - 20), null, tellColor, Projectile.rotation + MathHelper.Pi, tell.Size() * new Vector2(0.5f, 0.66f), new Vector2(width, 7f - width), 0, 0);
+                Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, width * 40 - 20), null, tellColor, Projectile.rotation + MathHelper.Pi, tell.Size() * new Vector2(0.5f, 0.66f), new Vector2(width, 14f - width), 0, 0);
                 return false;
 
             }
