@@ -41,7 +41,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 int count = (int)Common.Systems.DifficultySystem.DifficultyBasedValue(3, 4, 5);
 
-                Vector2 myHome = Main.npc[owner].Center + new Vector2(350 * (float)Math.Sqrt(Utils.GetLerpValue(-65, -40, Time, true)), 0).RotatedBy(Spin + MathHelper.TwoPi / count * WhoAmI);
+                Vector2 myHome = Main.npc[owner].Center + new Vector2(444 * (float)Math.Sqrt(Utils.GetLerpValue(-65, -40, Time, true)), 0).RotatedBy(Spin + MathHelper.TwoPi / count * WhoAmI);
                 Projectile.Center = Vector2.Lerp(Projectile.Center, myHome, 0.2f);
 
             }

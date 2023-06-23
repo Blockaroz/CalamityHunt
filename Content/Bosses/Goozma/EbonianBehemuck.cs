@@ -460,6 +460,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time > 90 && Time < 170 + spikeCount * spikeTime)
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                 {
+                    player.wingTime = player.wingTimeMax;
                     if (player.Center.Y < NPC.Bottom.Y)
                         player.velocity.Y = -player.velocity.Y + 7;
                     if (player.Center.Y > NPC.Bottom.Y + 1500)
