@@ -424,8 +424,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 nextAttack[currentSlime] = Main.rand.Next(0, 3);
                             }
 
-                            //currentSlime = 1;
-                            //nextAttack[currentSlime] = 2;
+                            //currentSlime = 3;
+                            //nextAttack[currentSlime] = 0;
 
                             int[] slimeTypes = new int[]
                             {
@@ -601,7 +601,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             SortedProjectileAttack(saveTarget, SortedProjectileAttackTypes.StellarDisruption);
 
                                         FlyTo(saveTarget);
-                                        NPC.velocity *= 0.78f * Utils.GetLerpValue(-50, 60, Time, true);
+                                        NPC.velocity *= 0.75f * Utils.GetLerpValue(-50, 60, Time, true);
                                         NPC.damage = 0;
 
                                         break;

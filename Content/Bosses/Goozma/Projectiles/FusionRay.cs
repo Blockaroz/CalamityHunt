@@ -180,6 +180,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time > ChargeTime + LaserDuration + 100)
                 Projectile.Kill();
+
+            foreach (Player player in Main.player.Where(n => n.active && !n.dead))
+            {
+               player.wingTime = player.wingTimeMax;
+            }
         }
 
         public static SlotId laserSound;

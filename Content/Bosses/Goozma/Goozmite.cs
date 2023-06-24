@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.height = 80;
             NPC.damage = 0;
             NPC.defense = 100;
-            NPC.lifeMax = 10000;
+            NPC.lifeMax = 9000;
             NPC.HitSound = SoundID.NPCDeath9;
             NPC.DeathSound = SoundID.NPCDeath9;
             NPC.knockBackResist = 0.1f;
@@ -158,7 +158,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 if (Time > TimeUntilDeath)
                 {
-                    Host.life += (int)(NPC.life * 7.5f);
+                    Host.life += (int)(NPC.life * 8f);
                     if (Host.life > Host.lifeMax)
                         Host.life = Host.lifeMax;
                     for (int i = 0; i < 50; i++)
