@@ -79,7 +79,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.height = 150;
             NPC.damage = 0;
             NPC.defense = 100;
-            NPC.lifeMax = 3000000;
+            NPC.lifeMax = 2500000;
             NPC.HitSound = null;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0f;
@@ -100,7 +100,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
             if (Main.expertMode)
             {
-                NPC.lifeMax = 5000000;
+                NPC.lifeMax = 4250000;
             }
             if (ModLoader.HasMod("CalamityMod"))
             {
@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 calamity.Call("SetDefenseDamageNPC", NPC, true);
                 if ((bool)calamity.Call("GetDifficultyActive", "revengeance"))
                 {
-                    NPC.lifeMax = 7500000;
+                    NPC.lifeMax = 6000000;
                 }
             }
 
