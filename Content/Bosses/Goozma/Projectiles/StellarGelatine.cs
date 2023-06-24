@@ -112,12 +112,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.localAI[0] += Projectile.velocity.Length() * 0.015f;
         }
 
+        public static Texture2D auraTexture;
+
+        public override void Load()
+        {
+            auraTexture = ModContent.Request<Texture2D>(Texture + "Aura", AssetRequestMode.ImmediateLoad).Value;
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> aura = ModContent.Request<Texture2D>(Texture + "Aura");
-            Asset<Texture2D> sparkle = TextureAssets.Extra[98];
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
+            Texture2D glow = AssetDirectory.Textures.Glow;
             Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
             float scale = Projectile.localAI[1];
@@ -137,16 +143,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 for (int i = 1; i < telegraphCount; i++)
                 {
                     Vector2 telegraphScale = new Vector2(0.1f + (float)Math.Pow(Utils.GetLerpValue(0, telegraphCount, i, true), 2f) * 2f, 1f);
-                    Main.EntitySpriteDraw(sparkle.Value, Projectile.Center + telegraphs[i] - Main.screenPosition, sparkle.Frame(), new Color(255, 10, 20, 0), telegraphs[i].AngleFrom(telegraphs[i - 1]) - MathHelper.PiOver2, sparkle.Size() * 0.5f, telegraphScale, 0, 0);
+                    Main.EntitySpriteDraw(sparkle, Projectile.Center + telegraphs[i] - Main.screenPosition, sparkle.Frame(), new Color(255, 10, 20, 0), telegraphs[i].AngleFrom(telegraphs[i - 1]) - MathHelper.PiOver2, sparkle.Size() * 0.5f, telegraphScale, 0, 0);
                 }
             }
 
             Vector2 flameSquish = new Vector2(1f + (float)Math.Sin(Projectile.localAI[0] * 0.2f) * 0.2f, 1f + (float)Math.Cos(Projectile.localAI[0] * 0.2f) * 0.2f);
 
-            Main.EntitySpriteDraw(aura.Value, Projectile.Center - Main.screenPosition, aura.Frame(), new Color(10, 30, 110, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, aura.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * scale * flameSquish, 0, 0);
-            Main.EntitySpriteDraw(aura.Value, Projectile.Center - Main.screenPosition, aura.Frame(), new Color(20, 100, 150, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, aura.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * 0.66f * scale * flameSquish, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scale, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(70, 40, 35, 0), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.3f * scale, 0, 0);
+            Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(10, 30, 110, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * scale * flameSquish, 0, 0);
+            Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(20, 100, 150, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * 0.66f * scale * flameSquish, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scale, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, new Color(70, 40, 35, 0), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.3f * scale, 0, 0);
 
             return false;
         }

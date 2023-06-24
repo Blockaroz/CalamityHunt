@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -78,8 +79,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
             Vector2 squishFactor = new Vector2(1f - Projectile.velocity.Length() * 0.0045f, 1f + Projectile.velocity.Length() * 0.0075f);
 
             Rectangle baseFrame = texture.Frame(3, 3, 0, Projectile.frame);
@@ -89,11 +90,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * Utils.GetLerpValue(0, 25, Time, true);
             bloomColor.A = 0;
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, bloomColor * 0.15f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor * Utils.GetLerpValue(15, 30, Time, true), Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, bloomColor * 0.15f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, baseFrame, lightColor * Utils.GetLerpValue(15, 30, Time, true), Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center + Projectile.velocity * 0.1f - Main.screenPosition, null, bloomColor * 0.05f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 1.2f * squishFactor, 0, 0);
 
             return false;
         }

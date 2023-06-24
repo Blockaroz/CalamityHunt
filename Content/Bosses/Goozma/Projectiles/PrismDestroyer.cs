@@ -92,9 +92,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> tellTexture = TextureAssets.Extra[98];
-            Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D tellTexture = AssetDirectory.Textures.Sparkle;
+            Texture2D bloom = AssetDirectory.Textures.Glow;
 
             if (Time <= 3)
             {
@@ -104,17 +104,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Color rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
 
                     float rotation = Projectile.rotation + MathHelper.PiOver2 + MathHelper.TwoPi / Rays * i;
-                    Main.EntitySpriteDraw(tellTexture.Value, Projectile.Center - Main.screenPosition, null, rainbow, rotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), (float)Math.Sqrt(tellScale) * new Vector2(1f, 4f), 0, 0);
-                    Main.EntitySpriteDraw(tellTexture.Value, Projectile.Center - Main.screenPosition, null, rainbow * 0.2f, rotation, tellTexture.Size() * new Vector2(0.5f, 0.75f), tellScale * new Vector2(1.3f, 15f), 0, 0);
-                    Main.EntitySpriteDraw(tellTexture.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(1f, 3f), 0, 0);
+                    Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, rainbow, rotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), (float)Math.Sqrt(tellScale) * new Vector2(1f, 4f), 0, 0);
+                    Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, rainbow * 0.2f, rotation, tellTexture.Size() * new Vector2(0.5f, 0.75f), tellScale * new Vector2(1.3f, 15f), 0, 0);
+                    Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(1f, 3f), 0, 0);
                     float numBetweens = (int)(8f - MathHelper.Min(Rays / 2f, 8f));
                     for (int j = 1; j < numBetweens - 1; j++)
                     {
                         Color betweenRainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + (i + (j / numBetweens)) / Rays) % 1f, 0.7f, 0.6f, 0);
                         float lerpRotation = rotation + (MathHelper.TwoPi / Rays * (j / (numBetweens - 1)));
                         float betweenScale = (2.5f - (j / (numBetweens - 1f)) * (1f - j / (numBetweens - 1f)) * 5f) * Utils.GetLerpValue(20, -30, Time, true);
-                        Main.EntitySpriteDraw(tellTexture.Value, Projectile.Center - Main.screenPosition, null, betweenRainbow * 0.2f, lerpRotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(0.8f, 2.2f) * betweenScale, 0, 0);
-                        Main.EntitySpriteDraw(tellTexture.Value, Projectile.Center - Main.screenPosition, null, betweenRainbow * 0.5f, lerpRotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(0.8f, 1.33f) * betweenScale, 0, 0);
+                        Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, betweenRainbow * 0.2f, lerpRotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(0.8f, 2.2f) * betweenScale, 0, 0);
+                        Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, betweenRainbow * 0.5f, lerpRotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(0.8f, 1.33f) * betweenScale, 0, 0);
                     }
                 }
             }
@@ -128,16 +128,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Color rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
 
                 float rotation = Projectile.rotation + MathHelper.TwoPi / Rays * i;
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, rainbowSolid, rotation, baseFrame.Size() * new Vector2(0.01f, 0.5f), attackScale * new Vector2(0.5f, 0.3f), 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, rainbow, rotation, baseFrame.Size() * new Vector2(0.01f, 0.5f), attackScale * new Vector2(0.6f, 0.4f), 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, rainbowSolid * 0.3f, rotation, glowFrame.Size() * new Vector2(0.05f, 0.5f), attackScale * new Vector2(0.8f, 0.5f), 0, 0);
-                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, rainbow * 0.3f, rotation, bloom.Size() * new Vector2(0.25f, 0.5f), 10 * attackScale * new Vector2(1.5f, 0.4f), 0, 0);
-                Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, rainbow * 0.5f, rotation, bloom.Size() * new Vector2(0.25f, 0.5f), attackScale * new Vector2(8f, 2f), 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, rainbowSolid, rotation, baseFrame.Size() * new Vector2(0.01f, 0.5f), attackScale * new Vector2(0.5f, 0.3f), 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, rainbow, rotation, baseFrame.Size() * new Vector2(0.01f, 0.5f), attackScale * new Vector2(0.6f, 0.4f), 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, rainbowSolid * 0.3f, rotation, glowFrame.Size() * new Vector2(0.05f, 0.5f), attackScale * new Vector2(0.8f, 0.5f), 0, 0);
+                Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, rainbow * 0.3f, rotation, bloom.Size() * new Vector2(0.25f, 0.5f), 10 * attackScale * new Vector2(1.5f, 0.4f), 0, 0);
+                Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, rainbow * 0.5f, rotation, bloom.Size() * new Vector2(0.25f, 0.5f), attackScale * new Vector2(8f, 2f), 0, 0);
             }
 
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, new Color(20, 5, 10, 0), Projectile.rotation, bloom.Size() * 0.5f, 10 * attackScale * 3f, 0, 0);
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, Main.hslToRgb((Projectile.localAI[0] * 0.01f + 0.3f) % 1f, 1f, 0.5f, 0) * 0.15f, Projectile.rotation, bloom.Size() * 0.5f, 10 * attackScale * 1.4f, 0, 0);
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, Main.hslToRgb((Projectile.localAI[0] * 0.01f + 0.5f) % 1f, 1f, 0.7f, 0) * 0.15f, Projectile.rotation, bloom.Size() * 0.5f, 10 * attackScale * 0.8f, 0, 0);
+            Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, new Color(20, 5, 10, 0), Projectile.rotation, bloom.Size() * 0.5f, 10 * attackScale * 3f, 0, 0);
+            Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, Main.hslToRgb((Projectile.localAI[0] * 0.01f + 0.3f) % 1f, 1f, 0.5f, 0) * 0.15f, Projectile.rotation, bloom.Size() * 0.5f, 10 * attackScale * 1.4f, 0, 0);
+            Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, Main.hslToRgb((Projectile.localAI[0] * 0.01f + 0.5f) % 1f, 1f, 0.7f, 0) * 0.15f, Projectile.rotation, bloom.Size() * 0.5f, 10 * attackScale * 0.8f, 0, 0);
 
 
             return false;

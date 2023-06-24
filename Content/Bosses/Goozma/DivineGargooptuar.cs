@@ -84,7 +84,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             PrismDestroyer,
             CrystalStorm,
-            PixieBall,
+            DoubleRainbow,
             TooFar,
             Interrupt,
             BlowUp = -1
@@ -143,8 +143,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         CrystalStorm();
                         break;
                                             
-                    case (int)AttackList.PixieBall:
-                        PixieBall();
+                    case (int)AttackList.DoubleRainbow:
+                        DoubleRainbow();
                         break;                                                      
                     
                     case (int)AttackList.BlowUp:
@@ -301,112 +301,192 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time > lengthOfAttack + 110)
                 Reset();
-        }        
+        }
 
-        private void PixieBall()
+        public int shieldChargeCount;
+        
+        private void DoubleRainbow()
         {
             NPC.rotation = NPC.velocity.X * 0.022f;
 
-            if (Time < 60)
-            {
-                if (Time == 50)
-                {
-                    NPC.velocity = Vector2.UnitY * 5f;
-                    int damage = Main.zenithWorld ? 5 : 0;
-                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Host.Center, Host.DirectionTo(Target.Center - Vector2.UnitY * 15).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<PixieBall>(), damage, 0, ai1: 15, ai2: -1);
-
-                    //if (!Main.dedServ)
-                    //{
-                    //    SoundEngine.PlaySound(SoundID.Item147, NPC.Center);
-                    //}
-                }
-
-                NPC.velocity *= 0.9f;
-
-                if (Time < 50)
-                    squishFactor = Vector2.Lerp(Vector2.One, new Vector2(1.5f, 0.6f), (float)Math.Sqrt(Utils.GetLerpValue(0, 50, Time, true)));
-                else
-                    squishFactor = Vector2.SmoothStep(new Vector2(1.5f, 0.8f), Vector2.One, (float)Math.Sqrt(Utils.GetLerpValue(50, 60, Time, true)));
-            }
-            else if (Time < 500)
-            {
-                squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Cos(Time * 0.05f) * 0.2f, 1f + (float)Math.Cos(Time * 0.05f + MathHelper.Pi) * 0.2f), 0.3f);
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.01f, 0.1f);
-
-                //if (Time % 80 == 0)
-                //    for (int i = 0; i < Main.rand.Next(10, 30); i++)
-                //        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2Circular(10, 10) - Vector2.UnitY * 10, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(3), 0);
-            }
+            if (Time < 110)
+                NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.001f;
             else
             {
-                NPC.localAI[1]++;
-                NPC.velocity *= 0.9f;
-            }
-
-            if (Time == 60)
-                SoundEngine.PlaySound(SoundID.Shatter, NPC.Center);
-
-            if (Time > 60)
-            {
-                if (NPC.localAI[1] == 1)
+                if (Time < 150)
                 {
-                    NPC.localAI[1]++;
+                    Color dustColor = Main.hslToRgb((NPC.localAI[0] * 0.03f) % 1f, 1f, 0.7f, 0);
+                    for (int i = 0; i < 25; i++)
+                    {
+                        Vector2 offset = Main.rand.NextVector2Circular(200, 180);
+                        Vector2 velocity = -offset.SafeNormalize(Vector2.Zero) * offset.Length() * 0.1f * Main.rand.NextFloat();
+                        Dust dust = Dust.NewDustPerfect(NPC.Center + offset, DustID.PortalBoltTrail, velocity, 0, dustColor, (1f + Main.rand.NextFloat(2f)) * Utils.GetLerpValue(120, 140, Time, true));
+                        dust.noGravity = true;
+                    }
+                }
 
-                    for (int i = 0; i < 2; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment0>(), 1f);
-                    
-                    for (int i = 0; i < 3; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment1>(), 1f);
-                   
-                    Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment2>(), 1f);
-
-                    for (int i = 0; i < 3; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment3>(), 1f);
-                    
-                    for (int i = 0; i < 5; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment4>(), 1f);
-                    
-                    for (int i = 0; i < 2; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment5>(), 1f);
-                    
-                    for (int i = 0; i < 3; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment6>(), 1f);
-                    
-                    for (int i = 0; i < 7; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment7>(), 1f);
-                    
-                    for (int i = 0; i < 9; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(11, 11), ModContent.GoreType<CrystalShieldFragment8>(), 1f);
-                    
-                    for (int i = 0; i < 14; i++)
-                        Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(12, 12), ModContent.GoreType<CrystalShieldFragment9>(), 1f);
-
-                    SoundStyle shatter = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixiePrismDestroyed");
-                    shatter.MaxInstances = 0;
-                    SoundEngine.PlaySound(shatter, NPC.Center);
+                NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.0005f;
+                NPC.velocity *= 0.9f;
+                foreach (NPC chargeNPC in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<PixieCharge>() && n.ai[1] > 0))
+                {
+                    chargeNPC.velocity = Vector2.Lerp(chargeNPC.velocity, chargeNPC.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (5 + chargeNPC.Distance(NPC.Center) * 0.006f), 0.03f);
+                    if (chargeNPC.Distance(NPC.Center) < 100)
+                    {
+                        chargeNPC.active = false;
+                        shieldChargeCount++;
+                    }
                 }
             }
 
-            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
+            //no reason to change this across difficulty
+            int shieldChargeSpawnTime = 7;
+
+            int spawnCount = 20;
+            float neededShieldChargeThreshold = 0.75f;
+
+            //YuH add mode stuff here
+
+
+            Vector2 wobble = Vector2.Lerp(new Vector2(0.8f, 1.3f), new Vector2(1.1f, 1f), 0.5f + (float)Math.Sin(Time * 0.2f) * 0.5f);
+            squishFactor = Vector2.Lerp(squishFactor, wobble, Utils.GetLerpValue(40, 50, Time, true) * 0.2f);
+
+            if (Time >= 50 && (Time - 50) % shieldChargeSpawnTime == 0 && Time <= spawnCount * shieldChargeSpawnTime + 50)
             {
-                Projectile ball = Main.projectile.First(n => n.active && n.type == ModContent.ProjectileType<PixieBall>());
-                pixieBallDangerShine = Utils.GetLerpValue(900, 50, ball.Distance(NPC.Center), true);
+                float radius = 40;
+
+                Vector2 velocity = new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi);
+                NPC pixie = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)(NPC.Center.X + velocity.X * radius), (int)(NPC.Center.Y + velocity.Y * radius) + 20, ModContent.NPCType<PixieCharge>(), ai2: NPC.whoAmI);
+                pixie.velocity = velocity * radius;
             }
 
-            //foreach (Projectile proj in Main.projectile.Where(n => n.type == ModContent.ProjectileType<PixieBall>() && n.active))
-            //{
-            //    if (proj.Distance(NPC.Center) < 50)
-            //    {
-            //        Time = 0;
-            //        Attack = (int)AttackList.BlowUp;
-            //        if (Main.netMode == NetmodeID.MultiplayerClient)
-            //            NPC.netUpdate = true;
-            //    }
-            //}
+            if (Time > spawnCount * shieldChargeSpawnTime + 60)
+            {
+                if (shieldChargeCount > (int)(spawnCount * neededShieldChargeThreshold))
+                {
+                    Time = 0;
+                    Attack = (int)AttackList.BlowUp;
 
-            if (Time > 600)
-                Reset();
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                        NPC.netUpdate = true;
+                }
+                else if (Main.npc.Count(n => n.active && n.type == ModContent.NPCType<PixieCharge>()) <= 0)
+                {
+                    ShatterShield();
+                    Reset();
+                }
+            }
+
+            shineStrength = (float)shieldChargeCount / spawnCount;
         }
+
+        private void ShatterShield()
+        {
+            for (int i = 0; i < 2; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment0>(), 1f);
+
+            for (int i = 0; i < 3; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment1>(), 1f);
+
+            Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment2>(), 1f);
+
+            for (int i = 0; i < 3; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment3>(), 1f);
+
+            for (int i = 0; i < 5; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment4>(), 1f);
+
+            for (int i = 0; i < 2; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment5>(), 1f);
+
+            for (int i = 0; i < 3; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment6>(), 1f);
+
+            for (int i = 0; i < 7; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment7>(), 1f);
+
+            for (int i = 0; i < 9; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(11, 11), ModContent.GoreType<CrystalShieldFragment8>(), 1f);
+
+            for (int i = 0; i < 14; i++)
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(12, 12), ModContent.GoreType<CrystalShieldFragment9>(), 1f);
+
+            SoundStyle shatter = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixiePrismDestroyed");
+            shatter.MaxInstances = 0;
+            SoundEngine.PlaySound(shatter, NPC.Center);
+        }
+
+        //private void PixieBall()
+        //{
+        //    NPC.rotation = NPC.velocity.X * 0.022f;
+
+        //    if (Time < 60)
+        //    {
+        //        if (Time == 50)
+        //        {
+        //            NPC.velocity = Vector2.UnitY * 5f;
+        //            int damage = Main.zenithWorld ? 5 : 0;
+        //            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Host.Center, Host.DirectionTo(Target.Center - Vector2.UnitY * 15).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<PixieBall>(), damage, 0, ai1: 15, ai2: -1);
+
+        //            //if (!Main.dedServ)
+        //            //{
+        //            //    SoundEngine.PlaySound(SoundID.Item147, NPC.Center);
+        //            //}
+        //        }
+
+        //        NPC.velocity *= 0.9f;
+
+        //        if (Time < 50)
+        //            squishFactor = Vector2.Lerp(Vector2.One, new Vector2(1.5f, 0.6f), (float)Math.Sqrt(Utils.GetLerpValue(0, 50, Time, true)));
+        //        else
+        //            squishFactor = Vector2.SmoothStep(new Vector2(1.5f, 0.8f), Vector2.One, (float)Math.Sqrt(Utils.GetLerpValue(50, 60, Time, true)));
+        //    }
+        //    else if (Time < 500)
+        //    {
+        //        squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Cos(Time * 0.05f) * 0.2f, 1f + (float)Math.Cos(Time * 0.05f + MathHelper.Pi) * 0.2f), 0.3f);
+        //        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.01f, 0.1f);
+
+        //        //if (Time % 80 == 0)
+        //        //    for (int i = 0; i < Main.rand.Next(10, 30); i++)
+        //        //        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2Circular(10, 10) - Vector2.UnitY * 10, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(3), 0);
+        //    }
+        //    else
+        //    {
+        //        NPC.localAI[1]++;
+        //        NPC.velocity *= 0.9f;
+        //    }
+
+        //    if (Time == 60)
+        //        SoundEngine.PlaySound(SoundID.Shatter, NPC.Center);
+
+        //    if (Time > 60)
+        //    {
+        //        if (NPC.localAI[1] == 1)
+        //        {
+        //            NPC.localAI[1]++;
+        //            ShatterShield();
+        //        }
+        //    }
+
+        //    if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
+        //    {
+        //        Projectile ball = Main.projectile.First(n => n.active && n.type == ModContent.ProjectileType<PixieBall>());
+        //        pixieBallDangerShine = Utils.GetLerpValue(900, 50, ball.Distance(NPC.Center), true);
+        //    }
+
+        //    //foreach (Projectile proj in Main.projectile.Where(n => n.type == ModContent.ProjectileType<PixieBall>() && n.active))
+        //    //{
+        //    //    if (proj.Distance(NPC.Center) < 50)
+        //    //    {
+        //    //        Time = 0;
+        //    //        Attack = (int)AttackList.BlowUp;
+        //    //        if (Main.netMode == NetmodeID.MultiplayerClient)
+        //    //            NPC.netUpdate = true;
+        //    //    }
+        //    //}
+
+        //    if (Time > 600)
+        //        Reset();
+        //}
 
         private void BlowUp()
         {
@@ -419,11 +499,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time == 1)
                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HolyExplosion>(), 0, 0);
             
-            if (Time < 5)
+            if (Time < 15)
                 Host.ai[0] = 0;
 
             if (Time > 30)
             {
+                ShatterShield();
+
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                 {
                     player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} saw the light."), 9999, -1, false, true, 200, false, 0, 0, 0);
@@ -469,22 +551,35 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public float shineStrength;
         public float pixieBallDangerShine;
 
+        public static Texture2D shineTexture;
+        public static Texture2D trailTexture;
+        public static Texture2D coreTexture;
+        public static Texture2D wingsTexture;
+
+        public static Texture2D dangerTexture;
+        public static Texture2D dangerShieldTexture;
+        public static Texture2D dangerShineTexture;
+
+        public override void Load()
+        {
+            shineTexture = ModContent.Request<Texture2D>(Texture + "Shine", AssetRequestMode.ImmediateLoad).Value;
+            trailTexture = ModContent.Request<Texture2D>(Texture + "Trail", AssetRequestMode.ImmediateLoad).Value;
+            coreTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CrystalMine", AssetRequestMode.ImmediateLoad).Value;
+            wingsTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DivineGargooptuarWingsFuckYouInfernumTerminus", AssetRequestMode.ImmediateLoad).Value;
+            dangerTexture = ModContent.Request<Texture2D>(Texture + "Danger", AssetRequestMode.ImmediateLoad).Value;
+            dangerShieldTexture = ModContent.Request<Texture2D>(Texture + "DangerShield", AssetRequestMode.ImmediateLoad).Value;
+            dangerShineTexture = ModContent.Request<Texture2D>(Texture + "DangerShine", AssetRequestMode.ImmediateLoad).Value;
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> shineTexture = ModContent.Request<Texture2D>(Texture + "Shine");
-            Asset<Texture2D> trailTexture = ModContent.Request<Texture2D>(Texture + "Trail");
-            Asset<Texture2D> core = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CrystalMine");
-            Asset<Texture2D> wings = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DivineGargooptuarWingsFuckYouInfernumTerminus");
-            Asset<Texture2D> dangerTexture = ModContent.Request<Texture2D>(Texture + "Danger");
-            Asset<Texture2D> dangerShield = ModContent.Request<Texture2D>(Texture + "DangerShield");
-            Asset<Texture2D> dangerShineTexture = ModContent.Request<Texture2D>(Texture + "DangerShine");
-            Asset<Texture2D> flare = TextureAssets.Extra[89];
-            Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig");
-            Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
+            Texture2D texture = TextureAssets.Npc[Type].Value;
+            Texture2D sparkle = TextureAssets.Extra[89].Value;
+            Texture2D glow = AssetDirectory.Textures.GlowBig;
+            Texture2D ring = AssetDirectory.Textures.GlowRing;
 
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
-            Rectangle wingRect = wings.Frame(1, 4, 0, wingFrame);
+            Rectangle wingRect = wingsTexture.Frame(1, 4, 0, wingFrame);
 
             Color color = Color.White;
 
@@ -494,30 +589,29 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     color = Color.Lerp(new Color(100, 100, 100, 0), Color.White, Math.Clamp(NPC.Distance(Target.Center), 100, 300) / 200f);
                     break;
             }
-            
-            if (Attack != (int)AttackList.PixieBall)
-                for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
-                {
-                    Vector2 oldPos = NPC.oldPos[i] + NPC.Size * new Vector2(0.5f, 1f);
-                    Color trailColor = Main.hslToRgb((NPC.localAI[0] * 0.03f - ((float)i / NPCID.Sets.TrailCacheLength[Type])) % 1f, 1f, 0.6f, 0) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1) * (1f - (float)i / NPCID.Sets.TrailCacheLength[Type]) * 0.6f;
-                    spriteBatch.Draw(trailTexture.Value, oldPos - screenPos, frame, trailColor.MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
-                }
+
+            for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
+            {
+                Vector2 oldPos = NPC.oldPos[i] + NPC.Size * new Vector2(0.5f, 1f);
+                Color trailColor = Main.hslToRgb((NPC.localAI[0] * 0.03f - ((float)i / NPCID.Sets.TrailCacheLength[Type])) % 1f, 1f, 0.6f, 0) * Math.Clamp(NPC.velocity.Length() * 0.01f, 0, 1) * (1f - (float)i / NPCID.Sets.TrailCacheLength[Type]);
+                spriteBatch.Draw(trailTexture, oldPos - screenPos, frame, trailColor.MultiplyRGBA(color), NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+            }
 
             Color rainbowColor = Main.hslToRgb((NPC.localAI[0] * 0.03f) % 1f, 1f, 0.7f, 0) * 0.8f;
             Vector2 corePos = NPC.Bottom + new Vector2(0, -50 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor;
-            if ((Attack == (int)AttackList.PixieBall && (Time > 50 && Time < 540)) || Attack == (int)AttackList.BlowUp)
-                corePos = NPC.Center + new Vector2(0, 4 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor; ;
+            if ((Attack == (int)AttackList.DoubleRainbow && (Time > 50 && Time < 540)) || Attack == (int)AttackList.BlowUp)
+                corePos = NPC.Center + new Vector2(0, 4 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor;
             Vector2 leftWingPos = corePos + new Vector2(-12, 2).RotatedBy(NPC.rotation) * NPC.scale;
             Vector2 rightWingPos = corePos + new Vector2(12, 2).RotatedBy(NPC.rotation) * NPC.scale;
             
-            spriteBatch.Draw(wings.Value, leftWingPos - screenPos, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale, 0, 0);
-            spriteBatch.Draw(wings.Value, rightWingPos - screenPos, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale, SpriteEffects.FlipHorizontally, 0);
+            spriteBatch.Draw(wingsTexture, leftWingPos - screenPos, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale, 0, 0);
+            spriteBatch.Draw(wingsTexture, rightWingPos - screenPos, wingRect, color, NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale, SpriteEffects.FlipHorizontally, 0);
             
-            spriteBatch.Draw(wings.Value, leftWingPos - screenPos, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale * 1.02f, 0, 0);
-            spriteBatch.Draw(wings.Value, rightWingPos - screenPos, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale * 1.02f, SpriteEffects.FlipHorizontally, 0);
+            spriteBatch.Draw(wingsTexture, leftWingPos - screenPos, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(1f, 0.5f), NPC.scale * 1.02f, 0, 0);
+            spriteBatch.Draw(wingsTexture, rightWingPos - screenPos, wingRect, color.MultiplyRGBA(rainbowColor), NPC.rotation * 0.5f, wingRect.Size() * new Vector2(0f, 0.5f), NPC.scale * 1.02f, SpriteEffects.FlipHorizontally, 0);
 
-            spriteBatch.Draw(core.Value, corePos - screenPos, null, color, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
-            spriteBatch.Draw(core.Value, corePos - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, core.Size() * 0.5f, NPC.scale * 1.1f * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
+            spriteBatch.Draw(coreTexture, corePos - screenPos, null, color, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, coreTexture.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
+            spriteBatch.Draw(coreTexture, corePos - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, coreTexture.Size() * 0.5f, NPC.scale * 1.1f * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
 
             Asset<Texture2D> colorMap = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/RainbowGelMap");
             Effect gelEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel", AssetRequestMode.ImmediateLoad).Value;
@@ -532,53 +626,47 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             switch (Attack)
             {
-                case (int)AttackList.PixieBall:
+                case (int)AttackList.DoubleRainbow:
                 case (int)AttackList.BlowUp:
 
-                    if ((Time > 50 && Time < 540) || Attack == (int)AttackList.BlowUp)
+                    if (Attack == (int)AttackList.BlowUp || Time > 150)
                     {
-                        float rainbowShine = (0.5f + (float)Math.Sin(NPC.localAI[0] * (0.1f + NPC.localAI[1] * 0.15f)) * 0.5f) * pixieBallDangerShine;
+                        float rainbowShine = (0.9f + (float)Math.Sin(NPC.localAI[0] * (0.1f + NPC.localAI[1] * 0.15f)) * 0.1f) * shineStrength;
 
                         gelEffect.Parameters["uImageSize"].SetValue(dangerTexture.Size());
-                        gelEffect.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, dangerTexture.Width(), dangerTexture.Height()));
+                        gelEffect.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, dangerTexture.Width, dangerTexture.Height));
 
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, gelEffect, Main.Transform);
 
-                        spriteBatch.Draw(dangerTexture.Value, NPC.Center - screenPos, dangerTexture.Frame(), color, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                        spriteBatch.Draw(dangerTexture, NPC.Center - screenPos, dangerTexture.Frame(), color, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-                        spriteBatch.Draw(dangerShineTexture.Value, NPC.Center - screenPos, dangerShineTexture.Frame(), new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
-                        
-                        spriteBatch.Draw(dangerShineTexture.Value, NPC.Center - screenPos, dangerShineTexture.Frame(), rainbowColor * rainbowShine, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
-                        spriteBatch.Draw(dangerTexture.Value, NPC.Center - screenPos, dangerShineTexture.Frame(), rainbowColor * rainbowShine * 0.1f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                        spriteBatch.Draw(dangerShineTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
-                        if (NPC.localAI[1] == 0)
-                        {
-                            spriteBatch.Draw(dangerShield.Value, NPC.Center - screenPos, dangerShield.Frame(), new Color(150, 150, 150, 150), NPC.rotation, dangerShield.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                            spriteBatch.Draw(dangerShield.Value, NPC.Center - screenPos, dangerShield.Frame(), rainbowColor * (0.7f + rainbowShine * 0.3f), NPC.rotation, dangerShield.Size() * 0.5f, NPC.scale * 1.01f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                            spriteBatch.Draw(dangerShield.Value, NPC.Center - screenPos, dangerShield.Frame(), rainbowColor * rainbowShine * 0.4f, NPC.rotation, dangerShield.Size() * 0.5f, NPC.scale * 1.5f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                        }
-                        else
-                        {
-                            spriteBatch.Draw(bloom.Value, NPC.Center - screenPos, bloom.Frame(), rainbowColor * (0.8f + rainbowShine * 0.2f), NPC.rotation, bloom.Size() * 0.5f, NPC.scale * 0.5f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                            spriteBatch.Draw(bloom.Value, NPC.Center - screenPos, bloom.Frame(), rainbowColor * rainbowShine, NPC.rotation, bloom.Size() * 0.5f, NPC.scale * 1.5f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                            spriteBatch.Draw(ring.Value, NPC.Center - screenPos, bloom.Frame(), rainbowColor * rainbowShine * 0.15f, NPC.rotation, ring.Size() * 0.5f, NPC.scale * 3f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                        }
+                        spriteBatch.Draw(dangerShineTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), rainbowColor * rainbowShine, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                        spriteBatch.Draw(dangerTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), rainbowColor * rainbowShine * 0.1f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
-                        Vector2 flareOff = new Vector2(25, -25 + (float)Math.Sin(npcFrame * MathHelper.PiOver2 - MathHelper.PiOver2) * 2f) * squishFactor;
+                        spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), new Color(150, 150, 150, 150), NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                        spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), rainbowColor * (0.7f + rainbowShine * 0.3f), NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * 1.01f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                        spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), rainbowColor * rainbowShine * 0.8f, NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * (1.1f + shineStrength * 0.3f) * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
 
-                        spriteBatch.Draw(flare.Value, NPC.Center + flareOff - screenPos, flare.Frame(), rainbowColor, 0, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Center + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver2, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Center + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Center + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver2 + MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
+                        Vector2 flareOff = new Vector2(25, -25 + (float)Math.Sin(npcFrame * MathHelper.PiOver2 - MathHelper.PiOver2) * 2f).RotatedBy(NPC.rotation) * squishFactor;
 
-                        spriteBatch.Draw(flare.Value, NPC.Center + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), 0, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Center + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Center + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Center + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2 + MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), rainbowColor, 0, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), rainbowColor, MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), rainbowColor, MathHelper.PiOver4, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), rainbowColor, MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
+
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), new Color(120, 120, 120, 0), 0, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver4, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
+
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), rainbowColor * 0.5f, MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(1f, 1.5f + shineStrength * 2f) * shineStrength * 3f, 0, 0);
+                        spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), rainbowColor, MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.8f, 1.3f + shineStrength * 2f) * shineStrength * 2f, 0, 0);
 
                     }
                     else
@@ -598,54 +686,39 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
                         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRasterizerState, gelEffect, Main.UIScaleMatrix);
 
-                        spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                        spriteBatch.Draw(texture, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
 
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRasterizerState, null, Main.UIScaleMatrix);
 
-                        spriteBatch.Draw(shineTexture.Value, NPC.Bottom - screenPos, frame, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
-
-                        Vector2 flareOff = new Vector2(41, -69 + (float)Math.Sin(npcFrame * MathHelper.PiOver2 - MathHelper.PiOver2) * 2f) * NPC.scale * squishFactor;
-
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), rainbowColor, 0, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver2, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver2 + MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
-
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), 0, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2 + MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
-
-                        break;
+                        spriteBatch.Draw(shineTexture, NPC.Bottom - screenPos, frame, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
                     }
                     else
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, gelEffect, Main.Transform);
 
-                        spriteBatch.Draw(texture.Value, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
+                        spriteBatch.Draw(texture, NPC.Bottom - screenPos, frame, color, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
 
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                         
-                        spriteBatch.Draw(shineTexture.Value, NPC.Bottom - screenPos, frame, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
-
-                        Vector2 flareOff = new Vector2(41, -69 + (float)Math.Sin(npcFrame * MathHelper.PiOver2 - MathHelper.PiOver2) * 2f) * NPC.scale * squishFactor;
-
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), rainbowColor, 0, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver2, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), rainbowColor, MathHelper.PiOver2 + MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
-
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), 0, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
-                        spriteBatch.Draw(flare.Value, NPC.Bottom + flareOff - screenPos, flare.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2 + MathHelper.PiOver4, flare.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
-
-
-                        break;
+                        spriteBatch.Draw(shineTexture, NPC.Bottom - screenPos, frame, new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, frame.Size() * new Vector2(0.5f, 1f), NPC.scale * squishFactor, 0, 0);
                     }
+
+                    Vector2 sparkleOffset = new Vector2(41, -69 + (float)Math.Sin(npcFrame * MathHelper.PiOver2 - MathHelper.PiOver2) * 2f).RotatedBy(NPC.rotation) * NPC.scale * squishFactor;
+
+                    spriteBatch.Draw(sparkle, NPC.Bottom + sparkleOffset - screenPos, sparkle.Frame(), rainbowColor, 0, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
+                    spriteBatch.Draw(sparkle, NPC.Bottom + sparkleOffset - screenPos, sparkle.Frame(), rainbowColor, MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 2f), 0, 0);
+                    spriteBatch.Draw(sparkle, NPC.Bottom + sparkleOffset - screenPos, sparkle.Frame(), rainbowColor, MathHelper.PiOver4, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
+                    spriteBatch.Draw(sparkle, NPC.Bottom + sparkleOffset - screenPos, sparkle.Frame(), rainbowColor, MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.5f, 1.5f), 0, 0);
+
+                    spriteBatch.Draw(sparkle, NPC.Bottom + sparkleOffset - screenPos, sparkle.Frame(), new Color(120, 120, 120, 0), 0, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
+                    spriteBatch.Draw(sparkle, NPC.Bottom + sparkleOffset - screenPos, sparkle.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1.5f), 0, 0);
+                    spriteBatch.Draw(sparkle, NPC.Bottom + sparkleOffset - screenPos, sparkle.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver4, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
+                    spriteBatch.Draw(sparkle, NPC.Bottom + sparkleOffset - screenPos, sparkle.Frame(), new Color(120, 120, 120, 0), MathHelper.PiOver2 + MathHelper.PiOver4, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.33f, 1f), 0, 0);
+
+                    break;
             }
 
             return false;

@@ -84,10 +84,16 @@ namespace CalamityHunt.Content.Particles
                 Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(3, 3), 100, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
         }
 
+        public static Texture2D texture;
+
+        public override void Load()
+        {
+            texture = new TextureAsset(Texture);
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
-        { 
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+        {
+            Texture2D glow = AssetDirectory.Textures.Glow;
             Rectangle frame = texture.Frame(8, 1, variant, 0);
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
@@ -96,7 +102,7 @@ namespace CalamityHunt.Content.Particles
             for (int i = 0; i < 4; i++)
             {
                 Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + rotation);
-                spriteBatch.Draw(texture.Value, position + off - Main.screenPosition, frame, glowColor, rotation, frame.Size() * 0.5f, scale, 0, 0);
+                spriteBatch.Draw(texture, position + off - Main.screenPosition, frame, glowColor, rotation, frame.Size() * 0.5f, scale, 0, 0);
             }
 
             if (colorful)
@@ -112,7 +118,7 @@ namespace CalamityHunt.Content.Particles
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
             }
 
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.6f), rotation, frame.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(texture, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.6f), rotation, frame.Size() * 0.5f, scale, 0, 0);
 
             if (colorful)
             {

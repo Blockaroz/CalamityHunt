@@ -325,6 +325,7 @@ NPCs: {
 	EbonianBehemuck.DisplayName: Ebonian Behemuck
 	StellarGeliath.DisplayName: Stellar Geliath
 	Goozmite.DisplayName: Goozmite
+	PixieCharge.DisplayName: Pixie Charge
 }
 
 Projectiles: {

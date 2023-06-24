@@ -320,14 +320,22 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private Vector2 lookVector;
 
+        public static Texture2D dressTexture;
+        public static Texture2D bubbleTexture;
+        public static Texture2D eyeTexture;
+
+        public override void Load()
+        {
+            dressTexture = ModContent.Request<Texture2D>(Texture + "Dress", AssetRequestMode.ImmediateLoad).Value;
+            bubbleTexture = ModContent.Request<Texture2D>(Texture + "Bubble", AssetRequestMode.ImmediateLoad).Value;
+            eyeTexture = ModContent.Request<Texture2D>(Texture + "Eye", AssetRequestMode.ImmediateLoad).Value;
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> dressTexture = ModContent.Request<Texture2D>(Texture + "Dress");
-            Asset<Texture2D> bubbleTexture = ModContent.Request<Texture2D>(Texture + "Bubble");
-            Asset<Texture2D> eyeTexture = ModContent.Request<Texture2D>(Texture + "Eye");
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Asset<Texture2D> flare = TextureAssets.Extra[89];
+            Texture2D texture = TextureAssets.Npc[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D flare = AssetDirectory.Textures.Sparkle;
 
             SpriteEffects spriteEffect = NPC.direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
@@ -341,10 +349,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             Vector2 bubbleSquish = new Vector2(1f + (float)Math.Sin(NPC.localAI[1] * 0.1f) * 0.1f, 1f - (float)Math.Cos(NPC.localAI[1] * 0.1f) * 0.1f);
-            spriteBatch.Draw(glow.Value, NPC.Center + new Vector2(0, -27) - screenPos, glow.Frame(), myColor * 0.15f, NPC.rotation, glow.Size() * 0.5f, NPC.scale * 4f, 0, 0);
-            spriteBatch.Draw(glow.Value, NPC.Center + new Vector2(0, -18) - screenPos, glow.Frame(), myColor, NPC.rotation, glow.Size() * 0.5f, NPC.scale, 0, 0);
-            spriteBatch.Draw(bubbleTexture.Value, NPC.Center - screenPos, bubbleTexture.Frame(), myColor, NPC.rotation, bubbleTexture.Size() * new Vector2(0.5f, 0.9f), NPC.scale * 1.01f * bubbleSquish, 0, 0);
-            spriteBatch.Draw(bubbleTexture.Value, NPC.Center - screenPos, bubbleTexture.Frame(), myColor, NPC.rotation, bubbleTexture.Size() * new Vector2(0.5f, 0.9f), NPC.scale * bubbleSquish, 0, 0);
+            spriteBatch.Draw(glow, NPC.Center + new Vector2(0, -27) - screenPos, glow.Frame(), myColor * 0.15f, NPC.rotation, glow.Size() * 0.5f, NPC.scale * 4f, 0, 0);
+            spriteBatch.Draw(glow, NPC.Center + new Vector2(0, -18) - screenPos, glow.Frame(), myColor, NPC.rotation, glow.Size() * 0.5f, NPC.scale, 0, 0);
+            spriteBatch.Draw(bubbleTexture, NPC.Center - screenPos, bubbleTexture.Frame(), myColor, NPC.rotation, bubbleTexture.Size() * new Vector2(0.5f, 0.9f), NPC.scale * 1.01f * bubbleSquish, 0, 0);
+            spriteBatch.Draw(bubbleTexture, NPC.Center - screenPos, bubbleTexture.Frame(), myColor, NPC.rotation, bubbleTexture.Size() * new Vector2(0.5f, 0.9f), NPC.scale * bubbleSquish, 0, 0);
 
             GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
@@ -355,17 +363,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
             effect.Parameters["baseToMapPercent"].SetValue(0f);
             FlipShadersOnOff(spriteBatch, effect, false);
 
-            spriteBatch.Draw(dressTexture.Value, NPC.Center + new Vector2(0, -2).RotatedBy(NPC.rotation) * NPC.scale - screenPos, dressTexture.Frame(), Color.White, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.4f) * 0.06f, dressTexture.Size() * new Vector2(0.5f, 0f), NPC.scale, spriteEffect, 0);
-            spriteBatch.Draw(texture.Value, NPC.Center + new Vector2(0, -12).RotatedBy(NPC.rotation) * NPC.scale - screenPos, texture.Frame(), Color.White, NPC.rotation, texture.Size() * 0.5f, NPC.scale, spriteEffect, 0);
-            spriteBatch.Draw(eyeTexture.Value, NPC.Center + lookVector - screenPos, eyeTexture.Frame(), Color.White, NPC.rotation, eyeTexture.Size() * 0.5f, NPC.scale, spriteEffect, 0);
+            spriteBatch.Draw(dressTexture, NPC.Center + new Vector2(0, -2).RotatedBy(NPC.rotation) * NPC.scale - screenPos, dressTexture.Frame(), Color.White, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.4f) * 0.06f, dressTexture.Size() * new Vector2(0.5f, 0f), NPC.scale, spriteEffect, 0);
+            spriteBatch.Draw(texture, NPC.Center + new Vector2(0, -12).RotatedBy(NPC.rotation) * NPC.scale - screenPos, texture.Frame(), Color.White, NPC.rotation, texture.Size() * 0.5f, NPC.scale, spriteEffect, 0);
+            spriteBatch.Draw(eyeTexture, NPC.Center + lookVector - screenPos, eyeTexture.Frame(), Color.White, NPC.rotation, eyeTexture.Size() * 0.5f, NPC.scale, spriteEffect, 0);
             
             FlipShadersOnOff(spriteBatch, null, false);
 
             float flareScale = 1f + (float)Math.Sin(NPC.localAI[0] * 0.5f) * 0.05f;
-            spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.3f, 2f) * flareScale, 0, 0);
-            spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.3f, 1.5f) * flareScale, 0, 0);
-            spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.1f, 0.7f) * flareScale, 0, 0);
-            spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.1f, 0.7f) * flareScale, 0, 0);
+            spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.3f, 2f) * flareScale, 0, 0);
+            spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.3f, 1.5f) * flareScale, 0, 0);
+            spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.1f, 0.7f) * flareScale, 0, 0);
+            spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.1f, 0.7f) * flareScale, 0, 0);
 
             if (NPC.ai[3] <= 0 && !NPC.IsABestiaryIconDummy)
             {
@@ -373,12 +381,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (NPC.ai[3] < 0)
                     power = (float)Math.Pow(Utils.GetLerpValue(0f, 8f, Time, true), 2f);
 
-                spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(1f, 5f) * power, 0, 0);
-                spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(1f, 5f) * power, 0, 0);
-                spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, 0, flare.Size() * 0.5f, new Vector2(1f, 9f) * power, 0, 0);
-                spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(1f, 7f) * power, 0, 0);
-                spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), 0, flare.Size() * 0.5f, new Vector2(1f, 2f) * power, 0, 0);
-                spriteBatch.Draw(flare.Value, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(1f, 2f) * power, 0, 0);
+                spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(1f, 5f) * power, 0, 0);
+                spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(1f, 5f) * power, 0, 0);
+                spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, 0, flare.Size() * 0.5f, new Vector2(1f, 9f) * power, 0, 0);
+                spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(1f, 7f) * power, 0, 0);
+                spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), 0, flare.Size() * 0.5f, new Vector2(1f, 2f) * power, 0, 0);
+                spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), MathHelper.PiOver2, flare.Size() * 0.5f, new Vector2(1f, 2f) * power, 0, 0);
             }
 
             return false;

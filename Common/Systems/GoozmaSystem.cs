@@ -124,12 +124,12 @@ namespace CalamityHunt.Common.Systems
                     sound.Stop();
             }
             
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
-            {
-                bool active = SoundEngine.TryGetActiveSound(PixieBall.auraSound, out ActiveSound sound);
-                if (active)
-                    sound.Stop();
-            }
+            //if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
+            //{
+            //    bool active = SoundEngine.TryGetActiveSound(PixieBall.auraSound, out ActiveSound sound);
+            //    if (active)
+            //        sound.Stop();
+            //}
             
             if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>()))
             {

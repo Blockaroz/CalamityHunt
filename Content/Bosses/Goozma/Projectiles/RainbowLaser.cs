@@ -103,20 +103,26 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             return false;
         }
 
+        public static Texture2D ballTexture = new TextureAsset();
+
+        public override void Load()
+        {
+            ballTexture = ModContent.Request<Texture2D>(Texture.Replace("Laser", "Ball"), AssetRequestMode.ImmediateLoad).Value;
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> ballTexture = ModContent.Request<Texture2D>(Texture.Replace("Laser", "Ball"));
-            Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Asset<Texture2D> ray = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRay");//ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
+            Texture2D texture = TextureAssets.Projectile[Type].Value;          
+            Texture2D bloom = AssetDirectory.Textures.Glow;
+            Texture2D ray = AssetDirectory.Textures.GlowRay;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             glowColor.A = 0;
 
             float tellStrength = (float)Math.Sqrt(Utils.GetLerpValue(0, 40, Projectile.localAI[1], true));
             Vector2 telegraphScale = new Vector2(3f + tellStrength * 3f, (1f - tellStrength) * 0.2f);
-            Main.EntitySpriteDraw(ray.Value, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * 0.3f, Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale, 0, 0);
-            Main.EntitySpriteDraw(ray.Value, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * Utils.GetLerpValue(0, 20, Projectile.localAI[1], true), Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale * new Vector2(1f, 0.4f), 0, 0);
+            Main.EntitySpriteDraw(ray, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * 0.3f, Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale, 0, 0);
+            Main.EntitySpriteDraw(ray, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * Utils.GetLerpValue(0, 20, Projectile.localAI[1], true), Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale * new Vector2(1f, 0.4f), 0, 0);
 
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
             {
@@ -125,18 +131,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 trailColor.A = 0;
                 float addRot = (-0.003f * i * Projectile.direction);
                 Vector2 oldPos = Projectile.oldPos[i] + Projectile.Size * 0.5f - Projectile.velocity.RotatedBy(addRot) * i * 1.5f * Utils.GetLerpValue(0, 60, Time, true); //Projectile.Distance(Projectile.oldPos[i] + Projectile.Size * 0.5f) * 0.1f;
-                Main.EntitySpriteDraw(texture.Value, oldPos - Main.screenPosition, texture.Frame(), trailColor * 0.2f, Projectile.oldRot[i] + MathHelper.PiOver2 + addRot, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(2f, 4f) * (1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type]), 0, 0);
-                Main.EntitySpriteDraw(texture.Value, oldPos - Main.screenPosition, texture.Frame(), trailColor, Projectile.oldRot[i] + MathHelper.PiOver2 + addRot, texture.Size() * new Vector2(0.5f, 0.05f), Projectile.scale * new Vector2(0.5f, Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f) * (1.2f - prog), 0, 0);
-                Main.EntitySpriteDraw(bloom.Value, oldPos - Main.screenPosition, bloom.Frame(), trailColor * 0.05f, Projectile.oldRot[i] + addRot, bloom.Size() * 0.5f, Projectile.scale * new Vector2(Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f, 1f) * (1f - prog), 0, 0);
-                Main.EntitySpriteDraw(bloom.Value, oldPos - Main.screenPosition, bloom.Frame(), trailColor * 0.1f, Projectile.oldRot[i] + addRot, bloom.Size() * 0.5f, Projectile.scale * new Vector2(Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f, 0.5f) * (1f - prog), 0, 0);
+                Main.EntitySpriteDraw(texture, oldPos - Main.screenPosition, texture.Frame(), trailColor * 0.2f, Projectile.oldRot[i] + MathHelper.PiOver2 + addRot, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(2f, 4f) * (1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type]), 0, 0);
+                Main.EntitySpriteDraw(texture, oldPos - Main.screenPosition, texture.Frame(), trailColor, Projectile.oldRot[i] + MathHelper.PiOver2 + addRot, texture.Size() * new Vector2(0.5f, 0.05f), Projectile.scale * new Vector2(0.5f, Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f) * (1.2f - prog), 0, 0);
+                Main.EntitySpriteDraw(bloom, oldPos - Main.screenPosition, bloom.Frame(), trailColor * 0.05f, Projectile.oldRot[i] + addRot, bloom.Size() * 0.5f, Projectile.scale * new Vector2(Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f, 1f) * (1f - prog), 0, 0);
+                Main.EntitySpriteDraw(bloom, oldPos - Main.screenPosition, bloom.Frame(), trailColor * 0.1f, Projectile.oldRot[i] + addRot, bloom.Size() * 0.5f, Projectile.scale * new Vector2(Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f, 0.5f) * (1f - prog), 0, 0);
             }
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor * 0.5f, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.2f), Projectile.scale * new Vector2(2f, 3f), 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor * 0.5f, Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.25f), Projectile.scale * 2, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(1f, 4f) * 0.7f, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.25f), Projectile.scale * new Vector2(0.6f, 1.2f), 0, 0);
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.1f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 4f, 0, 0);
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor * 0.5f, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.2f), Projectile.scale * new Vector2(2f, 3f), 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor * 0.5f, Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.25f), Projectile.scale * 2, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(1f, 4f) * 0.7f, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.25f), Projectile.scale * new Vector2(0.6f, 1.2f), 0, 0);
+            Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.1f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 4f, 0, 0);
+            Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
 
             return false;
         }

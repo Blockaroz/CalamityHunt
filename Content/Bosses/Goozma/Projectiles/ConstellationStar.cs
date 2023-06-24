@@ -89,10 +89,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> sparkle = TextureAssets.Extra[98];
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            ProjectileID.Sets.TrailingMode[Type] = 2;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
+            Texture2D glow = AssetDirectory.Textures.Glow;
 
             float wobble = 1f + (float)Math.Sin((Projectile.localAI[0] * 0.3f) % MathHelper.TwoPi) * 0.05f;
 
@@ -101,18 +100,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 float prog = 1f - (i / (float)ProjectileID.Sets.TrailCacheLength[Type]);
                 Vector2 stretch;
                 if (i == 0)
-                    stretch = new Vector2(prog, Projectile.position.Distance(Projectile.oldPos[i]) / texture.Height() * 3.5f);
+                    stretch = new Vector2(prog, Projectile.position.Distance(Projectile.oldPos[i]) / texture.Height * 3.5f);
                 else
-                    stretch = new Vector2(prog, Projectile.oldPos[i].Distance(Projectile.oldPos[i - 1]) / texture.Height() * 3.5f);
+                    stretch = new Vector2(prog, Projectile.oldPos[i].Distance(Projectile.oldPos[i - 1]) / texture.Height * 3.5f);
 
-                Main.EntitySpriteDraw(sparkle.Value, Projectile.oldPos[i] + Projectile.Size * 0.5f - Main.screenPosition, null, new Color(30, 15, 10, 0) * prog, Projectile.oldRot[i] + MathHelper.PiOver2, sparkle.Size() * 0.5f, Projectile.scale * stretch * (0.5f + prog * 0.5f), 0, 0);
+                Main.EntitySpriteDraw(sparkle, Projectile.oldPos[i] + Projectile.Size * 0.5f - Main.screenPosition, null, new Color(30, 15, 10, 0) * prog, Projectile.oldRot[i] + MathHelper.PiOver2, sparkle.Size() * 0.5f, Projectile.scale * stretch * (0.5f + prog * 0.5f), 0, 0);
             }
 
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(90, 50, 35, 0), 0, sparkle.Size() * 0.5f, Projectile.scale * new Vector2(0.5f, 1.5f), 0, 0);
-            Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(90, 50, 35, 0), 0 + MathHelper.PiOver2, sparkle.Size() * 0.5f, Projectile.scale * new Vector2(0.5f, 2f), 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 225, 170, 0), 0, texture.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1f) * wobble, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 225, 170, 0), 0 + MathHelper.PiOver2, texture.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * wobble, 0, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, new Color(50, 17, 10, 0), 0, glow.Size() * 0.5f, Projectile.scale * 2f * wobble, 0, 0);
+            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, new Color(90, 50, 35, 0), 0, sparkle.Size() * 0.5f, Projectile.scale * new Vector2(0.5f, 1.5f), 0, 0);
+            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, new Color(90, 50, 35, 0), 0 + MathHelper.PiOver2, sparkle.Size() * 0.5f, Projectile.scale * new Vector2(0.5f, 2f), 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, new Color(255, 225, 170, 0), 0, texture.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1f) * wobble, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, new Color(255, 225, 170, 0), 0 + MathHelper.PiOver2, texture.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * wobble, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, new Color(50, 17, 10, 0), 0, glow.Size() * 0.5f, Projectile.scale * 2f * wobble, 0, 0);
 
             return false;
         }

@@ -67,7 +67,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.Center = Main.npc[(int)Owner].Center + new Vector2(13 * Main.npc[(int)Owner].direction, -20f);
             (Main.npc[(int)Owner].ModNPC as Goozma).drawVelocity = Projectile.rotation.ToRotationVector2() * 12f;
             Main.npc[(int)Owner].velocity += Projectile.rotation.ToRotationVector2() * -0.1f;
-            Main.npc[(int)Owner].velocity *= 0.95f;
+            Main.npc[(int)Owner].velocity *= 0.98f;
 
             switch (Mode)
             {
@@ -94,7 +94,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Projectile.rotation = targetRotation + totalOffRot * Projectile.direction * waveChange;
 
                     if ((Main.npc[(int)Owner].ai[2] == 3 || Main.npc[(int)Owner].ai[2] == -2) && Time < ChargeTime + LaserDuration - 2)
+                    {
                         Time = ChargeTime + LaserDuration - 2;
+                        Mode = -1;
+                    }
 
                     break;
 
@@ -112,7 +115,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         Time = ChargeTime + LaserDuration - 10;
 
                     if (Main.npc[(int)Owner].ai[2] == 3 && Time < ChargeTime + LaserDuration - 2)
+                    {
                         Time = ChargeTime + LaserDuration - 2;
+                        Mode = -1;
+                    }
+
+                    break;
+
+                case -1:
+
+                    //shrug, do nothing
 
                     break;
             }
@@ -218,6 +230,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void Load()
         {
             On_Main.UpdateAudio += QuietMusic;
+
+            textureSecond = ModContent.Request<Texture2D>(Texture + "Second", AssetRequestMode.ImmediateLoad).Value;
+            textureGlow = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
+            textureBits = ModContent.Request<Texture2D>(Texture + "Bits", AssetRequestMode.ImmediateLoad).Value;
         }
 
         private void QuietMusic(On_Main.orig_UpdateAudio orig, Main self)
@@ -242,24 +258,25 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => overPlayers.Add(index);
 
+        public static Texture2D textureSecond;
+        public static Texture2D textureGlow;
+        public static Texture2D textureBits;
+
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> ray = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRay");
-            Asset<Texture2D> textureSecond = ModContent.Request<Texture2D>(Texture + "Second");
-            Asset<Texture2D> textureGlow = ModContent.Request<Texture2D>(Texture + "Glow");
-            Asset<Texture2D> textureBits = ModContent.Request<Texture2D>(Texture + "Bits");
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Asset<Texture2D> spark = ModContent.Request<Texture2D>(Texture + "Spark");
-
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D spark = AssetDirectory.Textures.Sparkle;
+            Texture2D ray = AssetDirectory.Textures.GlowRay;
+            
             Color startColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             startColor.A = 0;
 
             float laserCharge = Utils.GetLerpValue(50, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration + 20, Time, true);
             float laserRayCharge = Utils.GetLerpValue(0, ChargeTime, Projectile.localAI[1], true) * Utils.GetLerpValue(ChargeTime + 10, ChargeTime - 30, Time, true);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, startColor, 0, glow.Size() * 0.5f, 2f * laserCharge, 0, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(255, 255, 255, 0) * laserCharge, 0, glow.Size() * 0.5f, 1.5f * laserCharge, 0, 0);
-            Main.EntitySpriteDraw(ray.Value, Projectile.Center - Main.screenPosition, ray.Frame(), startColor * laserRayCharge * 0.5f, Projectile.rotation, ray.Size() * new Vector2(0.02f, 0.5f), new Vector2(3f, 2f), 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, startColor, 0, glow.Size() * 0.5f, 2f * laserCharge, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(255, 255, 255, 0) * laserCharge, 0, glow.Size() * 0.5f, 1.5f * laserCharge, 0, 0);
+            Main.EntitySpriteDraw(ray, Projectile.Center - Main.screenPosition, ray.Frame(), startColor * laserRayCharge * 0.5f, Projectile.rotation, ray.Size() * new Vector2(0.02f, 0.5f), new Vector2(3f, 2f), 0, 0);
 
             if (Time >= ChargeTime - 20)
             {
@@ -278,10 +295,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/FusionRayEffect", AssetRequestMode.ImmediateLoad).Value;
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-                lightningEffect.Parameters["uTexture0"].SetValue(texture.Value);
-                lightningEffect.Parameters["uTexture1"].SetValue(textureSecond.Value);
-                lightningEffect.Parameters["uGlow"].SetValue(textureGlow.Value);
-                lightningEffect.Parameters["uBits"].SetValue(textureBits.Value);
+                lightningEffect.Parameters["uTexture0"].SetValue(texture);
+                lightningEffect.Parameters["uTexture1"].SetValue(textureSecond);
+                lightningEffect.Parameters["uGlow"].SetValue(textureGlow);
+                lightningEffect.Parameters["uBits"].SetValue(textureBits);
                 lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.03f);
                 lightningEffect.Parameters["uFreq"].SetValue(1.5f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
@@ -293,13 +310,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 for (int i = 0; i < 12; i++)
                 {
-                    Main.EntitySpriteDraw(spark.Value, positions[1499] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.7f * new Vector2(1f, 2f), 0, 0);
-                    Main.EntitySpriteDraw(spark.Value, positions[1499] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.03f * Projectile.direction), spark.Size() * 0.5f, laserActive * new Vector2(1f, 2f), 0, 0);
-                    Main.EntitySpriteDraw(spark.Value, positions[1499] - Main.screenPosition, null, new Color(255, 255, 255, 0), (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.33f * new Vector2(1f, 2f), 0, 0);
-                    Main.EntitySpriteDraw(glow.Value, positions[1499] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), glow.Size() * 0.5f, laserActive * new Vector2(3f, 20f), 0, 0);
+                    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.7f * new Vector2(1f, 2f), 0, 0);
+                    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.03f * Projectile.direction), spark.Size() * 0.5f, laserActive * new Vector2(1f, 2f), 0, 0);
+                    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, new Color(255, 255, 255, 0), (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.33f * new Vector2(1f, 2f), 0, 0);
+                    Main.EntitySpriteDraw(glow, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), glow.Size() * 0.5f, laserActive * new Vector2(3f, 20f), 0, 0);
 
                 }
-                Main.EntitySpriteDraw(glow.Value, positions[1499] - Main.screenPosition, null, endColor, 0, glow.Size() * 0.5f, laserActive * 15f, 0, 0);
+                Main.EntitySpriteDraw(glow, positions[positions.Length - 1] - Main.screenPosition, null, endColor, 0, glow.Size() * 0.5f, laserActive * 15f, 0, 0);
             }
             return false;
         }

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -200,14 +201,19 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Main.player[Main.projectile[(int)Owner].owner].GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsWaitTime = 50;
         }
 
+        public static Texture2D glowTexture;
+
+        public override void Load()
+        {
+            glowTexture = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
             if (Time > 1)
             {
-                Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-                Texture2D glowTexture = ModContent.Request<Texture2D>(Texture + "Glow").Value;
-                Texture2D bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft").Value;
-
+                Texture2D texture = TextureAssets.Projectile[Type].Value;
+                Texture2D bloom = AssetDirectory.Textures.Glow;
                 VertexStrip strip = new VertexStrip();
 
                 Color StripColor(float progress) => Main.hslToRgb((Projectile.localAI[0] * 0.03f + progress) % 1f, 0.5f, 0.6f) * Utils.GetLerpValue(40, 10, Time, true);

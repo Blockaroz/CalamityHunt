@@ -67,6 +67,8 @@ namespace CalamityHunt.Content.Projectiles
                     Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), pos, vel, Color.White, 2f);
                     hue.data = Time * 0.33f;
                 }
+
+                Projectile.position.Y -= 0.5f;
             }
 
             for (int i = 0; i < (int)(Time / 1000f) + 1; i++)
@@ -144,6 +146,8 @@ namespace CalamityHunt.Content.Projectiles
         public override void Load()
         {
             On_Main.UpdateAudio += FadeMusicOut;
+
+            creatureTexture = ModContent.Request<Texture2D>(Texture + "Creature", AssetRequestMode.ImmediateLoad).Value;
         }
 
         public override void Unload()
@@ -237,42 +241,62 @@ namespace CalamityHunt.Content.Projectiles
             particle.behindEntities = true;
         }
 
+        public static Texture2D creatureTexture;
+
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> flare = TextureAssets.Extra[98];
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Asset<Texture2D> core = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> body = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/Goozma");
-            Asset<Texture2D> dress = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/GoozmaDress");
-            Asset<Texture2D> crown = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaCrown");
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
+            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            //Texture2D body = TextureAssets.Npc[ModContent.NPCType<Goozma>()].Value;
+            //Texture2D dress = Goozma.dressTexture;
+            //Texture2D crown = Goozma.crownTexture;
+            Texture2D eye = AssetDirectory.Textures.Extras.GoozmaEye;
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value * 1.5f;
             glowColor.A = 0;
             Vector2 drawOffset = new Vector2(14, 20).RotatedBy(Projectile.rotation) * Projectile.scale;
 
-            Projectile.scale = Utils.GetLerpValue(160, 810, Time, true);
-            Vector2 crownPos = Projectile.Center + drawOffset - new Vector2(-6, 44).RotatedBy(Projectile.rotation) * (float)Math.Pow(Projectile.scale, 3);
-            Vector2 dressPos = Projectile.Center + drawOffset + new Vector2(4, 16).RotatedBy(Projectile.rotation) * (float)Math.Pow(Projectile.scale, 3);
+            Projectile.scale = Utils.GetLerpValue(190, 810, Time, true);
 
-            float dressWobble = (float)Math.Sin(Time * 0.3f) * 0.05f;
-            Main.EntitySpriteDraw(dress.Value, dressPos - Main.screenPosition, null, new Color(20, 20, 20), dressWobble, dress.Size() * new Vector2(0.5f, 0f), Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(body.Value, Projectile.Center + drawOffset - Main.screenPosition, null, new Color(20, 20, 20), 0, body.Size() * 0.5f, Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(crown.Value, crownPos - Main.screenPosition, null, new Color(20, 20, 20), 0, crown.Size() * new Vector2(0.5f, 1f), Projectile.scale, 0, 0);
+            //Vector2 crownPos = Projectile.Center + drawOffset - new Vector2(-6, 44).RotatedBy(Projectile.rotation) * (float)Math.Pow(Projectile.scale, 3);
+            //Vector2 dressPos = Projectile.Center + drawOffset + new Vector2(4, 16).RotatedBy(Projectile.rotation) * (float)Math.Pow(Projectile.scale, 3);
 
-            Rectangle baseFrame = core.Frame(1, 2, 0, 0);
-            Rectangle glowFrame = core.Frame(1, 2, 0, 1);
-            Vector2 corePos = Projectile.Center + Main.rand.NextVector2Circular(2, 2) * Utils.GetLerpValue(700, 150, Time, true);
-            Main.EntitySpriteDraw(glow.Value, corePos - Main.screenPosition, null, Color.Lerp(Color.Transparent, glowColor * 0.07f, Utils.GetLerpValue(50, 350, Time, true)), 0, glow.Size() * 0.5f, 2f + Projectile.scale * 0.7f, 0, 0);
-            Main.EntitySpriteDraw(core.Value, corePos - Main.screenPosition, baseFrame, Color.Lerp(lightColor, new Color(20, 20, 20, 200), Utils.GetLerpValue(250, 400, Time, true)), 0, baseFrame.Size() * 0.5f, 1f + Projectile.scale * 0.7f, 0, 0);
-            Main.EntitySpriteDraw(core.Value, corePos - Main.screenPosition, glowFrame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(50, 250, Time, true) * Utils.GetLerpValue(750, 550, Time, true)), 0, glowFrame.Size() * 0.5f, 1f + Projectile.scale * 0.7f, 0, 0);
-            Main.EntitySpriteDraw(core.Value, corePos - Main.screenPosition, glowFrame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(50, 300, Time, true) * Utils.GetLerpValue(750, 550, Time, true)), 0, glowFrame.Size() * 0.5f, 1.05f + Projectile.scale * 0.7f, 0, 0);
+            //float dressWobble = (float)Math.Sin(Time * 0.3f) * 0.05f;
+            //Main.EntitySpriteDraw(dress, dressPos - Main.screenPosition, null, new Color(20, 20, 20), dressWobble, dress.Size() * new Vector2(0.5f, 0f), Projectile.scale, 0, 0);
+            //Main.EntitySpriteDraw(body, Projectile.Center + drawOffset - Main.screenPosition, null, new Color(20, 20, 20), 0, body.Size() * 0.5f, Projectile.scale, 0, 0);
+            //Main.EntitySpriteDraw(crown, crownPos - Main.screenPosition, null, new Color(20, 20, 20), 0, crown.Size() * new Vector2(0.5f, 1f), Projectile.scale, 0, 0);
 
-            Vector2 eyePos = Projectile.Center + drawOffset + new Vector2(-14, -20).RotatedBy(Projectile.rotation) * Projectile.scale;
+            float fastWobble = 0.6f + (float)Math.Sin(Time * 0.7f) * 0.4f;
+
+            Rectangle baseFrame = texture.Frame(1, 2, 0, 0);
+            Rectangle glowFrame = texture.Frame(1, 2, 0, 1);
+            Vector2 corePos = Projectile.Center + Main.rand.NextVector2Circular(2, 2);
+            Main.EntitySpriteDraw(glow, corePos - Main.screenPosition, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.07f, Utils.GetLerpValue(50, 350, Time, true)), 0, glow.Size() * 0.5f, 2f + Projectile.scale * 0.7f, 0, 0);
+            
+            Main.EntitySpriteDraw(texture, corePos - Main.screenPosition, baseFrame, Color.Black * 0.5f, 0, baseFrame.Size() * 0.5f, 1f + Projectile.scale * 0.9f + fastWobble * 0.3f, 0, 0);
+            
+            Main.EntitySpriteDraw(texture, corePos - Main.screenPosition, baseFrame, Color.Lerp(lightColor, new Color(20, 20, 20, 200), Utils.GetLerpValue(250, 400, Time, true)), 0, baseFrame.Size() * 0.5f, 1f + Projectile.scale * 0.7f, 0, 0);
+            Main.EntitySpriteDraw(texture, corePos - Main.screenPosition, glowFrame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(50, 250, Time, true) * Utils.GetLerpValue(750, 550, Time, true)), 0, glowFrame.Size() * 0.5f, 1f + Projectile.scale * 0.7f, 0, 0);
+            Main.EntitySpriteDraw(texture, corePos - Main.screenPosition, glowFrame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(50, 300, Time, true) * Utils.GetLerpValue(750, 550, Time, true)), 0, glowFrame.Size() * 0.5f, 1.05f + Projectile.scale * 0.7f, 0, 0);
+
+            Main.EntitySpriteDraw(creatureTexture, corePos - Main.screenPosition, creatureTexture.Frame(), Color.Black * 0.5f * Projectile.scale, 0, creatureTexture.Size() * new Vector2(0.4f, 0.4f), Projectile.scale * 0.9f + fastWobble * 0.3f, 0, 0);
+
+            for (int i = 0; i < 6; i++)
+            {
+                Vector2 off = new Vector2(2, 0).RotatedBy(Time * 0.2f + MathHelper.TwoPi / 6f * i);
+                Main.EntitySpriteDraw(creatureTexture, corePos + off - Main.screenPosition, creatureTexture.Frame(), glowColor * Projectile.scale, 0, creatureTexture.Size() * new Vector2(0.4f, 0.4f), Projectile.scale * 0.9f, 0, 0);
+            }
+
+            Main.EntitySpriteDraw(creatureTexture, corePos - Main.screenPosition, creatureTexture.Frame(), Color.Gray, 0, creatureTexture.Size() * new Vector2(0.4f, 0.4f), Projectile.scale * 0.9f, 0, 0);
+            Main.EntitySpriteDraw(creatureTexture, corePos - Main.screenPosition, creatureTexture.Frame(), Color.Black * 0.6f, 0, creatureTexture.Size() * new Vector2(0.4f, 0.4f), Projectile.scale * 0.85f, 0, 0);
+
+            Vector2 eyePos = Projectile.Center + drawOffset + new Vector2(-28, -20).RotatedBy(Projectile.rotation) * Projectile.scale;
             float eyeScale = (float)Math.Sqrt(Utils.GetLerpValue(840, 950, Time, true)) * 3f;
-            float eyeRot = (float)Math.Sqrt(Utils.GetLerpValue(840, 1100, Time, true)) * MathHelper.PiOver2 - MathHelper.PiOver4;
-            Main.EntitySpriteDraw(flare.Value, eyePos - Main.screenPosition, null, glowColor, eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.2f, 2.4f), 0, 0);
-            Main.EntitySpriteDraw(flare.Value, eyePos - Main.screenPosition, null, glowColor, eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.2f, 2f), 0, 0);
-            Main.EntitySpriteDraw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.15f, 1f), 0, 0);
-            Main.EntitySpriteDraw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.15f, 0.6f), 0, 0);
+            float eyeRot = (float)Math.Cbrt(Utils.GetLerpValue(840, 1080, Time, true)) * MathHelper.PiOver2 - MathHelper.PiOver4;
+            Main.EntitySpriteDraw(sparkle, eyePos - Main.screenPosition, sparkle.Frame(), glowColor * 0.1f, eyeRot + MathHelper.PiOver2, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.3f, 2.4f), 0, 0);
+            Main.EntitySpriteDraw(sparkle, eyePos - Main.screenPosition, sparkle.Frame(), glowColor * 0.1f, eyeRot, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.3f, 2f), 0, 0);
+            Main.EntitySpriteDraw(eye, eyePos - Main.screenPosition, eye.Frame(), glowColor, eyeRot, eye.Size() * 0.5f, eyeScale * 0.4f, 0, 0);
+            Main.EntitySpriteDraw(eye, eyePos - Main.screenPosition, eye.Frame(), new Color(255, 255, 255, 0), eyeRot, eye.Size() * 0.5f, eyeScale * 0.4f, 0, 0);
 
             return false;
         }

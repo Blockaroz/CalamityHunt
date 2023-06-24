@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -92,12 +93,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
         }
 
+        public static Texture2D speedTexture;
+
+        public override void Load()
+        {
+            speedTexture = ModContent.Request<Texture2D>(Texture + "Speed", AssetRequestMode.ImmediateLoad).Value;
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> speed = ModContent.Request<Texture2D>(Texture + "Speed");
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Rectangle frame = speed.Frame(3, 1, Projectile.frame, 0);
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
+            Rectangle frame = speedTexture.Frame(3, 1, Projectile.frame, 0);
 
             Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             bloomColor.A = 0;
@@ -105,8 +112,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             solidColor.A = 100;
             SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, solidColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, solidColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
 
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
             {
@@ -114,16 +121,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 trailColor.A = 0;
                 float fadeOut = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
                 float outScale = (float)Math.Pow(fadeOut, 1.5f);
-                Main.EntitySpriteDraw(texture.Value, Projectile.oldPos[i] + Projectile.velocity * i * 0.1f - Main.screenPosition, null, trailColor * outScale, Projectile.oldRot[i], texture.Size() * 0.5f, Projectile.scale * 1.6f * fadeOut, direction, 0);
+                Main.EntitySpriteDraw(texture, Projectile.oldPos[i] + Projectile.velocity * i * 0.1f - Main.screenPosition, null, trailColor * outScale, Projectile.oldRot[i], texture.Size() * 0.5f, Projectile.scale * 1.6f * fadeOut, direction, 0);
             }
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 1.1f, direction, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation * 1.1f, texture.Size() * 0.5f, Projectile.scale * 0.9f, direction, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, direction, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 1.1f, direction, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation * 1.1f, texture.Size() * 0.5f, Projectile.scale * 0.9f, direction, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, direction, 0);
 
-            Main.EntitySpriteDraw(speed.Value, Projectile.Center + new Vector2(25, 0).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.scale - Main.screenPosition, frame, bloomColor * 0.6f, Projectile.velocity.ToRotation() - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * 1.18f, direction, 0);
-            Main.EntitySpriteDraw(speed.Value, Projectile.Center + new Vector2(33, 0).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.scale - Main.screenPosition, frame, Color.Lerp(Color.Black, bloomColor, 0.1f), Projectile.velocity.ToRotation() - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * 1.15f, direction, 0);
-            Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f, 0, glow.Size() * 0.5f, Projectile.scale * 3f, direction, 0);
+            Main.EntitySpriteDraw(speedTexture, Projectile.Center + new Vector2(25, 0).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.scale - Main.screenPosition, frame, bloomColor * 0.6f, Projectile.velocity.ToRotation() - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * 1.18f, direction, 0);
+            Main.EntitySpriteDraw(speedTexture, Projectile.Center + new Vector2(33, 0).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.scale - Main.screenPosition, frame, Color.Lerp(Color.Black, bloomColor, 0.1f), Projectile.velocity.ToRotation() - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale * 1.15f, direction, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f, 0, glow.Size() * 0.5f, Projectile.scale * 3f, direction, 0);
 
             return false;
         }

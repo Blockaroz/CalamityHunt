@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -129,15 +130,20 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
         }
 
         public float crownRotation;
+        public static Texture2D crownTexture;
+        public static Texture2D tentacleTexture;
 
-        public override bool PreDraw(ref Color lightColor) => false;
-
-        public override void PostDraw(Color lightColor)
+        public override void Load()
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> crown = ModContent.Request<Texture2D>(Texture + "Crown");
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
+            crownTexture = ModContent.Request<Texture2D>(Texture + "Crown", AssetRequestMode.ImmediateLoad).Value;
+            tentacleTexture = ModContent.Request<Texture2D>(Texture + "Tentacle", AssetRequestMode.ImmediateLoad).Value;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D ring = AssetDirectory.Textures.GlowRing;
             SpriteEffects flip = SpriteEffects.None;// Projectile.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
@@ -145,36 +151,36 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             if (Main.player[Projectile.owner].cPet <= 0)
             {
                 float auraSize = 0.8f + (float)Math.Sin(Projectile.localAI[0] * 0.04f) * 0.2f;
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f * auraSize, 0, glow.Size() * 0.5f, Projectile.scale * 5f * auraSize, 0, 0);
-                Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, ring.Frame(), glowColor * 0.02f * auraSize, 0, ring.Size() * 0.5f, Projectile.scale * 2f * auraSize, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f * auraSize, 0, glow.Size() * 0.5f, Projectile.scale * 5f * auraSize, 0, 0);
+                Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, ring.Frame(), glowColor * 0.02f * auraSize, 0, ring.Size() * 0.5f, Projectile.scale * 2f * auraSize, 0, 0);
             }
             DrawTentacles(lightColor, glowColor);
 
             Rectangle frame = texture.Frame(3, 1, 0, 0);
             Rectangle glowFrame = texture.Frame(3, 1, 1, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, glowColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, glowColor * 0.1f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale * 1.05f, flip, 0);
-            
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, glowColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale, flip, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, glowColor * 0.1f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.33f), Projectile.scale * 1.05f, flip, 0);
+
             crownRotation = Math.Clamp(-Projectile.velocity.X * 0.06f, -1f, 1f);
 
-            Main.EntitySpriteDraw(crown.Value, Projectile.Center + new Vector2(0, -17).RotatedBy(crownRotation) * Projectile.scale - Main.screenPosition, null, Color.Lerp(lightColor, Color.White, 0.5f), crownRotation, crown.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * 1.05f, flip, 0);
-            Main.EntitySpriteDraw(crown.Value, Projectile.Center + new Vector2(0, -17).RotatedBy(crownRotation) * Projectile.scale - Main.screenPosition, null, glowColor * 0.3f, crownRotation, crown.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * 1.15f, flip, 0);
-            
+            Main.EntitySpriteDraw(crownTexture, Projectile.Center + new Vector2(0, -17).RotatedBy(crownRotation) * Projectile.scale - Main.screenPosition, null, Color.Lerp(lightColor, Color.White, 0.5f), crownRotation, crownTexture.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * 1.05f, flip, 0);
+            Main.EntitySpriteDraw(crownTexture, Projectile.Center + new Vector2(0, -17).RotatedBy(crownRotation) * Projectile.scale - Main.screenPosition, null, glowColor * 0.3f, crownRotation, crownTexture.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * 1.15f, flip, 0);
+
             if (Main.player[Projectile.owner].cPet <= 0)
             {
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, 0, 0);
 
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
             }
+            return false;
         }
 
         public Vector2[] oldVels;
 
         public void DrawTentacles(Color lightColor, Color growColor)
         {
-            Asset<Texture2D> tentacleTexture = ModContent.Request<Texture2D>(Texture + "Tentacle");
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Texture2D glow = AssetDirectory.Textures.Glow;
 
             if (oldVels == null)
             {
@@ -213,12 +219,12 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
                     lastPos += nextStick;
 
                     float bloomScale = (float)Math.Pow(prog, 1.25f);
-                    Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, frame, lightColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
-                    Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
-                    Main.EntitySpriteDraw(tentacleTexture.Value, lastPos - Main.screenPosition, glowFrame, growColor * 0.1f * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch * 1.05f, 0, 0);
+                    Main.EntitySpriteDraw(tentacleTexture, lastPos - Main.screenPosition, frame, lightColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
+                    Main.EntitySpriteDraw(tentacleTexture, lastPos - Main.screenPosition, glowFrame, growColor * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
+                    Main.EntitySpriteDraw(tentacleTexture, lastPos - Main.screenPosition, glowFrame, growColor * 0.1f * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch * 1.05f, 0, 0);
 
                     if (Main.player[Projectile.owner].cPet <= 0)
-                        Main.EntitySpriteDraw(glow.Value, lastPos + oldVels[i] * 0.1f - Main.screenPosition, glow.Frame(), growColor * bloomScale * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);
+                        Main.EntitySpriteDraw(glow, lastPos + oldVels[i] * 0.1f - Main.screenPosition, glow.Frame(), growColor * bloomScale * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);
                 }
             }
         }

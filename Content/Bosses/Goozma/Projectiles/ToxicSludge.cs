@@ -5,6 +5,7 @@ using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -65,10 +66,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             return false;
         }
 
+        public static Texture2D eyeTexture;
+
+        public override void Load()
+        {
+            eyeTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CorruptEye").Value;
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> bloom = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D bloom = AssetDirectory.Textures.Glow;
             Rectangle frame = texture.Frame(1, 2, 0, 0);
             Rectangle glowFrame = texture.Frame(1, 2, 0, 1);
 
@@ -77,22 +85,23 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             float scaleUp = 1f;
             if (Projectile.localAI[1] > 195)
             {
-                texture = ModContent.Request<Texture2D>(Texture + "Special");
-                frame = texture.Frame(5, 2, (int)(Projectile.localAI[1] % 3), 0);
-                glowFrame = texture.Frame(5, 2, (int)(Projectile.localAI[1] % 3), 1);
+                texture = eyeTexture;
+                frame = texture.Frame(8, 1, (int)(Projectile.localAI[1] % 8), 0);
+                glowFrame = frame;
                 scaleUp = 1.1f;
                 opacity = 1f;
+                glowColor *= 2;
             }
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Color.Black * 0.05f, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp * 1.33f, 0, 0);
-            Main.EntitySpriteDraw(bloom.Value, Projectile.Center - Main.screenPosition, null, glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * scaleUp * 2f, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Black * 0.05f, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp * 1.33f, 0, 0);
+            Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * scaleUp * 2f, 0, 0);
             for (int i = 0; i < 4; i++)
             {
                 Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + ProjAIStyleID.Rainbow);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, glowFrame, glowColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, glowFrame, glowColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
             }
 
-            Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, lightColor * opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, lightColor * opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
 
             return false;
         }

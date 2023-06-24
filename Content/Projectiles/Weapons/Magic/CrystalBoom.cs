@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
+using Terraria.GameContent;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 {
@@ -59,8 +60,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-            Texture2D glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft").Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
             float scale = Projectile.scale * 3f;
 
             Color rainbowColor = Main.hslToRgb(Projectile.localAI[0] * 0.03f % 1f, 0.5f, 0.55f, 0) * Utils.GetLerpValue(35, 15, Time, true) * 0.9f;

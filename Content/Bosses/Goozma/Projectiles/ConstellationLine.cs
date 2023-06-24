@@ -83,8 +83,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
             Rectangle half = texture.Frame(1, 2, 0, 0);
             Rectangle glowHalf = glow.Frame(1, 2, 0, 0);
 
@@ -99,14 +99,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 //double end
                 Vector2 distance = new Vector2(wobble * 0.3f + power * 0.1f, Projectile.Distance(Main.projectile[(int)End].Center) / (half.Height * 1.5f));
                 Vector2 glowDistance = new Vector2(wobble * 0.7f * (0.4f + Utils.GetLerpValue(70, 80, Time, true) * 0.6f), Projectile.Distance(Main.projectile[(int)End].Center) / glowHalf.Height);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, half, lineGlowColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Main.projectile[(int)End].Center - Main.screenPosition, half, lineGlowColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, half, lineGlowColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
+                Main.EntitySpriteDraw(texture, Main.projectile[(int)End].Center - Main.screenPosition, half, lineGlowColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
                 
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, half, lineColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * new Vector2(0.33f, 1f) * distance, 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Main.projectile[(int)End].Center - Main.screenPosition, half, lineColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * new Vector2(0.33f, 2f) * distance, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, half, lineColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * new Vector2(0.33f, 1f) * distance, 0, 0);
+                Main.EntitySpriteDraw(texture, Main.projectile[(int)End].Center - Main.screenPosition, half, lineColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * new Vector2(0.33f, 2f) * distance, 0, 0);
                 
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, glowHalf, bloomColor * wobble, Projectile.rotation + MathHelper.PiOver2, glowHalf.Size() * new Vector2(0.5f, 1f), Projectile.scale * glowDistance, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Main.projectile[(int)End].Center - Main.screenPosition, glowHalf, bloomColor * wobble, Projectile.rotation - MathHelper.PiOver2, glowHalf.Size() * new Vector2(0.5f, 1f), Projectile.scale * glowDistance, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glowHalf, bloomColor * wobble, Projectile.rotation + MathHelper.PiOver2, glowHalf.Size() * new Vector2(0.5f, 1f), Projectile.scale * glowDistance, 0, 0);
+                Main.EntitySpriteDraw(glow, Main.projectile[(int)End].Center - Main.screenPosition, glowHalf, bloomColor * wobble, Projectile.rotation - MathHelper.PiOver2, glowHalf.Size() * new Vector2(0.5f, 1f), Projectile.scale * glowDistance, 0, 0);
 
                 //single
                 //Vector2 distance = new Vector2(wobble * 0.2f, Projectile.Distance(Main.projectile[(int)End].Center) / texture.Height());

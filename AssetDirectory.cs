@@ -15,11 +15,14 @@ namespace CalamityHunt
         public struct Textures
         {
             public static TextureAsset Sparkle = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/SharpSpark");
+            public static TextureAsset GlowRing = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GlowRing");
+            public static TextureAsset GlowRay = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GlowRay");
+            public static TextureAsset Glow = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GlowSoft");
+            public static TextureAsset GlowBig = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GlowSoftBig");
+            public static TextureAsset ShockRing = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/ShockRing");
 
-            public struct TempGoozmaExtras
+            public struct Extras
             {
-                public static TextureAsset Glow = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-                public static TextureAsset BigGlow = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoftBig");
                 public static TextureAsset GoozmaEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpecialEye");
             }
 

@@ -9,6 +9,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -151,9 +152,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
-            Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D ring = AssetDirectory.Textures.GlowRing;
             Rectangle baseFrame = texture.Frame(3, 4, 0, Projectile.frame);
             Rectangle glowFrame = texture.Frame(3, 4, 1, Projectile.frame);
             Rectangle outlineFrame = texture.Frame(3, 4, 2, Projectile.frame);
@@ -166,14 +167,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 float ringScale = (float)Math.Cbrt(Utils.GetLerpValue(0, 100, Time, true));
                 float ringPower = 1f + (float)Math.Sin(Math.Pow(Time * 0.027f, 3f)) * 0.4f;
 
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f * ringScale * ringPower, Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height() * 2f + 3f) * ringScale, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f * ringScale * ringPower, 0, glow.Size() * 0.5f, (250f / glow.Height() * 2f) * 0.5f * ringScale, 0, 0);
-                Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f * ringScale * ringPower, Projectile.rotation * 0.1f, ring.Size() * 0.5f, (250f / ring.Height() * 2f + 0.5f) * ringScale, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f * ringScale * ringPower, Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height * 2f + 3f) * ringScale, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f * ringScale * ringPower, 0, glow.Size() * 0.5f, (250f / glow.Height * 2f) * 0.5f * ringScale, 0, 0);
+                Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f * ringScale * ringPower, Projectile.rotation * 0.1f, ring.Size() * 0.5f, (250f / ring.Height * 2f + 0.5f) * ringScale, 0, 0);
 
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale, 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale, 0, 0);
-                Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
 
             }
             else
@@ -181,9 +182,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 float ringScale = 1.01f + (float)Math.Sqrt(Time / 60f) * 0.3f;
                 float ringPower = (float)Math.Pow(Utils.GetLerpValue(30, 0, Time, true), 3f);
 
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f * Utils.GetLerpValue(30, 0, Time, true), Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height() * 2f + 5f) * ringScale * ringPower, 0, 0);
-                Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f * Utils.GetLerpValue(20, 0, Time, true), 0, glow.Size() * 0.5f, (250f / glow.Height() * 2f) * 0.6f * ringScale * ringPower, 0, 0);
-                Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f * ringPower, Projectile.rotation * 0.1f, ring.Size() * 0.5f, (250f / ring.Height() * 2f + 0.5f) * ringScale, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f * Utils.GetLerpValue(30, 0, Time, true), Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height * 2f + 5f) * ringScale * ringPower, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f * Utils.GetLerpValue(20, 0, Time, true), 0, glow.Size() * 0.5f, (250f / glow.Height * 2f) * 0.6f * ringScale * ringPower, 0, 0);
+                Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f * ringPower, Projectile.rotation * 0.1f, ring.Size() * 0.5f, (250f / ring.Height * 2f + 0.5f) * ringScale, 0, 0);
             }
 
             return false;

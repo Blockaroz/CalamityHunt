@@ -27,7 +27,6 @@ namespace CalamityHunt.Content.Particles
             time++;
             if (time > 15)
                 Active = false;
-            rotation *= (1.001f + time * 0.02f);
             if (emit)
                 Main.NewText("default is on");
         }
