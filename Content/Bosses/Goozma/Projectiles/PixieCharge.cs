@@ -53,7 +53,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 return;
             }
 
-            if (Time < 100)
+            if (Time < 60)
             {
                 NPC.defense = 2000;
                 NPC.velocity *= 0.93f;

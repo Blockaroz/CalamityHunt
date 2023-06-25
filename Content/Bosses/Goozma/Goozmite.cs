@@ -502,5 +502,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
             float interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
             colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
         }
+        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                if (projectile.type == ModLoader.GetMod("CalamityMod").Find<ModProjectile>("CelestusMiniScythe").Type || projectile.type == ModLoader.GetMod("CalamityMod").Find<ModProjectile>("CelestusProj").Type)
+                {
+                    modifiers.SourceDamage *= 0.75f;
+                }
+            }
+        }
     }
 }

@@ -334,7 +334,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                             for (int i = 0; i < extension; i++)
                             {
-                                Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2((Target.Center.X - NPC.Center.X) * 0.02f + i * Main.rand.NextFloat(-8f, 8f), 0), ModContent.ProjectileType<CrimulanSmasher>(), 15, 0);
+                                Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2((Target.Center.X - NPC.Center.X) * 0.02f + i * Main.rand.NextFloat(-8f, 8f), 0), ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
                                 proj.ai[0] = -40 - i;
                                 proj.ai[1] = -1;
                                 proj.ai[2] = 1;
@@ -431,11 +431,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                         for (int i = 0; i < count; i++)
                         {
-                            Projectile leftProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * 130 - 130 * count - 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), 15, 0);
+                            Projectile leftProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * 130 - 130 * count - 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
                             leftProj.ai[0] = -30 - time * i;
                             leftProj.ai[1] = -1;
                             leftProj.localAI[0] = 1;                            
-                            Projectile rightProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * -130 + 130 * count + 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), 15, 0);
+                            Projectile rightProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * -130 + 130 * count + 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
                             rightProj.ai[0] = -30 - time * i;
                             rightProj.ai[1] = -1;
                             rightProj.localAI[0] = 1;
@@ -673,8 +673,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int damage = attack switch
             {
                 0 => Main.expertMode ? 600 : 300,//contact
-                1 => 200,//smasher
-                2 => 100,//shockwave
+                1 => 150,//smasher
+                2 => 150,//shockwave
                 _ => damage = 0
             };
 
