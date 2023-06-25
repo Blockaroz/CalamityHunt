@@ -76,7 +76,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         private void OnHitEffect()
         {
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 2; i++)
             {
                 Color glowColor = Main.hslToRgb(NPC.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                 glowColor.A /= 2;

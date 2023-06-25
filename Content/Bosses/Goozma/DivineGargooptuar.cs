@@ -361,6 +361,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time > spawnCount * shieldChargeSpawnTime + 60)
             {
+                NPC.velocity *= 0f;
                 if (shieldChargeCount > (int)(spawnCount * neededShieldChargeThreshold))
                 {
                     Time = 0;
