@@ -70,7 +70,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D glow = AssetDirectory.Textures.Glow;
-            Texture2D flare = AssetDirectory.Textures.Sparkle;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
 
             //Rectangle ornamentBase = ornament.Frame(1, 2, 0, 0);
             //Rectangle ornamentGlow = ornament.Frame(1, 2, 0, 1);
@@ -127,7 +127,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     spriteBatch.Draw(ornamentTexture, ornamentPos - screenPos, ornamentBase, Color.White, ornamentRotation + rotFix, ornamentBase.Size() * 0.5f, NPC.scale, direction, 0);
                     spriteBatch.Draw(ornamentTexture, ornamentPos - screenPos, ornamentGlow, ornamentColor, ornamentRotation + rotFix, ornamentGlow.Size() * 0.5f, NPC.scale, direction, 0);
-                    spriteBatch.Draw(flare, ornamentPos - screenPos, null, new Color(ornamentColor.R, ornamentColor.G, ornamentColor.B, 0) * 0.2f, ornamentRotation + MathHelper.PiOver2, flare.Size() * 0.5f, NPC.scale * new Vector2(1f, 2f), direction, 0);
+                    spriteBatch.Draw(sparkle, ornamentPos - screenPos, null, new Color(ornamentColor.R, ornamentColor.G, ornamentColor.B, 0) * 0.2f, ornamentRotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(1f, 2f), direction, 0);
                 }
             }
 
@@ -148,14 +148,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 effect.Parameters["baseToMapPercent"].SetValue(-0.05f + Utils.GetLerpValue(20, 150, Time, true) * 0.1f);//-1f + Utils.GetLerpValue(20, 180, Time, true)
             }
 
+            Texture2D eyeBall = AssetDirectory.Textures.Extras.GoozmaEyeball;
+            Texture2D godEye = AssetDirectory.Textures.Extras.GoozmaGodEye;
+
+            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.9f + NPC.rotation) * headScale * NPC.scale;
+            spriteBatch.Draw(eyeBall, eyePos - screenPos, eyeBall.Frame(), Color.White, 0, eyeBall.Size() * 0.5f, 1, 0, 0);
+
             FlipShadersOnOff(spriteBatch, effect, false);
             DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, drawVelocity, tentacleVelocity, Color.White);
             FlipShadersOnOff(spriteBatch, null, false);
 
             Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * headScale * NPC.scale;
-            spriteBatch.Draw(crownMaskTexture, crownPos - screenPos, null, Color.White, extraTilt + NPC.rotation, crownMaskTexture.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
+            spriteBatch.Draw(crownMaskTexture, crownPos - screenPos, crownMaskTexture.Frame(), Color.White, extraTilt + NPC.rotation, crownMaskTexture.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
 
-            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.9f + NPC.rotation) * headScale * NPC.scale;
             float eyeRot = -MathHelper.PiOver4;
             float eyeScale = (1.1f + (float)Math.Sin(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 0.15f);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, new Color(255, 255, 255, 0), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.7f, 0.8f), 0, 0);
@@ -163,23 +168,25 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.5f) + new Vector2(0, eyePower.Y), 0, 0);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.1f) + new Vector2(0, eyePower.X), 0, 0);
 
-            Texture2D godEye = AssetDirectory.Textures.Extras.GoozmaEye;
-
             if (Phase == 1 && Time >= 50)
             {
-                eyeScale *= (float)Math.Sqrt(Utils.GetLerpValue(300, 310, Time, true));
+                eyeScale *= (float)Math.Cbrt(Utils.GetLerpValue(290, 330, Time, true));
                 float eyeFlash = Utils.GetLerpValue(300, 360, Time, true);
-                spriteBatch.Draw(godEye, eyePos - screenPos, null, glowColor * (1f - eyeFlash) * 0.7f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f + eyeFlash * 3f), 0, 0);
+                spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), glowColor * (1f - eyeFlash) * 0.5f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f + eyeFlash * 3f), 0, 0);
+                spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), glowColor * (1f - eyeFlash) * 0.2f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f + eyeFlash * 9f), 0, 0);
+                
+                spriteBatch.Draw(eyeBall, eyePos - screenPos, eyeBall.Frame(), glowColor * 0.4f, 0, eyeBall.Size() * 0.5f, 1.05f, 0, 0);
+                spriteBatch.Draw(glow, eyePos - screenPos, null, glowColor * 0.5f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 1.2f, 0, 0);
             }
 
-            spriteBatch.Draw(godEye, eyePos - screenPos, null, Color.Black * 0.5f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f), 0, 0);
-            spriteBatch.Draw(godEye, eyePos - screenPos, null, new Color(200, 200, 200, 0), eyeRot, godEye.Size() * 0.5f, eyeScale * 0.95f * (1f + eyePower.Length() * 0.06f), 0, 0);
-            spriteBatch.Draw(godEye, eyePos - screenPos, null, glowColor, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f), 0, 0);
+            spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), Color.Black * 0.5f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f), 0, 0);
+            spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), new Color(200, 200, 200, 0), eyeRot, godEye.Size() * 0.5f, eyeScale * 0.95f * (1f + eyePower.Length() * 0.06f), 0, 0);
+            spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), glowColor, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f), 0, 0);
 
-            spriteBatch.Draw(flare, eyePos - screenPos, null, glowColor * 0.15f, eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
-            spriteBatch.Draw(flare, eyePos - screenPos, null, glowColor * 0.15f, eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.33f, 4f) + new Vector2(0, eyePower.X), 0, 0);
-            spriteBatch.Draw(flare, eyePos - screenPos, null, glowColor * 0.15f, eyeRot + MathHelper.PiOver4, flare.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.X), 0, 0);
-            spriteBatch.Draw(flare, eyePos - screenPos, null, glowColor * 0.15f, eyeRot - MathHelper.PiOver4, flare.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
+            spriteBatch.Draw(sparkle, eyePos - screenPos, sparkle.Frame(), glowColor * 0.15f, eyeRot + MathHelper.PiOver2, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
+            spriteBatch.Draw(sparkle, eyePos - screenPos, sparkle.Frame(), glowColor * 0.15f, eyeRot, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 4f) + new Vector2(0, eyePower.X), 0, 0);
+            spriteBatch.Draw(sparkle, eyePos - screenPos, sparkle.Frame(), glowColor * 0.15f, eyeRot + MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.X), 0, 0);
+            spriteBatch.Draw(sparkle, eyePos - screenPos, sparkle.Frame(), glowColor * 0.15f, eyeRot - MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
 
 
             spriteBatch.Draw(glow, eyePos - screenPos, null, glowColor * 0.2f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 2f * eyeScale, 0, 0);

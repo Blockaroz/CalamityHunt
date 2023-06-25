@@ -119,7 +119,7 @@ namespace CalamityHunt.Content.Items.Misc
             Texture2D texture = TextureAssets.Item[Type].Value;
             Texture2D sparkTexture = AssetDirectory.Textures.Sparkle;
             Texture2D glowTexture = AssetDirectory.Textures.GlowBig;
-            Texture2D eyeTexture = AssetDirectory.Textures.Extras.GoozmaEye;
+            Texture2D eyeTexture = AssetDirectory.Textures.Extras.GoozmaGodEye;
 
             Color glowColor = GetAlpha(Color.White).Value;
             glowColor.A = 0;

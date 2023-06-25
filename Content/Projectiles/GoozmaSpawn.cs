@@ -251,7 +251,7 @@ namespace CalamityHunt.Content.Projectiles
             //Texture2D body = TextureAssets.Npc[ModContent.NPCType<Goozma>()].Value;
             //Texture2D dress = Goozma.dressTexture;
             //Texture2D crown = Goozma.crownTexture;
-            Texture2D eye = AssetDirectory.Textures.Extras.GoozmaEye;
+            Texture2D eye = AssetDirectory.Textures.Extras.GoozmaGodEye;
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value * 1.5f;
             glowColor.A = 0;
             Vector2 drawOffset = new Vector2(14, 20).RotatedBy(Projectile.rotation) * Projectile.scale;

@@ -23,7 +23,8 @@ namespace CalamityHunt
 
             public struct Extras
             {
-                public static TextureAsset GoozmaEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpecialEye");
+                public static TextureAsset GoozmaGodEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpecialEye");
+                public static TextureAsset GoozmaEyeball = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GoozmaSclera");
             }
 
             public struct SwordSwing
