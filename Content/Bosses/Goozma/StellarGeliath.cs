@@ -244,7 +244,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 saveTarget = NPC.Center;
 
-                int count = 17 + Main.rand.Next(5, 8);
+                int count = 5 + Main.rand.Next(5, 7);
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1600, 2000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.1f);
@@ -257,7 +257,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
             if (Time == 53)
             {
-                int count = 15 + Main.rand.Next(4, 8);
+                int count = 4 + Main.rand.Next(4, 6);
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1000, 1500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.2f);
@@ -272,7 +272,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.scale = 0f;
 
-                int count = 12 + Main.rand.Next(8, 12);
+                int count = 3 + Main.rand.Next(8, 10);
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(50, 1000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
