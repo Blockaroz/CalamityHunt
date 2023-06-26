@@ -509,8 +509,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                 {
+                    bool shouldDie = player.statLife < 5;
                     player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} saw the light."), 9999, -1, false, true, 200, false, 0, 0, 0);
-                    player.statLife = Math.Min(5, player.statLife);
+                    if (!shouldDie)
+                        player.statLife = 5;
                     player.immuneTime += 120;
                 }
 
