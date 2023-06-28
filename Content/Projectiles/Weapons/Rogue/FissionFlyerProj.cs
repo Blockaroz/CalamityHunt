@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -128,26 +129,38 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             return false;
         }
 
+        public override void Load()
+        {
+            ringTexture = ModContent.Request<Texture2D>(Texture + "Ring", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            handleTexture = ModContent.Request<Texture2D>(Texture + "Handle", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+        }
+
+        public static Texture2D ringTexture;
+        public static Texture2D handleTexture;
+
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-            Texture2D ring = ModContent.Request<Texture2D>(Texture + "Ring").Value;
-            Texture2D handle = ModContent.Request<Texture2D>(Texture + "Handle").Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
 
             if (Time < 60)
-                Main.EntitySpriteDraw(handle, Projectile.Center - Main.screenPosition, handle.Frame(), Color.White, Projectile.rotation, handle.Size() * 0.5f, Projectile.scale, 0, 0);
+                Main.EntitySpriteDraw(handleTexture, Projectile.Center - Main.screenPosition, handleTexture.Frame(), Color.White, Projectile.rotation, handleTexture.Size() * 0.5f, Projectile.scale, 0, 0);
 
             Color backColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-            backColor.A = 200;
-            Color glowColor = Color.Lerp(new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]), Color.White, 0.3f);
+            backColor.A = 170;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             glowColor.A = 0;
 
             float expand = MathF.Cbrt(Utils.GetLerpValue(70, 90, Time, true)) * (1f - MathF.Cbrt(Utils.GetLerpValue(100, 110, Time, true)) * 0.5f) * MathF.Sqrt(Utils.GetLerpValue(130, 120, Time, true));
 
+            SpriteEffects spinEffects = Projectile.direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
             float ringScale = (1f - expand * 0.8f) * Projectile.scale;
-            Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, ring.Frame(), backColor, Main.GlobalTimeWrappedHourly * 9f * Projectile.direction, ring.Size() * 0.5f, ringScale * 0.55f, 0, 0);
-            Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, ring.Frame(), glowColor, Main.GlobalTimeWrappedHourly * 7f * Projectile.direction, ring.Size() * 0.5f, ringScale * 0.5f, 0, 0);
-            Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, ring.Frame(), glowColor * 0.1f, Main.GlobalTimeWrappedHourly * 5f * Projectile.direction, ring.Size() * 0.5f, ringScale * 0.8f, 0, 0);
+            Main.EntitySpriteDraw(ringTexture, Projectile.Center - Main.screenPosition, ringTexture.Frame(), backColor, Main.GlobalTimeWrappedHourly * 14f * Projectile.direction, ringTexture.Size() * 0.5f, ringScale * 0.55f, spinEffects, 0);
+            Main.EntitySpriteDraw(ringTexture, Projectile.Center - Main.screenPosition, ringTexture.Frame(), new Color(200, 200, 200, 0), Main.GlobalTimeWrappedHourly * 14f * Projectile.direction, ringTexture.Size() * 0.5f, ringScale * 0.5f, spinEffects, 0);
+            Main.EntitySpriteDraw(ringTexture, Projectile.Center - Main.screenPosition, ringTexture.Frame(), glowColor * 0.7f, Main.GlobalTimeWrappedHourly * 9f * Projectile.direction, ringTexture.Size() * 0.5f, ringScale * 0.5f, spinEffects, 0);
+            Main.EntitySpriteDraw(ringTexture, Projectile.Center - Main.screenPosition, ringTexture.Frame(), glowColor * 0.2f, Main.GlobalTimeWrappedHourly * 6f * Projectile.direction, ringTexture.Size() * 0.5f, ringScale * 0.7f, spinEffects, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.3f, 0, glow.Size() * 0.5f, ringScale * 3f, 0, 0);
 
             Rectangle left = texture.Frame(2, 1, 0, 0);
             Rectangle right = texture.Frame(2, 1, 1, 0);

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -50,7 +51,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Projectile.oldVelocity.Length();
             }
 
-            Projectile.rotation += Projectile.direction;
+            Projectile.rotation += Projectile.direction * 0.2f;
 
             Dust splode = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.AncientLight, -Projectile.velocity * Main.rand.NextFloat(3f), 0, glowColor, 1f + Main.rand.NextFloat());
             splode.noGravity = true;
@@ -74,15 +75,20 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow;
 
             Color backColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-            backColor.A = 200;
-            Color glowColor = Color.Lerp(new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]), Color.White, 0.3f);
+            backColor.A = 180;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             glowColor.A = 0;
+            SpriteEffects spinEffects = Projectile.direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), backColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.6f, 0, 0);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.5f, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), backColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.5f, spinEffects, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(200, 200, 200, 0), Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.5f, spinEffects, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor, Projectile.rotation * 0.8f, texture.Size() * 0.5f, Projectile.scale * 0.6f, spinEffects, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor * 0.3f, Projectile.rotation * 0.6f, texture.Size() * 0.5f, Projectile.scale * 0.7f, spinEffects, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.5f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, spinEffects, 0);
 
             return false;
         }
