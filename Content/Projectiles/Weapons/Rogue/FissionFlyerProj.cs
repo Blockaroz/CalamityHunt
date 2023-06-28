@@ -43,7 +43,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override void AI()
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-
             if (Projectile.ai[1] == 0)
             {
                 Projectile.scale = 0.3f + Utils.GetLerpValue(0, 60, Time, true) * 0.7f;
@@ -58,6 +57,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                         ring.ai[0] = Time;
                     }
 
+                    if (Projectile.ai[2] == 1)
+                    {
+                        Projectile ring = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FissionFlyerMiniRing>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                        ring.ai[1] = 1;
+                    }
                     for (int j = 0; j < 40; j++)
                     {
                         Dust splode = Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(15, 15), 0, glowColor, 1f + Main.rand.NextFloat());

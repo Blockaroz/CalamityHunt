@@ -53,11 +53,18 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
             Projectile.rotation += Projectile.direction * 0.2f;
 
-            Dust splode = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.AncientLight, -Projectile.velocity * Main.rand.NextFloat(3f), 0, glowColor, 1f + Main.rand.NextFloat());
+            Dust splode = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20) * Projectile.scale, DustID.AncientLight, -Projectile.velocity * Main.rand.NextFloat(3f), 0, glowColor, 1f + Main.rand.NextFloat());
             splode.noGravity = true;
 
-            Dust dust = Dust.NewDustPerfect(Projectile.Center - Main.rand.NextVector2Circular(30, 30), DustID.Sand, Projectile.velocity * Main.rand.NextFloat(), 0, Color.Black, Main.rand.NextFloat());
+            Dust dust = Dust.NewDustPerfect(Projectile.Center - Main.rand.NextVector2Circular(30, 30) * Projectile.scale, DustID.Sand, Projectile.velocity * Main.rand.NextFloat(), 0, Color.Black, Main.rand.NextFloat());
             dust.noGravity = true;
+
+            if (Projectile.ai[1] == 1)
+            {
+                Projectile.penetrate = -1;
+                Projectile.scale = Utils.GetLerpValue(240, 200, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 120, Projectile.timeLeft, true) * 5;
+                Projectile.Resize((int)(60 * Projectile.scale), (int)(60 * Projectile.scale));
+            }
 
             Time++;
             Projectile.localAI[0] = Main.GlobalTimeWrappedHourly * 40f + Time;
