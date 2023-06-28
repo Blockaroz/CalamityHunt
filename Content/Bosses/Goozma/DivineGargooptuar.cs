@@ -304,6 +304,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         }
 
         public int shieldChargeCount;
+        public float shieldBreakPercent;
         
         private void DoubleRainbow()
         {
@@ -334,6 +335,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         chargeNPC.active = false;
                         shieldChargeCount++;
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                            NPC.netUpdate = true;
+
+                        SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact.WithPitchOffset(shieldChargeCount * 0.03f - 0.2f), NPC.Center);
                     }
                 }
             }
@@ -342,7 +347,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int shieldChargeSpawnTime = 7;
 
             int spawnCount = 20;
-            float neededShieldChargeThreshold = 0.75f;
+            float neededShieldChargeThreshold = 0.85f;
+
+            shieldBreakPercent = (float)shieldChargeCount / spawnCount;
 
             //YuH add mode stuff here
 
@@ -561,6 +568,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public static Texture2D dangerTexture;
         public static Texture2D dangerShieldTexture;
+        public static Texture2D dangerShieldCrackTexture;
         public static Texture2D dangerShineTexture;
 
         public override void Load()
@@ -571,6 +579,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             wingsTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DivineGargooptuarWingsFuckYouInfernumTerminus", AssetRequestMode.ImmediateLoad).Value;
             dangerTexture = ModContent.Request<Texture2D>(Texture + "Danger", AssetRequestMode.ImmediateLoad).Value;
             dangerShieldTexture = ModContent.Request<Texture2D>(Texture + "DangerShield", AssetRequestMode.ImmediateLoad).Value;
+            dangerShieldCrackTexture = ModContent.Request<Texture2D>(Texture + "DangerShieldCracks", AssetRequestMode.ImmediateLoad).Value;
             dangerShineTexture = ModContent.Request<Texture2D>(Texture + "DangerShine", AssetRequestMode.ImmediateLoad).Value;
         }
 
@@ -655,6 +664,21 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), new Color(150, 150, 150, 150), NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
                         spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), rainbowColor * (0.7f + rainbowShine * 0.3f), NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * 1.01f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
                         spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), rainbowColor * rainbowShine * 0.8f, NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * (1.1f + shineStrength * 0.3f) * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                        
+                        if (shieldBreakPercent > 0.13f)
+                        {
+                            int crackFrame = 0;
+                            if (shieldBreakPercent > 0.4f)
+                                crackFrame = 1;
+                            if (shieldBreakPercent > 0.7f)
+                                crackFrame = 2;
+
+                            Rectangle crackSourceFrame = dangerShieldCrackTexture.Frame(1, 3, 0, crackFrame);
+                            Color crackColor = rainbowColor * 0.2f;
+                            crackColor.A = 233;
+                            spriteBatch.Draw(dangerShieldCrackTexture, NPC.Center - screenPos, crackSourceFrame, crackColor, NPC.rotation, crackSourceFrame.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                            spriteBatch.Draw(dangerShieldCrackTexture, NPC.Center - screenPos, crackSourceFrame, crackColor * 0.2f, NPC.rotation, crackSourceFrame.Size() * 0.5f, NPC.scale * (1.1f + shineStrength * 0.3f) * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                        }
 
                         Vector2 flareOff = new Vector2(25, -25 + (float)Math.Sin(npcFrame * MathHelper.PiOver2 - MathHelper.PiOver2) * 2f).RotatedBy(NPC.rotation) * squishFactor;
 
