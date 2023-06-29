@@ -59,6 +59,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
             if ((Time - 8) % 4 == 1)
             {
+                Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge += 0.0001f;
+
                 SoundStyle lightning = SoundID.DD2_LightningBugZap;
                 lightning.MaxInstances = 0;
                 lightning.PitchVariance = 0.1f;
@@ -105,7 +107,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             }
             else
             {
-                Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge += 0.001f + Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge * 0.005f;
+                Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge += 0.002f + Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge * 0.004f;
                 Owner.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsWaitTime = 50;
             }
 

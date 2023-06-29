@@ -34,7 +34,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             Item.DamageType = DamageClass.Magic;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.mana = 35;
+            Item.mana = 15;
             Item.useTime = 12;
             Item.useAnimation = 12;
             Item.channel = true;
