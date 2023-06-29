@@ -532,8 +532,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int damage = attack switch
             {
                 0 => Main.expertMode ? 280 : 140,//contact
-                1 => 80,//Prism Destroyer
-                2 => 120,//Crystal Storm
+                1 => 105,//Prism Destroyer
+                2 => 100,//Crystal Storm
                 3 => 5,//Pixieball Crystal Shard
                 4 => 0,//Explosion
                 _ => 0

@@ -29,7 +29,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            Projectile.damage = 20;
             Projectile.Resize((int)(MathF.Sqrt(Utils.GetLerpValue(0, 50, Time, true)) * Size), Projectile.height);
 
             if (Time > 60)

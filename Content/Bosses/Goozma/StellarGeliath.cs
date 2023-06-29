@@ -168,6 +168,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             else switch (Attack)
                 {
                     case (int)AttackList.StarSigns:
+                        NPC.damage = 0;
                         StarSigns();
                         break;
                     case (int)AttackList.CosmicStomp:

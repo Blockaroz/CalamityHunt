@@ -330,11 +330,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         {
                             int extension = (int)DifficultyBasedValue(10, 12, 16, 18, 20);
 
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), GetDamage(2), 0, ai1: 2500);
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), 0, 0, ai1: 2500);
 
                             for (int i = 0; i < extension; i++)
                             {
-                                Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2((Target.Center.X - NPC.Center.X) * 0.02f + i * Main.rand.NextFloat(-8f, 8f), 0), ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
+                                Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2((Target.Center.X - NPC.Center.X) * 0.02f + i * Main.rand.NextFloat(-10f, 10f), 0), ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
                                 proj.ai[0] = -40 - i;
                                 proj.ai[1] = -1;
                                 proj.ai[2] = 1;
@@ -464,6 +464,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     NPC.velocity *= 0.1f;
                     squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.5f);
+
                     if (Time == waitTime + 95)
                     {
                         SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
@@ -499,7 +500,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time == waitTime + 180)
             {
-                Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), GetDamage(2), 0, ai1: 2500);
+                Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), 0, 0, ai1: 2500);
 
                 SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
                 slam.MaxInstances = 0;
@@ -513,12 +514,27 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
 
                 squishFactor = new Vector2(1.5f, 0.5f);
+
+                        int count = (int)DifficultyBasedValue(12, death: 16);
+                        int time = (int)DifficultyBasedValue(6, 5, 4, 3);
+
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile leftProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * 130 - 130 * count - 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
+                            leftProj.ai[0] = -30 - time * i;
+                            leftProj.ai[1] = -1;
+                            leftProj.localAI[0] = 1;                            
+                            Projectile rightProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * -130 + 130 * count + 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
+                            rightProj.ai[0] = -30 - time * i;
+                            rightProj.ai[1] = -1;
+                            rightProj.localAI[0] = 1;
+                        }
             }
 
             if (Time > waitTime + 180)
                 squishFactor = Vector2.Lerp(squishFactor, Vector2.One, 0.1f);
 
-            if (Time > waitTime + 200)
+            if (Time > waitTime + 260)
                 Reset();
         }
 
@@ -673,7 +689,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int damage = attack switch
             {
                 0 => Main.expertMode ? 600 : 300,//contact
-                1 => 150,//smasher
+                1 => 100,//smasher
                 2 => 150,//shockwave
                 _ => damage = 0
             };

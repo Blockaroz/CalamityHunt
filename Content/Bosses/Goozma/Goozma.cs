@@ -424,8 +424,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 nextAttack[currentSlime] = Main.rand.Next(0, 3);
                             }
 
-                            //currentSlime = 1;
-                            //nextAttack[currentSlime] = 2;
+                            //currentSlime = 2;
+                            //nextAttack[currentSlime] = 0;
 
                             int[] slimeTypes = new int[]
                             {
@@ -563,13 +563,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         break;
                                     case 1:
 
-                                        Orbit(1000, new Vector2(500, 0));
-                                        if (Time > 50)
-                                        {
-                                            SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.CrimulanHop);
-                                        }
-                                        //Fly();
-                                        //NPC.velocity *= 0.9f;
+                                        Fly();
+                                        NPC.velocity *= 0.9f;
 
                                         break;
                                     case 2:

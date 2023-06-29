@@ -13,15 +13,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 List<(int, float)> projectiles = new List<(int, float)> { };
                 Mod calamity = ModLoader.GetMod("CalamityMod");
-                projectiles.Add((calamity.Find<ModProjectile>("EssenceScythe").Type, 0.9f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("EssenceScythe").Type, 0.9f));
                 projectiles.Add((calamity.Find<ModProjectile>("ExcelsusMain").Type, 0.35f));
                 projectiles.Add((calamity.Find<ModProjectile>("ExcelsusPink").Type, 0.35f));
                 projectiles.Add((calamity.Find<ModProjectile>("ExcelsusBlue").Type, 0.35f));
                 projectiles.Add((calamity.Find<ModProjectile>("LaserFountain").Type, 0.35f));
                 projectiles.Add((calamity.Find<ModProjectile>("TaintedBladeSlasher").Type, 0.5f));
-                projectiles.Add((calamity.Find<ModProjectile>("GaelSkull").Type, 0.6f));
+                projectiles.Add((calamity.Find<ModProjectile>("GaelSkull").Type, 0.6f));*/
                 projectiles.Add((calamity.Find<ModProjectile>("LaceratorYoyo").Type, 4f));
-                projectiles.Add((calamity.Find<ModProjectile>("CosmicDischargeFlail").Type, 0.75f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("CosmicDischargeFlail").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("CosmicIceBurst").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("DragonPowFlail").Type, 0.6f));
                 projectiles.Add((calamity.Find<ModProjectile>("Waterfall").Type, 0.6f));
@@ -48,10 +48,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("Earth4").Type, 0.1f));
                 projectiles.Add((calamity.Find<ModProjectile>("ElementalExcaliburBeam").Type, 0.25f));
                 projectiles.Add((calamity.Find<ModProjectile>("RSSolarFlare").Type, 0.5f));
-                projectiles.Add((calamity.Find<ModProjectile>("TriactisHammerProj").Type, 0.7f));
+                projectiles.Add((calamity.Find<ModProjectile>("TriactisHammerProj").Type, 0.7f));*/
 
-                projectiles.Add((calamity.Find<ModProjectile>("ExoLightningBolt").Type, 0.5f));
-                projectiles.Add((calamity.Find<ModProjectile>("CardClub").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("ExoLightningBolt").Type, 0.8f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("CardClub").Type, 0.9f));
                 projectiles.Add((calamity.Find<ModProjectile>("CardClubSplit").Type, 0.9f));
                 projectiles.Add((calamity.Find<ModProjectile>("CardDiamond").Type, 0.9f));
                 projectiles.Add((calamity.Find<ModProjectile>("CardHeart").Type, 0.9f));
@@ -86,23 +86,23 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("VividBolt").Type, 0.85f));
                 projectiles.Add((calamity.Find<ModProjectile>("ClimaxProj").Type, 0.95f));
                 projectiles.Add((calamity.Find<ModProjectile>("ClimaxBeam").Type, 0.95f));
-                projectiles.Add((calamity.Find<ModProjectile>("VoidVortexProj").Type, 0.75f));
+                projectiles.Add((calamity.Find<ModProjectile>("VoidVortexProj").Type, 0.75f));*/
                 projectiles.Add((calamity.Find<ModProjectile>("InfernadoFriendly").Type, 0.99f));
-                projectiles.Add((calamity.Find<ModProjectile>("AetherBeam").Type, 0.85f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("AetherBeam").Type, 0.85f));
                 projectiles.Add((calamity.Find<ModProjectile>("TeslaCannonShot").Type, 0.9f));
                 projectiles.Add((calamity.Find<ModProjectile>("RedirectingLostSoul").Type, 0.9f));
                 projectiles.Add((calamity.Find<ModProjectile>("RedirectingVengefulSoul").Type, 0.9f));
-                projectiles.Add((calamity.Find<ModProjectile>("RedirectingGildedSoul").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("RedirectingGildedSoul").Type, 0.9f));*/
                 projectiles.Add((calamity.Find<ModProjectile>("Ancient").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("Ancient2").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("EnormousConsumingVortex").Type, 0.75f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("EnormousConsumingVortex").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("ExoVortex").Type, 0.8f));
                 projectiles.Add((calamity.Find<ModProjectile>("MelterNote1").Type, 0.95f));
                 projectiles.Add((calamity.Find<ModProjectile>("MelterNote2").Type, 0.95f));
-                projectiles.Add((calamity.Find<ModProjectile>("SpiritCongregation").Type, 0.25f));
+                projectiles.Add((calamity.Find<ModProjectile>("SpiritCongregation").Type, 0.25f));*/
                 projectiles.Add((calamity.Find<ModProjectile>("FabBolt").Type, 0.022f));
                 projectiles.Add((calamity.Find<ModProjectile>("FabRay").Type, 0.022f));
-                projectiles.Add((calamity.Find<ModProjectile>("BlushieStaffProj").Type, 0.1f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("BlushieStaffProj").Type, 0.1f));
                 projectiles.Add((calamity.Find<ModProjectile>("RainbowComet").Type, 0.05f));
                 projectiles.Add((calamity.Find<ModProjectile>("RainbowRocket").Type, 0.05f));
                 projectiles.Add((calamity.Find<ModProjectile>("ApotheosisWorm").Type, 0.5f));
@@ -128,12 +128,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("BrimstoneDartSummon").Type, 0.8f));
                 projectiles.Add((calamity.Find<ModProjectile>("AquasScepterCloudFlash").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("AquasScepterTeslaAura").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("AquasScepterRaindrop").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("LostSoulGold").Type, 0.5f));
-                projectiles.Add((calamity.Find<ModProjectile>("LostSoulGiant").Type, 0.5f));
-                projectiles.Add((calamity.Find<ModProjectile>("LostSoulLarge").Type, 0.5f));
-                projectiles.Add((calamity.Find<ModProjectile>("LostSoulSmall").Type, 0.5f));
-                projectiles.Add((calamity.Find<ModProjectile>("EndoBeam").Type, 0.75f));
+                projectiles.Add((calamity.Find<ModProjectile>("AquasScepterRaindrop").Type, 0.75f));*/
+                projectiles.Add((calamity.Find<ModProjectile>("AtlasMunitionsLaser").Type, 0.85f));
+                projectiles.Add((calamity.Find<ModProjectile>("AtlasMunitionsLaserOverdrive").Type, 0.85f));
+                projectiles.Add((calamity.Find<ModProjectile>("LostSoulSmall").Type, 0.85f));
+                projectiles.Add((calamity.Find<ModProjectile>("LostSoulGold").Type, 0.85f));
+                projectiles.Add((calamity.Find<ModProjectile>("LostSoulGiant").Type, 0.85f));
+                projectiles.Add((calamity.Find<ModProjectile>("LostSoulLarge").Type, 0.85f));
+                projectiles.Add((calamity.Find<ModProjectile>("LostSoulSmall").Type, 0.85f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("EndoBeam").Type, 0.75f));
                 projectiles.Add((calamity.Find<ModProjectile>("EndoIceShard").Type, 0.5f));
                 projectiles.Add((calamity.Find<ModProjectile>("EndoCooperBody").Type, 0.5f));
                 projectiles.Add((calamity.Find<ModProjectile>("EndoCooperLimbs").Type, 0.5f));
@@ -162,37 +165,42 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("DynamicPursuerProjectile").Type, 0.66f));
                 projectiles.Add((calamity.Find<ModProjectile>("DynamicPursuerElectricity").Type, 0.66f));
                 projectiles.Add((calamity.Find<ModProjectile>("DynamicPursuerLaser").Type, 0.66f));
-                projectiles.Add((calamity.Find<ModProjectile>("SacrificeProjectile").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("SacrificeProjectile").Type, 0.9f));*/
                 projectiles.Add((calamity.Find<ModProjectile>("SeraphimProjectile").Type, 0.01f));
                 projectiles.Add((calamity.Find<ModProjectile>("SeraphimDagger").Type, 0.01f));
                 projectiles.Add((calamity.Find<ModProjectile>("SeraphimAngelicLight").Type, 0.01f));
                 projectiles.Add((calamity.Find<ModProjectile>("SeraphimAngelicLight2").Type, 0.01f));
                 projectiles.Add((calamity.Find<ModProjectile>("SeraphimBeamLarge").Type, 0.01f));
-                projectiles.Add((calamity.Find<ModProjectile>("TheAtomSplitterProjectile").Type, 0.66f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("TheAtomSplitterProjectile").Type, 0.66f));
                 projectiles.Add((calamity.Find<ModProjectile>("TheAtomSplitterDuplicate").Type, 0.66f));
                 projectiles.Add((calamity.Find<ModProjectile>("WrathwingSpear").Type, 0.8f));
                 projectiles.Add((calamity.Find<ModProjectile>("WrathwingCinder").Type, 0.8f));
-                projectiles.Add((calamity.Find<ModProjectile>("WrathwingFireball").Type, 0.8f));
+                projectiles.Add((calamity.Find<ModProjectile>("WrathwingFireball").Type, 0.8f));*/
                 projectiles.Add((calamity.Find<ModProjectile>("FinalDawnFireball").Type, 0.2f));
                 projectiles.Add((calamity.Find<ModProjectile>("FinalDawnFlame").Type, 0.2f));
                 projectiles.Add((calamity.Find<ModProjectile>("FinalDawnHorizontalSlash").Type, 0.2f));
                 projectiles.Add((calamity.Find<ModProjectile>("FinalDawnProjectile").Type, 0.2f));
                 projectiles.Add((calamity.Find<ModProjectile>("FinalDawnThrow").Type, 0.2f));
                 projectiles.Add((calamity.Find<ModProjectile>("FinalDawnThrow2").Type, 0.2f));
-                projectiles.Add((calamity.Find<ModProjectile>("RefractionRotorProjectile").Type, 0.8f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("RefractionRotorProjectile").Type, 0.8f));
                 projectiles.Add((calamity.Find<ModProjectile>("PrismShurikenBlade").Type, 0.8f));
                 projectiles.Add((calamity.Find<ModProjectile>("NanoblackMain").Type, 0.01f));
                 projectiles.Add((calamity.Find<ModProjectile>("NanoblackSplit").Type, 0.01f));
                 projectiles.Add((calamity.Find<ModProjectile>("ScarletDevilProjectile").Type, 0.1f));
                 projectiles.Add((calamity.Find<ModProjectile>("ScarletDevilBullet").Type, 0.1f));
-                projectiles.Add((calamity.Find<ModProjectile>("ScarletBlast").Type, 0.1f));
+                projectiles.Add((calamity.Find<ModProjectile>("ScarletBlast").Type, 0.1f));*/
 
                 for (int i = 0; i < projectiles.Count; i++)
                 {
                     if (projectile.type == projectiles[i].Item1)
                     {
-                        //modifiers.SourceDamage *= projectiles[i].Item2;
+                        modifiers.SourceDamage *= projectiles[i].Item2;
                     }
+                }
+
+                if (projectile.minion)
+                {
+                    modifiers.SourceDamage *= 0.85f;
                 }
             }
         }

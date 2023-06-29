@@ -228,6 +228,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int jumpCount = (int)DifficultyBasedValue(3, 4, 5, 6);
             int jumpTime = (int)DifficultyBasedValue(120, 100, 70, 60);
 
+            NPC.dontTakeDamage = false;
+
             if (Time < 40)
             {
                 squishFactor = new Vector2(1f + (float)Math.Pow(Utils.GetLerpValue(2, 40, Time, true), 2) * 0.4f, 1f - (float)Math.Pow(Utils.GetLerpValue(2, 40, Time, true), 2) * 0.6f);
@@ -375,6 +377,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int spikeCount = (int)DifficultyBasedValue(2, 3, 3, 4);
             int spikeTime = (int)DifficultyBasedValue(140, 130, 120, 120);
 
+            NPC.dontTakeDamage = true;
+
             if (Time < 61)
             {
                 saveTarget = NPC.FindSmashSpot(Target.Center + new Vector2(0, 100));
@@ -470,8 +474,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (player.Center.X > NPC.Bottom.X + 140 || player.Center.X < NPC.Bottom.X - 140)
                     {
-                        player.velocity.X = -player.velocity.X * 0.05f;
-                        player.velocity.X -= (player.Center.X - NPC.Center.X) * 0.07f;
+                        player.velocity.X = -player.velocity.X * 0.025f;
+                        player.velocity.X -= (player.Center.X - NPC.Center.X) * 0.035f;
                     }
                 }
 
@@ -497,7 +501,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int damage = attack switch
             {
                 0 => Main.expertMode ? 280 : 140,//contact
-                1 => 80,//bubble
+                1 => 90,//bubble
                 2 => 140,//clone
                 3 => 80,//pillar
                 4 => 100,//tooth
