@@ -34,7 +34,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             if (Time == 0)
                 Projectile.rotation = Main.rand.NextFloat(-2f, 2f);
 
-            Projectile.scale = Utils.GetLerpValue(-3, 50, Time, true) + Utils.GetLerpValue(65, 80, Time, true) * 0.5f;
+            Projectile.scale = Utils.GetLerpValue(-3, 50, Time, true) + Utils.GetLerpValue(65, 80, Time, true);
             float expand = Utils.GetLerpValue(0, 80, Time, true);
 
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
@@ -68,7 +68,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             if (Time == 30 || Time > 70)
                 Projectile.velocity += Main.rand.NextVector2Circular(1, 1);
 
-            Projectile.frame = (int)(Utils.GetLerpValue(8, 30, Time, true) * 3f + Utils.GetLerpValue(60, 90, Time, true) * 4f);
+            Projectile.frame = (int)(Utils.GetLerpValue(8, 30, Time, true) * 4f + Utils.GetLerpValue(40, 90, Time, true) * 5f);
             Time++;
             Projectile.localAI[0] = Main.GlobalTimeWrappedHourly * 70f - Time * 0.5f;
         }
@@ -88,10 +88,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-            Rectangle frame = texture.Frame(1, 7, 0, Projectile.frame);
+            Rectangle frame = texture.Frame(1, 9, 0, Projectile.frame);
 
             Color backColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * 0.9f;
-            backColor.A = 220;
+            backColor.A = 180;
             Color glowColor = Color.Lerp(new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]), Color.White, 0.5f) * Utils.GetLerpValue(70, 50, Time, true);
             glowColor.A = 0;
             Color backDrawColor = backColor * Utils.GetLerpValue(80, 50, Time, true);
@@ -100,13 +100,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             for (int i = 0; i < 4; i++)
             {
                 Color trailColor = backDrawColor * (1f - i / 4f);
-                Vector2 off = Projectile.velocity * i * 4f * Utils.GetLerpValue(1, 15, Time, true);
-                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.33f, 0, 0);
+                Vector2 off = Projectile.velocity * i * 3f * Utils.GetLerpValue(1, 15, Time, true);
+                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
                 Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, drawColor * (1f - i / 4f), Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale, 0, 0);
-
             }
 
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, backDrawColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.33f, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, backDrawColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, drawColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale, 0, 0);
 
             return false;
