@@ -30,6 +30,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static CalamityHunt.Common.Systems.DifficultySystem;
@@ -355,6 +356,18 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Time = 0;
                         headScale = 1f;
                     }
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (Main.rand.NextBool((int)(Time + 1)))
+                        {
+                            Vector2 velocity = Vector2.UnitY.RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(1f);
+                            velocity.Y -= 1f + Main.rand.NextFloat();
+                            Particle.NewParticle(Particle.ParticleType<GooBurst>(), Main.rand.NextVector2FromRectangle(NPC.Hitbox), velocity, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value, 1f + Main.rand.NextFloat(1f));
+                        }
+                    }
+                    if (Time % 3 == 0)
+                        Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), 10f, 6f, 10));
 
                     Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(10, 10), 200, Color.Black, Main.rand.NextFloat(2f, 4f)).noGravity = true;
 

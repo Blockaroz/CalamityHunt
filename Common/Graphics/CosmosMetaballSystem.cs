@@ -157,7 +157,8 @@ namespace CalamityHunt.Common.Graphics
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, absorbEffect, Main.Transform);
 
-                Main.spriteBatch.Draw(bloom, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(255, 150, 60, 0) * projectile.scale, 0, bloom.Size() * 0.5f, projectile.scale * 6f, 0, 0);
+                Main.spriteBatch.Draw(bloom, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(15, 5, 65, 0), 0, bloom.Size() * 0.5f, projectile.scale * 10f, 0, 0);
+                Main.spriteBatch.Draw(bloom, projectile.Center - Main.screenPosition, bloom.Frame(), new Color(255, 150, 60, 0), 0, bloom.Size() * 0.5f, projectile.scale * 8f, 0, 0);
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);

@@ -44,8 +44,13 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             Item.consumeAmmoOnFirstShotOnly = true;
 		}
 
-
         public override Vector2? HoldoutOffset() => new Vector2(-16f, 0f);
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            Projectile.NewProjectileDirect(source, position, velocity.RotatedByRandom(1.5f), type, damage, knockback);
+            return false;
+        }
     }
 
     public class TrailblazerBackpackLayer : PlayerDrawLayer

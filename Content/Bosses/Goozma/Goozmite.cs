@@ -413,48 +413,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
         }
 
-        private List<Vector2> zapPointsReal;
-        private List<Vector2> zapPoints;
-        private List<Vector2> zapVelocities;
-
-        public void DrawHealZap(SpriteBatch spriteBatch, Vector2 screenPos)
-        {
-            VertexStrip strip = new VertexStrip();
-
-            Color myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
-            myColor.A = 0;
-            Color goozmaColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Host.localAI[0]);
-            goozmaColor.A = 0;
-
-            Color StripColor(float progress)
-            {
-                Color drawColor = Color.Lerp(myColor, goozmaColor * 0.2f, progress * 1.1f) * 0.2f;
-                drawColor.A = 0;
-                return drawColor;
-            }
-            float StripWidth(float progress) => (1f - (float)Math.Sin(progress * 2.5f) * 0.85f) * 100f;
-
-            float[] rots = new float[zapPointsReal.Count];
-            for (int i = 1; i < zapPointsReal.Count; i++)
-                rots[i] = zapPointsReal[i - 1].AngleTo(zapPoints[i]);
-            rots[0] = zapPointsReal[0].AngleTo(zapPoints[1]);
-            strip.PrepareStrip(zapPointsReal.ToArray(), rots, StripColor, StripWidth, -Main.screenPosition, zapPointsReal.Count, true);
-
-            Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
-            lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-            lightningEffect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
-            lightningEffect.Parameters["uGlow"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
-            lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
-            lightningEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.02f % 1f);
-            lightningEffect.Parameters["uBackPower"].SetValue(0.2f);
-            lightningEffect.CurrentTechnique.Passes[0].Apply();
-
-            strip.DrawTrail();
-
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-
-        }
-
         public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
         {
             float maxBright = 0.667f;
@@ -502,6 +460,49 @@ namespace CalamityHunt.Content.Bosses.Goozma
             float interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
             colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
         }
+
+        private List<Vector2> zapPointsReal;
+        private List<Vector2> zapPoints;
+        private List<Vector2> zapVelocities;
+
+        public void DrawHealZap(SpriteBatch spriteBatch, Vector2 screenPos)
+        {
+            VertexStrip strip = new VertexStrip();
+
+            Color myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
+            myColor.A = 0;
+            Color goozmaColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Host.localAI[0]);
+            goozmaColor.A = 0;
+
+            Color StripColor(float progress)
+            {
+                Color drawColor = Color.Lerp(myColor, goozmaColor * 0.2f, progress * 1.1f) * 0.2f;
+                drawColor.A = 0;
+                return drawColor;
+            }
+            float StripWidth(float progress) => (1f - (float)Math.Sin(progress * 2.5f) * 0.85f) * 100f;
+
+            float[] rots = new float[zapPointsReal.Count];
+            for (int i = 1; i < zapPointsReal.Count; i++)
+                rots[i] = zapPointsReal[i - 1].AngleTo(zapPoints[i]);
+            rots[0] = zapPointsReal[0].AngleTo(zapPoints[1]);
+            strip.PrepareStrip(zapPointsReal.ToArray(), rots, StripColor, StripWidth, -Main.screenPosition, zapPointsReal.Count, true);
+
+            Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
+            lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+            lightningEffect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
+            lightningEffect.Parameters["uGlow"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
+            lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
+            lightningEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.02f % 1f);
+            lightningEffect.Parameters["uBackPower"].SetValue(0.2f);
+            lightningEffect.CurrentTechnique.Passes[0].Apply();
+
+            strip.DrawTrail();
+
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+        }
+
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             if (ModLoader.HasMod("CalamityMod"))
