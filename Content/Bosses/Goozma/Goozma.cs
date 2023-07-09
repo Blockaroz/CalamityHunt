@@ -1940,7 +1940,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Attack = (int)attack;
-                Time = 0;
+                if (zeroTime)
+                    Time = 0; 
                 NPC.netUpdate = true;
             }
         }
@@ -1950,7 +1951,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Phase = phase; 
-                Time = 0;
+                if (zeroTime)
+                    Time = 0;
                 NPC.netUpdate = true;
             }
         }
