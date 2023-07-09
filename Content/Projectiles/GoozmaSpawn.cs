@@ -61,8 +61,8 @@ namespace CalamityHunt.Content.Projectiles
             {
                 for (int i = 0; i < (int)((Time - 400) / 800f) + 1; i++)
                 {
-                    Vector2 pos = Projectile.Center + Main.rand.NextVector2Circular(200, 150) + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
-                    Vector2 vel = pos.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * pos.Distance(Projectile.Center) * 0.1f * ((Time - 400) / 500f);
+                    Vector2 pos = Projectile.Center + Main.rand.NextVector2Circular(300, 300) * Projectile.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
+                    Vector2 vel = pos.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * pos.Distance(Projectile.Center) * ((Time - 400) / 500f) * (0.1f / (1f + Projectile.scale));
 
                     Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), pos, vel, Color.White, 2f);
                     hue.data = Time * 0.33f;
@@ -73,7 +73,7 @@ namespace CalamityHunt.Content.Projectiles
 
             for (int i = 0; i < (int)(Time / 1000f) + 1; i++)
             {
-                Vector2 pos = Projectile.Center + Main.rand.NextVector2CircularEdge(200, 150) + Main.rand.NextVector2Circular(40, 40);
+                Vector2 pos = Projectile.Center + Main.rand.NextVector2CircularEdge(150, 150) * Projectile.scale + Main.rand.NextVector2Circular(40, 40);
 
                 Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
                 hue.data = Time * 0.33f;
@@ -260,8 +260,8 @@ namespace CalamityHunt.Content.Projectiles
             glowColor.A = 0;
             Vector2 drawOffset = new Vector2(14, 20).RotatedBy(Projectile.rotation) * Projectile.scale;
 
-            int size = (int)(MathF.Pow(Utils.GetLerpValue(250, 900, Time, true), 0.7f) * 2f);
-            Projectile.scale = 1f + (MathF.Round(Utils.GetLerpValue(30, 810, Time, true), 2) - MathF.Sqrt(size) * 0.5f) * 1.9f;
+            int size = (int)(MathF.Pow(Utils.GetLerpValue(250, 850, Time, true), 0.7f) * 2f);
+            Projectile.scale = 1f + (MathF.Round(Utils.GetLerpValue(30, 820, Time, true), 2) - MathF.Sqrt(size) * 0.5f) * 1.9f;
 
             float fastWobble = 0.6f + (float)Math.Sin(Time * 0.7f) * 0.4f;
 
@@ -276,7 +276,8 @@ namespace CalamityHunt.Content.Projectiles
             Vector2 drawPos = Projectile.Center + Main.rand.NextVector2Circular(2, 2);
             Rectangle frame = texture.Frame(3, 1, size, 0);
             
-            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.2f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble * 0.5f, 0, 0);
+            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.2f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble * 0.4f, 0, 0);
+            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.1f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble, 0, 0);
 
             for (int i = 0; i < 6; i++)
             {
@@ -290,9 +291,9 @@ namespace CalamityHunt.Content.Projectiles
 
             Main.EntitySpriteDraw(glow, drawPos - Main.screenPosition, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.2f, Utils.GetLerpValue(150, 450, Time, true)), 0, glow.Size() * 0.5f, 0.3f + Projectile.scale + size, 0, 0);
 
-            Vector2 eyePos = Projectile.Center + drawOffset + new Vector2(-28, -20).RotatedBy(Projectile.rotation) * Projectile.scale;
-            float eyeScale = (float)Math.Sqrt(Utils.GetLerpValue(840, 950, Time, true)) * 3f;
-            float eyeRot = (float)Math.Cbrt(Utils.GetLerpValue(840, 1080, Time, true)) * MathHelper.PiOver2 - MathHelper.PiOver4;
+            Vector2 eyePos = Projectile.Center + drawOffset + new Vector2(-42, -37).RotatedBy(Projectile.rotation) * Projectile.scale;
+            float eyeScale = (float)Math.Sqrt(Utils.GetLerpValue(940, 950, Time, true)) * 3f;
+            float eyeRot = (float)Math.Cbrt(Utils.GetLerpValue(940, 1080, Time, true)) * MathHelper.PiOver2 - MathHelper.PiOver4;
             Main.EntitySpriteDraw(sparkle, eyePos - Main.screenPosition, sparkle.Frame(), glowColor * 0.1f, eyeRot + MathHelper.PiOver2, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.3f, 2.4f), 0, 0);
             Main.EntitySpriteDraw(sparkle, eyePos - Main.screenPosition, sparkle.Frame(), glowColor * 0.1f, eyeRot, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.3f, 2f), 0, 0);
             Main.EntitySpriteDraw(eye, eyePos - Main.screenPosition, eye.Frame(), glowColor, eyeRot, eye.Size() * 0.5f, eyeScale * 0.4f, 0, 0);

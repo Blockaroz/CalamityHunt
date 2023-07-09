@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace CalamityHunt.Content.Items.Weapons.Ranged
 {
@@ -48,7 +49,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectileDirect(source, position, velocity.RotatedByRandom(0.3f), type, damage, knockback);
+            Projectile.NewProjectileDirect(source, position, velocity.RotatedBy(MathF.Sin(Main.GlobalTimeWrappedHourly * 15) * 0.1f).RotatedByRandom(0.1f), type, damage, knockback);
             return false;
         }
     }
