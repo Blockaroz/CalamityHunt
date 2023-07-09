@@ -28,11 +28,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
         }
 
         public ref float Time => ref Projectile.ai[0];
+        public ref float Target => ref Projectile.ai[1];
 
         public override void AI()
         {
             if (Time == 0)
+            {
                 Projectile.rotation = Main.rand.NextFloat(-2f, 2f);
+                Target = -1;
+            }
 
             Projectile.scale = Utils.GetLerpValue(-5, 30, Time, true) + Utils.GetLerpValue(65, 80, Time, true);
             float expand = Utils.GetLerpValue(0, 80, Time, true);
@@ -57,11 +61,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
             if (Time > 20)
             {
-                int target = Projectile.FindTargetWithLineOfSight(1200);
-                if (target > -1)
+                if (Target > -1)
                 {
-                    Projectile.velocity += Projectile.DirectionTo(Main.npc[target].Center) * Utils.GetLerpValue(1200, 0, Projectile.Distance(Main.npc[target].Center), true);
+                    Projectile.velocity += Projectile.DirectionTo(Main.npc[(int)Target].Center) * Utils.GetLerpValue(1200, 0, Projectile.Distance(Main.npc[(int)Target].Center), true);
                     Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Projectile.oldVelocity.Length();
+                }
+                else
+                {
+                    Target = Projectile.FindTargetWithLineOfSight(1200);
+                    if (Target > -1 && Main.netMode != NetmodeID.MultiplayerClient)
+                        Projectile.netUpdate = true;
                 }
             }
 
