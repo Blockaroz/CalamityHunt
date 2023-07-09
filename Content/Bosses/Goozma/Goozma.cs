@@ -80,7 +80,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.width = 150;
             NPC.height = 150;
             NPC.damage = 0;
-            NPC.defense = 100;
+            NPC.defense = 110;
             NPC.lifeMax = 2750000;
             NPC.HitSound = null;
             NPC.DeathSound = SoundID.NPCDeath1;
@@ -452,7 +452,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             }
 
                             //currentSlime = 2;
-                            //nextAttack[currentSlime] = 0;
+                            //nextAttack[currentSlime] = 1;
 
                             int[] slimeTypes = new int[]
                             {

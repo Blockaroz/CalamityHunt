@@ -511,6 +511,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     modifiers.SourceDamage *= 0.85f;
                 }
+                if (projectile.type == ModLoader.GetMod("CalamityMod").Find<ModProjectile>("PhotonRipperProjectile").Type || projectile.type == ModLoader.GetMod("CalamityMod").Find<ModProjectile>("PrismTooth").Type)
+                {
+                    modifiers.SourceDamage *= 0.7f;
+                }
             }
         }
     }

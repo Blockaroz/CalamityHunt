@@ -22,26 +22,26 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("GaelSkull").Type, 0.6f));*/
                 projectiles.Add((calamity.Find<ModProjectile>("LaceratorYoyo").Type, 4f));
                 /*projectiles.Add((calamity.Find<ModProjectile>("CosmicDischargeFlail").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("CosmicIceBurst").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("DragonPowFlail").Type, 0.6f));
-                projectiles.Add((calamity.Find<ModProjectile>("Waterfall").Type, 0.6f));
-                projectiles.Add((calamity.Find<ModProjectile>("DraconicSpark").Type, 0.6f));
-                projectiles.Add((calamity.Find<ModProjectile>("SpineOfThanatosProjectile").Type, 0.85f));
-                projectiles.Add((calamity.Find<ModProjectile>("PrismRay").Type, 0.85f));
-                projectiles.Add((calamity.Find<ModProjectile>("ArkoftheCosmosBlast").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("ArkoftheCosmosConstellation").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("ArkoftheCosmosParryHoldout").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("ArkoftheCosmosSwungBlade").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("EonBolt").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("RendingNeedle").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("MurasamaSlash").Type, 0.6f));
+                projectiles.Add((calamity.Find<ModProjectile>("CosmicIceBurst").Type, 0.75f));*/
+                projectiles.Add((calamity.Find<ModProjectile>("DragonPowFlail").Type, 0.5f));
+                projectiles.Add((calamity.Find<ModProjectile>("Waterfall").Type, 0.5f));
+                projectiles.Add((calamity.Find<ModProjectile>("DraconicSpark").Type, 0.5f));
+                projectiles.Add((calamity.Find<ModProjectile>("SpineOfThanatosProjectile").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("PrismRay").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("ArkoftheCosmosBlast").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("ArkoftheCosmosConstellation").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("ArkoftheCosmosParryHoldout").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("ArkoftheCosmosSwungBlade").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("EonBolt").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("RendingNeedle").Type, 0.9f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("MurasamaSlash").Type, 0.6f));
                 projectiles.Add((calamity.Find<ModProjectile>("PhaseslayerBeam").Type, 0.85f));
-                projectiles.Add((calamity.Find<ModProjectile>("PhaseslayerProjectile").Type, 0.85f));
-                projectiles.Add((calamity.Find<ModProjectile>("PrismTooth").Type, 0.75f));
-                projectiles.Add((calamity.Find<ModProjectile>("PhotonRipperProjectile").Type, 0.25f));
-                projectiles.Add((calamity.Find<ModProjectile>("DragonRageStaff").Type, 0.4f));
-                projectiles.Add((calamity.Find<ModProjectile>("FuckYou").Type, 0.4f));
-                projectiles.Add((calamity.Find<ModProjectile>("DracoBeam").Type, 0.4f));
+                projectiles.Add((calamity.Find<ModProjectile>("PhaseslayerProjectile").Type, 0.85f));*/
+                projectiles.Add((calamity.Find<ModProjectile>("PrismTooth").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("PhotonRipperProjectile").Type, 0.9f));
+                projectiles.Add((calamity.Find<ModProjectile>("DragonRageStaff").Type, 0.56f));
+                projectiles.Add((calamity.Find<ModProjectile>("FuckYou").Type, 0.56f));
+                /*projectiles.Add((calamity.Find<ModProjectile>("DracoBeam").Type, 0.4f));
                 projectiles.Add((calamity.Find<ModProjectile>("EarthProj").Type, 0.1f));
                 projectiles.Add((calamity.Find<ModProjectile>("Earth2").Type, 0.1f));
                 projectiles.Add((calamity.Find<ModProjectile>("Earth3").Type, 0.1f));
@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("ClimaxProj").Type, 0.95f));
                 projectiles.Add((calamity.Find<ModProjectile>("ClimaxBeam").Type, 0.95f));
                 projectiles.Add((calamity.Find<ModProjectile>("VoidVortexProj").Type, 0.75f));*/
-                projectiles.Add((calamity.Find<ModProjectile>("InfernadoFriendly").Type, 0.99f));
+                projectiles.Add((calamity.Find<ModProjectile>("InfernadoFriendly").Type, 0.3f));
                 /*projectiles.Add((calamity.Find<ModProjectile>("AetherBeam").Type, 0.85f));
                 projectiles.Add((calamity.Find<ModProjectile>("TeslaCannonShot").Type, 0.9f));
                 projectiles.Add((calamity.Find<ModProjectile>("RedirectingLostSoul").Type, 0.9f));
@@ -206,25 +206,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
         }
         public static void GoozmaItemResistances(Item item, ref NPC.HitModifiers modifiers) //TRUE MELEE (holdouts don't count)
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
-                List<(int, float)> items = new List<(int, float)> { };
-                Mod calamity = ModLoader.GetMod("CalamityMod");
-                items.Add((calamity.Find<ModItem>("TheEnforcer").Type, 0.7f));
-                items.Add((calamity.Find<ModItem>("Excelsus").Type, 0.35f));
-                items.Add((calamity.Find<ModItem>("PrismaticBreaker").Type, 0.75f));
-                items.Add((calamity.Find<ModItem>("DraconicDestruction").Type, 0.4f));
-                items.Add((calamity.Find<ModItem>("Earth").Type, 0.1f));
-                items.Add((calamity.Find<ModItem>("ElementalExcalibur").Type, 0.1f));
-                items.Add((calamity.Find<ModItem>("RedSun").Type, 0.5f));
-                for (int i = 0; i < items.Count; i++)
-                {
-                    if (item.type == items[i].Item1)
-                    {
-                        //modifiers.SourceDamage *= items[i].Item2;
-                    }
-                }
-            }
+            // "give everything a resistance to true melee"
+            modifiers.SourceDamage *= 0.7f;
         }
 
         public static void DisablePointBlank()
