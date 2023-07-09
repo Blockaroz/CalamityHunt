@@ -34,7 +34,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             if (Time == 0)
                 Projectile.rotation = Main.rand.NextFloat(-2f, 2f);
 
-            Projectile.scale = Utils.GetLerpValue(-3, 50, Time, true) + Utils.GetLerpValue(65, 80, Time, true);
+            Projectile.scale = Utils.GetLerpValue(-10, 50, Time, true) + Utils.GetLerpValue(65, 80, Time, true);
             float expand = Utils.GetLerpValue(0, 80, Time, true);
 
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
@@ -68,7 +68,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             if (Time == 30 || Time > 70)
                 Projectile.velocity += Main.rand.NextVector2Circular(1, 1);
 
-            Projectile.frame = (int)(Utils.GetLerpValue(8, 30, Time, true) * 4f + Utils.GetLerpValue(40, 90, Time, true) * 5f);
+            Projectile.frame = (int)(Utils.GetLerpValue(8, 30, Time, true) * 5f + Utils.GetLerpValue(40, 90, Time, true) * 4f);
             Time++;
             Projectile.localAI[0] = Main.GlobalTimeWrappedHourly * 70f - Time * 0.5f;
         }

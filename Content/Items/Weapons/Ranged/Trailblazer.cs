@@ -48,7 +48,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectileDirect(source, position, velocity.RotatedByRandom(1.5f), type, damage, knockback);
+            Projectile.NewProjectileDirect(source, position, velocity.RotatedByRandom(0.3f), type, damage, knockback);
             return false;
         }
     }

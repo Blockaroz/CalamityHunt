@@ -50,7 +50,7 @@ namespace CalamityHunt.Content.Projectiles
 
             Projectile.damage = 0;
             Projectile.velocity.X = 0;
-            Projectile.velocity.Y = Utils.GetLerpValue(500, 0, Time, true) * -0.01f;
+            Projectile.velocity.Y = Utils.GetLerpValue(800, 0, Time, true) * -0.001f;
 
             if (Main.slimeRain)
                 Main.StopSlimeRain(true);
@@ -114,7 +114,7 @@ namespace CalamityHunt.Content.Projectiles
             //}
 
             if (Time % 3 == 0 && Time > 200)
-                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), Utils.GetLerpValue(200, 800, Time, true) * 10f, 6f, 10, 20000));
+                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), Utils.GetLerpValue(200, 800, Time, true) * 7f, 6f, 10, 20000));
 
             if (Time == 900)
             {
@@ -156,8 +156,6 @@ namespace CalamityHunt.Content.Projectiles
         public override void Load()
         {
             On_Main.UpdateAudio += FadeMusicOut;
-
-            creatureTexture = ModContent.Request<Texture2D>(Texture + "Creature", AssetRequestMode.ImmediateLoad).Value;
         }
 
         public override void Unload()
@@ -251,8 +249,6 @@ namespace CalamityHunt.Content.Projectiles
             particle.behindEntities = true;
         }
 
-        public static Texture2D creatureTexture;
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D sparkle = AssetDirectory.Textures.Sparkle;
@@ -264,8 +260,8 @@ namespace CalamityHunt.Content.Projectiles
             glowColor.A = 0;
             Vector2 drawOffset = new Vector2(14, 20).RotatedBy(Projectile.rotation) * Projectile.scale;
 
-            float initialScale = 0.5f + Utils.GetLerpValue(0, 200, Time, true);
-            Projectile.scale = MathF.Round(MathF.Sqrt(Utils.GetLerpValue(190, 810, Time, true)), 2);
+            int size = (int)(MathF.Pow(Utils.GetLerpValue(250, 900, Time, true), 0.7f) * 2f);
+            Projectile.scale = 1f + (MathF.Round(Utils.GetLerpValue(30, 810, Time, true), 2) - MathF.Sqrt(size) * 0.5f) * 1.9f;
 
             float fastWobble = 0.6f + (float)Math.Sin(Time * 0.7f) * 0.4f;
 
@@ -277,23 +273,22 @@ namespace CalamityHunt.Content.Projectiles
             effect.Parameters["baseToScreenPercent"].SetValue(1f);
             effect.Parameters["baseToMapPercent"].SetValue(0f);
 
-            Vector2 corePos = Projectile.Center + Main.rand.NextVector2Circular(2, 2);
-
-            Main.EntitySpriteDraw(creatureTexture, corePos - Main.screenPosition, creatureTexture.Frame(), Color.Black * 0.5f * Projectile.scale, 0, creatureTexture.Size() * 0.5f, Projectile.scale * 0.9f + fastWobble * 0.3f, 0, 0);
+            Vector2 drawPos = Projectile.Center + Main.rand.NextVector2Circular(2, 2);
+            Rectangle frame = texture.Frame(3, 1, size, 0);
+            
+            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.2f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble * 0.5f, 0, 0);
 
             for (int i = 0; i < 6; i++)
             {
                 Vector2 off = new Vector2(2, 0).RotatedBy(Time * 0.2f + MathHelper.TwoPi / 6f * i);
-                Main.EntitySpriteDraw(creatureTexture, corePos + off - Main.screenPosition, creatureTexture.Frame(), glowColor * Projectile.scale, 0, creatureTexture.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
+                Main.EntitySpriteDraw(texture, drawPos + off - Main.screenPosition, frame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(150, 450, Time, true)) * Projectile.scale, 0, frame.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
             }
-            FlipShadersOnOff(Main.spriteBatch, effect, false);
-            Main.EntitySpriteDraw(texture, corePos - Main.screenPosition, texture.Frame(), Color.Lerp(lightColor, new Color(20, 20, 20, 200), Utils.GetLerpValue(250, 400, Time, true)), 0, texture.Size() * 0.5f, initialScale + Projectile.scale * 0.7f, 0, 0);
 
-            Main.EntitySpriteDraw(creatureTexture, corePos - Main.screenPosition, creatureTexture.Frame(), Color.White, 0, creatureTexture.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
+            FlipShadersOnOff(Main.spriteBatch, effect, false);
+            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.White, 0, frame.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
             FlipShadersOnOff(Main.spriteBatch, null, false);
 
-            Main.EntitySpriteDraw(glow, corePos - Main.screenPosition, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.1f, Utils.GetLerpValue(50, 450, Time, true)), 0, glow.Size() * 0.5f, initialScale + Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(glow, corePos - Main.screenPosition, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.1f, Utils.GetLerpValue(50, 450, Time, true)), 0, glow.Size() * 0.5f, initialScale + Projectile.scale + fastWobble * 0.2f, 0, 0);
+            Main.EntitySpriteDraw(glow, drawPos - Main.screenPosition, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.2f, Utils.GetLerpValue(150, 450, Time, true)), 0, glow.Size() * 0.5f, 0.3f + Projectile.scale + size, 0, 0);
 
             Vector2 eyePos = Projectile.Center + drawOffset + new Vector2(-28, -20).RotatedBy(Projectile.rotation) * Projectile.scale;
             float eyeScale = (float)Math.Sqrt(Utils.GetLerpValue(840, 950, Time, true)) * 3f;

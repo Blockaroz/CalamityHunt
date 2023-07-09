@@ -801,11 +801,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             hueBot.data = NPC.localAI[0];
                                         }
 
-                                        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 0.2f;
-                                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 50f, 0.01f);
+                                        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 0.5f;
+                                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 60f, 0.03f);
                                     }
                                     else
-                                        NPC.velocity *= 0.6f;
+                                        NPC.velocity *= 0.7f;
 
                                     SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.DrillDash);
                                 }
