@@ -196,15 +196,13 @@ namespace CalamityHunt.Content.NPCs
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingPerennialSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/AureusSpawn").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<AureusSpawn>());
-                        else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/Pestilent").Type)
+                        else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/PestilentSlime").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingPestilentSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/BloomSlime").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingBloomSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/GammaSlime").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingGammaSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CragmawMire").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCragmawMire>());
-                        else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CragmawMire2").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCragmawMire>());
                     }
                 }
