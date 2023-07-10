@@ -84,10 +84,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             PrismDestroyer,
             CrystalStorm,
-            DoubleRainbow,
+            PixieBall,
             TooFar,
             Interrupt,
-            BlowUp = -1
+            BlowUp = -1,
+            DoubleRainbow = -300
         }
 
         public ref float Time => ref NPC.ai[0];
@@ -143,8 +144,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         CrystalStorm();
                         break;
                                             
+                    case (int)AttackList.PixieBall:
+                        PixieBall();
+                        break;                           
+                    
                     case (int)AttackList.DoubleRainbow:
-                        DoubleRainbow();
+                        BlowUp();
                         break;                                                      
                     
                     case (int)AttackList.BlowUp:
@@ -289,7 +294,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             else
             {
                 Vector2 wobble = Vector2.Lerp(new Vector2(0.5f, 1.6f), new Vector2(1.3f, 1f), 0.5f + (float)Math.Sin(Time * 0.2f) * 0.5f);
-                squishFactor = Vector2.Lerp(Vector2.Lerp(squishFactor, wobble, Utils.GetLerpValue(40, lengthOfAttack, Time, true) * 0.2f), Vector2.Lerp(squishFactor, Vector2.One, 0.1f), Utils.GetLerpValue(40 + lengthOfAttack, 110 + lengthOfAttack, Time, true)); 
+                squishFactor = Vector2.Lerp(Vector2.Lerp(squishFactor, wobble, Utils.GetLerpValue(40, lengthOfAttack, Time, true) * 0.2f), Vector2.Lerp(squishFactor, Vector2.One, 0.1f), Utils.GetLerpValue(40 + lengthOfAttack, 110 + lengthOfAttack, Time, true));
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center + new Vector2(0, -260)).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + new Vector2(0, -170)) * 0.2f, 0.2f + (float)Math.Sin(Time * 0.3f) * 0.1f);
 
                 if (Time <= lengthOfAttack + 100 && Time % 15 == 0)
@@ -306,86 +311,86 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public int shieldChargeCount;
         public float shieldBreakPercent;
         
-        private void DoubleRainbow()
-        {
-            NPC.rotation = NPC.velocity.X * 0.022f;
+        //private void DoubleRainbow()
+        //{
+        //    NPC.rotation = NPC.velocity.X * 0.022f;
 
-            if (Time < 110)
-                NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.001f;
-            else
-            {
-                if (Time < 150)
-                {
-                    Color dustColor = Main.hslToRgb((NPC.localAI[0] * 0.03f) % 1f, 1f, 0.7f, 0);
-                    for (int i = 0; i < 25; i++)
-                    {
-                        Vector2 offset = Main.rand.NextVector2Circular(200, 180);
-                        Vector2 velocity = -offset.SafeNormalize(Vector2.Zero) * offset.Length() * 0.1f * Main.rand.NextFloat();
-                        Dust dust = Dust.NewDustPerfect(NPC.Center + offset, DustID.PortalBoltTrail, velocity, 0, dustColor, (1f + Main.rand.NextFloat(2f)) * Utils.GetLerpValue(120, 140, Time, true));
-                        dust.noGravity = true;
-                    }
-                }
+        //    if (Time < 110)
+        //        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.001f;
+        //    else
+        //    {
+        //        if (Time < 150)
+        //        {
+        //            Color dustColor = Main.hslToRgb((NPC.localAI[0] * 0.03f) % 1f, 1f, 0.7f, 0);
+        //            for (int i = 0; i < 25; i++)
+        //            {
+        //                Vector2 offset = Main.rand.NextVector2Circular(200, 180);
+        //                Vector2 velocity = -offset.SafeNormalize(Vector2.Zero) * offset.Length() * 0.1f * Main.rand.NextFloat();
+        //                Dust dust = Dust.NewDustPerfect(NPC.Center + offset, DustID.PortalBoltTrail, velocity, 0, dustColor, (1f + Main.rand.NextFloat(2f)) * Utils.GetLerpValue(120, 140, Time, true));
+        //                dust.noGravity = true;
+        //            }
+        //        }
 
-                NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.0005f;
-                NPC.velocity *= 0.9f;
-                foreach (NPC chargeNPC in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<PixieCharge>() && n.ai[1] > 0))
-                {
-                    chargeNPC.velocity = Vector2.Lerp(chargeNPC.velocity, chargeNPC.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (5 + chargeNPC.Distance(NPC.Center) * 0.006f), 0.03f);
-                    if (chargeNPC.Distance(NPC.Center) < 100)
-                    {
-                        chargeNPC.active = false;
-                        shieldChargeCount++;
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                            NPC.netUpdate = true;
+        //        NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.0005f;
+        //        NPC.velocity *= 0.9f;
+        //        foreach (NPC chargeNPC in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<PixieCharge>() && n.ai[1] > 0))
+        //        {
+        //            chargeNPC.velocity = Vector2.Lerp(chargeNPC.velocity, chargeNPC.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (5 + chargeNPC.Distance(NPC.Center) * 0.006f), 0.03f);
+        //            if (chargeNPC.Distance(NPC.Center) < 100)
+        //            {
+        //                chargeNPC.active = false;
+        //                shieldChargeCount++;
+        //                if (Main.netMode == NetmodeID.MultiplayerClient)
+        //                    NPC.netUpdate = true;
 
-                        SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact.WithPitchOffset(shieldChargeCount * 0.03f - 0.2f), NPC.Center);
-                    }
-                }
-            }
+        //                SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact.WithPitchOffset(shieldChargeCount * 0.03f - 0.2f), NPC.Center);
+        //            }
+        //        }
+        //    }
 
-            //no reason to change this across difficulty
-            int shieldChargeSpawnTime = 7;
+        //    //no reason to change this across difficulty
+        //    int shieldChargeSpawnTime = 7;
 
-            int spawnCount = 20;
-            float neededShieldChargeThreshold = 0.85f;
+        //    int spawnCount = 20;
+        //    float neededShieldChargeThreshold = 0.85f;
 
-            shieldBreakPercent = (float)shieldChargeCount / spawnCount;
+        //    shieldBreakPercent = (float)shieldChargeCount / spawnCount;
 
-            //YuH add mode stuff here
+        //    //YuH add mode stuff here
 
 
-            Vector2 wobble = Vector2.Lerp(new Vector2(0.8f, 1.3f), new Vector2(1.1f, 1f), 0.5f + (float)Math.Sin(Time * 0.2f) * 0.5f);
-            squishFactor = Vector2.Lerp(squishFactor, wobble, Utils.GetLerpValue(40, 50, Time, true) * 0.2f);
+        //    Vector2 wobble = Vector2.Lerp(new Vector2(0.8f, 1.3f), new Vector2(1.1f, 1f), 0.5f + (float)Math.Sin(Time * 0.2f) * 0.5f);
+        //    squishFactor = Vector2.Lerp(squishFactor, wobble, Utils.GetLerpValue(40, 50, Time, true) * 0.2f);
 
-            if (Time >= 50 && (Time - 50) % shieldChargeSpawnTime == 0 && Time <= spawnCount * shieldChargeSpawnTime + 50)
-            {
-                float radius = 40;
+        //    if (Time >= 50 && (Time - 50) % shieldChargeSpawnTime == 0 && Time <= spawnCount * shieldChargeSpawnTime + 50)
+        //    {
+        //        float radius = 40;
 
-                Vector2 velocity = new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi);
-                NPC pixie = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)(NPC.Center.X + velocity.X * radius), (int)(NPC.Center.Y + velocity.Y * radius) + 20, ModContent.NPCType<PixieCharge>(), ai2: NPC.whoAmI);
-                pixie.velocity = velocity * radius;
-            }
+        //        Vector2 velocity = new Vector2(1, 0).RotatedByRandom(MathHelper.TwoPi);
+        //        NPC pixie = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)(NPC.Center.X + velocity.X * radius), (int)(NPC.Center.Y + velocity.Y * radius) + 20, ModContent.NPCType<PixieCharge>(), ai2: NPC.whoAmI);
+        //        pixie.velocity = velocity * radius;
+        //    }
 
-            if (Time > spawnCount * shieldChargeSpawnTime + 60)
-            {
-                NPC.velocity *= 0f;
-                if (shieldChargeCount > (int)(spawnCount * neededShieldChargeThreshold))
-                {
-                    Time = 0;
-                    Attack = (int)AttackList.BlowUp;
+        //    if (Time > spawnCount * shieldChargeSpawnTime + 60)
+        //    {
+        //        NPC.velocity *= 0f;
+        //        if (shieldChargeCount > (int)(spawnCount * neededShieldChargeThreshold))
+        //        {
+        //            Time = 0;
+        //            Attack = (int)AttackList.BlowUp;
 
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NPC.netUpdate = true;
-                }
-                else if (Main.npc.Count(n => n.active && n.type == ModContent.NPCType<PixieCharge>()) <= 0)
-                {
-                    ShatterShield();
-                    Reset();
-                }
-            }
+        //            if (Main.netMode == NetmodeID.MultiplayerClient)
+        //                NPC.netUpdate = true;
+        //        }
+        //        else if (Main.npc.Count(n => n.active && n.type == ModContent.NPCType<PixieCharge>()) <= 0)
+        //        {
+        //            ShatterShield();
+        //            Reset();
+        //        }
+        //    }
 
-            shineStrength = (float)shieldChargeCount / spawnCount;
-        }
+        //    shineStrength = (float)shieldChargeCount / spawnCount;
+        //}
 
         private void ShatterShield()
         {
@@ -423,97 +428,97 @@ namespace CalamityHunt.Content.Bosses.Goozma
             SoundEngine.PlaySound(shatter, NPC.Center);
         }
 
-        //private void PixieBall()
-        //{
-        //    NPC.rotation = NPC.velocity.X * 0.022f;
+        private void PixieBall()
+        {
+            NPC.rotation = NPC.velocity.X * 0.022f;
 
-        //    if (Time < 60)
-        //    {
-        //        if (Time == 50)
-        //        {
-        //            NPC.velocity = Vector2.UnitY * 5f;
-        //            int damage = Main.zenithWorld ? 5 : 0;
-        //            Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Host.Center, Host.DirectionTo(Target.Center - Vector2.UnitY * 15).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<PixieBall>(), damage, 0, ai1: 15, ai2: -1);
+            if (Time < 60)
+            {
+                if (Time == 50)
+                {
+                    NPC.velocity = Vector2.UnitY * 5f;
+                    int damage = Main.zenithWorld ? 5 : 0;
+                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Target.Center - new Vector2(0, 40), Target.Velocity, ModContent.ProjectileType<PixieBall>(), damage, 0, ai1: 15, ai2: -1);
+                }
 
-        //            //if (!Main.dedServ)
-        //            //{
-        //            //    SoundEngine.PlaySound(SoundID.Item147, NPC.Center);
-        //            //}
-        //        }
+                NPC.velocity *= 0.9f;
 
-        //        NPC.velocity *= 0.9f;
+                if (Time < 50)
+                    squishFactor = Vector2.Lerp(Vector2.One, new Vector2(1.5f, 0.6f), (float)Math.Sqrt(Utils.GetLerpValue(0, 50, Time, true)));
+                else
+                    squishFactor = Vector2.SmoothStep(new Vector2(1.5f, 0.8f), Vector2.One, (float)Math.Sqrt(Utils.GetLerpValue(50, 60, Time, true)));
+            }
+            else if (Time < 500)
+            {
+                squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Cos(Time * 0.05f) * 0.2f, 1f + (float)Math.Cos(Time * 0.05f + MathHelper.Pi) * 0.2f), 0.3f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.01f, 0.1f);
 
-        //        if (Time < 50)
-        //            squishFactor = Vector2.Lerp(Vector2.One, new Vector2(1.5f, 0.6f), (float)Math.Sqrt(Utils.GetLerpValue(0, 50, Time, true)));
-        //        else
-        //            squishFactor = Vector2.SmoothStep(new Vector2(1.5f, 0.8f), Vector2.One, (float)Math.Sqrt(Utils.GetLerpValue(50, 60, Time, true)));
-        //    }
-        //    else if (Time < 500)
-        //    {
-        //        squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Cos(Time * 0.05f) * 0.2f, 1f + (float)Math.Cos(Time * 0.05f + MathHelper.Pi) * 0.2f), 0.3f);
-        //        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.01f, 0.1f);
+                //if (Time % 80 == 0)
+                //    for (int i = 0; i < Main.rand.Next(10, 30); i++)
+                //        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2Circular(10, 10) - Vector2.UnitY * 10, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(3), 0);
+            }
+            else
+            {
+                NPC.localAI[1]++;
+                NPC.velocity *= 0.9f;
+            }
 
-        //        //if (Time % 80 == 0)
-        //        //    for (int i = 0; i < Main.rand.Next(10, 30); i++)
-        //        //        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Main.rand.NextVector2Circular(10, 10) - Vector2.UnitY * 10, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(3), 0);
-        //    }
-        //    else
-        //    {
-        //        NPC.localAI[1]++;
-        //        NPC.velocity *= 0.9f;
-        //    }
+            if (Time > 60)
+            {
+                if (NPC.localAI[1] == 1)
+                {
+                    SoundEngine.PlaySound(SoundID.DeerclopsIceAttack.WithPitchOffset(0.7f).WithVolumeScale(3f), NPC.Center);
 
-        //    if (Time == 60)
-        //        SoundEngine.PlaySound(SoundID.Shatter, NPC.Center);
+                    shieldBreakPercent++;
+                    NPC.localAI[1]++;
+                }
+            }
 
-        //    if (Time > 60)
-        //    {
-        //        if (NPC.localAI[1] == 1)
-        //        {
-        //            NPC.localAI[1]++;
-        //            ShatterShield();
-        //        }
-        //    }
+            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
+            {
+                Projectile ball = Main.projectile.First(n => n.active && n.type == ModContent.ProjectileType<PixieBall>());
+                pixieBallDangerShine = Utils.GetLerpValue(900, 50, ball.Distance(NPC.Center), true);
+            }
 
-        //    if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
-        //    {
-        //        Projectile ball = Main.projectile.First(n => n.active && n.type == ModContent.ProjectileType<PixieBall>());
-        //        pixieBallDangerShine = Utils.GetLerpValue(900, 50, ball.Distance(NPC.Center), true);
-        //    }
+            //foreach (Projectile proj in Main.projectile.Where(n => n.type == ModContent.ProjectileType<PixieBall>() && n.active))
+            //{
+            //    if (proj.Distance(NPC.Center) < 50)
+            //    {
+            //        Time = 0;
+            //        Attack = (int)AttackList.BlowUp;
+            //        if (Main.netMode == NetmodeID.MultiplayerClient)
+            //            NPC.netUpdate = true;
+            //    }
+            //}
 
-        //    //foreach (Projectile proj in Main.projectile.Where(n => n.type == ModContent.ProjectileType<PixieBall>() && n.active))
-        //    //{
-        //    //    if (proj.Distance(NPC.Center) < 50)
-        //    //    {
-        //    //        Time = 0;
-        //    //        Attack = (int)AttackList.BlowUp;
-        //    //        if (Main.netMode == NetmodeID.MultiplayerClient)
-        //    //            NPC.netUpdate = true;
-        //    //    }
-        //    //}
-
-        //    if (Time > 600)
-        //        Reset();
-        //}
+            if (Time > 600)
+            {
+                ShatterShield();
+                Reset();
+            }
+        }
 
         private void BlowUp()
         {
-            NPC.velocity *= 0.9f;
+            NPC.velocity *= 0.7f;
+            NPC.scale *= 1f + Time * 0.0015f;
             squishFactor = Vector2.Lerp(squishFactor * 0.98f, squishFactor * 1.1f, 0.05f + Time / 60f);
             NPC.frameCounter += 2;
 
-            Particle.NewParticle(Particle.ParticleType<HolyBombChunk>(), NPC.Center, Main.rand.NextVector2Circular(50, 50), Color.White, Time / 30f + Main.rand.NextFloat());
+            for (int i = 0; i < Time; i++)
+                Particle.NewParticle(Particle.ParticleType<HolyBombChunk>(), NPC.Center, Main.rand.NextVector2Circular(50, 50), Color.White, 0.7f + Time / 50f + Main.rand.NextFloat());
 
             if (Time == 1)
-                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HolyExplosion>(), 0, 0);
-            
-            if (Time < 15)
-                Host.ai[0] = 0;
-
-            if (Time > 30)
-            {
                 ShatterShield();
 
+            if (Time == 20)
+                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HolyExplosion>(), 0, 0);
+
+            if (Time < 35)
+                Host.ai[0] = 0;
+
+            if (Time > 40)
+            {
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                 {
                     bool shouldDie = player.statLife < 5;
@@ -638,10 +643,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             switch (Attack)
             {
-                case (int)AttackList.DoubleRainbow:
+                case (int)AttackList.PixieBall:
                 case (int)AttackList.BlowUp:
 
-                    if (Attack == (int)AttackList.BlowUp || Time > 150)
+                    if (Attack == (int)AttackList.BlowUp || Time > 20)
                     {
                         float rainbowShine = (0.9f + (float)Math.Sin(NPC.localAI[0] * (0.1f + NPC.localAI[1] * 0.15f)) * 0.1f) * shineStrength;
 
@@ -656,28 +661,31 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-                        spriteBatch.Draw(dangerShineTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
-
-                        spriteBatch.Draw(dangerShineTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), rainbowColor * rainbowShine, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
-                        spriteBatch.Draw(dangerTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), rainbowColor * rainbowShine * 0.1f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
-
-                        spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), new Color(150, 150, 150, 150), NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                        spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), rainbowColor * (0.7f + rainbowShine * 0.3f), NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * 1.01f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                        spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), rainbowColor * rainbowShine * 0.8f, NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * (1.1f + shineStrength * 0.3f) * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                        
-                        if (shieldBreakPercent > 0.13f)
+                        if (Attack != (int)AttackList.BlowUp)
                         {
-                            int crackFrame = 0;
-                            if (shieldBreakPercent > 0.4f)
-                                crackFrame = 1;
-                            if (shieldBreakPercent > 0.7f)
-                                crackFrame = 2;
+                            spriteBatch.Draw(dangerShineTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), new Color(color.R, color.G, color.B, 0) * 0.4f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
-                            Rectangle crackSourceFrame = dangerShieldCrackTexture.Frame(1, 3, 0, crackFrame);
-                            Color crackColor = rainbowColor * 0.2f;
-                            crackColor.A = 233;
-                            spriteBatch.Draw(dangerShieldCrackTexture, NPC.Center - screenPos, crackSourceFrame, crackColor, NPC.rotation, crackSourceFrame.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
-                            spriteBatch.Draw(dangerShieldCrackTexture, NPC.Center - screenPos, crackSourceFrame, crackColor * 0.2f, NPC.rotation, crackSourceFrame.Size() * 0.5f, NPC.scale * (1.1f + shineStrength * 0.3f) * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                            spriteBatch.Draw(dangerShineTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), rainbowColor * rainbowShine, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+                            spriteBatch.Draw(dangerTexture, NPC.Center - screenPos, dangerShineTexture.Frame(), rainbowColor * rainbowShine * 0.1f, NPC.rotation, dangerTexture.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
+
+                            spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), new Color(150, 150, 150, 150), NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                            spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), rainbowColor * (0.7f + rainbowShine * 0.3f), NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * 1.01f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                            spriteBatch.Draw(dangerShieldTexture, NPC.Center - screenPos, dangerShieldTexture.Frame(), rainbowColor * rainbowShine * 0.8f, NPC.rotation, dangerShieldTexture.Size() * 0.5f, NPC.scale * (1.1f + shineStrength * 0.3f) * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+
+                            if (shieldBreakPercent > 0.13f)
+                            {
+                                int crackFrame = 0;
+                                if (shieldBreakPercent > 0.4f)
+                                    crackFrame = 1;
+                                if (shieldBreakPercent > 0.7f)
+                                    crackFrame = 2;
+
+                                Rectangle crackSourceFrame = dangerShieldCrackTexture.Frame(1, 3, 0, crackFrame);
+                                Color crackColor = rainbowColor * 0.2f;
+                                crackColor.A = 233;
+                                spriteBatch.Draw(dangerShieldCrackTexture, NPC.Center - screenPos, crackSourceFrame, crackColor, NPC.rotation, crackSourceFrame.Size() * 0.5f, NPC.scale * 1f * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                                spriteBatch.Draw(dangerShieldCrackTexture, NPC.Center - screenPos, crackSourceFrame, crackColor * 0.2f, NPC.rotation, crackSourceFrame.Size() * 0.5f, NPC.scale * (1.1f + shineStrength * 0.3f) * (Vector2.One * 0.5f + squishFactor * 0.5f), 0, 0);
+                            }
                         }
 
                         Vector2 flareOff = new Vector2(25, -25 + (float)Math.Sin(npcFrame * MathHelper.PiOver2 - MathHelper.PiOver2) * 2f).RotatedBy(NPC.rotation) * squishFactor;

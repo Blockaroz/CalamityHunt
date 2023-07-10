@@ -51,6 +51,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active).whoAmI;
 
+            if (Time < 60)
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.npc[owner].GetTargetData().Velocity, 0.9f);
+
             if (HitCount < 0 || HitCount == 1)
             {
                 Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 36f;
@@ -223,64 +226,95 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             return true;
         }
 
+        public static Texture2D beachBallOverlay;
+        public static Texture2D hitMeSign;
+        public static Texture2D hitMeArrow;
+
+        public override void Load()
+        {
+            beachBallOverlay = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieBeachBall");
+            hitMeSign = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeSign");
+            hitMeArrow = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeSignArrow");
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
-            //Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            //Asset<Texture2D> sparkle = TextureAssets.Extra[98];
-            //Asset<Texture2D> ring = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowRing");
-            //Asset<Texture2D> glow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GlowSoft");
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D sparkle = TextureAssets.Extra[98].Value;
+            Texture2D ring = AssetDirectory.Textures.GlowRing;
+            Texture2D glow = AssetDirectory.Textures.Glow;
 
-            //Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
-            //Color solidColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 100);
-            //SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            
-            //Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, Color.Black * 0.1f, Projectile.rotation * 0.5f, texture.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
-            //Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, bloomColor, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale * 0.8f, 0, 0);
+            Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
+            SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            //for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
-            //{
-            //    Color trailColor = Main.hslToRgb((Projectile.localAI[0] * 0.03f - i * 0.04f) % 1f, 1f, 0.6f, 0) * 0.15f;
-            //    trailColor.A = 0;
-            //    float fadeOut = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
-            //    float outScale = (float)Math.Pow(fadeOut, 1.5f);
-            //    Main.EntitySpriteDraw(texture.Value, Projectile.oldPos[i] + Projectile.velocity * i * 0.1f - Main.screenPosition, null, trailColor * outScale, Projectile.oldRot[i], texture.Size() * 0.5f, Projectile.scale * 1.5f - i * 0.2f, direction, 0);
-            //}
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.Black * 0.1f, Projectile.rotation * 0.5f, texture.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), bloomColor, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale * 0.8f, 0, 0);
 
-            //Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(100, 100, 100, 0), Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.8f, direction, 0);
-            //Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, null, new Color(200, 200, 200, 0), Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.7f, direction, 0);
-            //Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, direction, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), bloomColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale * 0.9f, direction, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(200, 200, 200, 0), Projectile.rotation + 0.2f, texture.Size() * 0.5f, Projectile.scale * 0.8f, direction, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation + 0.2f, texture.Size() * 0.5f, Projectile.scale * 0.7f, direction, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), bloomColor * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, direction, 0);
 
-            //float lensAngle = Projectile.AngleFrom(Main.LocalPlayer.Center) + MathHelper.PiOver2;
-            //float lensPower = 1f + Projectile.Distance(Main.LocalPlayer.Center) * 0.003f;
+            Color overlayColor = bloomColor * 0.6f;
+            overlayColor.A = 100;
+            Main.EntitySpriteDraw(beachBallOverlay, Projectile.Center - Main.screenPosition, beachBallOverlay.Frame(), overlayColor, Projectile.rotation * 0.7f, beachBallOverlay.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
 
-            //float sparkRotation = Projectile.velocity.X * 0.01f;
-            //float wobble = 1.2f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.05f;
-            //Vector2 sparkleScale = new Vector2(0.5f, 6f) * wobble * Utils.GetLerpValue(0.3f, 1f, Projectile.scale, true);
-            //Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f, sparkRotation + MathHelper.PiOver2 + 0.2f, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
-            //Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), sparkRotation + MathHelper.PiOver2 + 0.2f, sparkle.Size() * 0.5f, sparkleScale * 0.4f, 0, 0);
-            //Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.6f, 0, 0);
-            //Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.33f, 0, 0);
-            
-            //float ringWobble0 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.6f) * 0.01f;
-            //float ringWobble1 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.3f) * 0.01f;
-            //Vector2 middleRingOff = new Vector2(0, 50).RotatedBy(lensAngle - 0.3f) * lensPower;
+            float lensAngle = Projectile.AngleFrom(Main.LocalPlayer.Center) + MathHelper.PiOver2;
+            float lensPower = 1f + Projectile.Distance(Main.LocalPlayer.Center) * 0.003f;
 
-            //Main.EntitySpriteDraw(ring.Value, Projectile.Center + middleRingOff - Main.screenPosition, null, bloomColor * 0.05f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * ringWobble0, 0, 0);
-            //Main.EntitySpriteDraw(ring.Value, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 1.4f * ringWobble1, 0, 0);
+            float sparkRotation = Projectile.velocity.X * 0.01f;
+            float wobble = 1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.05f;
+            Vector2 sparkleScale = new Vector2(0.5f, 6f) * wobble * Utils.GetLerpValue(0.3f, 1f, Projectile.scale, true);
+            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
+            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), sparkRotation + MathHelper.PiOver2 + 0.2f, sparkle.Size() * 0.5f, sparkleScale * 0.4f, 0, 0);
+            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.7f, 0, 0);
+            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.3f, 0, 0);
 
-            //Vector2 bottomRingOff = new Vector2(0, 40).RotatedBy(lensAngle + 0.2f) * lensPower;
-            //Main.EntitySpriteDraw(ring.Value, Projectile.Center + bottomRingOff - Main.screenPosition, null, bloomColor * 0.3f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 0.4f, 0, 0);
-            //Vector2 topRingOff = new Vector2(0, -60).RotatedBy(lensAngle) * lensPower;
-            //Main.EntitySpriteDraw(ring.Value, Projectile.Center + topRingOff - Main.screenPosition, null, bloomColor * 0.3f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 0.8f, 0, 0);
+            float ringWobble0 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.6f) * 0.01f;
+            float ringWobble1 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.3f) * 0.01f;
+            Vector2 middleRingOff = new Vector2(0, 50 * lensPower).RotatedBy(lensAngle - 0.3f);
 
-            //Vector2 topFlareOff = topRingOff * ringWobble0 * 1.1f;
-            //for (int i = 0; i < 3; i++)
-            //    Main.EntitySpriteDraw(sparkle.Value, Projectile.Center + topFlareOff - Main.screenPosition, null, bloomColor * 0.3f, MathHelper.TwoPi / 3f * i, sparkle.Size() * 0.5f, new Vector2(0.3f, 1.5f), 0, 0);
+            Main.EntitySpriteDraw(ring, Projectile.Center + middleRingOff - Main.screenPosition, null, bloomColor * 0.05f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * ringWobble0, 0, 0);
+            Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 1.4f * ringWobble1, 0, 0);
 
-            //Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * (0.3f / lensPower), Projectile.rotation * 0.5f, glow.Size() * 0.5f, Projectile.scale * 6f, 0, 0);
-            //Main.EntitySpriteDraw(glow.Value, Projectile.Center - Main.screenPosition, null, bloomColor * (0.08f / lensPower), Projectile.rotation * 0.5f, glow.Size() * 0.5f, Projectile.scale * 15f, 0, 0);
+            Vector2 bottomRingOff = new Vector2(0, 40).RotatedBy(lensAngle + 0.2f) * lensPower;
+            Main.EntitySpriteDraw(ring, Projectile.Center + bottomRingOff - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 0.4f, 0, 0);
+            Vector2 topRingOff = new Vector2(0, -60).RotatedBy(lensAngle) * lensPower;
+            Main.EntitySpriteDraw(ring, Projectile.Center + topRingOff - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 0.8f, 0, 0);
+
+            Vector2 topFlareOff = topRingOff * ringWobble0 * 1.1f;
+            for (int i = 0; i < 3; i++)
+                Main.EntitySpriteDraw(sparkle, Projectile.Center + topFlareOff - Main.screenPosition, null, bloomColor * 0.2f, MathHelper.TwoPi / 3f * i, sparkle.Size() * 0.5f, new Vector2(0.3f, 1.5f), 0, 0);
+
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * (0.3f / lensPower), Projectile.rotation * 0.5f, glow.Size() * 0.5f, Projectile.scale * 4f, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * (0.08f / lensPower), Projectile.rotation * 0.5f, glow.Size() * 0.5f, Projectile.scale * 8f, 0, 0);
+
+            DrawHitMeSign();
 
             return false;
+        }
+
+        public void DrawHitMeSign()
+        {
+            Texture2D glow = AssetDirectory.Textures.Glow;
+
+            Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.3f;
+
+            float influence = Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(300, 200, Time, true) * (0.5f + MathF.Sin(Time * 0.3f) * 0.2f);
+            float influenceDark = Utils.GetLerpValue(10, 30, Time, true) * Utils.GetLerpValue(300, 200, Time, true) * (0.8f + MathF.Sin(Time * 0.3f) * 0.2f);
+            Vector2 signPosition = new Vector2(Main.screenWidth / 2, Main.screenHeight / 3);
+            float arrowRotation = signPosition.AngleTo(Projectile.Center - Main.screenPosition) + MathF.Sin(Time * 0.3f) * 0.1f;
+
+            for (int i = 0; i < 8; i++)
+            {
+                Vector2 offset = new Vector2(4, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
+                Main.EntitySpriteDraw(hitMeSign, signPosition + offset - Vector2.UnitY * (hitMeSign.Height + 30), hitMeSign.Frame(), bloomColor * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeSign.Size() * 0.5f, 2f, 0, 0);
+                Main.EntitySpriteDraw(hitMeArrow, signPosition + offset, hitMeArrow.Frame(), bloomColor * influence, arrowRotation, hitMeArrow.Size() * new Vector2(0.3f, 0.5f), 2f, 0, 0);
+            }
+
+            Main.EntitySpriteDraw(hitMeSign, signPosition - Vector2.UnitY * (hitMeSign.Height + 30), hitMeSign.Frame(), new Color(255, 255, 255, 0) * influenceDark, MathF.Sin(Time * 0.15f) * 0.1f, hitMeSign.Size() * 0.5f, 2f, 0, 0);
+            Main.EntitySpriteDraw(hitMeArrow, signPosition, hitMeArrow.Frame(), new Color(255, 255, 255, 0) * influenceDark, arrowRotation, hitMeArrow.Size() * new Vector2(0.3f, 0.5f), 2f, 0, 0);
+
         }
     }
 }

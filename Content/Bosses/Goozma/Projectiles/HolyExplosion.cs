@@ -108,21 +108,21 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, Projectile.rotation, texture.Size() * 0.5f, MathF.Pow(time * 2f, 3f) * 2f, 0, 0);
 
             for (int i = 0; i < 4; i++)
-                DrawSparkle(MathHelper.TwoPi / 4f * i, 1.5f, Projectile.Center, sparkleColor, time);
+                DrawSparkle(MathHelper.TwoPi / 4f * i, 4f, Projectile.Center, sparkleColor, time);
 
 
             for (int i = 0; i < 4; i++)
-                DrawSparkle(MathHelper.TwoPi / 4f * i + MathHelper.PiOver4, 1f, Projectile.Center, sparkleColor * 0.8f, time);
+                DrawSparkle(MathHelper.TwoPi / 4f * i + MathHelper.PiOver4, 2f, Projectile.Center, sparkleColor * 0.8f, time);
             
             for (int i = 0; i < 8; i++)
-                DrawSparkle(MathHelper.TwoPi / 8f * i + MathHelper.Pi / 8f, 0.8f, Projectile.Center, sparkleColor * 0.03f, time);
+                DrawSparkle(MathHelper.TwoPi / 8f * i + MathHelper.Pi / 8f, 1.5f, Projectile.Center, sparkleColor * 0.03f, time);
 
             return false;
         }
 
         private void DrawSparkle(float rotation, float scale, Vector2 position, Color color, float progress)
         {
-            Vector2 outward = new Vector2(1000 * MathF.Pow(progress, 4f), 0).RotatedBy(rotation);
+            Vector2 outward = new Vector2(1000 * MathF.Pow(progress, 3f), 0).RotatedBy(rotation);
             Vector2 realScale = new Vector2(1.5f - MathF.Pow(progress, 1.5f) * 1.5f, 1f + MathF.Pow(progress, 5f) * 5f) * scale * MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(0, 0.2f, progress, true)) * Utils.GetLerpValue(1f, 0.8f, progress, true);
             Main.EntitySpriteDraw(sparkleTexture, position + outward - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation + MathHelper.PiOver2, sparkleTexture.Size() * 0.5f, 0.95f * realScale * new Vector2(0.4f, 1f), 0, 0);
             Main.EntitySpriteDraw(sparkleTexture, position + outward - Main.screenPosition, null, color, rotation + MathHelper.PiOver2, sparkleTexture.Size() * 0.5f, realScale * new Vector2(0.4f, 1f), 0, 0);
