@@ -27,7 +27,6 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
 using Terraria.GameContent.ItemDropRules;
@@ -451,8 +450,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 nextAttack[currentSlime] = Main.rand.Next(0, 3);
                             }
 
-                            //currentSlime = 2;
-                            //nextAttack[currentSlime] = 1;
+                            currentSlime = 3;
+                            nextAttack[currentSlime] = 1;
 
                             int[] slimeTypes = new int[]
                             {
@@ -1939,7 +1938,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Attack = (int)attack;
+                Attack = attack;
                 if (zeroTime)
                     Time = 0; 
                 NPC.netUpdate = true;

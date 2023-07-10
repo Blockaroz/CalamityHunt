@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
         }
 
-        private enum AttackList
+        public enum AttackList
         {
             SlamRain,
             CollidingCrush,
@@ -168,7 +168,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     RememberAttack = Attack;
 
                     if (NPC.Distance(Target.Center) > 1000)
-                        Attack = (int)AttackList.TooFar;
+                        SetAttack(AttackList.TooFar);
 
                     float distance = 0;
                     for (int i = 0; i < Main.tile.Height; i++)
@@ -189,7 +189,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         }
                     }
                     if (distance > 36)
-                        Attack = (int)AttackList.SlamDown;
+                        SetAttack(AttackList.SlamDown);
                 }
 
                 NPC.frameCounter++;
@@ -240,8 +240,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         if (Time > 55)
                         {
                             NPC.velocity *= 0f;
-                            Time = 0;
-                            Attack = RememberAttack;
+                            SetAttack((int)RememberAttack, true);
                         }
                         break;
 
@@ -252,8 +251,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void Reset()
         {
-            Time = 0;
-            Attack = (int)AttackList.Interrupt;
+            SetAttack(AttackList.Interrupt, true);
             squishFactor = Vector2.One;
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NPC.netUpdate = true;
@@ -441,6 +439,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             rightProj.localAI[0] = 1;
                         }
 
+                        //Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), 0, 0, ai1: 2000);
+
                         SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
                         slam.MaxInstances = 0;
                         SoundEngine.PlaySound(slam, NPC.Center);
@@ -487,9 +487,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
             if (Time > waitTime + 100 && Time < waitTime + 170)
             {
+                Vector2 airTarget = Target.Center - Vector2.UnitY * 320;
+
                 squishFactor = Vector2.Lerp(squishFactor, Vector2.One, 0.1f);
-                NPC.velocity *= 0.9f;
-                NPC.FindSmashSpot(saveTarget + Vector2.UnitY * 64);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(airTarget).SafeNormalize(Vector2.Zero) * Math.Max(2, NPC.Distance(airTarget)) * 0.1f, 0.06f) * Utils.GetLerpValue(waitTime + 150, waitTime + 135, Time, true);
+                saveTarget = Target.Center;
+                NPC.rotation = NPC.rotation.AngleLerp(NPC.Top.AngleTo(NPC.FindSmashSpot(saveTarget)) - MathHelper.PiOver2, 0.5f) * 0.4f;
             }
 
             if (Time > waitTime + 170 && Time <= waitTime + 180)
@@ -500,6 +503,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time == waitTime + 180)
             {
+                NPC.rotation = 0;
+
                 Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), 0, 0, ai1: 2500);
 
                 SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
@@ -515,20 +520,20 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 squishFactor = new Vector2(1.5f, 0.5f);
 
-                        int count = (int)DifficultyBasedValue(12, death: 16);
-                        int time = (int)DifficultyBasedValue(6, 5, 4, 3);
+                int count = (int)DifficultyBasedValue(12, death: 16);
+                int time = (int)DifficultyBasedValue(6, 5, 4, 3);
 
-                        for (int i = 0; i < count; i++)
-                        {
-                            Projectile leftProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * 130 - 130 * count - 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
-                            leftProj.ai[0] = -30 - time * i;
-                            leftProj.ai[1] = -1;
-                            leftProj.localAI[0] = 1;                            
-                            Projectile rightProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * -130 + 130 * count + 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
-                            rightProj.ai[0] = -30 - time * i;
-                            rightProj.ai[1] = -1;
-                            rightProj.localAI[0] = 1;
-                        }
+                for (int i = 0; i < count; i++)
+                {
+                    Projectile leftProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * 130 - 130 * count - 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
+                    leftProj.ai[0] = -30 - time * i;
+                    leftProj.ai[1] = -1;
+                    leftProj.localAI[0] = 1;                            
+                    Projectile rightProj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.FindSmashSpot(NPC.Center + new Vector2(i * -130 + 130 * count + 60, 0)), Vector2.Zero, ModContent.ProjectileType<CrimulanSmasher>(), GetDamage(1), 0);
+                    rightProj.ai[0] = -30 - time * i;
+                    rightProj.ai[1] = -1;
+                    rightProj.localAI[0] = 1;
+                }
             }
 
             if (Time > waitTime + 180)
@@ -645,7 +650,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (distance > 4 && Time < 90)
                 {
                     squishFactor = new Vector2(0.7f, 1.4f);
-                    Time = 80;
+                    SetTime(80);
                     NPC.velocity.X *= 0.7f;
                     NPC.velocity.Y = 40;
                     NPC.noTileCollide = true;
@@ -657,7 +662,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     }
                 }
                 else if (Time < 90)
-                    Time = 90;
+                    SetTime(90);
 
                 if (Time == 90)
                 {
@@ -678,10 +683,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             if (Time > 140)
-            {
-                Time = 0;
-                Attack = RememberAttack;
-            }
+                SetAttack((int)RememberAttack, true);
         }
 
         private int GetDamage(int attack, float modifier = 1f)
@@ -777,6 +779,28 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             GoozmaResistances.GoozmaProjectileResistances(projectile, ref modifiers);
+        }
+
+        public void SetAttack(AttackList attack, bool zeroTime = false) => SetAttack((int)attack, zeroTime);
+
+        public void SetAttack(int attack, bool zeroTime = false)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Attack = attack;
+                if (zeroTime)
+                    Time = 0;
+                NPC.netUpdate = true;
+            }
+        }
+
+        public void SetTime(int time)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Time = time;
+                NPC.netUpdate = true;
+            }
         }
     }
 }

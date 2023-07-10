@@ -81,7 +81,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 Projectile.velocity += Main.npc[(int)Owner].GetTargetData().Velocity * 0.012f;
                 Projectile.velocity.Y += 0.3f;
-                Projectile.velocity.X += (Main.npc[(int)Owner].GetTargetData().Center.X - Projectile.Center.X) * 0.0001f;
+                Projectile.velocity.X += (Main.npc[(int)Owner].GetTargetData().Center.X - Projectile.Center.X) * 0.0002f;
 
                 foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 30))
                 {
@@ -131,26 +131,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Projectile.ai[1] == 0)
                 scale = Utils.GetLerpValue(-15, 15, Projectile.localAI[0], true) * Projectile.localAI[1];
 
-            if (Projectile.ai[1] == 1 && Time < 0)
-            {
-                int telegraphCount = 150;
-                Vector2[] telegraphs = new Vector2[telegraphCount];
-                telegraphs[0] = new Vector2(0, 40).RotatedBy(direction * 60);
-                for (int i = 1; i < telegraphCount; i++)
-                {
-                    telegraphs[i] = telegraphs[i - 1] + new Vector2(0, 40).RotatedBy(direction * 60 - direction * i);
-                }
-                for (int i = 1; i < telegraphCount; i++)
-                {
-                    Vector2 telegraphScale = new Vector2(0.1f + (float)Math.Pow(Utils.GetLerpValue(0, telegraphCount, i, true), 2f) * 2f, 1f);
-                    Main.EntitySpriteDraw(sparkle, Projectile.Center + telegraphs[i] - Main.screenPosition, sparkle.Frame(), new Color(255, 10, 20, 0), telegraphs[i].AngleFrom(telegraphs[i - 1]) - MathHelper.PiOver2, sparkle.Size() * 0.5f, telegraphScale, 0, 0);
-                }
-            }
-
             Vector2 flameSquish = new Vector2(1f + (float)Math.Sin(Projectile.localAI[0] * 0.2f) * 0.2f, 1f + (float)Math.Cos(Projectile.localAI[0] * 0.2f) * 0.2f);
+            Color innerFlameColor = Color.Lerp(new Color(170, 100, 35, 0), new Color(20, 170, 200, 0), Utils.GetLerpValue(50, 30, Time, true));
 
-            Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(10, 30, 110, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * scale * flameSquish, 0, 0);
-            Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(20, 100, 150, 0) * 0.4f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * 0.66f * scale * flameSquish, 0, 0);
+            Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(10, 30, 110, 0) * 0.7f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * scale * flameSquish, 0, 0);
+            Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), innerFlameColor * 0.7f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * 0.66f * scale * flameSquish, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scale, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, new Color(70, 40, 35, 0), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.3f * scale, 0, 0);
 
