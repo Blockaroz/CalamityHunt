@@ -243,9 +243,7 @@ Items: {
 		DisplayName: Splendor Jam
 		Tooltip:
 			'''
-			uhh
-			fuck
-			'???? what should this thing do'
+			CROWN OF GOD
 			'''
 	}
 
@@ -314,6 +312,11 @@ Items: {
 
 	ScytheOfTheOldGod: {
 		DisplayName: Scythe Of The Old God
+		Tooltip: ""
+	}
+
+	FieryAuricSoul: {
+		DisplayName: Auric Soul
 		Tooltip: ""
 	}
 }
