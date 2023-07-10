@@ -260,8 +260,8 @@ namespace CalamityHunt.Content.Projectiles
             glowColor.A = 0;
             Vector2 drawOffset = new Vector2(14, 20).RotatedBy(Projectile.rotation) * Projectile.scale;
 
-            int size = (int)(MathF.Pow(Utils.GetLerpValue(250, 850, Time, true), 0.7f) * 2f);
-            Projectile.scale = 1f + (MathF.Round(Utils.GetLerpValue(30, 820, Time, true), 2) - MathF.Sqrt(size) * 0.5f) * 1.9f;
+            int size = (int)(Utils.GetLerpValue(250, 850, Time, true) * 6);
+            Projectile.scale = 1f + (MathF.Round(Utils.GetLerpValue(30, 820, Time, true), 2) - size * 0.1f) * 1.1f;
 
             float fastWobble = 0.6f + (float)Math.Sin(Time * 0.7f) * 0.4f;
 
@@ -274,7 +274,7 @@ namespace CalamityHunt.Content.Projectiles
             effect.Parameters["baseToMapPercent"].SetValue(0f);
 
             Vector2 drawPos = Projectile.Center + Main.rand.NextVector2Circular(2, 2);
-            Rectangle frame = texture.Frame(3, 1, size, 0);
+            Rectangle frame = texture.Frame(7, 1, size, 0);
             
             Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.2f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble * 0.4f, 0, 0);
             Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.1f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble, 0, 0);
