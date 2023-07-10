@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
 using Microsoft.Xna.Framework;
@@ -10,12 +11,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Weapons.Summoner
 {
     public class Gobflogger : ModItem
     {
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Gobbed.TagDamage);
+
         public override void SetDefaults()
         {
             Item.DefaultToWhip(ModContent.ProjectileType<GobfloggerProj>(), 2000, 12f, 4f, 100);

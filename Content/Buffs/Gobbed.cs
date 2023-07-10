@@ -7,14 +7,11 @@ namespace CalamityHunt.Content.Buffs
 {
     public class Gobbed : ModBuff
     {
+        public static readonly int TagDamage = 50;
+
         public override void Update(Player player, ref int buffIndex)
         {
             BuffID.Sets.IsAnNPCWhipDebuff[Type] = true;
-        }
-
-        public override void Update(NPC npc, ref int buffIndex)
-        {
-            npc.GetGlobalNPC<GobbedNPC>().marked = true;
         }
     }
 
@@ -22,11 +19,10 @@ namespace CalamityHunt.Content.Buffs
     {
         public override bool InstancePerEntity => true;
 
-        public bool marked;
-
-        public override void ResetEffects(NPC npc)
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
-            marked = false;
+            if (npc.HasBuff<Gobbed>())
+                modifiers.FlatBonusDamage += Gobbed.TagDamage * ProjectileID.Sets.SummonTagDamageMultiplier[projectile.type];
         }
     }
 }

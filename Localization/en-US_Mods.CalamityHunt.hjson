@@ -222,7 +222,8 @@ Items: {
 		DisplayName: Gobflogger
 		Tooltip:
 			'''
-			Your summons will focus struck enemies
+			{$CommonItemTooltip.SummonTagDamage}
+			{$CommonItemTooltip.Whips}
 			Strike enemies to gain a small boost to whip attack speed
 			'Slow and steady wins the race'
 			'''
@@ -241,10 +242,7 @@ Items: {
 
 	SplendorJam: {
 		DisplayName: Splendor Jam
-		Tooltip:
-			'''
-			CROWN OF GOD
-			'''
+		Tooltip: CROWN OF GOD
 	}
 
 	TheSlimer: {
