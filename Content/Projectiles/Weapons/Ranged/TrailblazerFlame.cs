@@ -38,7 +38,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 Target = -1;
             }
 
-            Projectile.scale = Utils.GetLerpValue(-5, 30, Time, true) + Utils.GetLerpValue(65, 80, Time, true);
+            Projectile.scale = Utils.GetLerpValue(-5, 30, Time, true) + Utils.GetLerpValue(55, 90, Time, true);
             float expand = Utils.GetLerpValue(0, 80, Time, true);
 
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
@@ -110,11 +110,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             {
                 Color trailColor = backDrawColor * (1f - i / 4f);
                 Vector2 off = Projectile.velocity * i * 3f * Utils.GetLerpValue(1, 15, Time, true);
-                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.1f, 0, 0);
                 Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, drawColor * (1f - i / 4f), Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale, 0, 0);
             }
 
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, backDrawColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, backDrawColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.1f, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, drawColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale, 0, 0);
 
             return false;
