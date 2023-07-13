@@ -74,7 +74,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
                 reduce *= 0.25f;
         }
 
-        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<ParasanguineHeld>()] <= 0;
+        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<CrystalGauntletBall>()] <= 0;
 
         public override bool AltFunctionUse(Player player) => true;
 
