@@ -35,6 +35,7 @@ namespace CalamityHunt.Content.Tiles
 
             AddMapEntry(new Color(22, 18, 22));
 
+            DustType = DustID.Cobalt;
             AnimationFrameHeight = 54;
         }
 

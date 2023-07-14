@@ -17,7 +17,7 @@ using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Items.Misc
+namespace CalamityHunt.Content.Items.Misc.AuricSouls
 {
     public class PureAuricSoul : ModItem
     {
@@ -49,7 +49,7 @@ namespace CalamityHunt.Content.Items.Misc
             {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
-                calamity.TryFind<ModRarity>("Violet", out r);
+                calamity.TryFind("Violet", out r);
                 Item.rare = r.Type;
             }
         }
@@ -103,15 +103,15 @@ namespace CalamityHunt.Content.Items.Misc
                 Vector2 off = Main.rand.NextVector2Circular(30, 30);
                 float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
                 Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(1, 1), GetAlpha(Color.White).Value * 0.2f, scale);
-            }                  
-            
+            }
+
             if (Main.rand.NextBool(25))
             {
                 Vector2 off = Main.rand.NextVector2Circular(20, 20);
                 float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
                 Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Item.Center + off, Main.rand.NextVector2Circular(4, 4), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
-            }            
-            
+            }
+
             if (Main.rand.NextBool(5))
             {
                 Dust soul = Dust.NewDustDirect(Item.Center - new Vector2(15), 30, 30, DustID.PortalBoltTrail, 0f, -Main.rand.NextFloat(1f, 2f), 0, GetAlpha(Color.White).Value, Main.rand.NextFloat(2f));
@@ -166,7 +166,7 @@ namespace CalamityHunt.Content.Items.Misc
                     offs2[i] = y.RotatedBy(time * 0.8f) * 0.9f;
                     offs3[i] = z.RotatedBy(-time * 0.1f) * new Vector2(1f, 0.8f) * 0.7f;
 
-                    Vector2 f = new Vector2(20 + (time * 0.4f % 1f) * 150f, 0).RotatedBy(MathHelper.TwoPi / 80f * i - time + 2f);
+                    Vector2 f = new Vector2(20 + time * 0.4f % 1f * 150f, 0).RotatedBy(MathHelper.TwoPi / 80f * i - time + 2f);
                     f.Y *= 1f + MathF.Sin(time * 2f) * 0.1f;
                 }
 
@@ -205,7 +205,7 @@ namespace CalamityHunt.Content.Items.Misc
                 Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CrystalLightningEffect", AssetRequestMode.ImmediateLoad).Value;
                 effect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
                 effect.Parameters["uTexture"].SetValue(chainTexture);
-                effect.Parameters["uGlow"].SetValue(TextureAssets.Extra[197 ].Value);
+                effect.Parameters["uGlow"].SetValue(TextureAssets.Extra[197].Value);
                 effect.Parameters["uColor"].SetValue(Vector3.One);
                 effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.5f % 1f);
                 effect.CurrentTechnique.Passes[0].Apply();

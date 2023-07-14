@@ -31,6 +31,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
         {
             _active = false;
             strengthTarget = 0;
+            additionalLightningChance = 0;
         }
 
         public override bool IsActive() => _strength > 0.001f && !Main.gameMenu;

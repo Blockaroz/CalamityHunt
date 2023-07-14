@@ -1,7 +1,7 @@
 ﻿using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
-using CalamityHunt.Content.Items.Consumable;
 using CalamityHunt.Content.Items.Dyes;
+using CalamityHunt.Content.Items.Misc;
 using CalamityHunt.Content.Pets.BloatBabyPet;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,18 +25,8 @@ namespace CalamityHunt.Common.Systems
 {
     public class GoozmaSystem : ModSystem
     {
-        public static bool conditionsMet;
-        private Vector2 spawnPos;
-
-        internal bool enableRawSpawn;
-
-        public override void PreUpdateNPCs()
+        public override void PostUpdateNPCs()
         {
-            enableRawSpawn = false;
-
-            if (enableRawSpawn)
-                RawGoozmaSpawning();
-
             StopSoundsIfNotActive();
         }
 
@@ -99,6 +89,7 @@ namespace CalamityHunt.Common.Systems
 
         public static bool GoozmaActive => Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active) || Main.projectile.Any(n => n.type == ModContent.ProjectileType<GoozmaSpawn>() && n.active);
 
+        public static Vector2 ninjaStatuePoint;
         public static Vector2[] slimeStatuePoints;
 
         public static bool FindSlimeStatues(int iCenter, int jCenter, int halfWidth = 10, int halfHeight = 3)
@@ -127,23 +118,25 @@ namespace CalamityHunt.Common.Systems
                 }
             }
 
-            if (count.Count > 0)
+            if (count.Count > 3)
             {
+                ninjaStatuePoint = new Vector2(iCenter * 16, (jCenter - 1) * 16);
                 slimeStatuePoints = count.ToArray();
                 return true;
             }
             else
             {
-                slimeStatuePoints = new Vector2[0];
+                slimeStatuePoints = new Vector2[4];
 
                 //text
                 return false;
             }
         }
 
-        private void RawGoozmaSpawning()
+        private void GoozmaSpawningOld()
         {
-            conditionsMet = false;
+            Vector2 spawnPos = Vector2.Zero;
+            bool conditionsMet = false;
             int slimeBoss = -1;
             bool king = true;
             if (Main.slimeRain && Main.hardMode)

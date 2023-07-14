@@ -16,7 +16,7 @@ using CalamityHunt.Common.Graphics.SlimeMonsoon;
 using Terraria.Enums;
 using Terraria.Audio;
 using Terraria.Chat;
-using CalamityHunt.Content.Items.Consumable;
+using CalamityHunt.Content.Items.Misc;
 
 namespace CalamityHunt.Content.Tiles
 {
@@ -27,16 +27,26 @@ namespace CalamityHunt.Content.Tiles
             Main.tileFrameImportant[Type] = true; 
             TileID.Sets.HasOutlines[Type] = true;
             TileID.Sets.DisableSmartCursor[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2);
             TileObjectData.newTile.Width = 4;
             TileObjectData.newTile.Height = 6;
             TileObjectData.newTile.Origin = new Point16(2, 5);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 16, 16 };
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.DrawYOffset = 2;
+
+            TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+            TileObjectData.newTile.StyleWrapLimit = 2;
+            TileObjectData.newTile.StyleMultiplier = 2;
+            TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+            TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
+            TileObjectData.addAlternate(1);
+
             TileObjectData.addTile(Type);
 
-            AddMapEntry(new Color(22, 18, 22));
+            DustType = DustID.Stone;
+            AddMapEntry(new Color(128, 128, 128));
         }
 
         public override void MouseOver(int i, int j)
@@ -44,7 +54,10 @@ namespace CalamityHunt.Content.Tiles
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = ModContent.ItemType<SlimeNinjaStatue>();
+            player.cursorItemIconID = ModContent.ItemType<GelatinousCatalyst>();
+
+            if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>())
+                player.cursorItemIconID = ModContent.ItemType<OverloadedSludge>();
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
@@ -83,11 +96,11 @@ namespace CalamityHunt.Content.Tiles
 
             if (GoozmaSystem.FindSlimeStatues(center, top, 10, 5))
             {
-                if (player.ConsumeItem(ModContent.ItemType<SlimeNinjaStatue>()))
+                if (player.HasItem(ModContent.ItemType<SlimeNinjaStatue>()))
                 {
 
                 }
-                else if (player.ConsumeItem(ModContent.ItemType<OverloadedSludge>()))
+                else if (player.HasItem(ModContent.ItemType<OverloadedSludge>()))
                 {
 
                 }

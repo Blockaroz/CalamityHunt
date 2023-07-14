@@ -8,7 +8,7 @@ using CalamityHunt.Content.Items.BossBags;
 using CalamityHunt.Content.Items.Lore;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
-using CalamityHunt.Content.Items.Misc;
+using CalamityHunt.Content.Items.Misc.AuricSouls;
 using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Content.Items.Weapons.Melee;
 using CalamityHunt.Content.Items.Weapons.Ranged;

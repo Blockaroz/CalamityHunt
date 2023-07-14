@@ -327,6 +327,11 @@ Items: {
 		DisplayName: Slime Ninja Statue
 		Tooltip: ""
 	}
+
+	GelatinousCatalyst: {
+		DisplayName: Gelatinous Catalyst
+		Tooltip: ""
+	}
 }
 
 NPCs: {

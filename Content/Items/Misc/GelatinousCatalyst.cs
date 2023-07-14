@@ -6,33 +6,30 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Items.Consumable
+namespace CalamityHunt.Content.Items.Misc
 {
-    public class OverloadedSludge : ModItem
+    public class GelatinousCatalyst : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-        }
-
         public override void SetDefaults()
         {
             Item.width = 40;
             Item.height = 40;
-            Item.useTime = 5;
-            Item.useAnimation = 5;
-            Item.useStyle = ItemUseStyleID.HoldUp;
             Item.knockBack = 6;
             Item.value = 10000;
-            Item.rare = ItemRarityID.LightRed;
+            Item.rare = ItemRarityID.Blue;
             Item.channel = true;
-            Item.consumable = false;
             Item.maxStack = 9999;
         }
 
-        public override bool? UseItem(Player player)
+        public override void AddRecipes()
         {
-            Main.StartSlimeRain(true);
-            return true;
+            CreateRecipe()
+                .AddIngredient(ItemID.Gel, 200)
+                .AddIngredient(ItemID.SoulofMight, 3)
+                .AddIngredient(ItemID.SoulofSight, 3)
+                .AddIngredient(ItemID.SoulofFright, 3)
+                .AddTile(TileID.CrystalBall)
+                .Register();
         }
     }
 }

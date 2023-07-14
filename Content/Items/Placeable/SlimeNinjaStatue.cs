@@ -26,10 +26,14 @@ namespace CalamityHunt.Content.Items.Placeable
                 .AddCondition(Condition.Hardmode)
                 .Register();
 
-            CreateRecipe()
-                .AddIngredient(ItemID.StoneBlock, 100)
-                .AddIngredient(ItemID.Gel)
-                .AddCondition(Condition.InGraveyard);
+            if (ModLoader.TryGetMod("CalamityMod", out _))
+            {
+                Recipe.Create(ItemID.SlimeStatue)
+                    .AddIngredient(ItemID.StoneBlock, 100)
+                    .AddIngredient(ItemID.Gel, 200)
+                    .AddCondition(Condition.InGraveyard)
+                    .Register();
+            }
         }
     }
 }
