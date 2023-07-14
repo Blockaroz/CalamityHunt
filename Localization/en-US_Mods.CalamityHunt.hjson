@@ -322,6 +322,11 @@ Items: {
 		DisplayName: Goomoire
 		Tooltip: ""
 	}
+
+	SlimeNinjaStatue: {
+		DisplayName: Slime Ninja Statue
+		Tooltip: ""
+	}
 }
 
 NPCs: {

@@ -1475,7 +1475,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             goozmaSimmerPitch = pitch;
 
             bool active = SoundEngine.TryGetActiveSound(goozmaSimmer, out ActiveSound sound);
-            if (!active || !goozmaWarble.IsValid)
+            if (!active || !goozmaSimmer.IsValid)
                 goozmaSimmer = SoundEngine.PlaySound(simmerSound, NPC.Center);
 
             else if (active)

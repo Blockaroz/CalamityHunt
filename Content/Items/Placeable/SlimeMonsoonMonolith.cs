@@ -26,11 +26,11 @@ namespace CalamityHunt.Content.Items.Placeable
 
         public override void UpdateAccessory(Player player, bool visual)
         {
-            player.GetModPlayer<MonolithPlayer>().monolithCount = 40;
+            player.GetModPlayer<EffectTilePlayer>().effectorCount["SlimeMonsoon"] = 5;
         }
         public override void UpdateVanity(Player player)
         {
-            player.GetModPlayer<MonolithPlayer>().monolithCount = 40;
+            player.GetModPlayer<EffectTilePlayer>().effectorCount["SlimeMonsoon"] = 5;
         }
 
         public override void AddRecipes()

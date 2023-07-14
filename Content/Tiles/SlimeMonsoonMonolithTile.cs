@@ -47,7 +47,7 @@ namespace CalamityHunt.Content.Tiles
             if (player is null)
                 return;
             if (player.active)
-                Main.LocalPlayer.GetModPlayer<MonolithPlayer>().monolithCount = 30;
+                Main.LocalPlayer.GetModPlayer<EffectTilePlayer>().effectorCount["SlimeMonsoon"] = 5;
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)

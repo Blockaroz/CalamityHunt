@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
@@ -18,6 +19,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Modules;
 
 namespace CalamityHunt.Common.Systems
 {
@@ -26,7 +28,120 @@ namespace CalamityHunt.Common.Systems
         public static bool conditionsMet;
         private Vector2 spawnPos;
 
+        internal bool enableRawSpawn;
+
         public override void PreUpdateNPCs()
+        {
+            enableRawSpawn = false;
+
+            if (enableRawSpawn)
+                RawGoozmaSpawning();
+
+            StopSoundsIfNotActive();
+        }
+
+        public void StopSoundsIfNotActive()
+        {
+            if (!GoozmaActive)
+            {
+                bool warbleActive = SoundEngine.TryGetActiveSound(Goozma.goozmaWarble, out ActiveSound warbleSound);
+                if (warbleActive)
+                    warbleSound.Stop();
+
+                bool shootActive = SoundEngine.TryGetActiveSound(Goozma.goozmaShoot, out ActiveSound shootSound);
+                if (shootActive)
+                    shootSound.Stop();                
+                
+                bool simmerActive = SoundEngine.TryGetActiveSound(Goozma.goozmaSimmer, out ActiveSound simmerSound);
+                if (simmerActive)
+                    simmerSound.Stop();
+
+            }
+
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BloatBabyProj>()))
+            {
+                bool active = SoundEngine.TryGetActiveSound(BloatBabyProj.travelSound, out ActiveSound sound);
+                if (active)
+                    sound.Stop();
+            }
+            
+            //if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
+            //{
+            //    bool active = SoundEngine.TryGetActiveSound(PixieBall.auraSound, out ActiveSound sound);
+            //    if (active)
+            //        sound.Stop();
+            //}
+            
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>()))
+            {
+                bool active = SoundEngine.TryGetActiveSound(FusionRay.laserSound, out ActiveSound sound);
+                if (active)
+                    sound.Stop();
+            }            
+            
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BlackHoleBlender>()))
+            {
+                if (Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Active)
+                {
+                    float intensity = Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Intensity;
+                    Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().UseIntensity(intensity * 0.5f);
+                    Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
+                }
+
+                bool active = SoundEngine.TryGetActiveSound(BlackHoleBlender.holeSound, out ActiveSound sound);
+                if (active)
+                    sound.Stop();                
+                bool windActive = SoundEngine.TryGetActiveSound(BlackHoleBlender.windSound, out ActiveSound windSound);
+                if (windActive)
+                    windSound.Stop();
+            }
+        }
+
+        public static bool GoozmaActive => Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active) || Main.projectile.Any(n => n.type == ModContent.ProjectileType<GoozmaSpawn>() && n.active);
+
+        public static Vector2[] slimeStatuePoints;
+
+        public static bool FindSlimeStatues(int iCenter, int jCenter, int halfWidth = 10, int halfHeight = 3)
+        {
+            List<Vector2> count = new List<Vector2>();
+            List<Point> ignore = new List<Point>();
+            for (int i = iCenter - halfWidth; i <= iCenter + halfWidth; i++)
+            {
+                for (int j = jCenter - halfHeight; j <= jCenter + halfHeight; j++)
+                {
+                    Tile checkTile = Framing.GetTileSafely(i, j);
+
+                    if (ignore.Contains(new Point(i, j)))
+                        continue;
+
+                    if (checkTile.HasTile && checkTile.TileType == TileID.Statues)
+                    {
+                        ignore.Add(new Point(i + 1, j));
+                        ignore.Add(new Point(i, j + 1));
+                        ignore.Add(new Point(i, j + 2));
+                        ignore.Add(new Point(i + 1, j + 1));
+                        ignore.Add(new Point(i + 1, j + 2));
+
+                        count.Add(new Vector2((i + 1) * 16, (j + 1) * 16));
+                    }
+                }
+            }
+
+            if (count.Count > 0)
+            {
+                slimeStatuePoints = count.ToArray();
+                return true;
+            }
+            else
+            {
+                slimeStatuePoints = new Vector2[0];
+
+                //text
+                return false;
+            }
+        }
+
+        private void RawGoozmaSpawning()
         {
             conditionsMet = false;
             int slimeBoss = -1;
@@ -95,67 +210,6 @@ namespace CalamityHunt.Common.Systems
                 Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), spawnPos, Vector2.Zero, ModContent.ProjectileType<GoozmaSpawn>(), 0, 0);
                 Main.npc[slimeBoss].active = false;
             }
-
-            StopSoundsIfNotActive();
         }
-
-        public void StopSoundsIfNotActive()
-        {
-            if (!GoozmaActive)
-            {
-                bool warbleActive = SoundEngine.TryGetActiveSound(Goozma.goozmaWarble, out ActiveSound warbleSound);
-                if (warbleActive)
-                    warbleSound.Stop();
-
-                bool shootActive = SoundEngine.TryGetActiveSound(Goozma.goozmaShoot, out ActiveSound shootSound);
-                if (shootActive)
-                    shootSound.Stop();                
-                
-                bool simmerActive = SoundEngine.TryGetActiveSound(Goozma.goozmaSimmer, out ActiveSound simmerSound);
-                if (simmerActive)
-                    simmerSound.Stop();
-
-            }
-
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BloatBabyProj>()))
-            {
-                bool active = SoundEngine.TryGetActiveSound(BloatBabyProj.travelSound, out ActiveSound sound);
-                if (active)
-                    sound.Stop();
-            }
-            
-            //if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
-            //{
-            //    bool active = SoundEngine.TryGetActiveSound(PixieBall.auraSound, out ActiveSound sound);
-            //    if (active)
-            //        sound.Stop();
-            //}
-            
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>()))
-            {
-                bool active = SoundEngine.TryGetActiveSound(FusionRay.laserSound, out ActiveSound sound);
-                if (active)
-                    sound.Stop();
-            }            
-            
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BlackHoleBlender>()))
-            {
-                if (Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Active)
-                {
-                    float intensity = Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Intensity;
-                    Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().UseIntensity(intensity * 0.5f);
-                    Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
-                }
-
-                bool active = SoundEngine.TryGetActiveSound(BlackHoleBlender.holeSound, out ActiveSound sound);
-                if (active)
-                    sound.Stop();                
-                bool windActive = SoundEngine.TryGetActiveSound(BlackHoleBlender.windSound, out ActiveSound windSound);
-                if (windActive)
-                    windSound.Stop();
-            }
-        }
-
-        public static bool GoozmaActive => Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active) || Main.projectile.Any(n => n.type == ModContent.ProjectileType<GoozmaSpawn>() && n.active);       
     }
 }
