@@ -17,6 +17,7 @@ using Terraria.Enums;
 using Terraria.Audio;
 using Terraria.Chat;
 using CalamityHunt.Content.Items.Misc;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Tiles
 {
@@ -62,6 +63,13 @@ namespace CalamityHunt.Content.Tiles
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
+        public static LocalizedText failText;
+
+        public override void Load()
+        {
+            failText = Language.GetOrRegister(Mod.GetLocalizationKey("Chat.NinjaShrineFailure"));
+        }
+
         public override bool RightClick(int i, int j)
         {
             //SoundEngine.PlaySound(SoundID.Mech, new Vector2(i * 16, j * 16));
@@ -96,23 +104,40 @@ namespace CalamityHunt.Content.Tiles
 
             if (GoozmaSystem.FindSlimeStatues(center, top, 10, 5))
             {
-                if (player.HasItem(ModContent.ItemType<SlimeNinjaStatue>()))
+                if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>())
                 {
+                    if (player.ConsumeItem(ModContent.ItemType<OverloadedSludge>()))
+                    {
 
+                    }
                 }
-                else if (player.HasItem(ModContent.ItemType<OverloadedSludge>()))
+                else if (player.ConsumeItem(ModContent.ItemType<GelatinousCatalyst>()))
                 {
+                    foreach (Vector2 position in GoozmaSystem.slimeStatuePoints)
+                    {
+                        for (int r = 0; r < 5; r++)
+                        {
+                            Dust d = Dust.NewDustDirect(position - new Vector2(16, 0), 32, 38, DustID.TintableDust, 0, -Main.rand.NextFloat(2f, 5f), 160, new Color(200, 200, 255), 1f + Main.rand.NextFloat());
+                            d.noGravity = true;
+                        }
+                    }
 
+                    for (int r = 0; r < 15; r++)
+                    {
+                        Dust d = Dust.NewDustDirect(GoozmaSystem.ninjaStatuePoint - new Vector2(32, 4), 64, 92, DustID.TintableDust, 0, -Main.rand.NextFloat(2f, 5f), 160, new Color(200, 200, 255), 1f + Main.rand.NextFloat());
+                        d.noGravity = true;
+                    }
+
+                    //Main.StartSlimeRain(true);
                 }
             }
             else
             {
-                string text = "The shrine is incomplete without slime statues surrounding it.";
                 Color color = new Color(255, 255, 0);
                 if (Main.netMode == NetmodeID.Server)
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral(text), color, player.whoAmI);
+                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral(failText.Value), color, player.whoAmI);
                 else
-                    Main.NewText(text, color);
+                    Main.NewText(failText.Value, color);
             }
 
             return true;

@@ -24,7 +24,7 @@ namespace CalamityHunt.Content.Projectiles
 {
     public class GoozmaSpawn : ModProjectile
     {
-        public static readonly SoundStyle slimeabsorb = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeAbsorb", 8) with { MaxInstances = 100, Volume = 0.1f};
+        public static readonly SoundStyle slimeabsorb = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeAbsorb", 8) with { MaxInstances = 100, Volume = 0.05f};
         public WeightedRandom<int> randomType = new WeightedRandom<int>();
         public override void SetDefaults()
         {
@@ -36,7 +36,7 @@ namespace CalamityHunt.Content.Projectiles
             Projectile.penetrate = -1;
             Projectile.aiStyle = -1;
             Projectile.damage = 0;
-            slimeMonsoonText = Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.Chat.SlimeMonsoon");
+            slimeMonsoonText = Language.GetOrRegister(Mod.GetLocalizationKey("Chat.SlimeMonsoon"));
         }
 
         public LocalizedText slimeMonsoonText;
