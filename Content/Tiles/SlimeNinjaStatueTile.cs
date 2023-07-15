@@ -57,7 +57,7 @@ namespace CalamityHunt.Content.Tiles
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = ModContent.ItemType<GelatinousCatalyst>();
 
-            if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>())
+            if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>() && Main.slimeRain)
                 player.cursorItemIconID = ModContent.ItemType<OverloadedSludge>();
         }
 
@@ -102,42 +102,49 @@ namespace CalamityHunt.Content.Tiles
 
             Player player = Main.LocalPlayer;
 
-            if (GoozmaSystem.FindSlimeStatues(center, top, 10, 5))
+            if (!GoozmaSystem.GoozmaActive)
             {
-                if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>())
+                if (GoozmaSystem.FindSlimeStatues(center, top, 10, 5))
                 {
-                    if (player.ConsumeItem(ModContent.ItemType<OverloadedSludge>()))
+                    if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>() && Main.slimeRain)
                     {
-
-                    }
-                }
-                else if (player.ConsumeItem(ModContent.ItemType<GelatinousCatalyst>()))
-                {
-                    foreach (Vector2 position in GoozmaSystem.slimeStatuePoints)
-                    {
-                        for (int r = 0; r < 5; r++)
+                        if (player.ConsumeItem(ModContent.ItemType<OverloadedSludge>()))
                         {
-                            Dust d = Dust.NewDustDirect(position - new Vector2(16, 0), 32, 38, DustID.TintableDust, 0, -Main.rand.NextFloat(2f, 5f), 160, new Color(200, 200, 255), 1f + Main.rand.NextFloat());
-                            d.noGravity = true;
+                            GoozmaSystem.GoozmaEgg(new Vector2(center * 16, (top - 1) * 16));
                         }
                     }
-
-                    for (int r = 0; r < 15; r++)
+                    else if (!Main.slimeRain)
                     {
-                        Dust d = Dust.NewDustDirect(GoozmaSystem.ninjaStatuePoint - new Vector2(32, 4), 64, 92, DustID.TintableDust, 0, -Main.rand.NextFloat(2f, 5f), 160, new Color(200, 200, 255), 1f + Main.rand.NextFloat());
-                        d.noGravity = true;
-                    }
+                        if (player.ConsumeItem(ModContent.ItemType<GelatinousCatalyst>()))
+                        {
+                            foreach (Vector2 position in GoozmaSystem.slimeStatuePoints)
+                            {
+                                for (int r = 0; r < 5; r++)
+                                {
+                                    Dust d = Dust.NewDustDirect(position - new Vector2(16, 0), 32, 38, DustID.TintableDust, 0, -Main.rand.NextFloat(2f, 5f), 160, new Color(200, 200, 255), 1f + Main.rand.NextFloat());
+                                    d.noGravity = true;
+                                }
+                            }
 
-                    //Main.StartSlimeRain(true);
+                            for (int r = 0; r < 15; r++)
+                            {
+                                Dust d = Dust.NewDustDirect(GoozmaSystem.ninjaStatuePoint - new Vector2(32, 4), 64, 92, DustID.TintableDust, 0, -Main.rand.NextFloat(2f, 5f), 160, new Color(200, 200, 255), 1f + Main.rand.NextFloat());
+                                d.noGravity = true;
+                            }
+
+                            Main.StartSlimeRain(true);
+                            NetMessage.SendData(MessageID.SetMiscEventValues);
+                        }
+                    }
                 }
-            }
-            else
-            {
-                Color color = new Color(255, 255, 0);
-                if (Main.netMode == NetmodeID.Server)
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral(failText.Value), color, player.whoAmI);
                 else
-                    Main.NewText(failText.Value, color);
+                {
+                    Color color = new Color(255, 255, 0);
+                    if (Main.netMode == NetmodeID.Server)
+                        ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral(failText.Value), color, player.whoAmI);
+                    else
+                        Main.NewText(failText.Value, color);
+                }
             }
 
             return true;

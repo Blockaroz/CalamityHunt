@@ -67,7 +67,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             return inColor;
         }
 
-        public override float GetCloudAlpha() => MathHelper.Lerp(Main.cloudAlpha, 1f, _strength);
+        public override float GetCloudAlpha() => (1f - _strength);
 
         private List<GooThunder>[] thunder;
 

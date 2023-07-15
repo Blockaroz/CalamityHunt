@@ -87,6 +87,11 @@ namespace CalamityHunt.Common.Systems
             }
         }
 
+        public static void GoozmaEgg(Vector2 position)
+        {
+            Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), position, Vector2.Zero, ModContent.ProjectileType<GoozmaSpawn>(), 0, 0);
+        }
+
         public static bool GoozmaActive => Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active) || Main.projectile.Any(n => n.type == ModContent.ProjectileType<GoozmaSpawn>() && n.active);
 
         public static Vector2 ninjaStatuePoint;
@@ -105,7 +110,7 @@ namespace CalamityHunt.Common.Systems
                     if (ignore.Contains(new Point(i, j)))
                         continue;
 
-                    if (checkTile.HasTile && checkTile.TileType == TileID.Statues)
+                    if (checkTile.HasTile && checkTile.TileType == TileID.Statues && checkTile.TileFrameX / 18 == 8)
                     {
                         ignore.Add(new Point(i + 1, j));
                         ignore.Add(new Point(i, j + 1));
@@ -200,8 +205,9 @@ namespace CalamityHunt.Common.Systems
 
                 SoundEngine.PlaySound(SoundID.NPCDeath1.WithPitchOffset(-0.5f), spawnPos);
 
-                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), spawnPos, Vector2.Zero, ModContent.ProjectileType<GoozmaSpawn>(), 0, 0);
                 Main.npc[slimeBoss].active = false;
+
+                GoozmaEgg(spawnPos);
             }
         }
     }

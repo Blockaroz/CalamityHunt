@@ -18,7 +18,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Projectiles
 {
@@ -50,7 +49,7 @@ namespace CalamityHunt.Content.Projectiles
 
             Projectile.damage = 0;
             Projectile.velocity.X = 0;
-            Projectile.velocity.Y = Utils.GetLerpValue(800, 0, Time, true) * -0.001f;
+            Projectile.velocity.Y = MathF.Sqrt(Utils.GetLerpValue(800, 0, Time, true)) * -0.1f;
 
             if (Main.slimeRain)
                 Main.StopSlimeRain(true);
@@ -87,9 +86,9 @@ namespace CalamityHunt.Content.Projectiles
                 //SoundEngine.PlaySound(devour, Projectile.Center);
             }
 
-            if (((Time < 500 && Main.rand.NextBool(30)) || (!Main.rand.NextBool((int)Time + 1))) && Time < 750)
-                for (int i = 0; i < 1 + (int)(Utils.GetLerpValue(400, 900, Time, true) * 10); i++)
-                    SpawnSlimes();
+            //if (((Time < 500 && Main.rand.NextBool(30)) || (!Main.rand.NextBool((int)Time + 1))) && Time < 750)
+            //    for (int i = 0; i < 1 + (int)(Utils.GetLerpValue(400, 900, Time, true) * 10); i++)
+            //        SpawnSlimes();
 
             if (Time == 650)
             {
@@ -256,12 +255,12 @@ namespace CalamityHunt.Content.Projectiles
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D eye = AssetDirectory.Textures.Extras.GoozmaGodEye;
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value * 1.2f;
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time * 0.33f) * 1.2f;
             glowColor.A = 0;
             Vector2 drawOffset = new Vector2(14, 20).RotatedBy(Projectile.rotation) * Projectile.scale;
 
             int size = (int)(Utils.GetLerpValue(250, 850, Time, true) * 6);
-            Projectile.scale = 1f + (MathF.Round(Utils.GetLerpValue(30, 820, Time, true), 2) - size * 0.1f) * 1.1f;
+            Projectile.scale = Utils.GetLerpValue(0, 120, Time, true) + (MathF.Round(Utils.GetLerpValue(30, 820, Time, true), 2) - size * 0.12f) * 1.33f;
 
             float fastWobble = 0.6f + (float)Math.Sin(Time * 0.7f) * 0.4f;
 

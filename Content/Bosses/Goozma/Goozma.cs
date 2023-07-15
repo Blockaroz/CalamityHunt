@@ -450,8 +450,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 nextAttack[currentSlime] = Main.rand.Next(0, 3);
                             }
 
-                            currentSlime = 2;
-                            nextAttack[currentSlime] = 1;
+                            //currentSlime = 2;
+                            //nextAttack[currentSlime] = 1;
 
                             int[] slimeTypes = new int[]
                             {
@@ -1290,7 +1290,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void OnKill()
         {
-            BossDownedSystem.downedGoozma = true;
+            BossDownedSystem.downedBoss["Goozma"] = true;
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.WorldData);
+
             bool active = SoundEngine.TryGetActiveSound(goozmaWarble, out ActiveSound sound);
             if (active)
                 sound.Stop();

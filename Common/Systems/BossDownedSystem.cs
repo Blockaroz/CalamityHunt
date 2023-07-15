@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,16 +12,21 @@ namespace CalamityHunt.Common.Systems
 {
     public class BossDownedSystem : ModSystem
     {
-        public static bool downedGoozma;
+        public static Dictionary<string, bool> downedBoss = new Dictionary<string, bool>()
+        {
+            { "Goozma", false }
+        };
 
         public override void SaveWorldData(TagCompound tag)
         {
-            tag["downedGoozma"] = downedGoozma;
+            foreach (string entry in downedBoss.Keys)
+                tag["downedBoss" + entry] = downedBoss[entry];
         }
 
         public override void LoadWorldData(TagCompound tag)
         {
-            downedGoozma = tag.GetBool("downedGoozma");
+            foreach (string entry in downedBoss.Keys)
+                downedBoss[entry] = tag.GetBool("downedBoss" + entry);
         }
     }
 }

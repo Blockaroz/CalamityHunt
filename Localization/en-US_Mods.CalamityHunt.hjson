@@ -472,3 +472,14 @@ LoreGoozma:
 	What a pity it is that the fruits of its effort came to nothing, in the end. An unremitting pattern in the cyclic annals of history.
 	Perhaps, from the perspective of Terraria, our own achievements amount to little more than the impotent writhing of slimes.
 	'''
+
+Configs: {
+	Config: {
+		DisplayName: Config
+
+		epilepsy: {
+			Label: "{$Mods.CalamityHunt.Config.HolyExplosionToggle.Label}"
+			Tooltip: "{$Mods.CalamityHunt.Config.HolyExplosionToggle.Tooltip}"
+		}
+	}
+}
