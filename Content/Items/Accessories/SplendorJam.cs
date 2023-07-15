@@ -10,18 +10,13 @@ using System.Threading.Tasks;
 
 namespace CalamityHunt.Content.Items.Accessories
 {
-    internal class SplendorJam : ModItem
+    public class SplendorJam : ModItem
     {
-		public override void SetStaticDefaults()
-		{
-			Item.ResearchUnlockCount = 1;
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 32;
 			Item.height = 30;
-			Item.value = Item.sellPrice(gold: 5);
+			Item.value = Item.sellPrice(gold: 35);
 			Item.accessory = true;
 			Item.rare = ModContent.RarityType<VioletRarity>();
 		}

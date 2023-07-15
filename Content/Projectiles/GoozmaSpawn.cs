@@ -86,9 +86,9 @@ namespace CalamityHunt.Content.Projectiles
                 //SoundEngine.PlaySound(devour, Projectile.Center);
             }
 
-            //if (((Time < 500 && Main.rand.NextBool(30)) || (!Main.rand.NextBool((int)Time + 1))) && Time < 750)
-            //    for (int i = 0; i < 1 + (int)(Utils.GetLerpValue(400, 900, Time, true) * 10); i++)
-            //        SpawnSlimes();
+            if (((Time < 500 && Main.rand.NextBool(30)) || (!Main.rand.NextBool((int)Time + 1))) && Time < 750)
+                for (int i = 0; i < 1 + (int)(Utils.GetLerpValue(400, 900, Time, true) * 5); i++)
+                    SpawnSlimes();
 
             if (Time == 650)
             {
@@ -164,19 +164,19 @@ namespace CalamityHunt.Content.Projectiles
 
         private void FadeMusicOut(On_Main.orig_UpdateAudio orig, Main self)
         {
-            orig(self);
-
-            if (Main.projectile.Any(n => n.active && n.type == Type))
+            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>()))
             {
-                Projectile goozma = Main.projectile.FirstOrDefault(n => n.active && n.type == Type);
+                Projectile goozma = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>());
                 for (int i = 0; i < Main.musicFade.Length; i++)
                 {
-                    float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(700, 100, goozma.ai[0], true);
+                    float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(300, 60, goozma.ai[0], true);
                     float tempFade = Main.musicFade[i];
                     Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.1f && goozma.ai[0] < 600);
                     Main.musicFade[i] = tempFade;
                 }
             }
+            else
+                orig(self);
         }
 
         public void SpawnSlimes()

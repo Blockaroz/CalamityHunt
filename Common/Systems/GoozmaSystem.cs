@@ -27,6 +27,7 @@ namespace CalamityHunt.Common.Systems
     {
         public override void PostUpdateNPCs()
         {
+            GoozmaSpawningOld();
             StopSoundsIfNotActive();
         }
 

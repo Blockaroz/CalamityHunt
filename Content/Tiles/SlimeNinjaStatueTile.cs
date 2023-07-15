@@ -57,8 +57,8 @@ namespace CalamityHunt.Content.Tiles
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = ModContent.ItemType<GelatinousCatalyst>();
 
-            if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>() && Main.slimeRain)
-                player.cursorItemIconID = ModContent.ItemType<OverloadedSludge>();
+            //if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>() && Main.slimeRain)
+            //    player.cursorItemIconID = ModContent.ItemType<OverloadedSludge>();
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
@@ -106,14 +106,14 @@ namespace CalamityHunt.Content.Tiles
             {
                 if (GoozmaSystem.FindSlimeStatues(center, top, 10, 5))
                 {
-                    if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>() && Main.slimeRain)
-                    {
-                        if (player.ConsumeItem(ModContent.ItemType<OverloadedSludge>()))
-                        {
-                            GoozmaSystem.GoozmaEgg(new Vector2(center * 16, (top - 1) * 16));
-                        }
-                    }
-                    else if (!Main.slimeRain)
+                    //if (player.HeldItem.type == ModContent.ItemType<OverloadedSludge>() && Main.slimeRain)
+                    //{
+                    //    if (player.ConsumeItem(ModContent.ItemType<OverloadedSludge>()))
+                    //    {
+                    //        GoozmaSystem.GoozmaEgg(new Vector2(center * 16, (top - 1) * 16));
+                    //    }
+                    //}
+                    if (!Main.slimeRain)
                     {
                         if (player.ConsumeItem(ModContent.ItemType<GelatinousCatalyst>()))
                         {
@@ -134,6 +134,9 @@ namespace CalamityHunt.Content.Tiles
 
                             Main.StartSlimeRain(true);
                             NetMessage.SendData(MessageID.SetMiscEventValues);
+
+                            SoundStyle spawnSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SlimeRainActivate");
+                            SoundEngine.PlaySound(spawnSound, new Vector2(center * 16, (top - 1) * 16));
                         }
                     }
                 }

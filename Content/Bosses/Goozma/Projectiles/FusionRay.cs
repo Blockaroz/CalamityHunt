@@ -253,7 +253,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     float grow = Utils.GetLerpValue(ChargeTime - 15, ChargeTime + 40, projectile.ai[0], true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration, projectile.ai[0], true);
 
-                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - grow * 0.66f);
+                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - grow * 0.33f);
                     float tempFade = Main.musicFade[i];
                     Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.15f);
                     Main.musicFade[i] = tempFade;

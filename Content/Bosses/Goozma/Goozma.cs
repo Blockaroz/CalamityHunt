@@ -4,6 +4,7 @@ using CalamityHunt.Common.Graphics.SlimeMonsoon;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
+using CalamityHunt.Content.Items.Accessories;
 using CalamityHunt.Content.Items.BossBags;
 using CalamityHunt.Content.Items.Lore;
 using CalamityHunt.Content.Items.Masks;
@@ -33,6 +34,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI;
 using static CalamityHunt.Common.Systems.DifficultySystem;
 
 namespace CalamityHunt.Content.Bosses.Goozma
@@ -178,9 +180,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //Masks
             LeadingConditionRule classic = new LeadingConditionRule(new Conditions.NotExpert());
 
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>()));
-            
+
             //Weapon 1
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<Goozmaga>()));
         }
@@ -1291,6 +1294,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void OnKill()
         {
             BossDownedSystem.downedBoss["Goozma"] = true;
+
+            Main.windSpeedTarget = 0f;
+            Main.windSpeedCurrent = MathHelper.Lerp(Main.windSpeedCurrent, 0, 0.7f);
             if (Main.netMode == NetmodeID.Server)
                 NetMessage.SendData(MessageID.WorldData);
 
@@ -1299,7 +1305,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 sound.Stop();
 
             for (int i = 0; i < Main.musicFade.Length; i++)
-                Main.musicFade[i] = 0.1f;
+                Main.musicFade[i] = 0.2f;
 
             SoundStyle deathSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaPop");
             SoundEngine.PlaySound(deathSound, NPC.Center);
