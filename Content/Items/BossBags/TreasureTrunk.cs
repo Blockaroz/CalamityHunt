@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Items.Accessories;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Weapons.Magic;
@@ -39,6 +40,7 @@ namespace CalamityHunt.Content.Items.BossBags
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
             itemLoot.Add(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<EbonianMask>(), ModContent.ItemType<DivineMask>(), ModContent.ItemType<CrimulanMask>(), ModContent.ItemType<StellarMask>()));
             itemLoot.Add(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<Goozmaga>()));
         }
