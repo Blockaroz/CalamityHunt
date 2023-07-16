@@ -159,7 +159,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
             npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaAuricSoul>()));
             npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaLore>()));
 
-            npcLoot.Add(SpecialRule.BossBagStrange(20, ModContent.ItemType<TreasureTrunk>(), ModContent.ItemType<TreasureBucket>()));
+            if (Main.rand.NextBool(20))
+                npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureBucket>()));
+            else
+                npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureTrunk>()));
 
             npcLoot.Add(ItemDropRule.Common(trophyTypes[0], 10));
             npcLoot.Add(ItemDropRule.FewFromOptions(1, 10, trophyTypes[1], trophyTypes[2], trophyTypes[3], trophyTypes[4]));
