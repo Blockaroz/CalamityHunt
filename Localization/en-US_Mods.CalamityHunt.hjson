@@ -332,6 +332,16 @@ Items: {
 		DisplayName: Gelatinous Catalyst
 		Tooltip: ""
 	}
+
+	EntropicSlimeConcentration: {
+		DisplayName: Entropic Slime Concentration
+		Tooltip: ""
+	}
+
+	PaladinPalanquin: {
+		DisplayName: Paladin Palanquin
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -440,6 +450,11 @@ Buffs: {
 	FusionBurn: {
 		DisplayName: Fusion Burn
 		Description: Mods.CalamityHunt.Buffs.FusionBurn.Description
+	}
+
+	PaladinPalanquinBuff: {
+		DisplayName: Paladin Palanquin Buff
+		Description: Mods.CalamityHunt.Buffs.PaladinPalanquinBuff.Description
 	}
 }
 

@@ -10,6 +10,7 @@ using CalamityHunt.Content.Items.Lore;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Misc.AuricSouls;
+using CalamityHunt.Content.Items.Mounts;
 using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Content.Items.Weapons.Melee;
 using CalamityHunt.Content.Items.Weapons.Ranged;
@@ -155,36 +156,25 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            //Soul
             npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaAuricSoul>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaLore>()));
 
-            //Bag
-            if (Main.rand.NextBool(20))
-                npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureBucket>()));
-            else
-                npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureTrunk>()));
+            npcLoot.Add(SpecialRule.BossBagStrange(20, ModContent.ItemType<TreasureTrunk>(), ModContent.ItemType<TreasureBucket>()));
 
-            //Trophies
             npcLoot.Add(ItemDropRule.Common(trophyTypes[0], 10));
             npcLoot.Add(ItemDropRule.FewFromOptions(1, 10, trophyTypes[1], trophyTypes[2], trophyTypes[3], trophyTypes[4]));
 
-            //Relic
             npcLoot.Add(ItemDropRule.MasterModeCommonDrop(relicType));
 
-            //Master Drop
             npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<ImperialGelato>()));
 
-            //Lore
-            npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaLore>()));
-
-            //Masks
             LeadingConditionRule classic = new LeadingConditionRule(new Conditions.NotExpert());
 
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
-            classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>()));
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 4));
 
-            //Weapon 1
+            classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>()));
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<Goozmaga>()));
         }
 

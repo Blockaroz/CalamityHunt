@@ -18,7 +18,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.value = 10000;
             Item.rare = ItemRarityID.Blue;
             Item.channel = true;
-            Item.maxStack = 9999;
+            Item.maxStack = Item.CommonMaxStack;
         }
 
         public override void AddRecipes()
