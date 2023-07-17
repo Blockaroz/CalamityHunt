@@ -57,7 +57,7 @@ namespace CalamityHunt.Content.Tiles
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = ModContent.ItemType<GelatinousCatalyst>();
 
-            if (player.HeldItem.type == ModContent.ItemType<EntropicSlimeConcentration>())
+            if (player.HasItem(ModContent.ItemType<EntropicSlimeConcentration>()))
                 player.cursorItemIconID = ModContent.ItemType<EntropicSlimeConcentration>();
         }
 
@@ -106,7 +106,7 @@ namespace CalamityHunt.Content.Tiles
             {
                 if (GoozmaSystem.FindSlimeStatues(center, top, 10, 5))
                 {
-                    if (player.HeldItem.type == ModContent.ItemType<EntropicSlimeConcentration>())
+                    if (player.HasItem(ModContent.ItemType<EntropicSlimeConcentration>()))
                         GoozmaSystem.GoozmaEgg(new Vector2(center * 16, (top - 1) * 16));
 
                     else if (!Main.slimeRain)
