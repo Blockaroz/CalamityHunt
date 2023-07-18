@@ -1,0 +1,78 @@
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
+using Humanizer;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.Linq;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace CalamityHunt.Content.Projectiles
+{
+    public class StressExplosion : ModProjectile
+    {
+        public override string Texture => $"{nameof(CalamityHunt)}/Content/Bosses/Goozma/Projectiles/SlimeBomb";
+        public override void SetDefaults()
+        {
+            Projectile.width = 60;
+            Projectile.height = 60;
+            Projectile.tileCollide = false;
+            Projectile.hostile = false;
+            Projectile.friendly = true;
+            Projectile.penetrate = -1;
+            Projectile.aiStyle = -1;
+        }
+        public ref float Time => ref Projectile.ai[0];
+        public ref float Stressed => ref Projectile.ai[1];
+        public override void AI()
+        {
+            if (Time == 1 && Stressed == 0)
+            {
+                SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
+                explodeSound.MaxInstances = 1;
+                SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.3f), Projectile.Center);
+                SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.8f), Projectile.Center);
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
+                    Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, 0.5f + (Main.rand.NextFloat()/2));
+                    goo.data = 1f;
+                }
+            }
+            else if (Time == 1 && Stressed > 0)
+            {
+                SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
+                explodeSound.MaxInstances = 1;
+                SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.3f), Projectile.Center);
+                SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.8f), Projectile.Center);
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
+                    Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, 1f + (Main.rand.NextFloat() / 2));
+                    goo.data = 1f;
+                }
+            }
+            if (Time > 20)
+                Projectile.Kill();
+            Time++;
+        }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            if (Stressed > 0)
+                return targetHitbox.Contains((Projectile.Center + new Vector2(Math.Min(Projectile.Distance(targetHitbox.Center()), 128), 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center()))).ToPoint());
+            return targetHitbox.Contains((Projectile.Center + new Vector2(Math.Min(Projectile.Distance(targetHitbox.Center()), 64), 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center()))).ToPoint());
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            return false;
+        }
+    }
+}

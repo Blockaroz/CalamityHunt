@@ -1,12 +1,9 @@
 ﻿using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using CalamityHunt.Content.Items.Rarities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CalamityHunt.Common.Players;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace CalamityHunt.Content.Items.Accessories
 {
@@ -20,5 +17,18 @@ namespace CalamityHunt.Content.Items.Accessories
 			Item.accessory = true;
 			Item.rare = ModContent.RarityType<VioletRarity>();
 		}
-	}
+        public override void UpdateVanity(Player player)
+        {
+            player.GetModPlayer<SplendorJamPlayer>().rainbow = true;
+        }
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {
+            if (!hideVisual)
+                player.GetModPlayer<SplendorJamPlayer>().rainbow = true;
+        }
+        public override void UpdateEquip(Player player)
+        {
+            player.GetModPlayer<SplendorJamPlayer>().active = true;
+        }
+    }
 }

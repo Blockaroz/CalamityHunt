@@ -410,6 +410,7 @@ Projectiles: {
 	FissionFlyerProj.DisplayName: Fission Flyer Proj
 	FissionFlyerMiniRing.DisplayName: Fission Flyer Mini Ring
 	ScytheOfTheOldGodHeld.DisplayName: Scythe Of The Old God Held
+	StressExplosion.DisplayName: Stress Explosion
 }
 
 Chat: {
