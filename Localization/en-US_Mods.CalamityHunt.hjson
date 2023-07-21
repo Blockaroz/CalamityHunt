@@ -56,10 +56,7 @@ Items: {
 
 	TreasureTrunk: {
 		DisplayName: Treasure Trunk
-		Tooltip: 
-			'''
-			<right> to open
-			'''
+		Tooltip: <right> to open
 	}
 
 	GoozmaMask: {
@@ -69,10 +66,7 @@ Items: {
 
 	TreasureBucket: {
 		DisplayName: Treasure Bucket
-		Tooltip: 
-			'''
-			<right> to open
-			'''
+		Tooltip: <right> to open
 	}
 
 	GoozmaTrophyItem: {
@@ -280,13 +274,12 @@ Items: {
 	SupremeRestorationPotion: {
 		RestoreLifeText: Mods.CalamityHunt.Items.SupremeRestorationPotion.RestoreLifeText
 		DisplayName: Omega Restoration Potion
-		Tooltip: "Reduced potion cooldown"
+		Tooltip: Reduced potion cooldown
 	}
 
 	EntropicTorch: {
 		DisplayName: Entropic Torch
 		Tooltip: ""
-
 	}
 
 	StickyHand: {
@@ -357,7 +350,7 @@ Items: {
 
 	GelatinousCatalyst: {
 		DisplayName: Gelatinous Catalyst
-		Tooltip: "Use on a Slime Ninja Statue with 4 Slime Statues present to start a Slime Rain"
+		Tooltip: Use on a Slime Ninja Statue with 4 Slime Statues present to start a Slime Rain
 	}
 
 	EntropicSlimeConcentration: {
@@ -447,6 +440,7 @@ Projectiles: {
 	FissionFlyerMiniRing.DisplayName: Fission Flyer Ringlet
 	ScytheOfTheOldGodHeld.DisplayName: Scythe Of The Old God
 	StressExplosion.DisplayName: Stressed Explosion
+	GoomoireSuck.DisplayName: Goomoire Suck
 }
 
 Chat: {

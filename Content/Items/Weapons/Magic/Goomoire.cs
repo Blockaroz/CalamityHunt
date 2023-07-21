@@ -28,15 +28,15 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             Item.damage = 2800;
             Item.DamageType = DamageClass.Magic;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            Item.useStyle = ItemUseStyleID.Shoot;
-            Item.mana = 25;
-            Item.useTime = 30;
-            Item.useAnimation = 30;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.mana = 15;
+            Item.useTime = 12;
+            Item.useAnimation = 12;
             Item.channel = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;
-            Item.value = Item.sellPrice(gold: 20);
-            Item.shoot = ModContent.ProjectileType<TrailblazerFlame>();
+            Item.value = Item.sellPrice(gold: 40);
+            Item.shoot = ModContent.ProjectileType<GoomoireSuck>();
             Item.shootSpeed = 4f;
             if (ModLoader.HasMod("CalamityMod"))
             {
@@ -45,6 +45,21 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }
+        }
+
+        public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<GoomoireSuck>()] <= 0;
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            player.manaCost = 0f;
+
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<CrystalGauntletBall>()] <= 0)
+            {
+                if (player.altFunctionUse == 0)
+                    Projectile.NewProjectileDirect(source, position, velocity, type, damage, 0, player.whoAmI);
+            }
+
+            return false;
         }
     }
 }

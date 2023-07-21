@@ -304,24 +304,24 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 lightningEffect.Parameters["uTexture1"].SetValue(textureSecond);
                 lightningEffect.Parameters["uGlow"].SetValue(textureGlow);
                 lightningEffect.Parameters["uBits"].SetValue(textureBits);
-                lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.03f);
+                lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.025f);
                 lightningEffect.Parameters["uFreq"].SetValue(1.5f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
                 strip.DrawTrail();
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
-                Color endColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - 60f);
-                endColor.A = 0;
+                //Color endColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - 60f);
+                //endColor.A = 0;
 
-                for (int i = 0; i < 12; i++)
-                {
-                    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.7f * new Vector2(1f, 2f), 0, 0);
-                    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.03f * Projectile.direction), spark.Size() * 0.5f, laserActive * new Vector2(1f, 2f), 0, 0);
-                    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, new Color(255, 255, 255, 0), (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.33f * new Vector2(1f, 2f), 0, 0);
-                    Main.EntitySpriteDraw(glow, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), glow.Size() * 0.5f, laserActive * new Vector2(3f, 20f), 0, 0);
+                //for (int i = 0; i < 12; i++)
+                //{
+                //    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.7f * new Vector2(1f, 2f), 0, 0);
+                //    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.03f * Projectile.direction), spark.Size() * 0.5f, laserActive * new Vector2(1f, 2f), 0, 0);
+                //    Main.EntitySpriteDraw(spark, positions[positions.Length - 1] - Main.screenPosition, null, new Color(255, 255, 255, 0), (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), spark.Size() * 0.5f, laserActive * 0.33f * new Vector2(1f, 2f), 0, 0);
+                //    Main.EntitySpriteDraw(glow, positions[positions.Length - 1] - Main.screenPosition, null, endColor * 0.3f, (MathHelper.TwoPi / 12f * i) + (Time * 0.01f * Projectile.direction), glow.Size() * 0.5f, laserActive * new Vector2(3f, 20f), 0, 0);
 
-                }
-                Main.EntitySpriteDraw(glow, positions[positions.Length - 1] - Main.screenPosition, null, endColor, 0, glow.Size() * 0.5f, laserActive * 15f, 0, 0);
+                //}
+                //Main.EntitySpriteDraw(glow, positions[positions.Length - 1] - Main.screenPosition, null, endColor, 0, glow.Size() * 0.5f, laserActive * 15f, 0, 0);
             }
             return false;
         }
@@ -339,7 +339,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             float start = (float)Math.Pow(progress, 0.6f);
             float cap = (float)Math.Cbrt(Utils.GetLerpValue(1.01f, 0.7f, progress, true));
             float grow = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
-            return start * cap * grow * 1650f * (1.1f + (float)Math.Cos(Time) * (0.06f - progress * 0.06f));
+            return start * cap * grow * 1650f * (1.1f + (float)Math.Cos(Time) * (0.08f - progress * 0.06f));
         }
     }
 }
