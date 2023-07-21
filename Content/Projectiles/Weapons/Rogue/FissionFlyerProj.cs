@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -131,6 +132,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             if (MathF.Abs(oldVelocity.Y - Projectile.velocity.Y) > 0)
                 Projectile.velocity.Y = -oldVelocity.Y * 1.33f;
             return false;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.AddBuff(ModContent.BuffType<FusionBurn>(), 180);
         }
 
         public override void Load()
