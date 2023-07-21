@@ -25,6 +25,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             Projectile.aiStyle = -1;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 80;
+            Projectile.ignoreWater = true;
         }
 
         public ref float Time => ref Projectile.ai[0];
