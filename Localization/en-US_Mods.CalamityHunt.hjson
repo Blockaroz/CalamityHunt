@@ -56,7 +56,10 @@ Items: {
 
 	TreasureTrunk: {
 		DisplayName: Treasure Trunk
-		Tooltip: ""
+		Tooltip: 
+			'''
+			<right> to open
+			'''
 	}
 
 	GoozmaMask: {
@@ -66,7 +69,10 @@ Items: {
 
 	TreasureBucket: {
 		DisplayName: Treasure Bucket
-		Tooltip: ""
+		Tooltip: 
+			'''
+			<right> to open
+			'''
 	}
 
 	GoozmaTrophyItem: {
@@ -126,7 +132,7 @@ Items: {
 			Hitting an enemy that has a planet orbitting it will increase the speed of the planet
 			This stacks 8 times
 			Stealth strikes cause two additional smaller planetoids to orbit the struck target
-			Right click to kill all existing planets and planetoids
+			<right> to kill all existing planets and planetoids
 			'''
 	}
 
@@ -164,7 +170,7 @@ Items: {
 		DisplayName: Auric Sole
 		Tooltip:
 			'''
-			Right click to disable
+			<right> to disable
 			Allows you to slide on every surface
 			Warning: May result in exceedingly high speeds
 			'Yharim would hate you for this'
@@ -175,7 +181,7 @@ Items: {
 		DisplayName: Discharged Auric Sole
 		Tooltip:
 			'''
-			Right click to enable
+			<right> to enable
 			Allows you to slide on every surface
 			Warning: May result in exceedingly high speeds
 			'Yharim would hate you for this'
@@ -211,9 +217,9 @@ Items: {
 		DisplayName: Parasanguine
 		Tooltip:
 			'''
-			Holding left click or hitting enemies builds up excess blood
-			Right click when your blood meter is high to expel your excess 
-			Left click after right clicking to perform a devastating twirl
+			Holding <left> or hitting enemies builds up excess blood
+			<right> when your blood meter is high to expel your excess 
+			<left> after right clicking to perform a devastating twirl
 			'What do you get when you feed a slime? A bigger slime.'
 			'''
 	}
@@ -233,10 +239,10 @@ Items: {
 		DisplayName: Crystal Gauntlets
 		Tooltip:
 			'''
-			Charges up a powerful burst of ball lightning
-			When charge is full, release left click to unleash the ball lightning upon your foes
-			Right click to clap, detonating all unleashed ball lightning and [WHATEVER IT DOES]
-			'Unlimited power!... within safe limits'
+			Hold <left> to charge up a powerful burst of ball lightning
+			When charge is full, release <left> to unleash the ball lightning upon your foes
+			<right> to clap, detonating all unleashed ball lightning 
+			'Unlimited power!'
 			'''
 	}
 
@@ -266,31 +272,39 @@ Items: {
 		Tooltip:
 			'''
 			Sprays a sizable slurry of sticky slime
-			Slime gets stuck as it is spewed, building up a blockage
-			Right click when blocked to blast out a bile bomb
+			Slime sticks to structures as it is spewed
 			'Shaken, not stirred'
 			'''
 	}
 
 	SupremeRestorationPotion: {
 		RestoreLifeText: Mods.CalamityHunt.Items.SupremeRestorationPotion.RestoreLifeText
-		DisplayName: Supreme Restoration Potion
-		Tooltip: ""
+		DisplayName: Omega Restoration Potion
+		Tooltip: "Reduced potion cooldown"
 	}
 
 	EntropicTorch: {
 		DisplayName: Entropic Torch
 		Tooltip: ""
+
 	}
 
 	StickyHand: {
 		DisplayName: Sticky Hand
-		Tooltip: ""
+		Tooltip:
+			'''
+			Automatically detaches you when close to the hook
+			'It won't break, I promise'
+			'''
 	}
 
 	Trailblazer: {
 		DisplayName: Trailblazer
-		Tooltip: ""
+		Tooltip:
+			'''
+			Uses gel for ammo
+			Ignores 15 points of enemy Defense
+			'''
 	}
 
 	SlimeCane: {
@@ -300,21 +314,30 @@ Items: {
 
 	FissionFlyer: {
 		DisplayName: Fission Flyer
-		Tooltip: ""
+		Tooltip:
+			'''
+			Chucks a chakram that splits into a volley of 3 Entropy Razorblades
+			Stealth strikes split into more Razorblades and leave behind a colossal blade 
+			'''
 	}
 
 	GoozmaAuricSoul: {
-		DisplayName: Auric Soul
+		DisplayName: Entropic Auric Soul
 		Tooltip: ""
 	}
 
 	ScytheOfTheOldGod: {
 		DisplayName: Scythe Of The Old God
-		Tooltip: ""
+		Tooltip:
+			'''
+			Swings a colossal scythe in a three-slash combo
+			'Not to be confused with the Scythe of the Old Duke...
+			...And nothing else.'
+			'''
 	}
 
 	FieryAuricSoul: {
-		DisplayName: Auric Soul
+		DisplayName: Draconic Auric Soul
 		Tooltip: ""
 	}
 
@@ -325,22 +348,35 @@ Items: {
 
 	SlimeNinjaStatue: {
 		DisplayName: Slime Ninja Statue
-		Tooltip: ""
+		Tooltip:
+			'''
+			Surround with 4 Slime Statues and interact with a Gelatinous Catalyst to start a Slime Rain
+			'Who is this guy, anyways?'
+			'''
 	}
 
 	GelatinousCatalyst: {
 		DisplayName: Gelatinous Catalyst
-		Tooltip: ""
+		Tooltip: "Use on a Slime Ninja Statue with 4 Slime Statues present to start a Slime Rain"
 	}
 
 	EntropicSlimeConcentration: {
 		DisplayName: Entropic Slime Concentration
-		Tooltip: ""
+		Tooltip:
+			'''
+			Use on a Slime Ninja Statue with 4 Slime Statues present to summon Goozma directly
+			Not consumable 
+			'''
 	}
 
 	PaladinPalanquin: {
 		DisplayName: Paladin Palanquin
-		Tooltip: ""
+		Tooltip:
+			'''
+			Summons a rideable Oily Bubble
+			Double jump to enter flight mode
+			'Now YOU get to be the ninja!'
+			'''
 	}
 }
 
@@ -351,7 +387,7 @@ NPCs: {
 	EbonianBehemuck.DisplayName: Ebonian Behemuck
 	StellarGeliath.DisplayName: Stellar Geliath
 	Goozmite.DisplayName: Goozmite
-	PixieCharge.DisplayName: Pixie Charge
+	PixieCharge.DisplayName: Remove This
 }
 
 Projectiles: {
@@ -395,22 +431,22 @@ Projectiles: {
 	ParasanguineHeld.DisplayName: Parasanguine Held
 	ParasanguineBlood.DisplayName: Parasanguine Blood
 	SwampBall.DisplayName: Swamp Ball
-	GobfloggerProj.DisplayName: Gobflogger Proj
+	GobfloggerProj.DisplayName: Gobflogger
 	CrystalGauntletBall.DisplayName: Crystal Gauntlet Ball
 	CrystalLightning.DisplayName: Crystal Lightning
-	CrystalGauntletBallThrown.DisplayName: Crystal Gauntlet Ball Thrown
+	CrystalGauntletBallThrown.DisplayName: Crystal Gauntlet Ball
 	CrystalPiercer.DisplayName: Crystal Piercer
 	CrystalBoom.DisplayName: Crystal Boom
 	CrimulanShockwave.DisplayName: Crimulan Shockwave
 	SludgeShakerHeld.DisplayName: Sludge Shaker Held
 	DarkSludge.DisplayName: Dark Sludge
 	SludgeLighter.DisplayName: Sludge Lighter
-	StickyHandProj.DisplayName: Sticky Hand Proj
+	StickyHandProj.DisplayName: Sticky Hand
 	TrailblazerFlame.DisplayName: Trailblazer Flame
-	FissionFlyerProj.DisplayName: Fission Flyer Proj
-	FissionFlyerMiniRing.DisplayName: Fission Flyer Mini Ring
-	ScytheOfTheOldGodHeld.DisplayName: Scythe Of The Old God Held
-	StressExplosion.DisplayName: Stress Explosion
+	FissionFlyerProj.DisplayName: Fission Flyer
+	FissionFlyerMiniRing.DisplayName: Fission Flyer Ringlet
+	ScytheOfTheOldGodHeld.DisplayName: Scythe Of The Old God
+	StressExplosion.DisplayName: Stressed Explosion
 }
 
 Chat: {
@@ -444,18 +480,18 @@ Buffs: {
 	}
 
 	Absorption: {
-		DisplayName: Absorption
+		DisplayName: Gobbed
 		Description: Whip speed is increased by just a tiny bit, just a tiny little bit, it's not increased by much, you might not even notice it because of how small it is
 	}
 
 	FusionBurn: {
 		DisplayName: Fusion Burn
-		Description: Mods.CalamityHunt.Buffs.FusionBurn.Description
+		Description: It hurts, Varik
 	}
 
 	PaladinPalanquinBuff: {
 		DisplayName: Paladin Palanquin Buff
-		Description: Mods.CalamityHunt.Buffs.PaladinPalanquinBuff.Description
+		Description: It's all squishy in here
 	}
 }
 
