@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Players;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Misc;
 using Humanizer;
 using Microsoft.Xna.Framework;
@@ -290,6 +291,13 @@ namespace CalamityHunt.Content.Projectiles
         public Vector2 gravPoint;
         public Vector2 bendPoint;
 
+        public static Texture2D chainTexture;
+
+        public override void Load()
+        {
+            chainTexture = new TextureAsset(Texture + "Chain");
+        }
+
         public override bool PreDrawExtras() => false;
 
         public override bool PreDraw(ref Color lightColor)
@@ -299,15 +307,13 @@ namespace CalamityHunt.Content.Projectiles
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-            Texture2D lineTexture = TextureAssets.Chain30.Value;
-
             Vector2 playerCenter = Projectile.Center;
             int finalCount = 0;
             while (true)
             {
                 finalCount++;
-                playerCenter += Projectile.DirectionTo(player.MountedCenter) * lineTexture.Height;
-                if (playerCenter.Distance(player.MountedCenter) < lineTexture.Height * 0.6f)
+                playerCenter += Projectile.DirectionTo(player.MountedCenter) * chainTexture.Height;
+                if (playerCenter.Distance(player.MountedCenter) < chainTexture.Height * 0.6f)
                     break;
             }
 
@@ -316,6 +322,9 @@ namespace CalamityHunt.Content.Projectiles
                 gravPoint = Vector2.Lerp(playerCenter, Projectile.Center, 0.33f);
                 bendPoint = Vector2.Lerp(playerCenter, Projectile.Center, 0.66f);
             }
+
+            if (Projectile.Distance(playerCenter) < chainTexture.Height)
+                return false;
 
             List<Vector2> controls = new List<Vector2>()
             {
@@ -334,18 +343,25 @@ namespace CalamityHunt.Content.Projectiles
             Rectangle frame = texture.Frame(1, 2, 0, Projectile.frame);
             SpriteEffects effects = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            for (int i = 1; i < points.Count; i++)
-            {
-                float rotation = points[i - 1].AngleTo(points[i]);
-                Vector2 stretch = new Vector2(Projectile.scale, points[i - 1].Distance(points[i]) / (lineTexture.Height));
-                Color drawColor = Lighting.GetColor(points[i].ToTileCoordinates());
-                DrawData drawData = new DrawData(lineTexture, points[i] - Main.screenPosition, lineTexture.Frame(), drawColor, rotation + MathHelper.PiOver2, lineTexture.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
+            Rectangle chainFrame = chainTexture.Frame();
+
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 120);
+
+            for (int i = 0; i < points.Count - 1; i++)
+            { 
+                float rotation = points[i].AngleTo(points[i + 1]);
+                float thinning = 1f - MathF.Sin((float)i / points.Count * MathHelper.Pi) * 0.6f * Utils.GetLerpValue(0, 400, curve.Distance(100), true);
+                Vector2 stretch = new Vector2(Projectile.scale * thinning, points[i].Distance(points[i + 1]) / (chainTexture.Height - 2));
+                Color chainGlowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt((1f - (float)(i + 3) / points.Count) * 70 + Main.GlobalTimeWrappedHourly * 120);
+
+                DrawData drawData = new DrawData(chainTexture, points[i] - Main.screenPosition, chainFrame, chainGlowColor, rotation + MathHelper.PiOver2, chainFrame.Size() * new Vector2(0.5f, 1f), stretch, 0, 0);
                 drawData.shader = player.cGrapple;
-                Main.EntitySpriteDraw(drawData);
+                Main.EntitySpriteDraw(drawData);                
             }
 
-            DrawData drawData2 = new DrawData(texture, Projectile.Center - Main.screenPosition, frame, lightColor, points[pointCount - 2].AngleTo(points[pointCount - 1]) + MathHelper.PiOver2, frame.Size() * 0.5f, Projectile.scale, effects, 0);
+            DrawData drawData2 = new DrawData(texture, Projectile.Center - Main.screenPosition, frame, glowColor, points[pointCount - 2].AngleTo(points[pointCount - 1]) + MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0.8f), Projectile.scale, effects, 0);
             drawData2.shader = player.cGrapple;
+
             Main.EntitySpriteDraw(drawData2);
 
             return false;
