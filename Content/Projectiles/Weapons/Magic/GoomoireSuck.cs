@@ -4,10 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 using System;
+using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Graphics;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Magic
@@ -81,14 +83,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
             Projectile.localAI[0] += Projectile.ai[2];
 
-            Size = 600;
             Projectile.ai[2] = MathF.Sqrt(Utils.GetLerpValue(0, 50, Time, true) * Utils.GetLerpValue(10, 30, Projectile.timeLeft, true));
+            Size = 600;
             Projectile.spriteDirection = Owner.direction;
 
             if (Time < 10)
                 newRot = Projectile.rotation;
 
-            newRot = Utils.AngleLerp(newRot, Owner.AngleTo(Main.MouseWorld), 0.2f);
+            newRot = Utils.AngleLerp(newRot, Projectile.rotation, 0.05f);
 
             HandleSound();
             RibbonPhysics();
@@ -97,6 +99,36 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             {
                 Projectile.frame = (Projectile.frame + 1) % 5;
                 Projectile.frameCounter = 0;
+            }
+
+            foreach (Gore gore in Main.gore)
+            {
+                Rectangle goreRec = new Rectangle((int)(gore.position.X - gore.scale * 10), (int)(gore.position.Y - gore.scale * 10), (int)(gore.scale * 20), (int)(gore.scale * 20));
+                if (Utils.IntersectsConeFastInaccurate(goreRec, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f))
+                    gore.velocity = Vector2.Lerp(gore.velocity, gore.position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 15, 0.2f);
+
+                if (gore.position.Distance(Projectile.Center) < 70)
+                    gore.scale *= 0.9f;
+                if (gore.position.Distance(Projectile.Center) < 40)
+                    gore.active = false;
+            }
+
+            foreach (Dust dust in Main.dust.Where(n => n.active && !n.noGravity))
+            {
+                Rectangle dustRec = new Rectangle((int)(dust.position.X - dust.scale * 3), (int)(dust.position.Y - dust.scale * 3), (int)(dust.scale * 6), (int)(dust.scale * 6));
+                if (Utils.IntersectsConeFastInaccurate(dustRec, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f))
+                    dust.velocity = Vector2.Lerp(dust.velocity, dust.position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 15, 0.2f);
+
+                if (dust.position.Distance(Projectile.Center) < 50)
+                    dust.scale *= 0.9f;                
+                if (dust.position.Distance(Projectile.Center) < 30)
+                    dust.active = false;
+            }            
+            
+            foreach (Item item in Main.item)
+            {
+                if (Utils.IntersectsConeFastInaccurate(item.Hitbox, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f))
+                    item.velocity = Vector2.Lerp(item.velocity, item.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 15, 0.2f);
             }
         }
 
@@ -161,7 +193,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            return Utils.IntersectsConeFastInaccurate(targetHitbox, Projectile.Center, Size, newRot, MathHelper.Pi / 7f);
+            return Utils.IntersectsConeFastInaccurate(targetHitbox, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -229,7 +261,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             float[] rotations = new float[500];
             for (int i = 0; i < 500; i++)
             {
-                rotations[i] = Utils.AngleLerp(newRot, Projectile.rotation, MathF.Sqrt(i / 500f)) + MathF.Sin(Time * 0.2f - i / 120f) * 0.0f * (1f - i / 500f) * Projectile.ai[2];
+                rotations[i] = Utils.AngleLerp(newRot, Projectile.rotation, MathF.Sqrt(i / 500f)) + MathF.Sin(Time * 0.2f - i / 50f) * 0.1f * (1f - i / 500f) * Projectile.ai[2];
                 positions[i] = sparklePos + new Vector2((Size * 1.4f) * (i / 500f) * Projectile.ai[2], 0).RotatedBy(rotations[i]);
             }
 
@@ -264,9 +296,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public float StripWidth(float progress)
         {
-            float start = (float)Math.Pow(progress, 0.6f);
-            float grow = (float)Math.Pow(Projectile.ai[2], 2f);
-            return start * grow * Size * 0.66f;
+            float start = MathHelper.SmoothStep(MathF.Pow(progress, 0.6f) * 0.2f, 1, progress);
+            float grow = (float)Math.Pow(Projectile.ai[2], 3f);
+            return start * grow * Size * 0.5f;
         }
     }
 }

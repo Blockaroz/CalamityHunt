@@ -59,20 +59,19 @@ float sineCoord(float x)
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-    float fadeConst = sin(input.Coord.y * 3.1415) - smoothstep(0.5, 1.0, input.Coord.x);
-    float4 scrollingBits = tex2D(tex1, float2(frac(input.Coord.x * 0.66 * uFreq + uTime * 3), frac(sineCoord(input.Coord.y) + input.Coord.x * 2 + uTime * 2)));
-    float4 scrollingBitsUnder = tex2D(tex1, float2(frac(input.Coord.x * 0.66 * uFreq + uTime * 3 + uBackPhaseShift), frac(sineCoord(1 - input.Coord.y) + input.Coord.x * 2 + uTime * 2)));
+    float fadeConst = sin(input.Coord.y * 3.1415) * 0.5 + 0.5 - smoothstep(0.5, 1.0, input.Coord.x);
+    float4 scrollingBits = tex2D(tex1, float2(frac(input.Coord.x * 0.66 * uFreq + uTime * 3), frac(sineCoord(input.Coord.y) + input.Coord.x * 3 + uTime * 2)));
+    float4 scrollingBitsUnder = tex2D(tex1, float2(frac(input.Coord.x * 0.66 * uFreq + uTime * 3 + uBackPhaseShift), frac(1 - sineCoord(input.Coord.y) + input.Coord.x * 3 + uTime * 2)));
     float glow = length(sqrt(tex2D(tex0, float2(input.Coord.x * uFreq + uTime * 3, input.Coord.y + uTime * 2)))) / 3;
     float4 core = (smoothstep(0.05, 0.08, glow / 3 * fadeConst) * input.Color + glow) * fadeConst * uMiddleBrightness;
       
-    if (length(scrollingBits.rgb) / 3 > 0.6 && scrollingBits.a > 0.1)
-        return input.Color * 1.3 * fadeConst + core;
+    if (length(scrollingBits.rgb) / 3 > 0.4 && scrollingBits.a > 0.1)
+        return input.Color * 1.5 * fadeConst + core;
     
     if (length(scrollingBitsUnder.rgb * fadeConst) / 3 > 0)
-        return float4(input.Color.rgb * 0.6, input.Color.a + 0.3) * fadeConst * scrollingBitsUnder + core;
+        return float4(input.Color.rgb * 0.4, input.Color.a + 0.5) * fadeConst * scrollingBitsUnder + core;
     
     return core;
-
 }
 
 technique Technique1
