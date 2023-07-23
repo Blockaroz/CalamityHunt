@@ -320,7 +320,7 @@ Items: {
 	}
 
 	ScytheOfTheOldGod: {
-		DisplayName: Scythe Of The Old God
+		DisplayName: Scythe of the Old God
 		Tooltip:
 			'''
 			Swings a colossal scythe in a three-slash combo
@@ -336,7 +336,12 @@ Items: {
 
 	Goomoire: {
 		DisplayName: Goomoire
-		Tooltip: ""
+		Tooltip:
+			'''
+			Casts a sealing spell which sucks in enemies 
+			Enemies that get sucked in give you 100 Mana
+			'Not into the pit! It burns!'
+			'''
 	}
 
 	SlimeNinjaStatue: {
@@ -438,9 +443,9 @@ Projectiles: {
 	TrailblazerFlame.DisplayName: Trailblazer Flame
 	FissionFlyerProj.DisplayName: Fission Flyer
 	FissionFlyerMiniRing.DisplayName: Fission Flyer Ringlet
-	ScytheOfTheOldGodHeld.DisplayName: Scythe Of The Old God
+	ScytheOfTheOldGodHeld.DisplayName: Scythe of the Old God
 	StressExplosion.DisplayName: Stressed Explosion
-	GoomoireSuck.DisplayName: Goomoire Suck
+	GoomoireSuck.DisplayName: Goomoire Suction
 }
 
 Chat: {
