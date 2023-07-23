@@ -109,10 +109,13 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
                 aPos += new Vector2(0, -aFrame.Height).RotatedBy(rot);
             }
 
-            if (frameCounter++ > 5)
+            if (drawInfo.shadow == 0f)
             {
-                frame = (frame + 1) % 5;
-                frameCounter = 0;
+                if (frameCounter++ > 5)
+                {
+                    frame = (frame + 1) % 5;
+                    frameCounter = 0;
+                }
             }
 
             DrawData swirl = new DrawData(swirlTexture, vec5, swirlTexture.Frame(1, 5, 0, frame), Color.White, drawInfo.drawPlayer.bodyRotation, swirlTexture.Frame(1, 5, 0, frame).Size() * 0.5f, 1f, drawInfo.playerEffect);
