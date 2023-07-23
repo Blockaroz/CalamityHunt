@@ -1,4 +1,6 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -97,11 +99,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
             if (Projectile.frameCounter++ > 5)
             {
-                Projectile.frame = (Projectile.frame + 1) % 5;
-                Projectile.frameCounter = 0;
+                if (Projectile.ai[2] > 0.7f)
+                {
+                    if (++Projectile.frame > 7)
+                        Projectile.frame = 3;
+                    Projectile.frameCounter = 0;
+                }
+                else
+                    Projectile.frame = (int)(Projectile.ai[2] * 3);
             }
 
-            foreach (Gore gore in Main.gore)
+            foreach (Gore gore in Main.gore.Where(n => n.active))
             {
                 Rectangle goreRec = new Rectangle((int)(gore.position.X - gore.scale * 10), (int)(gore.position.Y - gore.scale * 10), (int)(gore.scale * 20), (int)(gore.scale * 20));
                 if (Utils.IntersectsConeFastInaccurate(goreRec, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f))
@@ -110,7 +118,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                 if (gore.position.Distance(Projectile.Center) < 70)
                     gore.scale *= 0.9f;
                 if (gore.position.Distance(Projectile.Center) < 40)
+                {
                     gore.active = false;
+                    Poof();
+                }
             }
 
             foreach (Dust dust in Main.dust.Where(n => n.active && !n.noGravity))
@@ -123,13 +134,30 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     dust.scale *= 0.9f;                
                 if (dust.position.Distance(Projectile.Center) < 30)
                     dust.active = false;
-            }            
-            
-            foreach (Item item in Main.item)
+
+            }
+
+            foreach (Item item in Main.item.Where(n => n.active))
             {
                 if (Utils.IntersectsConeFastInaccurate(item.Hitbox, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f))
                     item.velocity = Vector2.Lerp(item.velocity, item.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 15, 0.2f);
             }
+
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Time + 10);
+
+            Vector2 inward = Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.5f) * Main.rand.NextFloat(Size * Projectile.ai[2] * 1.5f);
+            Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + inward, -inward * 0.03f, glowColor, 1f + Main.rand.NextFloat());
+            Dust d = Dust.NewDustPerfect(Projectile.Center + inward, DustID.Sand, -inward * 0.04f, 10, Color.Black, 1f + Main.rand.NextFloat());
+            d.noGravity = true;
+        }
+
+        public void Poof()
+        {
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Time + 10);
+
+            for (int i = 0; i < 5; i++)
+                Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(3, 3), glowColor, 2f);
+
         }
 
         private Vector2[] ribbonPoints;
@@ -174,10 +202,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public void HandleSound()
         {
-            SoundStyle theSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWindLoop");
+            SoundStyle theSound = SoundID.DD2_BookStaffTwisterLoop;//new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWindLoop");
             theSound.IsLooped = true;
 
-            windPitch = Projectile.ai[2] - 1f;
+            windPitch = Projectile.ai[2] - 0.8f;
             windVolume = 0.33f * Projectile.ai[2];
             bool active = SoundEngine.TryGetActiveSound(windSound, out ActiveSound sound);
             if ((!active || !windSound.IsValid))
@@ -199,7 +227,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Rectangle frame = texture.Frame(1, 5, 0, Projectile.frame);
+            Rectangle frame = texture.Frame(1, 8, 0, Projectile.frame);
 
             SpriteEffects bookEffect = Owner.direction * Owner.gravDir > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 
@@ -272,10 +300,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
             lightningEffect.Parameters["uTexture0"].SetValue(laserTexture);
             lightningEffect.Parameters["uTexture1"].SetValue(laserTexture2);
-            lightningEffect.Parameters["uTime"].SetValue(Projectile.localAI[0] * 0.025f);
+            lightningEffect.Parameters["uTime"].SetValue(Projectile.localAI[0] * 0.021f);
             lightningEffect.Parameters["uFreq"].SetValue(1f);
             lightningEffect.Parameters["uMiddleBrightness"].SetValue(1.3f);
             lightningEffect.Parameters["uBackPhaseShift"].SetValue(0.5f);
+            lightningEffect.Parameters["uSlant"].SetValue(2f);
             lightningEffect.CurrentTechnique.Passes[0].Apply();
             strip.DrawTrail();
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
@@ -289,8 +318,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public Color StripColor(float progress)
         {
-            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10 + progress * 40f);
-            color.A /= 2;
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10 + progress * 40f) * 0.4f;
+            color.A /= 3;
             return color * Projectile.ai[2];
         }
 
