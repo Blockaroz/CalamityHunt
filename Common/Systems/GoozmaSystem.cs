@@ -4,6 +4,7 @@ using CalamityHunt.Content.Items.Dyes;
 using CalamityHunt.Content.Items.Misc;
 using CalamityHunt.Content.Pets.BloatBabyPet;
 using CalamityHunt.Content.Projectiles;
+using CalamityHunt.Content.Projectiles.Weapons.Magic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -66,6 +67,13 @@ namespace CalamityHunt.Common.Systems
             if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>()))
             {
                 bool active = SoundEngine.TryGetActiveSound(FusionRay.laserSound, out ActiveSound sound);
+                if (active)
+                    sound.Stop();
+            }             
+            
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GoomoireSuck>()))
+            {
+                bool active = SoundEngine.TryGetActiveSound(GoomoireSuck.windSound, out ActiveSound sound);
                 if (active)
                     sound.Stop();
             }            

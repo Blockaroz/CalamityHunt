@@ -170,12 +170,12 @@ namespace CalamityHunt.Common.Players
                 }
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && checkStress >= 0.25f && checkStress < 0.75)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Main.myPlayer, 0, 0);
+                    Projectile.NewProjectile(Terraria.Entity.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Main.myPlayer, 0, 0);
                     wait = 60;
                 }
                 else if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && checkStress >= 0.75f)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Main.myPlayer, 0, 1);
+                    Projectile.NewProjectile(Terraria.Entity.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Main.myPlayer, 0, 1);
                     wait = 60;
                 }
             }
@@ -193,12 +193,12 @@ namespace CalamityHunt.Common.Players
                     }
                     if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && checkStress >= 0.25f && checkStress < 0.75)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Main.myPlayer, 0, 0);
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Main.myPlayer, 0, 0);
                         wait = 60;
                     }
                     else if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && stress >= 0.75f)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Main.myPlayer, 0, 1);
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Main.myPlayer, 0, 1);
                         wait = 60;
                     }
                 }

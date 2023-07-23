@@ -20,6 +20,7 @@ namespace CalamityHunt
             public static TextureAsset Glow = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GlowSoft");
             public static TextureAsset GlowBig = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GlowSoftBig");
             public static TextureAsset ShockRing = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/ShockRing");
+            public static TextureAsset Empty = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Empty");
 
             public struct Extras
             {

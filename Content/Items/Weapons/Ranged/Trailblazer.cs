@@ -53,23 +53,114 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             Projectile.NewProjectileDirect(source, position, velocity.RotatedBy(MathF.Sin(Main.GlobalTimeWrappedHourly * 15) * 0.1f).RotatedByRandom(0.1f), type, damage, knockback);
             return false;
         }
+
+        public static Texture2D backTexture;
+        public static Texture2D backSwirlTexture;
+        public static Texture2D backAntennaTexture;
+        public static Texture2D strapTexture;
+        public static Texture2D goggleTexture;
+
+        public override void Load()
+        {
+            backTexture = new TextureAsset(Texture + "_Back");
+            backSwirlTexture = new TextureAsset(Texture + "_BackSwirl");
+            backAntennaTexture = new TextureAsset(Texture + "_BackAntenna");
+            strapTexture = new TextureAsset(Texture + "_Strap");
+            goggleTexture = new TextureAsset(Texture + "_Goggles");
+        }
     }
 
     public class TrailblazerBackpackLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Backpacks);
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && !drawInfo.drawPlayer.turtleArmor && drawInfo.drawPlayer.body != 106 && drawInfo.drawPlayer.body != 170 && drawInfo.drawPlayer.backpack <= 0 && !drawInfo.drawPlayer.mount.Active;
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && VanityUtils.NoBackpackOn(ref drawInfo);
+
+        private int frame;
+
+        private int frameCounter;
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
-            Texture2D backpackTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Weapons/Ranged/Trailblazer_Back").Value;
+            Texture2D texture = Trailblazer.backTexture;
+            Texture2D swirlTexture = Trailblazer.backSwirlTexture;
+            Texture2D antennaTexture = Trailblazer.backAntennaTexture;
 
-            Vector2 vec5 = drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f);
+            Vector2 vec5 = drawInfo.BodyPosition() + new Vector2(-16 * drawInfo.drawPlayer.direction, -1 * drawInfo.drawPlayer.gravDir);
             vec5 = vec5.Floor();
             vec5.ApplyVerticalOffset(drawInfo);
 
-            DrawData item = new DrawData(backpackTexture, vec5, new Rectangle(0, 0, backpackTexture.Width, drawInfo.drawPlayer.bodyFrame.Height), drawInfo.colorArmorBody, drawInfo.drawPlayer.bodyRotation, new Vector2(backpackTexture.Width * 0.5f, drawInfo.bodyVect.Y), 1f, drawInfo.playerEffect);
+            Vector2 aPos = vec5 + new Vector2(9 * drawInfo.drawPlayer.direction, -18 * drawInfo.drawPlayer.gravDir);
+            for (int i = 0; i < 9; i++)
+            {
+                Color aColor = Lighting.GetColor(drawInfo.drawPlayer.MountedCenter.ToTileCoordinates());
+                Rectangle aFrame = antennaTexture.Frame(1, 3, 0, 2);
+                if (i == 8)
+                {
+                    aColor = Color.White;
+                    aFrame = antennaTexture.Frame(1, 3, 0, 0);
+                }
+                else if (i > 4)
+                    aFrame = antennaTexture.Frame(1, 3, 0, 1);
+
+                float rot = -drawInfo.drawPlayer.velocity.X * (0.03f * (i + 1) / 12f) - Math.Abs(drawInfo.drawPlayer.velocity.Y) * drawInfo.drawPlayer.velocity.X * (0.01f * i / 12f);
+                DrawData antenna = new DrawData(antennaTexture, aPos, aFrame, aColor, drawInfo.drawPlayer.bodyRotation + rot, aFrame.Size() * new Vector2(0.5f, 1f) - Vector2.UnitY, 1f, drawInfo.playerEffect);
+                drawInfo.DrawDataCache.Add(antenna);
+                aPos += new Vector2(0, -aFrame.Height).RotatedBy(rot);
+            }
+
+            if (frameCounter++ > 5)
+            {
+                frame = (frame + 1) % 5;
+                frameCounter = 0;
+            }
+
+            DrawData swirl = new DrawData(swirlTexture, vec5, swirlTexture.Frame(1, 5, 0, frame), Color.White, drawInfo.drawPlayer.bodyRotation, swirlTexture.Frame(1, 5, 0, frame).Size() * 0.5f, 1f, drawInfo.playerEffect);
+            drawInfo.DrawDataCache.Add(swirl);
+
+            Rectangle itemFrame = texture.Frame(1, 20, 0, (int)(drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height / 20f));
+
+            DrawData item = new DrawData(texture, vec5, itemFrame, Lighting.GetColor(drawInfo.drawPlayer.MountedCenter.ToTileCoordinates()), drawInfo.drawPlayer.bodyRotation, itemFrame.Size() * 0.5f, 1f, drawInfo.playerEffect);
+            drawInfo.DrawDataCache.Add(item);  
+        }
+    }        
+    
+    public class TrailblazerStrapLayer : PlayerDrawLayer
+    {
+        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && VanityUtils.NoBackpackOn(ref drawInfo);
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            Texture2D texture = Trailblazer.strapTexture;
+
+            Vector2 vec5 = drawInfo.BodyPosition();//drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f);
+            vec5 = vec5.Floor();
+            vec5.ApplyVerticalOffset(drawInfo);
+
+            DrawData item = new DrawData(texture, vec5, drawInfo.drawPlayer.bodyFrame, drawInfo.colorArmorBody, drawInfo.drawPlayer.bodyRotation, new Vector2(texture.Width * 0.5f, drawInfo.bodyVect.Y), 1f, drawInfo.playerEffect);
+            drawInfo.DrawDataCache.Add(item);
+        }
+    }    
+    
+    public class TrailblazerGogglesLayer : PlayerDrawLayer
+    {
+        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
+
+        public override bool IsHeadLayer => true;
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && drawInfo.fullHair;
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            Texture2D goggleTexture = Trailblazer.goggleTexture;
+
+            Vector2 vec5 = drawInfo.HeadPosition();
+            vec5 = vec5.Floor();
+            vec5.ApplyVerticalOffset(drawInfo);
+
+            DrawData item = new DrawData(goggleTexture, vec5, goggleTexture.Frame(), drawInfo.colorArmorBody, drawInfo.drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect);
             drawInfo.DrawDataCache.Add(item);
         }
     }

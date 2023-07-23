@@ -26,7 +26,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.hide = true;
             Projectile.manualDirectionChange = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
+            Projectile.localNPCHitCooldown = 3;
             Projectile.DamageType = DamageClass.Magic;
         }
 
@@ -49,8 +49,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Owner.SetDummyItemTime(4);
 
             Owner.heldProj = Projectile.whoAmI;
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Owner.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * Owner.HeldItem.shootSpeed, 0.06f);
-            Projectile.Center = Owner.MountedCenter + new Vector2(30 * Owner.direction, Owner.gfxOffY);
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity.SafeNormalize(Vector2.Zero), Owner.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero), 0.08f) * Owner.HeldItem.shootSpeed;
+            Projectile.Center = Owner.MountedCenter + Projectile.velocity.SafeNormalize(Vector2.Zero) * 25 + new Vector2(0, Owner.gfxOffY) + Main.rand.NextVector2Circular(2, 2) * Projectile.ai[2];
             Projectile.rotation = Projectile.velocity.ToRotation();
 
             if (Time % (5 + (int)(Owner.itemAnimationMax)) == 1)
@@ -79,38 +79,61 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
             Time++;
 
+            Projectile.localAI[0] += Projectile.ai[2];
+
             Size = 600;
-            Projectile.localAI[0] = MathF.Sqrt(Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(1, 30, Projectile.timeLeft, true));
+            Projectile.ai[2] = MathF.Sqrt(Utils.GetLerpValue(0, 50, Time, true) * Utils.GetLerpValue(10, 30, Projectile.timeLeft, true));
             Projectile.spriteDirection = Owner.direction;
 
             if (Time < 10)
-                oldRot = Projectile.rotation;
+                newRot = Projectile.rotation;
 
-            oldRot = Utils.AngleLerp(oldRot, Projectile.rotation, 0.1f);
+            newRot = Utils.AngleLerp(newRot, Owner.AngleTo(Main.MouseWorld), 0.2f);
 
             HandleSound();
+            RibbonPhysics();
+
+            if (Projectile.frameCounter++ > 5)
+            {
+                Projectile.frame = (Projectile.frame + 1) % 5;
+                Projectile.frameCounter = 0;
+            }
         }
 
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        private Vector2[] ribbonPoints;
+        private Vector2[] ribbonVels;
+
+        public void RibbonPhysics()
         {
-            return Utils.IntersectsConeFastInaccurate(targetHitbox, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 7f);
-        }
+            int length = 6;
+            if (ribbonVels != null)
+            {
+                for (int i = 0; i < ribbonVels.Length; i++)
+                {
+                    ribbonVels[i] = (Projectile.rotation - (1.5f + i * 0.2f) * Projectile.spriteDirection).ToRotationVector2() * 3f;
+                }
+            }
+            else
+                ribbonVels = new Vector2[length];
 
-        public override bool PreDraw(ref Color lightColor)
-        {
-            Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Rectangle frame = texture.Frame();
+            if (ribbonPoints != null)
+            {
+                float drawScale = Projectile.scale;
+                ribbonPoints[0] = Projectile.Center + new Vector2(4, -5 * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * drawScale;
 
-            float bookRot = 0;
-            SpriteEffects bookEffect = Owner.direction * (int)Owner.gravDir > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            if (Owner.gravDir < 0)
-                bookRot = MathHelper.Pi;
-
-            Main.EntitySpriteDraw(texture, Projectile.Center + new Vector2(0, 12 * Owner.gravDir + Owner.gfxOffY) - Main.screenPosition, frame, lightColor, bookRot + Owner.fullRotation, frame.Size() * 0.5f, 1f, bookEffect, 0);
-
-            DrawLaserCone();
-
-            return false;
+                for (int i = 1; i < ribbonPoints.Length; i++)
+                {
+                    ribbonPoints[i] += ribbonVels[i];
+                    if (ribbonPoints[i].Distance(ribbonPoints[i - 1]) > 10)
+                        ribbonPoints[i] = Vector2.Lerp(ribbonPoints[i], ribbonPoints[i - 1] + new Vector2(10, 0).RotatedBy(ribbonPoints[i - 1].AngleTo(ribbonPoints[i])), 0.8f);
+                }
+            }
+            else
+            {
+                ribbonPoints = new Vector2[length];
+                for (int i = 0; i < ribbonPoints.Length; i++)
+                    ribbonPoints[i] = Projectile.Center;
+            }
         }
 
         public static SlotId windSound;
@@ -122,8 +145,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             SoundStyle theSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWindLoop");
             theSound.IsLooped = true;
 
-            windPitch = Utils.GetLerpValue(0f, 0.8f, Projectile.localAI[0]);
-            windVolume = 0.5f * Projectile.localAI[0];
+            windPitch = Projectile.ai[2] - 1f;
+            windVolume = 0.33f * Projectile.ai[2];
             bool active = SoundEngine.TryGetActiveSound(windSound, out ActiveSound sound);
             if ((!active || !windSound.IsValid))
                 windSound = SoundEngine.PlaySound(theSound.WithVolumeScale(1.1f), Projectile.Center);
@@ -136,68 +159,114 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             }
         }
 
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            return Utils.IntersectsConeFastInaccurate(targetHitbox, Projectile.Center, Size, newRot, MathHelper.Pi / 7f);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = texture.Frame(1, 5, 0, Projectile.frame);
+
+            SpriteEffects bookEffect = Owner.direction * Owner.gravDir > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+
+            DrawRibbon(lightColor);
+
+            Main.EntitySpriteDraw(texture, Projectile.Center + new Vector2(-2, -2 * Owner.direction * Owner.gravDir).RotatedBy(Projectile.rotation) - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * 0.5f, 1f, bookEffect, 0);
+
+            DrawLaserCone();
+
+            return false;
+        }
+
+
+        private void DrawRibbon(Color lightColor)
+        {
+            if (ribbonPoints != null)
+            {
+                for (int i = 0; i < ribbonPoints.Length - 1; i++)
+                {
+                    int style = 0;
+                    if (i == ribbonPoints.Length - 3)
+                        style = 1;
+                    if (i > ribbonPoints.Length - 3)
+                        style = 2;
+                    Rectangle frame = ribbonTexture.Frame(1, 3, 0, style);
+                    float rotation = ribbonPoints[i].AngleTo(ribbonPoints[i + 1]);
+                    Vector2 stretch = new Vector2(0.5f + Utils.GetLerpValue(0, ribbonPoints.Length - 2, i, true) * 0.4f, ribbonPoints[i].Distance(ribbonPoints[i + 1]) / (frame.Height - 5));
+                    Main.EntitySpriteDraw(ribbonTexture, ribbonPoints[i] - Main.screenPosition, frame, lightColor.MultiplyRGBA(Color.Lerp(Color.DimGray, Color.White, (float)i / ribbonPoints.Length)), rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
+                }
+            }
+        }
+
+        public static Texture2D ribbonTexture;
         public static Texture2D laserTexture;
         public static Texture2D laserTexture2;
 
         public override void Load()
         {
+            ribbonTexture = new TextureAsset(Texture + "Ribbon");
             laserTexture = new TextureAsset(Texture + "Laser" + 0);
             laserTexture2 = new TextureAsset(Texture + "Laser" + 1);
         }
 
-        private float oldRot;
+        private float newRot;
 
         public void DrawLaserCone()
         {
+            Vector2 sparklePos = Projectile.Center + new Vector2(6, 0).RotatedBy(Projectile.rotation);
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
+            Color sparkleColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10);
+            sparkleColor.A = 0;
+
+            Vector2 sparkleScaleX = new Vector2(0.5f, 0.9f) * Projectile.ai[2];
+            Vector2 sparkleScaleY = new Vector2(0.5f, 1.33f) * Projectile.ai[2];
+            Main.EntitySpriteDraw(sparkle, sparklePos - Main.screenPosition, sparkle.Frame(), Color.Black * 0.3f, 0f, sparkle.Size() * 0.5f, sparkleScaleX, 0, 0);
+            Main.EntitySpriteDraw(sparkle, sparklePos - Main.screenPosition, sparkle.Frame(), Color.Black * 0.3f, MathHelper.PiOver2, sparkle.Size() * 0.5f, sparkleScaleY, 0, 0);
+
             Vector2[] positions = new Vector2[500];
             float[] rotations = new float[500];
             for (int i = 0; i < 500; i++)
             {
-                rotations[i] = Utils.AngleLerp(Projectile.rotation, oldRot, MathF.Sqrt(i / 500f)) + MathF.Sin(Time * 0.2f + i / 70f) * 0.12f * (1f - i / 500f) * Projectile.localAI[0];
-                positions[i] = Projectile.Center + new Vector2((Size * 1.4f) * (i / 500f) * Projectile.localAI[0], 0).RotatedBy(rotations[i]);
+                rotations[i] = Utils.AngleLerp(newRot, Projectile.rotation, MathF.Sqrt(i / 500f)) + MathF.Sin(Time * 0.2f - i / 120f) * 0.0f * (1f - i / 500f) * Projectile.ai[2];
+                positions[i] = sparklePos + new Vector2((Size * 1.4f) * (i / 500f) * Projectile.ai[2], 0).RotatedBy(rotations[i]);
             }
 
             VertexStrip strip = new VertexStrip();
             strip.PrepareStripWithProceduralPadding(positions, rotations, StripColor, StripWidth, -Main.screenPosition, true);
 
-            Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/FusionRayEffect", AssetRequestMode.ImmediateLoad).Value;
+            Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoomoireSuckEffect", AssetRequestMode.ImmediateLoad).Value;
             lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
             lightningEffect.Parameters["uTexture0"].SetValue(laserTexture);
             lightningEffect.Parameters["uTexture1"].SetValue(laserTexture2);
-            lightningEffect.Parameters["uGlow"].SetValue(laserTexture2);
-            lightningEffect.Parameters["uBits"].SetValue(laserTexture);
-            lightningEffect.Parameters["uTime"].SetValue(Time * 0.02f);
-            lightningEffect.Parameters["uFreq"].SetValue(0.5f);
+            lightningEffect.Parameters["uTime"].SetValue(Projectile.localAI[0] * 0.025f);
+            lightningEffect.Parameters["uFreq"].SetValue(1f);
+            lightningEffect.Parameters["uMiddleBrightness"].SetValue(1.3f);
+            lightningEffect.Parameters["uBackPhaseShift"].SetValue(0.5f);
             lightningEffect.CurrentTechnique.Passes[0].Apply();
             strip.DrawTrail();
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
-            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
-            Color sparkleColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10);
-            sparkleColor.A = 0;
+            Main.EntitySpriteDraw(sparkle, sparklePos - Main.screenPosition, sparkle.Frame(), sparkleColor, 0f, sparkle.Size() * 0.5f, sparkleScaleX, 0, 0);
+            Main.EntitySpriteDraw(sparkle, sparklePos - Main.screenPosition, sparkle.Frame(), sparkleColor, MathHelper.PiOver2, sparkle.Size() * 0.5f, sparkleScaleY, 0, 0);
 
-            Vector2 sparkleScale = new Vector2(0.5f, 1.5f);
-            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, sparkle.Frame(), sparkleColor, 0f, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
-            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, sparkle.Frame(), sparkleColor, MathHelper.PiOver2, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
-
-            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, sparkle.Frame(), new Color(255, 255, 255, 0), 0f, sparkle.Size() * 0.5f, sparkleScale * 0.5f, 0, 0);
-            Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, sparkle.Frame(), new Color(255, 255, 255, 0), MathHelper.PiOver2, sparkle.Size() * 0.5f, sparkleScale * 0.5f, 0, 0);
+            Main.EntitySpriteDraw(sparkle, sparklePos - Main.screenPosition, sparkle.Frame(), new Color(255, 255, 255, 0), 0f, sparkle.Size() * 0.5f, sparkleScaleX * 0.5f, 0, 0);
+            Main.EntitySpriteDraw(sparkle, sparklePos - Main.screenPosition, sparkle.Frame(), new Color(255, 255, 255, 0), MathHelper.PiOver2, sparkle.Size() * 0.5f, sparkleScaleY * 0.5f, 0, 0);
         }
 
         public Color StripColor(float progress)
         {
-            float grow = 0.1f + (float)Math.Pow(Projectile.localAI[0], 3f);
-
-            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10 + progress * 30f);
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10 + progress * 40f);
             color.A /= 2;
-            return color * grow * Projectile.localAI[0];
+            return color * Projectile.ai[2];
         }
 
         public float StripWidth(float progress)
         {
             float start = (float)Math.Pow(progress, 0.6f);
-            float grow = (float)Math.Pow(Projectile.localAI[0], 3f);
-            return start * grow * Size;
+            float grow = (float)Math.Pow(Projectile.ai[2], 2f);
+            return start * grow * Size * 0.66f;
         }
     }
 }

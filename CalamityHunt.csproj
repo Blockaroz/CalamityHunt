@@ -8,7 +8,15 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Textures\Empty.png" />
+    <None Remove="Content\Items\Armor\Shogun\ShogunWings.png" />
+    <None Remove="Content\Items\Weapons\Ranged\TrailblazerGoggles.png" />
+    <None Remove="Content\Items\Weapons\Ranged\Trailblazer_BackAntenna.png" />
+    <None Remove="Content\Items\Weapons\Ranged\Trailblazer_BackSwirl.png" />
+    <None Remove="Content\Items\Weapons\Ranged\Trailblazer_Goggles.png" />
+    <None Remove="Content\Items\Weapons\Ranged\Trailblazer_Strap.png" />
     <None Remove="Content\Particles\FlyingSlimes\FlyingCrimslime.cs~RF3356da6f.TMP" />
+    <None Remove="Content\Projectiles\Weapons\Magic\GoomoireSuckRibbon.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />

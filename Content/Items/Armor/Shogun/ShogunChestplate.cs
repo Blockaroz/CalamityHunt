@@ -16,7 +16,10 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
         public override void Load()
         {
             if (Main.netMode != NetmodeID.Server)
+            {
                 EquipLoader.AddEquipTexture(Mod, Texture + "_Waist", EquipType.Waist, this);
+                EquipLoader.AddEquipTexture(Mod, Texture.Replace("Chestplate", "Wings"), EquipType.Wings, this);
+            }
         }
 
         public override void SetDefaults()
@@ -47,6 +50,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
         public override void EquipFrameEffects(Player player, EquipType type)
         {
             player.waist = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Waist);
+            player.wings = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Wings);
         }
     }
 }

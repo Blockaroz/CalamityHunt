@@ -20,9 +20,9 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             if (drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsUseFingers)
                 texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Weapons/Magic/CrystalGauntlets_HandsOnPoint").Value;
 
-            Vector2 position = drawInfo.BodyPosition() + drawInfo.frontShoulderOffset + HuntOfTheOldGodUtils.GetCompositeOffset_FrontArm(ref drawInfo);
+            Vector2 position = drawInfo.BodyPosition() + drawInfo.frontShoulderOffset + VanityUtils.GetCompositeOffset_FrontArm(ref drawInfo);
             position.ApplyVerticalOffset(drawInfo);
-            Vector2 origin = drawInfo.bodyVect + drawInfo.frontShoulderOffset + HuntOfTheOldGodUtils.GetCompositeOffset_FrontArm(ref drawInfo);
+            Vector2 origin = drawInfo.bodyVect + drawInfo.frontShoulderOffset + VanityUtils.GetCompositeOffset_FrontArm(ref drawInfo);
             if (drawInfo.compFrontArmFrame.X / drawInfo.compFrontArmFrame.Width >= 7)
                 position += new Vector2((!drawInfo.playerEffect.HasFlag(SpriteEffects.FlipHorizontally)) ? 1 : (-1), (!drawInfo.playerEffect.HasFlag(SpriteEffects.FlipVertically)) ? 1 : (-1));
             
@@ -43,9 +43,9 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             if (drawInfo.drawPlayer.GetModPlayer<GoozmaWeaponsPlayer>().crystalGauntletsUseFingers)
                 texture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Items/Weapons/Magic/CrystalGauntlets_HandsOffPoint").Value;
 
-            Vector2 position = drawInfo.BodyPosition() + drawInfo.backShoulderOffset + HuntOfTheOldGodUtils.GetCompositeOffset_BackArm(ref drawInfo);
+            Vector2 position = drawInfo.BodyPosition() + drawInfo.backShoulderOffset + VanityUtils.GetCompositeOffset_BackArm(ref drawInfo);
             position.ApplyVerticalOffset(drawInfo);
-            Vector2 origin = drawInfo.bodyVect + drawInfo.backShoulderOffset + HuntOfTheOldGodUtils.GetCompositeOffset_BackArm(ref drawInfo);
+            Vector2 origin = drawInfo.bodyVect + drawInfo.backShoulderOffset + VanityUtils.GetCompositeOffset_BackArm(ref drawInfo);
             DrawData drawData = new DrawData(texture, position, drawInfo.compBackArmFrame, Color.White * (1f - drawInfo.shadow), drawInfo.compositeBackArmRotation, origin, 1f, drawInfo.playerEffect, 0);
             drawInfo.DrawDataCache.Add(drawData);
         }

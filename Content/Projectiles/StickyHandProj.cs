@@ -306,25 +306,20 @@ namespace CalamityHunt.Content.Projectiles
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-
+            if (Projectile.ai[1] < 2f)
+            {
+                gravPoint = Vector2.Lerp(player.MountedCenter, Projectile.Center, 0.33f);
+                bendPoint = Vector2.Lerp(player.MountedCenter, Projectile.Center, 0.66f);
+            }
             Vector2 playerCenter = Projectile.Center;
             int finalCount = 0;
             while (true)
             {
                 finalCount++;
                 playerCenter += Projectile.DirectionTo(player.MountedCenter) * chainTexture.Height;
-                if (playerCenter.Distance(player.MountedCenter) < chainTexture.Height * 0.6f)
+                if (playerCenter.Distance(player.MountedCenter) < chainTexture.Height * 1.2f)
                     break;
             }
-
-            if (Projectile.ai[1] < 2f)
-            {
-                gravPoint = Vector2.Lerp(playerCenter, Projectile.Center, 0.33f);
-                bendPoint = Vector2.Lerp(playerCenter, Projectile.Center, 0.66f);
-            }
-
-            if (Projectile.Distance(playerCenter) < chainTexture.Height)
-                return false;
 
             List<Vector2> controls = new List<Vector2>()
             {
@@ -356,7 +351,7 @@ namespace CalamityHunt.Content.Projectiles
 
                 DrawData drawData = new DrawData(chainTexture, points[i] - Main.screenPosition, chainFrame, chainGlowColor, rotation + MathHelper.PiOver2, chainFrame.Size() * new Vector2(0.5f, 1f), stretch, 0, 0);
                 drawData.shader = player.cGrapple;
-                Main.EntitySpriteDraw(drawData);                
+                Main.EntitySpriteDraw(drawData);
             }
 
             DrawData drawData2 = new DrawData(texture, Projectile.Center - Main.screenPosition, frame, glowColor, points[pointCount - 2].AngleTo(points[pointCount - 1]) + MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0.8f), Projectile.scale, effects, 0);
