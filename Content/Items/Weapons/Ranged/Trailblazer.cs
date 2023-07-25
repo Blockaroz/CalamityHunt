@@ -148,11 +148,11 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
     
     public class TrailblazerGogglesLayer : PlayerDrawLayer
     {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
+        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
 
         public override bool IsHeadLayer => true;
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && drawInfo.fullHair;
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && drawInfo.fullHair && drawInfo.drawPlayer.face < 1;
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {

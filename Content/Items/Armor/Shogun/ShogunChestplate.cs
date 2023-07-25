@@ -1,9 +1,5 @@
-﻿using CalamityHunt.Content.Items.Rarities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CalamityHunt.Common.Players;
+using CalamityHunt.Content.Items.Rarities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -47,10 +43,16 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             player.statManaMax2 += 150;
         }
 
+        public override bool WingUpdate(Player player, bool inUse)
+        {
+            bool set = player.GetModPlayer<ShogunArmorPlayer>().active;
+
+            return false;
+        }
+
         public override void EquipFrameEffects(Player player, EquipType type)
         {
             player.waist = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Waist);
-            player.wings = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Wings);
         }
     }
 }
