@@ -1,7 +1,9 @@
 ﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Melee;
+using CalamityHunt.Content.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -88,5 +90,29 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
         }
 
         public override bool MeleePrefix() => true;
+
+        public override void AddRecipes()
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                CreateRecipe()
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient(calamity.Find<ModItem>("DeathsAscension").Type)
+                    .AddIngredient(calamity.Find<ModItem>("LifefruitScythe").Type)
+                    .AddIngredient(calamity.Find<ModItem>("EssenceFlayer").Type)
+                    .AddIngredient(calamity.Find<ModItem>("AstralScythe").Type)
+                    .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .Register();
+            }
+            else 
+            {
+                CreateRecipe()
+                    .AddIngredient(ItemID.Sickle)
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddTile<SlimeNinjaStatueTile>()
+                    .Register();
+            }
+        }
     }
 }

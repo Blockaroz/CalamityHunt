@@ -1,8 +1,10 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Rogue;
+using CalamityHunt.Content.Tiles;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using System;
@@ -66,5 +68,29 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
             		return false;
 		}
+
+        public override void AddRecipes()
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                CreateRecipe()
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient(calamity.Find<ModItem>("GodsParanoia").Type)
+                    .AddIngredient(calamity.Find<ModItem>("MetalMonstrosity").Type)
+                    .AddIngredient(calamity.Find<ModItem>("SludgeSplotch").Type, 100)
+                    .AddIngredient(calamity.Find<ModItem>("Nychthemeron").Type)
+                    .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .Register();
+            }
+            else 
+            {
+                CreateRecipe()
+                    .AddIngredient(ItemID.SpikyBall, 100)
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddTile<SlimeNinjaStatueTile>()
+                    .Register();
+            }
 	}
+    }
 }

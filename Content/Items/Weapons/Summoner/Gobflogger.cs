@@ -1,7 +1,9 @@
 ﻿using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
+using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
+using CalamityHunt.Content.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -56,5 +58,41 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
         }
 
         public override bool MeleePrefix() => true;
+
+        public override void AddRecipes()
+        {
+            if (ModLoader.HasMod("CatalystMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CatalystMod");
+                CreateRecipe()
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient(calamity.Find<ModItem>("UnrelentingTorment").Type)
+                    .AddIngredient(calamity.Find<ModItem>("UnderBite").Type)
+                    .AddIngredient(calamity.Find<ModItem>("CongeledDuoWhip").Type)
+                    .AddIngredient(calamity.Find<ModItem>("BlossomsBlessing").Type)
+                    .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .Register();
+            }
+            else if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                CreateRecipe()
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient(calamity.Find<ModItem>("CosmicDischarge").Type)
+                    .AddIngredient(calamity.Find<ModItem>("Mourningstar").Type)
+                    .AddIngredient(calamity.Find<ModItem>("CrescentMoon").Type)
+                    .AddIngredient(calamity.Find<ModItem>("Nebulash").Type)
+                    .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .Register();
+            }
+            else 
+            {
+                CreateRecipe()
+                    .AddIngredient(ItemID.RopeCoil, 5)
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddTile<SlimeNinjaStatueTile>()
+                    .Register();
+            }
+	}
     }
 }

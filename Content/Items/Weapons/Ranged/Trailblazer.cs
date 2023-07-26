@@ -1,8 +1,10 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Ranged;
+using CalamityHunt.Content.Tiles;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
@@ -67,6 +69,30 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             backAntennaTexture = new TextureAsset(Texture + "_BackAntenna");
             strapTexture = new TextureAsset(Texture + "_Strap");
             goggleTexture = new TextureAsset(Texture + "_Goggles");
+        }
+
+        public override void AddRecipes()
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                CreateRecipe()
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient(calamity.Find<ModItem>("GodsBellows").Type)
+                    .AddIngredient(calamity.Find<ModItem>("PristineFury").Type)
+                    .AddIngredient(calamity.Find<ModItem>("OverloadedBlaster").Type)
+                    .AddIngredient(calamity.Find<ModItem>("AuroraBlazer").Type)
+                    .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .Register();
+            }
+            else 
+            {
+                CreateRecipe()
+                    .AddIngredient(ItemID.ElfMelter)
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddTile<SlimeNinjaStatueTile>()
+                    .Register();
+            }
         }
     }
 

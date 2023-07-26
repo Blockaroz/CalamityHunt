@@ -1,10 +1,12 @@
 ﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles.Weapons.Magic;
 using CalamityHunt.Content.Projectiles.Weapons.Melee;
 using CalamityHunt.Content.Projectiles.Weapons.Ranged;
+using CalamityHunt.Content.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -60,6 +62,30 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             }
 
             return false;
+        }
+
+        public override void AddRecipes()
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                CreateRecipe()
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient(calamity.Find<ModItem>("PrimordialAncient").Type)
+                    .AddIngredient(calamity.Find<ModItem>("Biofusillade").Type)
+                    .AddIngredient(calamity.Find<ModItem>("AbyssalTome").Type)
+                    .AddIngredient(calamity.Find<ModItem>("WintersFury").Type)
+                    .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .Register();
+            }
+            else 
+            {
+                CreateRecipe()
+                    .AddIngredient(ItemID.SpellTome)
+                    .AddIngredient<EntropyMatter>(15)
+                    .AddTile<SlimeNinjaStatueTile>()
+                    .Register();
+            }
         }
     }
 }
