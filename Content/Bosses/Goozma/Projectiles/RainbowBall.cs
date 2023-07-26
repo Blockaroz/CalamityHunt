@@ -58,7 +58,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 Projectile.extraUpdates = 1;
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * new Vector2(Main.rand.Next(22, 25), Main.rand.Next(22, 30)), 0.04f * Utils.GetLerpValue(0, 1400, Projectile.Distance(Main.player[target].MountedCenter), true));
-                Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f) * 0.4f * Utils.GetLerpValue(0, 1000, Projectile.Distance(Main.player[target].MountedCenter), true);
+                Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f) * 0.3f * Utils.GetLerpValue(0, 1000, Projectile.Distance(Main.player[target].MountedCenter), true);
                 Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 13 * (1f + Utils.GetLerpValue(0, 600, Projectile.Distance(Main.player[target].MountedCenter), true) * 0.5f);
             }
 

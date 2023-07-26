@@ -1834,7 +1834,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 3 => 125, //lightning
                 4 => 60, //static
                 5 => 100, //bloat
-                6 => Main.expertMode ? 600 : 300, //drill dash
+                6 => Main.expertMode ? 400 : 200, //drill dash
                 7 => 200, //fusion ray
                 _ => 0
             };
