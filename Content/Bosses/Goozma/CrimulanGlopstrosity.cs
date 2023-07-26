@@ -463,14 +463,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            if (Time > waitTime + 80 && Time < waitTime + 150)
+            int doubleWaitTime = waitTime + 20;
+            if (Time > doubleWaitTime + 80 && Time < doubleWaitTime + 150)
             {
-                if (Time < waitTime + 100)
+                if (Time < doubleWaitTime + 100)
                 {
                     NPC.velocity *= 0.1f;
-                    squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(waitTime + 80, waitTime + 100, Time, true)) * 0.5f);
+                    squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(doubleWaitTime + 80, doubleWaitTime + 100, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(doubleWaitTime + 80, doubleWaitTime + 100, Time, true)) * 0.5f);
 
-                    if (Time == waitTime + 95)
+                    if (Time == doubleWaitTime + 95)
                     {
                         SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
                         hop.MaxInstances = 0;
@@ -478,19 +479,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         SoundEngine.PlaySound(hop, NPC.Center);
                     }
                 }
-                else if (Time < waitTime + 130)
+                else if (Time < doubleWaitTime + 130)
                 {
-                    NPC.velocity.Y = -20 * Utils.GetLerpValue(waitTime + 160, waitTime + 80, Time, true);
-                    squishFactor = new Vector2(1f - Utils.GetLerpValue(waitTime + 150, waitTime + 110, Time, true) * 0.5f, 1f + Utils.GetLerpValue(waitTime + 150, waitTime + 110, Time, true) * 0.5f);
+                    NPC.velocity.Y = -20 * Utils.GetLerpValue(doubleWaitTime + 160, doubleWaitTime + 80, Time, true);
+                    squishFactor = new Vector2(1f - Utils.GetLerpValue(doubleWaitTime + 150, doubleWaitTime + 110, Time, true) * 0.5f, 1f + Utils.GetLerpValue(doubleWaitTime + 150, doubleWaitTime + 110, Time, true) * 0.5f);
                 }
             }
 
-            if (Time == waitTime + 125)
+            if (Time == doubleWaitTime + 125)
             {
                 SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
                 SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
             }
-            if (Time > waitTime + 100 && Time < waitTime + 170)
+            if (Time > doubleWaitTime + 100 && Time < doubleWaitTime + 170)
             {
                 useNinjaSlamFrame = true;
 
@@ -502,7 +503,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.rotation = NPC.rotation.AngleLerp(NPC.Top.AngleTo(NPC.FindSmashSpot(saveTarget)) - MathHelper.PiOver2, 0.5f) * 0.4f;
             }
 
-            if (Time > waitTime + 170 && Time <= waitTime + 180)
+            if (Time > doubleWaitTime + 170 && Time <= doubleWaitTime + 180)
             {
                 useNinjaSlamFrame = true;
 
@@ -511,7 +512,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 useNinjaSlamFrame = true;
             }
 
-            if (Time == waitTime + 180)
+            if (Time == doubleWaitTime + 180)
             {
                 NPC.rotation = 0;
 
@@ -546,10 +547,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            if (Time > waitTime + 180)
+            if (Time > doubleWaitTime + 180)
                 squishFactor = Vector2.Lerp(squishFactor, Vector2.One, 0.1f);
 
-            if (Time > waitTime + 260)
+            if (Time > doubleWaitTime + 260)
                 Reset();
         }
 
