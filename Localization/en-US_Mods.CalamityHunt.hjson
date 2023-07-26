@@ -446,6 +446,7 @@ Projectiles: {
 	ScytheOfTheOldGodHeld.DisplayName: Scythe of the Old God
 	StressExplosion.DisplayName: Stressed Explosion
 	GoomoireSuck.DisplayName: Goomoire Suction
+	SplendorTentacle.DisplayName: Splendor Tentacle
 }
 
 Chat: {

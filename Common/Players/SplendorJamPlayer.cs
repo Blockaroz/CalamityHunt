@@ -12,6 +12,7 @@ namespace CalamityHunt.Common.Players
 {
     public class SplendorJamPlayer : ModPlayer
     {
+        public int tentacleCount;
 
         public bool active;
         public bool rainbow;
@@ -103,6 +104,8 @@ namespace CalamityHunt.Common.Players
         {
             if (active)
             {
+                tentacleCount = 1;
+
                 for (int i = 0; i < slimes.Length; i++)
                 {
                     Player.npcTypeNoAggro[i] = true;
@@ -118,6 +121,7 @@ namespace CalamityHunt.Common.Players
                         Player.GetDamage(DamageClass.Generic).Flat += 12f;
                         Player.GetCritChance(DamageClass.Generic) += 3f;
                         Player.GetArmorPenetration(DamageClass.Generic) += 10f;
+                        tentacleCount = 3;
                     }
                     else if (checkStress >= 0.75 && checkStress < 1)
                     {
@@ -125,6 +129,8 @@ namespace CalamityHunt.Common.Players
                         Player.GetDamage(DamageClass.Generic).Flat += 16f;
                         Player.GetCritChance(DamageClass.Generic) += 7f;
                         Player.GetArmorPenetration(DamageClass.Generic) += 20f;
+                        tentacleCount = 5;
+
                     }
                     else if (checkStress >= 1)
                     {
@@ -132,6 +138,7 @@ namespace CalamityHunt.Common.Players
                         Player.GetDamage(DamageClass.Generic).Flat += 20f;
                         Player.GetCritChance(DamageClass.Generic) += 10f;
                         Player.GetArmorPenetration(DamageClass.Generic) += 40f;
+                        tentacleCount = 8;
                     }
                     else
                     {
@@ -139,6 +146,7 @@ namespace CalamityHunt.Common.Players
                         Player.GetDamage(DamageClass.Generic).Flat += 8f;
                         Player.GetCritChance(DamageClass.Generic) += 1f;
                         Player.GetArmorPenetration(DamageClass.Generic) += 5f;
+                        tentacleCount = 1;
                     }
                 }
                 if (stressedOut && stress <= 0)

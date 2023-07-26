@@ -52,7 +52,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectileDirect(source, position, velocity.RotatedBy(MathF.Sin(Main.GlobalTimeWrappedHourly * 15) * 0.1f).RotatedByRandom(0.1f), type, damage, knockback);
+            Projectile.NewProjectileDirect(source, position, velocity.RotatedBy(MathF.Sin(Main.GlobalTimeWrappedHourly * 15) * 0.1f).RotatedByRandom(0.1f) + player.velocity * 0.2f, type, damage, knockback);
             return false;
         }
 
@@ -130,7 +130,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
                     aFrame = antennaTexture.Frame(1, 3, 0, 1);
 
                 float rot = -drawInfo.drawPlayer.velocity.X * (0.03f * (i + 1) / 12f) - Math.Abs(drawInfo.drawPlayer.velocity.Y) * drawInfo.drawPlayer.velocity.X * (0.01f * i / 12f);
-                DrawData antenna = new DrawData(antennaTexture, aPos, aFrame, aColor, drawInfo.drawPlayer.bodyRotation + rot, aFrame.Size() * new Vector2(0.5f, 1f) - Vector2.UnitY, 1f, drawInfo.playerEffect);
+                DrawData antenna = new DrawData(antennaTexture, aPos, aFrame, aColor * (1f - drawInfo.shadow), drawInfo.drawPlayer.bodyRotation + rot, aFrame.Size() * new Vector2(0.5f, 1f) - Vector2.UnitY, 1f, drawInfo.playerEffect);
                 drawInfo.DrawDataCache.Add(antenna);
                 aPos += new Vector2(0, -aFrame.Height).RotatedBy(rot);
             }
@@ -144,12 +144,12 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
                 }
             }
 
-            DrawData swirl = new DrawData(swirlTexture, vec5, swirlTexture.Frame(1, 5, 0, frame), Color.White, drawInfo.drawPlayer.bodyRotation, swirlTexture.Frame(1, 5, 0, frame).Size() * 0.5f, 1f, drawInfo.playerEffect);
+            DrawData swirl = new DrawData(swirlTexture, vec5, swirlTexture.Frame(1, 5, 0, frame), Color.White * (1f - drawInfo.shadow), drawInfo.drawPlayer.bodyRotation, swirlTexture.Frame(1, 5, 0, frame).Size() * 0.5f, 1f, drawInfo.playerEffect);
             drawInfo.DrawDataCache.Add(swirl);
 
-            Rectangle itemFrame = texture.Frame(1, 20, 0, (int)(drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height / 20f));
+            Rectangle itemFrame = texture.Frame(1, 20, 0, (int)(drawInfo.drawPlayer.legFrame.Y / drawInfo.drawPlayer.legFrame.Height));
 
-            DrawData item = new DrawData(texture, vec5, itemFrame, Lighting.GetColor(drawInfo.drawPlayer.MountedCenter.ToTileCoordinates()), drawInfo.drawPlayer.bodyRotation, itemFrame.Size() * 0.5f, 1f, drawInfo.playerEffect);
+            DrawData item = new DrawData(texture, vec5, itemFrame, Lighting.GetColor(drawInfo.drawPlayer.MountedCenter.ToTileCoordinates()) * (1f - drawInfo.shadow), drawInfo.drawPlayer.bodyRotation, itemFrame.Size() * 0.5f, 1f, drawInfo.playerEffect);
             drawInfo.DrawDataCache.Add(item);  
         }
     }        
@@ -167,7 +167,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             Vector2 vec5 = drawInfo.BodyPosition();//drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f);
             vec5 = vec5.Floor();
 
-            DrawData item = new DrawData(texture, vec5, drawInfo.drawPlayer.bodyFrame, drawInfo.colorArmorBody, drawInfo.drawPlayer.bodyRotation, new Vector2(texture.Width * 0.5f, drawInfo.bodyVect.Y), 1f, drawInfo.playerEffect);
+            DrawData item = new DrawData(texture, vec5, drawInfo.drawPlayer.bodyFrame, drawInfo.colorArmorBody * (1f - drawInfo.shadow), drawInfo.drawPlayer.bodyRotation, new Vector2(texture.Width * 0.5f, drawInfo.bodyVect.Y), 1f, drawInfo.playerEffect);
             drawInfo.DrawDataCache.Add(item);
         }
     }    
@@ -178,7 +178,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         public override bool IsHeadLayer => true;
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && drawInfo.fullHair && drawInfo.drawPlayer.face < 1;
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && drawInfo.fullHair;
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
@@ -188,7 +188,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             vec5 = vec5.Floor();
             vec5.ApplyVerticalOffset(drawInfo);
 
-            DrawData item = new DrawData(goggleTexture, vec5, goggleTexture.Frame(), drawInfo.colorArmorBody, drawInfo.drawPlayer.headRotation, Vector2.Zero, 1f, drawInfo.playerEffect);
+            DrawData item = new DrawData(goggleTexture, vec5, goggleTexture.Frame(), drawInfo.colorArmorHead * (1f - drawInfo.shadow), drawInfo.drawPlayer.headRotation, Vector2.Zero, 1f, drawInfo.playerEffect);
             drawInfo.DrawDataCache.Add(item);
         }
     }
