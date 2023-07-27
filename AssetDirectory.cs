@@ -49,7 +49,12 @@ namespace CalamityHunt
         {
             public struct Weapon
             {
-                public static SoundStyle ScytheOfTheOldGodSwing = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/OldGodScytheSwing")
+                public static SoundStyle ScytheOfTheOldGodSwing = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/OldGodScytheSwing_" + 0)
+                {
+                    MaxInstances = 0,
+                    PitchVariance = 0.1f
+                };                
+                public static SoundStyle ScytheOfTheOldGodSwingStrong = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/OldGodScytheSwing_" + 1)
                 {
                     MaxInstances = 0,
                     PitchVariance = 0.1f

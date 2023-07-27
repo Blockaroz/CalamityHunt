@@ -76,6 +76,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             bool canKill = false;
 
             SoundStyle swingSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwing;
+            swingSound.Pitch = -0.1f;
+            SoundStyle strongSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwingStrong;
+            strongSound.Pitch = -0.1f;
 
             float speed = (Player.itemAnimationMax / 35f) / (0.5f + Player.GetTotalAttackSpeed(DamageClass.Melee) * 0.5f);
 
@@ -113,14 +116,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     rotation = MathHelper.Lerp(2f, -3f, swingPercent);
                     addRot = -MathHelper.TwoPi * MathHelper.SmoothStep(0, 1, MathHelper.SmoothStep(0, 1, Utils.GetLerpValue((int)(-10 * speed), (int)(60 * speed), Time, true)));
 
-                    if (Time == (int)(20 * speed))
-                        SoundEngine.PlaySound(swingSound.WithVolumeScale(0.3f).WithPitchOffset(-0.3f), Projectile.Center);
-                    
-                    if (Time == (int)(40 * speed))
-                    {
+                    if (Time == (int)(18 * speed))
+                        SoundEngine.PlaySound(strongSound.WithPitchOffset(-0.05f), Projectile.Center);
+
+                    if (Time == (int)(22 * speed))
                         shakeStrength = 1f;
-                        SoundEngine.PlaySound(swingSound.WithPitchOffset(-0.05f), Projectile.Center);
-                    }
+
 
                     if (Time > (int)(60 * speed))
                     {
@@ -141,10 +142,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     rotation = MathHelper.Lerp(-2f, 6f, swingPercent);
                     addRot = -MathHelper.Pi * MathF.Sqrt(Utils.GetLerpValue(0, (int)(60 * speed), Time, true));
 
-                    if (Time == (int)(30 * speed))
+                    if (Time == (int)(20 * speed))
                     {
                         shakeStrength = 1f;
-                        SoundEngine.PlaySound(swingSound.WithPitchOffset(0.15f), Projectile.Center);
+                        SoundEngine.PlaySound(strongSound.WithPitchOffset(0.35f), Projectile.Center);
                     }
 
                     if (Time > (int)(55 * speed))
@@ -281,6 +282,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 300);
             shakeStrength *= 1.5f;
+
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact, Projectile.Center);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -289,6 +292,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Particle.NewParticle(Particle.ParticleType<CrossSparkle>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 300);
             shakeStrength *= 1.5f;
+
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact, Projectile.Center);
         }
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)

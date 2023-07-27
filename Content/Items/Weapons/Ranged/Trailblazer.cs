@@ -174,11 +174,11 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
     
     public class TrailblazerGogglesLayer : PlayerDrawLayer
     {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
+        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
 
         public override bool IsHeadLayer => true;
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && drawInfo.fullHair;
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>();
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
@@ -188,7 +188,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             vec5 = vec5.Floor();
             vec5.ApplyVerticalOffset(drawInfo);
 
-            DrawData item = new DrawData(goggleTexture, vec5, goggleTexture.Frame(), drawInfo.colorArmorHead * (1f - drawInfo.shadow), drawInfo.drawPlayer.headRotation, Vector2.Zero, 1f, drawInfo.playerEffect);
+            DrawData item = new DrawData(goggleTexture, vec5, goggleTexture.Frame(), drawInfo.colorArmorHead * (1f - drawInfo.shadow), drawInfo.drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect);
             drawInfo.DrawDataCache.Add(item);
         }
     }

@@ -535,3 +535,7 @@ Configs: {
 		}
 	}
 }
+
+SetBonuses: {
+	Shogun: "This is a thingy"
+}

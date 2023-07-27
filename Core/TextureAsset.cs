@@ -13,6 +13,14 @@ public struct TextureAsset
         Texture = ModContent.Request<Texture2D>(Path, AssetRequestMode.ImmediateLoad).Value;
     }
 
+    public static TextureAsset[] LoadArray(string path, int count, int start = 0)
+    {
+        TextureAsset[] assets = new TextureAsset[count - start];
+        for (int i = 0; i < assets.Length; i++)
+            assets[i] = new TextureAsset(path + (i + start));
+        return assets;
+    }
+
     public static implicit operator string(TextureAsset asset) => asset.Path;
     public static implicit operator Texture2D(TextureAsset asset) => asset.Texture;
 }
