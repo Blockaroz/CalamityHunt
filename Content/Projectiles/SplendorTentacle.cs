@@ -46,6 +46,7 @@ namespace CalamityHunt.Content.Projectiles
                 return;
             }
 
+
             int count = Main.projectile.Count(n => n.active && n.type == Type && n.owner == Player.whoAmI);
             Index = 0;
 
@@ -64,8 +65,11 @@ namespace CalamityHunt.Content.Projectiles
                 //}
             }
 
-            if (Time == 0)
+            if (Time == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            {
                 Attack = (int)(Index % 2);
+                Projectile.netUpdate = true;
+            }
 
             Projectile.timeLeft = 20;
             Projectile.rotation = Projectile.AngleFrom(Player.MountedCenter) - MathHelper.PiOver2;
