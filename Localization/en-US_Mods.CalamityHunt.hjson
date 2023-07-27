@@ -507,11 +507,6 @@ Config: {
 		Label: Holy Explosion Screenshake Toggle
 		Tooltip: Enables or disables the Divine Gargooptuar's holy explosion screenshake effect
 	}
-
-	DistortionToggle: {
-		Label: Reduce Slime Monsoon Distortion
-		Tooltip: Lessens the Slime Monsoon's screen distortion effect while enabled
-	}
 }
 
 LoreGeneric:
@@ -537,11 +532,6 @@ Configs: {
 		epilepsy: {
 			Label: "{$Mods.CalamityHunt.Config.HolyExplosionToggle.Label}"
 			Tooltip: "{$Mods.CalamityHunt.Config.HolyExplosionToggle.Tooltip}"
-		}
-
-		monsoonDistortion: {
-			Label: "{$Mods.CalamityHunt.Config.DistortionToggle.Label}"
-			Tooltip: "{$Mods.CalamityHunt.Config.DistortionToggle.Tooltip}"
 		}
 	}
 }

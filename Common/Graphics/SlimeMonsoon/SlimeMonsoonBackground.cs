@@ -1,5 +1,4 @@
-﻿using CalamityHunt.Common.Systems;
-using CalamityHunt.Content.Bosses.Goozma;
+﻿using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -183,7 +182,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
             }
 
-            if (Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Active && !Config.Instance.monsoonDistortion)
+            if (Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Active)
             {
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader()
                     .UseColor(Color.White)

@@ -14,10 +14,5 @@ namespace CalamityHunt.Common.Systems
         [Tooltip("$Mods.CalamityHunt.Config.HolyExplosionToggle.Tooltip")]
         public bool epilepsy { get; set; }
 
-        [Label("$Mods.CalamityHunt.Config.DistortionToggle.Label")]
-        [DefaultValue(false)]
-        [Tooltip("$Mods.CalamityHunt.Config.DistortionToggle.Tooltip")]
-        public bool monsoonDistortion { get; set; }
-
     }
 }
