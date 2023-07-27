@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Content.Items.Rarities;
+﻿using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Items.Rarities;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -50,5 +51,13 @@ namespace CalamityHunt.Content.Items.Lore
         public override bool CanUseItem(Player player) => false;
 
         public override Color? GetAlpha(Color lightColor) => Color.White;
+
+        public override void AddRecipes()
+        {
+                CreateRecipe()
+                    .AddIngredient(Goozma.trophyTypes[0])
+                    .AddTile(TileID.Bookcases)
+                    .Register();
+        }
     }
 }

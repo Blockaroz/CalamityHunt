@@ -135,7 +135,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public int Music2;
 
         private static int relicType;
-        private static int[] trophyTypes;
+        public static int[] trophyTypes;
 
         public override void Load()
         {
