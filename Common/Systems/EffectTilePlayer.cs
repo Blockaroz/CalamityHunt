@@ -22,7 +22,7 @@ namespace CalamityHunt.Common.Systems
         public override void PostUpdateMiscEffects()
         {
             if (GoozmaSystem.GoozmaActive)
-                effectorCount["SlimeMonsoon"] = 5;
+                effectorCount["SlimeMonsoon"] = 60;
 
             Player.ManageSpecialBiomeVisuals("HuntOfTheOldGods:SlimeMonsoon", effectorCount["SlimeMonsoon"] > 0, Player.Center);
         }
