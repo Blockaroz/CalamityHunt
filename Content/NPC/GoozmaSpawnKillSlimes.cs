@@ -190,7 +190,7 @@ namespace CalamityHunt.Content.NPCs
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCryoSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/IrradiatedSlime").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingIrradiatedSlime>());
-                        else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CharredSlime").Type)
+                        else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/InfernalCongealment").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCharredSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/PerennialSlime").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingPerennialSlime>());
