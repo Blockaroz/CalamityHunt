@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Content.Items.Materials;
+using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using CalamityHunt.Common.Systems.Particles;
@@ -27,7 +28,14 @@ namespace CalamityHunt.Content.Items.Consumable
 			Item.UseSound = SoundID.Item3;
 			Item.maxStack = Item.CommonMaxStack;
 			Item.consumable = true;
-			Item.rare = ItemRarityID.Orange;
+			Item.rare = ModContent.RarityType<VioletRarity>();
+			if (ModLoader.HasMod("CalamityMod"))
+			{
+			   ModRarity r;
+			    Mod calamity = ModLoader.GetMod("CalamityMod");
+			    calamity.TryFind<ModRarity>("Violet", out r);
+			    Item.rare = r.Type;
+			}
 			Item.value = Item.buyPrice(gold: 1);
 
 			Item.healLife = 225; // While we change the actual healing value in GetHealLife, Item.healLife still needs to be higher than 0 for the item to be considered a healing item
@@ -48,6 +56,16 @@ namespace CalamityHunt.Content.Items.Consumable
             }
             else
                 orig(self, sItem);
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe(4)
+                .AddIngredient(ItemID.RestorationPotion, 4)
+                .AddIngredient<EntropyMatter>()
+                .AddTile(TileID.Bottles)
+                .Register()
+                .DisableDecraft();
         }
     }
 }

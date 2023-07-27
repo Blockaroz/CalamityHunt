@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Content.Items.Materials;
+using CalamityHunt.Content.Items.Rarities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -38,7 +39,14 @@ namespace CalamityHunt.Content.Items.Dyes
             Item.height = 20;
             Item.maxStack = 99;
             Item.value = Item.sellPrice(0, 1, 50);
-            Item.rare = ItemRarityID.LightRed;
+            Item.rare = ModContent.RarityType<VioletRarity>();
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                ModRarity r;
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.TryFind<ModRarity>("Violet", out r);
+                Item.rare = r.Type;
+            }
         }
 
         public override void AddRecipes()
