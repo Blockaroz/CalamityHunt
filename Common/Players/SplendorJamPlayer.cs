@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
@@ -80,15 +81,15 @@ namespace CalamityHunt.Common.Players
         {
             if (rainbow)
             {
-                gooTime++;
+                gooTime = (gooTime + 1) % 60;
+
                 if (drawInfo.shadow != 0)
                 {
+                    Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
                     if (Main.rand.NextBool(8) && stressedOut)
                     {
-                        Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, Color.White, 1f);
-                        hue.data = gooTime;
+                        Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, goo, 1f);
                     }
-                    Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
                     r = goo.R;
                     g = goo.G;
                     b = goo.B;
@@ -104,7 +105,10 @@ namespace CalamityHunt.Common.Players
         {
             if (active)
             {
-                tentacleCount = 1;
+                tentacleCount = stressedOut ? tentacleCount : (int)(1 + stress * 4f);
+
+                if (!Player.HasBuff<SplendorJamBuff>())
+                    Player.AddBuff(ModContent.BuffType<SplendorJamBuff>(), 5, false);
 
                 for (int i = 0; i < slimes.Length; i++)
                 {
@@ -121,7 +125,6 @@ namespace CalamityHunt.Common.Players
                         Player.GetDamage(DamageClass.Generic).Flat += 12f;
                         Player.GetCritChance(DamageClass.Generic) += 3f;
                         Player.GetArmorPenetration(DamageClass.Generic) += 10f;
-                        tentacleCount = 3;
                     }
                     else if (checkStress >= 0.75 && checkStress < 1)
                     {
@@ -129,7 +132,6 @@ namespace CalamityHunt.Common.Players
                         Player.GetDamage(DamageClass.Generic).Flat += 16f;
                         Player.GetCritChance(DamageClass.Generic) += 7f;
                         Player.GetArmorPenetration(DamageClass.Generic) += 20f;
-                        tentacleCount = 5;
 
                     }
                     else if (checkStress >= 1)
@@ -138,7 +140,6 @@ namespace CalamityHunt.Common.Players
                         Player.GetDamage(DamageClass.Generic).Flat += 20f;
                         Player.GetCritChance(DamageClass.Generic) += 10f;
                         Player.GetArmorPenetration(DamageClass.Generic) += 40f;
-                        tentacleCount = 8;
                     }
                     else
                     {
@@ -146,7 +147,6 @@ namespace CalamityHunt.Common.Players
                         Player.GetDamage(DamageClass.Generic).Flat += 8f;
                         Player.GetCritChance(DamageClass.Generic) += 1f;
                         Player.GetArmorPenetration(DamageClass.Generic) += 5f;
-                        tentacleCount = 1;
                     }
                 }
                 if (stressedOut && stress <= 0)

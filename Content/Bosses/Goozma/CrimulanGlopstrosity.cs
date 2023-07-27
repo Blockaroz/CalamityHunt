@@ -498,7 +498,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 Vector2 airTarget = Target.Center - Vector2.UnitY * 320;
 
                 squishFactor = Vector2.Lerp(squishFactor, Vector2.One, 0.1f);
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(airTarget).SafeNormalize(Vector2.Zero) * Math.Max(2, NPC.Distance(airTarget)) * 0.1f, 0.06f) * Utils.GetLerpValue(waitTime + 150, waitTime + 135, Time, true);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(airTarget).SafeNormalize(Vector2.Zero) * Math.Max(2, NPC.Distance(airTarget)) * 0.1f, 0.06f) * Utils.GetLerpValue(doubleWaitTime + 150, doubleWaitTime + 135, Time, true);
                 saveTarget = Target.Center;
                 NPC.rotation = NPC.rotation.AngleLerp(NPC.Top.AngleTo(NPC.FindSmashSpot(saveTarget)) - MathHelper.PiOver2, 0.5f) * 0.4f;
             }
@@ -508,7 +508,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 useNinjaSlamFrame = true;
 
                 squishFactor = new Vector2(0.5f, 1.5f);
-                NPC.Center = Vector2.Lerp(NPC.Center, NPC.FindSmashSpot(saveTarget) + Vector2.UnitY, Utils.GetLerpValue(waitTime + 173, waitTime + 180, Time, true));
+                NPC.Center = Vector2.Lerp(NPC.Center, NPC.FindSmashSpot(saveTarget) + Vector2.UnitY, Utils.GetLerpValue(doubleWaitTime + 173, doubleWaitTime + 180, Time, true));
                 useNinjaSlamFrame = true;
             }
 

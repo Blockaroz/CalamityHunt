@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using Humanizer;
 using Microsoft.Xna.Framework;
@@ -32,6 +33,7 @@ namespace CalamityHunt.Content.Projectiles
         public ref float Stressed => ref Projectile.ai[1];
         public override void AI()
         {
+            Color gooColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).Value;
             if (Time == 1 && Stressed == 0)
             {
                 SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
@@ -41,8 +43,7 @@ namespace CalamityHunt.Content.Projectiles
                 for (int i = 0; i < 5; i++)
                 {
                     Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
-                    Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, 0.5f + (Main.rand.NextFloat()/2));
-                    goo.data = 1f;
+                    Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, gooColor, 0.5f + (Main.rand.NextFloat()/2));
                 }
             }
             else if (Time == 1 && Stressed > 0)
@@ -54,8 +55,7 @@ namespace CalamityHunt.Content.Projectiles
                 for (int i = 0; i < 5; i++)
                 {
                     Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
-                    Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, 1f + (Main.rand.NextFloat() / 2));
-                    goo.data = 1f;
+                    Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, gooColor, 1f + (Main.rand.NextFloat() / 2));
                 }
             }
             if (Time > 20)

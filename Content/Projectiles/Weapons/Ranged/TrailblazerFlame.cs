@@ -49,6 +49,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             {
                 Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, Projectile.velocity * Main.rand.NextFloat(), glowColor, (1f + Main.rand.NextFloat()));
                 hue.data = Projectile.localAI[0];
+                hue.emit = true;
             }
 
             if (Main.rand.NextBool(3))

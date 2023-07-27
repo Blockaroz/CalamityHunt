@@ -188,7 +188,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             vec5 = vec5.Floor();
             vec5.ApplyVerticalOffset(drawInfo);
 
-            DrawData item = new DrawData(goggleTexture, vec5, goggleTexture.Frame(), drawInfo.colorArmorHead * (1f - drawInfo.shadow), drawInfo.drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect);
+            DrawData item = new DrawData(goggleTexture, vec5, goggleTexture.Frame(), drawInfo.colorArmorHead * (1f - drawInfo.shadow), drawInfo.drawPlayer.headRotation, new Vector2((int)drawInfo.headVect.X, (int)drawInfo.headVect.Y), 1f, drawInfo.playerEffect);
             drawInfo.DrawDataCache.Add(item);
         }
     }

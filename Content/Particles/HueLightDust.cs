@@ -37,10 +37,9 @@ namespace CalamityHunt.Content.Particles
             if (!Collision.SolidTiles(position, 2, 2))
             {
                 scale *= 1.0004f;
-                if (WorldGen.InWorld((int)(position.X / 16), (int)(position.X / 16)))
-                    Lighting.AddLight(position, color.ToVector3() * 0.2f * scale);
+                Lighting.AddLight(position, color.ToVector3() * 0.2f * scale);
             }
-            
+
             if (Main.rand.NextBool(150) && scale > 0.25f)
             {
                 Particle hue = NewParticle(Type, position, Main.rand.NextVector2Circular(1, 1), color * 0.99f, MathHelper.Clamp(scale * 2f, 0.1f, 1.5f));

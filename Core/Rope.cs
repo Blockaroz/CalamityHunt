@@ -65,6 +65,9 @@ public class Rope
 
         for (int i = 0; i < segments.Count; i++)
         {
+            if (segments[i].position.HasNaNs())
+                segments[i].position = segments[0].position;
+
             Vector2 velocity = (segments[i].position - segments[i].oldPosition) / (1f + damping) + gravity;
             velocity = TileCollision(segments[i].position, velocity);
 
@@ -85,10 +88,10 @@ public class Rope
             Vector2 changeDirection = Vector2.Zero;
 
             if (dist > segmentLength)
-                changeDirection = Vector2.Normalize(segments[i].position - segments[i + 1].position);
+                changeDirection = (segments[i].position - segments[i + 1].position).SafeNormalize(Vector2.Zero);
 
             else if (dist < segmentLength)
-                changeDirection = Vector2.Normalize(segments[i + 1].position - segments[i].position);
+                changeDirection = (segments[i + 1].position - segments[i].position).SafeNormalize(Vector2.Zero);
 
             Vector2 changeAmount = changeDirection * error;
             if (i != 0)

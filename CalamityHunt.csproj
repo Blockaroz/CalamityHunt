@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Textures\Empty.png" />
+    <None Remove="Content\Buffs\SplendorJamBuff.png" />
     <None Remove="Content\Items\Armor\Shogun\ShogunWings.png" />
     <None Remove="Content\Items\Weapons\Ranged\TrailblazerGoggles.png" />
     <None Remove="Content\Items\Weapons\Ranged\Trailblazer_BackAntenna.png" />

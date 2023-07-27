@@ -493,6 +493,11 @@ Buffs: {
 		DisplayName: Paladin Palanquin Buff
 		Description: It's all squishy in here
 	}
+
+	SplendorJamBuff: {
+		DisplayName: Splendor Jam Buff
+		Description: Mods.CalamityHunt.Buffs.SplendorJamBuff.Description
+	}
 }
 
 Tiles: {
@@ -536,6 +541,4 @@ Configs: {
 	}
 }
 
-SetBonuses: {
-	Shogun: "This is a thingy"
-}
+SetBonuses.Shogun: This is a thingy
