@@ -541,9 +541,6 @@ Configs: {
 	}
 }
 
-<<<<<<< Updated upstream
-SetBonuses.Shogun: This is a thingy
-=======
 SetBonuses.Shogun: 
 	'''
 	does it give stats?
@@ -553,4 +550,3 @@ SetBonuses.Shogun:
 	debuff immunities (implement)
 	is there anything else?? please tell me if so, then i can draft this out
 	'''
->>>>>>> Stashed changes
