@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
@@ -76,6 +77,9 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
                 soul.noGravity = true;
             }
             player.GetModPlayer<AuricSoulPlayer>().goozmaSoul = true;
+
+            //SoundStyle jingle = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/AuricSoulJingle");
+            //SoundEngine.PlaySound(jingle, player.Center); //fix? if implement at all?
 
             return false;
         }

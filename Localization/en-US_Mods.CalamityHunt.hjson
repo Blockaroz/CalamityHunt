@@ -541,4 +541,16 @@ Configs: {
 	}
 }
 
+<<<<<<< Updated upstream
 SetBonuses.Shogun: This is a thingy
+=======
+SetBonuses.Shogun: 
+	'''
+	does it give stats?
+	flight (show stats? check snow ruffian)
+	tabi dash + dash enhancer 
+	[s] to fastfall
+	debuff immunities (implement)
+	is there anything else?? please tell me if so, then i can draft this out
+	'''
+>>>>>>> Stashed changes
