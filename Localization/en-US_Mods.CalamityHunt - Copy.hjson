@@ -20,8 +20,8 @@ Items: {
 	}
 
 	EntropyMatter: {
-		DisplayName: Plaslime Condensate 
-		Tooltip: "'The purest, densest, and tastiest possible combination of gel'"
+		DisplayName: Entropy Matter
+		Tooltip: "'The purest, densest possible combination of gel'"
 	}
 
 	ShatteredHeartOfDarkness: {
@@ -278,7 +278,7 @@ Items: {
 	}
 
 	EntropicTorch: {
-		DisplayName: Plaslime Torch
+		DisplayName: Entropic Torch
 		Tooltip: ""
 	}
 
@@ -309,13 +309,13 @@ Items: {
 		DisplayName: Fission Flyer
 		Tooltip:
 			'''
-			Chucks a chakram that splits into a volley of 3 Plaslime Razorblades
+			Chucks a chakram that splits into a volley of 3 Entropy Razorblades
 			Stealth strikes split into more Razorblades and leave behind a colossal blade 
 			'''
 	}
 
 	GoozmaAuricSoul: {
-		DisplayName: Plaslime Auric Soul
+		DisplayName: Entropic Auric Soul
 		Tooltip: ""
 	}
 
@@ -359,7 +359,7 @@ Items: {
 	}
 
 	EntropicSlimeConcentration: {
-		DisplayName: Sludge Focus
+		DisplayName: Entropic Slime Concentration
 		Tooltip:
 			'''
 			Use on a Slime Ninja Statue with 4 Slime Statues present to summon Goozma directly
