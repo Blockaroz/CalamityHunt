@@ -558,6 +558,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int jumpCount = (int)DifficultyBasedValue(8, 9, 10, 11, 12);
             int jumpTime = (int)DifficultyBasedValue(50, 45, 40, 35);
+            float jumpHeight = NPC.height * 3f;
 
             if (Time < 35)
                 squishFactor = new Vector2(1f + (float)Math.Pow(Utils.GetLerpValue(5, 35, Time, true), 2) * 0.5f, 1f - (float)Math.Pow(Utils.GetLerpValue(5, 35, Time, true), 2) * 0.5f);
@@ -578,7 +579,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
                 else if (localTime < (int)(jumpTime * 0.72f))
                 {
-                    Vector2 midPoint = new Vector2((NPC.Center.X + saveTarget.X) / 2f, NPC.Center.Y - NPC.height * 2f);
+                    Vector2 midPoint = new Vector2((NPC.Center.X + saveTarget.X) / 2f, NPC.Center.Y - jumpHeight);
                     Vector2 jumpTarget = Vector2.Lerp(Vector2.Lerp(NPC.Center, midPoint, Utils.GetLerpValue(0, jumpTime * 0.3f, localTime, true)), Vector2.Lerp(midPoint, NPC.FindSmashSpot(saveTarget), Utils.GetLerpValue(jumpTime * 0.1f, jumpTime * 0.6f, localTime, true)), Utils.GetLerpValue(0, jumpTime * 0.6f, localTime, true));
                     NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(NPC.FindSmashSpot(jumpTarget)).SafeNormalize(Vector2.Zero) * NPC.Distance(NPC.FindSmashSpot(jumpTarget)) * 0.3f * Utils.GetLerpValue(0, jumpTime * 0.7f, localTime, true), Utils.GetLerpValue(0, jumpTime * 0.7f, localTime, true));
                     NPC.rotation = -NPC.velocity.Y * 0.008f * Math.Sign(NPC.velocity.X);

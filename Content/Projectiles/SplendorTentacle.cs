@@ -75,7 +75,7 @@ namespace CalamityHunt.Content.Projectiles
             Projectile.rotation = Projectile.AngleFrom(Player.MountedCenter) - MathHelper.PiOver2;
             NPC target = Projectile.FindTargetWithinRange(320);
 
-            float trackSpeed = 0.2f;
+            float trackSpeed = 0.05f;
             Vector2 homePos = Player.MountedCenter - new Vector2(180, 0).RotatedBy((MathHelper.Pi / count * Index) * Player.direction * 1.5f - MathHelper.PiOver2)
                 - Player.velocity * 2 + new Vector2(MathF.Sin(Time * 0.05f + Index * 1.5f), MathF.Cos(Time * 0.05f + Index * 1.5f)) * 5f;
 
