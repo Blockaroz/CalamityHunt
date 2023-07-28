@@ -558,7 +558,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             int jumpCount = (int)DifficultyBasedValue(8, 9, 10, 11, 12);
             int jumpTime = (int)DifficultyBasedValue(50, 45, 40, 35);
-            float jumpHeight = NPC.height * 3f;
+            float jumpHeight = NPC.height * 6f;
 
             if (Time < 35)
                 squishFactor = new Vector2(1f + (float)Math.Pow(Utils.GetLerpValue(5, 35, Time, true), 2) * 0.5f, 1f - (float)Math.Pow(Utils.GetLerpValue(5, 35, Time, true), 2) * 0.5f);

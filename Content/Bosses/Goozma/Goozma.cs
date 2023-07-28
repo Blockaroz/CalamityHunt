@@ -1626,7 +1626,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (NPC.Distance(Target.Center) > 100)
                     {
-                        if (Time % 80 < 35 && Time % 3 == 1)
+                        if (Time % 80 < 25 && Time % 3 == 1)
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, -NPC.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(2f), ModContent.ProjectileType<RainbowLaser>(), GetDamage(1), 0, ai0: -Main.rand.Next(40, 45), ai1: NPC.whoAmI);
 
                     }

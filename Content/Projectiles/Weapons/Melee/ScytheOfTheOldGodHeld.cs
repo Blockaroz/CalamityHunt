@@ -76,9 +76,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             bool canKill = false;
 
             SoundStyle swingSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwing;
-            swingSound.Pitch = -0.1f;
+            swingSound.Volume *= 0.7f;
             SoundStyle strongSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwingStrong;
-            strongSound.Pitch = -0.1f;
+            strongSound.Volume *= 0.7f;
 
             float speed = (Player.itemAnimationMax / 35f) / (0.5f + Player.GetTotalAttackSpeed(DamageClass.Melee) * 0.5f);
 
@@ -145,7 +145,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     if (Time == (int)(20 * speed))
                     {
                         shakeStrength = 1f;
-                        SoundEngine.PlaySound(strongSound.WithPitchOffset(0.35f), Projectile.Center);
+                        SoundEngine.PlaySound(strongSound.WithPitchOffset(0.25f), Projectile.Center);
                     }
 
                     if (Time > (int)(55 * speed))

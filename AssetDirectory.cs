@@ -26,6 +26,14 @@ namespace CalamityHunt
             {
                 public static TextureAsset GoozmaGodEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpecialEye");
                 public static TextureAsset GoozmaEyeball = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GoozmaSclera");
+                public static TextureAsset[] SwirlingRocks = TextureAsset.LoadArray($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/SwirlingRocks_", 2);
+            }
+            
+            public struct Bars
+            {
+                public static TextureAsset Stress = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/StressBar");
+                public static TextureAsset StressFill = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/StressBarFill");
+                public static TextureAsset StressTopped = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/StressBarTopped");
             }
 
             public struct SwordSwing
@@ -58,7 +66,8 @@ namespace CalamityHunt
                 {
                     MaxInstances = 0,
                     PitchVariance = 0.1f
-                };
+                };               
+                public static SoundStyle GoomoireWindLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoomoireWindLoop");
             }
 
             public struct Goozma

@@ -202,13 +202,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public void HandleSound()
         {
-            SoundStyle theSound = SoundID.DD2_BookStaffTwisterLoop;//new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWindLoop");
+            SoundStyle theSound = AssetDirectory.Sounds.Weapon.GoomoireWindLoop;
             theSound.IsLooped = true;
 
             windPitch = Projectile.ai[2] - 0.8f;
             windVolume = 0.33f * Projectile.ai[2];
             bool active = SoundEngine.TryGetActiveSound(windSound, out ActiveSound sound);
-            if ((!active || !windSound.IsValid))
+            if (!active || !windSound.IsValid)
                 windSound = SoundEngine.PlaySound(theSound.WithVolumeScale(1.1f), Projectile.Center);
 
             if (active)

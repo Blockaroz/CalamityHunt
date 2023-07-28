@@ -112,7 +112,7 @@ namespace CalamityHunt.Common.Players
 
                 for (int i = 0; i < slimes.Length; i++)
                 {
-                    Player.npcTypeNoAggro[i] = true;
+                    //Player.npcTypeNoAggro[slimes[i]] = true;
                 }
                 if (stress < 1f && !stressedOut)
                     stress += 0.0001f;

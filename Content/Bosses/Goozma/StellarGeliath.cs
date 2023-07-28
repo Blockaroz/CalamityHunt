@@ -849,6 +849,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     
                     color = Color.White * (Utils.GetLerpValue(50, 20, Time, true) + Utils.GetLerpValue(540, 570, Time, true));
 
+                    if (Time > 570 && Time < 680)
+                    {
+                        Texture2D swirlingRock0 = AssetDirectory.Textures.Extras.SwirlingRocks[0];
+                        Texture2D swirlingRock1 = AssetDirectory.Textures.Extras.SwirlingRocks[1];
+                        spriteBatch.Draw(swirlingRock0, NPC.Center - screenPos, swirlingRock0.Frame(), Color.White, Main.GlobalTimeWrappedHourly * 1.5f, swirlingRock0.Size() * 0.5f, NPC.scale * 0.25f, 0, 0);
+                        spriteBatch.Draw(swirlingRock1, NPC.Center - screenPos, swirlingRock1.Frame(), Color.White, Main.GlobalTimeWrappedHourly * 1.8f, swirlingRock1.Size() * 0.5f, NPC.scale * 0.25f, 0, 0);
+                    }
+
                     Texture2D shockRing = AssetDirectory.Textures.ShockRing;
 
                     discScale = oldDiscScale * ((float)Math.Cbrt(Utils.GetLerpValue(70, 0, Time, true) + Utils.GetLerpValue(540, 580, Time, true)) + Utils.GetLerpValue(600, 700, Time, true) * Utils.GetLerpValue(640, 610, Time, true));
