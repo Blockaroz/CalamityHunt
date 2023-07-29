@@ -319,7 +319,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if ((Time - 70) % 150 == 25)
                         SpawnConstellation(1, 10);
                     if ((Time - 70) % 150 == 45)
-                        SpawnConstellation(2, 8);
+                        SpawnConstellation(2, 8);                    
+                    
+                    if ((Time - 70) % 150 == 25)
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave.WithVolumeScale(0.7f), NPC.Center);
+                    if ((Time - 70) % 150 == 125)
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationForm.WithVolumeScale(0.7f), NPC.Center);
                 }
             }
 
@@ -334,7 +339,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void SpawnConstellation(int checkType, int lineCount)
         {
-            SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave, NPC.Center);
             switch (checkType)
             {
                 case 0:

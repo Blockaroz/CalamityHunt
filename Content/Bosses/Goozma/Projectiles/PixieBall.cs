@@ -175,37 +175,25 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Time++;
         }
 
-        //public static SlotId auraSound;
-        //public static float volume;
+        public LoopingSound auraSound;
+        public float volume;
 
-        //public void HandleSound()
-        //{
-        //    SoundStyle warningSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWarning");
-        //    warningSound.MaxInstances = 0;
+        public void HandleSound()
+        {
+            if (Projectile.localAI[1] > 8f)
+            {
+                Projectile.localAI[1] = 0;
+                float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f);
+                float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, -2f, 2f) * Projectile.scale;
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.3f), Projectile.Center);
+            }
 
-        //    if (Projectile.localAI[1] > 8f)
-        //    {
-        //        Projectile.localAI[1] = 0;
-        //        float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f);
-        //        float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, -2f, 2f) * Projectile.scale;
-        //        SoundEngine.PlaySound(warningSound.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.3f), Projectile.Center);
-        //    }
+            volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
 
-        //    SoundStyle pixieBallSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixieBallLoop");
-        //    pixieBallSound.IsLooped = true;
-
-        //    volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
-
-        //    bool active = SoundEngine.TryGetActiveSound(auraSound, out ActiveSound sound);
-        //    if (!active || !auraSound.IsValid)
-        //        auraSound = SoundEngine.PlaySound(pixieBallSound, Projectile.Center);
-
-        //    else if (active)
-        //    {
-        //        sound.Volume = volume;
-        //        sound.Position = Projectile.Center;
-        //    }
-        //}
+            if (auraSound == null)
+                auraSound = new LoopingSound(AssetDirectory.Sounds.Goozma.PixieBallLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            auraSound.Update(() => Projectile.Center, () => volume, () => 0f);
+        }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -228,13 +216,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public static Texture2D beachBallOverlay;
         public static Texture2D hitMeSign;
-        public static Texture2D hitMeArrow;
+        public static Texture2D hitMeHand;
 
         public override void Load()
         {
             beachBallOverlay = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieBeachBall");
             hitMeSign = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeSign");
-            hitMeArrow = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeSignArrow");
+            hitMeHand = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeHand");
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -309,11 +297,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 Vector2 offset = new Vector2(4, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
                 Main.EntitySpriteDraw(hitMeSign, signPosition + offset - Vector2.UnitY * (hitMeSign.Height + 30), hitMeSign.Frame(), bloomColor * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeSign.Size() * 0.5f, 2f, 0, 0);
-                Main.EntitySpriteDraw(hitMeArrow, signPosition + offset, hitMeArrow.Frame(), bloomColor * influence, arrowRotation, hitMeArrow.Size() * new Vector2(0.3f, 0.5f), 2f, 0, 0);
+                Main.EntitySpriteDraw(hitMeHand, signPosition + offset, hitMeHand.Frame(), bloomColor * influence, arrowRotation, hitMeHand.Size() * new Vector2(0.3f, 0.5f), 2f, 0, 0);
             }
 
             Main.EntitySpriteDraw(hitMeSign, signPosition - Vector2.UnitY * (hitMeSign.Height + 30), hitMeSign.Frame(), new Color(255, 255, 255, 0) * influenceDark, MathF.Sin(Time * 0.15f) * 0.1f, hitMeSign.Size() * 0.5f, 2f, 0, 0);
-            Main.EntitySpriteDraw(hitMeArrow, signPosition, hitMeArrow.Frame(), new Color(255, 255, 255, 0) * influenceDark, arrowRotation, hitMeArrow.Size() * new Vector2(0.3f, 0.5f), 2f, 0, 0);
+            Main.EntitySpriteDraw(hitMeHand, signPosition, hitMeHand.Frame(), new Color(255, 255, 255, 0) * influenceDark, arrowRotation, hitMeHand.Size() * new Vector2(0.3f, 0.5f), 2f, 0, 0);
 
         }
     }

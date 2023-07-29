@@ -32,7 +32,10 @@ namespace CalamityHunt.Common.Players
                 trailBlazerVolume += Player.ItemAnimationActive ? 0.2f : -0.05f;
             }
             else
+            {
+                trailBlazerVolume -= 0.05f;
                 trailBlazerInUse = false;
+            }
 
             trailBlazerVolume = MathHelper.Clamp(trailBlazerVolume, 0f, 0.6f);
 

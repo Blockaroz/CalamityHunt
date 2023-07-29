@@ -110,15 +110,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
         }
 
         public LoopingSound squartSound;
+        public float volume;
+        public float pitch;
 
         public void HandleSound()
         {
-            float volume = Utils.GetLerpValue(10, 25, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 5, Time, true) * 0.6f;
-            float pitch = Utils.GetLerpValue(0, 5, Time, true);
+            volume = Utils.GetLerpValue(0, 8, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 5, Time, true) * 0.6f;
+            pitch = Utils.GetLerpValue(0, 8, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 5, Time, true) - 0.8f;
             if (squartSound == null)
                 squartSound = new LoopingSound(AssetDirectory.Sounds.Weapon.SludgeShakerFiringLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
-            squartSound.Update(() => Projectile.Center, () => volume, () => 0f);
+            squartSound.Update(() => Projectile.Center, () => volume, () => pitch);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => false;
