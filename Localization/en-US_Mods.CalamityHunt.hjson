@@ -20,7 +20,7 @@ Items: {
 	}
 
 	EntropyMatter: {
-		DisplayName: Plaslime Condensate 
+		DisplayName: Plaslime Condensate
 		Tooltip: "'The purest, densest, and tastiest possible combination of gel'"
 	}
 
@@ -541,7 +541,7 @@ Configs: {
 	}
 }
 
-SetBonuses.Shogun: 
+SetBonuses.Shogun:
 	'''
 	does it give stats?
 	flight (show stats? check snow ruffian)

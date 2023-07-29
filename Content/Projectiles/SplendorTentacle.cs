@@ -47,7 +47,7 @@ namespace CalamityHunt.Content.Projectiles
             }
 
 
-            int count = Main.projectile.Count(n => n.active && n.type == Type && n.owner == Player.whoAmI);
+            int count = Main.projectile.Count(n => n.active && n.type == Type && n.owner == Player.whoAmI && n.whoAmI != Projectile.whoAmI);
             Index = 0;
 
             foreach (Projectile proj in Main.projectile.Where(n => n.active && n.owner == Player.whoAmI && n.type == Type))
@@ -76,8 +76,8 @@ namespace CalamityHunt.Content.Projectiles
             NPC target = Projectile.FindTargetWithinRange(320);
 
             float trackSpeed = 0.05f;
-            Vector2 homePos = Player.MountedCenter - new Vector2(180, 0).RotatedBy((MathHelper.Pi / count * Index) * Player.direction * 1.5f - MathHelper.PiOver2)
-                - Player.velocity * 2 + new Vector2(MathF.Sin(Time * 0.05f + Index * 1.5f), MathF.Cos(Time * 0.05f + Index * 1.5f)) * 5f;
+            Vector2 homePos = Player.MountedCenter - new Vector2(110, 0).RotatedBy(-MathHelper.PiOver2 - MathHelper.PiOver2 * Player.direction * Math.Min(count, 1) + (MathHelper.Pi / Math.Max(1f, count) * Index + MathHelper.PiOver2) * Player.direction)
+                - Player.velocity * 10 + new Vector2(MathF.Sin(Time * 0.05f + Index * 1.5f), MathF.Cos(Time * 0.05f + Index * 1.5f)) * 5f;
 
             if (target != null)
             {
@@ -117,7 +117,7 @@ namespace CalamityHunt.Content.Projectiles
 
                         if (Projectile.Distance(homePos) < 30)
                         {
-
+                            //LIFESTEAL!!!!!!!!!
                         }
 
                         if ((TimeInner > 120 || Projectile.Distance(target.Center) > 300) && Main.netMode != NetmodeID.MultiplayerClient)
@@ -152,11 +152,11 @@ namespace CalamityHunt.Content.Projectiles
             Time++;
 
             if (tentacle == null)
-                tentacle = new Rope(Projectile.Center, Player.MountedCenter, 30, 11f, Vector2.Zero, 0.05f);
+                tentacle = new Rope(Projectile.Center, Player.MountedCenter, 30, 11f, Vector2.Zero, 0.05f, 30);
 
             tentacle.StartPos = Projectile.Center;
             tentacle.EndPos = Player.MountedCenter;
-            tentacle.gravity = -Vector2.UnitX * Player.direction * 0.1f - Vector2.UnitY * 0.05f;
+            tentacle.gravity = -Vector2.UnitX * Player.direction * 0.05f + Vector2.UnitY.RotatedBy(Projectile.rotation) * 0.05f + Player.velocity * 0.05f;
             tentacle.Update();
 
             if (Projectile.Distance(Player.MountedCenter) > 300)
@@ -187,7 +187,7 @@ namespace CalamityHunt.Content.Projectiles
                     if (i == points.Count - 1)
                         tentacleFrame = texture.Frame(1, 5, 0, 0);
 
-                    Vector2 stretch = new Vector2((1.1f - (float)i / points.Count * 0.6f) * Projectile.scale, 1f);
+                    Vector2 stretch = new Vector2((1.1f - (float)i / points.Count * 0.6f) * Projectile.scale, i > points.Count - 2 ? points[i].Distance(points[i - 1]) / (tentacleFrame.Height - 2f) : 1f);
                     Main.EntitySpriteDraw(texture, points[i] - Main.screenPosition, tentacleFrame, Color.Lerp(Lighting.GetColor(Player.Center.ToTileCoordinates()), Color.White, 1f - (float)i / points.Count), rot, tentacleFrame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);              
                 }
 

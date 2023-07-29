@@ -541,7 +541,7 @@ Configs: {
 	}
 }
 
-SetBonuses.Shogun: 
+SetBonuses.Shogun:
 	'''
 	does it give stats?
 	flight (show stats? check snow ruffian)

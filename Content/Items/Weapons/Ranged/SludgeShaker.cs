@@ -10,7 +10,12 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 {
     public class SludgeShaker : ModItem
     {
-		public override void SetDefaults()
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.SkipsInitialUseSound[Type] = true;
+        }
+
+        public override void SetDefaults()
 		{
 			Item.width = 116;
 			Item.height = 76;

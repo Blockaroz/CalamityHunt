@@ -16,6 +16,11 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 {
     public class Trailblazer : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.SkipsInitialUseSound[Type] = true;
+        }
+
         public override void SetDefaults()
 		{
 			Item.width = 90;
@@ -26,10 +31,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 			Item.useTime = 3;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 10f;
-			SoundStyle useSound = SoundID.DD2_DrakinShot;
-			useSound.Pitch = 0.5f;
-			useSound.MaxInstances = 0;
-			Item.UseSound = useSound;
+			Item.UseSound = AssetDirectory.Sounds.Weapon.TrailBlazerFireStart;
 			Item.channel = true;
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<TrailblazerFlame>();
@@ -49,12 +51,6 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 		}
 
         public override Vector2? HoldoutOffset() => new Vector2(-16f, 0f);
-
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-            Projectile.NewProjectileDirect(source, position, velocity.RotatedBy(MathF.Sin(Main.GlobalTimeWrappedHourly * 15) * 0.1f).RotatedByRandom(0.1f) + player.velocity * 0.2f, type, damage, knockback);
-            return false;
-        }
 
         public static Texture2D backTexture;
         public static Texture2D backSwirlTexture;
