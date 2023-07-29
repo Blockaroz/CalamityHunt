@@ -39,7 +39,7 @@ namespace CalamityHunt.Content.Projectiles
                 SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
                 explodeSound.MaxInstances = 1;
                 SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.3f), Projectile.Center);
-                SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.8f), Projectile.Center);
+                SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Projectile.Center);
                 for (int i = 0; i < 5; i++)
                 {
                     Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
@@ -51,7 +51,7 @@ namespace CalamityHunt.Content.Projectiles
                 SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
                 explodeSound.MaxInstances = 1;
                 SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.3f), Projectile.Center);
-                SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.8f), Projectile.Center);
+                SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Projectile.Center);
                 for (int i = 0; i < 5; i++)
                 {
                     Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);

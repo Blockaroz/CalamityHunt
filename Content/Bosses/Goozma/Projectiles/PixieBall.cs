@@ -168,9 +168,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(25 - Time / 4f, 25 - Time / 4f), 0, glowColor, 2f + Main.rand.NextFloat(2f)).noGravity = true;
                 }
 
-            //HandleSound();
+            HandleSound();
 
-            Projectile.localAI[1] += (float)Math.Sqrt(Utils.GetLerpValue(1000, -250, Projectile.Distance(Main.npc[owner].Center), true) * 2f);
+            Projectile.localAI[1] += (float)Math.Sqrt(Utils.GetLerpValue(1000, -250, Projectile.Distance(Main.npc[owner].Center), true) * 3f);
             Projectile.localAI[0]++;
             Time++;
         }
@@ -180,12 +180,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public void HandleSound()
         {
-            if (Projectile.localAI[1] > 8f)
+            if (Projectile.localAI[1] > 10f)
             {
                 Projectile.localAI[1] = 0;
                 float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f);
                 float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, -2f, 2f) * Projectile.scale;
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.3f), Projectile.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.1f), Projectile.Center);
             }
 
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
@@ -282,27 +282,33 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             return false;
         }
 
+        public int signFrameCounter;
+        public int signFrame;
+
         public void DrawHitMeSign()
         {
-            Texture2D glow = AssetDirectory.Textures.Glow;
-
             Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.3f;
+            
+            if (signFrameCounter++ > 4)
+            {
+                signFrame = (signFrame + 1) % 8;
+                signFrameCounter = 0;
+            }
 
-            float influence = Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(300, 200, Time, true) * (0.5f + MathF.Sin(Time * 0.3f) * 0.2f);
-            float influenceDark = Utils.GetLerpValue(10, 30, Time, true) * Utils.GetLerpValue(300, 200, Time, true) * (0.8f + MathF.Sin(Time * 0.3f) * 0.2f);
-            Vector2 signPosition = new Vector2(Main.screenWidth / 2, Main.screenHeight / 3);
+            float influence = Utils.GetLerpValue(0, 30, Time, true) * (0.5f + MathF.Sin(Time * 0.3f) * 0.2f);
+            float influenceDark = Utils.GetLerpValue(10, 30, Time, true) * (0.8f + MathF.Sin(Time * 0.3f) * 0.2f);
+            float signScale = Utils.GetLerpValue(0.7f, 0.9f, Projectile.scale, true);
+            Vector2 signPosition = Projectile.Center - Main.screenPosition - new Vector2(0, 100 * Projectile.scale);
             float arrowRotation = signPosition.AngleTo(Projectile.Center - Main.screenPosition) + MathF.Sin(Time * 0.3f) * 0.1f;
 
+            Rectangle hitMeFrame = hitMeSign.Frame(1, 8, 0, signFrame);
+
+            Main.EntitySpriteDraw(hitMeSign, signPosition, hitMeFrame, new Color(255, 255, 255, 0) * influenceDark, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
             for (int i = 0; i < 8; i++)
             {
                 Vector2 offset = new Vector2(4, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
-                Main.EntitySpriteDraw(hitMeSign, signPosition + offset - Vector2.UnitY * (hitMeSign.Height + 30), hitMeSign.Frame(), bloomColor * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeSign.Size() * 0.5f, 2f, 0, 0);
-                Main.EntitySpriteDraw(hitMeHand, signPosition + offset, hitMeHand.Frame(), bloomColor * influence, arrowRotation, hitMeHand.Size() * new Vector2(0.3f, 0.5f), 2f, 0, 0);
+                Main.EntitySpriteDraw(hitMeSign, signPosition + offset, hitMeFrame, bloomColor * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
             }
-
-            Main.EntitySpriteDraw(hitMeSign, signPosition - Vector2.UnitY * (hitMeSign.Height + 30), hitMeSign.Frame(), new Color(255, 255, 255, 0) * influenceDark, MathF.Sin(Time * 0.15f) * 0.1f, hitMeSign.Size() * 0.5f, 2f, 0, 0);
-            Main.EntitySpriteDraw(hitMeHand, signPosition, hitMeHand.Frame(), new Color(255, 255, 255, 0) * influenceDark, arrowRotation, hitMeHand.Size() * new Vector2(0.3f, 0.5f), 2f, 0, 0);
-
         }
     }
 }

@@ -41,7 +41,7 @@ namespace CalamityHunt.Common.Players
 
             if (trailBlazerSound == null)
                 trailBlazerSound = new LoopingSound(AssetDirectory.Sounds.Weapon.TrailblazerFireLoop, () => trailBlazerVolume > 0.1f);
-            trailBlazerSound.Update(() => Player.MountedCenter, () => trailBlazerVolume, () => 0f);
+            trailBlazerSound.Update(() => Player.MountedCenter, () => trailBlazerVolume, () => MathF.Sin(Main.GlobalTimeWrappedHourly * 8) * 0.07f);
 
         }
     }
