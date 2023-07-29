@@ -51,8 +51,8 @@ namespace CalamityHunt.Content.Projectiles
             Projectile.velocity.X = 0;
             Projectile.velocity.Y = MathF.Sqrt(Utils.GetLerpValue(800, 0, Time, true)) * -0.1f;
 
-            if (Main.slimeRain && Time > 60)
-                Main.StopSlimeRain(true);
+            if (!Main.slimeRain)
+                Main.StartSlimeRain(false);
 
             SlimeMonsoonBackground.strengthTarget = Utils.GetLerpValue(120, 900, Time, true);
 

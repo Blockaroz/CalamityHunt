@@ -36,6 +36,7 @@ using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.Utilities;
 using static CalamityHunt.Common.Systems.DifficultySystem;
 
 namespace CalamityHunt.Content.Bosses.Goozma
@@ -186,9 +187,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public ref float Phase => ref NPC.ai[2];
         public ref NPC ActiveSlime => ref Main.npc[(int)NPC.ai[3]];
 
-        private int currentSlime;
-        private int[] nextAttack;
-
         public NPCAimedTarget Target => NPC.ai[3] < 0 ? NPC.GetTargetData() : (ActiveSlime.GetTargetData().Invalid ? NPC.GetTargetData() : ActiveSlime.GetTargetData());
 
         public enum AttackList
@@ -205,26 +203,35 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(currentSlime);
-            writer.Write(nextAttack[0]);
-            writer.Write(nextAttack[1]);
-            writer.Write(nextAttack[2]);
-            writer.Write(nextAttack[3]);
+
+            for (int i = 0; i < nextAttack.Length; i++) 
+                for (int j = 0; j < nextAttack[i].Count; j++)
+                    writer.Write(nextAttack[i][j]);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             currentSlime = reader.Read();
-            nextAttack[0] = reader.Read();
-            nextAttack[1] = reader.Read();
-            nextAttack[2] = reader.Read();
-            nextAttack[3] = reader.Read();
+
+            for (int i = 0; i < nextAttack.Length; i++)
+                for (int j = 0; j < nextAttack[i].Count; j++)
+                    nextAttack[i][j] = reader.Read();
         }
 
         public override void OnSpawn(IEntitySource source)
         {
-            nextAttack = new int[4] { -1, -1, -1, -1 };
             NPC.ai[3] = -1;
             currentSlime = -1;
+
+            //this sucks
+            nextAttack = new List<int>[]
+            {
+                new List<int> { 0, 1, 2},
+                new List<int> { 0, 1, 2},
+                new List<int> { 0, 1, 2},
+                new List<int> { 0, 1, 2}
+            };
+
             SetPhase(-1);
             headScale = 0.9f;
 
@@ -253,17 +260,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             if (Main.getGoodWorld && Main.masterMode && RevengeanceMode)
-            {
                 target.AddBuff(BuffID.VortexDebuff, 480);
-            }
         }
 
         private void ChangeWeather()
         {
-            if (Main.slimeRain)
-                Main.StopSlimeRain(false);
-
-            Main.StopRain();
+            if (!Main.slimeRain)
+                Main.StartSlimeRain(false);
 
             //Main.LocalPlayer.ManageSpecialBiomeVisuals("HuntOfTheOldGods:SlimeMonsoon", true, Main.LocalPlayer.Center);
         }
@@ -300,6 +303,33 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
             return Phase > 3 || (Phase == 3 && Time >= 300);
+        }
+
+
+        private int currentSlime;
+        private List<int>[] nextAttack;
+
+        private static readonly float SpecialAttackWeight = 0.0f; //unable to choose, therefore saved for last
+        public int GetSlimeAttack()
+        {
+            int gotten = -1;
+
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (nextAttack[currentSlime] == null || nextAttack[currentSlime].Count == 0)
+                    nextAttack[currentSlime] = new List<int> { 0, 1, 2 };
+
+                WeightedRandom<int> weightedRandom = new WeightedRandom<int>(Main.rand);
+                foreach (int j in nextAttack[currentSlime])
+                    weightedRandom.Add(j, j == 2 ? SpecialAttackWeight : 1f);
+
+                gotten = weightedRandom.Get();
+                nextAttack[currentSlime].Remove(gotten);
+
+                NPC.netUpdate = true;
+            }
+
+            return gotten;
         }
 
         public override void AI()
@@ -435,19 +465,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             }
 
                             currentSlime = (currentSlime + 1) % 4;
-                            nextAttack[currentSlime]++;
+                            int slimeAttack = GetSlimeAttack();
 
-                            for (int i = 0; i < nextAttack.Length; i++)
-                                nextAttack[i] = nextAttack[i] % 3;
+                            //for (int i = 0; i < nextAttack.Length; i++)
+                            //    nextAttack[i] = nextAttack[i] % 3;
 
                             if (Main.zenithWorld)
                             {
                                 currentSlime = Main.rand.Next(0, 4);
-                                nextAttack[currentSlime] = Main.rand.Next(0, 3);
+                                //nextAttack[currentSlime] = ;
                             }
 
-                            currentSlime = 1;
-                            nextAttack[currentSlime] = 2;
+                            //currentSlime = 1;
+                            //slimeAttack = 1;
 
                             int[] slimeTypes = new int[]
                             {
@@ -461,14 +491,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             {
                                 if (NPC.ai[3] < 0 || NPC.ai[3] >= Main.maxNPCs || !ActiveSlime.active)
                                 {
-                                    NPC.ai[3] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y - 50, slimeTypes[currentSlime], ai0: -50, ai1: nextAttack[currentSlime], ai2: NPC.whoAmI);
+                                    NPC.ai[3] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y - 50, slimeTypes[currentSlime], ai0: -50, ai1: slimeAttack, ai2: NPC.whoAmI);
                                     ActiveSlime.velocity.Y -= 16;
                                 }
                                 else
                                 {
                                     Vector2 pos = ActiveSlime.Bottom;
                                     ActiveSlime.active = false;
-                                    NPC.ai[3] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)pos.X, (int)pos.Y, slimeTypes[currentSlime], ai0: -50, ai1: nextAttack[currentSlime], ai2: NPC.whoAmI);
+                                    NPC.ai[3] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)pos.X, (int)pos.Y, slimeTypes[currentSlime], ai0: -50, ai1: slimeAttack, ai2: NPC.whoAmI);
                                 }
 
                                 SoundStyle spawn = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSpawnSlime");
@@ -1287,6 +1317,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void OnKill()
         {
             BossDownedSystem.downedBoss["Goozma"] = true;
+
+            Main.StopSlimeRain();
 
             Main.windSpeedTarget = 0f;
             Main.windSpeedCurrent = MathHelper.Lerp(Main.windSpeedCurrent, 0, 0.7f);

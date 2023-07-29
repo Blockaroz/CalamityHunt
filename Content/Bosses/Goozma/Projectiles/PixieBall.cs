@@ -173,6 +173,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.localAI[1] += (float)Math.Sqrt(Utils.GetLerpValue(1000, -250, Projectile.Distance(Main.npc[owner].Center), true) * 3f);
             Projectile.localAI[0]++;
             Time++;
+
+            UpdateHitMeSign();
         }
 
         public LoopingSound auraSound;
@@ -285,16 +287,20 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public int signFrameCounter;
         public int signFrame;
 
-        public void DrawHitMeSign()
+        public void UpdateHitMeSign()
         {
-            Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.3f;
-            
             if (signFrameCounter++ > 4)
             {
                 signFrame = (signFrame + 1) % 8;
                 signFrameCounter = 0;
             }
 
+        }
+
+        public void DrawHitMeSign()
+        {
+            Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.3f;
+            
             float influence = Utils.GetLerpValue(0, 30, Time, true) * (0.5f + MathF.Sin(Time * 0.3f) * 0.2f);
             float influenceDark = Utils.GetLerpValue(10, 30, Time, true) * (0.8f + MathF.Sin(Time * 0.3f) * 0.2f);
             float signScale = Utils.GetLerpValue(0.7f, 0.9f, Projectile.scale, true);

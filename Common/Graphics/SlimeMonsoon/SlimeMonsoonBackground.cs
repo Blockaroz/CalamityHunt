@@ -25,6 +25,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             radialDistortPos = position;
             strengthTarget = 1f;
             additionalLightningChance = 0;
+            lightningEnabled = true;
         }
 
         public override void Deactivate(params object[] args)
@@ -52,6 +53,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
         public static Vector2 radialDistortPos;
         public static float strengthTarget;
         public static int additionalLightningChance;
+        public static bool lightningEnabled;
         public static Color lightColor;
 
         public static float? forceStrength;
@@ -111,7 +113,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
             for (int i = 0; i < thunder.Length; i++)
             {
-                if (_random.NextBool(Math.Clamp(120 + additionalLightningChance, 2, 1000)) && _strength > 0.5f)
+                if (_random.NextBool(Math.Clamp(120 + additionalLightningChance, 2, 1000)) && _strength > 0.65f && lightningEnabled)
                     thunder[i].Add(new GooThunder(Main.LocalPlayer.Center, _random.NextFloat(0.5f, 1.4f), _random.Next(50, 100), i));
 
                 for (int j = 0; j < thunder[i].Count; j++)
