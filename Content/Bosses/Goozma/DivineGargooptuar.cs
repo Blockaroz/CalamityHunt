@@ -22,6 +22,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
+    [AutoloadBossHead]
     public class DivineGargooptuar : ModNPC
     {
         public override void SetStaticDefaults()

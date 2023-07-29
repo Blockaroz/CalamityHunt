@@ -20,7 +20,7 @@ Items: {
 	}
 
 	EntropyMatter: {
-		DisplayName: Plaslime Condensate
+		DisplayName: Material
 		Tooltip: "'The purest, densest, and tastiest possible combination of gel'"
 	}
 
@@ -278,15 +278,16 @@ Items: {
 	}
 
 	EntropicTorch: {
-		DisplayName: Plaslime Torch
+		DisplayName: Plurislurry Torch
 		Tooltip: ""
 	}
 
 	StickyHand: {
-		DisplayName: Sticky Hand
+		DisplayName: Icky Hand
 		Tooltip:
 			'''
 			Automatically detaches you when close to the hook
+			Hold [hook key] to keep the hook grappled
 			'It won't break, I promise'
 			'''
 	}
@@ -309,13 +310,13 @@ Items: {
 		DisplayName: Fission Flyer
 		Tooltip:
 			'''
-			Chucks a chakram that splits into a volley of 3 Plaslime Razorblades
-			Stealth strikes split into more Razorblades and leave behind a colossal blade 
+			Chucks a chakram that splits into a volley of 3 Razor Ringlets
+			Stealth strikes split into more Ringlets and leave behind a colossal blade 
 			'''
 	}
 
 	GoozmaAuricSoul: {
-		DisplayName: Plaslime Auric Soul
+		DisplayName: Plurislurry Auric Soul
 		Tooltip: ""
 	}
 
@@ -339,7 +340,6 @@ Items: {
 		Tooltip:
 			'''
 			Casts a sealing spell which sucks in enemies 
-			Enemies that get sucked in give you 100 Mana
 			'Not into the pit! It burns!'
 			'''
 	}
@@ -372,7 +372,7 @@ Items: {
 		Tooltip:
 			'''
 			Summons a rideable Oily Bubble
-			Double jump to enter flight mode
+			Press [space] while in the air to enter flight mode
 			'Now YOU get to be the ninja!'
 			'''
 	}
@@ -425,33 +425,34 @@ Projectiles: {
 	ThrowableChunk.DisplayName: Throwable Chunk
 	MiniRainbowBall.DisplayName: Mini Rainbow Ball
 	RainbowLaser.DisplayName: Rainbow Laser
-	PumpActionSwampgunHeld.DisplayName: Pump Action Swampgun Held
-	ParasanguineHeld.DisplayName: Parasanguine Held
+	PumpActionSwampgunHeld.DisplayName: Pump Action Swampgun
+	ParasanguineHeld.DisplayName: Parasanguine
 	ParasanguineBlood.DisplayName: Parasanguine Blood
 	SwampBall.DisplayName: Swamp Ball
 	GobfloggerProj.DisplayName: Gobflogger
-	CrystalGauntletBall.DisplayName: Crystal Gauntlet Ball
+	CrystalGauntletBall.DisplayName: Ball Lightning
 	CrystalLightning.DisplayName: Crystal Lightning
-	CrystalGauntletBallThrown.DisplayName: Crystal Gauntlet Ball
+	CrystalGauntletBallThrown.DisplayName: Ball Lightning
 	CrystalPiercer.DisplayName: Crystal Piercer
-	CrystalBoom.DisplayName: Crystal Boom
+	CrystalBoom.DisplayName: Clap
 	CrimulanShockwave.DisplayName: Crimulan Shockwave
-	SludgeShakerHeld.DisplayName: Sludge Shaker Held
+	SludgeShakerHeld.DisplayName: Sludge Shaker
 	DarkSludge.DisplayName: Dark Sludge
 	SludgeLighter.DisplayName: Sludge Lighter
-	StickyHandProj.DisplayName: Sticky Hand
+	StickyHandProj.DisplayName: Icky Hand
 	TrailblazerFlame.DisplayName: Trailblazer Flame
 	FissionFlyerProj.DisplayName: Fission Flyer
-	FissionFlyerMiniRing.DisplayName: Fission Flyer Ringlet
+	FissionFlyerMiniRing.DisplayName: Razor Ringlet
 	ScytheOfTheOldGodHeld.DisplayName: Scythe of the Old God
 	StressExplosion.DisplayName: Stressed Explosion
 	GoomoireSuck.DisplayName: Goomoire Suction
-	SplendorTentacle.DisplayName: Splendor Tentacle
+	SplendorTentacle.DisplayName: Spectacle
 }
 
 Chat: {
 	SlimeMonsoon: The Slime Monsoon has begun...
 	NinjaShrineFailure: The shrine is incomplete without enough slime statues nearby.
+	NinjaShrineFailureFunny: You offer to the shrine, but gain nothing.
 }
 
 Bestiary: {
@@ -490,13 +491,13 @@ Buffs: {
 	}
 
 	PaladinPalanquinBuff: {
-		DisplayName: Paladin Palanquin Buff
-		Description: It's all squishy in here
+		DisplayName: Paladin Palanquin
+		Description: They're both kinda squishy
 	}
 
 	SplendorJamBuff: {
-		DisplayName: Splendor Jam Buff
-		Description: Mods.CalamityHunt.Buffs.SplendorJamBuff.Description
+		DisplayName: Stressed Out
+		Description: Stress = Power
 	}
 }
 
