@@ -83,13 +83,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.05f) * Main.rand.Next(15, 20), ModContent.ProjectileType<DarkSludge>(), Owner.HeldItem.damage, 1f, Owner.whoAmI);
             }
 
-            if (Time % 10 == 2)
-            {
-                SoundStyle sludgeSound = SoundID.DD2_SkeletonSummoned;
-                sludgeSound.PitchVariance = 0.2f;
-                sludgeSound.MaxInstances = 0;
-                SoundEngine.PlaySound(sludgeSound, Projectile.Center);
-            }
+            //if (Time % 10 == 2)
+            //{
+            //    SoundStyle sludgeSound = SoundID.DD2_SkeletonSummoned;
+            //    sludgeSound.PitchVariance = 0.2f;
+            //    sludgeSound.MaxInstances = 0;
+            //    SoundEngine.PlaySound(sludgeSound, Projectile.Center);
+            //}
 
             if (!Owner.channel)
                 canKill = true;
@@ -104,6 +104,21 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             gunSquish = new Vector2(1.05f - gunSquishProg * 0.11f, 0.9f + gunSquishProg * 0.15f);
 
             Time++;
+
+            HandleSound();
+
+        }
+
+        public LoopingSound squartSound;
+
+        public void HandleSound()
+        {
+            float volume = Utils.GetLerpValue(10, 25, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 5, Time, true) * 0.6f;
+            float pitch = Utils.GetLerpValue(0, 5, Time, true);
+            if (squartSound == null)
+                squartSound = new LoopingSound(AssetDirectory.Sounds.Weapon.SludgeShakerFiringLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+
+            squartSound.Update(() => Projectile.Center, () => volume, () => 0f);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => false;

@@ -49,6 +49,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         private static readonly int LaserDuration = 800;
 
         public float targetRotation;
+        public float targetSize;
+        public float realSize;
 
         public override void AI()
         {
@@ -93,6 +95,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     float waveChange = MathHelper.SmoothStep(0f, 1f, Utils.GetLerpValue(ChargeTime * 0.8f, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration * 0.9f, ChargeTime + LaserDuration * 0.5f, Time, true));
                     Projectile.rotation = targetRotation + totalOffRot * Projectile.direction * waveChange;
 
+                    targetSize = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
+
                     if ((Main.npc[(int)Owner].ai[2] == 3 || Main.npc[(int)Owner].ai[2] == -2) && Time < ChargeTime + LaserDuration - 2)
                     {
                         Time = ChargeTime + LaserDuration - 2;
@@ -128,6 +132,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                     break;
             }
+
+            realSize = MathHelper.Lerp(realSize, targetSize, 0.1f);
 
             Projectile.velocity = Projectile.rotation.ToRotationVector2();
             Projectile.localAI[0] = Main.npc[(int)Owner].localAI[0];
@@ -167,47 +173,33 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             }
 
             if (Time == ChargeTime + LaserDuration + 20)
-            {
-                SoundStyle sizzle = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSizzle");
-                sizzle.MaxInstances = 0;
-                SoundEngine.PlaySound(sizzle, Projectile.Center);
-            }
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Sizzle, Projectile.Center);
 
             Time++;
             Projectile.localAI[1]++;
             Projectile.timeLeft = 10;
+
             HandleSound();
 
             if (Time > ChargeTime + LaserDuration + 100)
                 Projectile.Kill();
 
             foreach (Player player in Main.player.Where(n => n.active && !n.dead))
-            {
-               player.wingTime = player.wingTimeMax;
-            }
+                player.wingTime = player.wingTimeMax;
+
         }
 
-        public static SlotId laserSound;
-        public static float volume;
-        public static float pitch;
+        public LoopingSound raySound;
 
         public void HandleSound()
         {
-            SoundStyle raySound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaFusionRayLoop");
-            raySound.IsLooped = true;
+            float pitch = MathHelper.SmoothStep(0.1f, 1f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.5f;
+            float volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
 
-            pitch = MathHelper.SmoothStep(0.1f, 1f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.5f;
-            volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
-            bool active = SoundEngine.TryGetActiveSound(laserSound, out ActiveSound sound);
-            if ((!active || !laserSound.IsValid) && Time > ChargeTime - 35)
-                laserSound = SoundEngine.PlaySound(raySound.WithVolumeScale(1.1f), Projectile.Center);
+            if (raySound == null)
+                raySound = new LoopingSound(AssetDirectory.Sounds.Goozma.FusionRayLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
-            if (active)
-            {
-                sound.Volume = volume;
-                sound.Pitch = pitch;
-                sound.Position = Projectile.Center;
-            }
+            raySound.Update(() => Projectile.Center, () => volume, () => pitch);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -328,18 +320,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public Color StripColor(float progress)
         {
-            float grow = 0.1f + (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
-
             Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - progress * 100f);
             color.A = 0;
-            return color * grow;
+            return color * realSize;
         }
         public float StripWidth(float progress)
         {
             float start = (float)Math.Pow(progress, 0.6f);
             float cap = (float)Math.Cbrt(Utils.GetLerpValue(1.01f, 0.7f, progress, true));
-            float grow = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
-            return start * cap * grow * 1650f * (1.1f + (float)Math.Cos(Time) * (0.08f - progress * 0.06f));
+            return start * cap * realSize * 1650f * (1.1f + (float)Math.Cos(Time) * (0.08f - progress * 0.06f));
         }
     }
 }

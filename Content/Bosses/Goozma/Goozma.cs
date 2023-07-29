@@ -1293,10 +1293,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Main.netMode == NetmodeID.Server)
                 NetMessage.SendData(MessageID.WorldData);
 
-            bool active = SoundEngine.TryGetActiveSound(goozmaWarble, out ActiveSound sound);
-            if (active)
-                sound.Stop();
-
             for (int i = 0; i < Main.musicFade.Length; i++)
                 Main.musicFade[i] = 0.2f;
 
@@ -1398,94 +1394,64 @@ namespace CalamityHunt.Content.Bosses.Goozma
             HandleGoozmaSimmerSound();
         }
 
-        public static SlotId goozmaWarble;
-        public static float goozmaWarbleVolume;
-        public static float goozmaWarblePitch;
+        public LoopingSound goozmaWarble;
+        public float goozmaWarbleVolume;
+        public float goozmaWarblePitch;
 
         public void HandleGoozmaWarbleSound()
         {
-            SoundStyle warbleSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaTravelLoop");
-            warbleSound.IsLooped = true;
-
             float volumeScale = (Phase > 1 ? 0.9f : 0.4f);
             if (Phase == 3)
                 volumeScale *= Utils.GetLerpValue(140, 0, Time, true);
             goozmaWarbleVolume = MathHelper.Lerp(goozmaWarbleVolume, Math.Clamp(1f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, 0, 1) * NPC.scale * volumeScale + NPC.velocity.Length() * 0.2f, 0.1f);
             goozmaWarblePitch = MathHelper.Lerp(goozmaWarblePitch, Math.Clamp(NPC.velocity.Length() * 0.02f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, -0.8f, 0.8f), 0.1f);
 
-            bool active = SoundEngine.TryGetActiveSound(goozmaWarble, out ActiveSound sound);
-            if (!active || !goozmaWarble.IsValid)
-                goozmaWarble = SoundEngine.PlaySound(warbleSound, NPC.Center);
-
-            else if (active)
-            {
-                sound.Volume = goozmaWarbleVolume;
-                sound.Pitch = goozmaWarblePitch;
-                sound.Position = NPC.Center;
-            }
+            if (goozmaWarble == null)
+                goozmaWarble = new LoopingSound(AssetDirectory.Sounds.Goozma.WarbleLoop, new HuntOfTheOldGodUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
+            goozmaWarble.Update(() => NPC.Center, () => goozmaWarbleVolume, () => goozmaWarblePitch);
         }
 
-        public static SlotId goozmaShoot;
+        public static LoopingSound goozmaShoot;
         public static float goozmaShootPowerCurrent;
         public static float goozmaShootPowerTarget;
 
         public void HandleGoozmaShootSound()
         {
-            SoundStyle shootSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShootLoop");
-            shootSound.IsLooped = true;
-
             goozmaShootPowerCurrent = MathHelper.Lerp(goozmaShootPowerCurrent, goozmaShootPowerTarget, 0.2f);
             if (goozmaShootPowerCurrent < 0.05f)
                 goozmaShootPowerCurrent = 0f;
+            if (Phase == 1)
+                goozmaShootPowerCurrent = Utils.GetLerpValue(340, 510, Time, true) * 1.2f;
 
-            bool active = SoundEngine.SoundPlayer.TryGetActiveSound(goozmaShoot, out ActiveSound sound);
-            if (!active && goozmaShootPowerCurrent > 0.05f)
-                goozmaShoot = SoundEngine.PlaySound(shootSound, NPC.Center);
-
-            else if (active)
-            {
-                sound.Volume = goozmaShootPowerCurrent * 1.5f;
-                sound.Position = NPC.Center;
-
-                if (goozmaShootPowerCurrent <= 0.05f)
-                    sound.Stop();
-            }
+            if (goozmaShoot == null)
+                goozmaShoot = new LoopingSound(AssetDirectory.Sounds.Goozma.ShootLoop, () => new HuntOfTheOldGodUtils.NPCAudioTracker(NPC).IsActiveAndInGame() && goozmaShootPowerCurrent > 0.05f);
+            goozmaShoot.Update(() => NPC.Center, () => goozmaShootPowerCurrent * 1.5f, () => 0f);
 
             goozmaShootPowerTarget -= 0.05f;
             if (goozmaShootPowerTarget < 0.1f)
                 goozmaShootPowerTarget = 0f;
         }
-        
-        public static SlotId goozmaSimmer;
+
+        public static LoopingSound goozmaSimmer;
         public static float goozmaSimmerVolume;
         public static float goozmaSimmerPitch;
 
         public void HandleGoozmaSimmerSound()
         {
-            SoundStyle simmerSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSimmerLoop");
-            simmerSound.IsLooped = true;
-
             float pitch = 0f;
             float volume = 0f;
             if (Phase == 1)
             {
                 pitch = Utils.GetLerpValue(330, 550, Time, true);
-                volume = 0.5f + Utils.GetLerpValue(330, 550, Time, true) * 0.7f;
+                volume = 0.5f + Utils.GetLerpValue(330, 550, Time, true) * 0.6f;
             }
 
             goozmaSimmerVolume = Math.Clamp(1f - Main.LocalPlayer.Distance(NPC.Center) * 0.00001f, 0, 1) * volume;
             goozmaSimmerPitch = pitch;
 
-            bool active = SoundEngine.TryGetActiveSound(goozmaSimmer, out ActiveSound sound);
-            if (!active || !goozmaSimmer.IsValid)
-                goozmaSimmer = SoundEngine.PlaySound(simmerSound, NPC.Center);
-
-            else if (active)
-            {
-                sound.Volume = goozmaSimmerVolume;
-                sound.Pitch = goozmaSimmerPitch;
-                sound.Position = NPC.Center;
-            }
+            if (goozmaSimmer == null)
+                goozmaSimmer = new LoopingSound(AssetDirectory.Sounds.Goozma.SimmerLoop, new HuntOfTheOldGodUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
+            goozmaSimmer.Update(() => NPC.Center, () => goozmaSimmerVolume, () => goozmaSimmerPitch);
         }
 
         private void SortedProjectileAttack(Vector2 targetPos, SortedProjectileAttackTypes type)

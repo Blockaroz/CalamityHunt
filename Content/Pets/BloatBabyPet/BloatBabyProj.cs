@@ -105,28 +105,16 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
             HandleTravelSound();
         }
 
-        public static SlotId travelSound;
-        public static float travelVolume;
-        public static float travelPitch;
+        public static LoopingSound travelSound;
 
         public void HandleTravelSound()
         {
-            SoundStyle travelLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/BabyBloatTravelLoop");
-            travelLoop.IsLooped = true;
+            float travelVolume = Math.Clamp(1.1f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0002f, 0, 1.1f) * Projectile.scale * Projectile.velocity.Length() * 0.77f;
+            float travelPitch = Math.Clamp(Projectile.velocity.Length() * 0.025f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0001f, -0.8f, 0.8f);
 
-            travelVolume = Math.Clamp(1.1f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0002f, 0, 1.1f) * Projectile.scale * Projectile.velocity.Length() * 0.77f;
-            travelPitch = Math.Clamp(Projectile.velocity.Length() * 0.025f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0001f, -0.8f, 0.8f);
-
-            bool active = SoundEngine.TryGetActiveSound(travelSound, out ActiveSound sound);
-            if (!active || !travelSound.IsValid)
-                travelSound = SoundEngine.PlaySound(travelLoop, Projectile.Center);
-
-            else if (active)
-            {
-                sound.Volume = travelVolume;
-                sound.Pitch = travelPitch;
-                sound.Position = Projectile.Center;
-            }
+            if (travelSound == null)
+                travelSound = new LoopingSound(AssetDirectory.Sounds.BloatBabyWarbleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            travelSound.Update(() => Projectile.Center, () => travelVolume, () => travelPitch);
         }
 
         public float crownRotation;

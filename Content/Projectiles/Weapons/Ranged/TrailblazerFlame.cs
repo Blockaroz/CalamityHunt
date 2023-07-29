@@ -20,8 +20,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
         public override void SetDefaults()
         {
             Projectile.CloneDefaults(ProjectileID.Flames);
-            Projectile.width = 32;
-            Projectile.height = 32;
+            Projectile.width = 64;
+            Projectile.height = 64;
             Projectile.aiStyle = -1;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 80;
@@ -39,26 +39,31 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 Target = -1;
             }
 
-            Projectile.scale = Utils.GetLerpValue(-5, 30, Time, true) + Utils.GetLerpValue(55, 90, Time, true);
-            float expand = Utils.GetLerpValue(0, 80, Time, true);
+            Projectile.Resize((int)(150 * Utils.GetLerpValue(0, 80, Time, true)), (int)(150 * Utils.GetLerpValue(0, 80, Time, true)));
+            Projectile.scale = MathF.Pow(Utils.GetLerpValue(5, 80, Time, true), 0.7f) * 3f;
+            Projectile.position += (Main.player[Projectile.owner].position - Main.player[Projectile.owner].oldPosition) * Utils.GetLerpValue(20, 15, Time, true) * 0.3f;
+            float expand = Utils.GetLerpValue(0, 80, Time, true) * 2f;
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + 3);
             glowColor.A /= 3;
 
-            if (Main.rand.NextBool(8))
+            if (Time > 10)
             {
-                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, Projectile.velocity * Main.rand.NextFloat(), glowColor, (1f + Main.rand.NextFloat()));
-                hue.data = Projectile.localAI[0];
-                hue.emit = true;
-            }
+                if (Main.rand.NextBool(8))
+                {
+                    Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, Projectile.velocity * Main.rand.NextFloat(), glowColor, (1f + Main.rand.NextFloat()));
+                    hue.data = Projectile.localAI[0];
+                    hue.emit = true;
+                }
 
-            if (Main.rand.NextBool(3))
-                Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, Projectile.velocity * Main.rand.NextFloat(), glowColor, (1f + Main.rand.NextFloat()) * expand * 0.5f);
+                if (Main.rand.NextBool(4))
+                    Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(64, 64) * expand, Projectile.velocity * Main.rand.NextFloat(2f), glowColor, (1f + Main.rand.NextFloat()) * expand * 0.5f);
 
-            if (Main.rand.NextBool(5) && Projectile.velocity.LengthSquared() > 2f)
-            {
-                Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, DustID.Sand, Projectile.velocity * Main.rand.NextFloat(3f), 0, Color.Black, 0.3f + Main.rand.NextFloat());
-                dust.noGravity = true;
+                if (Main.rand.NextBool(5) && Projectile.velocity.LengthSquared() > 2f)
+                {
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(180, 180) * expand, DustID.Sand, Projectile.velocity * Main.rand.NextFloat(3f), 0, Color.Black, 0.3f + Main.rand.NextFloat());
+                    dust.noGravity = true;
+                }
             }
 
             if (Time > 20)
@@ -73,6 +78,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                     Target = Projectile.FindTargetWithLineOfSight(1200);
                     if (Target > -1 && Main.netMode != NetmodeID.MultiplayerClient)
                         Projectile.netUpdate = true;
+                }
+
+                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(5))
+                {
+                    Projectile.velocity += Main.rand.NextVector2Circular(1, 1);
+                    Projectile.netUpdate = true;
                 }
             }
 
@@ -111,10 +122,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             for (int i = 0; i < 4; i++)
             {
                 Color trailColor = backDrawColor * (1f - i / 4f);
-                Vector2 off = Projectile.velocity * i * 4f * Utils.GetLerpValue(1, 15, Time, true);
-                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 5f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.3f, 0, 0);
-                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.1f, 0, 0);
-                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, drawColor * (1f - i / 4f) * 0.5f, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale, 0, 0);
+                Vector2 off = Projectile.velocity * i * 3.5f * MathF.Sqrt(Projectile.scale) * Utils.GetLerpValue(1, 15, Time, true);
+                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 5f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.15f, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 5f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.1f, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, drawColor * (1f - i / 4f) * 0.66f, Projectile.rotation + Main.GlobalTimeWrappedHourly * 5f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale, 0, 0);
             }
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, backDrawColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 9f * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.1f, 0, 0);

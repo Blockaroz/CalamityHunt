@@ -66,14 +66,80 @@ namespace CalamityHunt
                 {
                     MaxInstances = 0,
                     PitchVariance = 0.1f
+                };
+                public static SoundStyle GoomoireWindLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoomoireWindLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
                 };               
-                public static SoundStyle GoomoireWindLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoomoireWindLoop");
+                public static SoundStyle SludgeShakerFiringLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SludgeShakerFiringLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
+                };               
+                public static SoundStyle TrailBlazerFireStart = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/TrailBlazerFireStart")
+                {
+                    MaxInstances = 0,
+                };
+                public static SoundStyle TrailblazerFireLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/TrailBlazerFireLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
+                };
             }
 
             public struct Goozma
-            {
-                //todo later
+            {               
+                public static SoundStyle Sizzle = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSizzle")
+                {
+                    MaxInstances = 0,
+                };                    
+                public static SoundStyle WarbleLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaTravelLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
+                };               
+                public static SoundStyle ShootLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShootLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
+                };               
+                public static SoundStyle SimmerLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSimmerLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
+                };                
+                public static SoundStyle FusionRayLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaFusionRayLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
+                };                
+                public static SoundStyle WindLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWindLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
+                };                
+                public static SoundStyle StellarBlackHoleLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarBlackHoleLoop")
+                {
+                    MaxInstances = 0,
+                    IsLooped = true
+                };                
+                
+                public static SoundStyle StellarConstellationWave = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarConstellationWave")
+                {
+                    MaxInstances = 0,
+                };                
+                public static SoundStyle StellarConstellationForm = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarConstellationForm")
+                {
+                    MaxInstances = 0,
+                };
             }
+
+            public static SoundStyle BloatBabyWarbleLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/BabyBloatTravelLoop")
+            {
+                MaxInstances = 0,
+                IsLooped = true
+            };
         }
     }
 }

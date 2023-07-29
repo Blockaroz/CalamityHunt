@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Utilities;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
@@ -25,6 +28,45 @@ namespace CalamityHunt
         // This line is what tells the player to hold Shift. There is essentially no reason to change it
         public static string LeftShiftExpandTooltip => "Press REPLACE THIS NOW to listen closer";
         public static Color LeftShiftExpandColor => new(190, 190, 190); // #BEBEBE
+        
+        public static SoundUpdateCallback SoundUpdateNPC(NPC npc, float initVolume, float initPitch)
+        {
+            return new SoundUpdateCallback((ActiveSound sound) =>
+            {
+                if (sound != null)
+                {
+                    sound.Volume = initVolume;
+                    sound.Pitch = initPitch;
+                    sound.Position = npc.Center;
+                }
 
+                return new NPCAudioTracker(npc).IsActiveAndInGame();
+            });
+        }
+
+        public class NPCAudioTracker
+        {
+            private int _expectedType;
+
+            private int _expectedIndex;
+
+            public NPCAudioTracker(NPC npc)
+            {
+                _expectedIndex = npc.whoAmI;
+                _expectedType = npc.type;
+            }
+
+            public bool IsActiveAndInGame()
+            {
+                if (Main.gameMenu)
+                    return false;
+
+                NPC npc = Main.npc[_expectedIndex];
+                if (npc.active)
+                    return npc.type == _expectedType;
+
+                return false;
+            }
+        }
     }
 }

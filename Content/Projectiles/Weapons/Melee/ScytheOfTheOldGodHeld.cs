@@ -73,7 +73,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
             float rotation = 0;
             float addRot = 0;
-            bool canKill = false;
 
             SoundStyle swingSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwing;
             swingSound.Volume *= 0.7f;

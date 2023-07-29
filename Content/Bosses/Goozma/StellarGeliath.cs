@@ -334,6 +334,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void SpawnConstellation(int checkType, int lineCount)
         {
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave, NPC.Center);
             switch (checkType)
             {
                 case 0:

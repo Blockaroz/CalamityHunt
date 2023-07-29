@@ -96,50 +96,28 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.rotation += 0.05f;
         }
 
-        public static SlotId holeSound;
-        public static SlotId windSound;
-        public static float volume;
-        public static float pitch;
+        public LoopingSound holeSound;
+        public LoopingSound windSound;
+
+        public float volume;
+        public float pitch;
 
         public void HandleSound()
         {
-            SoundStyle blackholeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarBlackHoleLoop");
-            blackholeSound.IsLooped = true;
-            SoundStyle windBlowingSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWindLoop");
-            windBlowingSound.IsLooped = true;
-
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * (0.8f + Projectile.scale * 0.5f);
             pitch = (float)Math.Sqrt(Utils.GetLerpValue(-MaxTime * 0.5f, MaxTime, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime * 0.8f, Time, true)) * 1.5f - 1f;
 
-            bool holeActive = SoundEngine.TryGetActiveSound(BlackHoleBlender.holeSound, out ActiveSound holeSound);
-            if (!holeActive || !BlackHoleBlender.holeSound.IsValid)
-                BlackHoleBlender.holeSound = SoundEngine.PlaySound(blackholeSound, Projectile.Center);
+            if (holeSound == null)
+                holeSound = new LoopingSound(AssetDirectory.Sounds.Goozma.StellarBlackHoleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            if (windSound == null)
+                windSound = new LoopingSound(AssetDirectory.Sounds.Goozma.WindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
-            else if (holeActive)
-            {
-                holeSound.Volume = volume * 0.8f;
-                holeSound.Pitch = pitch;
-                holeSound.Position = Projectile.Center;
-            }            
-            
-            bool windActive = SoundEngine.TryGetActiveSound(BlackHoleBlender.windSound, out ActiveSound windSound);
-            if (!windActive || !BlackHoleBlender.windSound.IsValid)
-                BlackHoleBlender.windSound = SoundEngine.PlaySound(windBlowingSound, Projectile.Center);
-
-            else if (holeActive)
-            {
-                windSound.Volume = volume;
-                windSound.Pitch = 0.3f + pitch * 0.5f;
-                windSound.Position = Projectile.Center;
-            }
+            holeSound.Update(() => Projectile.Center, () => volume * 0.7f, () => pitch);
+            windSound.Update(() => Projectile.Center, () => volume, () => 0.3f + pitch * 0.5f);
         }
 
         public override bool PreKill(int timeLeft)
         {
-            bool active = SoundEngine.TryGetActiveSound(holeSound, out ActiveSound sound);
-            if (active)
-                sound.Stop();
-
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
 
             return true;

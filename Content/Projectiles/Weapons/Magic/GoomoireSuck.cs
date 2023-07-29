@@ -1,6 +1,7 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -13,6 +14,7 @@ using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 {
@@ -196,32 +198,30 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             }
         }
 
-        public static SlotId windSound;
-        public static float windVolume;
-        public static float windPitch;
-
-        public void HandleSound()
-        {
-            SoundStyle theSound = AssetDirectory.Sounds.Weapon.GoomoireWindLoop;
-            theSound.IsLooped = true;
-
-            windPitch = Projectile.ai[2] - 0.8f;
-            windVolume = 0.33f * Projectile.ai[2];
-            bool active = SoundEngine.TryGetActiveSound(windSound, out ActiveSound sound);
-            if (!active || !windSound.IsValid)
-                windSound = SoundEngine.PlaySound(theSound.WithVolumeScale(1.1f), Projectile.Center);
-
-            if (active)
-            {
-                sound.Volume = windVolume;
-                sound.Pitch = windPitch;
-                sound.Position = Projectile.Center;
-            }
-        }
-
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             return Utils.IntersectsConeFastInaccurate(targetHitbox, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f);
+        }
+
+        public LoopingSound windSoundLoop;
+
+        public void HandleSound()
+        {
+            if (windSoundLoop == null)
+                windSoundLoop = new LoopingSound(AssetDirectory.Sounds.Weapon.GoomoireWindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+           
+            windSoundLoop.Update(() => Projectile.Center, () => Projectile.ai[2] * 0.5f, () => Projectile.ai[2] - 0.9f);
+        }
+
+        public static Texture2D ribbonTexture;
+        public static Texture2D laserTexture;
+        public static Texture2D laserTexture2;
+
+        public override void Load()
+        {
+            ribbonTexture = new TextureAsset(Texture + "Ribbon");
+            laserTexture = new TextureAsset(Texture + "Laser" + 0);
+            laserTexture2 = new TextureAsset(Texture + "Laser" + 1);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -258,17 +258,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     Main.EntitySpriteDraw(ribbonTexture, ribbonPoints[i] - Main.screenPosition, frame, lightColor.MultiplyRGBA(Color.Lerp(Color.DimGray, Color.White, (float)i / ribbonPoints.Length)), rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
                 }
             }
-        }
-
-        public static Texture2D ribbonTexture;
-        public static Texture2D laserTexture;
-        public static Texture2D laserTexture2;
-
-        public override void Load()
-        {
-            ribbonTexture = new TextureAsset(Texture + "Ribbon");
-            laserTexture = new TextureAsset(Texture + "Laser" + 0);
-            laserTexture2 = new TextureAsset(Texture + "Laser" + 1);
         }
 
         private float newRot;
@@ -318,8 +307,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public Color StripColor(float progress)
         {
-            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10 + progress * 40f) * 0.4f;
-            color.A /= 3;
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10 + progress * 40f) * 0.45f;
+            color.A /= 2;
             return color * Projectile.ai[2];
         }
 

@@ -29,55 +29,8 @@ namespace CalamityHunt.Common.Systems
         public override void PostUpdateNPCs()
         {
             GoozmaSpawningOld();
-            StopSoundsIfNotActive();
-        }
 
-        public void StopSoundsIfNotActive()
-        {
-            if (!GoozmaActive)
-            {
-                bool warbleActive = SoundEngine.TryGetActiveSound(Goozma.goozmaWarble, out ActiveSound warbleSound);
-                if (warbleActive)
-                    warbleSound.Stop();
-
-                bool shootActive = SoundEngine.TryGetActiveSound(Goozma.goozmaShoot, out ActiveSound shootSound);
-                if (shootActive)
-                    shootSound.Stop();                
-                
-                bool simmerActive = SoundEngine.TryGetActiveSound(Goozma.goozmaSimmer, out ActiveSound simmerSound);
-                if (simmerActive)
-                    simmerSound.Stop();
-
-            }
-
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BloatBabyProj>()))
-            {
-                bool active = SoundEngine.TryGetActiveSound(BloatBabyProj.travelSound, out ActiveSound sound);
-                if (active)
-                    sound.Stop();
-            }
-            
-            //if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<PixieBall>()))
-            //{
-            //    bool active = SoundEngine.TryGetActiveSound(PixieBall.auraSound, out ActiveSound sound);
-            //    if (active)
-            //        sound.Stop();
-            //}
-            
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>()))
-            {
-                bool active = SoundEngine.TryGetActiveSound(FusionRay.laserSound, out ActiveSound sound);
-                if (active)
-                    sound.Stop();
-            }             
-            
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GoomoireSuck>()))
-            {
-                bool active = SoundEngine.TryGetActiveSound(GoomoireSuck.windSound, out ActiveSound sound);
-                if (active)
-                    sound.Stop();
-            }            
-            
+            //stop black hole shader
             if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BlackHoleBlender>()))
             {
                 if (Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Active)
@@ -86,18 +39,12 @@ namespace CalamityHunt.Common.Systems
                     Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().UseIntensity(intensity * 0.5f);
                     Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
                 }
-
-                bool active = SoundEngine.TryGetActiveSound(BlackHoleBlender.holeSound, out ActiveSound sound);
-                if (active)
-                    sound.Stop();                
-                bool windActive = SoundEngine.TryGetActiveSound(BlackHoleBlender.windSound, out ActiveSound windSound);
-                if (windActive)
-                    windSound.Stop();
             }
         }
 
         public static void GoozmaEgg(Vector2 position)
         {
+            //sync this
             Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), position, Vector2.Zero, ModContent.ProjectileType<GoozmaSpawn>(), 0, 0);
         }
 
