@@ -247,7 +247,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Color overlayColor = bloomColor * 0.6f;
             overlayColor.A = 100;
-            Main.EntitySpriteDraw(beachBallOverlay, Projectile.Center - Main.screenPosition, beachBallOverlay.Frame(), overlayColor, Projectile.rotation * 0.7f, beachBallOverlay.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
+            Main.EntitySpriteDraw(beachBallOverlay, Projectile.Center - Main.screenPosition, beachBallOverlay.Frame(), overlayColor * 0.1f, Projectile.rotation * 0.7f, beachBallOverlay.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
 
             float lensAngle = Projectile.AngleFrom(Main.LocalPlayer.Center) + MathHelper.PiOver2;
             float lensPower = 1f + Projectile.Distance(Main.LocalPlayer.Center) * 0.003f;
@@ -287,6 +287,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public int signFrameCounter;
         public int signFrame;
 
+        public Vector2 handPosition;
+        public float handRotation;
+        public int handFrame;
+        public int handDir;
+
         public void UpdateHitMeSign()
         {
             if (signFrameCounter++ > 4)
@@ -295,25 +300,62 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 signFrameCounter = 0;
             }
 
+            Vector2 homePos = new Vector2(Main.screenWidth / 2f, Main.screenHeight / 2.7f);
+
+            handDir = homePos.X > Projectile.Center.X - Main.screenPosition.X ? 1 : -1;
+
+            if (Main.getGoodWorld)
+            {
+                handFrame = 5;
+                handPosition = Vector2.SmoothStep(Projectile.Center - Main.screenPosition, homePos, Utils.GetLerpValue(0, 60, Time, true));
+                handRotation = MathF.Sin(Time * 0.4f) * Utils.GetLerpValue(45, 50, Time, true) * 0.6f;
+            }
+            else
+            {
+                if (Time < 70)
+                {
+                    handFrame = 1 + (int)(Utils.GetLerpValue(0, 20, Time, true) * 2f);
+                    handPosition = Vector2.SmoothStep(Projectile.Center - Main.screenPosition, homePos, Utils.GetLerpValue(0, 60, Time, true));
+                    handRotation = MathF.Sin(Time * 0.4f) * Utils.GetLerpValue(60, 55, Time, true);
+                }
+                else// if (HitCount < 1)
+                {
+                    handPosition = homePos + (HitCount > 0 ? Main.rand.NextVector2Circular(4, 4) : Vector2.Zero);
+                    handRotation = Utils.AngleLerp(handRotation, handPosition.AngleTo(Projectile.Center - Main.screenPosition) + MathF.Sin(Time * 0.3f) * 0.1f + MathHelper.PiOver2, 0.2f);
+                    handFrame = 3 + (int)(Utils.GetLerpValue(70, 85, Time, true) * 2);
+                }
+            }
+
         }
 
         public void DrawHitMeSign()
         {
             Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.3f;
             
-            float influence = Utils.GetLerpValue(0, 30, Time, true) * (0.5f + MathF.Sin(Time * 0.3f) * 0.2f);
-            float influenceDark = Utils.GetLerpValue(10, 30, Time, true) * (0.8f + MathF.Sin(Time * 0.3f) * 0.2f);
-            float signScale = Utils.GetLerpValue(0.7f, 0.9f, Projectile.scale, true);
+            float influence = Utils.GetLerpValue(0, 10, Time, true);
+            float wobble = (0.7f + MathF.Sin(Time * 0.3f) * 0.1f);
+
+            float handScale = Utils.GetLerpValue(0.5f, 0.9f, Projectile.scale, true);
+            float signScale = handScale * Utils.GetLerpValue(40, 60, Time, true);
             Vector2 signPosition = Projectile.Center - Main.screenPosition - new Vector2(0, 100 * Projectile.scale);
-            float arrowRotation = signPosition.AngleTo(Projectile.Center - Main.screenPosition) + MathF.Sin(Time * 0.3f) * 0.1f;
 
             Rectangle hitMeFrame = hitMeSign.Frame(1, 8, 0, signFrame);
 
-            Main.EntitySpriteDraw(hitMeSign, signPosition, hitMeFrame, new Color(255, 255, 255, 0) * influenceDark, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
+            Main.EntitySpriteDraw(hitMeSign, signPosition, hitMeFrame, new Color(255, 255, 255, 128) * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
             for (int i = 0; i < 8; i++)
             {
-                Vector2 offset = new Vector2(4, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
-                Main.EntitySpriteDraw(hitMeSign, signPosition + offset, hitMeFrame, bloomColor * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
+                Vector2 offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
+                Main.EntitySpriteDraw(hitMeSign, signPosition + offset, hitMeFrame, bloomColor * influence * wobble, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
+            }
+
+            Rectangle pointerFrame = hitMeHand.Frame(1, 6, 0, handFrame);
+
+            SpriteEffects handEffect = handDir < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            Main.EntitySpriteDraw(hitMeHand, handPosition, pointerFrame, new Color(255, 255, 255, 128) * influence, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
+            for (int i = 0; i < 8; i++)
+            {
+                Vector2 offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
+                Main.EntitySpriteDraw(hitMeHand, handPosition + offset, pointerFrame, bloomColor * influence * wobble, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
             }
         }
     }

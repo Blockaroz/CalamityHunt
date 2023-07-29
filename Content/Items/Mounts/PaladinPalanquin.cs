@@ -11,8 +11,8 @@ namespace CalamityHunt.Content.Items.Mounts
         public override void SetDefaults()
         {
             Item.DefaultToMount(ModContent.MountType<PaladinPalanquinMount>());
-            Item.width = 34;
-            Item.height = 22;
+            Item.width = 54;
+            Item.height = 50;
             Item.value = Item.sellPrice(0, 30, 0, 0);
             Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))

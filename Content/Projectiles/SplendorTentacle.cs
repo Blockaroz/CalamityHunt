@@ -157,7 +157,8 @@ namespace CalamityHunt.Content.Projectiles
 
             tentacle.StartPos = Projectile.Center;
             tentacle.EndPos = Player.MountedCenter;
-            tentacle.gravity = -Vector2.UnitX * Player.direction * 0.05f + Vector2.UnitY.RotatedBy(Projectile.rotation) * 0.05f + Player.velocity * 0.05f;
+            tentacle.gravity = -Vector2.UnitX * Player.direction * 0.05f + Vector2.UnitY.RotatedBy(Projectile.rotation) * 0.05f;
+            tentacle.damping = Utils.GetLerpValue(300, 400, (Player.position - Projectile.Center).Length(), true);
             tentacle.Update();
 
             if (Projectile.Distance(Player.MountedCenter) > 300)
@@ -184,6 +185,7 @@ namespace CalamityHunt.Content.Projectiles
                     Rectangle tentacleGlowFrame = texture.Frame(2, 10, 1, 7 - (int)((float)i / points.Count * 6));
 
                     float rot = points[i].AngleTo(points[i - 1]) - MathHelper.PiOver2;
+                    Vector2 stretch = new Vector2((1.1f - (float)i / points.Count * 0.6f) * Projectile.scale, i > points.Count - 2 ? points[i].Distance(points[i - 1]) / (tentacleFrame.Height - 2f) : 1.1f);
 
                     if (i == 1)
                     {
@@ -194,8 +196,8 @@ namespace CalamityHunt.Content.Projectiles
                     {
                         tentacleFrame = texture.Frame(2, 5, 0, 0);
                         tentacleGlowFrame = texture.Frame(2, 5, 1, 0);
+                        stretch = new Vector2(Projectile.scale, points[i].Distance(points[i - 1]) / (tentacleFrame.Height - 2f) * 1.2f);
                     }
-                    Vector2 stretch = new Vector2((1.1f - (float)i / points.Count * 0.6f) * Projectile.scale, i > points.Count - 2 ? points[i].Distance(points[i - 1]) / (tentacleFrame.Height - 2f) : 1.1f);
                     Main.EntitySpriteDraw(texture, points[i] - Main.screenPosition, tentacleFrame, Color.Lerp(light, Color.White, 1f - (float)i / points.Count), rot, tentacleFrame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
 
                     Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 150 + i * 10) * 0.5f;

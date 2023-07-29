@@ -53,9 +53,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 foreach (Projectile otherStar in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 300))
                 {
-                    otherStar.velocity += otherStar.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.4f;
-                    Projectile.velocity += Projectile.DirectionFrom(otherStar.Center).SafeNormalize(Vector2.Zero) * 0.4f;
+                    otherStar.velocity += otherStar.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.2f * (3f - WhoAmI);
+                    Projectile.velocity += Projectile.DirectionFrom(otherStar.Center).SafeNormalize(Vector2.Zero) * 0.2f * (3f - WhoAmI);
                 }
+                if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<StellarGeliath>()))
+                {
+                    NPC owner = Main.npc.First(n => n.active && n.type == ModContent.NPCType<StellarGeliath>());
+
+                    Projectile.velocity += Projectile.DirectionTo(owner.Center).RotatedBy(MathHelper.PiOver2) * 0.1f;
+                }
+                else
+                    Time = Math.Max(Time, 540 - (int)(WhoAmI * 0.5f));
+
             }
 
             if (Time + (int)(WhoAmI * 0.5f) > 550)

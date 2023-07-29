@@ -171,9 +171,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             if (ribbonVels != null)
             {
                 for (int i = 0; i < ribbonVels.Length; i++)
-                {
                     ribbonVels[i] = (Projectile.rotation - (1.5f + i * 0.2f) * Projectile.spriteDirection).ToRotationVector2() * 3f;
-                }
             }
             else
                 ribbonVels = new Vector2[length];

@@ -105,7 +105,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public void HandleSound()
         {
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * (0.8f + Projectile.scale * 0.5f);
-            pitch = (float)Math.Sqrt(Utils.GetLerpValue(-MaxTime * 0.5f, MaxTime, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime * 0.8f, Time, true)) * 1.5f - 1f;
+            pitch = (float)Math.Sqrt(Utils.GetLerpValue(-MaxTime * 0.5f, MaxTime, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime * 0.98f, Time, true)) * 2f - 1.5f;
 
             if (holeSound == null)
                 holeSound = new LoopingSound(AssetDirectory.Sounds.Goozma.StellarBlackHoleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);

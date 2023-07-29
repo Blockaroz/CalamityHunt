@@ -246,6 +246,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 saveTarget = NPC.Center;
 
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave, NPC.Center);
+
                 int count = 5 + Main.rand.Next(5, 7);
                 for (int i = 0; i < count; i++)
                 {
@@ -259,6 +261,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
             if (Time == 53)
             {
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave.WithPitchOffset(0.07f), NPC.Center);
+
                 int count = 4 + Main.rand.Next(4, 6);
                 for (int i = 0; i < count; i++)
                 {
@@ -273,6 +277,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time == 70)
             {
                 NPC.scale = 0f;
+
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationForm.WithPitchOffset(0.2f), NPC.Center);
 
                 int count = 3 + Main.rand.Next(8, 10);
                 for (int i = 0; i < count; i++)
@@ -311,7 +317,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time > 70)
             {
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.05f, 0.1f) * Utils.GetLerpValue(500, 560, Time, true);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.01f, 0.1f) * Utils.GetLerpValue(550, 580, Time, true);
 
                 if (Time < 521)
                 {
@@ -323,9 +329,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         SpawnConstellation(2, 8);                    
                     
                     if ((Time - 70) % 150 == 25)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave.WithVolumeScale(0.7f), NPC.Center);
-                    if ((Time - 70) % 150 == 125)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationForm.WithVolumeScale(0.7f), NPC.Center);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
+                    if ((Time - 70) % 150 == 120)
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationForm.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
                 }
             }
 
@@ -334,6 +340,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.scale = MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(600, 680, Time, true));
                 squishFactor = Vector2.Lerp(new Vector2(1f + (float)Math.Sin((Time - 600) * 0.1f) * 0.9f, 1f - (float)Math.Sin((Time - 600) * 0.1f) * 0.9f) * 3f, Vector2.One, NPC.scale);
             }
+
+            if (Time == 580)
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarReform, NPC.Center);
+
             if (Time > 680)
                 Reset();
         }
@@ -501,7 +511,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (Time == 45)
                 {
                     SoundStyle telegraph = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarSlimeStarfallTelegraph");
-                    SoundEngine.PlaySound(telegraph, NPC.Center);
+                    SoundEngine.PlaySound(telegraph.WithVolumeScale(2f), NPC.Center);
                 }
 
                 if (Time < 40 + waitTime * 0.8f)
@@ -569,6 +579,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.001f * Utils.GetLerpValue(40 + waitTime + 150, 40 + waitTime + 260, Time, true) * Utils.GetLerpValue(40 + waitTime + 130, 40 + waitTime + 150, Time, true); ;
             }
 
+            if (Time == waitTime + 200)
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarReform, NPC.Center);
+
             if (Time > 40 && Time < 40 + waitTime + 10)
             {
                 for (int i = 0; i < 2; i++)
@@ -623,12 +636,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), strength, 4, 30, 20000));
                 }
             }
+
+            if (Time == 585)
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarBlackHoleGulp, NPC.Center);
+
             if (Time > 530)
             {
                 NPC.velocity *= 0.92f;
                 NPC.scale = 1f + MathHelper.SmoothStep(-0.15f, 1, Utils.GetLerpValue(685, 670, Time, true) * Utils.GetLerpValue(580, 595, Time, true)) * 3.5f * (float)Math.Sqrt(Utils.GetLerpValue(720, 670, Time, true) * Utils.GetLerpValue(580, 610, Time, true));
                 squishFactor = Vector2.Lerp(Vector2.One, Vector2.Lerp(new Vector2(0.8f, 1.2f), new Vector2(1.3f, 0.7f), 0.5f + (float)Math.Sin(Time * 0.1f) * 0.5f), Utils.GetLerpValue(600, 620, Time, true) * Utils.GetLerpValue(680, 630, Time, true) * 0.5f);
-                
+
                 if (Time > 670 && Time < 690)
                 {
                     for (int i = 0; i < Main.rand.Next(1, 5); i++)
@@ -784,11 +801,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public Vector2 discScale;
 
         public static Texture2D consumeTexture;
+        public static Texture2D bestiarySpaceTexture;
         public static Texture2D constellationRing;
 
         public override void Load()
         {
             consumeTexture = ModContent.Request<Texture2D>(Texture + "Consume", AssetRequestMode.ImmediateLoad).Value;
+            bestiarySpaceTexture = ModContent.Request<Texture2D>(Texture + "BestiarySpaceImage", AssetRequestMode.ImmediateLoad).Value;
             constellationRing = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/ConstellationArea", AssetRequestMode.ImmediateLoad).Value;
         }
 
@@ -809,6 +828,34 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             int cosStompWaitTime = (int)DifficultyBasedValue(100, 90, 80, 60);
 
+            if (NPC.IsABestiaryIconDummy)
+            {
+                RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
+                Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
+                spriteBatch.End();
+                spriteBatch.GraphicsDevice.RasterizerState = priorRrasterizerState;
+                spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
+
+                Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
+                effect.Parameters["uTextureClose"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
+                effect.Parameters["uTextureFar"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space1").Value);
+                effect.Parameters["uPosition"].SetValue(screenPos + new Vector2(0, MathF.Sin(Main.GlobalTimeWrappedHourly * 0.5f) * 0.1f));
+                effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
+                effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));
+                effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, Main.GlobalTimeWrappedHourly * 0.0004f % 2f));
+                effect.Parameters["uCloseColor"].SetValue(new Color(20, 80, 255).ToVector3());
+                effect.Parameters["uFarColor"].SetValue(new Color(110, 50, 200).ToVector3());
+                effect.Parameters["uOutlineColor"].SetValue(new Color(10, 5, 45, 0).ToVector4());
+                effect.Parameters["uImageRatio"].SetValue(new Vector2(bestiarySpaceTexture.Width / (float)bestiarySpaceTexture.Height, 1f) * 0.66f);
+
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, effect, Main.UIScaleMatrix);
+
+                spriteBatch.Draw(bestiarySpaceTexture, NPC.Center - screenPos, bestiarySpaceTexture.Frame(), Color.White, NPC.rotation, bestiarySpaceTexture.Size() * 0.5f, NPC.scale, 0, 0);
+
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
+            }
+
             switch (Attack)
             {
                 case (int)AttackList.TooFar:
@@ -824,8 +871,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     //spriteBatch.End();
                     //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
 
-                    spriteBatch.Draw(constellationRing, saveTarget - screenPos, constellationRing.Frame(), new Color(50, 10, 55, 0) * 0.3f * scaleIn * scaleOut, Time * 0.003f, constellationRing.Size() * 0.5f, ringScale * 0.99f, 0, 0);
-                    spriteBatch.Draw(constellationRing, saveTarget - screenPos, constellationRing.Frame(), new Color(30, 10, 120, 0) * 0.7f * scaleIn * scaleOut, Time * 0.005f, constellationRing.Size() * 0.5f, ringScale, 0, 0);
+                    spriteBatch.Draw(constellationRing, saveTarget - screenPos, constellationRing.Frame(), new Color(10, 30, 120, 0) * 0.5f * scaleIn * scaleOut, Time * 0.003f, constellationRing.Size() * 0.5f, ringScale * 0.99f, 0, 0);
+                    spriteBatch.Draw(constellationRing, saveTarget - screenPos, constellationRing.Frame(), new Color(40, 30, 90, 0) * 0.5f * scaleIn * scaleOut, Time * 0.005f, constellationRing.Size() * 0.5f, ringScale, 0, 0);
 
                     //spriteBatch.End();
                     //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);

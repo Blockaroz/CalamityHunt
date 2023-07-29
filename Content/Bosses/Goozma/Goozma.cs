@@ -476,8 +476,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 //nextAttack[currentSlime] = ;
                             }
 
-                            //currentSlime = 1;
-                            //slimeAttack = 1;
+                            currentSlime = 3;
+                            slimeAttack = 0;
 
                             int[] slimeTypes = new int[]
                             {
@@ -1102,7 +1102,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     NPC.velocity = Vector2.Lerp(NPC.velocity, Vector2.UnitY * -8, 0.2f) * Utils.GetLerpValue(60, 20, Time, true);
 
-                    NPC.Center += Main.rand.NextVector2Circular(5, 5) * Utils.GetLerpValue(0, 100, Time, true);
+                    NPC.Center += Main.rand.NextVector2Circular(15, 15) * Utils.GetLerpValue(0, 100, Time, true);
                     
                     if (Time < 15)
                         KillSlime(currentSlime);
@@ -1219,14 +1219,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             //shimmer
-            //if (Phase != -2 && Phase != -1 && Main.tile[NPC.Center.ToTileCoordinates()].LiquidType == LiquidID.Shimmer)
-            //{
-            //    Phase = -2;
-            //    Time = 0;
-            //    for (int i = 0; i < 4; i++)
-            //        KillSlime(currentSlime);
-            //    ActiveSlime.active = false;
-            //}
+            if (Phase != -21 && Phase != -1 && Main.tile[NPC.Center.ToTileCoordinates()].LiquidType == LiquidID.Shimmer)
+            {
+                Phase = -21;
+                Time = 0;
+                for (int i = 0; i < 4; i++)
+                    KillSlime(currentSlime);
+                ActiveSlime.active = false;
+            }
 
             if (hitTimer > 0)
                 hitTimer--;
