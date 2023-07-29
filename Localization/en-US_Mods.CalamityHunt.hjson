@@ -372,7 +372,7 @@ Items: {
 		Tooltip:
 			'''
 			Summons a rideable Oily Bubble
-			Double jump to enter flight mode
+			Press [space] while in the air to enter flight mode
 			'Now YOU get to be the ninja!'
 			'''
 	}
@@ -492,7 +492,7 @@ Buffs: {
 
 	PaladinPalanquinBuff: {
 		DisplayName: Paladin Palanquin
-		Description: It's all squishy in here
+		Description: They're both kinda squishy
 	}
 
 	SplendorJamBuff: {

@@ -20,6 +20,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
+    [AutoloadBossHead]
     public class CrimulanGlopstrosity : ModNPC
     {
         public override void SetStaticDefaults()

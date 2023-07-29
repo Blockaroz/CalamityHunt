@@ -23,6 +23,7 @@ using Terraria.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
+    [AutoloadBossHead]
     public class StellarGeliath : ModNPC
     {
         public override void SetStaticDefaults()

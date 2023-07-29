@@ -21,6 +21,7 @@ using Terraria.GameContent.Drawing;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
+    [AutoloadBossHead]
     public class EbonianBehemuck : ModNPC
     {
         public override void SetStaticDefaults()
