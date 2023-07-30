@@ -14,11 +14,13 @@
     <None Remove="Content\Bosses\Goozma\StellarGeliathBestiarySpaceImage.png" />
     <None Remove="Content\Buffs\SplendorJamBuff.png" />
     <None Remove="Content\Items\Armor\Shogun\ShogunWings.png" />
+    <None Remove="Content\Items\Misc\SludgeFocusGlow.png" />
     <None Remove="Content\Items\Weapons\Ranged\TrailblazerGoggles.png" />
     <None Remove="Content\Items\Weapons\Ranged\Trailblazer_BackAntenna.png" />
     <None Remove="Content\Items\Weapons\Ranged\Trailblazer_BackSwirl.png" />
     <None Remove="Content\Items\Weapons\Ranged\Trailblazer_Goggles.png" />
     <None Remove="Content\Items\Weapons\Ranged\Trailblazer_Strap.png" />
+    <None Remove="Content\Mounts\PaladinPalanquinMount_Ball.png" />
     <None Remove="Content\Particles\FlyingSlimes\FlyingCrimslime.cs~RF3356da6f.TMP" />
     <None Remove="Content\Projectiles\Weapons\Magic\GoomoireSuckRibbon.png" />
   </ItemGroup>

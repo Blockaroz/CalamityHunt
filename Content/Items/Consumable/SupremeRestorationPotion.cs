@@ -25,7 +25,7 @@ namespace CalamityHunt.Content.Items.Consumable
 			Item.useAnimation = 17;
 			Item.useTime = 17;
 			Item.useTurn = true;
-			Item.UseSound = SoundID.Item3;
+			Item.UseSound = AssetDirectory.Sounds.SupremeRestorationBigGulp;
 			Item.maxStack = Item.CommonMaxStack;
 			Item.consumable = true;
 			Item.rare = ModContent.RarityType<VioletRarity>();
@@ -62,7 +62,7 @@ namespace CalamityHunt.Content.Items.Consumable
         {
             CreateRecipe(4)
                 .AddIngredient(ItemID.RestorationPotion, 4)
-                .AddIngredient<EntropyMatter>()
+                .AddIngredient<ChromaticMass>()
                 .AddTile(TileID.Bottles)
                 .Register()
                 .DisableDecraft();

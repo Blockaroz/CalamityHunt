@@ -73,7 +73,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("GodsBellows").Type)
                     .AddIngredient(calamity.Find<ModItem>("PristineFury").Type)
                     .AddIngredient(calamity.Find<ModItem>("OverloadedBlaster").Type)
@@ -85,7 +85,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             {
                 CreateRecipe()
                     .AddIngredient(ItemID.ElfMelter)
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
             }

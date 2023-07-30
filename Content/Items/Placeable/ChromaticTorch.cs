@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Placeable
 {
-	public class EntropicTorch : ModItem
+	public class ChromaticTorch : ModItem
 	{
 		public Color rainbowGlow => new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 100f);
 
@@ -28,7 +28,7 @@ namespace CalamityHunt.Content.Items.Placeable
 		{
 			// DefaultToTorch sets various properties common to torch placing items. Hover over DefaultToTorch in Visual Studio to see the specific properties set.
 			// Of particular note to torches are Item.holdStyle, Item.flame, and Item.noWet. 
-			Item.DefaultToTorch(ModContent.TileType<Tiles.EntropicTorchPlaced>(), 0, false);
+			Item.DefaultToTorch(ModContent.TileType<Tiles.ChromaticTorchPlaced>(), 0, false);
 			Item.noWet = false;
 			Item.value = 50;
 		}
@@ -61,7 +61,7 @@ namespace CalamityHunt.Content.Items.Placeable
 		{
 			CreateRecipe(100)
 				.AddIngredient(ItemID.Torch, 100)
-				.AddIngredient<EntropyMatter>()
+				.AddIngredient<ChromaticMass>()
 				//.AddTile<Tiles.Furniture.ExampleWorkbench>()
 				.Register();
 		}

@@ -66,7 +66,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
                 Mod calamity = ModLoader.GetMod("CatalystMod");
                 Mod calamityfr = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("UnrelentingTorment").Type)
                     .AddIngredient(calamity.Find<ModItem>("UnderBite").Type)
                     .AddIngredient(calamity.Find<ModItem>("CongeledDuoWhip").Type)
@@ -78,7 +78,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("CosmicDischarge").Type)
                     .AddIngredient(calamity.Find<ModItem>("Mourningstar").Type)
                     .AddIngredient(calamity.Find<ModItem>("CrescentMoon").Type)
@@ -90,7 +90,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             {
                 CreateRecipe()
                     .AddIngredient(ItemID.RopeCoil, 5)
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
             }

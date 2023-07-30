@@ -70,7 +70,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("PrimordialAncient").Type)
                     .AddIngredient(calamity.Find<ModItem>("Biofusillade").Type)
                     .AddIngredient(calamity.Find<ModItem>("AbyssalTome").Type)
@@ -82,7 +82,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             {
                 CreateRecipe()
                     .AddIngredient(ItemID.SpellTome)
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
             }

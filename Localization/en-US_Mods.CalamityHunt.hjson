@@ -19,9 +19,9 @@ Items: {
 		Tooltip: ""
 	}
 
-	EntropyMatter: {
-		DisplayName: Material
-		Tooltip: "'The purest, densest, and tastiest possible combination of gel'"
+	ChromaticMass: {
+		DisplayName: Chromatic Mass
+		Tooltip: "'Feels like cold plasma'"
 	}
 
 	ShatteredHeartOfDarkness: {
@@ -277,8 +277,8 @@ Items: {
 		Tooltip: Reduced potion cooldown
 	}
 
-	EntropicTorch: {
-		DisplayName: Plurislurry Torch
+	ChromaticTorch: {
+		DisplayName: Chromatic Torch
 		Tooltip: ""
 	}
 
@@ -316,7 +316,7 @@ Items: {
 	}
 
 	GoozmaAuricSoul: {
-		DisplayName: Plurislurry Auric Soul
+		DisplayName: Chromatic Auric Soul
 		Tooltip: ""
 	}
 
@@ -358,7 +358,7 @@ Items: {
 		Tooltip: Use on a Slime Ninja Statue with 4 Slime Statues present to start a Slime Rain
 	}
 
-	EntropicSlimeConcentration: {
+	SludgeFocus: {
 		DisplayName: Sludge Focus
 		Tooltip:
 			'''

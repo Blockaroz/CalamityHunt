@@ -19,7 +19,7 @@ using CalamityHunt.Content.Bosses.Goozma;
 
 namespace CalamityHunt.Content.Tiles
 {
-	public class EntropicTorchPlaced : ModTile
+	public class ChromaticTorchPlaced : ModTile
 	{
 		private Asset<Texture2D> flameTexture;
 		public Color rainbowGlow => new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 100f);
@@ -67,7 +67,7 @@ namespace CalamityHunt.Content.Tiles
 			// Assets
 			if (!Main.dedServ)
 			{
-				flameTexture = ModContent.Request<Texture2D>("CalamityHunt/Content/Tiles/EntropicTorchPlaced_Flame");
+				flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
 			}
 		}
 

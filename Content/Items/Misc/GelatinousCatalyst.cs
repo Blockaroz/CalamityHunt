@@ -12,8 +12,8 @@ namespace CalamityHunt.Content.Items.Misc
     {
         public override void SetDefaults()
         {
-            Item.width = 40;
-            Item.height = 40;
+            Item.width = 26;
+            Item.height = 34;
             Item.knockBack = 6;
             Item.value = 10000;
             Item.rare = ItemRarityID.Blue;

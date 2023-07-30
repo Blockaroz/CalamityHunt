@@ -52,7 +52,7 @@ namespace CalamityHunt.Content.Items.Dyes
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient<EntropyMatter>()
+                .AddIngredient<ChromaticMass>()
                 .AddIngredient(ItemID.BottledWater)
                 .AddTile(TileID.DyeVat)
                 .Register();

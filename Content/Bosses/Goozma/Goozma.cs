@@ -175,7 +175,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             LeadingConditionRule classic = new LeadingConditionRule(new Conditions.NotExpert());
 
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 4));
 
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>()));

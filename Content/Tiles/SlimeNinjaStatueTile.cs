@@ -57,8 +57,8 @@ namespace CalamityHunt.Content.Tiles
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = ModContent.ItemType<GelatinousCatalyst>();
 
-            if (player.HasItem(ModContent.ItemType<EntropicSlimeConcentration>()))
-                player.cursorItemIconID = ModContent.ItemType<EntropicSlimeConcentration>();
+            if (player.HasItem(ModContent.ItemType<SludgeFocus>()))
+                player.cursorItemIconID = ModContent.ItemType<SludgeFocus>();
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
@@ -106,7 +106,7 @@ namespace CalamityHunt.Content.Tiles
             {
                 if (GoozmaSystem.FindSlimeStatues(center, top, 10, 5))
                 {
-                    if (player.HasItem(ModContent.ItemType<EntropicSlimeConcentration>()))
+                    if (player.HasItem(ModContent.ItemType<SludgeFocus>()))
                         GoozmaSystem.GoozmaEgg(new Vector2(center * 16, (top - 1) * 16));
 
                     else if (!Main.slimeRain)

@@ -41,7 +41,7 @@ namespace CalamityHunt.Content.Items.BossBags
 
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
-            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<EntropyMatter>(), 1, 20, 30));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 2));
             itemLoot.Add(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<EbonianMask>(), ModContent.ItemType<DivineMask>(), ModContent.ItemType<CrimulanMask>(), ModContent.ItemType<StellarMask>()));

@@ -75,7 +75,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
             {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("GodsParanoia").Type)
                     .AddIngredient(calamity.Find<ModItem>("MetalMonstrosity").Type)
                     .AddIngredient(calamity.Find<ModItem>("SludgeSplotch").Type, 100)
@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
             {
                 CreateRecipe()
                     .AddIngredient(ItemID.SpikyBall, 100)
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
             }

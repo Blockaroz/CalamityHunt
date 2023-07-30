@@ -97,7 +97,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("DeathsAscension").Type)
                     .AddIngredient(calamity.Find<ModItem>("LifefruitScythe").Type)
                     .AddIngredient(calamity.Find<ModItem>("EssenceFlayer").Type)
@@ -109,7 +109,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             {
                 CreateRecipe()
                     .AddIngredient(ItemID.Sickle)
-                    .AddIngredient<EntropyMatter>(15)
+                    .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
             }

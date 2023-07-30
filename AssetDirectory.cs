@@ -85,6 +85,7 @@ namespace CalamityHunt
                 public static SoundStyle StellarConstellationForm = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarSlimeConstellationForm") { MaxInstances = 0 };
             }
 
+            public static SoundStyle SupremeRestorationBigGulp = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SupremeRestorationBigGulp") { MaxInstances = 0, PitchVariance = 0.05f };
             public static SoundStyle BloatBabyWarbleLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/BabyBloatTravelLoop") { MaxInstances = 0, IsLooped = true };
         }
     }

@@ -36,7 +36,7 @@ namespace CalamityHunt.Content.Items.Placeable
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient<EntropyMatter>(15)
+                .AddIngredient<ChromaticMass>(15)
                 .Register();
         }
     }
