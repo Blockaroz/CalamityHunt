@@ -49,7 +49,7 @@ namespace CalamityHunt.Common.UI
                         stressTopTimer = 0;
                     }
                 }
-                else if (fillPercent <= 1f)
+                else if (fillPercent < 1f)
                     stressTopFrame = -1;
             }
         }
