@@ -16,19 +16,46 @@ namespace CalamityHunt.Content.Buffs
     {
         public override void SetStaticDefaults()
         {
-            Main.buffNoTimeDisplay[Type] = true;
+            Main.buffNoTimeDisplay[Type] = false;
             Main.buffNoSave[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] < player.GetModPlayer<SplendorJamPlayer>().tentacleCount)
-                Projectile.NewProjectile(player.GetSource_FromThis(), player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<SplendorTentacle>(), 200, 0.5f);
-            
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] > player.GetModPlayer<SplendorJamPlayer>().tentacleCount)
-                Main.projectile.First(n => n.active && n.owner == player.whoAmI).Kill();
+            if (player.GetModPlayer<SplendorJamPlayer>().stressedOut)
+            {
+                float checkStress = player.GetModPlayer<SplendorJamPlayer>().checkStress;
+                if (checkStress >= 0.5 && checkStress < 0.75)
+                {
+                    player.GetDamage(DamageClass.Generic) += 0.7f;
+                    player.GetDamage(DamageClass.Generic).Flat += 12f;
+                    player.GetCritChance(DamageClass.Generic) += 3f;
+                    player.GetArmorPenetration(DamageClass.Generic) += 10f;
+                }
+                else if (checkStress >= 0.75 && checkStress < 1)
+                {
+                    player.GetDamage(DamageClass.Generic) += 0.16f;
+                    player.GetDamage(DamageClass.Generic).Flat += 16f;
+                    player.GetCritChance(DamageClass.Generic) += 7f;
+                    player.GetArmorPenetration(DamageClass.Generic) += 20f;
 
-            if (!player.GetModPlayer<SplendorJamPlayer>().active)
+                }
+                else if (checkStress >= 1)
+                {
+                    player.GetDamage(DamageClass.Generic) += 0.35f;
+                    player.GetDamage(DamageClass.Generic).Flat += 20f;
+                    player.GetCritChance(DamageClass.Generic) += 10f;
+                    player.GetArmorPenetration(DamageClass.Generic) += 40f;
+                }
+                else
+                {
+                    player.GetDamage(DamageClass.Generic) += 0.02f;
+                    player.GetDamage(DamageClass.Generic).Flat += 8f;
+                    player.GetCritChance(DamageClass.Generic) += 1f;
+                    player.GetArmorPenetration(DamageClass.Generic) += 5f;
+                }
+            }
+            else
                 player.DelBuff(buffIndex);
         }
     }

@@ -4,9 +4,12 @@ using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
+using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Players
@@ -21,47 +24,10 @@ namespace CalamityHunt.Common.Players
         public float stress;
         public float checkStress;
 
+        private bool playFull;
         private float gooTime;
         private int delay;
         private int wait;
-        private readonly int[] slimes =
-{
-            NPCID.GreenSlime,
-            NPCID.BlueSlime,
-            NPCID.PurpleSlime,
-            NPCID.Pinky,
-            NPCID.RedSlime,
-            NPCID.YellowSlime,
-            NPCID.BlackSlime,
-            NPCID.BabySlime,
-            NPCID.MotherSlime,
-            NPCID.LavaSlime,
-            NPCID.SandSlime,
-            NPCID.IceSlime,
-            NPCID.SpikedIceSlime,
-            NPCID.JungleSlime,
-            NPCID.SpikedJungleSlime,
-            NPCID.DungeonSlime,
-            NPCID.GoldenSlime,
-            NPCID.ShimmerSlime,
-            NPCID.WindyBalloon,
-            NPCID.UmbrellaSlime,
-            NPCID.SlimeMasked,
-            NPCID.SlimeRibbonGreen,
-            NPCID.SlimeRibbonRed,
-            NPCID.SlimeRibbonWhite,
-            NPCID.SlimeRibbonYellow,
-            NPCID.ToxicSludge,
-            NPCID.CorruptSlime,
-            NPCID.Slimeling,
-            NPCID.Slimer,
-            NPCID.Slimer2,
-            NPCID.Crimslime,
-            NPCID.Gastropod,
-            NPCID.IlluminantSlime,
-            NPCID.RainbowSlime
-
-        };
         public override void ResetEffects()
         {
             rainbow = false;
@@ -74,26 +40,31 @@ namespace CalamityHunt.Common.Players
             }
             if (Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15 && stress >= 0.25f && !stressedOut)
             {
+                SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/JamStressActivate"), Player.Center);
                 stressedOut = true;
+                Player.AddBuff(ModContent.BuffType<SplendorJamBuff>(), (int)(checkStress * 16 + 4) * 60);
             }
         }
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
+            if (rainbow || active)
+                gooTime = (gooTime + 1) % 60;
             if (rainbow)
             {
-                gooTime = (gooTime + 1) % 60;
-
+                Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
                 if (drawInfo.shadow != 0)
                 {
-                    Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
-                    if (Main.rand.NextBool(8) && stressedOut)
-                    {
-                        Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, goo, 1f);
-                    }
                     r = goo.R;
                     g = goo.G;
                     b = goo.B;
                 }
+                if (drawInfo.shadow == 0 && Main.rand.NextBool(8) && stressedOut)
+                    Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, goo, 1f);
+            }
+            if (stressedOut)
+            {
+                Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
+                Lighting.AddLight(Player.Center, new Vector3(goo.R, goo.G, goo.B) * 0.01f * checkStress);
             }
         }
         public override void FrameEffects()
@@ -105,50 +76,17 @@ namespace CalamityHunt.Common.Players
         {
             if (active)
             {
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] < Player.GetModPlayer<SplendorJamPlayer>().tentacleCount && Player.whoAmI == Main.myPlayer)
+                    Projectile.NewProjectile(Player.GetSource_FromThis(), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<SplendorTentacle>(), 200, 0.5f, Player.whoAmI);
+
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] > Player.GetModPlayer<SplendorJamPlayer>().tentacleCount)
+                    Main.projectile.First(n => n.active && n.owner == Player.whoAmI).Kill();
+
                 tentacleCount = stressedOut ? tentacleCount : (int)(1 + stress * 4f);
-
-                if (!Player.HasBuff<SplendorJamBuff>())
-                    Player.AddBuff(ModContent.BuffType<SplendorJamBuff>(), 5, false);
-
-                for (int i = 0; i < slimes.Length; i++)
-                {
-                    //Player.npcTypeNoAggro[slimes[i]] = true;
-                }
                 if (stress < 1f && !stressedOut)
                     stress += 0.0001f;
                 if (stressedOut)
-                {
-                    stress -= 0.001f;
-                    if (checkStress >= 0.5 && checkStress < 0.75)
-                    {
-                        Player.GetDamage(DamageClass.Generic) += 0.7f;
-                        Player.GetDamage(DamageClass.Generic).Flat += 12f;
-                        Player.GetCritChance(DamageClass.Generic) += 3f;
-                        Player.GetArmorPenetration(DamageClass.Generic) += 10f;
-                    }
-                    else if (checkStress >= 0.75 && checkStress < 1)
-                    {
-                        Player.GetDamage(DamageClass.Generic) += 0.16f;
-                        Player.GetDamage(DamageClass.Generic).Flat += 16f;
-                        Player.GetCritChance(DamageClass.Generic) += 7f;
-                        Player.GetArmorPenetration(DamageClass.Generic) += 20f;
-
-                    }
-                    else if (checkStress >= 1)
-                    {
-                        Player.GetDamage(DamageClass.Generic) += 0.35f;
-                        Player.GetDamage(DamageClass.Generic).Flat += 20f;
-                        Player.GetCritChance(DamageClass.Generic) += 10f;
-                        Player.GetArmorPenetration(DamageClass.Generic) += 40f;
-                    }
-                    else
-                    {
-                        Player.GetDamage(DamageClass.Generic) += 0.02f;
-                        Player.GetDamage(DamageClass.Generic).Flat += 8f;
-                        Player.GetCritChance(DamageClass.Generic) += 1f;
-                        Player.GetArmorPenetration(DamageClass.Generic) += 5f;
-                    }
-                }
+                    stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
                 if (stressedOut && stress <= 0)
                 {
                     stressedOut = false;
@@ -162,28 +100,40 @@ namespace CalamityHunt.Common.Players
             }
             else
             {
+                Player.ClearBuff(ModContent.BuffType<SplendorJamBuff>());
                 stressedOut = false;
                 stress = 0;
                 checkStress = 0;
             }
         }
+        public override void PostUpdateMiscEffects()
+        {
+            if (Player.whoAmI == Main.myPlayer && playFull && checkStress >= 1f)
+            {
+                playFull = false;
+                SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/JamStressFull"), Player.Center);
+            }
+            else if (!playFull && checkStress < 1f)
+                playFull = true;
+        }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (active)
+            if (active && Player.whoAmI == Main.myPlayer && Player.HeldItem.type != ItemID.Zenith)
             {
-                if (stress < 1f && delay <= 0 && !stressedOut)
+                if (stress < 1f && delay <= 0 && !stressedOut && target.type != NPCID.TargetDummy)
                 {
-                    stress += 0.001f;
+                    float dis = Player.Distance(target.Center);
+                    stress += 0.0005f + ((dis > 0 && dis <= 320) ? 0.0005f : 0.0005f - (dis/320 * 0.0005f));
                     delay = 5;
                 }
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && checkStress >= 0.25f && checkStress < 0.75)
                 {
-                    Projectile.NewProjectile(Terraria.Entity.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Main.myPlayer, 0, 0);
+                    Projectile.NewProjectile(Player.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Player.whoAmI, 0, 0);
                     wait = 60;
                 }
                 else if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && checkStress >= 0.75f)
                 {
-                    Projectile.NewProjectile(Terraria.Entity.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Main.myPlayer, 0, 1);
+                    Projectile.NewProjectile(Player.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Player.whoAmI, 0, 1);
                     wait = 60;
                 }
             }
@@ -192,21 +142,22 @@ namespace CalamityHunt.Common.Players
         {
             if (active)
             {
-                if (proj.type != ModContent.ProjectileType<StressExplosion>())
+                if (proj.type != ModContent.ProjectileType<SplendorTentacle>() && Player.whoAmI == Main.myPlayer)
                 {
-                    if (stress < 1f && delay <= 0 && !stressedOut)
+                    if (stress < 1f && delay <= 0 && !stressedOut && target.type != NPCID.TargetDummy)
                     {
-                        stress += 0.001f;
+                        float dis = Player.Distance(target.Center);
+                        stress += 0.0005f + ((dis > 0 && dis <= 320) ? 0.0005f : 0.0005f - (dis / 320 * 0.0005f));
                         delay = 5;
                     }
                     if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && checkStress >= 0.25f && checkStress < 0.75)
                     {
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Main.myPlayer, 0, 0);
+                        Projectile.NewProjectile(proj.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Player.whoAmI, 0, 0);
                         wait = 60;
                     }
                     else if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && stress >= 0.75f)
                     {
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_None(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Main.myPlayer, 0, 1);
+                        Projectile.NewProjectile(proj.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Player.whoAmI, 0, 1);
                         wait = 60;
                     }
                 }

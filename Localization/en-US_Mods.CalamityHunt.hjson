@@ -513,6 +513,21 @@ Config: {
 		Label: Holy Explosion Screenshake Toggle
 		Tooltip: Enables or disables the Divine Gargooptuar's holy explosion screenshake effect
 	}
+
+	StressPosX: {
+		Label: "{$Mods.CalamityHunt.Config.StressPosX.Label}"
+		Tooltip: "{$Mods.CalamityHunt.Config.StressPosX.Tooltip}"
+	}
+
+	StressPosY: {
+		Label: "{$Mods.CalamityHunt.Config.StressPosY.Label}"
+		Tooltip: "{$Mods.CalamityHunt.Config.StressPosY.Tooltip}"
+	}
+
+	StressShake: {
+		Label: "{$Mods.CalamityHunt.Config.StressShake.Label}"
+		Tooltip: "{$Mods.CalamityHunt.Config.StressShake.Tooltip}"
+	}
 }
 
 LoreGeneric:
@@ -538,6 +553,21 @@ Configs: {
 		epilepsy: {
 			Label: "{$Mods.CalamityHunt.Config.HolyExplosionToggle.Label}"
 			Tooltip: "{$Mods.CalamityHunt.Config.HolyExplosionToggle.Tooltip}"
+		}
+
+		stressX: {
+			Label: "{$Mods.CalamityHunt.Config.StressPosX.Label}"
+			Tooltip: "{$Mods.CalamityHunt.Config.StressPosX.Tooltip}"
+		}
+
+		stressY: {
+			Label: "{$Mods.CalamityHunt.Config.StressPosY.Label}"
+			Tooltip: "{$Mods.CalamityHunt.Config.StressPosY.Tooltip}"
+		}
+
+		stressShake: {
+			Label: "{$Mods.CalamityHunt.Config.StressShake.Label}"
+			Tooltip: "{$Mods.CalamityHunt.Config.StressShake.Tooltip}"
 		}
 	}
 }
