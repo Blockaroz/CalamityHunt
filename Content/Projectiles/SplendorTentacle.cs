@@ -29,6 +29,8 @@ namespace CalamityHunt.Content.Projectiles
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.manualDirectionChange = true;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 15;
         }
 
         public ref float Time => ref Projectile.ai[0];

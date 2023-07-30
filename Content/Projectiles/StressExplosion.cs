@@ -28,6 +28,8 @@ namespace CalamityHunt.Content.Projectiles
             Projectile.friendly = true;
             Projectile.penetrate = -1;
             Projectile.aiStyle = -1;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 20;
         }
         public ref float Time => ref Projectile.ai[0];
         public ref float Stressed => ref Projectile.ai[1];
