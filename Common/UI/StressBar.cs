@@ -68,18 +68,19 @@ namespace CalamityHunt.Common.UI
                             Texture2D barCharge = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/StressBarFill").Value;
                             Texture2D barTop = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/StressBarTopped").Value;
 
-                            Vector2 shake = Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().stressedOut ? Shake() * oldPercent : Vector2.Zero;
-
                             Vector2 vector = new Vector2(Config.Instance.stressX, Config.Instance.stressY);
                             if (vector.X < 0f || vector.X > 100f)
                                 vector.X = 35.77406f;
                             if (vector.Y < 0f || vector.Y > 100f)
                                 vector.Y = 3.97614312f;
                             Vector2 position = new Vector2((int)(vector.X * 0.01f * (Main.screenWidth - bar.Width)), (int)(vector.Y * 0.01f * (Main.screenHeight - (bar.Height / 5))));
+                            Vector2 shake = Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().stressedOut ? Shake() * oldPercent : Vector2.Zero;
+                            Vector2 offset = new Vector2(21, 26);
+                            Vector2 pos = position + shake - offset;
                             int fillAmount = (fillPercent > 0.99f) ? 60 + 42 : (int)(60 * fillPercent + 42);
 
                             Rectangle mouse = new Rectangle((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y, 8, 8);
-                            Rectangle value = new Rectangle((int)position.X, (int)position.Y, bar.Width, bar.Height / 5);
+                            Rectangle value = new Rectangle((int)(pos.X + 21), (int)(pos.Y + 26), 92, 24);
                             if (mouse.Intersects(value))
                                 Main.instance.MouseText("Stress: " + StressString(fillPercent, 1), 0, 0);
 
@@ -87,9 +88,9 @@ namespace CalamityHunt.Common.UI
                             Rectangle fillFrame = new Rectangle(0, (int)(oldPercent / 0.25f)*(barCharge.Height / 5), fillAmount, barCharge.Height / 5);
                             Rectangle topFrame = new Rectangle(0, stressTopFrame * (barTop.Height / 9), barTop.Width, barTop.Height / 9);
 
-                            Main.spriteBatch.Draw(bar, position + shake, barFrame, Color.White, 0, Vector2.Zero, 1f, 0, 0);
-                            Main.spriteBatch.Draw(barCharge, position + shake, fillFrame, Color.White, 0, Vector2.Zero, 1f, 0, 0);
-                            Main.spriteBatch.Draw(barTop, position + shake, topFrame, Color.White, 0, Vector2.Zero, 1f, 0, 0);
+                            Main.spriteBatch.Draw(bar, pos, barFrame, Color.White, 0, Vector2.Zero, 1f, 0, 0);
+                            Main.spriteBatch.Draw(barCharge, pos, fillFrame, Color.White, 0, Vector2.Zero, 1f, 0, 0);
+                            Main.spriteBatch.Draw(barTop, pos, topFrame, Color.White, 0, Vector2.Zero, 1f, 0, 0);
                             return true;
                         },
                         InterfaceScaleType.UI));

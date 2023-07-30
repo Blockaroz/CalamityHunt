@@ -85,6 +85,8 @@ namespace CalamityHunt.Common.Players
                 tentacleCount = stressedOut ? tentacleCount : (int)(1 + stress * 4f);
                 if (stress < 1f && !stressedOut)
                     stress += 0.0001f;
+                else if (stress > 1f && !stressedOut)
+                    stress = 1f;
                 if (stressedOut)
                     stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
                 if (stressedOut && stress <= 0)
