@@ -6,6 +6,7 @@ using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Items.Accessories;
 using CalamityHunt.Content.Items.BossBags;
+using CalamityHunt.Content.Items.Consumable;
 using CalamityHunt.Content.Items.Lore;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
@@ -180,6 +181,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>()));
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<Goozmaga>()));
+        }
+
+        public override void BossLoot(ref string name, ref int potionType)
+        {
+            potionType = ModContent.ItemType<SupremeRestorationPotion>();
         }
 
         public ref float Time => ref NPC.ai[0];
