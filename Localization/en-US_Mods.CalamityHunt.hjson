@@ -242,7 +242,19 @@ Items: {
 
 	SplendorJam: {
 		DisplayName: Splendor Jam
-		Tooltip: CROWN OF GOD
+		Tooltip: 
+			'''
+			Activates the Stress Bar
+			Stress builds up passively, though standing close to enemies speeds up the rate at which it increases
+			You emit light that scales with your Stress level
+			Grants a Spectacle at 0%, 25%, 50%, 75%, and 100% Stress
+			At 25% Stress your weapons will produce explosions
+			At 75% Stress your explosions will become larger and deal more damage
+			Double tap <down> while Stress is above 25% to enter Malice Mode
+			Malice Mode significantly increases your damage, as well as granting flat damage, armor penetration, and critical strike
+			These boosts and their duration scale with the amount of stress you have
+			'Something horrible is approaching...'
+			'''
 	}
 
 	TheSlimer: {
@@ -287,7 +299,7 @@ Items: {
 		Tooltip:
 			'''
 			Automatically detaches you when close to the hook
-			Hold [hook key] to keep the hook grappled
+			Hold <grapple> to keep the hook grappled
 			'It won't break, I promise'
 			'''
 	}
@@ -359,7 +371,7 @@ Items: {
 	}
 
 	SludgeFocus: {
-		DisplayName: Sludge Focus
+		DisplayName: Pluripotence
 		Tooltip:
 			'''
 			Use on a Slime Ninja Statue with 4 Slime Statues present to summon Goozma directly
@@ -372,7 +384,7 @@ Items: {
 		Tooltip:
 			'''
 			Summons a rideable Oily Bubble
-			Press [space] while in the air to enter flight mode
+			Press <jump> while in the air to enter flight mode
 			'Now YOU get to be the ninja!'
 			'''
 	}
@@ -496,8 +508,8 @@ Buffs: {
 	}
 
 	SplendorJamBuff: {
-		DisplayName: Stressed Out
-		Description: Stress = Power
+		DisplayName: Malice Mode
+		Description: You're all stressed out
 	}
 }
 
@@ -574,10 +586,11 @@ Configs: {
 
 SetBonuses.Shogun:
 	'''
-	does it give stats?
-	flight (show stats? check snow ruffian)
-	tabi dash + dash enhancer 
-	[s] to fastfall
-	debuff immunities (implement)
-	is there anything else?? please tell me if so, then i can draft this out
+	17% increased damage
+	Allows flight and slow fall
+	Wearing any wings overrides this flight
+	Allows the ability to dash and enhances other dashes
+	Hold <down> to fastfall
+	Increases jump speed 
+	Grants immunity to many debuffs [NEEDS DOING]
 	'''
