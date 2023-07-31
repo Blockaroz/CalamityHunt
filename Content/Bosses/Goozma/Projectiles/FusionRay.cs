@@ -78,7 +78,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     if (Time % 4 == 0 && Time > ChargeTime && Time < ChargeTime + LaserDuration)
                     {
                         float shakeStrength = Utils.GetLerpValue(ChargeTime - LaserDuration * 0.5f, ChargeTime + LaserDuration, Time, true);
-                        Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 18f, 12, 20, 5000));
+                        Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 8f, 12, 20, 5000));
                     }
 
                     //float firstWave = MathHelper.SmoothStep(-1.5f, 0.6f, Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration * 0.3f, Time, true));
@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     if (Time % 4 == 0 && Time > ChargeTime && Time < ChargeTime + LaserDuration)
                     {
                         float shakeStrength = Utils.GetLerpValue(ChargeTime - LaserDuration * 0.5f, ChargeTime + LaserDuration, Time, true);
-                        Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 18f, 12, 20, 5000));
+                        Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 8f, 12, 20, 5000));
                     }
                     
                     Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center), 0.03f);

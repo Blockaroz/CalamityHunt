@@ -17,7 +17,7 @@ namespace CalamityHunt.Content.Buffs
     {
         public override void SetStaticDefaults()
         {
-            Main.buffNoTimeDisplay[Type] = false;
+            Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
         }
 

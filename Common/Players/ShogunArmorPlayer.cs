@@ -158,6 +158,8 @@ namespace CalamityHunt.Common.Players
                 if (self.wingsLogic == wingSlot && self.wings <= 0)
                     self.wings = wingSlot;
 
+                if (self.wingTime >= self.wingTimeMax)
+                    self.wingTime = 1;
             }
         }
 

@@ -19,21 +19,30 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
 {
     public class SlimeCane : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.StaffMinionSlotsRequired[Type] = 1;
+        }
+
         public override void SetDefaults()
         {
             Item.width = 54;
             Item.height = 84;
             Item.useTime = 30;
+            Item.mana = 20;
             Item.useAnimation = 30;
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;
+            Item.reuseDelay = 2;
             Item.damage = 2000;
             Item.noMelee = true;
             Item.knockBack = 10f;
             Item.UseSound = SoundID.DD2_MonkStaffSwing;
             Item.shoot = ModContent.ProjectileType<SlimeCaneGemCounter>();
-            Item.shootSpeed = 8f;
+            Item.shootSpeed = 10f;
             Item.buffType = ModContent.BuffType<SlimeCaneBuff>();
+            Item.buffTime = 5;
+            Item.autoReuse = true;
             Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {
