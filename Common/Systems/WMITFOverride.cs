@@ -62,7 +62,7 @@ namespace CalamityHunt.Common.Systems
                 var t = config.GetType().GetField("DisplayItemTooltips", BindingFlags.Public | BindingFlags.Instance);
                 if ((bool)t.GetValue(config) && item.ModItem != null)
                 {
-                    if (item.ModItem.Mod == Mod)
+                    if (item.ModItem.Mod == Mod && !item.Name.Contains("[" + item.ModItem.Mod.Name + "]") && !item.Name.Contains("[" + item.ModItem.Mod.DisplayName + "]"))
                     {
                         tooltips.RemoveAll(i => i.Text.Contains(Mod.Name));
                         tooltips.RemoveAll(i => i.Text.Contains(Mod.DisplayName));
