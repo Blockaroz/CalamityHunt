@@ -47,8 +47,6 @@ namespace CalamityHunt.Common.Players
         }
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-            if (rainbow || active)
-                gooTime = (gooTime + 1) % 60;
             if (rainbow)
             {
                 Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
@@ -61,11 +59,6 @@ namespace CalamityHunt.Common.Players
                 if (drawInfo.shadow == 0 && Main.rand.NextBool(8) && stressedOut)
                     Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, goo, 1f);
             }
-            if (stressedOut)
-            {
-                Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
-                Lighting.AddLight(Player.Center, new Vector3(goo.R, goo.G, goo.B) * 0.01f * checkStress);
-            }
         }
         public override void FrameEffects()
         {
@@ -74,8 +67,12 @@ namespace CalamityHunt.Common.Players
         }
         public override void UpdateEquips()
         {
+            if (rainbow || active)
+                gooTime = (gooTime + 1) % 60;
             if (active)
             {
+                Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
+                Lighting.AddLight(Player.Center, new Vector3(goo.R, goo.G, goo.B) * 0.01f * checkStress);
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] < Player.GetModPlayer<SplendorJamPlayer>().tentacleCount && Player.whoAmI == Main.myPlayer)
                     Projectile.NewProjectile(Player.GetSource_FromThis(), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<SplendorTentacle>(), 200, 0.5f, Player.whoAmI);
 
