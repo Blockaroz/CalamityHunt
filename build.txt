@@ -2,3 +2,4 @@ displayName = Hunt of the Old God
 loadAfter = CalamityMod
 author = Powerhouse
 version = 0.4
+sortAfter = WMITF
