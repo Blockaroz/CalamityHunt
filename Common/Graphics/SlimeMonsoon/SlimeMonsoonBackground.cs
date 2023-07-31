@@ -135,7 +135,13 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             int yOffset = (int)(yOffPower * 1600f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 0.275f % MathHelper.TwoPi) * 100f);
 
             //gold: new Color(40, 22, 15);
-            Color brightColor = new Color(22, 10, 32);
+            Color brightColor = new GradientColor(new Color[]
+            {
+                new Color(20, 16, 42),
+                new Color(25, 20, 32),
+                new Color(30, 15, 20)
+
+            }, 2f, 2f).Value;
             Color darkColor = Color.Lerp(brightColor, Color.Black, 0.3f);
             lightColor = Color.Lerp(Color.DimGray, brightColor, 0.9f);
 

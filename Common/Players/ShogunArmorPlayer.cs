@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Items.Armor.Shogun;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using System;
@@ -140,6 +141,24 @@ namespace CalamityHunt.Common.Players
         public override void Load()
         {
             On_Player.DashMovement += ShogunDash;
+            On_Player.JumpMovement += SetWings;
+        }
+
+        private void SetWings(On_Player.orig_JumpMovement orig, Player self)
+        {
+            orig(self);
+
+            if (self.GetModPlayer<ShogunArmorPlayer>().active)
+            {
+                int wingSlot = EquipLoader.GetEquipSlot(Mod, "ShogunChestplate", EquipType.Wings);
+
+                if (self.equippedWings == null)
+                    self.wingsLogic = wingSlot;
+
+                if (self.wingsLogic == wingSlot && self.wings <= 0)
+                    self.wings = wingSlot;
+
+            }
         }
 
         private void ShogunDash(On_Player.orig_DashMovement orig, Player self)

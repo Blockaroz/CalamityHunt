@@ -22,7 +22,6 @@ using CalamityHunt.Content.Pets.BloatBabyPet;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
-using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,7 +35,6 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 using Terraria.Utilities;
 using static CalamityHunt.Common.Systems.DifficultySystem;
 
@@ -482,8 +480,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 //nextAttack[currentSlime] = ;
                             }
 
-                            //currentSlime = 1;
-                            //slimeAttack = 2;
+                            currentSlime = 2;
+                            slimeAttack = 2;
 
                             int[] slimeTypes = new int[]
                             {
@@ -624,9 +622,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         break;
                                     case 2:
 
-                                        Orbit(300, new Vector2(800, 0));
+                                        Orbit(400, new Vector2(700, 0));
 
-                                        if (Time > 40 && Time < 400)
+                                        if (Time > 40)
                                             SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.CrimulanHop);
 
 
@@ -1628,11 +1626,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case SortedProjectileAttackTypes.CrimulanHop:
 
-                    if (NPC.Distance(Target.Center) > 100)
+                    if (Time % 80 < 20 && Time % 5 == 1)
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(1f), ModContent.ProjectileType<RainbowLaser>(), GetDamage(1), 0, ai0: -Main.rand.Next(30, 35), ai1: NPC.whoAmI);
+                    
+                    if (Time % 80 < 50 && Time % 15 == 5)
                     {
-                        if (Time % 80 < 25 && Time % 3 == 1)
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, -NPC.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(2f), ModContent.ProjectileType<RainbowLaser>(), GetDamage(1), 0, ai0: -Main.rand.Next(40, 45), ai1: NPC.whoAmI);
-
+                        SoundEngine.PlaySound(fizzSound, NPC.Center);
+                        goozmaShootPowerTarget = 1f;
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(targetPos).SafeNormalize(Vector2.Zero).RotatedByRandom(4f), ModContent.ProjectileType<SlimeShot>(), GetDamage(1), 0);
                     }
 
                     break;

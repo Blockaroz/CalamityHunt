@@ -90,7 +90,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * Utils.GetLerpValue(0, 25, Time, true);
             bloomColor.A = 0;
 
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.15f * squishFactor, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, outlineFrame, new Color(200, 200, 200, 0), Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, bloomColor * 0.15f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, baseFrame, lightColor * Utils.GetLerpValue(15, 30, Time, true), Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);

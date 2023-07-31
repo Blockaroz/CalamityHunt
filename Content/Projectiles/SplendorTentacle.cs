@@ -198,7 +198,7 @@ namespace CalamityHunt.Content.Projectiles
                     {
                         tentacleFrame = texture.Frame(2, 5, 0, 0);
                         tentacleGlowFrame = texture.Frame(2, 5, 1, 0);
-                        stretch = new Vector2(Projectile.scale, points[i].Distance(points[i - 1]) / (tentacleFrame.Height - 2f) * 1.2f);
+                        stretch = new Vector2(Projectile.scale * 0.6f, points[i].Distance(points[i - 1]) / (tentacleFrame.Height - 2f) * 1.2f);
                     }
                     Main.EntitySpriteDraw(texture, points[i] - Main.screenPosition, tentacleFrame, Color.Lerp(light, Color.White, 1f - (float)i / points.Count), rot, tentacleFrame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
 

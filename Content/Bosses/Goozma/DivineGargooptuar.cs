@@ -439,7 +439,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     NPC.velocity = Vector2.UnitY * 5f;
                     int damage = Main.zenithWorld ? 5 : 0;
-                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Target.Center - new Vector2(0, 40), Target.Velocity, ModContent.ProjectileType<PixieBall>(), damage, 0, ai1: 15, ai2: -1);
+                    Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), Target.Center - new Vector2(0, 80), Target.Velocity, ModContent.ProjectileType<PixieBall>(), damage, 0, ai1: 15, ai2: -1);
                 }
 
                 NPC.velocity *= 0.9f;
@@ -452,7 +452,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             else if (Time < 500)
             {
                 squishFactor = Vector2.Lerp(squishFactor, new Vector2(1f + (float)Math.Cos(Time * 0.05f) * 0.2f, 1f + (float)Math.Cos(Time * 0.05f + MathHelper.Pi) * 0.2f), 0.3f);
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.01f, 0.1f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * MathF.Pow(NPC.Distance(Target.Center) * 0.5f, 1.1f) * 0.05f, 0.1f);
 
                 //if (Time % 80 == 0)
                 //    for (int i = 0; i < Main.rand.Next(10, 30); i++)

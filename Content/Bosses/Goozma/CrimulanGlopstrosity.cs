@@ -558,7 +558,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         private void EndlessChase()
         {
             int jumpCount = (int)DifficultyBasedValue(8, 9, 10, 11, 12);
-            int jumpTime = (int)DifficultyBasedValue(50, 45, 40, 35);
+            int jumpTime = (int)DifficultyBasedValue(70, 65, 60, 55);
             float jumpHeight = NPC.height * 6f;
 
             if (Time < 35)

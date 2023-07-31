@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Players;
 using CalamityHunt.Content.Items.Rarities;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -19,13 +20,12 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
         public override void SetStaticDefaults()
         {
             Item.wingSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Wings);
-            ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(-1, 13f, 3f, true);
+            ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(9000, 13f, 3f, true);
         }
 
         public override void SetDefaults()
         {
             Item.wingSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Wings);
-
             Item.width = 34;
             Item.height = 24;
             Item.value = Item.sellPrice(gold: 10);
@@ -52,28 +52,49 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
 
         public override bool WingUpdate(Player player, bool inUse)
         {
+            if (inUse)
+            {
+                Dust d = Dust.NewDustDirect(player.Center - new Vector2(15), 30, 30, DustID.Sand, 0, 0, 100, Color.Black, 0.5f);
+                d.noGravity = true;
+            }
+
             return false;
+        }
+
+        public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
+        {
+            ascentWhenFalling = 0.5f;
+            ascentWhenRising = 0.3f;
+            maxCanAscendMultiplier = 1f;
+            maxAscentMultiplier = 3f;
+            constantAscend = 0.2f;
+        }
+
+        public override void HorizontalWingSpeeds(Player player, ref float speed, ref float acceleration)
+        {
+            speed = 2f;
+            acceleration = 3f;
         }
 
         public override void EquipFrameEffects(Player player, EquipType type)
         {
-            if (player.GetModPlayer<ShogunArmorPlayer>().active)
+            if (player.equippedWings != null)
             {
-                if (player.equippedWings == null)
+                if (player.equippedWings.wingSlot == player.wingsLogic)
                 {
                     player.wings = Item.wingSlot;
-                    player.wingsLogic = Item.wingSlot;
-                    player.equippedWings = Item;
-                }
-                else if (player.equippedWings.wingSlot == player.wings)
-                {
-                    player.wings = Item.wingSlot;
-                    player.wingsLogic = Item.wingSlot;
-                    player.equippedWings = Item;
+                    player.cWings = player.cBody;
                 }
             }
 
-            player.waist = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Waist);
+            if (player.wingsLogic == Item.wingSlot && player.wings <= 0)
+                player.wings = Item.wingSlot;
+
+            if (player.body == Item.bodySlot)
+            {
+                player.waist = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Waist);
+                player.cWaist = player.cBody;
+            }
         }
     }
 }

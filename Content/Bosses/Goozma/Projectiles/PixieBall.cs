@@ -41,7 +41,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void AI()
         {
             Projectile.rotation += Projectile.velocity.Length() * 0.01f * (Projectile.velocity.X > 0 ? 1 : -1);
-            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 17, Time, true) * Utils.GetLerpValue(480, 440, Time, true)) * 1.3f;
+            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 17, Time, true) * Utils.GetLerpValue(480, 460, Time, true)) * 1.3f;
             owner = -1;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active))
             {
@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Projectile.velocity += Main.rand.NextVector2Circular(3, 3);
 
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * 3f, 0.03f) * Utils.GetLerpValue(500, 470, Time, true);
-                Projectile.velocity += Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * 0.3f;
+                Projectile.velocity += Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * (0.3f + Utils.GetLerpValue(500, 800, Projectile.Distance(Main.npc[owner].Center), true));
             }
 
             if (Cooldown <= 0)
