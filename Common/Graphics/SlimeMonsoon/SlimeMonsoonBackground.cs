@@ -55,6 +55,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
         public static int additionalLightningChance;
         public static bool lightningEnabled;
         public static Color lightColor;
+        public static float distortionStrength = 1f;
 
         public static float? forceStrength;
 
@@ -100,7 +101,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                 radialDistortPos = Vector2.Lerp(radialDistortPos, Main.LocalPlayer.Center, 0.3f);
 
             _brightness = MathHelper.Lerp(_brightness, 0.15f, 0.08f);
-            _windSpeed -= Main.WindForVisuals * 0.0035f;
+            _windSpeed -= Main.WindForVisuals * 0.0025f;
             _windSpeed = _windSpeed % 1f;
 
             if (thunder == null)
@@ -167,7 +168,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                             continue;
                         break;
                     default:
-                        if ((maxDepth >= float.MaxValue && minDepth < float.MaxValue))
+                        if (maxDepth >= float.MaxValue && minDepth < float.MaxValue)
                             continue;
                         break;
                 }
@@ -177,7 +178,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
                 skyClouds.Parameters["uWorldPos"].SetValue(Main.screenPosition / (7000f - i * 500f));
                 skyClouds.Parameters["uColorBase"].SetValue(Color.Lerp(darkColor, brightColor, Utils.GetLerpValue(0, 4, i, true)).ToVector4());
-                skyClouds.Parameters["uTime"].SetValue(_windSpeed + i * 200);
+                skyClouds.Parameters["uTime"].SetValue(_windSpeed + i * 100);
                 skyClouds.Parameters["uStrength"].SetValue(Math.Clamp((float)Math.Cbrt(_strength) * 0.9f - Utils.GetLerpValue(0, 2, i, true) * 0.2f, 0.0001f, 1f));
 
                 spriteBatch.End();
@@ -197,7 +198,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                     .UseTargetPosition(radialDistortPos)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
                     .UseIntensity(1f)
-                    .UseOpacity(_strength * 0.1f);
+                    .UseOpacity(_strength * 0.1f * distortionStrength);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
@@ -257,7 +258,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                 lightningEffect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Texture);
                 lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Texture);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
-                lightningEffect.Parameters["uTime"].SetValue(-(float)Math.Cbrt(maxTime - time) * 0.2f);
+                lightningEffect.Parameters["uTime"].SetValue(-(float)Math.Cbrt(maxTime - time) * 0.3f);
                 lightningEffect.Parameters["uBackPower"].SetValue(0f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
 
