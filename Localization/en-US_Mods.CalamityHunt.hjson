@@ -242,7 +242,7 @@ Items: {
 
 	SplendorJam: {
 		DisplayName: Splendor Jam
-		Tooltip: 
+		Tooltip:
 			'''
 			Activates the Stress Bar
 			Stress builds up passively, though standing close to enemies speeds up the rate at which it increases

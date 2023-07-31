@@ -80,60 +80,59 @@ namespace CalamityHunt.Common.Systems
     {
         public override void PostUpdate()
         {
-            bool checkNoWorldT = !ModLoader.TryGetMod("WMITF", out Mod wmitf2) && !wmitf2.TryFind("Config", out ModConfig config2) && !(bool)config2.GetType().GetField("DisplayWorldTooltips", BindingFlags.Public | BindingFlags.Instance).GetValue(config2);
-            bool checkTech = ModLoader.TryGetMod("WMITF", out Mod wmitf3) && wmitf3.TryFind("Config", out ModConfig config3) && !(bool)config3.GetType().GetField("DisplayTechnicalNames", BindingFlags.Public | BindingFlags.Instance).GetValue(config3);
-            
-            if (Main.dedServ || checkNoWorldT)
-                return;
-            WMITFOverride.MouseText = String.Empty;
-            WMITFOverride.SecondLine = false;
-            WMITFOverride.Hunted = false;
+            if (!Main.dedServ && ModLoader.TryGetMod("WMITF", out Mod wmitf) && wmitf.TryFind("Config", out ModConfig config))
+            {
+                WMITFOverride.MouseText = String.Empty;
+                WMITFOverride.SecondLine = false;
+                WMITFOverride.Hunted = false;
 
-            var tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
-            if (tile.HasTile)
-            {
-                var modTile = TileLoader.GetTile(tile.TileType);
-                if (modTile != null)
+                bool tech = (bool)config.GetType().GetField("DisplayTechnicalNames", BindingFlags.Public | BindingFlags.Instance).GetValue(config);
+                var tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+                if (tile.HasTile)
                 {
-                    if (modTile.Mod == Mod)
+                    var modTile = TileLoader.GetTile(tile.TileType);
+                    if (modTile != null)
                     {
-                        WMITFOverride.MouseText = checkTech ? ("CalamityMod:" + modTile.Name) : "Calamity Mod";
-                        WMITFOverride.Hunted = true;
-                    }
-                }
-            }
-            else
-            {
-                var modWall = WallLoader.GetWall(tile.WallType);
-                if (modWall != null)
-                {
-                    if (modWall.Mod == Mod)
-                    {
-                        WMITFOverride.MouseText = checkTech ? ("CalamityMod:" + modWall.Name) : "Calamity Mod";
-                        WMITFOverride.Hunted = true;
-                    }
-                }
-            }
-            var mousePos = Main.MouseWorld;
-            for (int i = 0; i < Main.maxNPCs; i++)
-            {
-                var npc = Main.npc[i];
-                if (mousePos.Between(npc.TopLeft, npc.BottomRight))
-                {
-                    var modNPC = NPCLoader.GetNPC(npc.type);
-                    if (modNPC != null && npc.active && !NPCID.Sets.ProjectileNPC[npc.type])
-                    {
-                        if (modNPC.Mod == Mod)
+                        if (modTile.Mod == Mod)
                         {
-                            WMITFOverride.MouseText = checkTech ? ("CalamityMod:" + modNPC.Name) : "Calamity Mod";
-                            WMITFOverride.SecondLine = true;
-                            break;
+                            WMITFOverride.MouseText = tech ? ("CalamityMod:" + modTile.Name) : "Calamity Mod";
+                            WMITFOverride.Hunted = true;
                         }
                     }
                 }
+                else
+                {
+                    var modWall = WallLoader.GetWall(tile.WallType);
+                    if (modWall != null)
+                    {
+                        if (modWall.Mod == Mod)
+                        {
+                            WMITFOverride.MouseText = tech ? ("CalamityMod:" + modWall.Name) : "Calamity Mod";
+                            WMITFOverride.Hunted = true;
+                        }
+                    }
+                }
+                var mousePos = Main.MouseWorld;
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    var npc = Main.npc[i];
+                    if (mousePos.Between(npc.TopLeft, npc.BottomRight))
+                    {
+                        var modNPC = NPCLoader.GetNPC(npc.type);
+                        if (modNPC != null && npc.active && !NPCID.Sets.ProjectileNPC[npc.type])
+                        {
+                            if (modNPC.Mod == Mod)
+                            {
+                                WMITFOverride.MouseText = tech ? ("CalamityMod:" + modNPC.Name) : "Calamity Mod";
+                                WMITFOverride.SecondLine = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (WMITFOverride.MouseText != String.Empty && Main.mouseText)
+                    WMITFOverride.SecondLine = true;
             }
-            if (WMITFOverride.MouseText != String.Empty && Main.mouseText)
-                WMITFOverride.SecondLine = true;
         }
     }
 }
