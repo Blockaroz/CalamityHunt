@@ -190,8 +190,8 @@ namespace CalamityHunt.Common.Players
 
                 self.dashType = 1;
             }
-            
-                orig(self);
+           
+            orig(self);
         }
     }
 }

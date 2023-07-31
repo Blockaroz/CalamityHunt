@@ -476,8 +476,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 //nextAttack[currentSlime] = ;
                             }
 
-                            //currentSlime = 3;
-                            //slimeAttack = 0;
+                            //currentSlime = 1;
+                            //slimeAttack = 2;
 
                             int[] slimeTypes = new int[]
                             {

@@ -1,6 +1,7 @@
 ﻿using CalamityHunt.Common.Players;
 using CalamityHunt.Content.Items.Rarities;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,21 +12,27 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
     {
         public override void Load()
         {
-            if (Main.netMode != NetmodeID.Server)
-            {
-                EquipLoader.AddEquipTexture(Mod, Texture + "_Waist", EquipType.Waist, this);
-                EquipLoader.AddEquipTexture(Mod, Texture.Replace("Chestplate", "Wings"), EquipType.Wings, this);
-            }
+            EquipLoader.AddEquipTexture(Mod, Texture + "_Waist", EquipType.Waist, this);
+            EquipLoader.AddEquipTexture(Mod, Texture.Replace("Chestplate", "Wings"), EquipType.Wings, this);
+        }
+
+        public override void SetStaticDefaults()
+        {
+            Item.wingSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Wings);
+            ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(-1, 13f, 3f, true);
         }
 
         public override void SetDefaults()
         {
+            Item.wingSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Wings);
+
             Item.width = 34;
             Item.height = 24;
             Item.value = Item.sellPrice(gold: 10);
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.defense = 50;
             Item.lifeRegen = 3;
+
             if (ModLoader.HasMod("CalamityMod"))
             {
                 ModRarity r;
@@ -45,13 +52,27 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
 
         public override bool WingUpdate(Player player, bool inUse)
         {
-            bool set = player.GetModPlayer<ShogunArmorPlayer>().active;
-
             return false;
         }
 
         public override void EquipFrameEffects(Player player, EquipType type)
         {
+            if (player.GetModPlayer<ShogunArmorPlayer>().active)
+            {
+                if (player.equippedWings == null)
+                {
+                    player.wings = Item.wingSlot;
+                    player.wingsLogic = Item.wingSlot;
+                    player.equippedWings = Item;
+                }
+                else if (player.equippedWings.wingSlot == player.wings)
+                {
+                    player.wings = Item.wingSlot;
+                    player.wingsLogic = Item.wingSlot;
+                    player.equippedWings = Item;
+                }
+            }
+
             player.waist = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Waist);
         }
     }

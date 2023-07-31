@@ -78,7 +78,7 @@ namespace CalamityHunt.Content.Projectiles
             Projectile.rotation = Projectile.AngleFrom(Player.MountedCenter) - MathHelper.PiOver2;
             NPC target = Projectile.FindTargetWithinRange(320);
 
-            float trackSpeed = 0.05f / (1f + Player.velocity.Length() * 0.2f);
+            float trackSpeed = 0.05f;
             Vector2 homePos = Player.MountedCenter - new Vector2(110, 0).RotatedBy(-MathHelper.PiOver2 - MathHelper.PiOver2 * Player.direction * Math.Min(count, 1) + (MathHelper.Pi / Math.Max(1f, count) * Index + MathHelper.PiOver2) * Player.direction)
                 - Player.velocity * 10 + new Vector2(MathF.Sin(Time * 0.05f + Index * 1.5f), MathF.Cos(Time * 0.05f + Index * 1.5f)) * 5f;
 
@@ -159,8 +159,8 @@ namespace CalamityHunt.Content.Projectiles
 
             tentacle.StartPos = Projectile.Center;
             tentacle.EndPos = Player.MountedCenter;
-            tentacle.gravity = -Vector2.UnitX * Player.direction * 0.05f + Vector2.UnitY.RotatedBy(Projectile.rotation) * 0.05f;
-            tentacle.damping = Utils.GetLerpValue(300, 400, (Player.position - Projectile.Center).Length(), true);
+            tentacle.gravity = -Vector2.UnitX * Player.direction * 0.05f;
+            tentacle.damping = Utils.GetLerpValue(500, 0, (Player.position - Projectile.Center).Length(), true) * 0.05f + Utils.GetLerpValue(300, 320, (Player.position - Projectile.Center).Length(), true);
             tentacle.Update();
 
             if (Projectile.Distance(Player.MountedCenter) > 300)

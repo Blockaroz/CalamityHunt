@@ -96,7 +96,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         Projectile.velocity = Projectile.DirectionFrom(player.Center).SafeNormalize(Vector2.Zero) * (14f + Projectile.velocity.Length() + player.velocity.Length());
                     
                     Cooldown += 15;
-                    
+
+                    if (Time > 40)
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.PixieBallBounce, Projectile.Center);
+
                     for (int i = 0; i < 40; i++)
                     {
                         Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
@@ -170,7 +173,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             HandleSound();
 
-            Projectile.localAI[1] += (float)Math.Sqrt(Utils.GetLerpValue(1000, -250, Projectile.Distance(Main.npc[owner].Center), true) * 3f);
+            Projectile.localAI[1] += (float)Math.Sqrt(Utils.GetLerpValue(1000, 0, Projectile.Distance(Main.npc[owner].Center), true) * 5f);
             Projectile.localAI[0]++;
             Time++;
 
@@ -185,9 +188,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Projectile.localAI[1] > 10f)
             {
                 Projectile.localAI[1] = 0;
-                float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f);
-                float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, -2f, 2f) * Projectile.scale;
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.1f), Projectile.Center);
+                float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f) * 1.1f - 1f;
+                float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, 0.05f, 2f) * Projectile.scale;
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.15f), Projectile.Center);
             }
 
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
