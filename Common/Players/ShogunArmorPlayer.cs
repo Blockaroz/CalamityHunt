@@ -212,5 +212,50 @@ namespace CalamityHunt.Common.Players
            
             orig(self);
         }
+
+        public override void PostUpdateMiscEffects()
+        {
+            if (active)
+            {
+            Player.buffImmune[BuffID.Silenced] = true;
+            Player.buffImmune[BuffID.Cursed] = true;
+            Player.buffImmune[BuffID.OgreSpit] = true;
+            Player.buffImmune[BuffID.Frozen] = true;
+            Player.buffImmune[BuffID.Webbed] = true;
+            Player.buffImmune[BuffID.Stoned] = true;
+            Player.buffImmune[BuffID.VortexDebuff] = true;
+            Player.buffImmune[BuffID.Electrified] = true;
+            Player.buffImmune[BuffID.Burning] = true;
+            Player.buffImmune[BuffID.Stinky] = true;
+            Player.buffImmune[BuffID.Dazed] = true;
+            Player.buffImmune[BuffID.Venom] = true;
+            Player.buffImmune[BuffID.CursedInferno] = true;
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Player.buffImmune[calamity.Find<ModBuff>("Clamity").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("Dragonfire").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("DoGExtremeGravity").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("FishAlert").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("GlacialState").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("GodSlayerInferno").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("HolyFlames").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("IcarusFolly").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("MiracleBlight").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("Nightwither").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("Plague").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("VulnerabilityHex").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("Warped").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("WeakPetrification").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("WhisperingDeath").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("FabsolVodkaBuff").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("FrozenLungs").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("PopoNoselessBuff").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("SearingLava").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("ShellfishClaps").Type] = true;
+                Player.buffImmune[calamity.Find<ModBuff>("BrimstoneFlames").Type] = true;
+                }
+          }
+          }
     }
 }
