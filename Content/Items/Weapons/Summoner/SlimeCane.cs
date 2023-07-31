@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Ranged;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
@@ -29,14 +30,10 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             Item.damage = 2000;
             Item.noMelee = true;
             Item.knockBack = 10f;
-            SoundStyle useSound = SoundID.AbigailUpgrade;
-            useSound.Volume = 1f;
-            useSound.Pitch = -0.33f;
-            useSound.MaxInstances = 0;
-            Item.UseSound = useSound;
-            Item.shoot = ModContent.ProjectileType<TrailblazerFlame>();
+            Item.UseSound = SoundID.DD2_MonkStaffSwing;
+            Item.shoot = ModContent.ProjectileType<SlimeCaneGemCounter>();
             Item.shootSpeed = 8f;
-
+            Item.buffType = ModContent.BuffType<SlimeCaneBuff>();
             Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {
@@ -46,11 +43,6 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
                 Item.rare = r.Type;
             }
             Item.DamageType = DamageClass.Summon;
-        }
-
-        public override void UseAnimation(Player player)
-        {
-            player.itemRotation += MathHelper.Pi / 8f * player.direction;
         }
     }
 }

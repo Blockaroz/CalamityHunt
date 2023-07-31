@@ -13,7 +13,6 @@ public class LoopingSound
     public LoopingSound(SoundStyle soundStyle, Func<bool> activeCondition)
     {
         style = soundStyle;
-        style.IsLooped = true;
         condition = activeCondition;
         slot = SlotId.Invalid;
     }
@@ -22,7 +21,7 @@ public class LoopingSound
     {
         bool active = SoundEngine.TryGetActiveSound(slot, out ActiveSound activeSound);
 
-        if (!active || !slot.IsValid)
+        if ((!active || !slot.IsValid) && condition.Invoke())
         {
             slot = SoundEngine.PlaySound(style, position.Invoke(), sound =>
             {

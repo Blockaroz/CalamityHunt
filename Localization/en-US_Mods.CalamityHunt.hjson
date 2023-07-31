@@ -459,6 +459,7 @@ Projectiles: {
 	StressExplosion.DisplayName: Stressed Explosion
 	GoomoireSuck.DisplayName: Goomoire Suction
 	SplendorTentacle.DisplayName: Spectacle
+	SlimeCaneGemCounter.DisplayName: Slime Cane Gem Counter
 }
 
 Chat: {
@@ -510,6 +511,11 @@ Buffs: {
 	SplendorJamBuff: {
 		DisplayName: Malice Mode
 		Description: You're all stressed out
+	}
+
+	SlimeCaneBuff: {
+		DisplayName: Slime Cane Buff
+		Description: Mods.CalamityHunt.Buffs.SlimeCaneBuff.Description
 	}
 }
 
