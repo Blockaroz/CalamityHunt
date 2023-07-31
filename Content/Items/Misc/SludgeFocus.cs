@@ -1,4 +1,5 @@
 using CalamityHunt.Content.Items.Materials;
+using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using CalamityHunt.Common.Systems.Particles;
@@ -20,7 +21,14 @@ namespace CalamityHunt.Content.Items.Misc
             Item.height = 48;
             Item.knockBack = 6;
             Item.value = 10000;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ModContent.RarityType<VioletRarity>();
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                ModRarity r;
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                calamity.TryFind<ModRarity>("Violet", out r);
+                Item.rare = r.Type;
+            }
             Item.channel = true;
         }
 
