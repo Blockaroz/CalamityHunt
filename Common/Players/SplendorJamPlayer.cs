@@ -4,6 +4,7 @@ using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
+using ReLogic.Utilities;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
@@ -24,10 +25,13 @@ namespace CalamityHunt.Common.Players
         public float stress;
         public float checkStress;
 
+        private bool t25, t50, t75;
         private bool playFull;
         private float gooTime;
         private int delay;
         private int wait;
+        SlotId loopSlot;
+
         public override void ResetEffects()
         {
             rainbow = false;
@@ -37,10 +41,12 @@ namespace CalamityHunt.Common.Players
             if (!stressedOut)
             {
                 checkStress = stress;
+                if (SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))
+                    activeSound.Stop();
             }
             if (Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15 && stress >= 0.25f && !stressedOut)
             {
-                SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/JamStressActivate"), Player.Center);
+                SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageActivate"), Player.Center);
                 stressedOut = true;
                 Player.AddBuff(ModContent.BuffType<SplendorJamBuff>(), (int)(checkStress * 16 + 4) * 60);
             }
@@ -84,10 +90,34 @@ namespace CalamityHunt.Common.Players
                     stress += 0.0001f;
                 else if (stress > 1f && !stressedOut)
                     stress = 1f;
+                if (stress > 0.25f && !t25)
+                {
+                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Pitch = -0.4f }, Player.Center);
+                    t25 = true;
+                }
+                else if (stress > 0.5f && !t50)
+                {
+                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Pitch = -0.2f }, Player.Center);
+                    t50 = true;
+                }
+                if (stress > 0.755f && !t75)
+                {
+                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator"), Player.Center);
+                    t75 = true;
+                }
                 if (stressedOut)
+                {
                     stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
+                    if (!SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))
+                        loopSlot = SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageLoop"), Player.Center);
+                    else
+                        activeSound.Position = Player.Center;
+                }
                 if (stressedOut && stress <= 0)
                 {
+                    t25 = false;
+                    t50 = false;
+                    t75 = false;
                     stressedOut = false;
                     stress = 0;
                     checkStress = 0;
@@ -100,6 +130,9 @@ namespace CalamityHunt.Common.Players
             else
             {
                 Player.ClearBuff(ModContent.BuffType<SplendorJamBuff>());
+                t25 = false;
+                t50 = false;
+                t75 = false;
                 stressedOut = false;
                 stress = 0;
                 checkStress = 0;
@@ -110,7 +143,7 @@ namespace CalamityHunt.Common.Players
             if (Player.whoAmI == Main.myPlayer && playFull && checkStress >= 1f)
             {
                 playFull = false;
-                SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/JamStressFull"), Player.Center);
+                SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageFull"), Player.Center);
             }
             else if (!playFull && checkStress < 1f)
                 playFull = true;
