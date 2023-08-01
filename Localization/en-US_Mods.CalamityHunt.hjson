@@ -270,7 +270,7 @@ Items: {
 
 	PureAuricSoul: {
 		DisplayName: Auric Soul
-		Tooltip: ""
+		Tooltip: "Absorb to gain immense powers"
 	}
 
 	SludgeShaker: {
@@ -329,7 +329,7 @@ Items: {
 
 	GoozmaAuricSoul: {
 		DisplayName: Chromatic Auric Soul
-		Tooltip: ""
+		Tooltip: "Absorb to gain immense, slimy powers"
 	}
 
 	ScytheOfTheOldGod: {
@@ -344,7 +344,7 @@ Items: {
 
 	FieryAuricSoul: {
 		DisplayName: Draconic Auric Soul
-		Tooltip: ""
+		Tooltip: "Absorb to gain immense, draconic powers"
 	}
 
 	Goomoire: {
