@@ -172,7 +172,7 @@ namespace CalamityHunt.Common.Players
 
                     }
 
-                    if (self.TryingToHoverUp)
+                    if (self.TryingToHoverUp && !self.mount.Active)
                         self.velocity.Y -= 1f;
                 }
 

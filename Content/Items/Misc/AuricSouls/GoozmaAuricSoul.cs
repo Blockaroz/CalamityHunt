@@ -87,14 +87,33 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
 
         public override Color? GetAlpha(Color lightColor)
         {
-            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 30);
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 30 - 10);
             Color secColor = Color.SaddleBrown;
-            Color final = Color.Lerp(glowColor, secColor, 0.4f + MathF.Sin(Main.GlobalTimeWrappedHourly * 0.1f) * 0.2f);
+            Color final = Color.Lerp(glowColor, secColor, 0.3f + MathF.Sin(Main.GlobalTimeWrappedHourly * 0.1f) * 0.1f);
             return final;
         }
 
+        public LoopingSound heartbeatSound;
+        public LoopingSound droneSound;
+
+        public int breathSoundCounter;
+
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
+            if (heartbeatSound == null)
+                heartbeatSound = new LoopingSound(AssetDirectory.Sounds.GoozmaAuricSoulHeartbeat, new HuntOfTheOldGodUtils.ItemAudioTracker(Item).IsActiveAndInGame);
+            heartbeatSound.Update(() => Item.position, () => 1f, () => 0f);
+
+            if (droneSound == null)
+                droneSound = new LoopingSound(AssetDirectory.Sounds.GoozmaAuricSoulDrone, new HuntOfTheOldGodUtils.ItemAudioTracker(Item).IsActiveAndInGame);
+            droneSound.Update(() => Item.position, () => 1.5f, () => 0f);
+
+            if (breathSoundCounter-- <= 0)
+            {
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaAuricSoulBreathe, Item.Center);
+                breathSoundCounter = Main.rand.Next(300, 500);
+            }
+
             if (Main.rand.NextBool(10))
             {
                 Vector2 off = Main.rand.NextVector2Circular(30, 30);
@@ -125,53 +144,65 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
             glowColor.A = 0;
 
             float soulScale = scale;
-            float fastScale = 1f + MathF.Sin(Main.GlobalTimeWrappedHourly * 25f % MathHelper.TwoPi) * 0.1f;
-            scale = 1f + MathF.Sin(Main.GlobalTimeWrappedHourly * 3f % MathHelper.TwoPi) * 0.1f;
+            float fastScale = 1f + MathF.Sin(Main.GlobalTimeWrappedHourly * 15f % MathHelper.TwoPi) * 0.1f;
+            scale = 1f + MathF.Sin(Main.GlobalTimeWrappedHourly % MathHelper.TwoPi) * 0.1f;
            
             spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), Color.Black * 0.2f, 0, glowTexture.Size() * 0.5f, soulScale * 3f, 0, 0);
 
             VertexStrip strip = new VertexStrip();
+            VertexStrip strip2 = new VertexStrip();
 
             int count = 500;
             Vector2[] offs = new Vector2[count];
+            Vector2[] offs2 = new Vector2[count];
             float[] offRots = new float[count];
+            float[] offRots2 = new float[count];
 
             float time = Main.GlobalTimeWrappedHourly * 0.5f;
             for (int i = 0; i < count; i++)
             {
-                Vector2 x = new Vector2(50 + MathF.Sin(time * 2 + i / (float)count * 76f) * 7f, 0).RotatedBy(MathHelper.TwoPi / (float)count * i - time);
-                x.X *= 1f + MathF.Cos(time * 1.5f) * 0.1f;
-                offs[i] = x.RotatedBy(time);
+                Vector2 x = new Vector2(60 * scale + MathF.Sin(time * 5f + i / (float)count * 76f) * 7f, 0).RotatedBy(MathHelper.TwoPi / (float)count * i - time);
+                x.X *= 1f + MathF.Cos(time * 2f) * 0.1f;
+                offs[i] = x.RotatedBy(time);                
+                
+                Vector2 y = new Vector2(30 + MathF.Sin(time * 8f + i / (float)count * 76f) * 3f, 0).RotatedBy(MathHelper.TwoPi / (float)count * i - time + 0.9f);
+                y.X *= 1f + MathF.Cos(time * 3f) * 0.2f;
+                offs2[i] = y.RotatedBy(time);
             }
 
             offRots[0] = offs[0].AngleTo(offs[1]);
+            offRots2[0] = offs2[0].AngleTo(offs2[1]);
 
             for (int i = 1; i < count; i++)
+            {
                 offRots[i] = offs[i - 1].AngleTo(offs[i]);
+                offRots2[i] = offs2[i - 1].AngleTo(offs[i]);
+            }
 
             Color StripColor(float p)
             {
                 Color final = new GradientColor(SlimeUtils.GoozColors, 0.5f, 0.5f).ValueAt(p * 20 - 10 + Main.GlobalTimeWrappedHourly * 30);
-                return final * 0.9f;
+                return final * 0.8f;
             }
-            float StripWidth(float p) => 16f * MathHelper.Clamp(MathF.Sin(p * 20) + 0.4f, 0f, 1f);
+            float StripWidth(float p) => 15f * MathHelper.Clamp(MathF.Sin(p * 20) + 0.4f, 0f, 1f);
 
             strip.PrepareStrip(offs, offRots, StripColor, StripWidth, Item.Center - Main.screenPosition, offs.Length, true);
-
-            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
+            strip2.PrepareStrip(offs2, offRots2, StripColor, StripWidth, Item.Center - Main.screenPosition, offs2.Length, true);
+            
+            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CrystalLightningEffect", AssetRequestMode.ImmediateLoad).Value;
             effect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-            effect.Parameters["uTexture"].SetValue(TextureAssets.Extra[197].Value);
+            effect.Parameters["uTexture"].SetValue(trailTexture);
             effect.Parameters["uGlow"].SetValue(TextureAssets.Extra[197].Value);
             effect.Parameters["uColor"].SetValue(Vector3.One);
-            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.66f % 1f);
-            effect.Parameters["uBackPower"].SetValue(1f);
+            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.2f % 1f);
             effect.CurrentTechnique.Passes[0].Apply();
 
             strip.DrawTrail();
+            strip2.DrawTrail();
 
             for (int i = 0; i < 4; i++)
             {
-                Color sparkleColor = new GradientColor(SlimeUtils.GoozColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 30 + i);
+                Color sparkleColor = new GradientColor(SlimeUtils.GoozColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 30 + i) * 0.7f;
                 sparkleColor.A = 0;
                 float length = 4f;
                 if (i % 2 == 1)
@@ -193,8 +224,8 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
         private void DrawSideSparkle(SpriteBatch spriteBatch, Vector2 position, float rotation, Color color, float length)
         {
             Texture2D sparkTexture = AssetDirectory.Textures.Sparkle;
-            Vector2 t = new Vector2(0.17f, length);
-            Vector2 l = new Vector2(0.6f, length + 0.1f);
+            Vector2 t = new Vector2(0.2f, length * 0.7f);
+            Vector2 l = new Vector2(0.6f, length + 0.2f);
             spriteBatch.Draw(sparkTexture, position, sparkTexture.Frame(), color * 0.1f, rotation + MathHelper.PiOver2, sparkTexture.Size() * 0.5f, l, 0, 0);
             spriteBatch.Draw(sparkTexture, position, sparkTexture.Frame(), color * 1.5f, rotation + MathHelper.PiOver2, sparkTexture.Size() * 0.5f, t, 0, 0);
         }

@@ -49,7 +49,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 Projectile.scale = 0.3f + Utils.GetLerpValue(0, 60, Time, true) * 0.7f;
                 if (Time == 105)
                 {
-                    SoundEngine.PlaySound(SoundID.Item84, Projectile.Center);
+                     SoundEngine.PlaySound(AssetDirectory.Sounds.Weapon.FissionFlyerExplode, Projectile.Center);
                     int amt = Projectile.ai[2] == 1 ? 5 : 3;
                     for (int i = 0; i < amt; i++)
                     {
