@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 namespace CalamityHunt.Common.Players
 {
@@ -154,6 +155,8 @@ namespace CalamityHunt.Common.Players
             {
                 if (stress < 1f && delay <= 0 && !stressedOut && target.type != NPCID.TargetDummy)
                 {
+                    if (DummyCheck(target))
+                        return;
                     float dis = Player.Distance(target.Center);
                     stress += 0.0005f + ((dis > 0 && dis <= 320) ? 0.0005f : 0.0005f - (dis/320 * 0.0005f));
                     delay = 5;
@@ -178,6 +181,8 @@ namespace CalamityHunt.Common.Players
                 {
                     if (stress < 1f && delay <= 0 && !stressedOut && target.type != NPCID.TargetDummy)
                     {
+                        if (DummyCheck(target))
+                            return;
                         float dis = Player.Distance(target.Center);
                         stress += 0.0005f + ((dis > 0 && dis <= 320) ? 0.0005f : 0.0005f - (dis / 320 * 0.0005f));
                         delay = 5;
@@ -194,6 +199,18 @@ namespace CalamityHunt.Common.Players
                     }
                 }
             }
+        }
+        private static bool DummyCheck(NPC npc)
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                if (npc.type == ModContent.Find<ModNPC>("CalamityMod/SuperDummyNPC").Type)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
     }
 }

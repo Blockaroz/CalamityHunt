@@ -125,6 +125,7 @@ namespace CalamityHunt.Common.Systems
                             {
                                 WMITFOverride.MouseText = tech ? ("CalamityMod:" + modNPC.Name) : "Calamity Mod";
                                 WMITFOverride.SecondLine = true;
+                                WMITFOverride.Hunted = true;
                                 break;
                             }
                         }
