@@ -250,7 +250,7 @@ Items: {
 			Grants a Spectacle at 0%, 25%, 50%, 75%, and 100% Stress
 			At 25% Stress your weapons will produce explosions
 			At 75% Stress your explosions will become larger and deal more damage
-			Double tap <down> while Stress is above 25% to enter Malice Mode
+			Double tap DOWN while Stress is above 25% to enter Malice Mode
 			Malice Mode significantly increases your damage, as well as granting flat damage, armor penetration, and critical strike
 			These boosts and their duration scale with the amount of stress you have
 			'Something horrible is approaching...'
@@ -270,7 +270,7 @@ Items: {
 
 	PureAuricSoul: {
 		DisplayName: Auric Soul
-		Tooltip: "Absorb to gain immense powers"
+		Tooltip: Absorb to gain immense powers
 	}
 
 	SludgeShaker: {
@@ -299,7 +299,7 @@ Items: {
 		Tooltip:
 			'''
 			Automatically detaches you when close to the hook
-			Hold <grapple> to keep the hook grappled
+			Hold the hook button down to keep the hook attached to blocks
 			'It won't break, I promise'
 			'''
 	}
@@ -329,7 +329,7 @@ Items: {
 
 	GoozmaAuricSoul: {
 		DisplayName: Chromatic Auric Soul
-		Tooltip: "Absorb to gain immense, slimy powers"
+		Tooltip: Absorb to gain immense, slimy powers
 	}
 
 	ScytheOfTheOldGod: {
@@ -344,7 +344,7 @@ Items: {
 
 	FieryAuricSoul: {
 		DisplayName: Draconic Auric Soul
-		Tooltip: "Absorb to gain immense, draconic powers"
+		Tooltip: Absorb to gain immense, draconic powers
 	}
 
 	Goomoire: {
@@ -593,10 +593,11 @@ Configs: {
 SetBonuses.Shogun:
 	'''
 	17% increased damage
-	Allows flight and slow fall
+	{$CommonItemTooltip.FlightAndSlowfall}
+	{$CommonItemTooltip.PressDownToHover}
 	Wearing any wings overrides this flight
 	Allows the ability to dash and enhances other dashes
-	Hold <down> to fastfall
+	Hold DOWN to fastfall
 	Increases jump speed 
 	Grants immunity to many endgame and movement-based debuffs
 	'''
