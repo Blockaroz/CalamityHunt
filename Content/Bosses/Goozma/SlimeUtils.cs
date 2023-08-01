@@ -143,6 +143,66 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     return GoozmaColorUtils.Unpleasant;
                 case 24:
                     return GoozmaColorUtils.OceanJasper;
+                case 25:
+                    return GoozmaColorUtils.Seashell;
+                case 26:
+                    return GoozmaColorUtils.JackOLantern;
+                case 27:
+                    return GoozmaColorUtils.CottonCandy;
+                case 28:
+                    return GoozmaColorUtils.MeanGreen;
+                case 29:
+                    return GoozmaColorUtils.ColorCalibration;
+                case 30:
+                    return GoozmaColorUtils.Enchanted;
+                case 31:
+                    return GoozmaColorUtils.Sisyphan;
+                case 32:
+                    return GoozmaColorUtils.Babil;
+                case 33:
+                    return GoozmaColorUtils.Doomsday;
+                case 34:
+                    return GoozmaColorUtils.Rugamarian;
+                case 35:
+                    return GoozmaColorUtils.Poozma;
+                case 36:
+                    return GoozmaColorUtils.Festive;
+                case 37:
+                    return GoozmaColorUtils.MoonCarpet;
+                case 39:
+                    return GoozmaColorUtils.Zeromus;
+                case 40:
+                    return GoozmaColorUtils.Water;
+                case 41:
+                    return GoozmaColorUtils.Stellar;
+                case 42:
+                    return GoozmaColorUtils.Crimson;
+                case 43:
+                    return GoozmaColorUtils.Corruption;
+                case 44:
+                    return GoozmaColorUtils.Hallow;
+                case 45:
+                    return GoozmaColorUtils.TheDragon;
+                case 46:
+                    return GoozmaColorUtils.Speevil;
+                case 47:
+                    return GoozmaColorUtils.HyperrealisticBloody;
+                case 48:
+                    return GoozmaColorUtils.AuricTesla;
+                case 49:
+                    return GoozmaColorUtils.Pikmin;
+                case 50:
+                    return GoozmaColorUtils.Flame;
+                case 51:
+                    return GoozmaColorUtils.Poland;
+                case 52:
+                    return GoozmaColorUtils.Kindergarten;
+                case 53:
+                    return GoozmaColorUtils.Daniel;
+                case 54:
+                    return GoozmaColorUtils.Autumnal;
+                case 55:
+                    return GoozmaColorUtils.Subworld;
             }
         }
 
