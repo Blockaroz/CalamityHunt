@@ -16,7 +16,7 @@ namespace CalamityHunt.Common.Systems
 
         [Label("$Mods.CalamityHunt.Config.StressPosX.Label")]
         [Range(0f, 100f)]
-        [DefaultValue(35.77406f)]
+        [DefaultValue(45.24)]
         [Tooltip("$Mods.CalamityHunt.Config.StressPosX.Tooltip")]
         public float stressX { get; set; }
 
