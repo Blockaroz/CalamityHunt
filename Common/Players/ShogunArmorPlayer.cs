@@ -10,6 +10,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -141,10 +142,10 @@ namespace CalamityHunt.Common.Players
         public override void Load()
         {
             On_Player.DashMovement += ShogunDash;
-            On_Player.JumpMovement += SetWings;
+            On_Player.UpdatePettingAnimal += SetWings;
         }
 
-        private void SetWings(On_Player.orig_JumpMovement orig, Player self)
+        private void SetWings(On_Player.orig_UpdatePettingAnimal orig, Player self)
         {
             orig(self);
 
@@ -153,13 +154,32 @@ namespace CalamityHunt.Common.Players
                 int wingSlot = EquipLoader.GetEquipSlot(Mod, "ShogunChestplate", EquipType.Wings);
 
                 if (self.equippedWings == null)
+                {
                     self.wingsLogic = wingSlot;
+
+                    if (self.controlJump && self.wingTime > 0f && !self.canJumpAgain_Cloud && self.jump == 0)
+                    {
+                        bool hovering = self.TryingToHoverDown && !self.merman;
+                        if (hovering)
+                        {
+                            self.runAcceleration += 10;
+                            self.maxRunSpeed += 10;
+
+                            self.velocity.Y *= 0.7f;
+                            if (self.velocity.Y > -2f && self.velocity.Y < 1f)
+                                self.velocity.Y = 1E-05f;
+                        }
+
+                    }
+
+                    if (self.TryingToHoverUp)
+                        self.velocity.Y -= 1f;
+                }
 
                 if (self.wingsLogic == wingSlot && self.wings <= 0)
                     self.wings = wingSlot;
 
-                if (self.wingTime >= self.wingTimeMax)
-                    self.wingTime = 1;
+                self.noFallDmg = true;
             }
         }
 

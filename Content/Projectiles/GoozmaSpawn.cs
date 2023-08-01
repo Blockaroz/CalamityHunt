@@ -23,7 +23,7 @@ namespace CalamityHunt.Content.Projectiles
 {
     public class GoozmaSpawn : ModProjectile
     {
-        public static readonly SoundStyle slimeabsorb = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeAbsorb", 8) with { MaxInstances = 100, Volume = 0.05f};
+        public static readonly SoundStyle slimeabsorb = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeAbsorb", 8) with { MaxInstances = 0, Volume = 0.1f};
         public WeightedRandom<int> randomType = new WeightedRandom<int>();
         public override void SetDefaults()
         {
@@ -164,6 +164,8 @@ namespace CalamityHunt.Content.Projectiles
 
         private void FadeMusicOut(On_Main.orig_UpdateAudio orig, Main self)
         {
+            orig(self);
+
             if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>()))
             {
                 Projectile goozma = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>());
@@ -175,8 +177,6 @@ namespace CalamityHunt.Content.Projectiles
                     Main.musicFade[i] = tempFade;
                 }
             }
-            else
-                orig(self);
         }
 
         public void SpawnSlimes()
