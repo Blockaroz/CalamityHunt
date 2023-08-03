@@ -11,7 +11,9 @@ using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
-using Terraria.UI;
+using MonoMod.RuntimeDetour;
+using MonoMod.Cil;
+using Mono.Cecil.Cil;
 
 namespace CalamityHunt
 {
@@ -47,6 +49,46 @@ namespace CalamityHunt
             else
                 throw new DataMisalignedException();
 
+            //Hide the mod from /modlist
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Type modlistCommand = typeof(ModCommand).Assembly.GetType("Terraria.ModLoader.Default.ModlistCommand");
+                if (modlistCommand != null)
+                    HideFromModListIL = new ILHook(modlistCommand.GetMethod("Action"), HideModFromModListCommand);
+            }
+        }
+
+        public void HideModFromModListCommand(ILContext il)
+        {
+            ILCursor cursor = new ILCursor(il);
+
+            if (!cursor.TryGotoNext(MoveType.After,
+                i => i.MatchStloc(0)))
+            {
+                return;
+            }
+
+            cursor.Emit(OpCodes.Ldloc, 0);
+            cursor.EmitDelegate(SkipCalamityHunt);
+            cursor.Emit(OpCodes.Stloc, 0);
+        }
+
+        public IEnumerable<Mod> SkipCalamityHunt(IEnumerable<Mod> mods)
+        {
+            List<Mod> modsWithoutHunt = new List<Mod>();
+            foreach (Mod mod in mods)
+            {
+                if (mod != this)
+                    modsWithoutHunt.Add(mod);
+            }
+             return modsWithoutHunt;
+        }
+
+        public static ILHook HideFromModListIL;
+
+        public override void Unload()
+        {
+            HideFromModListIL?.Undo();
         }
 
         public override void PostSetupContent()
