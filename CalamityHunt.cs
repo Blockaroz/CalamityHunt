@@ -50,12 +50,9 @@ namespace CalamityHunt
                 throw new DataMisalignedException();
 
             //Hide the mod from /modlist
-            if (ModLoader.HasMod("CalamityMod"))
-            {
-                Type modlistCommand = typeof(ModCommand).Assembly.GetType("Terraria.ModLoader.Default.ModlistCommand");
-                if (modlistCommand != null)
-                    HideFromModListIL = new ILHook(modlistCommand.GetMethod("Action"), HideModFromModListCommand);
-            }
+            Type modlistCommand = typeof(ModCommand).Assembly.GetType("Terraria.ModLoader.Default.ModlistCommand");
+            if (modlistCommand != null)
+                HideFromModListIL = new ILHook(modlistCommand.GetMethod("Action"), HideModFromModListCommand);
         }
 
         public void HideModFromModListCommand(ILContext il)
@@ -75,6 +72,9 @@ namespace CalamityHunt
 
         public IEnumerable<Mod> SkipCalamityHunt(IEnumerable<Mod> mods)
         {
+            if (!ModLoader.HasMod("CalamityMod"))
+                return mods;
+
             List<Mod> modsWithoutHunt = new List<Mod>();
             foreach (Mod mod in mods)
             {
