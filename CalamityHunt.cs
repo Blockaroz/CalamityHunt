@@ -14,13 +14,21 @@ using Terraria.ModLoader;
 using MonoMod.RuntimeDetour;
 using MonoMod.Cil;
 using Mono.Cecil.Cil;
+using Terraria.Audio;
+using Terraria.ID;
 
 namespace CalamityHunt
 {
 	public class CalamityHunt : Mod
 	{
+        public static bool UndercoverMode = false;
+
         public override void Load()
         {
+            UndercoverMode = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space);
+            if (UndercoverMode)
+                SoundEngine.PlaySound(SoundID.Unlock);
+
             Ref<Effect> stellarblackhole = new Ref<Effect>(ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceHole", AssetRequestMode.ImmediateLoad).Value);
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"] = new Filter(new ScreenShaderData(stellarblackhole, "BlackHolePass"), EffectPriority.VeryHigh);
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Load();
