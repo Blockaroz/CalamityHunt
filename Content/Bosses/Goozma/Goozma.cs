@@ -129,7 +129,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 nPCsToDrawCordOn.Add(NPC);
             }
 
-            SlimeUtils.GoozmaColorType = Main.rand.Next(23);
+            SlimeUtils.GoozmaColorType = Main.rand.Next(54);
         }
 
         public int Music2;

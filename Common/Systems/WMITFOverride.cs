@@ -1,17 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
-using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Terraria;
-using Terraria.GameInput;
+using Terraria.Chat;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terraria.UI;
 using Terraria.UI.Chat;
-using tModPorter;
 
 namespace CalamityHunt.Common.Systems
 {
@@ -71,6 +69,22 @@ namespace CalamityHunt.Common.Systems
                         TooltipLine line = new(Mod, Mod.Name, "[" + text + "]");
                         line.OverrideColor = Colors.RarityBlue;
                         tooltips.Add(line);
+                    }
+                    else if (item.ModItem.Mod == Mod && item.Name.Contains("[" + item.ModItem.Mod.Name + "]"))
+                    {
+                        TooltipLine tt = tooltips.Find(i => i.Text.Contains(Mod.Name));
+                        if (tt.Name.Equals("Terraria.ItemName"))
+                        {
+                            tt.Text = item.Name + " [CalamityMod]";
+                        }
+                    }
+                    else if (item.ModItem.Mod == Mod && !item.Name.Contains("[" + item.ModItem.Mod.DisplayName + "]"))
+                    {
+                        TooltipLine tt = tooltips.Find(i => i.Text.Contains(Mod.DisplayName));
+                        if (tt.Name.Equals("Terraria.ItemName"))
+                        {
+                            tt.Text = item.Name + " [Calamity Mod]";
+                        }
                     }
                 }
             }

@@ -3,9 +3,9 @@ Items: {
 		DisplayName: Overloaded Sludge
 		Tooltip:
 			'''
-			It looks corrupted
 			Summons the Slime God
 			Not consumable
+			'It looks corrupted'
 			'''
 	}
 
