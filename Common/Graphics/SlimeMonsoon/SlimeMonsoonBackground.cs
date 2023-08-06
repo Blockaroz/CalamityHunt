@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
+﻿using CalamityHunt.Common.Systems;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -198,7 +199,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                     .UseTargetPosition(radialDistortPos)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
                     .UseIntensity(1f)
-                    .UseOpacity(_strength * 0.1f * distortionStrength);
+                    .UseOpacity(_strength * 0.1f * distortionStrength * Config.Instance.monsoonDistortion);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);

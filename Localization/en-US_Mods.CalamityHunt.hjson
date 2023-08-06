@@ -533,18 +533,23 @@ Config: {
 	}
 
 	StressPosX: {
-		Label: "{$Mods.CalamityHunt.Config.StressPosX.Label}"
-		Tooltip: "{$Mods.CalamityHunt.Config.StressPosX.Tooltip}"
+		Label: Stress Meter X Position
+		Tooltip: Adjusts the Stress Meter's horizontal position
 	}
 
 	StressPosY: {
-		Label: "{$Mods.CalamityHunt.Config.StressPosY.Label}"
-		Tooltip: "{$Mods.CalamityHunt.Config.StressPosY.Tooltip}"
+		Label: Stress Meter Y Position
+		Tooltip: Adjusts the Stress Meter's vertical position
 	}
 
 	StressShake: {
-		Label: "{$Mods.CalamityHunt.Config.StressShake.Label}"
-		Tooltip: "{$Mods.CalamityHunt.Config.StressShake.Tooltip}"
+		Label: Stress Meter Shake Toggle
+		Tooltip: Toggles the Stress Meter's shaking effect
+	}
+
+	Distortion: {
+		Label: Monsoon Distortion Potency
+		Tooltip: Adjusts how strong the Slime Monsoon's distortion effect applies
 	}
 }
 
@@ -586,6 +591,11 @@ Configs: {
 		stressShake: {
 			Label: "{$Mods.CalamityHunt.Config.StressShake.Label}"
 			Tooltip: "{$Mods.CalamityHunt.Config.StressShake.Tooltip}"
+		}
+
+		monsoonDistortion: {
+			Label: "{$Mods.CalamityHunt.Config.Distortion.Label}"
+			Tooltip: "{$Mods.CalamityHunt.Config.Distortion.Tooltip}"
 		}
 	}
 }
