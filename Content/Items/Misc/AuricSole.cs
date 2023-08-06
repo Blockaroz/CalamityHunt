@@ -1,4 +1,6 @@
-﻿using CalamityHunt.Content.Items.Rarities;
+﻿using CalamityHunt.Content.Items.Materials;
+using CalamityHunt.Content.Items.Rarities;
+using CalamityHunt.Content.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -47,6 +49,27 @@ namespace CalamityHunt.Content.Items.Misc
             glowColor.A = 0;
             spriteBatch.Draw(glow.Value, position, glow.Frame(), glowColor, 0, glow.Size() * 0.48f, scale, 0, 0);
             return true;
+        }
+
+        public override void AddRecipes()
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                CreateRecipe()
+                    .AddIngredient(calamity.Find<ModItem>("AuricBar").Type, 10)
+                    .AddIngredient<ChromaticMass>(5)
+                    .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .Register();
+            }
+            else 
+            {
+                CreateRecipe()
+                    .AddIngredient(ItemID.GoldBar, 10)
+                    .AddIngredient<ChromaticMass>(5)
+                    .AddTile<SlimeNinjaStatueTile>()
+                    .Register();
+            }
         }
     }
 }
