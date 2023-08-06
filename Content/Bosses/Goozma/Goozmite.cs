@@ -509,7 +509,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 if (projectile.type == ModLoader.GetMod("CalamityMod").Find<ModProjectile>("CelestusMiniScythe").Type || projectile.type == ModLoader.GetMod("CalamityMod").Find<ModProjectile>("CelestusProj").Type)
                 {
-                    modifiers.SourceDamage *= 0.85f;
+                    modifiers.SourceDamage *= 0.9f;
                 }
                 if (projectile.type == ModLoader.GetMod("CalamityMod").Find<ModProjectile>("PhotonRipperProjectile").Type || projectile.type == ModLoader.GetMod("CalamityMod").Find<ModProjectile>("PrismTooth").Type)
                 {

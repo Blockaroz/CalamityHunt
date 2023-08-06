@@ -340,6 +340,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             ChangeWeather();
             GoozmaResistances.DisablePointBlank();
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Main.player[Main.myPlayer].AddBuff(ModLoader.GetMod("CalamityMod").Find<ModBuff>("BossEffects").Type, 2);
+            }
             bool noSlime = NPC.ai[3] < 0 || NPC.ai[3] >= Main.maxNPCs || ActiveSlime.ai[1] > 3 || !ActiveSlime.active;
             if (Phase == 0 && noSlime)
                 SetAttack(AttackList.SpawnSlime);
