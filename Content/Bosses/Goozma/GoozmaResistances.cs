@@ -56,6 +56,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("CardDiamond").Type, 0.85f));
                 projectiles.Add((calamity.Find<ModProjectile>("CardHeart").Type, 0.85f));
                 projectiles.Add((calamity.Find<ModProjectile>("CardSpade").Type, 0.85f));
+                projectiles.Add((calamity.Find<ModProjectile>("CondemnationArrow").Type, 0.7f));
+                projectiles.Add((calamity.Find<ModProjectile>("CondemnationArrowHoming").Type, 0.7f));
                 //projectiles.Add((calamity.Find<ModProjectile>("DragonsBreathRound").Type, 0.85f));
                 projectiles.Add((calamity.Find<ModProjectile>("PrismMine").Type, 0.65f));
                 /*projectiles.Add((calamity.Find<ModProjectile>("PrismaticEnergyBlast").Type, 0.85f));
