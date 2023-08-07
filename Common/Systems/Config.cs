@@ -20,6 +20,12 @@ namespace CalamityHunt.Common.Systems
         [Tooltip("$Mods.CalamityHunt.Config.Distortion.Tooltip")]
         public float monsoonDistortion { get; set; }
 
+        [Label("$Mods.CalamityHunt.Config.LightningToggle.Label")]
+        [DefaultValue(true)]
+        [Tooltip("$Mods.CalamityHunt.Config.LightningToggle.Tooltip")]
+        public bool monsoonLightning { get; set; }
+
+        [Header("$Mods.CalamityHunt.Config.StressHeader")]
         [Label("$Mods.CalamityHunt.Config.StressPosX.Label")]
         [Range(0f, 100f)]
         [DefaultValue(45.24)]

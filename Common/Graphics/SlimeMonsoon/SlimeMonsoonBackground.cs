@@ -115,7 +115,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
             for (int i = 0; i < thunder.Length; i++)
             {
-                if (_random.NextBool(Math.Clamp(120 + additionalLightningChance, 2, 1000)) && _strength > 0.65f && lightningEnabled)
+                if (_random.NextBool(Math.Clamp(120 + additionalLightningChance, 2, 1000)) && _strength > 0.65f && lightningEnabled && Config.Instance.monsoonLightning)
                     thunder[i].Add(new GooThunder(Main.LocalPlayer.Center, _random.NextFloat(0.5f, 1.4f), _random.Next(50, 100), i));
 
                 for (int j = 0; j < thunder[i].Count; j++)

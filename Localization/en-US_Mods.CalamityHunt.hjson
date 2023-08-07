@@ -526,10 +526,11 @@ Tiles: {
 
 Config: {
 	VisualHeader: Visuals
+	StressHeader: Stress Meter
 
 	HolyExplosionToggle: {
 		Label: Holy Explosion Screenshake Toggle
-		Tooltip: Enables or disables the Divine Gargooptuar's holy explosion screenshake effect
+		Tooltip: Disable this to heavily tone down the Divine Gargooptuar's holy explosion visuals
 	}
 
 	StressPosX: {
@@ -551,6 +552,13 @@ Config: {
 		Label: Monsoon Distortion Potency
 		Tooltip: Adjusts how strong the Slime Monsoon's distortion effect applies
 	}
+
+	LightningToggle: {
+		Label: Monsoon Thunder Toggle
+		Tooltip: Enables or disables the Slime Monsoon's thunder visuals
+	}
+
+	StressHeader: stress X Header
 }
 
 LoreGeneric:
@@ -596,6 +604,11 @@ Configs: {
 		monsoonDistortion: {
 			Label: "{$Mods.CalamityHunt.Config.Distortion.Label}"
 			Tooltip: "{$Mods.CalamityHunt.Config.Distortion.Tooltip}"
+		}
+
+		monsoonLightning: {
+			Tooltip: "{$Mods.CalamityHunt.Config.LightningToggle.Tooltip}"
+			Label: "{$Mods.CalamityHunt.Config.LightningToggle.Label}"
 		}
 	}
 }
