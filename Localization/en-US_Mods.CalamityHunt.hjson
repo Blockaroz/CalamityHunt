@@ -526,7 +526,7 @@ Tiles: {
 
 Config: {
 	VisualHeader: Visuals
-	StressHeader: Stress Meter
+	StressHeader: stress X Header
 
 	HolyExplosionToggle: {
 		Label: Holy Explosion Screenshake Toggle
@@ -557,8 +557,6 @@ Config: {
 		Label: Monsoon Thunder Toggle
 		Tooltip: Enables or disables the Slime Monsoon's thunder visuals
 	}
-
-	StressHeader: stress X Header
 }
 
 LoreGeneric:

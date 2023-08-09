@@ -2,9 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,26 +18,24 @@ namespace CalamityHunt.Content.Mounts
         public override void SetStaticDefaults()
         {
             MountData.jumpHeight = 16;
-            MountData.jumpSpeed = 8f;
+            MountData.jumpSpeed = 12f;
 
-            MountData.acceleration = 0.05f;
+            MountData.acceleration = 0.12f;
             MountData.blockExtraJumps = true;
             MountData.constantJump = true;
             MountData.fallDamage = 0;
-            MountData.runSpeed = 12;
-            MountData.dashSpeed = 16;
-
-            MountData.usesHover = true;
+            MountData.runSpeed = 16;
+            MountData.dashSpeed = 24;
 
             MountData.fatigueMax = 0;
             MountData.buff = ModContent.BuffType<Buffs.PaladinPalanquinBuff>();
 
-            MountData.yOffset = -18;
+            MountData.yOffset = -26;
             MountData.bodyFrame = 3;
 
             MountData.totalFrames = 1;
 
-            MountData.heightBoost = 12;
+            MountData.heightBoost = 16;
             MountData.playerYOffsets = Enumerable.Repeat(MountData.heightBoost, MountData.totalFrames).ToArray();
 
             if (!Main.dedServ)
@@ -47,7 +47,7 @@ namespace CalamityHunt.Content.Mounts
 
         public override void SetMount(Player player, ref bool skipDust)
         {
-            player.mount._mountSpecificData = new PaladinPalanquinData() { flying = false, rotation = 0, tilt = 0 };
+            player.mount._mountSpecificData = new PaladinPalanquinData() { rotation = 0, tilt = 0 };
 
             skipDust = true;
         }
@@ -59,91 +59,113 @@ namespace CalamityHunt.Content.Mounts
 
         public override void UpdateEffects(Player player)
         {
-            if (player.velocity.Length() > 1)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    Dust d = Dust.NewDustPerfect(player.MountedCenter + Main.rand.NextVector2Circular(42, 42), DustID.TintableDust, player.velocity * 0.5f, 100, Color.Black, 1f + Main.rand.NextFloat());
-                    d.noGravity = true;
-                }
-            }
+            int heightBoost = 36;
+
             if (player.mount._mountSpecificData is PaladinPalanquinData data)
             {
-                data.tilt = player.velocity.X * 0.01f;
+                data.tilt = player.velocity.X * 0.02f;
 
-                bool onGround = Collision.SolidCollision(player.MountedCenter - new Vector2(20, 10), 40, 50);
+                data.rotation += player.velocity.X * 0.015f;
 
-                if (player.controlJump && player.releaseJump && !onGround)
-                    data.flying = !data.flying;
+                player.maxFallSpeed = player.controlDownHold ? 40 : 20;
 
-                if (!data.flying)
+                if (player.controlJump)
+                    player.velocity.Y -= 1f;
+                else
+                    player.velocity.Y += player.controlDownHold ? player.gravity * 3f : player.gravity * 0.1f;
+
+                if (player.velocity.Y < -10f)
+                    player.velocity.Y = -10f;
+
+                data.frameCounter += (int)(Utils.GetLerpValue(-1, 15, Math.Abs(player.velocity.X), true) * 3);
+                if (data.frameCounter > 5)
                 {
-                    data.rotation += player.velocity.X * 0.02f;
+                    data.frameCounter = 0;
+                    data.frameOffset = (data.frameOffset + 1) % 4;
+                }
+                data.frame = (int)(Utils.GetLerpValue(1, 5, Math.Abs(player.velocity.X), true) * 2);
 
-                    player.maxFallSpeed = 20;
-                    player.velocity.Y += player.gravity * 0.7f;
-
-                    if (player.controlJump && player.releaseJump && onGround)
-                    {
-                        player.velocity.Y -= 13;
-                    }
+                if (Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) > 0.5f)
+                {
+                    data.ballFrame = 2;
+                    data.ballFrameCounter = 0;
                 }
                 else
                 {
-                    data.rotation += player.velocity.X * 0.005f;
+                    data.ballFrameCounter++;
+                    data.ballFrame = 2 - (int)(Utils.GetLerpValue(30, 50, data.ballFrameCounter, true) * 2);
+                    heightBoost = 36 - (int)(Utils.GetLerpValue(30, 50, data.ballFrameCounter, true) * 2) * 4;
+                    if (data.ballFrame < 2)
+                        data.rotation = 0;
+                }
 
-                    if (player.controlUp)
-                        player.velocity.Y -= MountData.acceleration;
-
-                    if (player.controlDown)
-                        player.velocity.Y += MountData.acceleration;
-
-                    if (player.velocity.Length() > MountData.runSpeed)
-                        player.velocity = player.velocity.SafeNormalize(Vector2.Zero) * MountData.runSpeed;
+                if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, heightBoost + 20), 2, 20) && Math.Abs(player.velocity.X) > 1f)
+                {
+                    Dust d = Dust.NewDustPerfect(player.MountedCenter + new Vector2(0, heightBoost + 20) + Main.rand.NextVector2Circular(5, 3), DustID.TintableDust, new Vector2(-player.velocity.X * 0.1f, -1 - Math.Abs(player.velocity.X) * 0.2f).RotatedByRandom(1f), 100, Color.Black, 0.7f);
+                    d.noGravity = Main.rand.NextBool(3);
+                    d.shader = GameShaders.Armor.GetSecondaryShader(player.cMount, player);
                 }
             }
             else
                 player.mount._mountSpecificData = new PaladinPalanquinData();
 
-            if (Collision.SolidCollision(player.MountedCenter + new Vector2(player.velocity.X * 3f - 10, -1), 2, 20) && Math.Abs(player.velocity.X) > 1f)
-                player.velocity.X *= -0.5f;
+            MountData.heightBoost = heightBoost;
+            MountData.playerYOffsets = Enumerable.Repeat(MountData.heightBoost, MountData.totalFrames).ToArray();
 
-            if (Collision.SolidCollision(player.MountedCenter + new Vector2(-1, player.velocity.Y * 3f - 10), 2, 20) && Math.Abs(player.velocity.Y) > 1f)
-                player.velocity.Y *= -0.9f;
+            //if (Collision.SolidCollision(player.MountedCenter + new Vector2(player.velocity.X * 3f - 10, -1), 2, 20) && Math.Abs(player.velocity.X) > 1f)
+            //    player.velocity.X *= -0.5f;
+
+            if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, player.velocity.Y * 4f), 2, 30) && Math.Abs(player.velocity.Y) > 0.5f)
+                player.velocity.Y *= -0.7f - Utils.GetLerpValue(0, 10, Math.Abs(player.velocity.X), true) * 0.4f;
 
         }
 
         protected class PaladinPalanquinData
         {
-            public bool flying;
-
             public float rotation;
 
             public float tilt;
+
+            public int ballFrame;
+            public int ballFrameCounter;
+
+            public int frame;
+            public int frameOffset;
+            public int frameCounter;
+        }
+
+        public static PaladinPalanquinTextureContent ballTextureContent;
+
+        public override void Load()
+        {
+            Main.ContentThatNeedsRenderTargets.Add(ballTextureContent = new PaladinPalanquinTextureContent());
         }
 
         public override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow)
         {
             if (drawPlayer.mount._mountSpecificData is PaladinPalanquinData data)
             {
-                drawPlayer.fullRotationOrigin = drawPlayer.Size * 0.5f;
                 drawPlayer.fullRotation = data.tilt;
 
                 switch (drawType)
                 {
-                    case 0:
-
-                        DrawData saddleData = new DrawData(MountData.backTexture.Value, drawPlayer.MountedCenter - Main.screenPosition, MountData.backTexture.Frame(), drawColor, data.tilt, MountData.backTexture.Size() * 0.5f, drawScale, spriteEffects, 0);
-                        saddleData.shader = drawPlayer.cMount;
-                        playerDrawData.Add(saddleData);
-
-                        break;
-
                     case 2:
 
-                        DrawData bubbleData = new DrawData(MountData.frontTexture.Value, drawPlayer.MountedCenter - drawPlayer.velocity * 0.3f - Main.screenPosition, MountData.frontTexture.Frame(), drawColor, data.rotation, MountData.frontTexture.Size() * 0.5f, drawScale, 0, 0);
-                        bubbleData.shader = drawPlayer.cMount;
-                        playerDrawData.Add(bubbleData);
+                        ballTextureContent.Request();
+                        if (ballTextureContent.IsReady)
+                        {
+                            Vector2 minusVelocity = new Vector2(-drawPlayer.velocity.X * 0.1f, Math.Max(-drawPlayer.velocity.Y, 0));
+                            Texture2D ballTexture = ballTextureContent.GetTarget();
+                            Rectangle ballFrame = ballTexture.Frame(3, 1, data.ballFrame, 0);
+                            DrawData ballData = new DrawData(ballTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(0, MountData.heightBoost).RotatedBy(data.tilt) - Main.screenPosition, ballFrame, drawColor, data.rotation, ballFrame.Size() * 0.5f, drawScale, spriteEffects, 0);
+                            ballData.shader = drawPlayer.cMount;
+                            playerDrawData.Add(ballData);
+                        }
+
+                        Rectangle frontFrame = MountData.frontTexture.Frame(1, 6, 0, data.frame == 2 ? data.frame + data.frameOffset : data.frame);
+                        DrawData palanquinData = new DrawData(MountData.frontTexture.Value, drawPlayer.MountedCenter - new Vector2(0, 9).RotatedBy(data.tilt) - Main.screenPosition, frontFrame, drawColor, data.tilt, frontFrame.Size() * 0.5f, drawScale, spriteEffects, 0);
+                        palanquinData.shader = drawPlayer.cMount;
+                        playerDrawData.Add(palanquinData);
                         break;
 
                     case 3:

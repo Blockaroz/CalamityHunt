@@ -11,6 +11,7 @@
     <None Remove="Assets\Textures\Empty.png" />
     <None Remove="Assets\Textures\Goozma\Crowns\SwirlingRocks_0.png" />
     <None Remove="Assets\Textures\Goozma\Crowns\SwirlingRocks_1.png" />
+    <None Remove="Assets\Textures\Mounts\PaladinPalanquinMount_Ball.png" />
     <None Remove="Content\Bosses\Goozma\StellarGeliathBestiarySpaceImage.png" />
     <None Remove="Content\Buffs\SlimeCaneBuff.png" />
     <None Remove="Content\Buffs\SplendorJamBuff.png" />
