@@ -71,8 +71,6 @@ namespace CalamityHunt.Content.Mounts
 
                 if (player.controlJump)
                     player.velocity.Y -= 1f;
-                else
-                    player.velocity.Y += player.controlDownHold ? player.gravity * 3f : player.gravity * 0.1f;
 
                 if (player.velocity.Y < -10f)
                     player.velocity.Y = -10f;
@@ -98,6 +96,16 @@ namespace CalamityHunt.Content.Mounts
                     if (data.ballFrame < 2)
                         data.rotation = 0;
                 }
+                if (!player.controlJump)
+                {
+                    data.wingFrameCounter = 0;
+                    data.wingFrame = 1;
+                }
+                else if (data.wingFrameCounter++ > 2)
+                {
+                    data.wingFrameCounter = 0;
+                    data.wingFrame = (data.wingFrame + 1) % 4;
+                }
 
                 if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, heightBoost + 20), 2, 20) && Math.Abs(player.velocity.X) > 1f)
                 {
@@ -115,7 +123,7 @@ namespace CalamityHunt.Content.Mounts
             //if (Collision.SolidCollision(player.MountedCenter + new Vector2(player.velocity.X * 3f - 10, -1), 2, 20) && Math.Abs(player.velocity.X) > 1f)
             //    player.velocity.X *= -0.5f;
 
-            if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, player.velocity.Y * 4f), 2, 30) && Math.Abs(player.velocity.Y) > 0.5f)
+            if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, player.velocity.Y * 2f + 20), 2, 30) && Math.Abs(player.velocity.Y) > 0.5f && !player.controlDown)
                 player.velocity.Y *= -0.7f - Utils.GetLerpValue(0, 10, Math.Abs(player.velocity.X), true) * 0.4f;
 
         }
@@ -127,7 +135,9 @@ namespace CalamityHunt.Content.Mounts
             public float tilt;
 
             public int ballFrame;
-            public int ballFrameCounter;
+            public int ballFrameCounter;            
+            public int wingFrame;
+            public int wingFrameCounter;
 
             public int frame;
             public int frameOffset;
@@ -151,13 +161,16 @@ namespace CalamityHunt.Content.Mounts
                 {
                     case 2:
 
+                        Vector2 minusVelocity = new Vector2(-drawPlayer.velocity.X * 0.1f, Math.Max(-drawPlayer.velocity.Y, 0));
+
                         ballTextureContent.Request();
                         if (ballTextureContent.IsReady)
                         {
-                            Vector2 minusVelocity = new Vector2(-drawPlayer.velocity.X * 0.1f, Math.Max(-drawPlayer.velocity.Y, 0));
                             Texture2D ballTexture = ballTextureContent.GetTarget();
                             Rectangle ballFrame = ballTexture.Frame(3, 1, data.ballFrame, 0);
-                            DrawData ballData = new DrawData(ballTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(0, MountData.heightBoost).RotatedBy(data.tilt) - Main.screenPosition, ballFrame, drawColor, data.rotation, ballFrame.Size() * 0.5f, drawScale, spriteEffects, 0);
+
+                            DrawData ballData = new DrawData(ballTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(0, MountData.heightBoost).RotatedBy(data.tilt) - Main.screenPosition, ballFrame, drawColor, data.rotation, ballFrame.Size() * 0.5f, drawScale, spriteEffects, 0);                         
+
                             ballData.shader = drawPlayer.cMount;
                             playerDrawData.Add(ballData);
                         }
@@ -166,6 +179,17 @@ namespace CalamityHunt.Content.Mounts
                         DrawData palanquinData = new DrawData(MountData.frontTexture.Value, drawPlayer.MountedCenter - new Vector2(0, 9).RotatedBy(data.tilt) - Main.screenPosition, frontFrame, drawColor, data.tilt, frontFrame.Size() * 0.5f, drawScale, spriteEffects, 0);
                         palanquinData.shader = drawPlayer.cMount;
                         playerDrawData.Add(palanquinData);
+
+                        if (data.ballFrame == 2)
+                        {
+                            Texture2D wingTexture = AssetDirectory.Textures.Extras.PaladinPalanquinWings;
+                            Rectangle wingFrame = wingTexture.Frame(1, 4, 0, data.wingFrame);
+
+                            DrawData wingData = new DrawData(wingTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(-24 * drawPlayer.direction, MountData.heightBoost - 8).RotatedBy(data.tilt) - Main.screenPosition, wingFrame, drawColor, data.tilt, wingFrame.Size() * 0.5f, drawScale, spriteEffects, 0);
+                            wingData.shader = drawPlayer.cMount;
+                            playerDrawData.Add(wingData);
+                        }
+
                         break;
 
                     case 3:
