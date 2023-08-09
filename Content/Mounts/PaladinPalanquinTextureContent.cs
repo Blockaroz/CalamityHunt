@@ -13,13 +13,16 @@ namespace CalamityHunt.Content.Mounts;
 
 public class PaladinPalanquinTextureContent : ARenderTargetContentByRequest
 {
+    public Rectangle frame;
+    public float rotation;
+
     protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
         Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall;
-        PrepareARenderTarget_AndListenToEvents(ref _target, device, asset.Width, asset.Height, RenderTargetUsage.PreserveContents);
+        PrepareARenderTarget_AndListenToEvents(ref _target, device, frame.Width, frame.Height, RenderTargetUsage.PreserveContents);
         device.SetRenderTarget(_target);
         device.Clear(Color.Transparent);
-        DrawData value = new DrawData(asset, Vector2.Zero, Color.White);
+        DrawData value = new DrawData(asset, frame.Size() * 0.5f, frame, Color.White, rotation, frame.Size() * 0.5f, 1f, 0, 0);
 
         GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
         Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,7 +32,7 @@ namespace CalamityHunt.Content.Mounts
             MountData.buff = ModContent.BuffType<Buffs.PaladinPalanquinBuff>();
 
             MountData.yOffset = -26;
-            MountData.bodyFrame = 3;
+            MountData.bodyFrame = 0;
 
             MountData.totalFrames = 1;
 
@@ -155,21 +156,26 @@ namespace CalamityHunt.Content.Mounts
         {
             if (drawPlayer.mount._mountSpecificData is PaladinPalanquinData data)
             {
-                drawPlayer.fullRotation = data.tilt;
-
                 switch (drawType)
                 {
                     case 2:
 
-                        Vector2 minusVelocity = new Vector2(-drawPlayer.velocity.X * 0.1f, Math.Max(-drawPlayer.velocity.Y, 0));
+                        Vector2 minusVelocity = new Vector2(-drawPlayer.velocity.X * 0.1f, Math.Max(-drawPlayer.velocity.Y * 1.5f, 0));
 
+                        float yS = Math.Abs(Math.Min(0, drawPlayer.velocity.Y * 0.02f));
+                        float xS = Math.Abs(drawPlayer.velocity.X * 0.01f) * (1f - yS * 0.6f);
+                        Vector2 squish = new Vector2(1f - yS + xS, 1f + yS - xS) * drawScale;
+
+                        Rectangle ballFrame = AssetDirectory.Textures.Extras.PaladinPalanquinBall.Texture.Frame(3, 1, data.ballFrame, 0);
+                        ballTextureContent.frame = ballFrame;
+                        ballTextureContent.rotation = data.rotation;
                         ballTextureContent.Request();
+
                         if (ballTextureContent.IsReady)
                         {
                             Texture2D ballTexture = ballTextureContent.GetTarget();
-                            Rectangle ballFrame = ballTexture.Frame(3, 1, data.ballFrame, 0);
 
-                            DrawData ballData = new DrawData(ballTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(0, MountData.heightBoost).RotatedBy(data.tilt) - Main.screenPosition, ballFrame, drawColor, data.rotation, ballFrame.Size() * 0.5f, drawScale, spriteEffects, 0);                         
+                            DrawData ballData = new DrawData(ballTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(0, MountData.heightBoost + xS * 8f).RotatedBy(data.tilt) - Main.screenPosition, ballTexture.Frame(), drawColor, data.tilt, ballTexture.Size() * 0.5f, squish, 0, 0);                         
 
                             ballData.shader = drawPlayer.cMount;
                             playerDrawData.Add(ballData);
@@ -185,7 +191,7 @@ namespace CalamityHunt.Content.Mounts
                             Texture2D wingTexture = AssetDirectory.Textures.Extras.PaladinPalanquinWings;
                             Rectangle wingFrame = wingTexture.Frame(1, 4, 0, data.wingFrame);
 
-                            DrawData wingData = new DrawData(wingTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(-24 * drawPlayer.direction, MountData.heightBoost - 8).RotatedBy(data.tilt) - Main.screenPosition, wingFrame, drawColor, data.tilt, wingFrame.Size() * 0.5f, drawScale, spriteEffects, 0);
+                            DrawData wingData = new DrawData(wingTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(-24 * drawPlayer.direction, MountData.heightBoost - 8).RotatedBy(data.tilt) * squish - Main.screenPosition, wingFrame, drawColor, data.tilt, wingFrame.Size() * 0.5f, drawScale, spriteEffects, 0);
                             wingData.shader = drawPlayer.cMount;
                             playerDrawData.Add(wingData);
                         }
