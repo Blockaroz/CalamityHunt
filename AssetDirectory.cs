@@ -75,6 +75,8 @@ namespace CalamityHunt
                 public static SoundStyle ShootLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaShootLoop") { MaxInstances = 0, IsLooped = true };
                 public static SoundStyle SimmerLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSimmerLoop") { MaxInstances = 0, IsLooped = true };
                 public static SoundStyle FusionRayLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaFusionRayLoop") { MaxInstances = 0, IsLooped = true };
+                public static SoundStyle Pop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaPop") { MaxInstances = 0 };
+                public static SoundStyle Explode = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaExplode") { MaxInstances = 0, IsLooped = true };
 
                 public static SoundStyle WindLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaWindLoop") { MaxInstances = 0, IsLooped = true };
 

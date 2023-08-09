@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
@@ -49,13 +50,25 @@ namespace CalamityHunt.Content.Mounts
         public override void SetMount(Player player, ref bool skipDust)
         {
             player.mount._mountSpecificData = new PaladinPalanquinData() { rotation = 0, tilt = 0 };
-
+            SoundEngine.PlaySound(SoundID.Item81.WithVolumeScale(1.5f).WithPitchOffset(0.7f), player.Center);
             skipDust = true;
+
+            for (int i = 0; i < 30; i++)
+            {
+                Dust d = Dust.NewDustDirect(player.MountedCenter - new Vector2(25, 20), 50, 80, DustID.TintableDust, 0, -Main.rand.NextFloat(5f), 100, Color.Black, Main.rand.NextFloat() + 1);
+                d.noGravity = true;
+            }
         }
 
         public override void Dismount(Player player, ref bool skipDust)
         {
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Pop.WithVolumeScale(0.5f).WithPitchOffset(1f), player.Center);
             skipDust = true;
+            for (int i = 0; i < 40; i++)
+            {
+                Dust d = Dust.NewDustDirect(player.MountedCenter - new Vector2(25, 20), 50, 80, DustID.TintableDust, 0, -Main.rand.NextFloat(5f), 100, Color.Black, Main.rand.NextFloat() + 1);
+                d.noGravity = true;
+            }
         }
 
         public override void UpdateEffects(Player player)
