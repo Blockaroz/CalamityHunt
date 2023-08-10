@@ -187,8 +187,21 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.Kill();
 
             foreach (Player player in Main.player.Where(n => n.active && !n.dead))
-                player.wingTime = player.wingTimeMax;
-
+            {
+                if (ModLoader.HasMod("CalamityMod"))
+                {
+                    if (ModLoader.GetMod("CalamityMod").Version != new Version(2, 0, 3, 1))
+                    {
+                        ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", player, true);
+                    }
+                    else
+                        player.wingTime = player.wingTimeMax;
+                }
+                else
+                {
+                    player.wingTime = player.wingTimeMax;
+                }
+            }
         }
 
         public LoopingSound raySound;

@@ -467,7 +467,21 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time > 90 && Time < 170 + spikeCount * spikeTime)
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000))
                 {
-                    player.wingTime = player.wingTimeMax;
+
+                    if (ModLoader.HasMod("CalamityMod"))
+                    {
+                        if (ModLoader.GetMod("CalamityMod").Version != new Version(2, 0, 3, 1))
+                        {
+                            ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", player, true);
+                        }
+                        else
+                            player.wingTime = player.wingTimeMax;
+                    }
+                    else
+                    {
+                        player.wingTime = player.wingTimeMax;
+                    }
+
                     if (player.Center.Y < NPC.Bottom.Y)
                         player.velocity.Y = -player.velocity.Y + 7;
                     if (player.Center.Y > NPC.Bottom.Y + 1500)
