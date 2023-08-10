@@ -24,6 +24,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.value = Item.sellPrice(silver: 50);
             Item.shoot = ModContent.ProjectileType<PumpActionSwampgunHeld>();
             Item.shootSpeed = 5f;
+            Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {
                 ModRarity r;

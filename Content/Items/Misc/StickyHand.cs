@@ -21,6 +21,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.height = 40;
             Item.shoot = ModContent.ProjectileType<StickyHandProj>();
             Item.shootSpeed = 25f;
+            Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {
                 ModRarity r;

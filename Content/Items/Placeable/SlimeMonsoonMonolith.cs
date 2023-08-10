@@ -35,9 +35,21 @@ namespace CalamityHunt.Content.Items.Placeable
 
         public override void AddRecipes()
         {
-            CreateRecipe()
-                .AddIngredient<ChromaticMass>(15)
-                .Register();
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+                CreateRecipe()
+                    .AddIngredient<ChromaticMass>(15)
+                    .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .Register();
+            }
+            else
+            {
+                CreateRecipe()
+                    .AddIngredient<ChromaticMass>(15)
+                    .AddTile<SlimeNinjaStatueTile>()
+                    .Register();
+            }
         }
     }
 }

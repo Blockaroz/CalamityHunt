@@ -388,6 +388,21 @@ Items: {
 			'Now YOU get to be the ninja!'
 			'''
 	}
+
+	ChromaticBomb: {
+		DisplayName: Chromatic Bomb
+		Tooltip: Throws out a gravity-defying black hole
+	}
+
+	ChromaticGooztick: {
+		DisplayName: Chromatic Gooztick
+		Tooltip: Ignores gravity and bounces off tiles
+	}
+
+	DynamoRod: {
+		DisplayName: Dynamo Rod
+		Tooltip: Explodes into a colossal tile-destroying black hole
+	}
 }
 
 NPCs: {
@@ -460,6 +475,9 @@ Projectiles: {
 	GoomoireSuck.DisplayName: Goomoire Suction
 	SplendorTentacle.DisplayName: Spectacle
 	SlimeCaneGemCounter.DisplayName: Slime Cane Gem Counter
+	ChromaticBombProjectile.DisplayName: Chromatic Bomb Projectile
+	ChromaticGooztickProjectile.DisplayName: Chromatic Gooztick Projectile
+	DynamoRodProjectile.DisplayName: Dynamo Rod Projectile
 }
 
 Chat: {

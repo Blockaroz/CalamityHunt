@@ -91,6 +91,6 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
             }
-	}
+		}
     }
 }
