@@ -554,7 +554,7 @@ Tiles: {
 
 Config: {
 	VisualHeader: Visuals
-	StressHeader: stress X Header
+	StressHeader: Stress Meter
 
 	HolyExplosionToggle: {
 		Label: Holy Explosion Screenshake Toggle
