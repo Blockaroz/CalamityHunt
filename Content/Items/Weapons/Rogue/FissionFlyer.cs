@@ -76,17 +76,17 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
-                    .AddIngredient(calamity.Find<ModItem>("GodsParanoia").Type)
-                    .AddIngredient(calamity.Find<ModItem>("MetalMonstrosity").Type)
+                    .AddIngredient(calamity.Find<ModItem>("MangroveChakram").Type)
+                    .AddIngredient(calamity.Find<ModItem>("Valediction").Type)
+                    .AddIngredient(calamity.Find<ModItem>("ToxicantTwister").Type)
                     .AddIngredient(calamity.Find<ModItem>("SludgeSplotch").Type, 100)
-                    .AddIngredient(calamity.Find<ModItem>("Nychthemeron").Type)
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
             else 
             {
                 CreateRecipe()
-                    .AddIngredient(ItemID.SpikyBall, 100)
+                    .AddIngredient(ItemID.WoodenBoomerang)
                     .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
