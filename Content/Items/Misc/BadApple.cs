@@ -18,6 +18,7 @@ namespace CalamityHunt.Content.Items.Misc
         {
             Item.width = 26;
             Item.height = 32;
+            Item.maxStack = 9999;
             Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {
