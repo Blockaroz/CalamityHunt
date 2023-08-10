@@ -28,8 +28,8 @@ namespace CalamityHunt.Content.Items.Misc
             Item.shootSpeed = 5f;
             Item.shoot = ModContent.ProjectileType<DynamoRodProjectile>();
             Item.autoReuse = true;
-            Item.width = 8;
-            Item.height = 28;
+            Item.width = 28;
+            Item.height = 26;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;
             Item.noUseGraphic = true;

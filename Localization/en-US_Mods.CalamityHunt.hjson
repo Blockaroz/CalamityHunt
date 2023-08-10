@@ -403,6 +403,16 @@ Items: {
 		DisplayName: Dynamo Rod
 		Tooltip: Explodes into a colossal tile-destroying black hole
 	}
+
+	BadApple: {
+		DisplayName: Bad Apple
+		Tooltip: 
+		'''
+		'An apple from a tree razed during one of Goozma's rampages. 
+		It seems to have warped into something mostly new, and likely tastes terrible as a result. 
+		If the flavor isn't strange, the smell certainly is.'
+		'''
+	}
 }
 
 NPCs: {
