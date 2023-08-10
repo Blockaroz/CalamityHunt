@@ -14,6 +14,10 @@ namespace CalamityHunt.Content.Items.Mounts
             Item.width = 54;
             Item.height = 50;
             Item.value = Item.sellPrice(0, 30, 0, 0);
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.useStyle = 1;
+            Item.noMelee = true;
             Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {
