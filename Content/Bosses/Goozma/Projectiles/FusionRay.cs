@@ -210,8 +210,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public void HandleSound()
         {
-            volume = 1.3f * Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
-            pitch = MathHelper.SmoothStep(0.1f, 1f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) - 1f + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.5f;
+            volume = 1.3f * Utils.GetLerpValue(0, 0.05f, realSize, true);// * Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
+            pitch = (MathHelper.SmoothStep(0.1f, 1f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.5f * realSize) - 1f;
 
             if (raySound == null)
                 raySound = new LoopingSound(AssetDirectory.Sounds.Goozma.FusionRayLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);

@@ -72,11 +72,10 @@ namespace CalamityHunt.Common.Players
                     Player.fullRotation = Player.fullRotation.AngleLerp(-Player.velocity.X * 0.05f, 0.1f);
                     Player.fullRotationOrigin = Player.Size * 0.5f;
 
-                    Main.SetCameraLerp(0.2f, 25);
+                    Main.SetCameraLerp(0.1f, 25);
                 }
                 else if (bunnyHopCounter < 0)
                     Player.fullRotation = Player.velocity.X * 0.01f;
-
                 else
                     Player.fullRotation = Player.fullRotation.AngleLerp(0f, 0.15f);
 

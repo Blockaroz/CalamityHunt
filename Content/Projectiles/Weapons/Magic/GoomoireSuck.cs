@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using ReLogic.Utilities;
 using System;
 using System.Linq;
 using Terraria;
@@ -14,7 +13,6 @@ using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 {
@@ -88,7 +86,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.localAI[0] += Projectile.ai[2];
 
             Projectile.ai[2] = MathF.Sqrt(Utils.GetLerpValue(0, 50, Time, true) * Utils.GetLerpValue(10, 30, Projectile.timeLeft, true));
-            Size = 600;
+            Size = 500;
             Projectile.spriteDirection = Owner.direction;
 
             if (Time < 10)
@@ -198,7 +196,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            return Utils.IntersectsConeFastInaccurate(targetHitbox, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f);
+            return Utils.IntersectsConeFastInaccurate(targetHitbox, Projectile.Center, (Size * 1.33f) * Projectile.ai[2], Projectile.rotation, MathHelper.Pi / 8f);
         }
 
         public LoopingSound windSoundLoop;
@@ -314,7 +312,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         {
             float start = MathHelper.SmoothStep(MathF.Pow(progress, 0.6f) * 0.2f, 1, progress);
             float grow = (float)Math.Pow(Projectile.ai[2], 3f);
-            return start * grow * Size * 0.5f;
+            return start * grow * Size * 0.4667f;
         }
     }
 }

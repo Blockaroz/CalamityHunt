@@ -75,11 +75,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             float addRot = 0;
 
             SoundStyle swingSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwing;
-            swingSound.Volume *= 0.7f;
+            swingSound.Volume *= 0.8f;
             SoundStyle strongSound = AssetDirectory.Sounds.Weapon.ScytheOfTheOldGodSwingStrong;
-            strongSound.Volume *= 0.7f;
+            strongSound.Volume *= 0.8f;
 
-            float speed = (Player.itemAnimationMax / 35f) / (0.5f + Player.GetTotalAttackSpeed(DamageClass.Melee) * 0.5f);
+            float speed = (Player.itemAnimationMax / 36f) / (0.9f + Player.GetTotalAttackSpeed(DamageClass.Melee) * 0.1f);
 
             switch (SwingStyle)
             {
