@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.height = 80;
             NPC.damage = 0;
             NPC.defense = 100;
-            NPC.lifeMax = 9000;
+            NPC.lifeMax = 10000;
             NPC.HitSound = SoundID.NPCDeath9;
             NPC.DeathSound = SoundID.NPCDeath9;
             NPC.knockBackResist = 0.1f;
