@@ -3,6 +3,7 @@ using CalamityHunt.Content.Items.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -56,6 +57,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             {
                 Dust d = Dust.NewDustDirect(player.Center - new Vector2(30), 60, 60, DustID.Sand, 0, 0, 100, Color.Black, 1f);
                 d.noGravity = true;
+                d.shader = GameShaders.Armor.GetSecondaryShader(player.cWings, player);
             }
 
             return false;

@@ -25,6 +25,35 @@ namespace CalamityHunt.Common.Players
         private int inertiaTimer;
         private int dashTime;
 
+        public override void FrameEffects()
+        {
+            if (active)
+            {
+                if (Player.dashDelay < 0)
+                {
+                    Main.SetCameraLerp(0.1f, 25);
+                    Player.fullRotation += (float)Math.Cbrt(Player.velocity.X) * 0.2f * (1 + dashTime);
+                    Player.fullRotationOrigin = Player.Size * 0.5f;
+
+                    for (int i = 0; i < 6; i++)
+                        Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(25, 25), DustID.TintableDust, Player.velocity * -Main.rand.NextFloat(-0.5f, 1f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
+
+                    Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(25, 25), Player.velocity * -Main.rand.NextFloat(-0.6f, 0.6f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
+                }
+                else if (slamPower > 0)
+                {
+                    Player.fullRotation = Player.fullRotation.AngleLerp(-Player.velocity.X * 0.05f, 0.1f);
+                    Player.fullRotationOrigin = Player.Size * 0.5f;
+
+                    Main.SetCameraLerp(0.1f, 25);
+                }
+                else if (bunnyHopCounter < 0)
+                    Player.fullRotation = Player.velocity.X * 0.01f;
+                else
+                    Player.fullRotation = Player.fullRotation.AngleLerp(0f, 0.15f);
+            }
+        }
+
         public override void PostUpdateRunSpeeds()
         {
             bool inAir = !WorldGen.SolidOrSlopedTile(Main.tile[(Player.Bottom / 16f).ToPoint()]) && !Collision.SolidCollision(Player.position, Player.width, Player.height);
@@ -52,32 +81,14 @@ namespace CalamityHunt.Common.Players
                 {
                     inertiaTimer = 1;
 
-                    Main.SetCameraLerp(0.2f, 25);
-                    Player.fullRotation += (float)Math.Cbrt(Player.velocity.X) * 0.2f * (1 + dashTime);
-                    Player.fullRotationOrigin = Player.Size * 0.5f;
                     if (Player.controlJump && Player.releaseJump)
                     {
                         Player.dashDelay = 0;
                         inertiaTimer = 60;
                     }
-
-                    for (int i = 0; i < 6; i++)
-                        Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(25, 25), DustID.TintableDust, Player.velocity * -Main.rand.NextFloat(-0.5f, 1f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
-
-                    Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(25, 25), Player.velocity * -Main.rand.NextFloat(-0.6f, 0.6f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
                 }
                 else if (slamPower > 0)
-                {
                     Player.velocity.X += (Player.direction * 0.2f - Player.velocity.X * 0.01f) * Math.Clamp(Player.velocity.X, 0, 1);
-                    Player.fullRotation = Player.fullRotation.AngleLerp(-Player.velocity.X * 0.05f, 0.1f);
-                    Player.fullRotationOrigin = Player.Size * 0.5f;
-
-                    Main.SetCameraLerp(0.1f, 25);
-                }
-                else if (bunnyHopCounter < 0)
-                    Player.fullRotation = Player.velocity.X * 0.01f;
-                else
-                    Player.fullRotation = Player.fullRotation.AngleLerp(0f, 0.15f);
 
                 if (Player.dashDelay > 0)
                     Player.dashDelay--;
@@ -123,7 +134,6 @@ namespace CalamityHunt.Common.Players
             }
             else
             {
-                Player.fullRotation = 0;
                 bunnyHopCounter = 0;
                 slamPower = 0;
             }
@@ -155,6 +165,7 @@ namespace CalamityHunt.Common.Players
                 if (self.equippedWings == null)
                 {
                     self.wingsLogic = wingSlot;
+                    self.wingTime = 1;
 
                     if (self.controlJump && self.wingTime > 0f && !self.canJumpAgain_Cloud && self.jump == 0)
                     {
@@ -168,7 +179,6 @@ namespace CalamityHunt.Common.Players
                             if (self.velocity.Y > -2f && self.velocity.Y < 1f)
                                 self.velocity.Y = 1E-05f;
                         }
-
                     }
 
                     if (self.TryingToHoverUp && !self.mount.Active)
@@ -176,7 +186,9 @@ namespace CalamityHunt.Common.Players
                 }
 
                 if (self.wingsLogic == wingSlot && self.wings <= 0)
+                {
                     self.wings = wingSlot;
+                }
 
                 self.noFallDmg = true;
             }
