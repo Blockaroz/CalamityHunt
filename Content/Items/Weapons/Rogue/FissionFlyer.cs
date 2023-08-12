@@ -17,7 +17,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 		{
 			Item.width = 50;
 			Item.height = 50;
-			Item.damage = 1866; 
+			Item.damage = 950; 
 			Item.noMelee = true;
 			Item.noUseGraphic = true;
 			Item.useAnimation = 10;

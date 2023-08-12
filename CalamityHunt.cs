@@ -106,48 +106,85 @@ namespace CalamityHunt
             // Kill Old Duke and inject Goozma into boss rush
             if (ModLoader.HasMod("CalamityMod"))
             {
-                Mod cal = ModLoader.GetMod("CalamityMod");
-                List<(int, int, Action<int>, int, bool, float, int[], int[])> brEntries = (List<(int, int, Action<int>, int, bool, float, int[], int[])>)cal.Call("GetBossRushEntries");
-                int[] slimeIDs = { ModContent.NPCType<EbonianBehemuck>(), ModContent.NPCType<CrimulanGlopstrosity>(), ModContent.NPCType<DivineGargooptuar>(), ModContent.NPCType<StellarGeliath>() };
-                int[] goozmaID = { ModContent.NPCType<Goozma>() };
-                Action<int> pr = delegate (int npc)
-                {
-                    NPC.SpawnOnPlayer(Main.myPlayer, ModContent.NPCType<Goozma>());
-                };
-                int ODID = cal.Find<ModNPC>("OldDuke").Type;
-
-                for (int i = 0; i < brEntries.Count(); i++)
-                {
-                    if (brEntries[i].Item1 == ODID)
-                    {
-                        brEntries.RemoveAt(i);
-                        ODID = i;
-                        break;
-                    }
-                }
-
-                brEntries.Insert(ODID, (ModContent.NPCType<Goozma>(), -1, pr, 180, false, 0f, slimeIDs, goozmaID));
-                cal.Call("SetBossRushEntries", brEntries);
+                BossRushInjection(ModLoader.GetMod("CalamityMod"));
             }
             if (ModLoader.HasMod("BossChecklist"))
             {
-                Mod bossChecklist = ModLoader.GetMod("BossChecklist");
-                int sludge = ModContent.ItemType<OverloadedSludge>();
-                if (ModLoader.HasMod("CalamityMod"))
-                {
-                    sludge = ModLoader.GetMod("CalamityMod").Find<ModItem>("OverloadedSludge").Type;
-                }
-                Action<SpriteBatch, Rectangle, Color> portrait = (SpriteBatch sb, Rectangle rect, Color color) => {
-                    Texture2D texture = ModContent.Request<Texture2D>("CalamityHunt/Assets/Textures/Goozma/GoozmaBC").Value;
-                    Vector2 centered = new Vector2(rect.Center.X - (texture.Width / 2), rect.Center.Y - (texture.Height / 2));
-                    sb.Draw(texture, centered, color);
-                };
-                bossChecklist.Call("LogBoss", this, "Goozma", 23.6, () => BossDownedSystem.downedBoss["Goozma"], ModContent.NPCType<Goozma>(), new Dictionary<string, object>()
-                {
-                    ["spawnItems"] = sludge,
-                    ["customPortrait"] = portrait
-                });    
+                BossChecklist(ModLoader.GetMod("BossChecklist"));
             } 
-        }   
+            // Add this whenever Slime Cane is added
+            /*if (ModLoader.HasMod("SummonersAssociation"))
+            {
+                Mod sAssociation = ModLoader.GetMod("SummonersAssociation");
+                sAssociation.Call("AddMinionInfo", ItemType<SlimeCane>(), BuffType<SlimeBabyBuff>(), new List<Dictionary<string, object>>
+                {
+                    new Dictionary<string, object>()
+                    {
+                        ["ProjID"] = ProjectileType<EbonianBaby>()
+                    },
+                    new Dictionary<string, object>()
+                    {
+                        ["ProjID"] = ProjectileType<CrimsonBaby>()
+                    },
+                    new Dictionary<string, object>()
+                    {
+                        ["ProjID"] = ProjectileType<HallowBaby>()
+                    },
+                    new Dictionary<string, object>()
+                    {
+                        ["ProjID"] = ProjectileType<AstralBaby>()
+                    }
+                });
+            }*/
+        }
+        
+        public static void BossRushInjection(Mod cal)
+        {
+            // Goozma
+            List<(int, int, Action<int>, int, bool, float, int[], int[])> brEntries = (List<(int, int, Action<int>, int, bool, float, int[], int[])>)cal.Call("GetBossRushEntries");
+            int[] slimeIDs = { ModContent.NPCType<EbonianBehemuck>(), ModContent.NPCType<CrimulanGlopstrosity>(), ModContent.NPCType<DivineGargooptuar>(), ModContent.NPCType<StellarGeliath>(), ModContent.NPCType<Goozmite>() };
+            int[] goozmaID = { ModContent.NPCType<Goozma>() };
+            Action<int> pr = delegate (int npc)
+            {
+                SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaAwaken");
+                int whomst = Player.FindClosest(new Vector2(Main.maxTilesX, Main.maxTilesY) * 16f * 0.5f, 1, 1);
+                Player guy = Main.player[whomst];
+                SoundEngine.PlaySound(roar, guy.Center);
+                NPC.SpawnOnPlayer(whomst, ModContent.NPCType<Goozma>());
+            };
+            int ODID = cal.Find<ModNPC>("OldDuke").Type;
+
+            for (int i = 0; i < brEntries.Count(); i++)
+            {
+                if (brEntries[i].Item1 == ODID)
+                {
+                    brEntries.RemoveAt(i);
+                    ODID = i;
+                    break;
+                }
+            }
+
+            brEntries.Insert(ODID, (ModContent.NPCType<Goozma>(), -1, pr, 180, true, 0f, slimeIDs, goozmaID));
+            cal.Call("SetBossRushEntries", brEntries);
+        }
+
+        public void BossChecklist(Mod bossChecklist)
+        {
+            int sludge = ModContent.ItemType<OverloadedSludge>();
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                sludge = ModLoader.GetMod("CalamityMod").Find<ModItem>("OverloadedSludge").Type;
+            }
+            Action<SpriteBatch, Rectangle, Color> portrait = (SpriteBatch sb, Rectangle rect, Color color) => {
+                Texture2D texture = ModContent.Request<Texture2D>("CalamityHunt/Assets/Textures/Goozma/GoozmaBC").Value;
+                Vector2 centered = new Vector2(rect.Center.X - (texture.Width / 2), rect.Center.Y - (texture.Height / 2));
+                sb.Draw(texture, centered, color);
+            };
+            bossChecklist.Call("LogBoss", this, "Goozma", 23.6, () => BossDownedSystem.downedBoss["Goozma"], ModContent.NPCType<Goozma>(), new Dictionary<string, object>()
+            {
+                ["spawnItems"] = sludge,
+                ["customPortrait"] = portrait
+            });
+        }
     }
 }

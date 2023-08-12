@@ -20,8 +20,8 @@ namespace CalamityHunt.Content.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = 192;
-            Projectile.height = 192;
+            Projectile.width = 80;
+            Projectile.height = 80;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;

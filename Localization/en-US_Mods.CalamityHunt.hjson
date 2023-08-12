@@ -422,7 +422,7 @@ NPCs: {
 		BossChecklistIntegration: {
 			EntryName: Goozma
 			SpawnInfo: Drop an [i:CalamityHunt/OverloadedSludge] on King Slime during a Slime Rain after the Wall of Flesh has been defeated.
-			DespawnMessage: "[c/fC03D3:Goozma goozed away.]"
+			DespawnMessage: "[c/fC03D3:The slime monsoon recedes...]"
 		}
 	}
 

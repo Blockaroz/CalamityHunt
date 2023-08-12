@@ -78,10 +78,11 @@ namespace CalamityHunt.Common.Players
                 gooTime = (gooTime + 1) % 60;
             if (active)
             {
+                int damage = (int)GetBestClassDamage(Player).ApplyTo(200);
                 Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
                 Lighting.AddLight(Player.Center, new Vector3(goo.R, goo.G, goo.B) * 0.01f * checkStress);
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] < Player.GetModPlayer<SplendorJamPlayer>().tentacleCount && Player.whoAmI == Main.myPlayer)
-                    Projectile.NewProjectile(Player.GetSource_FromThis(), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<SplendorTentacle>(), 200, 0.5f, Player.whoAmI);
+                    Projectile.NewProjectile(Player.GetSource_FromThis(), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<SplendorTentacle>(), damage, 0.5f, Player.whoAmI);
 
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] > Player.GetModPlayer<SplendorJamPlayer>().tentacleCount)
                     Main.projectile.First(n => n.active && n.owner == Player.whoAmI).Kill();
@@ -211,6 +212,42 @@ namespace CalamityHunt.Common.Players
                 return false;
             }
             return false;
+        }
+        public static StatModifier GetBestClassDamage(Player player)
+        {
+            StatModifier ret = StatModifier.Default;
+            StatModifier classless = player.GetTotalDamage<GenericDamageClass>();
+
+            // Atypical damage stats are copied from "classless", like Avenger Emblem. This prevents stacking flat damage effects repeatedly.
+            ret.Base = classless.Base;
+            ret *= classless.Multiplicative;
+            ret.Flat = classless.Flat;
+
+            // Check the five Calamity classes to see what the strongest one is, and use that for the typical damage stat.
+            float best = 1f;
+
+            float melee = player.GetTotalDamage<MeleeDamageClass>().Additive;
+            if (melee > best) best = melee;
+            float ranged = player.GetTotalDamage<RangedDamageClass>().Additive;
+            if (ranged > best) best = ranged;
+            float magic = player.GetTotalDamage<MagicDamageClass>().Additive;
+            if (magic > best) best = magic;
+
+            // Summoner intentionally has a reduction. As the only class with no crit, it tends to have higher raw damage than other classes.
+            float summon = player.GetTotalDamage<SummonDamageClass>().Additive * 0.75f;
+            if (summon > best) best = summon;
+            // We intentionally don't check whip class, because it inherits 100% from Summon
+
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                DamageClass roguetype = ModLoader.GetMod("CalamityMod").Find<DamageClass>("RogueDamageClass");
+                float rogue = player.GetTotalDamage(roguetype).Additive;
+                if (rogue > best) best = rogue;
+            }
+
+            // Add the best typical damage stat, then return the full modifier.
+            ret += best - 1f;
+            return ret;
         }
     }
 }
