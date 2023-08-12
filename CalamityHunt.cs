@@ -1,4 +1,6 @@
 using CalamityHunt.Common.Graphics.SlimeMonsoon;
+using CalamityHunt.Common.Systems;
+using CalamityHunt.Content.Items.Misc;
 using CalamityHunt.Content.Bosses.Goozma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -127,6 +129,25 @@ namespace CalamityHunt
                 brEntries.Insert(ODID, (ModContent.NPCType<Goozma>(), -1, pr, 180, false, 0f, slimeIDs, goozmaID));
                 cal.Call("SetBossRushEntries", brEntries);
             }
-        }        
+            if (ModLoader.HasMod("BossChecklist"))
+            {
+                Mod bossChecklist = ModLoader.GetMod("BossChecklist");
+                int sludge = ModContent.ItemType<OverloadedSludge>();
+                if (ModLoader.HasMod("CalamityMod"))
+                {
+                    sludge = ModLoader.GetMod("CalamityMod").Find<ModItem>("OverloadedSludge").Type;
+                }
+                Action<SpriteBatch, Rectangle, Color> portrait = (SpriteBatch sb, Rectangle rect, Color color) => {
+                    Texture2D texture = ModContent.Request<Texture2D>("CalamityHunt/Assets/Textures/Goozma/GoozmaBC").Value;
+                    Vector2 centered = new Vector2(rect.Center.X - (texture.Width / 2), rect.Center.Y - (texture.Height / 2));
+                    sb.Draw(texture, centered, color);
+                };
+                bossChecklist.Call("LogBoss", this, "Goozma", 23.6, () => BossDownedSystem.downedBoss["Goozma"], ModContent.NPCType<Goozma>(), new Dictionary<string, object>()
+                {
+                    ["spawnItems"] = sludge,
+                    ["customPortrait"] = portrait
+                });    
+            } 
+        }   
     }
 }

@@ -416,7 +416,16 @@ Items: {
 }
 
 NPCs: {
-	Goozma.DisplayName: Goozma
+	Goozma: {
+		DisplayName: Goozma
+
+		BossChecklistIntegration: {
+			EntryName: Goozma
+			SpawnInfo: Drop an [i:CalamityHunt/OverloadedSludge] on King Slime during a Slime Rain after the Wall of Flesh has been defeated.
+			DespawnMessage: "[c/fC03D3:Goozma goozed away.]"
+		}
+	}
+
 	CrimulanGlopstrosity.DisplayName: Crimulan Glopstrosity
 	DivineGargooptuar.DisplayName: Divine Gargooptuar
 	EbonianBehemuck.DisplayName: Ebonian Behemuck

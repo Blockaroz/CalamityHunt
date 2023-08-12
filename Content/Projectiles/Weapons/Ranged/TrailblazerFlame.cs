@@ -26,6 +26,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             Projectile.penetrate = -1;
             Projectile.timeLeft = 80;
             Projectile.ignoreWater = true;
+            Projectile.tileCollide = false;
         }
 
         public ref float Time => ref Projectile.ai[0];
@@ -95,11 +96,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             Projectile.localAI[0] = Main.GlobalTimeWrappedHourly * 70f - Time * 0.5f;
         }
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
+        /*public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Projectile.velocity *= 0.1f;
             return false;
-        }
+        }*/
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {

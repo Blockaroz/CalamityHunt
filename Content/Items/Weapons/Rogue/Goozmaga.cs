@@ -73,17 +73,17 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
 				if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
 				{
-					Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, -1f, 1f);
+					Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 1f);
 					return false;
 				}
 			}
 			else if (player.vortexStealthActive || player.shroomiteStealth)
 			{
 				// stealth strike
-				Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, -1f, 1f);
+				Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 1f);
 				return false;
 			}
-			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, -1f);
+			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
 			return false;
 		}
 	}

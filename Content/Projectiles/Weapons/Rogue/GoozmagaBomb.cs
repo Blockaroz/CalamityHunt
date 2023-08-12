@@ -44,8 +44,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 				Projectile.localAI[1] = 1;
             }
 			// check if the projectile has a target host
-			bool hasTarget = Projectile.ai[0] > -1;
-			NPC target = hasTarget ? Main.npc[(int)Projectile.ai[0]] : null;
+			bool hasTarget = Projectile.ai[0] > 0;
+			NPC target = hasTarget ? Main.npc[(int)Projectile.ai[0] - 1] : null;
 			// orbit
 			if (target != null && target.chaseable && target.active)
 			{
@@ -62,7 +62,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
 			}
 			// die if it's in orbit mode and the target isn't present
-			if (Projectile.ai[0] > -1 && !target.active)
+			if (Projectile.ai[0] > 0 && !target.active)
             {
 				Projectile.Kill();
 			}
@@ -93,14 +93,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         {
 			bool projCount = false;
 			bool hasMinis = false;
-			bool amIOrbitting = Projectile.ai[0] > -1 ? true : false;
+			bool amIOrbitting = Projectile.ai[0] > 0 ? true : false;
 			if (!amIOrbitting)
 			{
 				// check if the target already has an orbital
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile proj = Main.projectile[i];
-					if (proj.type == ModContent.ProjectileType<GoozmagaBomb>() && proj.whoAmI != Projectile.whoAmI && proj.ai[0] == target.whoAmI && proj.active)
+					if (proj.type == ModContent.ProjectileType<GoozmagaBomb>() && proj.whoAmI != Projectile.whoAmI && proj.ai[0] == target.whoAmI + 1 && proj.active)
 					{
 						projCount = true;
 						break;
@@ -122,7 +122,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 					for (int i = 0; i < Main.maxProjectiles; i++)
 					{
 						Projectile proj = Main.projectile[i];
-						if (proj.type == ModContent.ProjectileType<GoozmagaBomb>() && proj.whoAmI != Projectile.whoAmI && proj.ai[0] == target.whoAmI && proj.active)
+						if (proj.type == ModContent.ProjectileType<GoozmagaBomb>() && proj.whoAmI != Projectile.whoAmI && proj.ai[0] == target.whoAmI + 1 && proj.active)
 						{
 							proj.localAI[0] += 0.5f;
 							if (proj.localAI[0] == maxStacks / 2)
@@ -152,10 +152,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 					}
 				}
 				// if it doesn't have an orbital, BECOME the orbital
-				if (target.active && !projCount && Projectile.ai[0] == -1)
+				if (target.active && !projCount && Projectile.ai[0] == 0)
 				{
 					SoundEngine.PlaySound(SoundID.Item62, Projectile.position);
-					Projectile.ai[0] = target.whoAmI;
+					Projectile.ai[0] = target.whoAmI + 1;
 					// if it's a stealth strike, spawn two extra orbitals that do 50% damage
 					if (Projectile.ai[1] == 1 && !hasMinis)
 					{

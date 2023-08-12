@@ -25,7 +25,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 		{
 			Item.width = 90;
 			Item.height = 38;
-			Item.damage = 2000;
+			Item.damage = 650;
 			Item.noMelee = true;
 			Item.useAnimation = 15;
 			Item.useTime = 3;
