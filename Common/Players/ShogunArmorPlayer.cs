@@ -24,11 +24,14 @@ namespace CalamityHunt.Common.Players
         private int bunnyHopCounter;
         private int inertiaTimer;
         private int dashTime;
+        private bool dashing;
+        private bool dashingOld;
 
         public override void FrameEffects()
         {
             if (active)
             {
+                dashing = Player.dashDelay < 0;
                 if (Player.dashDelay < 0)
                 {
                     Main.SetCameraLerp(0.1f, 25);
@@ -49,9 +52,11 @@ namespace CalamityHunt.Common.Players
                 }
                 else if (bunnyHopCounter < 0)
                     Player.fullRotation = Player.velocity.X * 0.01f;
-                else
-                    Player.fullRotation = Player.fullRotation.AngleLerp(0f, 0.15f);
+                else if (dashing != dashingOld)
+                    Player.fullRotation = 0;
             }
+
+            dashingOld = Player.dashDelay < 0;
         }
 
         public override void PostUpdateRunSpeeds()
