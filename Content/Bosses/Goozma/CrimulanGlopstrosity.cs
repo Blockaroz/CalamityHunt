@@ -127,37 +127,37 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.buffImmune[ModLoader.GetMod("CalamityMod").Find<ModBuff>("MiracleBlight").Type] = true;
             }
 
-            if (Attack != (int)AttackList.TooFar && Attack != (int)AttackList.SlamDown)
-            {
-                foreach (Player player in Main.player.Where(n => n.active && !n.dead))
-                {
-                    float distance = 0;
-                    for (int i = 0; i < Main.tile.Height; i++)
-                    {
-                        Point playerTile = player.MountedCenter.ToTileCoordinates();
-                        if (WorldGen.InWorld(playerTile.X, playerTile.Y + i))
-                        {
-                            if (WorldGen.SolidTileAllowTopSlope(playerTile.X, playerTile.Y + i))
-                            {
-                                distance = i;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            distance = i;
-                            break;
-                        }
-                    }
-                    if (distance > 36)
-                    {
-                        player.velocity.Y += distance * 0.3f;
-                        player.maxFallSpeed += distance;
-                        player.gravity *= 10;
-                    }
-                    //inflict debuff
-                }
-            }
+            //if (Attack != (int)AttackList.TooFar && Attack != (int)AttackList.SlamDown)
+            //{
+            //    foreach (Player player in Main.player.Where(n => n.active && !n.dead))
+            //    {
+            //        float distance = 0;
+            //        for (int i = 0; i < Main.tile.Height; i++)
+            //        {
+            //            Point playerTile = player.MountedCenter.ToTileCoordinates();
+            //            if (WorldGen.InWorld(playerTile.X, playerTile.Y + i))
+            //            {
+            //                if (WorldGen.SolidTileAllowTopSlope(playerTile.X, playerTile.Y + i))
+            //                {
+            //                    distance = i;
+            //                    break;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                distance = i;
+            //                break;
+            //            }
+            //        }
+            //        if (distance > 36)
+            //        {
+            //            player.velocity.Y += distance * 0.3f;
+            //            player.maxFallSpeed += distance;
+            //            player.gravity *= 10;
+            //        }
+            //        //inflict debuff
+            //    }
+            //}
 
             NPC.damage = GetDamage(0);
 
