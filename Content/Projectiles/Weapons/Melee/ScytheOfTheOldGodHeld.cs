@@ -298,11 +298,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
             float itemScale = Player.GetAdjustedItemScale(Player.HeldItem);
-            int size = (int)(600 * itemScale);
+            int size = (int)(450 * itemScale);
 
             hitbox.Width = size;
             hitbox.Height = size;
-            hitbox.Location = (Projectile.Center + Projectile.rotation.ToRotationVector2() * 220f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 150 * itemScale - new Vector2(size * 0.5f)).ToPoint();
+            hitbox.Location = (Projectile.Center + Projectile.rotation.ToRotationVector2() * 60f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 100 * itemScale - new Vector2(size * 0.5f)).ToPoint();
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -394,10 +394,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
             }
 
-            Vector2 waveOff = new Vector2(swingPercent * 200, 0).RotatedBy(Projectile.velocity.ToRotation());
-            float waveSrength = Utils.GetLerpValue(0.5f, 0.8f, swingPercent2, true) * Utils.GetLerpValue(1f, 0.9f, swingPercent, true);
-            Main.EntitySpriteDraw(swingTexture, Projectile.Center + waveOff - Main.screenPosition, swingTexture.Frame(1, 4, 0, 0), glowColor * waveSrength * 0.2f, Projectile.velocity.ToRotation(), swingTexture.Frame(1, 4, 0, 1).Size() * 0.5f, drawScale + swingPercent * 5f, spriteEffects, 0);
-            Main.EntitySpriteDraw(swingTexture, Projectile.Center + waveOff - Main.screenPosition, swingTexture.Frame(1, 4, 0, 2), glowColor * waveSrength * 0.1f, Projectile.velocity.ToRotation(), swingTexture.Frame(1, 4, 0, 1).Size() * 0.5f, drawScale + swingPercent * 3f, spriteEffects, 0);
+            //outer slash
+            //Vector2 waveOff = new Vector2(swingPercent * 200, 0).RotatedBy(Projectile.velocity.ToRotation());
+            //float waveSrength = Utils.GetLerpValue(0.5f, 0.8f, swingPercent2, true) * Utils.GetLerpValue(1f, 0.9f, swingPercent, true);
+            //Main.EntitySpriteDraw(swingTexture, Projectile.Center + waveOff - Main.screenPosition, swingTexture.Frame(1, 4, 0, 0), glowColor * waveSrength * 0.2f, Projectile.velocity.ToRotation(), swingTexture.Frame(1, 4, 0, 1).Size() * 0.5f, drawScale + swingPercent * 5f, spriteEffects, 0);
+            //Main.EntitySpriteDraw(swingTexture, Projectile.Center + waveOff - Main.screenPosition, swingTexture.Frame(1, 4, 0, 2), glowColor * waveSrength * 0.1f, Projectile.velocity.ToRotation(), swingTexture.Frame(1, 4, 0, 1).Size() * 0.5f, drawScale + swingPercent * 3f, spriteEffects, 0);
 
             float sparkStrength = (1f - swingPercent2) * swingPercent2 * 4f * Utils.GetLerpValue(0.3f, 0.5f, swingPercent, true);
             
