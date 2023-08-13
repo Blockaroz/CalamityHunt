@@ -18,6 +18,7 @@ using MonoMod.Cil;
 using Mono.Cecil.Cil;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 
 namespace CalamityHunt
 {
@@ -183,8 +184,27 @@ namespace CalamityHunt
             bossChecklist.Call("LogBoss", this, "Goozma", 23.6, () => BossDownedSystem.downedBoss["Goozma"], ModContent.NPCType<Goozma>(), new Dictionary<string, object>()
             {
                 ["spawnItems"] = sludge,
-                ["customPortrait"] = portrait
+                ["customPortrait"] = portrait,
+                ["despawnMessage"] = DespawnMessage
             });
         }
+
+        Func<NPC, LocalizedText> DespawnMessage = delegate (NPC npc)
+        {
+            int numberOfAdjectives = 25;
+            int numberOfNouns = 21;
+            int numberOfSpecial = 7;
+            int specialChance = 20;
+
+            string adjective = "Mods.CalamityHunt.NPCs.Goozma.Titles.Adjective" + Main.rand.Next(1, numberOfAdjectives + 1);
+            string noun = "Mods.CalamityHunt.NPCs.Goozma.Titles.Noun" + Main.rand.Next(1, numberOfNouns + 1);
+            LocalizedText final = Language.GetText("Mods.CalamityHunt.NPCs.Goozma.BossChecklistIntegration.DespawnMessage").WithFormatArgs(Language.GetText(adjective), Language.GetText(noun));
+            if (Main.rand.NextBool(specialChance))
+            {
+                string special = "Mods.CalamityHunt.NPCs.Goozma.Titles.Specific" + Main.rand.Next(1, numberOfSpecial + 1);
+                final = Language.GetText("Mods.CalamityHunt.NPCs.Goozma.BossChecklistIntegration.DespawnMessage").WithFormatArgs(Language.GetText(special), Language.GetOrRegister(""));
+            }
+            return final;
+        };
     }
 }
