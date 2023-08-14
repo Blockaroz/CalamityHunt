@@ -191,8 +191,8 @@ namespace CalamityHunt
 
         Func<NPC, LocalizedText> DespawnMessage = delegate (NPC npc)
         {
-            int numberOfAdjectives = 30;
-            int numberOfNouns = 25;
+            int numberOfAdjectives = 31;
+            int numberOfNouns = 26;
             int numberOfSpecial = 8;
             int specialChance = 20;
 
