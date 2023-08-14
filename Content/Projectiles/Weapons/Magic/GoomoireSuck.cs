@@ -30,7 +30,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.hide = true;
             Projectile.manualDirectionChange = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 3;
+            Projectile.localNPCHitCooldown = 8;
             Projectile.DamageType = DamageClass.Magic;
         }
 
