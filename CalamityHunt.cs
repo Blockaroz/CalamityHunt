@@ -191,10 +191,10 @@ namespace CalamityHunt
 
         Func<NPC, LocalizedText> DespawnMessage = delegate (NPC npc)
         {
-            int numberOfAdjectives = 31;
-            int numberOfNouns = 26;
-            int numberOfSpecial = 8;
-            int specialChance = 20;
+            int numberOfAdjectives = 34;
+            int numberOfNouns = 29;
+            int numberOfSpecial = 10;
+            int specialChance = 30;
 
             string adjective = "Mods.CalamityHunt.NPCs.Goozma.Titles.Adjective" + Main.rand.Next(1, numberOfAdjectives + 1);
             string noun = "Mods.CalamityHunt.NPCs.Goozma.Titles.Noun" + Main.rand.Next(1, numberOfNouns + 1);

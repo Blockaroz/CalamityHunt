@@ -470,12 +470,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (ModLoader.HasMod("CalamityMod"))
                     {
-                        if (ModLoader.GetMod("CalamityMod").Version != new Version(2, 0, 3, 1))
-                        {
-                            ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", player, true);
-                        }
-                        else
-                            player.wingTime = player.wingTimeMax;
+                        ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", player, true);
                     }
                     else
                     {
