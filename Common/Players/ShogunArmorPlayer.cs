@@ -170,8 +170,11 @@ namespace CalamityHunt.Common.Players
                 if (self.equippedWings == null)
                 {
                     self.wingsLogic = wingSlot;
+                    if (ModLoader.HasMod("CalamityMod"))
+                    {
+                        ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", self, true);
+                    }
                     self.wingTime = 1;
-
                     if (self.controlJump && self.wingTime > 0f && !self.canJumpAgain_Cloud && self.jump == 0)
                     {
                         bool hovering = self.TryingToHoverDown && !self.merman;
