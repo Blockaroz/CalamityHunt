@@ -503,6 +503,7 @@ Projectiles: {
 	ChromaticGooztickProjectile.DisplayName: Chromatic Gooztick Projectile
 	DynamoRodProjectile.DisplayName: Dynamo Rod Projectile
 	ThrowingStarsProjectile.DisplayName: Throwing Stars Projectile
+	ThrowingStarsGhostProjectile.DisplayName: Throwing Stars Ghost Projectile
 }
 
 Chat: {
