@@ -29,6 +29,9 @@ Adjective28: Opalescent
 Adjective29: Bloated
 Adjective30: Glopulous
 Adjective31: Goomsday
+Adjective32: Catalytic
+Adjective33: Slimy
+Adjective34: Recollected
 Noun1: Deity
 Noun2: Monstrosity
 Noun3: Menace
@@ -55,6 +58,9 @@ Noun23: Gastropod
 Noun24: Bloat
 Noun25: Singularity
 Noun26: Sludgement
+Noun27: Wellspring
+Noun28: Cesspool
+Noun29: Caolescence
 Specific1: God of Slimes
 Specific2: True Slime God
 Specific3: Jellyfish of Wisdom
@@ -63,3 +69,5 @@ Specific5: Collective Unconscious
 Specific6: Glop God
 Specific7: Sinister Slop
 Specific8: Godly Goop
+Specific9: Sludgestorm
+Specific10: Gunge
