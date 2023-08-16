@@ -413,6 +413,11 @@ Items: {
 			If the flavor isn't strange, the smell certainly is.'
 			'''
 	}
+
+	ThrowingStars: {
+		DisplayName: Throwing Stars
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -497,6 +502,7 @@ Projectiles: {
 	ChromaticBombProjectile.DisplayName: Chromatic Bomb Projectile
 	ChromaticGooztickProjectile.DisplayName: Chromatic Gooztick Projectile
 	DynamoRodProjectile.DisplayName: Dynamo Rod Projectile
+	ThrowingStarsProjectile.DisplayName: Throwing Stars Projectile
 }
 
 Chat: {
