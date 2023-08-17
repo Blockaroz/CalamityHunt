@@ -31,7 +31,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
             Item.useTime = 3;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 10f;
-            Item.UseSound = SoundID.DD2_JavelinThrowersAttack with { MaxInstances = 0, PitchVariance = 0.1f, Pitch = 0.3f, Volume = 0.8f };
+            Item.UseSound = SoundID.DD2_JavelinThrowersAttack with { MaxInstances = 0, PitchVariance = 0.1f, Pitch = 0.5f, Volume = 0.8f };
             Item.autoReuse = true;
             Item.shootSpeed = 11f;
             Item.rare = ModContent.RarityType<VioletRarity>();
@@ -54,8 +54,18 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            //if (Main.rand.NextBool(25))
-            //    type = ModContent.ProjectileType<ThrowingStarsGhostProjectile>();
+            if (Main.rand.NextBool(30))
+            {
+                type = ModContent.ProjectileType<ThrowingStarsCritProjectile>();
+                velocity *= 1.5f;
+            }
+            else
+            {
+                Vector2 newVelocity = velocity * Main.rand.NextFloat(0.7f, 1f);
+                float randRot = Main.rand.NextFloat(-1f, 1f);
+                position += newVelocity.RotatedBy(randRot * 0.6f) * 2;
+                velocity = newVelocity.RotatedBy(randRot * 0.05f);
+            }
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -65,10 +75,12 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
             if (player.whoAmI == Main.myPlayer)
             {
-                Vector2 newVelocity = velocity * Main.rand.NextFloat(0.7f, 1f);
-                ModifyShootStats(player, ref position, ref newVelocity, ref type, ref damage, ref knockback);
-                float randRot = Main.rand.NextFloat(-1f, 1f);
-                Projectile.NewProjectile(source, position + newVelocity.RotatedBy(randRot) * 3, newVelocity.RotatedBy(randRot * 0.2f), type, damage, knockback, player.whoAmI);
+                ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
+                float ai = 0;
+                if (type != Item.shoot)
+                    ai = Main.rand.Next(2);
+                Projectile proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+                proj.ai[1] = ai;
             }
 
             return false;

@@ -105,7 +105,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             }
         }
 
-        public override bool PreKill(int timeLeft)
+        public override void Kill(int timeLeft)
         {
             SoundStyle killSound = SoundID.MaxMana with { MaxInstances = 0, Pitch = 1f, PitchVariance = 0.4f };
             SoundEngine.PlaySound(killSound, Projectile.Center);
@@ -116,8 +116,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(5), 10, 10, DustID.RainbowRod, newColor: randomColor);
                 d.noGravity = true;
             }
-
-            return true;
         }
 
         private void SetCollided(bool stick)
