@@ -418,6 +418,16 @@ Items: {
 		DisplayName: Throwing Stars
 		Tooltip: ""
 	}
+
+	CometKunai: {
+		DisplayName: Comet Kunai
+		Tooltip:
+			'''
+			Releases a barrage of kunai and stars that double up on successful hits
+			Stealth strikes call down a starshower wherever they land
+			'The power of the sun, in the palm of my hand.'
+			'''
+	}
 }
 
 NPCs: {
@@ -509,6 +519,9 @@ Projectiles: {
 	DivinePinky.DisplayName: Divine Pinky
 	EbonianBlinky.DisplayName: Ebonian Blinky
 	StellarInky.DisplayName: Stellar Inky
+	CometKunaiCritProjectile.DisplayName: Comet Kunai Crit Projectile
+	CometKunaiGhostProjectile.DisplayName: Comet Kunai Ghost Projectile
+	CometKunaiProjectile.DisplayName: Comet Kunai Projectile
 }
 
 Chat: {

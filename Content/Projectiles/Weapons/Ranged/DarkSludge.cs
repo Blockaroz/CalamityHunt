@@ -82,16 +82,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 Projectile.Center += Main.npc[(int)StickHost].position - Main.npc[(int)StickHost].oldPosition;
             }
 
-            if (Time == 21)
-                Projectile.velocity += Main.rand.NextVector2Circular(5, 10).RotatedBy(Projectile.velocity.ToRotation());
+            if (Time == 40)
+                Projectile.velocity += Main.rand.NextVector2Circular(8, 12).RotatedBy(Projectile.velocity.ToRotation());
 
-            if (Time > 20)
-            {
-                if (Grounded == 0)
-                    Projectile.velocity.Y++;
-                else if (StickHost <= -1)
-                    Projectile.velocity.Y += 0.2f;
-            }
+            Projectile.extraUpdates = Time < 25 ? 1 : 0;
+
+            if (Grounded == 0)
+                Projectile.velocity.Y += Time > 35 ? 1f : 0.3f;
 
 
             if (Projectile.velocity.Length() > 25f)
@@ -126,12 +123,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
-            if (Grounded != 0)
-            {
-                hitbox.Width = 100;
-                hitbox.Height = 70;
-                hitbox.Location = (Projectile.Center - new Vector2(50, 35)).ToPoint();
-            }
+            hitbox.Width = 80;
+            hitbox.Height = 80;
+            hitbox.Location = (Projectile.Center - new Vector2(40)).ToPoint();
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

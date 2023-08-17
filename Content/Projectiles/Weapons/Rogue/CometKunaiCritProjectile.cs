@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 {
-    public class ThrowingStarsCritProjectile : ModProjectile
+    public class CometKunaiCritProjectile : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -64,7 +64,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 d.noGravity = true;
                 d.velocity += Main.rand.NextVector2Circular(4, 4);
             }
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, -oldVelocity * 0.6f, ModContent.ProjectileType<ThrowingStarsGhostProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, -1);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, -oldVelocity * 0.6f, ModContent.ProjectileType<CometKunaiGhostProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, -1);
         }
 
         public override bool PreDraw(ref Color lightColor)

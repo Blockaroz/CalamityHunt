@@ -51,9 +51,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff(ModContent.BuffType<Gobbed>(), 240);
+            target.AddBuff(ModContent.BuffType<Gobbed>(), 300);
             if (!Main.player[Projectile.owner].HasBuff<Absorption>())
-                Main.player[Projectile.owner].AddBuff(ModContent.BuffType<Absorption>(), 240);
+                Main.player[Projectile.owner].AddBuff(ModContent.BuffType<Absorption>(), 300);
             Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
         }
 

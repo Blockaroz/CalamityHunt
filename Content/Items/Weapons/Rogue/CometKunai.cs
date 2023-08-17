@@ -14,17 +14,13 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Weapons.Rogue
 {
-    public class ThrowingStars : ModItem
+    public class CometKunai : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-        }
-
         public override void SetDefaults()
         {
             Item.width = 100;
             Item.height = 100;
-            Item.damage = 10;
+            Item.damage = 315;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.useAnimation = 6;
@@ -47,7 +43,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
                 Item.DamageType = d;
                 Item.rare = r.Type;
             }
-            Item.shoot = ModContent.ProjectileType<ThrowingStarsProjectile>();
+            Item.shoot = ModContent.ProjectileType<CometKunaiProjectile>();
         }
 
         public override Color? GetAlpha(Color lightColor) => new Color(200, 200, 200, 200);
@@ -56,8 +52,9 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
         {
             if (Main.rand.NextBool(30))
             {
-                type = ModContent.ProjectileType<ThrowingStarsCritProjectile>();
+                type = ModContent.ProjectileType<CometKunaiCritProjectile>();
                 velocity *= 1.5f;
+                damage *= 3;
             }
             else
             {
@@ -75,6 +72,23 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
             if (player.whoAmI == Main.myPlayer)
             {
+                if (ModLoader.HasMod("CalamityMod"))
+                {
+                    Mod calamity = ModLoader.GetMod("CalamityMod");
+
+                    if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
+                    {
+                        Main.NewText("i told you not to >:(", Color.RoyalBlue);
+                        return false;
+                    }
+                }
+                else if (player.vortexStealthActive || player.shroomiteStealth)
+                {
+                    // stealth strike
+                    Main.NewText("i told you not to >:(", Color.RoyalBlue);
+                    return false;
+                }
+
                 ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
                 float ai = 0;
                 if (type != Item.shoot)

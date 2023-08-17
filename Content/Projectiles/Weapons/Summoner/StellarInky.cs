@@ -8,7 +8,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 {
     public class StellarInky : ModProjectile
     {
-        public override string Texture => "CalamityHunt/Content/Projectiles/Weapons/Summoner/Template";
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.MinionSacrificable[Type] = true;
@@ -30,18 +29,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.DamageType = DamageClass.Summon;
         }
 
+        public Player Player => Main.player[Projectile.owner];
+
         public override void AI()
         {
-            Player player = Main.player[Projectile.owner];
-
-            if (!player.GetModPlayer<SlimeCanePlayer>().slimes)
-            {
+            if (!Player.GetModPlayer<SlimeCanePlayer>().slimes || Player.dead)
                 Projectile.Kill();
-            }
             else
-            {
                 Projectile.timeLeft = 2;
-            }
         }
 
         public override bool PreDraw(ref Color lightColor)

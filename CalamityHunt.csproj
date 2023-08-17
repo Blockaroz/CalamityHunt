@@ -8,7 +8,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <AdditionalFiles Remove="Content\Projectiles\Weapons\Rogue\ThrowingStarsGhostProjectile.png" />
+    <AdditionalFiles Remove="Assets\Textures\GoozmoemEye.png" />
+    <AdditionalFiles Remove="Content\Projectiles\Weapons\Rogue\CometKunaiGhostProjectile.png" />
+    <AdditionalFiles Remove="Content\Projectiles\Weapons\Summoner\BlinkySpikeBall.png" />
+    <AdditionalFiles Remove="Content\Projectiles\Weapons\Summoner\Goozmoem.png" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\Textures\Empty.png" />

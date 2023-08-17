@@ -24,10 +24,10 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
 
         public override void SetDefaults()
         {
-            Item.DefaultToWhip(ModContent.ProjectileType<GobfloggerProj>(), 2000, 12f, 4f, 100);
+            Item.DefaultToWhip(ModContent.ProjectileType<GobfloggerProj>(), 300, 12f, 4f, 100);
             Item.width = 56;
             Item.height = 48;
-            Item.shootSpeed = 4;
+            Item.shootSpeed = 5;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.channel = true;
             if (ModLoader.HasMod("CalamityMod"))

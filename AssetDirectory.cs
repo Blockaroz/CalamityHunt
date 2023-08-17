@@ -29,6 +29,8 @@ namespace CalamityHunt
                 public static TextureAsset[] SwirlingRocks = TextureAsset.LoadArray($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/SwirlingRocks_", 2);
                 public static TextureAsset PaladinPalanquinBall = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Mounts/PaladinPalanquinMount_Ball");
                 public static TextureAsset PaladinPalanquinWings = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Mounts/PaladinPalanquinMount_Wings");
+                public static TextureAsset InkyHats = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/InkyHats");
+                public static TextureAsset GoozmoemEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GoozmoemEye");
             }
             
             public struct Bars

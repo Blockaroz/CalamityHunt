@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 {
-    public class ThrowingStarsProjectile : ModProjectile
+    public class CometKunaiProjectile : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -150,7 +150,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.velocity = Vector2.Zero;
             Projectile.ai[1] = target.whoAmI;
 
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.player[Projectile.owner].Center, Main.rand.NextVector2CircularEdge(3, 3), ModContent.ProjectileType<ThrowingStarsGhostProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.player[Projectile.owner].Center, Main.rand.NextVector2CircularEdge(3, 3), ModContent.ProjectileType<CometKunaiGhostProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
         }
 
         public override bool? CanDamage() => Projectile.ai[0] == 0;
@@ -166,7 +166,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D glowTexture = TextureAssets.Projectile[ModContent.ProjectileType<ThrowingStarsGhostProjectile>()].Value;
+            Texture2D glowTexture = TextureAssets.Projectile[ModContent.ProjectileType<CometKunaiGhostProjectile>()].Value;
             Vector2 direction = Projectile.rotation.ToRotationVector2() * 10;
 
             VertexStrip strip = new VertexStrip();

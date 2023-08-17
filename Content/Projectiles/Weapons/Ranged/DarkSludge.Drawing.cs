@@ -10,12 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using Terraria.GameContent;
-using Terraria.Graphics.Renderers;
-using Terraria.Map;
 using Terraria.ModLoader;
-using static Terraria.GameContent.Animations.IL_Actions.NPCs;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 {
@@ -24,7 +19,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
         public override void Load()
         {
             On_Main.CheckMonoliths += DrawShapes;
-            On_Main.DoDraw_Tiles_Solid += DrawSludge; ;
+            On_Main.DoDraw_Tiles_Solid += DrawSludge;
         }
 
         public static RenderTarget2D SludgeTarget { get; set; }

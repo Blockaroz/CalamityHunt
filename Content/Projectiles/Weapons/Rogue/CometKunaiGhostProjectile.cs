@@ -14,7 +14,7 @@ using Terraria.Audio;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 {
-    public class ThrowingStarsGhostProjectile : ModProjectile
+    public class CometKunaiGhostProjectile : ModProjectile
     {
         public override void SetStaticDefaults()
         {
