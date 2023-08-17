@@ -505,6 +505,10 @@ Projectiles: {
 	ThrowingStarsProjectile.DisplayName: Throwing Stars Projectile
 	ThrowingStarsGhostProjectile.DisplayName: Throwing Stars Ghost Projectile
 	ThrowingStarsCritProjectile.DisplayName: Throwing Stars Crit Projectile
+	CrimulanClyde.DisplayName: Crimulan Clyde
+	DivinePinky.DisplayName: Divine Pinky
+	EbonianBlinky.DisplayName: Ebonian Blinky
+	StellarInky.DisplayName: Stellar Inky
 }
 
 Chat: {
