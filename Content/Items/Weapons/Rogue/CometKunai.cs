@@ -48,23 +48,6 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
         public override Color? GetAlpha(Color lightColor) => new Color(200, 200, 200, 200);
 
-        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-        {
-            if (Main.rand.NextBool(30))
-            {
-                type = ModContent.ProjectileType<CometKunaiCritProjectile>();
-                velocity *= 1.5f;
-                damage *= 3;
-            }
-            else
-            {
-                Vector2 newVelocity = velocity * Main.rand.NextFloat(0.7f, 1f);
-                float randRot = Main.rand.NextFloat(-1f, 1f);
-                position += newVelocity.RotatedBy(randRot * 0.6f) * 2;
-                velocity = newVelocity.RotatedBy(randRot * 0.05f);
-            }
-        }
-
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             //if (Item.UseSound.HasValue)
@@ -78,22 +61,52 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
                     if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
                     {
-                        Main.NewText("i told you not to >:(", Color.RoyalBlue);
+                        type = ModContent.ProjectileType<CometKunaiStealthProjectile>();
+                        velocity *= 2;
+                        damage *= 2;
+                        Projectile stealthProj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+                        stealthProj.ai[1] = -1;
+                        stealthProj.rotation += Main.rand.NextFloat(-1f, 1f);
                         return false;
                     }
                 }
                 else if (player.vortexStealthActive || player.shroomiteStealth)
                 {
                     // stealth strike
-                    Main.NewText("i told you not to >:(", Color.RoyalBlue);
+                    if (player.itemAnimation == player.itemAnimationMax)
+                    {
+                        Projectile stealthProj = Projectile.NewProjectileDirect(source, position, velocity * 3, ModContent.ProjectileType<CometKunaiStealthProjectile>(), damage * 2, knockback, player.whoAmI);
+                        stealthProj.ai[1] = -1;
+                        stealthProj.rotation += Main.rand.NextFloat(-1f, 1f);
+
+                        for (int i = 0; i < 5; i++)
+                        {
+                            Vector2 offVel = velocity.RotatedBy(0.3f / 4f * i - 0.15f);
+                            Projectile.NewProjectileDirect(source, position, offVel, type, damage, knockback, player.whoAmI);
+                        }
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave with { Pitch = 1f, Volume = 0.2f }, player.Center);
+                    }
                     return false;
                 }
 
-                ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
                 float ai = 0;
-                if (type != Item.shoot)
-                    ai = Main.rand.Next(2);
+                if (Main.rand.NextBool(30))
+                {
+                    type = ModContent.ProjectileType<CometKunaiCritProjectile>();
+                    velocity *= 1.5f;
+                    damage *= 3;
+                    ai = Main.rand.NextFloat(2);
+                }
+                else
+                {
+                    Vector2 newVelocity = velocity * Main.rand.NextFloat(0.7f, 1f);
+                    float randRot = Main.rand.NextFloat(-1f, 1f);
+                    position += newVelocity.RotatedBy(randRot * 0.6f) * 2;
+                    velocity = newVelocity.RotatedBy(randRot * 0.05f);
+                }
+
                 Projectile proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+                proj.rotation = ai;
                 proj.ai[1] = ai;
             }
 

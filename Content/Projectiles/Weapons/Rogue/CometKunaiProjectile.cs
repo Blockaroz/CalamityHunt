@@ -38,7 +38,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
                 Projectile.DamageType = d;
             }
-            Projectile.extraUpdates = 10;
+            Projectile.extraUpdates = 11;
             Projectile.timeLeft = 80;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 1;
@@ -54,7 +54,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
-                Dust d = Dust.NewDustPerfect(Projectile.Center - Projectile.velocity * Main.rand.NextFloat(), DustID.PortalBolt, Projectile.velocity * Main.rand.NextFloat(), 0, randomColor, 0.6f);
+                Dust d = Dust.NewDustPerfect(Projectile.Center - Projectile.velocity * Main.rand.NextFloat(), DustID.SparkForLightDisc, Projectile.velocity.RotatedByRandom(0.1f) * Main.rand.NextFloat(), 0, randomColor, 0.9f);
                 d.noGravity = true;
 
                 if (Projectile.timeLeft < 40)
@@ -113,7 +113,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             {
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
-                Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(5), 10, 10, DustID.RainbowRod, newColor: randomColor);
+                Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(5), 10, 10, DustID.SparkForLightDisc, 0, 0, 0, randomColor, 2f);
                 d.noGravity = true;
             }
         }
@@ -127,7 +127,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             if (stick)
             {
                 Projectile.tileCollide = false;
-                SoundStyle attachSound = SoundID.Item108 with { MaxInstances = 0, Pitch = 1f, PitchVariance = 0.2f, Volume = 0.3f };
+                SoundStyle attachSound = SoundID.Item108 with { MaxInstances = 0, Pitch = 1f, PitchVariance = 0.2f, Volume = 0.2f };
                 SoundEngine.PlaySound(attachSound, Projectile.Center);
             }
         }

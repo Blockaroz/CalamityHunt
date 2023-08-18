@@ -31,6 +31,7 @@ namespace CalamityHunt
                 public static TextureAsset PaladinPalanquinWings = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Mounts/PaladinPalanquinMount_Wings");
                 public static TextureAsset InkyHats = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/InkyHats");
                 public static TextureAsset GoozmoemEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GoozmoemEye");
+                public static TextureAsset CometKunaiFlame = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/CometKunaiFlame");
             }
             
             public struct Bars

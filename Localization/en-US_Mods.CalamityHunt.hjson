@@ -522,6 +522,8 @@ Projectiles: {
 	CometKunaiCritProjectile.DisplayName: Comet Kunai Crit Projectile
 	CometKunaiGhostProjectile.DisplayName: Comet Kunai Ghost Projectile
 	CometKunaiProjectile.DisplayName: Comet Kunai Projectile
+	CometKunaiStealthProjectile.DisplayName: Comet Kunai Stealth Projectile
+	CometKunaiStarfall.DisplayName: Comet Kunai Starfall
 }
 
 Chat: {

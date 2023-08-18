@@ -38,6 +38,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
         public override void AI()
         {
+            for (int i = 0; i < 5; i++)
+            {
+                Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
+                randomColor.A = 0;
+                Dust d = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity / 5f * i, DustID.SparkForLightDisc, Vector2.Zero, 0, randomColor, 1.5f);
+                d.noGravity = true;
+            }
+
             if (Projectile.ai[0] == 0)
             {
                 Projectile.ai[0]++;
@@ -56,11 +64,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
         public override void Kill(int timeLeft)
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 15; i++)
             {
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
-                Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(5), 10, 10, DustID.RainbowRod, newColor: randomColor);
+                Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(10), 20, 20, DustID.SparkForLightDisc, 0, 0, 0, randomColor);
                 d.noGravity = true;
                 d.velocity += Main.rand.NextVector2Circular(4, 4);
             }
@@ -72,7 +80,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D glow = AssetDirectory.Textures.Glow;
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(0, 70, 200, 0), Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * 1.3f, 0, 0);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 230, 50, 200), Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.6f), Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.White, Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.6f), Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(0, 10, 90, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 0.7f, 0, 0);
 
             return false;
