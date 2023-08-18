@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Content.Buffs;
+﻿using CalamityHunt.Common.Players;
+using CalamityHunt.Content.Buffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;

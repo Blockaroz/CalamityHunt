@@ -62,7 +62,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             {
                 if (Projectile.ai[2]++ % 4 == 0)
                 {
-                    Vector2 position = Projectile.Center - new Vector2(0, 500) + Main.rand.NextVector2Circular(400, 150);
+                    Vector2 position = Projectile.Center - new Vector2(0, 400) + Main.rand.NextVector2Circular(500, 300);
                     Vector2 velocity = position.DirectionTo(Projectile.Center).RotatedByRandom(0.12f).SafeNormalize(Vector2.Zero) * position.Distance(Projectile.Center) * 0.024f;
                     velocity.X *= 0.9f;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<CometKunaiStarfall>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
@@ -156,16 +156,21 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D flame = AssetDirectory.Textures.Extras.CometKunaiFlame;
             Texture2D glow = AssetDirectory.Textures.Glow;
-            Rectangle fireFrame = flame.Frame(3, 1, Projectile.frame, 0);
+            Rectangle fireFrame = flame.Frame(1, 3, 0, Projectile.frame);
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(0, 70, 100, 0), Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.55f), Projectile.scale * 1.3f, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.White, Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.55f), Projectile.scale, 0, 0);
 
-            if (Projectile.ai[0] == 0)
-                Main.EntitySpriteDraw(flame, Projectile.Center - Main.screenPosition, fireFrame, new Color(0, 20, 200, 20), Projectile.velocity.ToRotation() - MathHelper.PiOver2, fireFrame.Size() * new Vector2(0.5f, 0.8f), Projectile.scale, 0, 0);
 
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(5, 10, 60, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(0, 5, 30, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
+            
+            if (Projectile.ai[0] == 0)
+            {
+                float p = Utils.GetLerpValue(5, 20, Projectile.localAI[0], true);
+                Main.EntitySpriteDraw(flame, Projectile.Center - Main.screenPosition, fireFrame, Color.Black * p, Projectile.velocity.ToRotation() - MathHelper.PiOver2, fireFrame.Size() * new Vector2(0.5f, 0.75f), Projectile.scale * 1.2f, 0, 0);
+                Main.EntitySpriteDraw(flame, Projectile.Center - Main.screenPosition, fireFrame, new Color(0, 20, 200, 20) * p, Projectile.velocity.ToRotation() - MathHelper.PiOver2, fireFrame.Size() * new Vector2(0.5f, 0.75f), Projectile.scale * 1.3f, 0, 0);
+            }
 
             return false;
         }

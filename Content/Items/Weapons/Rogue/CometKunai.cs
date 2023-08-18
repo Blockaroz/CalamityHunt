@@ -20,10 +20,10 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
         {
             Item.width = 100;
             Item.height = 100;
-            Item.damage = 315;
+            Item.damage = 185;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-            Item.useAnimation = 6;
+            Item.useAnimation = 9;
             Item.useTime = 3;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 10f;

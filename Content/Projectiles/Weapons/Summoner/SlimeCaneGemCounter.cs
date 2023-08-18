@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Content.Buffs;
+﻿using CalamityHunt.Common.Players;
+using CalamityHunt.Content.Buffs;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
@@ -36,11 +37,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
 
         public override void AI()
-        {
+        { 
             Player player = Main.player[Projectile.owner];
-
-            if (player.dead)
-                player.GetModPlayer<SlimeCanePlayer>().slimes = false;
 
             if (player.GetModPlayer<SlimeCanePlayer>().slimes)
                 Projectile.timeLeft = 2;
