@@ -41,7 +41,6 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             Item.shoot = ModContent.ProjectileType<SlimeCaneGemCounter>();
             Item.shootSpeed = 10f;
             Item.buffType = ModContent.BuffType<SlimeCaneBuff>();
-            Item.buffTime = 5;
             Item.autoReuse = true;
             Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
@@ -52,6 +51,12 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
                 Item.rare = r.Type;
             }
             Item.DamageType = DamageClass.Summon;
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            player.AddBuff(Item.buffType, 5);
+            return true;
         }
     }
 }

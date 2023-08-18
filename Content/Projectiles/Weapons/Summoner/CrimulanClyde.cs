@@ -41,7 +41,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override bool PreDraw(ref Color lightColor)
         {
-            return true;
+            return false;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

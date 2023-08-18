@@ -37,11 +37,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.Kill();
             else
                 Projectile.timeLeft = 2;
+
+            Idle();
+        }
+
+        public void Idle()
+        {
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            return true;
+            return false;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

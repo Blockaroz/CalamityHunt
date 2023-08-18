@@ -34,34 +34,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.hide = true;
         }
 
-        public override void OnSpawn(IEntitySource source)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                int slimeType = ModContent.ProjectileType<CrimulanClyde>();
-                switch (i)
-                {
-                    case 1:
-                        slimeType = ModContent.ProjectileType<EbonianBlinky>();
-                        break;
-                    case 2:
-                        slimeType = ModContent.ProjectileType<DivinePinky>();
-                        break;
-                    case 3:
-                        slimeType = ModContent.ProjectileType<StellarInky>();
-                        break;
-                    default:
-                        slimeType = ModContent.ProjectileType<CrimulanClyde>();
-                        break;
-                }
-                if (Main.player[Projectile.owner].ownedProjectileCounts[slimeType] <= 0)
-                {
-                    int p = Projectile.NewProjectile(source, Projectile.position.X - (20 * i), Projectile.position.Y, 0, 0, slimeType, Projectile.damage, Projectile.knockBack, Projectile.owner);
-                    if (Main.projectile.IndexInRange(p))
-                        Main.projectile[p].originalDamage = Projectile.damage;
-                }
-            }
-        }
 
         public override void AI()
         {

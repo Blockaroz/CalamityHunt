@@ -62,8 +62,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             {
                 if (Projectile.ai[2]++ % 4 == 0)
                 {
-                    Vector2 position = Projectile.Center - new Vector2(0, 500) + Main.rand.NextVector2Circular(345, 150);
-                    Vector2 velocity = position.DirectionTo(Projectile.Center).RotatedByRandom(0.1f).SafeNormalize(Vector2.Zero) * position.Distance(Projectile.Center) * 0.024f;
+                    Vector2 position = Projectile.Center - new Vector2(0, 500) + Main.rand.NextVector2Circular(400, 150);
+                    Vector2 velocity = position.DirectionTo(Projectile.Center).RotatedByRandom(0.12f).SafeNormalize(Vector2.Zero) * position.Distance(Projectile.Center) * 0.024f;
+                    velocity.X *= 0.9f;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<CometKunaiStarfall>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
                 }
             }
