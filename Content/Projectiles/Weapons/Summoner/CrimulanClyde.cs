@@ -2,6 +2,7 @@
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
+using Humanizer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -37,7 +38,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.manualDirectionChange = true;
         }
 
-        public override bool? CanDamage() => false;
+        public override bool? CanDamage() => State == (int)SlimeMinionState.Attacking && Time > 0;
 
         public ref float State => ref Projectile.ai[0];
         public ref float Time => ref Projectile.ai[1];
@@ -60,27 +61,22 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.rotation = 0f;
             Projectile.damage = Player.GetModPlayer<SlimeCanePlayer>().highestOriginalDamage;
             int target = -1;
-            Projectile.Minion_FindTargetInRange(800, ref target, false);
+            Projectile.Minion_FindTargetInRange(800, ref target, true);
+            bool hasTarget = false;
             if (target > -1)
             {
-                if (Main.npc[target].active)
+                hasTarget = true;
+                if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile))
                     Attack(target);
-            }
-            else
-            {
-                if (Math.Abs(Projectile.velocity.X) < 3f)
-                    Projectile.direction = Player.direction;
                 else
-                    Projectile.direction = Math.Sign(Projectile.velocity.X);
-
-                Idle();
+                    hasTarget = false;
             }
-
-            Projectile.velocity.Y += iAmInAir ? 0.25f : 0.3f;
+            if (!hasTarget)
+                Idle();
 
             if (iAmInAir && Main.rand.NextBool() && jumpTime > 0)
             {
-                Color color = new Color(150, 160, 255, 60);
+                Color color = new Color(255, 150, 150, 60);
                 Dust sparkle = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(13, 12), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(1, 1), 0, color, 0.2f + Main.rand.NextFloat());
                 sparkle.noGravity = Main.rand.NextBool(3);
             }
@@ -89,7 +85,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 jumpTime--;
         }
 
-        public Vector2 HomePosition => Player.Bottom + new Vector2(-110 * Player.direction, -28);
+        public Vector2 HomePosition => Player.Bottom + new Vector2(-100 * Player.direction, -28);
 
         public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(150), 300, 300);
 
@@ -139,19 +135,26 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.frameCounter = 0;
                 Projectile.frame = 0;
             }
+
+            Projectile.velocity.Y += iAmInAir ? 0.25f : 0.3f;
+
+            if (Math.Abs(Projectile.velocity.X) < 3f)
+                Projectile.direction = Player.direction;
+            else
+                Projectile.direction = Math.Sign(Projectile.velocity.X);
         }
 
         public void Attack(int whoAmI)
         {
             NPC target = Main.npc[whoAmI];
-            bool targetInAir = !Collision.SolidCollision(target.position - new Vector2(50), target.width + 100, target.height + 100);
+            bool targetInAir = !Collision.SolidCollision(target.position - new Vector2(100), target.width + 200, target.height + 200);
             if (targetInAir)
                 iAmInAir = true;
 
-            if (Projectile.Distance(target.Center) < 150)
+            if (Projectile.Distance(target.Center) < 250)
                 State = (int)SlimeMinionState.Attacking;
 
-            if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving)
+            if (Projectile.Distance(target.Center) > 400 || State == (int)SlimeMinionState.IdleMoving)
             {
                 State = (int)SlimeMinionState.IdleMoving;
 
@@ -162,44 +165,70 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 }
             }
 
-            Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, State == (int)SlimeMinionState.Attacking ? 0f : (target.Center.X - Projectile.Center.X) * 0.03f, 0.05f);
+            Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, State == (int)SlimeMinionState.Attacking ? 0f : (target.Center.X - Projectile.Center.X) * 0.03f, 0.1f);
 
             if (Projectile.Bottom.Y > target.Center.Y + 30 && targetInAir && Projectile.velocity.Y >= 0)
                 Jump(-5 - Math.Max(Math.Abs(HomePosition.X - Projectile.Center.X) * 0.01f + (iAmInAir ? Math.Abs(target.Center.Y - Projectile.Center.Y) * 0.02f : 0) + 0.5f, 0), iAmInAir);
 
-            int maxTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(9, 8, 7, 6, 5);
-
             if (State == (int)SlimeMinionState.Attacking)
             {
-                Projectile.Kill();
-                //Projectile.velocity.X *= 0.9f;
-                //if (Projectile.velocity.Y > 0)
-                //    Projectile.velocity.Y *= 0.9f;
+                Time++;
+                Projectile.tileCollide = true;
 
-                //Projectile.direction = Projectile.Center.X > target.Center.X ? -1 : 1;
+                if (Time < 0)
+                {
+                    if (++Projectile.frameCounter >= 10)
+                    {
+                        Projectile.frameCounter = 0;
+                        Projectile.frame = Math.Clamp(Projectile.frame + 1, 9, 10);
+                    }
 
-                //Time++;
-                //if (++Projectile.frameCounter >= maxTime)
-                //{
-                //    Projectile.frameCounter = 0;
-                //    Projectile.frame = Math.Clamp(Projectile.frame + 1, 6, 11);
-                //    if (Projectile.frame == 11)
-                //        Projectile.frame = 6;
-                //}
+                    Projectile.velocity *= 0.95f;
+                    Vector2 top = target.Top - new Vector2(0, 50);
+                    Vector2 newVel = Projectile.DirectionTo(top).SafeNormalize(Vector2.Zero) * Projectile.Distance(top) * 0.01f;
+                    newVel.X *= 0.1f;
+                    Projectile.velocity += newVel;
+                }
+                else
+                {
+                    Projectile.damage = 2;
+                    Projectile.tileCollide = false;
+                    Projectile.velocity = Projectile.DirectionTo(target.Center - new Vector2(0, 10)) * (Time + 0.1f) * Projectile.Distance(target.Center) * 0.012f;
+                    Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.ToRotation() - MathHelper.PiOver2, 0.5f);
 
-                //if (Time == maxTime * 3)
-                //{
-                //    AttackCount++;
+                    if (Time == 0)
+                        Projectile.frame = 5;
 
-                //}
-
-                //if (Time >= maxTime * 5)
-                //    Time = 0;
+                    if (++Projectile.frameCounter >= 4)
+                    {
+                        Projectile.frameCounter = 0;
+                        Projectile.frame = Math.Clamp(Projectile.frame + 1, 6, 8);
+                    }
+                }
             }
             else
             {
                 State = (int)SlimeMinionState.IdleMoving;
                 Time = 0;
+            }
+
+            Projectile.velocity.Y += 0.05f;
+
+            if (Math.Abs(Projectile.velocity.X) > 0)
+                Projectile.direction = Math.Sign(Projectile.velocity.X);
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (State == (int)SlimeMinionState.Attacking)
+            {
+                Projectile.frame = 9;
+                Projectile.velocity.Y = -Math.Sign(Projectile.velocity.Y) * Math.Max(Math.Abs(Projectile.velocity.Y), 8) * Main.rand.NextFloat(0.6f, 1.1f);
+                Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * Math.Max(Math.Abs(Projectile.velocity.X), 8) * Main.rand.NextFloat(0.7f, 3f);
+                Time = -Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(25, 20, 18, 13, 10);
+
+                SoundStyle bounce = SoundID.Item154 with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.2f, Volume = 0.5f };
+                SoundEngine.PlaySound(bounce, Projectile.Center);
             }
         }
 
@@ -219,20 +248,20 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             jumpTime = 24;
             if (air)
             {
-                Color color = new Color(150, 160, 255, 60);
+                Color color = new Color(255, 150, 150, 60);
                 color.A = 0;
                 Particle wave = Particle.NewParticle(Particle.ParticleType<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
-                wave.data = new Color(245, 255, 168, 120);
+                wave.data = new Color(255, 255, 168, 120);
                 for (int i = 0; i < Main.rand.Next(3, 7); i++)
                 {
                     Dust sparkle = Dust.NewDustPerfect(Projectile.Bottom + Main.rand.NextVector2Circular(9, 4), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(3, 1) - Vector2.UnitY * (i + 1) * 0.7f, 0, color, 1f + Main.rand.NextFloat());
                     sparkle.noGravity = Main.rand.NextBool(3);
                 }
 
-                SoundEngine.PlaySound(SoundID.Item24 with { MaxInstances = 0, Pitch = 0.9f, PitchVariance = 0.3f, Volume = 0.6f }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item24 with { MaxInstances = 0, Pitch = 0.6f, PitchVariance = 0.3f, Volume = 0.4f }, Projectile.Center);
             }
             else
-                SoundEngine.PlaySound(SoundID.NPCHit13 with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.3f, Volume = 0.1f }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.NPCDeath9 with { MaxInstances = 0, Pitch = -0.1f, PitchVariance = 0.3f, Volume = 0.3f }, Projectile.Center);
 
             Projectile.frame = 0;
 

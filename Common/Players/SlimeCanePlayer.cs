@@ -18,10 +18,12 @@ namespace CalamityHunt.Common.Players
             int count = Player.ownedProjectileCounts[ModContent.ProjectileType<SlimeCaneGemCounter>()];
 
             if (count > 1)
-                num = 1;
+                num = 1;            
             if (count > 2)
-                num = 3;
+                num = 2;
             if (count > 3)
+                num = 3;
+            if (count > 4)
                 num = 4;
 
             return num;

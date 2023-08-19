@@ -1,8 +1,15 @@
 ﻿using CalamityHunt.Common.Players;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Buffs;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
@@ -13,13 +20,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             ProjectileID.Sets.MinionSacrificable[Type] = true;
             ProjectileID.Sets.MinionTargettingFeature[Type] = true;
-            Main.projFrames[Type] = 1;
+            Main.projFrames[Type] = 11;
         }
 
         public override void SetDefaults()
         {
-            Projectile.width = 22;
-            Projectile.height = 22;
+            Projectile.width = 40;
+            Projectile.height = 30;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.penetrate = -1;
@@ -28,7 +35,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
             Projectile.DamageType = DamageClass.Summon;
+            Projectile.manualDirectionChange = true;
         }
+
+        public override bool? CanDamage() => false;
+
+        public ref float State => ref Projectile.ai[0];
+        public ref float Time => ref Projectile.ai[1];
+        public ref float AttackCount => ref Projectile.ai[2];
 
         public Player Player => Main.player[Projectile.owner];
 
@@ -39,20 +53,235 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             else
                 Projectile.timeLeft = 2;
 
-            Idle();
+            if (Projectile.Distance(HomePosition) > 800)
+                State = (int)SlimeMinionState.IdleMoving;
+
+            iAmInAir = false;
+
+            Projectile.rotation = 0f;
+            Projectile.damage = Player.GetModPlayer<SlimeCanePlayer>().highestOriginalDamage;
+            int target = -1;
+            Projectile.Minion_FindTargetInRange(800, ref target, true);
+            bool hasTarget = false;
+            if (target > -1)
+            {
+                hasTarget = true;
+                if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile))
+                    Attack(target);
+                else
+                    hasTarget = false;
+            }
+            if (!hasTarget)
+                Idle();
+
+            if (iAmInAir && Main.rand.NextBool(3))
+            {
+                Color color = Color.Lerp(new Color(130, 170, 255, 60), new Color(255, 110, 255, 60), Main.rand.Next(2));
+                Dust sparkle = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(13, 12), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(1, 1), 0, color, 0.2f + Main.rand.NextFloat());
+                sparkle.noGravity = Main.rand.NextBool(3);
+            }
+
+            if (jumpTime > 0)
+                jumpTime--;
         }
+
+        public Vector2 HomePosition => InAir ? Player.Bottom + new Vector2(-80 * Player.direction, -100) : Player.Bottom + new Vector2(-140 * Player.direction, -20);
+
+        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(150), 300, 300);
+
+        public bool iAmInAir;
+
+        public int jumpTime;
 
         public void Idle()
         {
+            Time = 0;
+            if (InAir)
+                iAmInAir = true;
+
+            bool tooFar = Projectile.Distance(HomePosition) > 900 && State != (int)SlimeMinionState.Attacking;
+            if (tooFar)
+            {
+                State = (int)SlimeMinionState.IdleMoving;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * Projectile.Distance(HomePosition) * 0.05f, 0.1f);
+                Projectile.rotation = Projectile.velocity.X * 0.02f;
+                if (Projectile.velocity.Y > 0)
+                    Projectile.frame = 5;
+                else
+                    Projectile.frame = 0;
+            }
+
+            Projectile.velocity.X *= 0.6f;
+
+            if (Math.Abs(Projectile.Center.X - HomePosition.X) > 4 || InAir)
+            {
+                State = (int)SlimeMinionState.IdleMoving;
+                if (!InAir)
+                    Projectile.velocity.X = (HomePosition.X - Projectile.Center.X) * 0.05f;
+                else
+                    Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, (HomePosition.X - Projectile.Center.X) * 0.05f, 0.3f);
+            }
+
+            if (InAir)
+            {
+                Projectile.tileCollide = false;
+
+                if (Projectile.Distance(HomePosition) > 14)
+                    Projectile.velocity += Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(HomePosition) * 0.005f);
+                else
+                {
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2Circular(5, 5), 0.05f);
+                    Projectile.netUpdate = true;
+                }
+                Projectile.velocity *= 0.95f;
+                Projectile.rotation = Projectile.velocity.X * 0.04f;
+            }
+            else
+                Projectile.tileCollide = true;
+
+            if (InAir)
+            {
+                if (++Projectile.frameCounter >= 5)
+                {
+                    Projectile.frameCounter = 0;
+                    Projectile.frame = Math.Clamp(Projectile.frame + 1, 6, 12);
+                    if (Projectile.frame == 12)
+                        Projectile.frame = 6;
+                }
+            }
+            else
+            {
+                if (State == (int)SlimeMinionState.IdleMoving)
+                {
+                    if (++Projectile.frameCounter >= 7)
+                    {
+                        Projectile.frameCounter = 0;
+                        Projectile.frame = Math.Clamp(Projectile.frame + 1, 0, 5);
+                    }
+                }
+                else
+                {
+                    Projectile.frameCounter = 0;
+                    Projectile.frame = 0;
+                }
+            }
+
+            Projectile.velocity.Y += iAmInAir ? 0f : 0.5f;
+
+            if (Math.Abs(Projectile.velocity.X) < 1f)
+                Projectile.direction = Player.direction;
+            else
+                Projectile.direction = Math.Sign(Projectile.velocity.X);
         }
 
-        public override bool PreDraw(ref Color lightColor)
+        public void Attack(int whoAmI)
         {
-            return false;
+            NPC target = Main.npc[whoAmI];
+            int maxTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(9, 9, 8, 7, 6);
+            iAmInAir = true;
+            Projectile.tileCollide = false;
+
+            if (Projectile.Distance(target.Center) < 150)
+                State = (int)SlimeMinionState.Attacking;
+
+            if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving)
+            {
+                State = (int)SlimeMinionState.IdleMoving;
+
+                if (++Projectile.frameCounter >= 5)
+                {
+                    Projectile.frameCounter = 0;
+                    Projectile.frame = Math.Clamp(Projectile.frame + 1, 6, 12);
+                    if (Projectile.frame == 12)
+                        Projectile.frame = 6;
+                }
+
+                Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(target.Center) * 0.002f);
+                Projectile.velocity *= 0.95f;
+            }
+
+            if (State == (int)SlimeMinionState.Attacking)
+            {
+                Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center) * 0.001f;
+                Projectile.velocity *= 0.98f;
+
+                Time++;
+
+                if (++Projectile.frameCounter >= maxTime)
+                {
+                    Projectile.frameCounter = 0;
+                    Projectile.frame = Math.Clamp(Projectile.frame + 1, 11, 17);
+                    if (Projectile.frame == 17)
+                        Projectile.frame = 11;
+                }
+
+                if (Time == maxTime * 4)
+                {
+                    //117, 67, 68
+                    SoundStyle ray = SoundID.Item28 with { MaxInstances = 0, Pitch = 0.9f, PitchVariance = 0.2f, Volume = 0.3f };
+                    SoundEngine.PlaySound(ray, Projectile.Center);
+                    //Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * 5, ProjectileID.TinyEater, Projectile.damage, Projectile.knockBack, Player.whoAmI);
+                }
+
+                if (Time >= maxTime * 6)
+                    Time = 0;
+            }
+
+            if (Math.Abs(Projectile.velocity.X) > 0)
+                Projectile.direction = Math.Sign(Projectile.velocity.X);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            if (State == (int)SlimeMinionState.IdleMoving)
+            {
+                if (Projectile.velocity.Y >= 0)
+                    Jump(-7 - Math.Max(Math.Abs(HomePosition.X - Projectile.Center.X) * 0.01f + (iAmInAir ? Math.Abs(HomePosition.Y - Projectile.Center.Y) * 0.026f : 0) + 0.5f, 0), iAmInAir);
+            }
+
+            return false;
+        }
+
+        public void Jump(float height, bool air)
+        {
+            jumpTime = 24;
+            if (air)
+            {
+                Color color = new Color(255, 150, 150, 60);
+                color.A = 0;
+                Particle wave = Particle.NewParticle(Particle.ParticleType<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
+                wave.data = new Color(255, 255, 168, 120);
+                for (int i = 0; i < Main.rand.Next(3, 7); i++)
+                {
+                    Dust sparkle = Dust.NewDustPerfect(Projectile.Bottom + Main.rand.NextVector2Circular(9, 4), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(3, 1) - Vector2.UnitY * (i + 1) * 0.7f, 0, color, 1f + Main.rand.NextFloat());
+                    sparkle.noGravity = Main.rand.NextBool(3);
+                }
+
+                SoundEngine.PlaySound(SoundID.Item24 with { MaxInstances = 0, Pitch = 0.6f, PitchVariance = 0.3f, Volume = 0.4f }, Projectile.Center);
+            }
+            else
+                SoundEngine.PlaySound(SoundID.NPCDeath9 with { MaxInstances = 0, Pitch = -0.1f, PitchVariance = 0.3f, Volume = 0.3f }, Projectile.Center);
+
+            Projectile.frame = 0;
+
+            if (Math.Abs(Projectile.Center.X - HomePosition.X) < 4 && !air)
+                State = (int)SlimeMinionState.Idle;
+            else
+                Projectile.velocity.Y = iAmInAir ? height * 0.9f : height;
+
+            if (AttackCount >= 3)
+                AttackCount = 0;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = texture.Frame(5, 17, Player.GetModPlayer<SlimeCanePlayer>().SlimeRank(), Projectile.frame, -2, -2);
+            SpriteEffects direction = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            Vector2 scale = Projectile.scale * Vector2.One;
+
+            Main.EntitySpriteDraw(texture, Projectile.Bottom + Vector2.UnitY * 12 - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), scale, direction, 0);
+
             return false;
         }
     }

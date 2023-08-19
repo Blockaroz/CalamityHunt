@@ -61,20 +61,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.damage = Player.GetModPlayer<SlimeCanePlayer>().highestOriginalDamage;
             int target = -1;
             Projectile.Minion_FindTargetInRange(800, ref target, false);
+            bool hasTarget = false;
             if (target > -1)
             {
-                if (Main.npc[target].active)
+                hasTarget = true;
+                if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile))
                     Attack(target);
-            }
-            else
-            {
-                if (Math.Abs(Projectile.velocity.X) < 3f)
-                    Projectile.direction = Player.direction;
                 else
-                    Projectile.direction = Math.Sign(Projectile.velocity.X);
-
-                Idle();
+                    hasTarget = false;
             }
+            if (!hasTarget)
+                Idle();
 
             Projectile.velocity.Y += iAmInAir ? 0.3f : 0.4f;
 
@@ -139,19 +136,23 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.frameCounter = 0;
                 Projectile.frame = 0;
             }
+
+            if (Math.Abs(Projectile.velocity.X) < 3f)
+                Projectile.direction = Player.direction;
+            else
+                Projectile.direction = Math.Sign(Projectile.velocity.X);
         }
 
         public void Attack(int whoAmI)
         {
             NPC target = Main.npc[whoAmI];
-            bool targetInAir = !Collision.SolidCollision(target.position - new Vector2(50), target.width + 100, target.height + 100);
+            int maxTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(9, 8, 7, 6, 5);
+
+            bool targetInAir = !Collision.SolidCollision(target.position - new Vector2(150), target.width + 300, target.height + 300);
             if (targetInAir)
                 iAmInAir = true;
 
-            if (Projectile.Distance(target.Center) < 150 && AttackCount < 3)
-                State = (int)SlimeMinionState.Attacking;
-
-            if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving)
+            if ((Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving))
             {
                 State = (int)SlimeMinionState.IdleMoving;
 
@@ -162,12 +163,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 }
             }
 
-            Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, State == (int)SlimeMinionState.Attacking ? 0f : (target.Center.X - Projectile.Center.X) * 0.03f, 0.05f);
+            if (Projectile.Distance(target.Center) < 150 && AttackCount < 3)
+                State = (int)SlimeMinionState.Attacking;
 
-            if (Projectile.Bottom.Y > target.Center.Y + 30 && targetInAir && Projectile.velocity.Y >= 0)
+            if (Projectile.Bottom.Y > target.Center.Y + 30 && targetInAir && Projectile.velocity.Y >= 0 && Time % maxTime == 0)
                 Jump(-6 - Math.Max(Math.Abs(HomePosition.X - Projectile.Center.X) * 0.01f + (iAmInAir ? Math.Abs(target.Center.Y - Projectile.Center.Y) * 0.02f : 0) + 0.5f, 0), iAmInAir);
 
-            int maxTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(9, 8, 7, 6, 5);
+            Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, State == (int)SlimeMinionState.Attacking ? 0f : (target.Center.X - Projectile.Center.X) * 0.03f, 0.05f);
 
             if (State == (int)SlimeMinionState.Attacking && AttackCount < 3)
             {
@@ -186,15 +188,22 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                         Projectile.frame = 6;
                 }
 
-                if (Time == maxTime * 3)
+                if (Time == maxTime * 3 + 2)
                 {
-                    AttackCount++;
-
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * 5, ProjectileID.TinyEater, Projectile.damage, Projectile.knockBack, Player.whoAmI);
+                    SoundStyle burp = SoundID.NPCDeath12 with { MaxInstances = 0, Pitch = 0.9f, PitchVariance = 0.2f, Volume = 0.3f };
+                    SoundEngine.PlaySound(burp, Projectile.Center);
+                    //Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * 5, ProjectileID.TinyEater, Projectile.damage, Projectile.knockBack, Player.whoAmI);
                 }
 
                 if (Time >= maxTime * 5)
+                {
+                    if (iAmInAir)
+                        AttackCount++;
+                    else
+                        AttackCount = 0;
+
                     Time = 0;
+                }
             }
             else
             {
@@ -229,14 +238,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     sparkle.noGravity = Main.rand.NextBool(3);
                 }
 
-                SoundEngine.PlaySound(SoundID.Item24 with { MaxInstances = 0, Pitch = 0.9f, PitchVariance = 0.3f, Volume = 0.6f }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item24 with { MaxInstances = 0, Pitch = 0.9f, PitchVariance = 0.3f, Volume = 0.4f }, Projectile.Center);
             }
             else
-                SoundEngine.PlaySound(SoundID.NPCHit13 with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.3f, Volume = 0.1f }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.NPCDeath9 with { MaxInstances = 0, Pitch = 0.5f, PitchVariance = 0.3f, Volume = 0.2f }, Projectile.Center);
 
-            Projectile.frame = 0;
+            if (State != (int)SlimeMinionState.Attacking)
+                Projectile.frame = 0;
 
-            if (Math.Abs(Projectile.Center.X - HomePosition.X) < 4 && !air)
+            if (Math.Abs(Projectile.Center.X - HomePosition.X) < 4 && !air && State != (int)SlimeMinionState.Attacking)
                 State = (int)SlimeMinionState.Idle;
             else
                 Projectile.velocity.Y = iAmInAir ? height * 0.9f : height;
