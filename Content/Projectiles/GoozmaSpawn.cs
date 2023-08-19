@@ -220,6 +220,13 @@ namespace CalamityHunt.Content.Projectiles
             if (Main.xMas)
                 randomType.Add(Particle.ParticleType<FlyingPresentSlime>(), 1f / 150f);
 
+            if (Main.zenithWorld)
+            {
+                randomType.Add(Particle.ParticleType<FlyingYumeSlime>(), 1f / 15000f);
+                randomType.Add(Particle.ParticleType<FlyingCoreSlime>(), 1f / 15000f);
+                randomType.Add(Particle.ParticleType<FlyingDragonSlime>(), 1f / 15000f);
+            }
+
             if (ModLoader.HasMod("CalamityMod"))
             {
                 randomType.Add(Particle.ParticleType<FlyingAeroSlime>(), 1f / 800f);
