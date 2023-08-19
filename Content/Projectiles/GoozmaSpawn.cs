@@ -220,6 +220,13 @@ namespace CalamityHunt.Content.Projectiles
             if (Main.xMas)
                 randomType.Add(Particle.ParticleType<FlyingPresentSlime>(), 1f / 150f);
 
+            if (Main.zenithWorld)
+            {
+                randomType.Add(Particle.ParticleType<FlyingYumeSlime>(), 1f / 15000f);
+                randomType.Add(Particle.ParticleType<FlyingCoreSlime>(), 1f / 15000f);
+                randomType.Add(Particle.ParticleType<FlyingDragonSlime>(), 1f / 15000f);
+            }
+
             if (ModLoader.HasMod("CalamityMod"))
             {
                 randomType.Add(Particle.ParticleType<FlyingAeroSlime>(), 1f / 800f);
@@ -237,6 +244,17 @@ namespace CalamityHunt.Content.Projectiles
                 randomType.Add(Particle.ParticleType<FlyingBloomSlime>(), 1f / 1000f);
                 randomType.Add(Particle.ParticleType<FlyingGammaSlime>(), 1f / 800f);
                 randomType.Add(Particle.ParticleType<FlyingCragmawMire>(), 1f / 5000f);
+            }
+            if (ModLoader.HasMod("CatalystMod"))
+            {
+                randomType.Add(Particle.ParticleType<FlyingWulfrumSlime>(), 1f / 800f);
+                randomType.Add(Particle.ParticleType<FlyingAscendedAstralSlime>(), 1f / 1500f);
+                //if (!NPC.downedMoonlord || (bool)ModLoader.GetMod("CatalystMod").Call("worlddefeats.astrageldon"))
+                {
+                    randomType.Add(Particle.ParticleType<FlyingNovaSlime>(), 1f / 700f);
+                    randomType.Add(Particle.ParticleType<FlyingNovaSlimer>(), 1f / 700f);
+                    randomType.Add(Particle.ParticleType<FlyingMetanovaSlime>(), 1f / 1000f);
+                }
             }
 
             int type = randomType.Get();

@@ -89,6 +89,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             }
 		}
 
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+			// only deal meaningful damage if it's orbiting
+			if (Projectile.ai[0] <= 0)
+			{
+				modifiers.SetMaxDamage(1);
+			}
+        }
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			bool projCount = false;
