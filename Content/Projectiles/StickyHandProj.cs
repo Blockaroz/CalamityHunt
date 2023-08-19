@@ -100,7 +100,7 @@ namespace CalamityHunt.Content.Projectiles
                 Projectile.frame = 0;
                 Projectile.extraUpdates = 4;
 
-                if (distance < 24f)
+                if (distance < 48f)
                     Projectile.Kill();
 
                 float retreatSpeed = 1f;
@@ -262,7 +262,7 @@ namespace CalamityHunt.Content.Projectiles
 
         public override void GrapplePullSpeed(Player player, ref float speed)
         {
-            speed = 15f;
+            speed = 17f;
         }
 
         public override float GrappleRange()
