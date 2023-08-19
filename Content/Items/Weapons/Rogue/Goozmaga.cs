@@ -13,7 +13,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 		public override void SetDefaults()
 		{
 			Item.width = 100;
-			Item.damage = 2222; 
+			Item.damage = 21203; 
 			Item.noMelee = true;
 			Item.noUseGraphic = true;
 			Item.useAnimation = Item.useTime = 40;
@@ -30,7 +30,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 				ModRarity r;
 				Mod calamity = ModLoader.GetMod("CalamityMod");
 				calamity.TryFind<DamageClass>("RogueDamageClass", out d);
-				calamity.TryFind<ModRarity>("Violet", out r);
+				calamity.TryFind<ModRarity>("CalamityRed", out r);
 				Item.DamageType = d;
 				Item.rare = r.Type;
             }

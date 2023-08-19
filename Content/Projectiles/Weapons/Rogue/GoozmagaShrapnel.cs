@@ -47,7 +47,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 			}
 			if (hasATarget)
 			{
-				NPC target = Main.npc[(int)TargetIndex];
+				NPC target = Main.npc[(int)TargetIndex - 1];
 				if (target != null)
 				{
 					Projectile.localAI[1] += PlanetoidNum == 1 ? 0.75f : 1f;
