@@ -27,16 +27,12 @@ namespace CalamityHunt.Common.Players
             return num;
         }
 
-        public int ValueFromSlimeRank(int first, int second, int third, int fourth)
+        public int ValueFromSlimeRank(params int[] values)
         {
-            switch (SlimeRank())
-            {
-                case 0: return first;
-                case 1: return second;
-                case 2: return third;
-                case 3: return fourth;
-                default: return first;
-            }
+            if (values.Length != 5)
+                return -1;
+
+            return values[SlimeRank()];
         }
 
         public void SetSlimes()
