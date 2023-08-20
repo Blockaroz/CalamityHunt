@@ -61,12 +61,20 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
                     if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
                     {
-                        type = ModContent.ProjectileType<CometKunaiStealthProjectile>();
-                        velocity *= 2;
-                        damage *= 2;
-                        Projectile stealthProj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
-                        stealthProj.ai[1] = -1;
-                        stealthProj.rotation += Main.rand.NextFloat(-1f, 1f);
+                        // stealth strike
+                        if (player.itemAnimation == player.itemAnimationMax)
+                        {
+                            Projectile stealthProj = Projectile.NewProjectileDirect(source, position, velocity * 3, ModContent.ProjectileType<CometKunaiStealthProjectile>(), damage * 2, knockback, player.whoAmI);
+                            stealthProj.ai[1] = -1;
+                            stealthProj.rotation += Main.rand.NextFloat(-1f, 1f);
+
+                            for (int i = 0; i < 5; i++)
+                            {
+                                Vector2 offVel = velocity.RotatedBy(0.3f / 4f * i - 0.15f);
+                                Projectile.NewProjectileDirect(source, position, offVel, type, damage, knockback, player.whoAmI);
+                            }
+                            SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave with { Pitch = 1f, Volume = 0.2f }, player.Center);
+                        }
                         return false;
                     }
                 }

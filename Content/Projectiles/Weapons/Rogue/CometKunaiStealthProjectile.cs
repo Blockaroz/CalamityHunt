@@ -30,7 +30,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
                 Projectile.DamageType = d;
             }
-            Projectile.usesLocalNPCImmunity = true;
+            Projectile.usesIDStaticNPCImmunity = true;
             Projectile.timeLeft = 240;
             Projectile.penetrate = -1;
         }

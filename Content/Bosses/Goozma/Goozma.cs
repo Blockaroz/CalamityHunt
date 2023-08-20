@@ -178,7 +178,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 4));
 
-            classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>(), ModContent.ItemType<GoozmaMask>()));
+            classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<EbonianMask>(), ModContent.ItemType<DivineMask>(), ModContent.ItemType<CrimulanMask>(), ModContent.ItemType<StellarMask>()));
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<CometKunai>()));
         }
 
