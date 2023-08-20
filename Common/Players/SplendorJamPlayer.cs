@@ -54,18 +54,18 @@ namespace CalamityHunt.Common.Players
         }
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
+            Color goo = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(gooTime);
             if (rainbow)
             {
-                Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
                 if (drawInfo.shadow != 0)
                 {
                     r = goo.R;
                     g = goo.G;
                     b = goo.B;
                 }
-                if (drawInfo.shadow == 0 && Main.rand.NextBool(8) && stressedOut)
-                    Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, goo, 1f);
             }
+            if (drawInfo.shadow == 0 && Main.rand.NextBool(8) && stressedOut)
+                Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, goo, 1f);
         }
         public override void FrameEffects()
         {
@@ -79,13 +79,13 @@ namespace CalamityHunt.Common.Players
             if (active)
             {
                 int damage = (int)GetBestClassDamage(Player).ApplyTo(200);
-                Color goo = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(gooTime * 0.05f);
+                Color goo = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(gooTime);
                 Lighting.AddLight(Player.Center, new Vector3(goo.R, goo.G, goo.B) * 0.01f * checkStress);
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] < Player.GetModPlayer<SplendorJamPlayer>().tentacleCount && Player.whoAmI == Main.myPlayer)
                     Projectile.NewProjectile(Player.GetSource_FromThis(), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<SplendorTentacle>(), damage, 0.5f, Player.whoAmI);
 
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] > Player.GetModPlayer<SplendorJamPlayer>().tentacleCount)
-                    Main.projectile.First(n => n.active && n.owner == Player.whoAmI).Kill();
+                    Main.projectile.First(n => n.active && n.owner == Player.whoAmI && n.type == ModContent.ProjectileType<SplendorTentacle>()).Kill();
 
                 tentacleCount = stressedOut ? tentacleCount : (int)(1 + stress * 4f);
                 if (stress < 1f && !stressedOut)
@@ -94,24 +94,24 @@ namespace CalamityHunt.Common.Players
                     stress = 1f;
                 if (stress > 0.25f && !t25)
                 {
-                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Pitch = -0.4f }, Player.Center);
+                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Pitch = -0.4f, Volume = 0.7f }, Player.Center);
                     t25 = true;
                 }
                 else if (stress > 0.5f && !t50)
                 {
-                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Pitch = -0.2f }, Player.Center);
+                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Pitch = -0.2f, Volume = 0.7f }, Player.Center);
                     t50 = true;
                 }
                 if (stress > 0.755f && !t75)
                 {
-                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator"), Player.Center);
+                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Volume = 0.7f }, Player.Center);
                     t75 = true;
                 }
                 if (stressedOut)
                 {
                     stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
                     if (!SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))
-                        loopSlot = SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageLoop"), Player.Center);
+                        loopSlot = SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageLoop") with { Volume = 0.7f }, Player.Center);
                     else
                         activeSound.Position = Player.Center;
                 }
@@ -131,7 +131,6 @@ namespace CalamityHunt.Common.Players
             }
             else
             {
-                Player.ClearBuff(ModContent.BuffType<SplendorJamBuff>());
                 t25 = false;
                 t50 = false;
                 t75 = false;
