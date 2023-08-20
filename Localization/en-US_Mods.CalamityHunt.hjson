@@ -314,6 +314,7 @@ Items: {
 			'''
 			Uses gel for ammo
 			Ignores 15 points of enemy Defense
+			80% chance save ammo
 			'''
 	}
 

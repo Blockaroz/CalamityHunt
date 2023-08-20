@@ -52,6 +52,13 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         public override Vector2? HoldoutOffset() => new Vector2(-16f, 0f);
 
+        public override bool CanConsumeAmmo(Item ammo, Player player)
+        {
+            if (Main.rand.Next(0, 100) < 80)
+                return false;
+            return true;
+        }
+
         public static Texture2D backTexture;
         public static Texture2D backSwirlTexture;
         public static Texture2D backAntennaTexture;

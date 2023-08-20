@@ -205,6 +205,19 @@ namespace CalamityHunt.Content.NPCs
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CragmawMire").Type)
                             Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCragmawMire>());
                     }
+                    if (ModLoader.HasMod("CatalystMod"))
+                    {
+                        if (npc.type == ModContent.Find<ModNPC>("CatalystMod/NovaSlime").Type)
+                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingNovaSlime>());
+                        else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/NovaSlimer").Type)
+                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingNovaSlimer>());
+                        else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/MetanovaSlime").Type)
+                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingMetanovaSlime>());
+                        else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/WulfrumSlime").Type)
+                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingWulfrumSlime>());
+                        else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/AscendedAstralSlime").Type)
+                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingAscendedAstralSlime>());
+                    }
                 }
             }
         }
