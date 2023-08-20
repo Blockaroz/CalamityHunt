@@ -10,6 +10,8 @@ namespace CalamityHunt.Content.Items.Misc
 {
     public class DynamoRod : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
+
         public const int Damage = 10000;
         public const float Knockback = 20f;
 

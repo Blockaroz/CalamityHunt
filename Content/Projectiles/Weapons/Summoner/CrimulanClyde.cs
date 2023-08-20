@@ -85,9 +85,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 jumpTime--;
         }
 
-        public Vector2 HomePosition => Player.Bottom + new Vector2(-100 * Player.direction, -28);
+        public Vector2 HomePosition => Player.Bottom + new Vector2(-104 * Player.direction, -28);
 
-        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(150), 300, 300);
+        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150);
 
         public bool iAmInAir;
 
@@ -147,9 +147,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Attack(int whoAmI)
         {
             NPC target = Main.npc[whoAmI];
-            bool targetInAir = !Collision.SolidCollision(target.position - new Vector2(100), target.width + 200, target.height + 200);
-            if (targetInAir)
-                iAmInAir = true;
+            iAmInAir = true;
 
             if (Projectile.Distance(target.Center) < 250)
                 State = (int)SlimeMinionState.Attacking;
@@ -167,7 +165,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, State == (int)SlimeMinionState.Attacking ? 0f : (target.Center.X - Projectile.Center.X) * 0.03f, 0.1f);
 
-            if (Projectile.Bottom.Y > target.Center.Y + 30 && targetInAir && Projectile.velocity.Y >= 0)
+            if (Projectile.Bottom.Y > target.Center.Y + 30 && Projectile.velocity.Y >= 0)
                 Jump(-5 - Math.Max(Math.Abs(HomePosition.X - Projectile.Center.X) * 0.01f + (iAmInAir ? Math.Abs(target.Center.Y - Projectile.Center.Y) * 0.02f : 0) + 0.5f, 0), iAmInAir);
 
             if (State == (int)SlimeMinionState.Attacking)
@@ -177,14 +175,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
                 if (Time < 0)
                 {
-                    if (++Projectile.frameCounter >= 10)
+                    if (++Projectile.frameCounter >= 8)
                     {
                         Projectile.frameCounter = 0;
                         Projectile.frame = Math.Clamp(Projectile.frame + 1, 9, 10);
                     }
 
-                    Projectile.velocity *= 0.95f;
-                    Vector2 top = target.Top - new Vector2(0, 50);
+                    Projectile.velocity *= 0.99f;
+                    Vector2 top = target.Top - new Vector2(0, 60);
                     Vector2 newVel = Projectile.DirectionTo(top).SafeNormalize(Vector2.Zero) * Projectile.Distance(top) * 0.01f;
                     newVel.X *= 0.1f;
                     Projectile.velocity += newVel;
@@ -193,7 +191,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 {
                     Projectile.damage = 2;
                     Projectile.tileCollide = false;
-                    Projectile.velocity = Projectile.DirectionTo(target.Center - new Vector2(0, 10)) * (Time + 0.1f) * Projectile.Distance(target.Center) * 0.012f;
+                    Projectile.velocity = Projectile.DirectionTo(target.Center - new Vector2(0, 10)) * (Time + 0.1f) * Projectile.Distance(target.Center) * 0.02f;
                     Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.ToRotation() - MathHelper.PiOver2, 0.5f);
 
                     if (Time == 0)
@@ -212,7 +210,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Time = 0;
             }
 
-            Projectile.velocity.Y += 0.05f;
+            Projectile.velocity.Y += 0.01f;
 
             if (Math.Abs(Projectile.velocity.X) > 0)
                 Projectile.direction = Math.Sign(Projectile.velocity.X);
@@ -225,7 +223,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.frame = 9;
                 Projectile.velocity.Y = -Math.Sign(Projectile.velocity.Y) * Math.Max(Math.Abs(Projectile.velocity.Y), 8) * Main.rand.NextFloat(0.6f, 1.1f);
                 Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * Math.Max(Math.Abs(Projectile.velocity.X), 8) * Main.rand.NextFloat(0.7f, 3f);
-                Time = -Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(25, 20, 18, 13, 10);
+                Time = -Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(25, 20, 18, 16, 15);
 
                 SoundStyle bounce = SoundID.Item154 with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.2f, Volume = 0.5f };
                 SoundEngine.PlaySound(bounce, Projectile.Center);

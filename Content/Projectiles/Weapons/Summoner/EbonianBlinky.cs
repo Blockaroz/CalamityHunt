@@ -88,7 +88,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public Vector2 HomePosition => Player.Bottom + new Vector2(-50 * Player.direction, -28);
 
-        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(150), 300, 300);
+        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150);
 
         public bool iAmInAir;
 
@@ -148,7 +148,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             NPC target = Main.npc[whoAmI];
             int maxTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(9, 8, 7, 6, 5);
 
-            bool targetInAir = !Collision.SolidCollision(target.position - new Vector2(150), target.width + 300, target.height + 300);
+            bool targetInAir = !Collision.SolidCollision(target.position - new Vector2(5, 150), target.width + 10, target.height + 300);
             if (targetInAir)
                 iAmInAir = true;
 

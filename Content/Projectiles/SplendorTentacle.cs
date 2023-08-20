@@ -159,8 +159,8 @@ namespace CalamityHunt.Content.Projectiles
 
             tentacle.StartPos = Projectile.Center;
             tentacle.EndPos = Player.MountedCenter;
-            tentacle.gravity = -Vector2.UnitX * Player.direction * 0.05f;
-            tentacle.damping = Utils.GetLerpValue(500, 0, (Player.position - Projectile.Center).Length(), true) * 0.05f + Utils.GetLerpValue(300, 320, (Player.position - Projectile.Center).Length(), true);
+            tentacle.gravity = -Vector2.UnitX * Player.direction * 0.05f - Vector2.UnitY * 0.01f;
+            tentacle.damping = Utils.GetLerpValue(20, 0, Player.velocity.Length(), true) * 0.05f;
             tentacle.Update();
 
             if (Projectile.Distance(Player.MountedCenter) > 300)

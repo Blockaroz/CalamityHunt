@@ -81,17 +81,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 sparkle.noGravity = Main.rand.NextBool(3);
             }
 
-            if (jumpTime > 0)
-                jumpTime--;
+            if (AttackCount > 0)
+                AttackCount--;
         }
 
-        public Vector2 HomePosition => InAir ? Player.Bottom + new Vector2(-80 * Player.direction, -100) : Player.Bottom + new Vector2(-140 * Player.direction, -20);
+        public Vector2 HomePosition => InAir ? Player.Bottom + new Vector2(-80 * Player.direction, -100) : Player.Bottom + new Vector2(-150 * Player.direction, -20);
 
-        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(150), 300, 300);
+        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150);
 
         public bool iAmInAir;
-
-        public int jumpTime;
 
         public void Idle()
         {
@@ -111,7 +109,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     Projectile.frame = 0;
             }
 
-            Projectile.velocity.X *= 0.6f;
+            Projectile.velocity.X *= 0.95f;
 
             if (Math.Abs(Projectile.Center.X - HomePosition.X) > 4 || InAir)
             {
@@ -119,7 +117,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 if (!InAir)
                     Projectile.velocity.X = (HomePosition.X - Projectile.Center.X) * 0.05f;
                 else
-                    Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, (HomePosition.X - Projectile.Center.X) * 0.05f, 0.3f);
+                    Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, (HomePosition.X - Projectile.Center.X) * 0.1f, 0.1f);
             }
 
             if (InAir)
@@ -166,7 +164,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 }
             }
 
-            Projectile.velocity.Y += iAmInAir ? 0f : 0.5f;
+            if (!iAmInAir)
+                Projectile.velocity.Y += 0.5f;
 
             if (Math.Abs(Projectile.velocity.X) < 1f)
                 Projectile.direction = Player.direction;
@@ -184,7 +183,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (Projectile.Distance(target.Center) < 150)
                 State = (int)SlimeMinionState.Attacking;
 
-            if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving)
+            if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving || AttackCount > 0)
             {
                 State = (int)SlimeMinionState.IdleMoving;
 
@@ -200,7 +199,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.velocity *= 0.95f;
             }
 
-            if (State == (int)SlimeMinionState.Attacking)
+            if (State == (int)SlimeMinionState.Attacking && AttackCount == 0)
             {
                 Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center) * 0.001f;
                 Projectile.velocity *= 0.98f;
@@ -224,7 +223,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 }
 
                 if (Time >= maxTime * 6)
+                {
                     Time = 0;
+                    AttackCount = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(60, 50, 45, 40, 30);
+                }
+
             }
 
             if (Math.Abs(Projectile.velocity.X) > 0)
@@ -244,7 +247,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public void Jump(float height, bool air)
         {
-            jumpTime = 24;
             if (air)
             {
                 Color color = new Color(255, 150, 150, 60);
@@ -260,7 +262,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 SoundEngine.PlaySound(SoundID.Item24 with { MaxInstances = 0, Pitch = 0.6f, PitchVariance = 0.3f, Volume = 0.4f }, Projectile.Center);
             }
             else
-                SoundEngine.PlaySound(SoundID.NPCDeath9 with { MaxInstances = 0, Pitch = -0.1f, PitchVariance = 0.3f, Volume = 0.3f }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.NPCDeath9 with { MaxInstances = 0, Pitch = -0.6f, PitchVariance = 0.3f, Volume = 0.3f }, Projectile.Center);
 
             Projectile.frame = 0;
 
