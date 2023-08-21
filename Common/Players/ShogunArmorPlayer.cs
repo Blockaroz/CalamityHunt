@@ -377,7 +377,7 @@ namespace CalamityHunt.Common.Players
         public float accumulatedSpin = 0;
 
         public bool ActiveState { get; set; }
-        public bool Active(Player player, ShogunArmorPlayer modPlayer) => player.dashDelay < 0;
+        public bool Active(Player player, ShogunArmorPlayer modPlayer) => modPlayer.active && player.dashDelay < 0;
 
         public void Update(Player player, ShogunArmorPlayer modPlayer, ref float rotation)
         {
