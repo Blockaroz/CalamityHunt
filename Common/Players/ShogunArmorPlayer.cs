@@ -84,6 +84,15 @@ namespace CalamityHunt.Common.Players
                 {
                     Main.SetCameraLerp(0.1f, 25);
                 }
+
+
+
+                //If the wing logic isnt the same as the visual wings that means its vanity. Vanilla does the same to check if the wings are real or not
+                bool playerHasVanityWings = Player.wings > 0 && Player.wingsLogic != Player.wings;
+                if (!playerHasVanityWings)
+                {
+                    Player.wings = EquipLoader.GetEquipSlot(Mod, "ShogunChestplate", EquipType.Wings);
+                }
             }
         }
 
@@ -216,11 +225,6 @@ namespace CalamityHunt.Common.Players
 
                     if (Player.TryingToHoverUp && !Player.mount.Active)
                         Player.velocity.Y -= 1f;
-                }
-
-                if (Player.wingsLogic == wingSlot && Player.wings <= 0)
-                {
-                    Player.wings = wingSlot;
                 }
 
                 Player.noFallDmg = true;
