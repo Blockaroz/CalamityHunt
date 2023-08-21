@@ -96,6 +96,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Idle()
         {
             Time = 0;
+            Projectile.tileCollide = true;
+
             if (InAir)
                 iAmInAir = true;
 
