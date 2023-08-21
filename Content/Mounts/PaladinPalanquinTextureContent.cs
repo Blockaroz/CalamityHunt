@@ -42,7 +42,7 @@ public class PaladinPalanquinTextureContent : ARenderTargetContentByRequest
         _wasPrepared = true;
     }
 
-    public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
+    private void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
     {
         brightnesses = new float[10];
         colors = new Vector3[10];

@@ -529,6 +529,7 @@ Projectiles: {
 	CometKunaiProjectile.DisplayName: Comet Kunai Projectile
 	CometKunaiStealthProjectile.DisplayName: Comet Kunai Stealth Projectile
 	CometKunaiStarfall.DisplayName: Comet Kunai Starfall
+	Goozmoem.DisplayName: Goozmoem
 }
 
 Chat: {
