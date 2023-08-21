@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public Vector2 HomePosition => InAir ? Player.Bottom + new Vector2(-80 * Player.direction, -100) : Player.Bottom + new Vector2(-150 * Player.direction, -20);
 
-        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150);
+        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150, true);
 
         public bool iAmInAir;
 
@@ -277,6 +277,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override bool PreDraw(ref Color lightColor)
         {
+            lightColor = Color.Lerp(lightColor, Color.White, 0.4f);
+
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle frame = texture.Frame(5, 17, Player.GetModPlayer<SlimeCanePlayer>().SlimeRank(), Projectile.frame, -2, -2);
             SpriteEffects direction = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;

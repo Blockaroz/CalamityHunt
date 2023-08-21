@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public Vector2 HomePosition => InAir ? Player.Bottom + new Vector2(-160 * Player.direction, -60) : Player.Bottom + new Vector2(-190 * Player.direction, -20);
 
-        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150);
+        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150, true);
 
         public bool iAmInAir;
 
@@ -214,8 +214,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Attack(int whoAmI)
         {
             NPC target = Main.npc[whoAmI];
-            int attackWaitTime = 100;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(1, 2, 3, 4, 5);
-            int attackCD = 24;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(1, 2, 3, 4, 5);
+            int attackWaitTime = 100;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(100, 85, 72, 60, 50);
+            int hitCD = 24;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(40, 35, 30, 25, 24);
             int maxAttacks = 3;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(1, 2, 3, 4, 5);
 
             iAmInAir = true;
@@ -277,13 +277,21 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     if (Time == 0)
                     {
                         if (AttackCount > maxAttacks)
-                            AttackCount = -30;
+                            AttackCount = -hitCD;
 
                         else
                         {
+                            teleportTime = 10;
+
+                            Color color = new Color(18, 20, 100, 0);
+                            Particle portal = Particle.NewParticle(Particle.ParticleType<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
+                            portal.data = new Color(200, 200, 90, 60);
 
                             targetPositionOffset += Main.rand.NextVector2Circular(1, 5);
                             Projectile.Center = target.Center + targetPositionOffset;
+
+                            Particle portalAfter = Particle.NewParticle(Particle.ParticleType<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
+                            portalAfter.data = new Color(255, 255, 0, 60);
 
                             //
                         }
@@ -364,6 +372,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override bool PreDraw(ref Color lightColor)
         {
+            lightColor = Color.Lerp(lightColor, Color.White, 0.5f);
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle frame = texture.Frame(5, 8, Player.GetModPlayer<SlimeCanePlayer>().SlimeRank(), Projectile.frame, -2, -2);
             SpriteEffects direction = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -379,7 +388,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             }
 
             Main.EntitySpriteDraw(texture, Projectile.Bottom - Vector2.UnitY * 8 - Main.screenPosition, frame, lightColor, Projectile.rotation, new Vector2(frame.Width * (0.5f + 0.1f * Projectile.direction), 36), scale, direction, 0);
-
 
             return false;
         }

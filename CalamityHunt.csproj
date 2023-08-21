@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <AdditionalFiles Remove="Assets\Textures\GoozmoemEye.png" />
+    <AdditionalFiles Remove="Content\Particles\MicroPortal.png" />
     <AdditionalFiles Remove="Content\Projectiles\Weapons\Rogue\CometKunaiGhostProjectile.png" />
     <AdditionalFiles Remove="Content\Projectiles\Weapons\Rogue\CometKunaiStarfall.png" />
     <AdditionalFiles Remove="Content\Projectiles\Weapons\Summoner\BlinkySpikeBall.png" />

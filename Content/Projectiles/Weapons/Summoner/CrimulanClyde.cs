@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public Vector2 HomePosition => Player.Bottom + new Vector2(-104 * Player.direction, -28);
 
-        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150);
+        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150, true);
 
         public bool iAmInAir;
 
