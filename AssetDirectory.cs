@@ -30,7 +30,9 @@ namespace CalamityHunt
                 public static TextureAsset PaladinPalanquinBall = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Mounts/PaladinPalanquinMount_Ball");
                 public static TextureAsset PaladinPalanquinWings = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Mounts/PaladinPalanquinMount_Wings");
                 public static TextureAsset InkyHats = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/InkyHats");
+                public static TextureAsset InkyRings = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/InkyRings");
                 public static TextureAsset GoozmoemEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GoozmoemEye");
+                public static TextureAsset GoozmoemCrown = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GoozmoemCrown");
                 public static TextureAsset CometKunaiFlame = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/CometKunaiFlame");
             }
             

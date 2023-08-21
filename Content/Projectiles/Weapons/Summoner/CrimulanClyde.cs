@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -53,6 +54,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             else
                 Projectile.timeLeft = 2;
 
+            if (Projectile.Distance(HomePosition) > 1600)
+            {
+                State = (int)SlimeMinionState.Idle;
+                Projectile.Center = HomePosition;
+                Projectile.tileCollide = false;
+            }
+
             if (Projectile.Distance(HomePosition) > 800)
                 State = (int)SlimeMinionState.IdleMoving;
 
@@ -85,7 +93,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 jumpTime--;
         }
 
-        public Vector2 HomePosition => Player.Bottom + new Vector2(-104 * Player.direction, -28);
+        public Vector2 HomePosition => Player.Bottom + new Vector2(-116 * Player.direction, -28);
 
         public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150, true);
 
@@ -281,7 +289,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             SpriteEffects direction = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             Vector2 scale = Projectile.scale * Vector2.One;
 
-            Main.EntitySpriteDraw(texture, Projectile.Bottom + Vector2.UnitY * 2 - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), scale, direction, 0);
+            DrawData data = new DrawData(texture, Projectile.Bottom + Vector2.UnitY * 2 - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), scale, direction, 0);
+            data.shader = Player.cPet;
+            Main.EntitySpriteDraw(data);
 
             return false;
         }

@@ -99,8 +99,13 @@ namespace CalamityHunt.Content.Mounts
 
                 if (Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) > 0.5f)
                 {
-                    data.ballFrame = 2;
-                    data.ballFrameCounter = 0;
+                    if (data.ballFrameCounter++ > 6)
+                    {
+                        data.ballFrameCounter = 0;
+                        data.ballFrame = Math.Clamp(data.ballFrame + 1, 0, 2);
+                    }
+                    if (data.ballFrame < 2)
+                        data.rotation = 0;
                 }
                 else
                 {
@@ -119,6 +124,8 @@ namespace CalamityHunt.Content.Mounts
                 {
                     data.wingFrameCounter = 0;
                     data.wingFrame = (data.wingFrame + 1) % 4;
+                    if (data.wingFrame == 3)
+                        SoundEngine.PlaySound(SoundID.Item32, player.Center);
                 }
 
                 if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, heightBoost + 20), 2, 20) && Math.Abs(player.velocity.X) > 1f)
@@ -138,7 +145,12 @@ namespace CalamityHunt.Content.Mounts
             //    player.velocity.X *= -0.5f;
 
             if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, player.velocity.Y * 2f + 20), 2, 30) && Math.Abs(player.velocity.Y) > 0.5f && !player.controlDown)
+            {
                 player.velocity.Y *= -0.7f - Utils.GetLerpValue(0, 10, Math.Abs(player.velocity.X), true) * 0.4f;
+
+                SoundStyle bounceSound = SoundID.Item154 with { Pitch = -Utils.GetLerpValue(0, 20, Math.Abs(player.velocity.Y), true) + 0.7f, PitchVariance = 0.3f, Volume = Utils.GetLerpValue(0, 20, Math.Abs(player.velocity.Y), true) };
+                SoundEngine.PlaySound(bounceSound, player.Center);
+            }
 
         }
 

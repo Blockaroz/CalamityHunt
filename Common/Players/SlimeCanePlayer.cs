@@ -1,6 +1,8 @@
 ﻿using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
+using System.Linq;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Players
@@ -24,10 +26,12 @@ namespace CalamityHunt.Common.Players
             if (count > 3)
                 num = 3;
             if (count > 4)
-                num = 4;
+                num = HighestRank;
 
             return num;
         }
+
+        public static readonly int HighestRank = 4;
 
         public int ValueFromSlimeRank(params int[] values)
         {
@@ -64,6 +68,14 @@ namespace CalamityHunt.Common.Players
                         Main.projectile[p].originalDamage = highestOriginalDamage;
                 }
             }
+
+            int goozType = ModContent.ProjectileType<Goozmoem>();
+            if (SlimeRank() >= HighestRank && Player.ownedProjectileCounts[goozType] <= 0)
+            {
+                int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - (20), Player.position.Y, 0, 0, goozType, highestOriginalDamage, 0, Player.whoAmI);
+                if (Main.projectile.IndexInRange(p))
+                    Main.projectile[p].originalDamage = highestOriginalDamage;
+            }
         }
 
         public override void PostUpdateBuffs()
@@ -71,7 +83,14 @@ namespace CalamityHunt.Common.Players
             if (Player.HasBuff<SlimeCaneBuff>())
             {
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<SlimeCaneGemCounter>()] > 0)
+                {
                     slimes = true;
+                    foreach (Projectile gem in Main.projectile.Where(n => n.owner == Player.whoAmI))
+                    {
+                        if (highestOriginalDamage < gem.originalDamage)
+                            highestOriginalDamage = gem.originalDamage;
+                    }
+                }
 
                 int buffIndex = Player.FindBuffIndex(ModContent.BuffType<SlimeCaneBuff>());
                 if (!slimes)
