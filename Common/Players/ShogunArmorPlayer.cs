@@ -20,24 +20,61 @@ namespace CalamityHunt.Common.Players
     {
         public bool active;
         public float slamPower;
-        private bool slamming;
-        private int bunnyHopCounter;
-        private int inertiaTimer;
-        private int dashTime;
-        private bool dashing;
-        private bool dashingOld;
+        public bool slamming;
+        public int bunnyHopCounter;
+        public int inertiaTimer;
+        public int dashTime;
+
+        public List<IShogunSpinModifier> spinEffects = new List<IShogunSpinModifier>();
+
+        public override void Initialize()
+        {
+            spinEffects ??= new List<IShogunSpinModifier>();
+            spinEffects.Clear();
+
+            spinEffects.Add(new ShogunDashSpinModifier());
+            spinEffects.Add(new ShogunSlamSpinModifier());
+            spinEffects.Add(new ShogunBHopSpinModifier());
+        }
 
         public override void FrameEffects()
         {
+            bool deactivatedEffect = false;
+            float rotation = 0;
+
+            foreach (IShogunSpinModifier spinEffect in spinEffects)
+            {
+                bool previousState = spinEffect.ActiveState;
+                spinEffect.ActiveState = spinEffect.Active(Player, this);
+
+                if (spinEffect.ActiveState != previousState)
+                {
+                    //If we turned active while before we weren't, reactivate the effect
+                    if (!previousState)
+                        spinEffect.Reactivate(Player, this);
+                    else
+                        deactivatedEffect = true;
+                }
+
+                if (spinEffect.ActiveState)
+                    spinEffect.Update(Player, this, ref rotation);
+            }
+
+            //Set the rotation if we have any active effects
+            if (spinEffects.Any(s => s.ActiveState))
+            {
+                Player.fullRotation = rotation;
+                Player.fullRotationOrigin = Player.Size * 0.5f;
+            }
+            //If there's no more active effects after we deactivated one, that means we have to reset the rotation
+            else if (deactivatedEffect)
+                 Player.fullRotation = 0; 
+
             if (active)
             {
-                dashing = Player.dashDelay < 0;
                 if (Player.dashDelay < 0)
                 {
                     Main.SetCameraLerp(0.1f, 25);
-                    Player.fullRotation += (float)Math.Cbrt(Player.velocity.X) * 0.2f * (1 + dashTime);
-                    Player.fullRotationOrigin = Player.Size * 0.5f;
-
                     for (int i = 0; i < 6; i++)
                         Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(25, 25), DustID.TintableDust, Player.velocity * -Main.rand.NextFloat(-0.5f, 1f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
@@ -45,18 +82,9 @@ namespace CalamityHunt.Common.Players
                 }
                 else if (slamPower > 0)
                 {
-                    Player.fullRotation = Player.fullRotation.AngleLerp(-Player.velocity.X * 0.05f, 0.1f);
-                    Player.fullRotationOrigin = Player.Size * 0.5f;
-
                     Main.SetCameraLerp(0.1f, 25);
                 }
-                else if (bunnyHopCounter < 0)
-                    Player.fullRotation = Player.velocity.X * 0.01f;
-                else if (dashing != dashingOld)
-                    Player.fullRotation = 0;
             }
-
-            dashingOld = Player.dashDelay < 0;
         }
 
         public override void PostUpdateRunSpeeds()
@@ -156,49 +184,46 @@ namespace CalamityHunt.Common.Players
         public override void Load()
         {
             On_Player.DashMovement += ShogunDash;
-            On_Player.UpdatePettingAnimal += SetWings;
         }
 
-        private void SetWings(On_Player.orig_UpdatePettingAnimal orig, Player self)
+        public override void PostUpdateEquips()
         {
-            orig(self);
-
-            if (self.GetModPlayer<ShogunArmorPlayer>().active)
+            if (active)
             {
                 int wingSlot = EquipLoader.GetEquipSlot(Mod, "ShogunChestplate", EquipType.Wings);
 
-                if (self.equippedWings == null)
+                if (Player.equippedWings == null)
                 {
-                    self.wingsLogic = wingSlot;
+                    Player.wingsLogic = wingSlot;
+                    Player.wingTime = 1;
+
                     if (ModLoader.HasMod("CalamityMod"))
+                        ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", Player, true);
+
+                    if (Player.controlJump && Player.wingTime > 0f && !Player.canJumpAgain_Cloud && Player.jump == 0)
                     {
-                        ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", self, true);
-                    }
-                    self.wingTime = 1;
-                    if (self.controlJump && self.wingTime > 0f && !self.canJumpAgain_Cloud && self.jump == 0)
-                    {
-                        bool hovering = self.TryingToHoverDown && !self.merman;
+                        bool hovering = Player.TryingToHoverDown && !Player.merman;
                         if (hovering)
                         {
-                            self.runAcceleration += 10;
-                            self.maxRunSpeed += 10;
+                            Player.runAcceleration += 10;
+                            Player.maxRunSpeed += 10;
 
-                            self.velocity.Y *= 0.7f;
-                            if (self.velocity.Y > -2f && self.velocity.Y < 1f)
-                                self.velocity.Y = 1E-05f;
+                            Player.velocity.Y *= 0.7f;
+                            if (Player.velocity.Y > -2f && Player.velocity.Y < 1f)
+                                Player.velocity.Y = 1E-05f;
                         }
                     }
 
-                    if (self.TryingToHoverUp && !self.mount.Active)
-                        self.velocity.Y -= 1f;
+                    if (Player.TryingToHoverUp && !Player.mount.Active)
+                        Player.velocity.Y -= 1f;
                 }
 
-                if (self.wingsLogic == wingSlot && self.wings <= 0)
+                if (Player.wingsLogic == wingSlot && Player.wings <= 0)
                 {
-                    self.wings = wingSlot;
+                    Player.wings = wingSlot;
                 }
 
-                self.noFallDmg = true;
+                Player.noFallDmg = true;
             }
         }
 
@@ -298,5 +323,71 @@ namespace CalamityHunt.Common.Players
                 }
           }
           }
+    }
+
+    public interface IShogunSpinModifier
+    {
+        public bool ActiveState { get; set; }
+        public bool Active(Player player, ShogunArmorPlayer modPlayer);
+        public void Update(Player player, ShogunArmorPlayer modPlayer, ref float rotation);
+        public void Reactivate(Player player, ShogunArmorPlayer modPlayer) { }
+    }
+
+    public class ShogunBHopSpinModifier : IShogunSpinModifier
+    {
+        public int smoothingTimer = 50;
+
+        public bool ActiveState { get; set; }
+        public bool Active(Player player, ShogunArmorPlayer modPlayer) => (modPlayer.bunnyHopCounter < 0 || smoothingTimer > 0) && modPlayer.slamPower <= 0;
+
+        public void Update(Player player, ShogunArmorPlayer modPlayer, ref float rotation)
+        {
+            smoothingTimer--;
+            rotation += player.velocity.X * 0.02f * (float)Math.Pow(Utils.GetLerpValue(0, 30, smoothingTimer, true), 0.6f);
+        }
+
+        public void Reactivate(Player player, ShogunArmorPlayer modPlayer)
+        {
+            smoothingTimer = 50;
+        }
+    }
+
+    public class ShogunSlamSpinModifier : IShogunSpinModifier
+    {
+        public float lerpedRotation = 0;
+
+        public bool ActiveState { get; set; }
+        public bool Active(Player player, ShogunArmorPlayer modPlayer) => modPlayer.slamPower > 0;
+
+        public void Update(Player player, ShogunArmorPlayer modPlayer, ref float rotation)
+        {
+            lerpedRotation = lerpedRotation.AngleLerp(-player.velocity.X * 0.05f, 0.1f);
+            rotation += lerpedRotation;
+        }
+
+        public void Reactivate(Player player, ShogunArmorPlayer modPlayer)
+        {
+            lerpedRotation = player.fullRotation;
+        }
+    }
+
+
+    public class ShogunDashSpinModifier : IShogunSpinModifier
+    {
+        public float accumulatedSpin = 0;
+
+        public bool ActiveState { get; set; }
+        public bool Active(Player player, ShogunArmorPlayer modPlayer) => player.dashDelay < 0;
+
+        public void Update(Player player, ShogunArmorPlayer modPlayer, ref float rotation)
+        {
+            accumulatedSpin += (float)Math.Cbrt(player.velocity.X) * 0.2f * (1 + modPlayer.dashTime);
+            rotation += accumulatedSpin;
+        }
+
+        public void Reactivate(Player player, ShogunArmorPlayer modPlayer)
+        {
+            accumulatedSpin = 0;
+        }
     }
 }
