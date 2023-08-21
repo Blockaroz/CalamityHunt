@@ -38,7 +38,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.manualDirectionChange = true;
         }
 
-        public override bool? CanDamage() => State == (int)SlimeMinionState.Attacking;
+        public override bool? CanDamage() => State == (int)SlimeMinionState.Attacking && AttackCount > 0 && Time >= 0;
 
         public ref float State => ref Projectile.ai[0];
         public ref float Time => ref Projectile.ai[1];
@@ -65,7 +65,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             iAmInAir = false;
 
-            Projectile.damage = Player.GetModPlayer<SlimeCanePlayer>().highestOriginalDamage;
+            Projectile.damage = 2;// Player.GetModPlayer<SlimeCanePlayer>().highestOriginalDamage;
+
             int target = -1;
             Projectile.Minion_FindTargetInRange(800, ref target, true);
             bool hasTarget = false;
@@ -100,13 +101,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             //    sparkle.noGravity = Main.rand.NextBool(3);
             //}
 
-            if (AttackCount > 0)
-                AttackCount--;
+            if (teleportTime > 0)
+                teleportTime--;
+
+            if (AttackCount < 0)
+                AttackCount++;
         }
 
         public Vector2 HomePosition => InAir ? Player.Bottom + new Vector2(-160 * Player.direction, -60) : Player.Bottom + new Vector2(-190 * Player.direction, -20);
 
-        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150);
+        public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150, true);
 
         public bool iAmInAir;
 
@@ -115,6 +119,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Idle()
         {
             Time = 0;
+            AttackCount = 0;
+
             if (InAir)
                 iAmInAir = true;
 
@@ -208,47 +214,93 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Attack(int whoAmI)
         {
             NPC target = Main.npc[whoAmI];
-            int maxAttacks = 1 + 5;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(1, 2, 3, 4, 5);
+            int attackWaitTime = 100;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(100, 85, 72, 60, 50);
+            int hitCD = 24;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(40, 35, 30, 25, 24);
+            int maxAttacks = 3;// Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(1, 2, 3, 4, 5);
 
             iAmInAir = true;
             Projectile.tileCollide = false;
 
-            if (Projectile.Distance(target.Center) < 250)
+            if (Projectile.Distance(target.Center) < 350)
                 State = (int)SlimeMinionState.Attacking;
 
-            if (Projectile.Distance(target.Center) > 400 || State == (int)SlimeMinionState.IdleMoving || AttackCount > 0)
+            if (Projectile.Distance(target.Center) > 400 || State == (int)SlimeMinionState.IdleMoving)
             {
                 State = (int)SlimeMinionState.IdleMoving;
 
                 Projectile.frame = 6;
 
-                Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * MathF.Max(0.5f, Projectile.Distance(target.Center) * 0.5f);
+                Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center) * 0.01f;
                 Projectile.velocity *= 0.94f;
+                Time = 0;
             }
 
-            if (State == (int)SlimeMinionState.Attacking && AttackCount < maxAttacks)
+            if (State == (int)SlimeMinionState.Attacking)
             {
                 //Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center) * 0.01f;
                 //Projectile.velocity *= 0.93f;
+                if (Math.Abs(Projectile.velocity.X) > 0)
+                    Projectile.direction = Math.Sign(Projectile.velocity.X);
 
                 Projectile.frame = 7;
 
-                Time++;
+                if (AttackCount < 0)
+                    Projectile.velocity *= 0.85f;
 
                 if (AttackCount == 0)
                 {
-                    if (Time < 2 && Main.myPlayer == Projectile.owner)
+                    if (Main.myPlayer == Projectile.owner)
                     {
-                        targetPositionOffset = new Vector2(Projectile.Center.X > target.Center.X ? target.Right.X + Main.rand.Next(5, 15) : target.Left.X - Main.rand.Next(5, 15), Main.rand.Next(-15, 15));
-                        Projectile.netUpdate = true;
+                        if (Time < 1)
+                        {
+                            targetPositionOffset = new Vector2((Projectile.Center.X > target.Center.X ? 1 : -1) * (target.width + Main.rand.Next(95, 105)), Main.rand.Next(-25, 25));
+                            Projectile.netUpdate = true;
+                        }
+                    }
+
+                    if (Time >= 2)
+                    {
+                        Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center + targetPositionOffset).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center + targetPositionOffset) * 0.05f, 0.2f);
+                        Projectile.velocity += Projectile.DirectionFrom(target.Center) * 0.3f;
+                        if (Time > attackWaitTime)
+                        {
+                            AttackCount++;
+                            Time = 0;
+                        }
                     }
                 }
-                else
+
+                Time++;
+
+                if (AttackCount > 0)
                 {
-                    if (Math.Abs(Projectile.velocity.X) > 0)
-                        Projectile.direction = Math.Sign(Projectile.velocity.X);
+                    if (Time == 0)
+                    {
+                        if (AttackCount > maxAttacks)
+                            AttackCount = -hitCD;
 
+                        else
+                        {
+                            teleportTime = 10;
 
+                            Color color = new Color(18, 20, 100, 0);
+                            Particle portal = Particle.NewParticle(Particle.ParticleType<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
+                            portal.data = new Color(200, 200, 90, 60);
+
+                            targetPositionOffset += Main.rand.NextVector2Circular(1, 5);
+                            Projectile.Center = target.Center + targetPositionOffset;
+
+                            Particle portalAfter = Particle.NewParticle(Particle.ParticleType<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
+                            portalAfter.data = new Color(255, 255, 0, 60);
+
+                            //
+                        }
+                    }
+
+                    if (Time > 0)
+                    {
+                        Projectile.velocity = Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Time * Projectile.Distance(target.Center) * 0.05f;
+                    }
                 }
             }
         }
@@ -265,13 +317,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (State == (int)SlimeMinionState.Attacking)
+            if (State == (int)SlimeMinionState.Attacking && AttackCount > 0)
             {
-                Time *= -1;
+                Time = -MathHelper.Clamp(Time, 10, 30);
                 AttackCount++;
                 if (Main.myPlayer == Projectile.owner)
                 {
-                    Projectile.velocity = Projectile.velocity.RotatedByRandom(0.2f);
+                    Projectile.velocity = Projectile.velocity.RotatedByRandom(1f);
                     Projectile.netUpdate = true;
                 }
             }
@@ -320,6 +372,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override bool PreDraw(ref Color lightColor)
         {
+            lightColor = Color.Lerp(lightColor, Color.White, 0.5f);
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle frame = texture.Frame(5, 8, Player.GetModPlayer<SlimeCanePlayer>().SlimeRank(), Projectile.frame, -2, -2);
             SpriteEffects direction = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -335,7 +388,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             }
 
             Main.EntitySpriteDraw(texture, Projectile.Bottom - Vector2.UnitY * 8 - Main.screenPosition, frame, lightColor, Projectile.rotation, new Vector2(frame.Width * (0.5f + 0.1f * Projectile.direction), 36), scale, direction, 0);
-
 
             return false;
         }
