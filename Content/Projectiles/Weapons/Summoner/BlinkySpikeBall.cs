@@ -62,7 +62,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     {
                         if (Main.myPlayer == Projectile.owner)
                         {
-                            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[target].Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.2f) * 10, 0.05f);
+                            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[target].Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.2f) * 20, 0.07f);
                             Projectile.netUpdate = true;
                         }
                         if (Projectile.Distance(Main.npc[target].Center) < 100 && Projectile.ai[1] < 1)
@@ -81,7 +81,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             if (Projectile.ai[0] > 5)
             {
-                Projectile.velocity *= 0.9f;
+                Projectile.velocity *= 0.95f;
 
                 if (Projectile.ai[1] < 2)
                 {

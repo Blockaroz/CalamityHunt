@@ -11,32 +11,34 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.Dyes;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Dyes
 {
-    public class GoopDyeShaderData : ArmorShaderData
+    public class GoopHairDyeShaderData : HairShaderData
     {
-        public GoopDyeShaderData(Ref<Effect> shader, string passName) : base(shader, passName)
+        public GoopHairDyeShaderData(Ref<Effect> shader, string passName) : base(shader, passName)
         {
             map = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/RainbowMap", AssetRequestMode.ImmediateLoad).Value;
         }
 
         private Texture2D map;
 
-        public override void Apply(Entity entity, DrawData? drawData = null)
+        public override void Apply(Player player, DrawData? drawData = null)
         {
             if (drawData.HasValue)
             {
                 UseColor(new Color(39, 31, 34));
                 Shader.Parameters["uMap"].SetValue(map);
             }
-            base.Apply(entity, drawData);
+            base.Apply(player, drawData);
         }
     }
-    public class GoopDye : ModItem
+
+    public class GoopHairDye : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -46,15 +48,16 @@ namespace CalamityHunt.Content.Items.Dyes
             {
                 Effect goopShader = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoopDye", AssetRequestMode.ImmediateLoad).Value;
 
-                GameShaders.Armor.BindShader(ModContent.ItemType<GoopDye>(), new GoopDyeShaderData(new Ref<Effect>(goopShader), "LiquidPass"));
+                GameShaders.Hair.BindShader(ModContent.ItemType<GoopHairDye>(), new GoopHairDyeShaderData(new Ref<Effect>(goopShader), "LiquidPass"));
             }
         }
 
         public override void SetDefaults()
         {
-            int dye = Item.dye;
-            Item.CloneDefaults(ItemID.BrownDye);
-            Item.dye = dye;
+            Item.width = 20;
+            Item.height = 26;
+            Item.maxStack = Item.CommonMaxStack;
+            Item.value = Item.buyPrice(gold: 5);
             Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {
@@ -63,15 +66,17 @@ namespace CalamityHunt.Content.Items.Dyes
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }
+            Item.UseSound = SoundID.Item3;
+            Item.useStyle = ItemUseStyleID.DrinkLiquid;
+            Item.useTurn = true;
+            Item.useAnimation = 17;
+            Item.useTime = 17;
+            Item.consumable = true;
         }
 
-        public override void AddRecipes()
+        public override bool ConsumeItem(Player player)
         {
-            CreateRecipe()
-                .AddIngredient<ChromaticMass>()
-                .AddIngredient(ItemID.BottledWater)
-                .AddTile(TileID.DyeVat)
-                .Register();
+            return true;
         }
     }
 }

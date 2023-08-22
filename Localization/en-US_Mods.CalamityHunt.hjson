@@ -320,7 +320,14 @@ Items: {
 
 	SlimeCane: {
 		DisplayName: Slime Cane
-		Tooltip: ""
+		Tooltip:
+			'''
+			Summons a set of 4 slime squires to protect you
+			Using the weapon again will consume a minion slot to upgrade the slimes
+			The slimes can be upgraded a maximum of 4 times
+			Once the slimes have been fully upgraded, a goozmoem will appear that fires fusion rays at enemies
+			'If only I could wipe away the impurities and make it as beautiful as me'
+			'''
 	}
 
 	FissionFlyer: {
@@ -388,8 +395,7 @@ Items: {
 		DisplayName: Paladin Palanquin
 		Tooltip:
 			'''
-			Summons a rideable Oily Bubble
-			Press <jump> while in the air to enter flight mode
+			Summons a rideable Oily Bubble mount
 			'Now YOU get to be the ninja!'
 			'''
 	}
@@ -432,6 +438,11 @@ Items: {
 			Stealth strikes call down a starshower wherever they land
 			'The power of the sun, in the palm of my hand.'
 			'''
+	}
+
+	GoopHairDye: {
+		DisplayName: Goop Hair Dye
+		Tooltip: ""
 	}
 }
 
@@ -517,21 +528,19 @@ Projectiles: {
 	ChromaticBombProjectile.DisplayName: Chromatic Bomb Projectile
 	ChromaticGooztickProjectile.DisplayName: Chromatic Gooztick Projectile
 	DynamoRodProjectile.DisplayName: Dynamo Rod Projectile
-	ThrowingStarsProjectile.DisplayName: Throwing Stars Projectile
-	ThrowingStarsGhostProjectile.DisplayName: Throwing Stars Ghost Projectile
-	ThrowingStarsCritProjectile.DisplayName: Throwing Stars Crit Projectile
 	CrimulanClyde.DisplayName: Crimulan Clyde
 	DivinePinky.DisplayName: Divine Pinky
 	EbonianBlinky.DisplayName: Ebonian Blinky
 	StellarInky.DisplayName: Stellar Inky
-	CometKunaiCritProjectile.DisplayName: Comet Kunai Crit Projectile
-	CometKunaiGhostProjectile.DisplayName: Comet Kunai Ghost Projectile
-	CometKunaiProjectile.DisplayName: Comet Kunai Projectile
-	CometKunaiStealthProjectile.DisplayName: Comet Kunai Stealth Projectile
-	CometKunaiStarfall.DisplayName: Comet Kunai Starfall
+	CometKunaiCritProjectile.DisplayName: Comet Kunai
+	CometKunaiGhostProjectile.DisplayName: Comet Kunai
+	CometKunaiProjectile.DisplayName: Comet Kunai
+	CometKunaiStealthProjectile.DisplayName: Comet Kunai
+	CometKunaiStarfall.DisplayName: Comet Kunai
 	Goozmoem.DisplayName: Goozmoem
 	BlinkySpikeBall.DisplayName: Blinky Spike Ball
-	PinkyLight.DisplayName: Pinky Light
+	PinkyLight.DisplayName: Pinky's Light
+	GoozmoemRay.DisplayName: Fusion Ray
 }
 
 Chat: {
@@ -586,8 +595,8 @@ Buffs: {
 	}
 
 	SlimeCaneBuff: {
-		DisplayName: Slime Cane Buff
-		Description: Mods.CalamityHunt.Buffs.SlimeCaneBuff.Description
+		DisplayName: Slime Soirée
+		Description: Inky, Blinky, Pinky, and Clyde will protect you
 	}
 }
 

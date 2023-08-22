@@ -5,19 +5,16 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Humanizer.In;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -239,10 +236,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void Load()
         {
             On_Main.UpdateAudio += QuietMusic;
-
-            textureSecond = ModContent.Request<Texture2D>(Texture + "Second", AssetRequestMode.ImmediateLoad).Value;
-            textureGlow = ModContent.Request<Texture2D>(Texture + "Glow", AssetRequestMode.ImmediateLoad).Value;
-            textureBits = ModContent.Request<Texture2D>(Texture + "Bits", AssetRequestMode.ImmediateLoad).Value;
         }
 
         private void QuietMusic(On_Main.orig_UpdateAudio orig, Main self)
@@ -267,17 +260,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => overPlayers.Add(index);
 
-        public static Texture2D textureSecond;
-        public static Texture2D textureGlow;
-        public static Texture2D textureBits;
-
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D texture = AssetDirectory.Textures.Extras.FusionRay[0];
+            Texture2D textureBits = AssetDirectory.Textures.Extras.FusionRay[1];
+            Texture2D textureGlow = AssetDirectory.Textures.Extras.FusionRay[2];
+            Texture2D textureSecond = AssetDirectory.Textures.Extras.FusionRay[3];
             Texture2D glow = AssetDirectory.Textures.Glow;
-            Texture2D spark = AssetDirectory.Textures.Sparkle;
             Texture2D ray = AssetDirectory.Textures.GlowRay;
-            
+
             Color startColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             startColor.A = 0;
 

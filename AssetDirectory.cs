@@ -22,6 +22,11 @@ namespace CalamityHunt
             public static TextureAsset ShockRing = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/ShockRing");
             public static TextureAsset Empty = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Empty");
 
+            public struct Buffs
+            {
+                public static TextureAsset[] SlimeCane = TextureAsset.LoadArray($"{nameof(CalamityHunt)}/Assets/Textures/Buffs/SlimeCane_", 2);
+            }
+
             public struct Extras
             {
                 public static TextureAsset GoozmaGodEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpecialEye");
@@ -34,6 +39,8 @@ namespace CalamityHunt
                 public static TextureAsset GoozmoemEye = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GoozmoemEye");
                 public static TextureAsset GoozmoemCrown = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/GoozmoemCrown");
                 public static TextureAsset CometKunaiFlame = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/CometKunaiFlame");
+                public static TextureAsset[] FusionRay = TextureAsset.LoadArray($"{nameof(CalamityHunt)}/Assets/Textures/FusionRay_", 4);
+
             }
             
             public struct Bars
@@ -98,9 +105,14 @@ namespace CalamityHunt
 
             public static SoundStyle SupremeRestorationBigGulp = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SupremeRestorationBigGulp") { MaxInstances = 0, PitchVariance = 0.05f };
             public static SoundStyle BloatBabyWarbleLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/BabyBloatTravelLoop") { MaxInstances = 0, IsLooped = true };
+            
             public static SoundStyle GoozmaAuricSoulHeartbeat = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
             public static SoundStyle GoozmaAuricSoulDrone = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulDrone") { MaxInstances = 0, IsLooped = true };
             public static SoundStyle GoozmaAuricSoulBreathe = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.4f };
+
+            public static SoundStyle YharonAuricSoulHeartbeat = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
+            public static SoundStyle YharonAuricSoulDrone = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulDrone") { MaxInstances = 0, Volume = 0.5f, IsLooped = true };
+            public static SoundStyle YharonAuricSoulBreathe = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.2f };
         }
     }
 }

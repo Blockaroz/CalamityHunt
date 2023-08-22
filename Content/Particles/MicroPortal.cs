@@ -51,7 +51,7 @@ namespace CalamityHunt.Content.Particles
             spriteBatch.Draw(texture, position - Main.screenPosition, solidFrame, Color.Black * 0.5f, rotation * 1.3f, solidFrame.Size() * 0.5f, scale * 0.6f * curScale, 0, 0);
 
             spriteBatch.Draw(texture, position - Main.screenPosition, colorFrame, color, rotation, colorFrame.Size() * 0.5f, scale * curScale * (1f + MathF.Sin(time * 10f) * 0.05f), 0, 0);
-            spriteBatch.Draw(texture, position - Main.screenPosition, glowFrame, secondColor * (1f - time), rotation, glowFrame.Size() * 0.5f, scale * 1.05f * curScale * (1f + MathF.Sin(time * 10f) * 0.05f), 0, 0);
+            spriteBatch.Draw(texture, position - Main.screenPosition, glowFrame, secondColor, rotation, glowFrame.Size() * 0.5f, scale * 1.05f * curScale * (1f + MathF.Sin(time * 10f) * 0.05f), 0, 0);
         }
     }
 }

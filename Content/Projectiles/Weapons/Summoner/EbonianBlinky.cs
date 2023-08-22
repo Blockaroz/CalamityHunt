@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -29,6 +30,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.height = 30;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 18000;
             Projectile.minion = true;
@@ -60,14 +62,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.tileCollide = false;
             }
 
-            if (Projectile.Distance(HomePosition) > 800)
-                State = (int)SlimeMinionState.IdleMoving;
-
             iAmInAir = false;
 
             Projectile.rotation = 0f;
             int target = -1;
-            Projectile.Minion_FindTargetInRange(800, ref target, false);
+            Projectile.Minion_FindTargetInRange(1200, ref target, false);
             bool hasTarget = false;
             if (target > -1)
             {
@@ -87,6 +86,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Color color = new Color(150, 160, 255, 60);
                 Dust sparkle = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(13, 12), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(1, 1), 0, color, 0.2f + Main.rand.NextFloat());
                 sparkle.noGravity = Main.rand.NextBool(3);
+                sparkle.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
             }
 
             if (jumpTime > 0)
@@ -104,6 +104,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Idle()
         {
             Time = 0;
+            Projectile.tileCollide = true;
             if (InAir)
                 iAmInAir = true;
 
@@ -111,7 +112,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (tooFar)
             {
                 State = (int)SlimeMinionState.IdleMoving;
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * Projectile.Distance(HomePosition) * 0.05f, 0.1f);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * Projectile.Distance(HomePosition) * 0.1f, 0.2f);
                 Projectile.rotation = Projectile.velocity.X * 0.02f;
                 if (Projectile.velocity.Y > 0)
                     Projectile.frame = 5;
@@ -160,7 +161,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (targetInAir)
                 iAmInAir = true;
 
-            if ((Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving))
+            if ((Projectile.Distance(target.Center) > 400 || State == (int)SlimeMinionState.IdleMoving))
             {
                 State = (int)SlimeMinionState.IdleMoving;
 
@@ -171,17 +172,18 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 }
             }
 
-            if (Projectile.Distance(target.Center) < 150 && AttackCount < 3)
+            if (Projectile.Distance(target.Center) < 350 && AttackCount < 3)
                 State = (int)SlimeMinionState.Attacking;
 
             if (Projectile.Bottom.Y > target.Center.Y + 30 && targetInAir && Projectile.velocity.Y >= 0 && Time % maxTime == 0)
                 Jump(-6 - Math.Max(Math.Abs(HomePosition.X - Projectile.Center.X) * 0.01f + (iAmInAir ? Math.Abs(target.Center.Y - Projectile.Center.Y) * 0.02f : 0) + 0.5f, 0), iAmInAir);
 
-            Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, State == (int)SlimeMinionState.Attacking ? 0f : (target.Center.X - Projectile.Center.X) * 0.03f, 0.05f);
+            if (Math.Abs(Projectile.Center.X - target.Center.X) > 40)
+                Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, State == (int)SlimeMinionState.Attacking ? 0f : (target.Center.X - Projectile.Center.X) * 0.1f, 0.05f);
 
             if (State == (int)SlimeMinionState.Attacking && AttackCount < 3)
             {
-                Projectile.velocity.X *= 0.9f;
+                Projectile.velocity.X *= 0.96f;
                 if (Projectile.velocity.Y > 0)
                     Projectile.velocity.Y *= 0.9f;
 
@@ -246,10 +248,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 color.A = 0;
                 Particle wave = Particle.NewParticle(Particle.ParticleType<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
                 wave.data = new Color(245, 255, 168, 120);
+                wave.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
                 for (int i = 0; i < Main.rand.Next(3, 7); i++)
                 {
                     Dust sparkle = Dust.NewDustPerfect(Projectile.Bottom + Main.rand.NextVector2Circular(9, 4), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(3, 1) - Vector2.UnitY * (i + 1) * 0.7f, 0, color, 1f + Main.rand.NextFloat());
                     sparkle.noGravity = Main.rand.NextBool(3);
+                    sparkle.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
+
                 }
 
                 SoundEngine.PlaySound(SoundID.Item24 with { MaxInstances = 0, Pitch = 0.9f, PitchVariance = 0.3f, Volume = 0.4f }, Projectile.Center);

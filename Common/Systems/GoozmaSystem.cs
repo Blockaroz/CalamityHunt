@@ -53,7 +53,7 @@ namespace CalamityHunt.Common.Systems
         public static Vector2 ninjaStatuePoint;
         public static Vector2[] slimeStatuePoints;
 
-        public static bool FindSlimeStatues(int iCenter, int jCenter, int halfWidth = 10, int halfHeight = 3)
+        public static bool FindSlimeStatues(int iCenter, int jCenter, int halfWidth = 20, int halfHeight = 20)
         {
             List<Vector2> count = new List<Vector2>();
             List<Point> ignore = new List<Point>();

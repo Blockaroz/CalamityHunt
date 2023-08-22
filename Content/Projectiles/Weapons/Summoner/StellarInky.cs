@@ -11,6 +11,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.GameContent.Animations.IL_Actions.Sprites;
@@ -32,6 +33,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.height = 30;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 18000;
             Projectile.minion = true;
@@ -63,15 +65,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.tileCollide = false;
             }       
             
-            if (Projectile.Distance(HomePosition) > 800)
-                State = (int)SlimeMinionState.IdleMoving;
-
             iAmInAir = false;
 
             Projectile.tileCollide = false;
 
             int target = -1;
-            Projectile.Minion_FindTargetInRange(800, ref target, false);
+            Projectile.Minion_FindTargetInRange(1200, ref target, false);
             bool hasTarget = false;
             if (target > -1)
             {
@@ -102,6 +101,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Color color = new Color(5, 30, 200, 0);
                 Dust sparkle = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(13, 12), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(1, 1), 0, color, 0.2f + Main.rand.NextFloat());
                 sparkle.noGravity = Main.rand.NextBool(3);
+                sparkle.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
             }
 
             if (teleportTime > 0)
@@ -110,10 +110,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (AttackCount < 0)
                 AttackCount++;
 
-            if (ringFrameCounter++ > 10)
+            if (ringFrameCounter++ > 4)
             {
                 ringFrameCounter = 0;
-                ringFrame = (ringFrame + 1) % 3;
+                ringFrame = (ringFrame + 1) % 4;
             }
         }
 
@@ -165,14 +165,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                         {
                             Color color = new Color(5, 10, 100, 0);
                             Particle portal = Particle.NewParticle(Particle.ParticleType<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portal.data = new Color(200, 200, 90, 120);
+                            portal.data = new Color(255, 200, 90, 120);
 
                             teleportTime = 0;
                             Projectile.Center -= Projectile.velocity.RotatedByRandom(2f) * Main.rand.Next(8, 15);
                             Projectile.netUpdate = true;
 
                             Particle portalAfter = Particle.NewParticle(Particle.ParticleType<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portalAfter.data = new Color(200, 200, 90, 120);
+                            portalAfter.data = new Color(255, 200, 90, 120);
 
                             //SoundStyle warpSound = SoundID.Item135;
                         }
@@ -228,7 +228,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Attack(int whoAmI)
         {
             NPC target = Main.npc[whoAmI];
-            int attackWaitTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(100, 85, 72, 60, 50);
+            int attackWaitTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(60, 55, 42, 30, 20);
             int hitCD = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(40, 35, 30, 25, 24);
             int maxAttacks = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(1, 2, 3, 4, 5);
 
@@ -274,7 +274,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
                     if (Time >= 2)
                     {
-                        Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center + targetPositionOffset).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center + targetPositionOffset) * 0.05f, 0.2f);
+                        Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center + targetPositionOffset).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center + targetPositionOffset) * 0.1f, 0.2f);
                         Projectile.velocity += Projectile.DirectionFrom(target.Center) * 0.3f;
                         if (Time > attackWaitTime)
                         {
@@ -299,13 +299,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
                             Color color = new Color(5, 10, 100, 0);
                             Particle portal = Particle.NewParticle(Particle.ParticleType<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portal.data = new Color(200, 200, 90, 120);
+                            portal.data = new Color(255, 200, 90, 120);
 
                             targetPositionOffset += Main.rand.NextVector2Circular(1, 5);
                             Projectile.Center = target.Center + targetPositionOffset;
 
                             Particle portalAfter = Particle.NewParticle(Particle.ParticleType<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portalAfter.data = new Color(200, 200, 90, 120);
+                            portalAfter.data = new Color(255, 200, 90, 120);
 
                             //
                         }
@@ -338,6 +338,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 if (Main.myPlayer == Projectile.owner)
                 {
                     Projectile.velocity = Projectile.velocity.RotatedByRandom(1f);
+                    Projectile.velocity *= 0.94f;
                     Projectile.netUpdate = true;
                 }
             }
@@ -402,8 +403,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 4 => 4,
                 _ => 0
             };
-            Rectangle ringFrontFrame = ringTexture.Frame(6, 3, ringXFrame, ringFrame);
-            Rectangle ringBackFrame = ringTexture.Frame(6, 3, ringXFrame + 1, ringFrame);
+            Rectangle ringFrontFrame = ringTexture.Frame(6, 4, ringXFrame, ringFrame);
+            Rectangle ringBackFrame = ringTexture.Frame(6, 4, ringXFrame + 1, ringFrame);
             float ringRotation = -Projectile.velocity.X * 0.02f - Projectile.velocity.Y * 0.04f;
 
             Rectangle frame = texture.Frame(5, 8, Player.GetModPlayer<SlimeCanePlayer>().SlimeRank(), Projectile.frame, -2, -2);
@@ -412,10 +413,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             
             int yOff = Player.GetModPlayer<SlimeCanePlayer>().SlimeRank() > 3 ? -2 : 0;
             bool ringAllowed = State != (int)SlimeMinionState.Attacking || AttackCount <= 0;
-
+            Vector2 ringOffset = new Vector2(0, 8);
             if (ringAllowed)
             {
-                DrawData ringBackData = new DrawData(ringTexture, Projectile.Center + new Vector2(-4 * Projectile.direction, 4) - Main.screenPosition, ringBackFrame, lightColor, ringRotation, ringBackFrame.Size() * 0.5f, scale, direction, 0);
+                DrawData ringBackData = new DrawData(ringTexture, Projectile.Center + ringOffset - Main.screenPosition, ringBackFrame, lightColor, ringRotation, ringBackFrame.Size() * 0.5f, scale, direction, 0);
                 ringBackData.shader = Player.cPet;
                 Main.EntitySpriteDraw(ringBackData);
             }
@@ -437,10 +438,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             if (ringAllowed)
             {
-                DrawData ringFrontData = new DrawData(ringTexture, Projectile.Center + new Vector2(-4 * Projectile.direction, 4) - Main.screenPosition, ringFrontFrame, lightColor, ringRotation, ringFrontFrame.Size() * 0.5f, scale, direction, 0);
+                DrawData ringFrontData = new DrawData(ringTexture, Projectile.Center + ringOffset - Main.screenPosition, ringFrontFrame, lightColor, ringRotation, ringFrontFrame.Size() * 0.5f, scale, direction, 0);
                 ringFrontData.shader = Player.cPet;
                 Main.EntitySpriteDraw(ringFrontData);
             }
+
             return false;
         }
     }

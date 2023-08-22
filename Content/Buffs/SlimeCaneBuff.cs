@@ -11,11 +11,15 @@ using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
 using Mono.Cecil;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.DataStructures;
 
 namespace CalamityHunt.Content.Buffs
 {
     public class SlimeCaneBuff : ModBuff
     {
+        public override string Texture => AssetDirectory.Textures.Buffs.SlimeCane[0];
+
         public override void SetStaticDefaults()
         {
             Main.buffNoTimeDisplay[Type] = true;
@@ -31,6 +35,13 @@ namespace CalamityHunt.Content.Buffs
                 player.DelBuff(buffIndex);
             else
                 player.buffTime[buffIndex] = 18000;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, int buffIndex, ref BuffDrawParams drawParams)
+        {
+            bool finalTier = Main.LocalPlayer.GetModPlayer<SlimeCanePlayer>().SlimeRank() == SlimeCanePlayer.HighestRank;
+            drawParams.Texture = AssetDirectory.Textures.Buffs.SlimeCane[finalTier ? 1 : 0];
+            return true;
         }
     }
 }
