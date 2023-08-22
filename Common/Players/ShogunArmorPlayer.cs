@@ -205,6 +205,8 @@ namespace CalamityHunt.Common.Players
                 {
                     Player.wingsLogic = wingSlot;
                     Player.wingTime = 1;
+                    Player.wingTimeMax = 1;
+                    Player.equippedWings = Player.armor[1];
 
                     if (ModLoader.HasMod("CalamityMod"))
                         ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", Player, true);
