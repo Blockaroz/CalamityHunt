@@ -68,7 +68,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             iAmInAir = false;
 
-            Projectile.damage = 2;// Player.GetModPlayer<SlimeCanePlayer>().highestOriginalDamage;
             Projectile.tileCollide = false;
 
             int target = -1;

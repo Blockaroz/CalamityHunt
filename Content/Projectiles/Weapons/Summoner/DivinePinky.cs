@@ -67,9 +67,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             iAmInAir = false;
 
             Projectile.rotation = 0f;
-            Projectile.damage = Player.GetModPlayer<SlimeCanePlayer>().highestOriginalDamage;
             int target = -1;
-            Projectile.Minion_FindTargetInRange(800, ref target, true);
+            Projectile.Minion_FindTargetInRange(800, ref target, false);
+
             bool hasTarget = false;
             if (target > -1)
             {
@@ -184,7 +184,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Attack(int whoAmI)
         {
             NPC target = Main.npc[whoAmI];
-            int maxTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(9, 9, 8, 7, 6);
+            int maxTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(9, 9, 8, 7, 7);
+            int attackCD = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(60, 50, 45, 40, 30);
+            float radius = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(80, 120, 180, 240, 280);
             iAmInAir = true;
             Projectile.tileCollide = false;
 
@@ -209,7 +211,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             if (State == (int)SlimeMinionState.Attacking && AttackCount == 0)
             {
-                Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center) * 0.001f;
+                Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center) * 0.002f;
                 Projectile.velocity *= 0.98f;
 
                 Time++;
@@ -222,18 +224,21 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                         Projectile.frame = 11;
                 }
 
-                if (Time == maxTime * 4)
+                if (Time == maxTime * 3 + 5)
                 {
                     //117, 67, 68
-                    SoundStyle ray = SoundID.Item28 with { MaxInstances = 0, Pitch = 0.9f, PitchVariance = 0.2f, Volume = 0.3f };
+                    SoundStyle ray = SoundID.Item15 with { MaxInstances = 0, Pitch = -1f, PitchVariance = 0.2f, Volume = 0.5f };
                     SoundEngine.PlaySound(ray, Projectile.Center);
-                    //Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * 5, ProjectileID.TinyEater, Projectile.damage, Projectile.knockBack, Player.whoAmI);
+
+                    Projectile shine = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<PinkyLight>(), Projectile.damage, Projectile.knockBack, Player.whoAmI);
+                    shine.ai[1] = radius;
+                    shine.ai[2] = Projectile.whoAmI;
                 }
 
                 if (Time >= maxTime * 6)
                 {
                     Time = 0;
-                    AttackCount = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(60, 50, 45, 40, 30);
+                    AttackCount = attackCD;
                 }
 
             }

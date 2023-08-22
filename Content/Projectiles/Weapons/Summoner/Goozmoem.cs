@@ -82,7 +82,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (cordRope == null)
                 cordRope = new Rope(cordStart, cordEnd, 16, 2f, Vector2.Zero, 0.5f, 10);
 
-            cordRope.segmentLength = Projectile.Distance(Player.MountedCenter) * 0.07f;
+            cordRope.segmentLength = MathF.Sqrt(Projectile.Distance(Player.MountedCenter)) * 0.4f;
             cordRope.StartPos = cordStart;
             cordRope.EndPos = cordEnd;
             cordRope.gravity = new Vector2(Player.direction * 1, -0.5f) * 0.3f;
@@ -116,6 +116,20 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Attack(int whoAmI)
         {
             NPC target = Main.npc[whoAmI];
+
+            if (Projectile.Distance(HomePosition) > 14)
+                Projectile.velocity += Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(HomePosition) * 0.03f);
+            else
+            {
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2Circular(2, 2), 0.3f);
+                Projectile.velocity *= 0.9f;
+                Projectile.netUpdate = true;
+            }
+
+            Projectile.velocity *= 0.9f;
+
+            Projectile.direction = Projectile.Center.X > target.Center.X ? -1 : 1;
+
         }
 
         public Vector2 eyeOffset;

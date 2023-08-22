@@ -66,7 +66,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             iAmInAir = false;
 
             Projectile.rotation = 0f;
-            Projectile.damage = Player.GetModPlayer<SlimeCanePlayer>().highestOriginalDamage;
             int target = -1;
             Projectile.Minion_FindTargetInRange(800, ref target, false);
             bool hasTarget = false;
@@ -94,7 +93,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 jumpTime--;
         }
 
-        public Vector2 HomePosition => Player.Bottom + new Vector2(-60 * Player.direction, -28);
+        public Vector2 HomePosition => Player.Bottom + new Vector2(-70 * Player.direction, -28);
 
         public bool InAir => !Collision.SolidCollision(Player.MountedCenter - new Vector2(20, 0), 40, 150, true);
 
@@ -155,6 +154,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             NPC target = Main.npc[whoAmI];
             int maxTime = Player.GetModPlayer<SlimeCanePlayer>().ValueFromSlimeRank(9, 8, 7, 6, 5);
+            int shootCount = 1;
 
             bool targetInAir = !Collision.SolidCollision(target.position - new Vector2(5, 150), target.width + 10, target.height + 300);
             if (targetInAir)
@@ -200,7 +200,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 {
                     SoundStyle burp = SoundID.NPCDeath12 with { MaxInstances = 0, Pitch = 0.9f, PitchVariance = 0.2f, Volume = 0.3f };
                     SoundEngine.PlaySound(burp, Projectile.Center);
-                    //Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * 5, ProjectileID.TinyEater, Projectile.damage, Projectile.knockBack, Player.whoAmI);
+
+                    for (int i = 0; i < shootCount; i++)
+                    {
+                        Projectile spikeBall = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<BlinkySpikeBall>(), Projectile.damage, Projectile.knockBack, Player.whoAmI);
+                        spikeBall.ai[0] = -Main.rand.Next(20, 30);
+                        spikeBall.ai[2] = target.whoAmI;
+                    }
                 }
 
                 if (Time >= maxTime * 5)

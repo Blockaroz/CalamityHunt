@@ -530,6 +530,8 @@ Projectiles: {
 	CometKunaiStealthProjectile.DisplayName: Comet Kunai Stealth Projectile
 	CometKunaiStarfall.DisplayName: Comet Kunai Starfall
 	Goozmoem.DisplayName: Goozmoem
+	BlinkySpikeBall.DisplayName: Blinky Spike Ball
+	PinkyLight.DisplayName: Pinky Light
 }
 
 Chat: {

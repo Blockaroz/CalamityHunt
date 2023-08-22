@@ -63,7 +63,7 @@ namespace CalamityHunt.Common.Players
                 }
                 if (Player.ownedProjectileCounts[slimeType] <= 0)
                 {
-                    int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - (20 * i), Player.position.Y, 0, 0, slimeType, highestOriginalDamage, 0, Player.whoAmI);
+                    int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - (10 * i), Player.position.Y, 0, 0, slimeType, highestOriginalDamage, 0, Player.whoAmI);
                     if (Main.projectile.IndexInRange(p))
                         Main.projectile[p].originalDamage = highestOriginalDamage;
                 }
@@ -72,7 +72,7 @@ namespace CalamityHunt.Common.Players
             int goozType = ModContent.ProjectileType<Goozmoem>();
             if (SlimeRank() >= HighestRank && Player.ownedProjectileCounts[goozType] <= 0)
             {
-                int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - (20), Player.position.Y, 0, 0, goozType, highestOriginalDamage, 0, Player.whoAmI);
+                int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - 20, Player.position.Y, 0, 0, goozType, highestOriginalDamage, 0, Player.whoAmI);
                 if (Main.projectile.IndexInRange(p))
                     Main.projectile[p].originalDamage = highestOriginalDamage;
             }
