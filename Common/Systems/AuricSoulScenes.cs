@@ -24,7 +24,24 @@ namespace CalamityHunt.Common.Systems
             {
                 player.GetModPlayer<EffectTilePlayer>().effectorCount["SlimeMonsoon"] = 5;
                 SlimeMonsoonBackground.lightningEnabled = false;
-                Main.windSpeedTarget = Math.Sign(Main.windSpeedCurrent == 0 ? 1 : Main.windSpeedCurrent) * 20;
+                Main.windSpeedTarget = 1;
+            }
+            return active;
+        }
+    }
+
+    public class YharonAuricSoulScene : ModSceneEffect
+    {
+        public override SceneEffectPriority Priority => SceneEffectPriority.Event;
+
+        public override int Music => MusicLoader.GetMusicSlot(Mod, "Assets/Music/YharonAuricSoulMusic");
+
+        public override bool IsSceneEffectActive(Player player)
+        {
+            bool active = Main.item.Any(n => n.active && n.type == ModContent.ItemType<FieryAuricSoul>());
+
+            if (active && ModLoader.TryGetMod("CalamityMod", out Mod calamity))
+            {
             }
             return active;
         }

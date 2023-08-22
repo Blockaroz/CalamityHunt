@@ -322,7 +322,7 @@ Items: {
 		DisplayName: Slime Cane
 		Tooltip:
 			'''
-			Summons a set of 4 slimes to protect you
+			Summons a set of 4 slime squires to protect you
 			Using the weapon again will consume a minion slot to upgrade the slimes
 			The slimes can be upgraded a maximum of 4 times
 			Once the slimes have been fully upgraded, a goozmoem will appear that fires fusion rays at enemies
@@ -529,22 +529,19 @@ Projectiles: {
 	ChromaticBombProjectile.DisplayName: Chromatic Bomb Projectile
 	ChromaticGooztickProjectile.DisplayName: Chromatic Gooztick Projectile
 	DynamoRodProjectile.DisplayName: Dynamo Rod Projectile
-	ThrowingStarsProjectile.DisplayName: Throwing Stars Projectile
-	ThrowingStarsGhostProjectile.DisplayName: Throwing Stars Ghost Projectile
-	ThrowingStarsCritProjectile.DisplayName: Throwing Stars Crit Projectile
 	CrimulanClyde.DisplayName: Crimulan Clyde
 	DivinePinky.DisplayName: Divine Pinky
 	EbonianBlinky.DisplayName: Ebonian Blinky
 	StellarInky.DisplayName: Stellar Inky
-	CometKunaiCritProjectile.DisplayName: Comet Kunai Crit Projectile
-	CometKunaiGhostProjectile.DisplayName: Comet Kunai Ghost Projectile
-	CometKunaiProjectile.DisplayName: Comet Kunai Projectile
-	CometKunaiStealthProjectile.DisplayName: Comet Kunai Stealth Projectile
-	CometKunaiStarfall.DisplayName: Comet Kunai Starfall
+	CometKunaiCritProjectile.DisplayName: Comet Kunai
+	CometKunaiGhostProjectile.DisplayName: Comet Kunai
+	CometKunaiProjectile.DisplayName: Comet Kunai
+	CometKunaiStealthProjectile.DisplayName: Comet Kunai
+	CometKunaiStarfall.DisplayName: Comet Kunai
 	Goozmoem.DisplayName: Goozmoem
 	BlinkySpikeBall.DisplayName: Blinky Spike Ball
-	PinkyLight.DisplayName: Pinky Light
-	GoozmoemRay.DisplayName: Goozmoem Ray
+	PinkyLight.DisplayName: Pinky's Light
+	GoozmoemRay.DisplayName: Fusion Ray
 }
 
 Chat: {
@@ -599,7 +596,7 @@ Buffs: {
 	}
 
 	SlimeCaneBuff: {
-		DisplayName: Slime Cane Buff
+		DisplayName: Slime Soirée
 		Description: Inky, Blinky, Pinky, and Clyde will protect you
 	}
 }

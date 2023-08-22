@@ -86,11 +86,20 @@ namespace CalamityHunt.Common.Players
                 {
                     highestOriginalDamage = 0;
                     slimes = true;
+                    int count = 0;
+
                     foreach (Projectile gem in Main.projectile.Where(n => n.owner == Player.whoAmI && n.type == ModContent.ProjectileType<SlimeCaneGemCounter>()))
                     {
+                        count++;
+
                         if (highestOriginalDamage < gem.originalDamage)
                             highestOriginalDamage = gem.originalDamage;
+
+                        if (count > 5)
+                            gem.Kill();
                     }
+
+
                 }
 
                 int buffIndex = Player.FindBuffIndex(ModContent.BuffType<SlimeCaneBuff>());
@@ -101,6 +110,7 @@ namespace CalamityHunt.Common.Players
 
                 if (Player.whoAmI == Main.myPlayer)
                     SetSlimes();
+
             }
         }
 

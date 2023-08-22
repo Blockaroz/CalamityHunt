@@ -105,9 +105,14 @@ namespace CalamityHunt
 
             public static SoundStyle SupremeRestorationBigGulp = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SupremeRestorationBigGulp") { MaxInstances = 0, PitchVariance = 0.05f };
             public static SoundStyle BloatBabyWarbleLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/BabyBloatTravelLoop") { MaxInstances = 0, IsLooped = true };
+            
             public static SoundStyle GoozmaAuricSoulHeartbeat = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
             public static SoundStyle GoozmaAuricSoulDrone = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulDrone") { MaxInstances = 0, IsLooped = true };
             public static SoundStyle GoozmaAuricSoulBreathe = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.4f };
+
+            public static SoundStyle YharonAuricSoulHeartbeat = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
+            public static SoundStyle YharonAuricSoulDrone = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulDrone") { MaxInstances = 0, IsLooped = true };
+            public static SoundStyle YharonAuricSoulBreathe = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.2f };
         }
     }
 }

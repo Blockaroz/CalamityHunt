@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
@@ -97,8 +98,27 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
             return final;
         }
 
+        public LoopingSound heartbeatSound;
+        public LoopingSound droneSound;
+
+        public int breathSoundCounter;
+
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
+            if (heartbeatSound == null)
+                heartbeatSound = new LoopingSound(AssetDirectory.Sounds.YharonAuricSoulHeartbeat, new HuntOfTheOldGodUtils.ItemAudioTracker(Item).IsActiveAndInGame);
+            heartbeatSound.Update(() => Item.position, () => 1f, () => 0f);
+
+            if (droneSound == null)
+                droneSound = new LoopingSound(AssetDirectory.Sounds.YharonAuricSoulDrone, new HuntOfTheOldGodUtils.ItemAudioTracker(Item).IsActiveAndInGame);
+            droneSound.Update(() => Item.position, () => 1.5f, () => 0f);
+
+            if (breathSoundCounter-- <= 0)
+            {
+                SoundEngine.PlaySound(AssetDirectory.Sounds.YharonAuricSoulBreathe, Item.Center);
+                breathSoundCounter = Main.rand.Next(500, 800);
+            }
+
             if (Main.rand.NextBool(15))
             {
                 Vector2 off = Main.rand.NextVector2Circular(40, 40);
@@ -194,7 +214,7 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
                     Color final = new GradientColor(array, 0.15f, 0.5f).ValueAt((p + Main.GlobalTimeWrappedHourly) * 25f);
                     return final * 0.6f;
                 }
-                float StripWidth(float p) => 25f * (1f + MathF.Sin(p * MathHelper.TwoPi * 8) * 0.1f) * p * (1f - p) * 5f;
+                float StripWidth(float p) => 25f * (1f + MathF.Sin(p * MathHelper.TwoPi * 3) * 0.5f) * p * (1f - p) * 5f;
 
                 strip1.PrepareStrip(offs1, offRots1, StripColor, StripWidth, Item.Center - Main.screenPosition, offs1.Length, true);
                 strip2.PrepareStrip(offs2, offRots2, StripColor, StripWidth, Item.Center - Main.screenPosition, offs2.Length, true);
@@ -225,14 +245,13 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
                 float lensRotation = time % MathHelper.TwoPi;
                 float lensRotationSlow = (time + MathF.Sin(time * 2) * 0.3f) % MathHelper.TwoPi;
 
-
-                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), darkColor, lensRotation - MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.5f, 1f + lensScale * 5f), 0, 0);
-                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), darkColor, lensRotation + MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.5f, 1f + lensScale * 5f), 0, 0);
+                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), darkColor, lensRotation - MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.3f, 1f + lensScale * 5f), 0, 0);
+                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), darkColor, lensRotation + MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(0.3f, 1f + lensScale * 5f), 0, 0);
                 spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor, lensRotation - MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(1f, 1f + lensScale), 0, 0);
                 spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor, lensRotation + MathHelper.PiOver4, sparkTexture.Size() * 0.5f, new Vector2(1f, 1f + lensScale), 0, 0);
 
-                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), darkColor, lensRotationSlow, sparkTexture.Size() * 0.5f, new Vector2(0.5f, 2f + lensScaleSlow * 5f), 0, 0);
-                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), darkColor, lensRotationSlow + MathHelper.PiOver2, sparkTexture.Size() * 0.5f, new Vector2(0.5f, 2f + lensScaleSlow * 5f), 0, 0);
+                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), darkColor, lensRotationSlow, sparkTexture.Size() * 0.5f, new Vector2(0.3f, 2f + lensScaleSlow * 5f), 0, 0);
+                spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), darkColor, lensRotationSlow + MathHelper.PiOver2, sparkTexture.Size() * 0.5f, new Vector2(0.3f, 2f + lensScaleSlow * 5f), 0, 0);
                 spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor, lensRotationSlow, sparkTexture.Size() * 0.5f, new Vector2(1f, 2f + lensScaleSlow), 0, 0);
                 spriteBatch.Draw(sparkTexture, Item.Center - Main.screenPosition, sparkTexture.Frame(), glowColor, lensRotationSlow + MathHelper.PiOver2, sparkTexture.Size() * 0.5f, new Vector2(1f, 2f + lensScaleSlow), 0, 0);
 
