@@ -29,7 +29,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
-            Projectile.minion = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
             Projectile.DamageType = DamageClass.Summon;
@@ -150,10 +149,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override bool PreDraw(ref Color lightColor)
         {
-            foreach (Sparkle sparkle in sparkles)
-                sparkle.Draw(Projectile.Center - Main.screenPosition);
-
-            float p = 1f;
+            if (sparkles != null) foreach (Sparkle sparkle in sparkles) sparkle.Draw(Projectile.Center - Main.screenPosition);
 
             return false;
         }

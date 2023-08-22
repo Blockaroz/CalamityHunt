@@ -4,7 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -32,6 +34,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.localNPCHitCooldown = 10;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.manualDirectionChange = true;
+            Projectile.hide = true;
         }
 
         public override bool? CanDamage() => State == (int)SlimeMinionState.Attacking && Time > 0;
@@ -52,7 +55,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.timeLeft = 2;
 
             int target = -1;
-            Projectile.Minion_FindTargetInRange(800, ref target, true);
+            Projectile.Minion_FindTargetInRange(1200, ref target, true);
             bool hasTarget = false;
             if (target > -1)
             {
@@ -67,6 +70,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             Dust gas = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16, 25), DustID.TintableDust, Main.rand.NextVector2Circular(1, 1), 150, Color.Black, 0.5f + Main.rand.NextFloat());
             gas.noGravity = true;
+            gas.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
 
             if (AttackCD > 0)
                 AttackCD--;
@@ -77,8 +81,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.frame = (Projectile.frame + 1) % 6;
             }
 
-            Vector2 cordStart = new Vector2(512) + new Vector2(10 * Projectile.direction, 2).RotatedBy(Projectile.rotation) * Projectile.scale * 0.5f;
-            Vector2 cordEnd = new Vector2(512) + (Player.MountedCenter - Projectile.Center) * 0.5f;
+            Vector2 cordStart = new Vector2(256) + new Vector2(10 * Projectile.direction, 2).RotatedBy(Projectile.rotation) * Projectile.scale * 0.5f;
+            Vector2 cordEnd = new Vector2(256) + (Player.MountedCenter - Projectile.Center) * 0.5f;
             if (cordRope == null)
                 cordRope = new Rope(cordStart, cordEnd, 16, 2f, Vector2.Zero, 0.5f, 10);
 
@@ -110,7 +114,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             }
             Projectile.velocity *= 0.9f;
 
-            eyeOffset = Vector2.Lerp(eyeOffset, Main.rand.NextVector2Circular(4, 4), 0.3f);
+            eyeOffset = Vector2.Lerp(eyeOffset, new Vector2(4 * Projectile.direction, 0) + Main.rand.NextVector2Circular(4, 4), 0.3f);
         }
 
         public void Attack(int whoAmI)
@@ -126,11 +130,34 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.netUpdate = true;
             }
 
+            if (AttackCD == 0)
+            {
+                Time++;
+
+                if (Time > 100)
+                {
+                    SoundStyle ray = SoundID.Item15 with { MaxInstances = 0, Pitch = -1f, PitchVariance = 0.2f, Volume = 0.5f };
+                    SoundEngine.PlaySound(ray, Projectile.Center);
+
+                    int direction = Main.rand.NextBool().ToDirectionInt();
+                    Projectile laser = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<GoozmoemRay>(), Projectile.damage, Projectile.knockBack, Player.whoAmI);
+                    laser.ai[0] = Projectile.AngleTo(target.Center) + Main.rand.NextFloat(0.5f, 1.5f) * direction;
+                    laser.ai[1] = Projectile.AngleTo(target.Center) - Main.rand.NextFloat(0.5f, 1.5f) * direction;
+                    laser.ai[2] = Projectile.whoAmI;
+                    Time = 0;
+                    AttackCD = 60;
+                }
+            }
+            else
+            {
+                Projectile.direction = Projectile.Center.X > target.Center.X ? -1 : 1;
+                eyeOffset = Vector2.Lerp(eyeOffset, new Vector2(4 * Projectile.direction, 0) + Main.rand.NextVector2Circular(4, 4), 0.3f);
+            }
+
             Projectile.velocity *= 0.9f;
-
-            Projectile.direction = Projectile.Center.X > target.Center.X ? -1 : 1;
-
         }
+
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindProjectiles.Add(index);
 
         public Vector2 eyeOffset;
 
@@ -147,8 +174,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             Vector2 scale = Projectile.scale * Vector2.One;
 
-            goozmoemTextureContent.width = 1024;
-            goozmoemTextureContent.height = 1024;
+            goozmoemTextureContent.width = 512;
+            goozmoemTextureContent.height = 512;
             goozmoemTextureContent.drawFunction = DrawCreature;
             goozmoemTextureContent.drawNonGlowFunction = DrawCreatureCrown;
             goozmoemTextureContent.Request();
@@ -171,21 +198,21 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Texture2D eyeTexture = AssetDirectory.Textures.Extras.GoozmoemEye;
                 Rectangle frame = texture.Frame(1, 7, 0, Projectile.frame, -2, -2);
 
-                goozmoemCordTextureContent.width = 1024;
-                goozmoemCordTextureContent.height = 1024;
+                goozmoemCordTextureContent.width = 512;
+                goozmoemCordTextureContent.height = 512;
                 List<Vector2> points = cordRope.GetPoints();
-                points.Add(new Vector2(512) + (Player.MountedCenter - Projectile.Center) * 0.5f);
+                points.Add(new Vector2(256) + (Player.MountedCenter - Projectile.Center) * 0.5f);
                 goozmoemCordTextureContent.positions = points.ToArray();
                 goozmoemCordTextureContent.Request();
 
                 if (goozmoemCordTextureContent.IsReady)
                 {
                     Texture2D goozmoemCord = goozmoemCordTextureContent.GetTarget();
-                    Main.EntitySpriteDraw(goozmoemCord, new Vector2(512), goozmoemCord.Frame(), Color.White, Projectile.rotation, goozmoemCord.Size() * 0.5f, 2f, 0, 0);
+                    Main.EntitySpriteDraw(goozmoemCord, new Vector2(256), goozmoemCord.Frame(), Color.White, Projectile.rotation, goozmoemCord.Size() * 0.5f, 2f, 0, 0);
                 }
 
-                Main.EntitySpriteDraw(texture, new Vector2(512), frame, Color.White, Projectile.rotation, new Vector2(frame.Width * 0.5f, 22), 1f, direction, 0);
-                Main.EntitySpriteDraw(eyeTexture, new Vector2(512) + eyeOffset + new Vector2(4 * Projectile.direction, -4).RotatedBy(Projectile.rotation), eyeTexture.Frame(), Color.White, Projectile.rotation, eyeTexture.Size() * 0.5f, 1f, direction, 0);
+                Main.EntitySpriteDraw(texture, new Vector2(256), frame, Color.White, Projectile.rotation, new Vector2(frame.Width * 0.5f, 22), 1f, direction, 0);
+                Main.EntitySpriteDraw(eyeTexture, new Vector2(256) + eyeOffset + new Vector2(0, -4).RotatedBy(Projectile.rotation), eyeTexture.Frame(), Color.White, Projectile.rotation, eyeTexture.Size() * 0.5f, 1f, direction, 0);
             }
         }
 
@@ -195,7 +222,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             Texture2D texture = AssetDirectory.Textures.Extras.GoozmoemCrown;
             Rectangle frame = texture.Frame(1, 7, 0, Projectile.frame, -2, -2);
-            Main.EntitySpriteDraw(texture, new Vector2(512), frame, Color.White, Projectile.rotation, new Vector2(frame.Width * 0.5f, 22), 1f, direction, 0);
+            Main.EntitySpriteDraw(texture, new Vector2(256), frame, Color.White, Projectile.rotation, new Vector2(frame.Width * 0.5f, 22), 1f, direction, 0);
         }
     }
 }

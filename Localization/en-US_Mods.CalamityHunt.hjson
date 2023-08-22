@@ -433,6 +433,11 @@ Items: {
 			'The power of the sun, in the palm of my hand.'
 			'''
 	}
+
+	GoopHairDye: {
+		DisplayName: Goop Hair Dye
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -532,6 +537,7 @@ Projectiles: {
 	Goozmoem.DisplayName: Goozmoem
 	BlinkySpikeBall.DisplayName: Blinky Spike Ball
 	PinkyLight.DisplayName: Pinky Light
+	GoozmoemRay.DisplayName: Goozmoem Ray
 }
 
 Chat: {

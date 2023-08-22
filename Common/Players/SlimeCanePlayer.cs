@@ -84,8 +84,9 @@ namespace CalamityHunt.Common.Players
             {
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<SlimeCaneGemCounter>()] > 0)
                 {
+                    highestOriginalDamage = 0;
                     slimes = true;
-                    foreach (Projectile gem in Main.projectile.Where(n => n.owner == Player.whoAmI))
+                    foreach (Projectile gem in Main.projectile.Where(n => n.owner == Player.whoAmI && n.type == ModContent.ProjectileType<SlimeCaneGemCounter>()))
                     {
                         if (highestOriginalDamage < gem.originalDamage)
                             highestOriginalDamage = gem.originalDamage;
