@@ -193,8 +193,8 @@ namespace CalamityHunt
         {
             int numberOfAdjectives = 34;
             int numberOfNouns = 29;
-            int numberOfSpecial = 12;
-            int specialChance = 30;
+            int numberOfSpecial = 16;
+            int specialChance = 40;
 
             string adjective = "Mods.CalamityHunt.NPCs.Goozma.Titles.Adjective" + Main.rand.Next(1, numberOfAdjectives + 1);
             string noun = "Mods.CalamityHunt.NPCs.Goozma.Titles.Noun" + Main.rand.Next(1, numberOfNouns + 1);
