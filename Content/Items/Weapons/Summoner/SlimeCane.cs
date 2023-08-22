@@ -34,7 +34,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.reuseDelay = 2;
-            Item.damage = 127;
+            Item.damage = 196;
             Item.noMelee = true;
             Item.knockBack = 10f;
             Item.UseSound = SoundID.DD2_MonkStaffSwing;
