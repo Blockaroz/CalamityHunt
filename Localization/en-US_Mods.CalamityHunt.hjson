@@ -320,7 +320,14 @@ Items: {
 
 	SlimeCane: {
 		DisplayName: Slime Cane
-		Tooltip: ""
+		Tooltip:
+			'''
+			Summons a set of 4 slimes to protect you
+			Using the weapon again will consume a minion slot to upgrade the slimes
+			The slimes can be upgraded a maximum of 4 times
+			Once the slimes have been fully upgraded, a goozmoem will appear that fires fusion rays at enemies
+			'If only I could wipe away the impurities and make it as beautiful as me'
+			'''
 	}
 
 	FissionFlyer: {
@@ -593,7 +600,7 @@ Buffs: {
 
 	SlimeCaneBuff: {
 		DisplayName: Slime Cane Buff
-		Description: Mods.CalamityHunt.Buffs.SlimeCaneBuff.Description
+		Description: Inky, Blinky, Pinky, and Clyde will protect you
 	}
 }
 

@@ -1,7 +1,10 @@
 using CalamityHunt.Common.Graphics.SlimeMonsoon;
 using CalamityHunt.Common.Systems;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Misc;
+using CalamityHunt.Content.Items.Weapons.Summoner;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Projectiles.Weapons.Summoner;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -114,29 +117,33 @@ namespace CalamityHunt
                 BossChecklist(ModLoader.GetMod("BossChecklist"));
             } 
             // Add this whenever Slime Cane is added
-            /*if (ModLoader.HasMod("SummonersAssociation"))
+            if (ModLoader.HasMod("SummonersAssociation"))
             {
                 Mod sAssociation = ModLoader.GetMod("SummonersAssociation");
-                sAssociation.Call("AddMinionInfo", ItemType<SlimeCane>(), BuffType<SlimeBabyBuff>(), new List<Dictionary<string, object>>
+                sAssociation.Call("AddMinionInfo", ModContent.ItemType<SlimeCane>(), ModContent.BuffType<SlimeCaneBuff>(), new List<Dictionary<string, object>>
                 {
                     new Dictionary<string, object>()
                     {
-                        ["ProjID"] = ProjectileType<EbonianBaby>()
+                        ["ProjID"] = ModContent.ProjectileType<EbonianBlinky>()
                     },
                     new Dictionary<string, object>()
                     {
-                        ["ProjID"] = ProjectileType<CrimsonBaby>()
+                        ["ProjID"] = ModContent.ProjectileType<CrimulanClyde>()
                     },
                     new Dictionary<string, object>()
                     {
-                        ["ProjID"] = ProjectileType<HallowBaby>()
+                        ["ProjID"] = ModContent.ProjectileType<DivinePinky>()
                     },
                     new Dictionary<string, object>()
                     {
-                        ["ProjID"] = ProjectileType<AstralBaby>()
+                        ["ProjID"] = ModContent.ProjectileType<StellarInky>()
+                    },
+                    new Dictionary<string, object>()
+                    {
+                        ["ProjID"] = ModContent.ProjectileType<Goozmoem>()
                     }
                 });
-            }*/
+            }
         }
         
         public static void BossRushInjection(Mod cal)
