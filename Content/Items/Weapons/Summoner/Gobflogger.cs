@@ -39,6 +39,15 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             }
         }
 
+        public override bool CanUseItem(Player player)
+        {
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                Item.autoReuse = true;
+            }
+            return base.CanUseItem(player);
+        }
+
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Texture2D glow = ModContent.Request<Texture2D>(Texture + "Glow").Value;
