@@ -190,7 +190,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             iAmInAir = true;
             Projectile.tileCollide = false;
 
-            if (Projectile.Distance(target.Center) < 150)
+            if (Projectile.Distance(target.Center) =< 300)
                 State = (int)SlimeMinionState.Attacking;
 
             if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving || AttackCD > 0)
