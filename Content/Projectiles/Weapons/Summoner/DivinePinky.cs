@@ -45,7 +45,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public ref float State => ref Projectile.ai[0];
         public ref float Time => ref Projectile.ai[1];
-        public ref float AttackCount => ref Projectile.ai[2];
+        public ref float AttackCD => ref Projectile.ai[2];
 
         public Player Player => Main.player[Projectile.owner];
 
@@ -89,8 +89,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 sparkle.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
             }
 
-            if (AttackCount > 0)
-                AttackCount--;
+            if (AttackCD > 0)
+                AttackCD--;
         }
 
         public Vector2 HomePosition => InAir ? Player.Bottom + new Vector2(-90 * Player.direction, -100) : Player.Bottom + new Vector2(-160 * Player.direction, -20);
@@ -193,7 +193,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (Projectile.Distance(target.Center) < 150)
                 State = (int)SlimeMinionState.Attacking;
 
-            if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving || AttackCount > 0)
+            if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving || AttackCD > 0)
             {
                 State = (int)SlimeMinionState.IdleMoving;
 
@@ -209,10 +209,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.velocity *= 0.9f;
             }
 
-            if (State == (int)SlimeMinionState.Attacking && AttackCount == 0)
+            if (State == (int)SlimeMinionState.Attacking && AttackCD == 0)
             {
-                if (Projectile.Distance(target.Center) > 60)
+                if (Projectile.Distance(target.Center) > 100)
                     Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center) * 0.03f;
+                else if (Main.myPlayer == Projectile.owner)
+                {
+                    Projectile.velocity += Main.rand.NextVector2Circular(2, 2);
+                    Projectile.netUpdate = true;
+                }
 
                 Projectile.velocity *= 0.85f;
 
@@ -241,7 +246,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 if (Time >= maxTime * 6)
                 {
                     Time = 0;
-                    AttackCount = attackCD;
+                    AttackCD = attackCD;
                 }
             }
 
@@ -287,8 +292,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             else
                 Projectile.velocity.Y = iAmInAir ? height * 0.9f : height;
 
-            if (AttackCount >= 3)
-                AttackCount = 0;
+            if (AttackCD >= 3)
+                AttackCD = 0;
         }
 
         public override bool PreDraw(ref Color lightColor)
