@@ -111,7 +111,7 @@ namespace CalamityHunt
             public static SoundStyle GoozmaAuricSoulBreathe = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.4f };
 
             public static SoundStyle YharonAuricSoulHeartbeat = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
-            public static SoundStyle YharonAuricSoulDrone = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulDrone") { MaxInstances = 0, IsLooped = true };
+            public static SoundStyle YharonAuricSoulDrone = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulDrone") { MaxInstances = 0, Volume = 0.5f, IsLooped = true };
             public static SoundStyle YharonAuricSoulBreathe = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/YharonAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.2f };
         }
     }
