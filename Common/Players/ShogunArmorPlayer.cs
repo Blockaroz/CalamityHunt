@@ -74,16 +74,16 @@ namespace CalamityHunt.Common.Players
             {
                 if (Player.dashDelay < 0)
                 {
-                    Main.SetCameraLerp(0.1f, 25);
+                    //Main.SetCameraLerp(0.1f, 25);
                     for (int i = 0; i < 6; i++)
                         Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(25, 25), DustID.TintableDust, Player.velocity * -Main.rand.NextFloat(-0.5f, 1f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
                     Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(25, 25), Player.velocity * -Main.rand.NextFloat(-0.6f, 0.6f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
                 }
-                else if (slamPower > 0)
-                {
-                    Main.SetCameraLerp(0.1f, 25);
-                }
+                //else if (slamPower > 0)
+                //{
+                //    Main.SetCameraLerp(0.1f, 25);
+                //}
 
 
 

@@ -20,6 +20,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using System.Security.Principal;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -951,6 +952,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 25f;
                 discScale = oldDiscScale * 0.8f;
+                Matrix normalMatrix = Matrix.Invert(Matrix.Identity) * Matrix.CreateOrthographicOffCenter(0f, Main.screenWidth, Main.screenHeight, 0f, 0f, 1f);
+                discEffect.Parameters["uTransformMatrix"].SetValue(normalMatrix);
 
                 RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
                 Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
@@ -983,11 +986,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
                 topStrip.PrepareStrip(topDiscPos.ToArray(), topDiscRot.ToArray(), ColorFunction, TopWidthFunction, discPos - screenPos, topDiscPos.Count, true);
 
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
+
                 discEffect.CurrentTechnique.Passes[0].Apply();
                 bottomStrip.DrawTrail();
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
 
                 spriteBatch.Draw(bloom, NPC.Center - screenPos, bloom.Frame(), new Color(20, 20, 80, 0) * NPC.scale, NPC.rotation, bloom.Size() * 0.5f, NPC.scale * squishFactor * new Vector2(1.1f, 0.8f), 0, 0);
 
