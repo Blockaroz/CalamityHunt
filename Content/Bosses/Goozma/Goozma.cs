@@ -5,6 +5,7 @@ using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Items.Accessories;
+using CalamityHunt.Content.Items.Armor.Shogun;
 using CalamityHunt.Content.Items.BossBags;
 using CalamityHunt.Content.Items.Consumable;
 using CalamityHunt.Content.Items.Lore;
@@ -175,6 +176,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             LeadingConditionRule classic = new LeadingConditionRule(new Conditions.NotExpert());
 
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunHelm>()));
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunChestplate>
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunPants>()));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 4));
 
