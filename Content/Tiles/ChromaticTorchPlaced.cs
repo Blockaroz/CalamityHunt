@@ -144,7 +144,7 @@ namespace CalamityHunt.Content.Tiles
 			}
 
 			ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (long)(uint)i); // Don't remove any casts.
-			Color color = new Color(100, 100, 100, 0);
+			Color color = rainbowGlow;
 			int width = 20;
 			int height = 20;
 			var tile = Main.tile[i, j];
