@@ -105,6 +105,7 @@ namespace CalamityHunt
 
             public static SoundStyle SupremeRestorationBigGulp = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SupremeRestorationBigGulp") { MaxInstances = 0, PitchVariance = 0.05f };
             public static SoundStyle BloatBabyWarbleLoop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/BabyBloatTravelLoop") { MaxInstances = 0, IsLooped = true };
+            public static SoundStyle GoozmoemRay = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmoemFusionRayShoot") { MaxInstances = 0, Volume = 0.8f };
             
             public static SoundStyle GoozmaAuricSoulHeartbeat = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
             public static SoundStyle GoozmaAuricSoulDrone = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaAuricSoulDrone") { MaxInstances = 0, IsLooped = true };
