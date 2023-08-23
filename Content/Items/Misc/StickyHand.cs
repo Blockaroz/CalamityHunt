@@ -4,10 +4,12 @@ using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Misc
@@ -30,7 +32,13 @@ namespace CalamityHunt.Content.Items.Misc
                 Item.rare = r.Type;
             }
         }
-
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            TooltipLine tooltip = new(Mod, "CalamityHunt:HookStats", Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.StickyHandStats").Value);
+            int check = tooltips.IndexOf(tooltips.Find(t => t.Text.Equals("\'It won't break, I promise\'")));
+            if (ModLoader.HasMod("CalamityMod"))
+                tooltips.Insert(check, tooltip);
+        }
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.6f, 0.6f).Value;
