@@ -64,6 +64,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             player.jumpSpeedBoost += 2f;
             player.GetModPlayer<ShogunArmorPlayer>().active = true;
             player.GetDamage(DamageClass.Generic) += 0.18f;
+            player.maxMinions += 5;
         }
     }
 

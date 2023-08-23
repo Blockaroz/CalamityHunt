@@ -694,7 +694,7 @@ Configs: {
 
 SetBonuses.Shogun:
 	'''
-	17% increased damage
+	17% increased damage and +5 max minions
 	{$CommonItemTooltip.FlightAndSlowfall}
 	{$CommonItemTooltip.PressDownToHover}
 	Wearing any wings overrides this flight
