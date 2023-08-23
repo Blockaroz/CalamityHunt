@@ -582,7 +582,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             shineTexture = ModContent.Request<Texture2D>(Texture + "Shine", AssetRequestMode.ImmediateLoad).Value;
             trailTexture = ModContent.Request<Texture2D>(Texture + "Trail", AssetRequestMode.ImmediateLoad).Value;
             coreTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CrystalMine", AssetRequestMode.ImmediateLoad).Value;
-            wingsTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DivineGargooptuarWingsFuckYouInfernumTerminus", AssetRequestMode.ImmediateLoad).Value;
+            wingsTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DivineGargooptuarWingsNevermindSorryDominic", AssetRequestMode.ImmediateLoad).Value;
             dangerTexture = ModContent.Request<Texture2D>(Texture + "Danger", AssetRequestMode.ImmediateLoad).Value;
             dangerShieldTexture = ModContent.Request<Texture2D>(Texture + "DangerShield", AssetRequestMode.ImmediateLoad).Value;
             dangerShieldCrackTexture = ModContent.Request<Texture2D>(Texture + "DangerShieldCracks", AssetRequestMode.ImmediateLoad).Value;
