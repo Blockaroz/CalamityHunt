@@ -93,6 +93,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	GoozmaSoulMusicBox: {
+		DisplayName: Music Box (Chromatic Soul)
+		Tooltip: ""
+	}
+
+	YharonSoulMusicBox: {
+		DisplayName: Music Box (Draconic Soul)
+		Tooltip: ""
+	}
+
 	SlimeMonsoonMonolith: {
 		DisplayName: Slime Monsoon Monolith
 		Tooltip: "'Invoke a fairly large amount of slime'"
@@ -602,6 +612,8 @@ Buffs: {
 Tiles: {
 	GoozmaMusicBoxP1Tile.MapEntry: Music Box
 	GoozmaMusicBoxP2Tile.MapEntry: Music Box
+	GoozmaSoulMusicBoxTile.MapEntry: Music Box
+	YharonSoulMusicBoxTile.MapEntry: Music Box
 }
 
 Config: {

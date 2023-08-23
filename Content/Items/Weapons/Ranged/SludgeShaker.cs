@@ -22,8 +22,8 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 			Item.damage = 2200;
 			Item.noMelee = true;
 			Item.noUseGraphic = true;
-			Item.useAnimation = 30;
-			Item.useTime = 30;
+			Item.useAnimation = 22;
+			Item.useTime = 22;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 10f;
 			Item.UseSound = SoundID.Item1;
