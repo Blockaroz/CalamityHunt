@@ -23,18 +23,19 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
         {
             Item.width = 78;
             Item.height = 72;
-            Item.damage = 1500;
-            Item.DamageType = DamageClass.Melee;
+            Item.damage = 3500;
+            Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 50;
-            Item.useAnimation = 50;
+            Item.useTime = 30;
+            Item.useAnimation = 30;
             Item.channel = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;
             Item.value = Item.sellPrice(gold: 20);
             Item.shoot = ModContent.ProjectileType<ParasanguineHeld>();
             Item.shootSpeed = 5f;
+            Item.autoReuse = true;
             if (ModLoader.HasMod("CalamityMod"))
             {
                 ModRarity r;
