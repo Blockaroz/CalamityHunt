@@ -37,7 +37,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             Item.channel = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;
-            Item.value = Item.sellPrice(gold: 40);
+            Item.value = Item.sellPrice(gold: 20);
             Item.shoot = ModContent.ProjectileType<GoomoireSuck>();
             Item.shootSpeed = 4f;
             if (ModLoader.HasMod("CalamityMod"))

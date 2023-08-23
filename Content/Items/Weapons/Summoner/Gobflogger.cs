@@ -30,6 +30,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             Item.shootSpeed = 5;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.channel = true;
+            Item.value = Item.sellPrice(gold: 20);
             if (ModLoader.HasMod("CalamityMod"))
             {
                 ModRarity r;

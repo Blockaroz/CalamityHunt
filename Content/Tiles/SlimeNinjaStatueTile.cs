@@ -104,7 +104,7 @@ namespace CalamityHunt.Content.Tiles
 
             if (!GoozmaSystem.GoozmaActive)
             {
-                if (GoozmaSystem.FindSlimeStatues(center, top, 10, 5))
+                if (GoozmaSystem.FindSlimeStatues(center, top, 20, 20))
                 {
                     if (player.HasItem(ModContent.ItemType<SludgeFocus>()))
                         GoozmaSystem.GoozmaEgg(new Vector2(center * 16, (top - 1) * 16));

@@ -38,6 +38,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 			Item.shootSpeed = 9.5f;
 			Item.rare = ModContent.RarityType<VioletRarity>();
 			Item.useAmmo = AmmoID.Gel;
+            Item.value = Item.sellPrice(gold: 20);
             Item.ArmorPenetration = 15;
             if (ModLoader.HasMod("CalamityMod"))
             {

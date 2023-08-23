@@ -24,6 +24,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 			Item.shootSpeed = 22f;
 			Item.rare = ModContent.RarityType<VioletRarity>();
 			Item.DamageType = DamageClass.Throwing;
+            Item.value = Item.sellPrice(gold: 20);
 			if (ModLoader.HasMod("CalamityMod"))
             {
 				DamageClass d;

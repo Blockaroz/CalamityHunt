@@ -31,6 +31,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<SludgeShakerHeld>();
 			Item.shootSpeed = 5f;
+            Item.value = Item.sellPrice(gold: 20);
 			Item.rare = ModContent.RarityType<VioletRarity>();
             if (ModLoader.HasMod("CalamityMod"))
             {

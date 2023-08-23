@@ -205,6 +205,8 @@ namespace CalamityHunt.Common.Players
                 {
                     Player.wingsLogic = wingSlot;
                     Player.wingTime = 1;
+                    Player.wingTimeMax = 1;
+                    Player.equippedWings = Player.armor[1];
 
                     if (ModLoader.HasMod("CalamityMod"))
                         ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", Player, true);
@@ -214,8 +216,8 @@ namespace CalamityHunt.Common.Players
                         bool hovering = Player.TryingToHoverDown && !Player.merman;
                         if (hovering)
                         {
-                            Player.runAcceleration += 10;
-                            Player.maxRunSpeed += 10;
+                            Player.runAcceleration += 5;
+                            Player.maxRunSpeed += 5;
 
                             Player.velocity.Y *= 0.7f;
                             if (Player.velocity.Y > -2f && Player.velocity.Y < 1f)
