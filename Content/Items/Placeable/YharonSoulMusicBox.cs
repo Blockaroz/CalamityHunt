@@ -25,8 +25,8 @@ namespace CalamityHunt.Content.Items.Placeable
             {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient(calamity.Find<ModItem>("YharonSoulFragment").Type)
-                    .AddIngredient<ChromaticMass>(15)
+                    .AddIngredient(ItemID.MusicBox)
+                    .AddIngredient(calamity.Find<ModItem>("YharonSoulFragment").Type, 15)
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
