@@ -82,7 +82,7 @@ namespace CalamityHunt.Common.UI
                             Rectangle mouse = new Rectangle((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y, 8, 8);
                             Rectangle value = new Rectangle((int)(pos.X + 21), (int)(pos.Y + 26), 92, 24);
                             if (mouse.Intersects(value))
-                                Main.instance.MouseText("Stress: " + StressString(fillPercent, 1), 0, 0);
+                                Main.instance.MouseText("Stress: " + StressString(fillPercent * 100, 100), 0, 0);
 
                             Rectangle barFrame = new Rectangle(0, stressFrame * (bar.Height / 5), bar.Width, bar.Height / 5);
                             Rectangle fillFrame = new Rectangle(0, (int)(oldPercent / 0.25f)*(barCharge.Height / 5), fillAmount, barCharge.Height / 5);
@@ -102,11 +102,15 @@ namespace CalamityHunt.Common.UI
             float shakeIntensity = Config.Instance.stressShake;
             return new Vector2(Main.rand.NextFloat(0f - shakeIntensity, shakeIntensity), Main.rand.NextFloat(0f - shakeIntensity, shakeIntensity));
         }
-        private static string StressString(float value, float maxValue)
+        private static string StressString(float val, float max)
         {
             StringBuilder stringBuilder = new StringBuilder(32);
-            stringBuilder.Append((100f * value / maxValue).ToString("0.00"));
-            stringBuilder.Append("%");
+            stringBuilder.Append((100f * val / max).ToString("0.00"));
+            stringBuilder.Append("% (");
+            stringBuilder.Append(val.ToString("n2"));
+            stringBuilder.Append(" / ");
+            stringBuilder.Append(max.ToString("n2"));
+            stringBuilder.Append(')');
             return stringBuilder.ToString();
         }
     }
