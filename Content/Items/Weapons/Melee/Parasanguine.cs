@@ -23,7 +23,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
         {
             Item.width = 78;
             Item.height = 72;
-            Item.damage = 3500;
+            Item.damage = 2222;
             Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.useStyle = ItemUseStyleID.Swing;

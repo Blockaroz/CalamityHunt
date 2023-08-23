@@ -38,7 +38,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Projectile.manualDirectionChange = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 12;
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.DamageType = DamageClass.MeleeNoSpeed;
             Projectile.noEnchantmentVisuals = true;
         }
 
@@ -285,12 +285,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             {
                 Projectile.EmitEnchantmentVisualsAt(Projectile.Center + Projectile.rotation.ToRotationVector2() * 100 - new Vector2(50), 100, 100);
 
-                //if (Mode < 2)
-                //{
-                //    WeaponBars.DisplayBar();
-                //    Player.GetModPlayer<GoozmaWeaponsPlayer>().parasolBlood += 10;
-                //    Player.GetModPlayer<GoozmaWeaponsPlayer>().parasolBloodWaitTime += 20;
-                //}
+                if (Mode < 2)
+                {
+                    WeaponBars.DisplayBar();
+                    Player.GetModPlayer<GoozmaWeaponsPlayer>().parasolBlood += 10;
+                    Player.GetModPlayer<GoozmaWeaponsPlayer>().parasolBloodWaitTime += 20;
+                }
             }
 
             if (canKill)
