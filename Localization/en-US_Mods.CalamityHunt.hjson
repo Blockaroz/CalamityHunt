@@ -325,7 +325,7 @@ Items: {
 			Summons a set of 4 slime squires to protect you
 			Using the weapon again will consume a minion slot to upgrade the slimes
 			The slimes can be upgraded a maximum of 4 times
-			Once the slimes have been fully upgraded, a goozmoem will appear that fires fusion rays at enemies
+			Once the slimes have been fully upgraded, a Goozmoem will appear that fires fusion rays at enemies
 			'If only I could wipe away the impurities and make it as beautiful as me'
 			'''
 	}
@@ -396,13 +396,13 @@ Items: {
 		Tooltip:
 			'''
 			Summons a rideable Oily Bubble mount
-			'Now YOU get to be the ninja!'
+			'Feeling like royalty!'
 			'''
 	}
 
 	ChromaticBomb: {
 		DisplayName: Chromatic Bomb
-		Tooltip: Throws out a gravity-defying black hole
+		Tooltip: Throws out a gravity-defying black hole that destroys tiles
 	}
 
 	ChromaticGooztick: {
@@ -411,7 +411,7 @@ Items: {
 	}
 
 	DynamoRod: {
-		DisplayName: Dynamo Rod
+		DisplayName: Dynamo Dynamite
 		Tooltip: Explodes into a colossal tile-destroying black hole
 	}
 
@@ -436,7 +436,7 @@ Items: {
 			'''
 			Releases a barrage of kunai and stars that double up on successful hits
 			Stealth strikes call down a starshower wherever they land
-			'The power of the sun, in the palm of my hand.'
+			'The power of the stars, in the palm of my hand...'
 			'''
 	}
 
@@ -462,7 +462,6 @@ NPCs: {
 	EbonianBehemuck.DisplayName: Ebonian Behemuck
 	StellarGeliath.DisplayName: Stellar Geliath
 	Goozmite.DisplayName: Goozmite
-	PixieCharge.DisplayName: Remove This
 }
 
 Projectiles: {
@@ -525,9 +524,9 @@ Projectiles: {
 	GoomoireSuck.DisplayName: Goomoire Suction
 	SplendorTentacle.DisplayName: Spectacle
 	SlimeCaneGemCounter.DisplayName: Slime Cane Gem Counter
-	ChromaticBombProjectile.DisplayName: Chromatic Bomb Projectile
-	ChromaticGooztickProjectile.DisplayName: Chromatic Gooztick Projectile
-	DynamoRodProjectile.DisplayName: Dynamo Rod Projectile
+	ChromaticBombProjectile.DisplayName: Chromatic Bomb
+	ChromaticGooztickProjectile.DisplayName: Chromatic Gooztick
+	DynamoRodProjectile.DisplayName: Dynamo Dynamite
 	CrimulanClyde.DisplayName: Crimulan Clyde
 	DivinePinky.DisplayName: Divine Pinky
 	EbonianBlinky.DisplayName: Ebonian Blinky
@@ -538,7 +537,7 @@ Projectiles: {
 	CometKunaiStealthProjectile.DisplayName: Comet Kunai
 	CometKunaiStarfall.DisplayName: Comet Kunai
 	Goozmoem.DisplayName: Goozmoem
-	BlinkySpikeBall.DisplayName: Blinky Spike Ball
+	BlinkySpikeBall.DisplayName: Blinky's Spike Ball
 	PinkyLight.DisplayName: Pinky's Light
 	GoozmoemRay.DisplayName: Fusion Ray
 }
@@ -586,7 +585,7 @@ Buffs: {
 
 	PaladinPalanquinBuff: {
 		DisplayName: Paladin Palanquin
-		Description: They're both kinda squishy
+		Description: Almost as good as being in a real slime
 	}
 
 	SplendorJamBuff: {
