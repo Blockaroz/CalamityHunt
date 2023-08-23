@@ -99,9 +99,9 @@ namespace CalamityHunt.Content.Tiles
 			if (tile.TileFrameX < 66)
 			{
 				// Make it emit the following light.
-				r = 0.9f;
-				g = 0.9f;
-				b = 0.9f;
+				r = rainbowGlow.R / 255;
+				g = rainbowGlow.G / 255;
+				b = rainbowGlow.B / 255;
 			}
 		}
 
