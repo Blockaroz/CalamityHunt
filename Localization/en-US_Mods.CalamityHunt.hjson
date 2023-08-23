@@ -134,7 +134,7 @@ Items: {
 		DisplayName: Slippery Shogun Chestplate
 		Tooltip:
 			'''
-			15% increased damage
+			20% increased damage
 			Reduces damage taken by 9% and greatly increases life regeneration
 			Increases max life and mana by 150
 			'''
@@ -144,8 +144,8 @@ Items: {
 		DisplayName: Slippery Shogun Helm
 		Tooltip:
 			'''
-			15% increased damage
-			10% increased critital strike chance
+			20% increased damage
+			15% increased critical strike chance
 			15% increased melee speed
 			'''
 	}
@@ -154,7 +154,7 @@ Items: {
 		DisplayName: Slippery Shogun Pants
 		Tooltip:
 			'''
-			15% increased damage
+			20% increased damage
 			50% increased movement speed 
 			Greatly improved acceleration and maneuverability 
 			'''
@@ -694,7 +694,7 @@ Configs: {
 
 SetBonuses.Shogun:
 	'''
-	17% increased damage
+	17% increased damage and +5 max minions
 	{$CommonItemTooltip.FlightAndSlowfall}
 	{$CommonItemTooltip.PressDownToHover}
 	Wearing any wings overrides this flight

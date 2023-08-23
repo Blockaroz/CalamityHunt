@@ -32,10 +32,12 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             Item.channel = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;
+            Item.autoReuse = true;
             Item.value = Item.sellPrice(gold: 20);
             Item.shoot = ModContent.ProjectileType<ParasanguineHeld>();
-            Item.shootSpeed = 5f;
+            Item.shootSpeed = 8f;
             Item.autoReuse = true;
+
             if (ModLoader.HasMod("CalamityMod"))
             {
                 ModRarity r;
