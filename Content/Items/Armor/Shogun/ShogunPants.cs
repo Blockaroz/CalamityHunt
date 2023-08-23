@@ -30,7 +30,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
 
         public override void UpdateEquip(Player player)
         {
-            player.GetDamage(DamageClass.Generic) += 0.15f;
+            player.GetDamage(DamageClass.Generic) += 0.20f;
             player.moveSpeed += 0.5f;
             player.runAcceleration *= 1.2f;
             player.maxRunSpeed *= 1.2f;
