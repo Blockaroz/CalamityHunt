@@ -176,9 +176,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             LeadingConditionRule classic = new LeadingConditionRule(new Conditions.NotExpert());
 
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunHelm>()));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunChestplate>
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunPants>()));
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunHelm>(), 3));
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunChestplate>(), 3));
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunPants>(), 3));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 4));
 
