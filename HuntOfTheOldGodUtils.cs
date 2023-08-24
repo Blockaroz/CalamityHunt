@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace CalamityHunt
 {
@@ -75,6 +76,26 @@ namespace CalamityHunt
                     return item.type == _expectedType;
 
                 return false;
+            }
+        }
+
+        public static void GetTopLeft(this Tile tile, ref int i, ref int j, out int tileWidth, out int tileHeight)
+        {
+            TileObjectData data = TileObjectData.GetTileData(tile.TileType, 0);
+            tileWidth = data.Width;
+            tileHeight = data.Height;
+
+            i -= (tile.TileFrameX % data.CoordinateFullWidth) / (data.CoordinateWidth + data.CoordinatePadding);
+            int heightY = tile.TileFrameY % data.CoordinateFullHeight; //Get the frame Y but for a single style variant
+
+            for (int l = 0; l < data.CoordinateHeights.Length; l++)
+            {
+                int currentCoordinateHeight = data.CoordinateHeights[l] + data.CoordinatePadding;
+                if (heightY >= currentCoordinateHeight)
+                {
+                    j--;
+                    heightY -= currentCoordinateHeight;
+                }
             }
         }
     }
