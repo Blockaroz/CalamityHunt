@@ -1,6 +1,7 @@
 ﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Accessories;
+using CalamityHunt.Content.Items.Armor.Shogun;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Mounts;
@@ -43,6 +44,9 @@ namespace CalamityHunt.Content.Items.BossBags
         {
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ShogunHelm>(), 3));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ShogunChestplate>(), 3));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ShogunPants>(), 3));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 2));
             itemLoot.Add(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<EbonianMask>(), ModContent.ItemType<DivineMask>(), ModContent.ItemType<CrimulanMask>(), ModContent.ItemType<StellarMask>()));
             itemLoot.Add(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<CometKunai>()));
