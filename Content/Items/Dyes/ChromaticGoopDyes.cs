@@ -230,7 +230,7 @@ namespace CalamityHunt.Content.Items.Dyes
 
         public override void Apply(Entity entity, DrawData? drawData)
         {
-            UseColor(new Color(139, 131, 134));
+            UseColor(new Color(239, 231, 234));
             UseOpacity(0.6f); //Opacity will darken the original color
 
             Goozma.GetGradientMapValues(ChromaticDyeLoader.Palettes[index], out float[] brightnesses, out Vector3[] colors);
