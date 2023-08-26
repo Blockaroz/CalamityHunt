@@ -19,7 +19,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         private static float maxBright;
 
-        public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
+        public static void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors) => GetGradientMapValues(SlimeUtils.GoozColorsVector3, out brightnesses, out colors);
+
+        public static void GetGradientMapValues(Vector3[] gradient, out float[] brightnesses, out Vector3[] colors)
         {
             maxBright = 0.667f;
             brightnesses = new float[10];
@@ -57,7 +59,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
             for (int i = 0; i < 9; i++)
             {
-                colors[1 + (rainbowStartIndex + i) % 9] = SlimeUtils.GoozColorsVector3[i];
+                colors[1 + (rainbowStartIndex + i) % 9] = gradient[i];
             }
 
             //We always want a brightness at index 0 to be the lower bound

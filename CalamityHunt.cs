@@ -28,12 +28,15 @@ namespace CalamityHunt
 	public class CalamityHunt : Mod
 	{
         public static bool UndercoverMode = false;
+        public static Mod Instance;
 
         public override void Load()
         {
             UndercoverMode = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space);
             if (UndercoverMode)
                 SoundEngine.PlaySound(SoundID.Unlock);
+
+            Instance = this;
 
             Ref<Effect> stellarblackhole = new Ref<Effect>(ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceHole", AssetRequestMode.ImmediateLoad).Value);
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"] = new Filter(new ScreenShaderData(stellarblackhole, "BlackHolePass"), EffectPriority.VeryHigh);
