@@ -11,6 +11,7 @@ using CalamityHunt.Content.Items.Consumable;
 using CalamityHunt.Content.Items.Lore;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
+using CalamityHunt.Content.Items.Misc;
 using CalamityHunt.Content.Items.Misc.AuricSouls;
 using CalamityHunt.Content.Items.Mounts;
 using CalamityHunt.Content.Items.Weapons.Magic;
@@ -179,6 +180,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunHelm>(), 3));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunChestplate>(), 3));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunPants>(), 3));
+            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<StickyHand>(), 3));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
             classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 4));
 

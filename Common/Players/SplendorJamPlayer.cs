@@ -111,7 +111,7 @@ namespace CalamityHunt.Common.Players
                     SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Volume = 0.7f }, Player.Center);
                     t75 = true;
                 }
-                if (stressedOut)
+                if (stressedOut && stress > 0)
                 {
                     stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
                     if (!SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))

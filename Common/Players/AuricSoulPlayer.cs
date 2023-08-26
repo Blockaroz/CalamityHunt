@@ -35,7 +35,7 @@ namespace CalamityHunt.Common.Players
             {
                 Player.GetDamage(DamageClass.Generic) += 0.03f;
                 Player.GetCritChance(DamageClass.Generic) += 0.03f;
-                Player.GetKnockback(DamageClass.Generic) += 0.03f;
+                Player.GetKnockback(DamageClass.Summon) += 0.03f;
                 Player.moveSpeed += 0.03f;
                 Player.GetAttackSpeed(DamageClass.Melee) += 0.03f;
                 Player.endurance += 0.01f;
@@ -45,7 +45,7 @@ namespace CalamityHunt.Common.Players
             {
                 Player.GetDamage(DamageClass.Generic) += 0.03f;
                 Player.GetCritChance(DamageClass.Generic) += 0.03f;
-                Player.GetKnockback(DamageClass.Generic) += 0.03f;
+                Player.GetKnockback(DamageClass.Summon) += 0.03f;
                 Player.moveSpeed += 0.03f;
                 Player.GetAttackSpeed(DamageClass.Melee) += 0.03f;
                 Player.endurance += 0.01f;
