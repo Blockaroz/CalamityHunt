@@ -62,11 +62,11 @@ float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0)
     
     
     float4 map = float4(GradientMap(brightness, 10, brightnesses, colors), 1);
-    float4 color = lerp(sampleColor * baseColor, map, baseToMapPercent);
+    float4 color = lerp(sampleColor, map, baseToMapPercent);
     float4 screenColor = Screen(color, map);
     
     color = lerp(color, screenColor, baseToScreenPercent);
-    return color *= sampleColor.a;
+    return color * sampleColor.a * baseColor;
 }
 
 technique Technique1
