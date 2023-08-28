@@ -100,7 +100,7 @@ namespace CalamityHunt.Common.Systems
             bool conditionsMet = false;
             int slimeBoss = -1;
             bool king = true;
-            if (Main.slimeRain && Main.hardMode)
+            if (Main.slimeRain && (Main.hardMode || NPC.downedPlantBoss))
             {
                 foreach (NPC nPC in Main.npc.Where(n => (n.type == NPCID.KingSlime || n.type == NPCID.QueenSlimeBoss) && n.boss && n.active))
                 {
