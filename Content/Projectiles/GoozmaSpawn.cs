@@ -230,6 +230,7 @@ namespace CalamityHunt.Content.Projectiles
                 randomType.Add(Particle.ParticleType<FlyingMireSlime>(), 1f / 5000f);
                 randomType.Add(Particle.ParticleType<FlyingInfernoSlime>(), 1f / 5000f);
                 randomType.Add(Particle.ParticleType<FlyingOilSlime>(), 1f / 5000f);
+                randomType.Add(Particle.ParticleType<FlyingWhiteSlime>(), 1f / 5000f);
             }
 
             if (ModLoader.HasMod("CalamityMod"))
