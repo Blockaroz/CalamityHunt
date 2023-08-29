@@ -33,9 +33,6 @@ namespace CalamityHunt.Common.Graphics
 
         public void Unload()
         {
-            On_Main.CheckMonoliths -= DrawSpaceShapes;
-            On_Main.DoDraw_DrawNPCsOverTiles -= DrawSpace;
-            Main.QueueMainThreadAction(SpaceTarget.Dispose);
         }
 
         public RenderTarget2D SpaceTarget { get; set; }
