@@ -99,8 +99,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
-            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
 
             float wobble = 1f + (float)Math.Sin((Projectile.localAI[0] * 0.3f) % MathHelper.TwoPi) * 0.05f;
 

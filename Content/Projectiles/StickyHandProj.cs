@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Peripherals.RGB;
 using System;
 using System.Collections.Generic;
+using CalamityHunt.Common.Utilities;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -285,11 +287,11 @@ namespace CalamityHunt.Content.Projectiles
             return vanilla;
         }
 
-        public static Texture2D chainTexture;
+        public static Asset<Texture2D> chainTexture;
 
         public override void Load()
         {
-            chainTexture = new TextureAsset(Texture + "Chain");
+            chainTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Chain");
         }
 
         public Rope rope;
@@ -313,7 +315,7 @@ namespace CalamityHunt.Content.Projectiles
                 Rectangle frame = texture.Frame(1, 2, 0, Projectile.frame);
                 SpriteEffects effects = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-                Rectangle chainFrame = chainTexture.Frame();
+                Rectangle chainFrame = chainTexture.Value.Frame();
 
                 Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 120);
 
@@ -321,10 +323,10 @@ namespace CalamityHunt.Content.Projectiles
                 {
                     float rotation = points[i].AngleTo(points[i + 1]);
                     float thinning = 1f - MathF.Sin((float)i / points.Count * MathHelper.Pi) * 0.6f * Utils.GetLerpValue(0, 400, Projectile.Distance(player.MountedCenter) * 0.9f, true);
-                    Vector2 stretch = new Vector2(Projectile.scale * thinning, points[i].Distance(points[i + 1]) / (chainTexture.Height - 4));
+                    Vector2 stretch = new Vector2(Projectile.scale * thinning, points[i].Distance(points[i + 1]) / (chainTexture.Height() - 4));
                     Color chainGlowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt((1f - (float)(i + 3) / points.Count) * 70 + Main.GlobalTimeWrappedHourly * 120);
 
-                    DrawData drawData = new DrawData(chainTexture, points[i] - Main.screenPosition, chainFrame, chainGlowColor, rotation + MathHelper.PiOver2, chainFrame.Size() * new Vector2(0.5f, 1f), stretch, 0, 0);
+                    DrawData drawData = new DrawData(chainTexture.Value, points[i] - Main.screenPosition, chainFrame, chainGlowColor, rotation + MathHelper.PiOver2, chainFrame.Size() * new Vector2(0.5f, 1f), stretch, 0, 0);
                     drawData.shader = player.cGrapple;
                     Main.EntitySpriteDraw(drawData);
                 }

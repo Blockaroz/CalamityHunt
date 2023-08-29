@@ -593,8 +593,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             Texture2D texture = TextureAssets.Npc[Type].Value;
             Texture2D sparkle = TextureAssets.Extra[89].Value;
-            Texture2D glow = AssetDirectory.Textures.GlowBig;
-            Texture2D ring = AssetDirectory.Textures.GlowRing;
+            Texture2D glow = AssetDirectory.Textures.GlowBig.Value;
+            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
 
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
             Rectangle wingRect = wingsTexture.Frame(1, 4, 0, wingFrame);

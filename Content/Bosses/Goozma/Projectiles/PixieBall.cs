@@ -3,9 +3,9 @@ using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using ReLogic.Utilities;
 using System;
 using System.Linq;
+using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -219,23 +219,23 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             return true;
         }
 
-        public static Texture2D beachBallOverlay;
-        public static Texture2D hitMeSign;
-        public static Texture2D hitMeHand;
+        public static Asset<Texture2D> beachBallOverlay;
+        public static Asset<Texture2D> hitMeSign;
+        public static Asset<Texture2D> hitMeHand;
 
         public override void Load()
         {
-            beachBallOverlay = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieBeachBall");
-            hitMeSign = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeSign");
-            hitMeHand = new TextureAsset($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeHand");
+            beachBallOverlay = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieBeachBall");
+            hitMeSign = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeSign");
+            hitMeHand = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeHand");
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D sparkle = TextureAssets.Extra[98].Value;
-            Texture2D ring = AssetDirectory.Textures.GlowRing;
-            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
 
             Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
             SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -250,7 +250,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Color overlayColor = bloomColor * 0.6f;
             overlayColor.A = 100;
-            Main.EntitySpriteDraw(beachBallOverlay, Projectile.Center - Main.screenPosition, beachBallOverlay.Frame(), overlayColor * 0.1f, Projectile.rotation * 0.7f, beachBallOverlay.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
+            Main.EntitySpriteDraw(beachBallOverlay.Value, Projectile.Center - Main.screenPosition, beachBallOverlay.Value.Frame(), overlayColor * 0.1f, Projectile.rotation * 0.7f, beachBallOverlay.Value.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
 
             float lensAngle = Projectile.AngleFrom(Main.LocalPlayer.Center) + MathHelper.PiOver2;
             float lensPower = 1f + Projectile.Distance(Main.LocalPlayer.Center) * 0.003f;
@@ -342,23 +342,23 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             float signScale = handScale * Utils.GetLerpValue(40, 60, Time, true);
             Vector2 signPosition = Projectile.Center - Main.screenPosition - new Vector2(0, 100 * Projectile.scale);
 
-            Rectangle hitMeFrame = hitMeSign.Frame(1, 8, 0, signFrame);
+            Rectangle hitMeFrame = hitMeSign.Value.Frame(1, 8, 0, signFrame);
 
-            Main.EntitySpriteDraw(hitMeSign, signPosition, hitMeFrame, new Color(255, 255, 255, 128) * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
+            Main.EntitySpriteDraw(hitMeSign.Value, signPosition, hitMeFrame, new Color(255, 255, 255, 128) * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
             for (int i = 0; i < 8; i++)
             {
                 Vector2 offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
-                Main.EntitySpriteDraw(hitMeSign, signPosition + offset, hitMeFrame, bloomColor * influence * wobble, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
+                Main.EntitySpriteDraw(hitMeSign.Value, signPosition + offset, hitMeFrame, bloomColor * influence * wobble, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
             }
 
-            Rectangle pointerFrame = hitMeHand.Frame(1, 6, 0, handFrame);
+            Rectangle pointerFrame = hitMeHand.Value.Frame(1, 6, 0, handFrame);
 
             SpriteEffects handEffect = handDir < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Main.EntitySpriteDraw(hitMeHand, handPosition, pointerFrame, new Color(255, 255, 255, 128) * influence, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
+            Main.EntitySpriteDraw(hitMeHand.Value, handPosition, pointerFrame, new Color(255, 255, 255, 128) * influence, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
             for (int i = 0; i < 8; i++)
             {
                 Vector2 offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
-                Main.EntitySpriteDraw(hitMeHand, handPosition + offset, pointerFrame, bloomColor * influence * wobble, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
+                Main.EntitySpriteDraw(hitMeHand.Value, handPosition + offset, pointerFrame, bloomColor * influence * wobble, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
             }
         }
     }

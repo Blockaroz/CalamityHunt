@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -50,17 +51,17 @@ namespace CalamityHunt.Content.Particles
                 Active = false;
         }
 
-        public static Texture2D texture;
+        public static Asset<Texture2D> texture;
 
         public override void Load()
         {
-            texture = new TextureAsset(Texture);
+            texture = AssetUtilities.RequestImmediate<Texture2D>(Texture);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D glow = AssetDirectory.Textures.Glow;
-            Rectangle rect = texture.Frame(1, 3, 0, frame);
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Rectangle rect = texture.Value.Frame(1, 3, 0, frame);
             Color drawColor = color;
             drawColor.A /= 3;
             Color glowColor = color * 0.2f;
@@ -68,11 +69,11 @@ namespace CalamityHunt.Content.Particles
             Color whiteColor = Color.White;
             whiteColor.A = 0;
 
-            spriteBatch.Draw(texture, position - Main.screenPosition, rect, drawColor, rotation, rect.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, rect, drawColor, rotation, rect.Size() * 0.5f, scale, 0, 0);
             spriteBatch.Draw(glow, position - Main.screenPosition, null, glowColor * 0.5f, rotation, glow.Size() * 0.5f, scale * 0.5f, 0, 0);
 
             float innerGlowScale = 0.7f - Utils.GetLerpValue(0f, 1f, life, true) * 0.2f;
-            spriteBatch.Draw(texture, position - Main.screenPosition, rect, whiteColor, rotation, rect.Size() * 0.5f, scale * innerGlowScale * 0.7f, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, rect, whiteColor, rotation, rect.Size() * 0.5f, scale * innerGlowScale * 0.7f, 0, 0);
         }
     }
 }

@@ -815,8 +815,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = TextureAssets.Npc[Type].Value;
-            Texture2D flash = AssetDirectory.Textures.Sparkle;
-            Texture2D bloom = AssetDirectory.Textures.GlowBig;
+            Texture2D flash = AssetDirectory.Textures.Sparkle.Value;
+            Texture2D bloom = AssetDirectory.Textures.GlowBig.Value;
 
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
             
@@ -884,7 +884,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time < 40 + cosStompWaitTime)
                     {
-                        Texture2D ray = AssetDirectory.Textures.GlowRay;
+                        Texture2D ray = AssetDirectory.Textures.GlowRay.Value;
                         float rayPower = Utils.GetLerpValue(50, 40 + cosStompWaitTime, Time, true);
                         Color rayColor = Color.Lerp(new Color(80, 20, 230), new Color(200, 80, 30), rayPower);
                         rayColor.A = 0;
@@ -905,13 +905,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time > 570 && Time < 680)
                     {
-                        Texture2D swirlingRock0 = AssetDirectory.Textures.Extras.SwirlingRocks[0];
-                        Texture2D swirlingRock1 = AssetDirectory.Textures.Extras.SwirlingRocks[1];
+                        Texture2D swirlingRock0 = AssetDirectory.Textures.Extras.SwirlingRocks[0].Value;
+                        Texture2D swirlingRock1 = AssetDirectory.Textures.Extras.SwirlingRocks[1].Value;
                         spriteBatch.Draw(swirlingRock0, NPC.Center - screenPos, swirlingRock0.Frame(), Color.White, Main.GlobalTimeWrappedHourly * 1.5f, swirlingRock0.Size() * 0.5f, NPC.scale * 0.25f, 0, 0);
                         spriteBatch.Draw(swirlingRock1, NPC.Center - screenPos, swirlingRock1.Frame(), Color.White, Main.GlobalTimeWrappedHourly * 1.8f, swirlingRock1.Size() * 0.5f, NPC.scale * 0.25f, 0, 0);
                     }
 
-                    Texture2D shockRing = AssetDirectory.Textures.ShockRing;
+                    Texture2D shockRing = AssetDirectory.Textures.ShockRing.Value;
 
                     discScale = oldDiscScale * ((float)Math.Cbrt(Utils.GetLerpValue(70, 0, Time, true) + Utils.GetLerpValue(540, 580, Time, true)) + Utils.GetLerpValue(600, 700, Time, true) * Utils.GetLerpValue(640, 610, Time, true));
                     if (Time < 680)

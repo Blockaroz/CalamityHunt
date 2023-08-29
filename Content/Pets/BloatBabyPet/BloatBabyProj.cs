@@ -130,8 +130,8 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D glow = AssetDirectory.Textures.Glow;
-            Texture2D ring = AssetDirectory.Textures.GlowRing;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
             SpriteEffects flip = SpriteEffects.None;// Projectile.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
@@ -168,7 +168,7 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
 
         public void DrawTentacles(Color lightColor, Color growColor)
         {
-            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
 
             if (oldVels == null)
             {

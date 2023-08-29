@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Linq;
+using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -209,15 +210,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             windSoundLoop.Update(() => Projectile.Center, () => Projectile.ai[2] * 0.5f, () => Projectile.ai[2] - 0.9f);
         }
 
-        public static Texture2D ribbonTexture;
-        public static Texture2D laserTexture;
-        public static Texture2D laserTexture2;
+        public static Asset<Texture2D> ribbonTexture;
+        public static Asset<Texture2D> laserTexture;
+        public static Asset<Texture2D> laserTexture2;
 
         public override void Load()
         {
-            ribbonTexture = new TextureAsset(Texture + "Ribbon");
-            laserTexture = new TextureAsset(Texture + "Laser" + 0);
-            laserTexture2 = new TextureAsset(Texture + "Laser" + 1);
+            ribbonTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Ribbon");
+            laserTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Laser" + 0);
+            laserTexture2 = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Laser" + 1);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -248,10 +249,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                         style = 1;
                     if (i > ribbonPoints.Length - 3)
                         style = 2;
-                    Rectangle frame = ribbonTexture.Frame(1, 3, 0, style);
+                    Rectangle frame = ribbonTexture.Value.Frame(1, 3, 0, style);
                     float rotation = ribbonPoints[i].AngleTo(ribbonPoints[i + 1]);
                     Vector2 stretch = new Vector2(0.5f + Utils.GetLerpValue(0, ribbonPoints.Length - 2, i, true) * 0.4f, ribbonPoints[i].Distance(ribbonPoints[i + 1]) / (frame.Height - 5));
-                    Main.EntitySpriteDraw(ribbonTexture, ribbonPoints[i] - Main.screenPosition, frame, lightColor.MultiplyRGBA(Color.Lerp(Color.DimGray, Color.White, (float)i / ribbonPoints.Length)), rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
+                    Main.EntitySpriteDraw(ribbonTexture.Value, ribbonPoints[i] - Main.screenPosition, frame, lightColor.MultiplyRGBA(Color.Lerp(Color.DimGray, Color.White, (float)i / ribbonPoints.Length)), rotation - MathHelper.PiOver2, frame.Size() * new Vector2(0.5f, 0f), stretch, 0, 0);
                 }
             }
         }
@@ -261,7 +262,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         public void DrawLaserCone()
         {
             Vector2 sparklePos = Projectile.Center + new Vector2(6, 0).RotatedBy(Projectile.rotation);
-            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
             Color sparkleColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time + 10);
             sparkleColor.A = 0;
 
@@ -283,8 +284,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
             Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoomoireSuckEffect", AssetRequestMode.ImmediateLoad).Value;
             lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-            lightningEffect.Parameters["uTexture0"].SetValue(laserTexture);
-            lightningEffect.Parameters["uTexture1"].SetValue(laserTexture2);
+            lightningEffect.Parameters["uTexture0"].SetValue(laserTexture.Value);
+            lightningEffect.Parameters["uTexture1"].SetValue(laserTexture2.Value);
             lightningEffect.Parameters["uTime"].SetValue(Projectile.localAI[0] * 0.021f);
             lightningEffect.Parameters["uFreq"].SetValue(1f);
             lightningEffect.Parameters["uMiddleBrightness"].SetValue(1.3f);

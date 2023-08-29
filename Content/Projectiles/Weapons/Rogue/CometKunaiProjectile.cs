@@ -192,7 +192,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 effect.Parameters["uColor"].SetValue(new Color(0, 80, 255, 0).ToVector4());
                 effect.Parameters["uInnerColor"].SetValue(new Color(140, 255, 255, 50).ToVector4());
                 effect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-                effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.SlimeMonsoon.LightningGlow.Texture);
+                effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.SlimeMonsoon.LightningGlow.Value);
                 effect.Parameters["uTexture2"].SetValue(TextureAssets.Extra[189].Value);
                 effect.Parameters["uTime"].SetValue(-Main.GlobalTimeWrappedHourly * 2);
                 effect.CurrentTechnique.Passes[0].Apply();

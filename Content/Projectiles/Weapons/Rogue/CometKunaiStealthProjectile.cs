@@ -154,8 +154,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D flame = AssetDirectory.Textures.Extras.CometKunaiFlame;
-            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D flame = AssetDirectory.Textures.Extras.CometKunaiFlame.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
             Rectangle fireFrame = flame.Frame(1, 3, 0, Projectile.frame);
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(0, 70, 100, 0), Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.55f), Projectile.scale * 1.3f, 0, 0);

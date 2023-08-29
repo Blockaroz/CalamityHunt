@@ -158,7 +158,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else
                 texture = ModContent.Request<Texture2D>(Texture + "_Rock").Value;
 
-            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
             Rectangle frame = texture.Frame(1, 3, 0, (int)Size);
             float power = (float)Math.Sqrt(Utils.GetLerpValue(0, 30, Projectile.localAI[0], true));
 

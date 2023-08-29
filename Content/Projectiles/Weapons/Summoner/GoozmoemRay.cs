@@ -22,7 +22,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 {
     public class GoozmoemRay : ModProjectile
     {
-        public override string Texture => AssetDirectory.Textures.Sparkle;
+        public override string Texture => $"{Mod.Name}/Assets/Textures/SharpSpark";
 
         public override void SetStaticDefaults()
         {
@@ -115,10 +115,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = AssetDirectory.Textures.Extras.FusionRay[0];
-            Texture2D textureBits = AssetDirectory.Textures.Extras.FusionRay[1];
-            Texture2D textureGlow = AssetDirectory.Textures.Extras.FusionRay[2];
-            Texture2D textureSecond = AssetDirectory.Textures.Extras.FusionRay[3];
+            Texture2D texture = AssetDirectory.Textures.Extras.FusionRay[0].Value;
+            Texture2D textureBits = AssetDirectory.Textures.Extras.FusionRay[1].Value;
+            Texture2D textureGlow = AssetDirectory.Textures.Extras.FusionRay[2].Value;
+            Texture2D textureSecond = AssetDirectory.Textures.Extras.FusionRay[3].Value;
 
             Color startColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             startColor.A = 0;
