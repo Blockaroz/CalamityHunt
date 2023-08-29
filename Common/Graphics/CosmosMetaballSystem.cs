@@ -33,9 +33,6 @@ namespace CalamityHunt.Common.Graphics
 
         public void Unload()
         {
-            On_Main.CheckMonoliths -= DrawSpaceShapes;
-            On_Main.DoDraw_DrawNPCsOverTiles -= DrawSpace;
-            Main.QueueMainThreadAction(SpaceTarget.Dispose);
         }
 
         public RenderTarget2D SpaceTarget { get; set; }
@@ -88,7 +85,7 @@ namespace CalamityHunt.Common.Graphics
             foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is BlackHoleBlender))
             {
                 BlackHoleBlender blender = projectile.ModProjectile as BlackHoleBlender;
-                Texture2D bloom = AssetDirectory.Textures.GlowBig;
+                Texture2D bloom = AssetDirectory.Textures.GlowBig.Value;
 
                 absorbEffect.Parameters["uTime"].SetValue(projectile.localAI[0] * 0.002f % 1f);
                 absorbEffect.Parameters["uSize"].SetValue(projectile.scale * new Vector2(8f));
@@ -144,7 +141,7 @@ namespace CalamityHunt.Common.Graphics
             absorbEffect.Parameters["uTexture0"].SetValue(spaceNoise[0]);
             absorbEffect.Parameters["uTexture1"].SetValue(spaceNoise[1]);
 
-            Texture2D bloom = AssetDirectory.Textures.GlowBig;
+            Texture2D bloom = AssetDirectory.Textures.GlowBig.Value;
 
             foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is BlackHoleBlender))
             {

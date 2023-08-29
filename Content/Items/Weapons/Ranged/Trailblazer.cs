@@ -11,6 +11,8 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using CalamityHunt.Common.Utilities;
+using ReLogic.Content;
 
 namespace CalamityHunt.Content.Items.Weapons.Ranged
 {
@@ -60,19 +62,19 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             return true;
         }
 
-        public static Texture2D backTexture;
-        public static Texture2D backSwirlTexture;
-        public static Texture2D backAntennaTexture;
-        public static Texture2D strapTexture;
-        public static Texture2D goggleTexture;
+        public static Asset<Texture2D> backTexture;
+        public static Asset<Texture2D> backSwirlTexture;
+        public static Asset<Texture2D> backAntennaTexture;
+        public static Asset<Texture2D> strapTexture;
+        public static Asset<Texture2D> goggleTexture;
 
         public override void Load()
         {
-            backTexture = new TextureAsset(Texture + "_Back");
-            backSwirlTexture = new TextureAsset(Texture + "_BackSwirl");
-            backAntennaTexture = new TextureAsset(Texture + "_BackAntenna");
-            strapTexture = new TextureAsset(Texture + "_Strap");
-            goggleTexture = new TextureAsset(Texture + "_Goggles");
+            backTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "_Back");
+            backSwirlTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "_BackSwirl");
+            backAntennaTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "_BackAntenna");
+            strapTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "_Strap");
+            goggleTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "_Goggles");
         }
 
         public override void AddRecipes()
@@ -112,9 +114,9 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
-            Texture2D texture = Trailblazer.backTexture;
-            Texture2D swirlTexture = Trailblazer.backSwirlTexture;
-            Texture2D antennaTexture = Trailblazer.backAntennaTexture;
+            Texture2D texture = Trailblazer.backTexture.Value;
+            Texture2D swirlTexture = Trailblazer.backSwirlTexture.Value;
+            Texture2D antennaTexture = Trailblazer.backAntennaTexture.Value;
 
             Vector2 vec5 = drawInfo.BodyPosition() + new Vector2(-16 * drawInfo.drawPlayer.direction, -1 * drawInfo.drawPlayer.gravDir);
             vec5 = vec5.Floor();
@@ -166,7 +168,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
-            Texture2D texture = Trailblazer.strapTexture;
+            Texture2D texture = Trailblazer.strapTexture.Value;
 
             Vector2 vec5 = drawInfo.BodyPosition();//drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f);
             vec5 = vec5.Floor();
@@ -186,7 +188,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
-            Texture2D goggleTexture = Trailblazer.goggleTexture;
+            Texture2D goggleTexture = Trailblazer.goggleTexture.Value;
 
             Vector2 vec5 = drawInfo.HeadPosition();
             vec5 = vec5.Floor();

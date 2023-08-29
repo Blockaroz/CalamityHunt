@@ -84,7 +84,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
             Rectangle half = texture.Frame(1, 2, 0, 0);
             Rectangle glowHalf = glow.Frame(1, 2, 0, 0);
 

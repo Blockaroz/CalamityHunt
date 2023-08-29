@@ -171,8 +171,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D glow = AssetDirectory.Textures.Glow;
-            Texture2D ring = AssetDirectory.Textures.GlowRing;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
             Vector2 squishFactor = new Vector2(1f - Projectile.velocity.Length() * 0.0045f, 1f + Projectile.velocity.Length() * 0.0075f);
 
             Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
@@ -220,7 +220,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public void DrawTentacles(Color lightColor, Color growColor)
         {
-            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
 
             float tentaCount = 2;
             for (int j = 0; j < tentaCount; j++)

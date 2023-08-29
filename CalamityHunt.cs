@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
+using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
@@ -19,6 +20,7 @@ using Terraria.ModLoader;
 using MonoMod.RuntimeDetour;
 using MonoMod.Cil;
 using Mono.Cecil.Cil;
+using ReLogic.Content.Sources;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
@@ -48,24 +50,25 @@ namespace CalamityHunt
 
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonBackground();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
-
-            bool exists = ModContent.RequestIfExists($"{nameof(CalamityHunt)}/Charcoal", out Asset<Texture2D> asset, AssetRequestMode.ImmediateLoad);
-            if (exists)
+            if (!Main.dedServer)
             {
-                Vector2 keySize = new Vector2(283, 238);
-                SurfaceFormat keyFormat = SurfaceFormat.Color;
-                int keyLevelCount = 1;
+                bool exists = ModContent.RequestIfExists($"{nameof(CalamityHunt)}/Charcoal", out Asset<Texture2D> asset, AssetRequestMode.ImmediateLoad);
+                if (exists)
+                {
+                    Vector2 keySize = new Vector2(283, 238);
+                    SurfaceFormat keyFormat = SurfaceFormat.Color;
+                    int keyLevelCount = 1;
 
-                Texture2D texture = asset.Value;
-                bool checkSize = texture.Width != keySize.X || texture.Height != keySize.Y;
-                bool checkFormat = texture.Format != keyFormat;
-                bool checkLevels = texture.LevelCount != keyLevelCount;
-                if (checkSize || checkFormat || checkLevels)
+                    Texture2D texture = asset.Value;
+                    bool checkSize = texture.Width != keySize.X || texture.Height != keySize.Y;
+                    bool checkFormat = texture.Format != keyFormat;
+                    bool checkLevels = texture.LevelCount != keyLevelCount;
+                    if (checkSize || checkFormat || checkLevels)
+                        throw new DataMisalignedException();
+                }
+                else
                     throw new DataMisalignedException();
             }
-            else
-                throw new DataMisalignedException();
-
             //Hide the mod from /modlist
             Type modlistCommand = typeof(ModCommand).Assembly.GetType("Terraria.ModLoader.Default.ModlistCommand");
             if (modlistCommand != null)
@@ -216,5 +219,12 @@ namespace CalamityHunt
             }
             return final;
         };
+
+        public override IContentSource CreateDefaultContentSource()
+        {
+            var source = new SmartContentSource(base.CreateDefaultContentSource());
+            source.AddDirectoryRedirect("Content", "Assets/Textures");
+            return source;
+        }
     }
 }

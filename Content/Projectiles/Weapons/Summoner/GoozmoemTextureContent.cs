@@ -25,7 +25,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
         {
-            Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall;
+            Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall.Value;
             PrepareARenderTarget_AndListenToEvents(ref _target, device, width, height, RenderTargetUsage.PreserveContents);
             device.SetRenderTarget(_target);
             device.Clear(Color.Transparent);
@@ -105,7 +105,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
         {
-            Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall;
+            Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall.Value;
             PrepareARenderTarget_AndListenToEvents(ref _target, device, width, height, RenderTargetUsage.PreserveContents);
             device.SetRenderTarget(_target);
             device.Clear(Color.Transparent);

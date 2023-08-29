@@ -1,14 +1,11 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -103,18 +100,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             return false;
         }
 
-        public static Texture2D ballTexture = new TextureAsset();
-
-        public override void Load()
-        {
-            ballTexture = ModContent.Request<Texture2D>(Texture.Replace("Laser", "Ball"), AssetRequestMode.ImmediateLoad).Value;
-        }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;          
-            Texture2D bloom = AssetDirectory.Textures.Glow;
-            Texture2D ray = AssetDirectory.Textures.GlowRay;
+            Texture2D bloom = AssetDirectory.Textures.Glow.Value;
+            Texture2D ray = AssetDirectory.Textures.GlowRay.Value;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             glowColor.A = 0;

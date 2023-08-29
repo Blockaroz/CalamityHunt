@@ -339,7 +339,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 return false;
 
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D swingTexture = AssetDirectory.Textures.SwordSwing.Basic;
+            Texture2D swingTexture = AssetDirectory.Textures.SwordSwing.Basic.Value;
 
             Vector2 endOrigin = new Vector2(0.35f, 0.5f + 0.3f * Projectile.spriteDirection);
             Vector2 origin = endOrigin;
@@ -418,7 +418,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public void DrawSpark(Vector2 position, Color color, float scale)
         {
-            Texture2D texture = AssetDirectory.Textures.Sparkle;
+            Texture2D texture = AssetDirectory.Textures.Sparkle.Value;
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), color, MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(1f, 2f) * scale, 0, 0);
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), color, -MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(1f, 2f) * scale, 0, 0);
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, texture.Frame(), new Color(200, 200, 200, 0), MathHelper.PiOver4, texture.Size() * 0.5f, new Vector2(0.5f, 1f) * scale, 0, 0);

@@ -191,7 +191,7 @@ namespace CalamityHunt.Content.Mounts
                         float xS = Math.Abs(drawPlayer.velocity.X * 0.01f) * (1f - yS * 0.6f);
                         Vector2 squish = new Vector2(1f - yS + xS, 1f + yS - xS) * drawScale;
 
-                        Rectangle ballFrame = AssetDirectory.Textures.Extras.PaladinPalanquinBall.Texture.Frame(3, 1, data.ballFrame, 0);
+                        Rectangle ballFrame = AssetDirectory.Textures.Extras.PaladinPalanquinBall.Value.Frame(3, 1, data.ballFrame, 0);
                         ballTextureContent.frame = ballFrame;
                         ballTextureContent.rotation = data.rotation;
                         ballTextureContent.Request();
@@ -213,7 +213,7 @@ namespace CalamityHunt.Content.Mounts
 
                         if (data.ballFrame == 2)
                         {
-                            Texture2D wingTexture = AssetDirectory.Textures.Extras.PaladinPalanquinWings;
+                            Texture2D wingTexture = AssetDirectory.Textures.Extras.PaladinPalanquinWings.Value;
                             Rectangle wingFrame = wingTexture.Frame(1, 4, 0, data.wingFrame);
 
                             DrawData wingData = new DrawData(wingTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(-24 * drawPlayer.direction, MountData.heightBoost - 8).RotatedBy(data.tilt) * squish - Main.screenPosition, wingFrame, drawColor, data.tilt, wingFrame.Size() * 0.5f, drawScale, spriteEffects, 0);

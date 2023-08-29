@@ -334,8 +334,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = TextureAssets.Npc[Type].Value;
-            Texture2D glow = AssetDirectory.Textures.Glow;
-            Texture2D flare = AssetDirectory.Textures.Sparkle;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D flare = AssetDirectory.Textures.Sparkle.Value;
 
             SpriteEffects spriteEffect = NPC.direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
