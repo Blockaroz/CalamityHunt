@@ -50,24 +50,25 @@ namespace CalamityHunt
 
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonBackground();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
-
-            bool exists = ModContent.RequestIfExists($"{nameof(CalamityHunt)}/Charcoal", out Asset<Texture2D> asset, AssetRequestMode.ImmediateLoad);
-            if (exists)
+            if (!Main.dedServer)
             {
-                Vector2 keySize = new Vector2(283, 238);
-                SurfaceFormat keyFormat = SurfaceFormat.Color;
-                int keyLevelCount = 1;
+                bool exists = ModContent.RequestIfExists($"{nameof(CalamityHunt)}/Charcoal", out Asset<Texture2D> asset, AssetRequestMode.ImmediateLoad);
+                if (exists)
+                {
+                    Vector2 keySize = new Vector2(283, 238);
+                    SurfaceFormat keyFormat = SurfaceFormat.Color;
+                    int keyLevelCount = 1;
 
-                Texture2D texture = asset.Value;
-                bool checkSize = texture.Width != keySize.X || texture.Height != keySize.Y;
-                bool checkFormat = texture.Format != keyFormat;
-                bool checkLevels = texture.LevelCount != keyLevelCount;
-                if (checkSize || checkFormat || checkLevels)
+                    Texture2D texture = asset.Value;
+                    bool checkSize = texture.Width != keySize.X || texture.Height != keySize.Y;
+                    bool checkFormat = texture.Format != keyFormat;
+                    bool checkLevels = texture.LevelCount != keyLevelCount;
+                    if (checkSize || checkFormat || checkLevels)
+                        throw new DataMisalignedException();
+                }
+                else
                     throw new DataMisalignedException();
             }
-            else
-                throw new DataMisalignedException();
-
             //Hide the mod from /modlist
             Type modlistCommand = typeof(ModCommand).Assembly.GetType("Terraria.ModLoader.Default.ModlistCommand");
             if (modlistCommand != null)
