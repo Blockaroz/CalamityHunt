@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ReLogic.Content;
+﻿using ReLogic.Content;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Utilities;
@@ -10,51 +8,11 @@ namespace CalamityHunt.Common.Utilities;
 /// </summary>
 public static class AssetUtilities
 {
-    /// <summary>
-    ///     Helper system which provides some instanced data.
-    /// </summary>
-    private class AssetUtilitiesSystem : ModSystem
-    {
-        internal class AssetManager<T> : IDisposable where T : class
-        {
-            private Dictionary<string, Asset<T>> _assets = new();
-
-            public Asset<T> GetOrRequestAsset(string path, AssetRequestMode requestMode)
-            {
-                if (_assets.TryGetValue(path, out var asset))
-                    return asset;
-
-                return _assets[path] = ModContent.Request<T>(path, requestMode);
-            }
-
-            public void Dispose()
-            {
-                _assets.Clear();
-            }
-        }
-
-        private Dictionary<Type, IDisposable> _assetManagers = new();
-
-        public AssetManager<T> GetAssetManager<T>() where T : class
-        {
-            if (_assetManagers.TryGetValue(typeof(T), out var manager))
-                return (AssetManager<T>) manager;
-
-            manager = new AssetManager<T>();
-            return (AssetManager<T>) (_assetManagers[typeof(T)] = manager);
-        }
-
-        public override void Unload()
-        {
-            base.Unload();
-
-            foreach (var manager in _assetManagers.Values)
-                manager.Dispose();
-
-            _assetManagers.Clear();
-        }
-    }
-
+    // These are essentially just calls to ModContent.Request, but they were
+    // originally made for a more sophisticated asset loading system. I'd like
+    // to keep these methods in use in the event a use arises for them again.
+    // - Tomat
+    
     /// <summary>
     ///     Makes a cacheable request for an asset.
     /// </summary>
@@ -73,10 +31,10 @@ public static class AssetUtilities
 
     private static Asset<T> Request<T>(string path, AssetRequestMode requestMode) where T : class
     {
-        // In the event that this system for some reason has not yet loaded, we
+        /*// In the event that this system for some reason has not yet loaded, we
         // can simply handle it like this.
         if (ModContent.GetInstance<AssetUtilitiesSystem>() is { } system)
-            return system.GetAssetManager<T>().GetOrRequestAsset(path, requestMode);
+            return system.GetAssetManager<T>().GetOrRequestAsset(path, requestMode);*/
 
         return ModContent.Request<T>(path, requestMode);
     }
