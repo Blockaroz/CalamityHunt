@@ -1,4 +1,4 @@
-using CalamityHunt.Common.Graphics.SlimeMonsoon;
+﻿using CalamityHunt.Common.Graphics.SlimeMonsoon;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Misc;
@@ -50,7 +50,7 @@ namespace CalamityHunt
 
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonBackground();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
-            if (!Main.dedServer)
+            if (!Main.dedServ)
             {
                 bool exists = ModContent.RequestIfExists($"{nameof(CalamityHunt)}/Charcoal", out Asset<Texture2D> asset, AssetRequestMode.ImmediateLoad);
                 if (exists)
