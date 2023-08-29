@@ -190,12 +190,12 @@ namespace CalamityHunt.Content.Items.Dyes
             Highlight ??= ModContent.Request<Texture2D>(Texture + "Highlight");
 
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, GetShader(), Main.UIScaleMatrix);
+            spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, GetShader(), Main.UIScaleMatrix);
 
             spriteBatch.Draw(Overlay.Value, position, frame, drawColor, 0f, origin, scale, 0, 0);
 
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
 
             spriteBatch.Draw(Highlight.Value, position, frame, drawColor, 0f, origin, scale, 0, 0);
         }
