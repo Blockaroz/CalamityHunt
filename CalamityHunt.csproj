@@ -45,8 +45,4 @@
       <HintPath>lib\ParticleEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Sounds\SlimeMonsoon\" />
-    <Folder Include="Common\Bestiary\" />
-  </ItemGroup>
 </Project>
