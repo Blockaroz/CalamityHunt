@@ -23,6 +23,8 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
     {
         public static Texture2D chainTexture;
 
+		public override bool IsLoadingEnabled(Mod mod) => false;
+
         public override void Load()
         {
             chainTexture = ModContent.Request<Texture2D>(Texture + "Chain", AssetRequestMode.ImmediateLoad).Value;
