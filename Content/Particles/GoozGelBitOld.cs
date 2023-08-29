@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -81,18 +82,18 @@ namespace CalamityHunt.Content.Particles
                 Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(3, 3), 100, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
         }
 
-        public static Texture2D texture;
+        public static Asset<Texture2D> texture;
 
         public override void Load()
         {
-            texture = new TextureAsset(Texture);
+            texture = AssetUtilities.RequestImmediate<Texture2D>(Texture);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D glow = AssetDirectory.Textures.Glow;
-            Rectangle frame = texture.Frame(3, 2, variant, 0);
-            Rectangle glowFrame = texture.Frame(3, 2, variant, 1);
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Rectangle frame = texture.Value.Frame(3, 2, variant, 0);
+            Rectangle glowFrame = texture.Value.Frame(3, 2, variant, 1);
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
             glowColor.A = 0;
@@ -102,12 +103,12 @@ namespace CalamityHunt.Content.Particles
             for (int i = 0; i < 4; i++)
             {
                 Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + rotation);
-                spriteBatch.Draw(texture, position + off - Main.screenPosition, frame, glowColor, rotation, frame.Size() * 0.5f, scale, 0, 0);
+                spriteBatch.Draw(texture.Value, position + off - Main.screenPosition, frame, glowColor, rotation, frame.Size() * 0.5f, scale, 0, 0);
             }
-            spriteBatch.Draw(texture, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.6f), rotation, frame.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.6f), rotation, frame.Size() * 0.5f, scale, 0, 0);
 
             if (colorful)
-                spriteBatch.Draw(texture, position - Main.screenPosition, glowFrame, glowColor * 0.75f * scale, rotation, frame.Size() * 0.5f, scale, 0, 0);
+                spriteBatch.Draw(texture.Value, position - Main.screenPosition, glowFrame, glowColor * 0.75f * scale, rotation, frame.Size() * 0.5f, scale, 0, 0);
 
         }
     }

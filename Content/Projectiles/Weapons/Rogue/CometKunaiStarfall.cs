@@ -59,7 +59,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
             Rectangle sparkleFrame = sparkle.Frame(1, 2, 0, 0);
             float p = Utils.GetLerpValue(0, 50, Projectile.timeLeft, true) * Utils.GetLerpValue(90, 30, Projectile.timeLeft, true);
             Vector2 scale = new Vector2(p * 0.8f, MathF.Pow(p + 0.3f, 2) * 3f) * Projectile.scale;

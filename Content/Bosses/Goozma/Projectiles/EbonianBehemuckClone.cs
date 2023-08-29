@@ -164,7 +164,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle frame = texture.Frame(1, 4, 0, Projectile.frame);
 
-            Texture2D tell = AssetDirectory.Textures.Glow;
+            Texture2D tell = AssetDirectory.Textures.Glow.Value;
 
             float scale = 1f;
 

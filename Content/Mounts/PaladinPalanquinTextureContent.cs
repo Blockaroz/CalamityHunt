@@ -18,7 +18,7 @@ public class PaladinPalanquinTextureContent : ARenderTargetContentByRequest
 
     protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
-        Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall;
+        Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall.Value;
         PrepareARenderTarget_AndListenToEvents(ref _target, device, frame.Width, frame.Height, RenderTargetUsage.PreserveContents);
         device.SetRenderTarget(_target);
         device.Clear(Color.Transparent);

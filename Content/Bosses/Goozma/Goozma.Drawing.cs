@@ -71,8 +71,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Texture2D glow = AssetDirectory.Textures.Glow;
-            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
 
             //Rectangle ornamentBase = ornament.Frame(1, 2, 0, 0);
             //Rectangle ornamentGlow = ornament.Frame(1, 2, 0, 1);
@@ -150,8 +150,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 effect.Parameters["baseToMapPercent"].SetValue(-0.05f + Utils.GetLerpValue(20, 150, Time, true) * 0.1f);//-1f + Utils.GetLerpValue(20, 180, Time, true)
             }
 
-            Texture2D eyeBall = AssetDirectory.Textures.Extras.GoozmaEyeball;
-            Texture2D godEye = AssetDirectory.Textures.Extras.GoozmaGodEye;
+            Texture2D eyeBall = AssetDirectory.Textures.Extras.GoozmaEyeball.Value;
+            Texture2D godEye = AssetDirectory.Textures.Extras.GoozmaGodEye.Value;
 
             Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.9f + NPC.rotation) * headScale * NPC.scale;
             spriteBatch.Draw(eyeBall, eyePos - screenPos, eyeBall.Frame(), Color.White, 0, eyeBall.Size() * 0.5f, 1, 0, 0);

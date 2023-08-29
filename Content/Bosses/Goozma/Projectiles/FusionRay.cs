@@ -262,12 +262,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = AssetDirectory.Textures.Extras.FusionRay[0];
-            Texture2D textureBits = AssetDirectory.Textures.Extras.FusionRay[1];
-            Texture2D textureGlow = AssetDirectory.Textures.Extras.FusionRay[2];
-            Texture2D textureSecond = AssetDirectory.Textures.Extras.FusionRay[3];
-            Texture2D glow = AssetDirectory.Textures.Glow;
-            Texture2D ray = AssetDirectory.Textures.GlowRay;
+            Texture2D texture = AssetDirectory.Textures.Extras.FusionRay[0].Value;
+            Texture2D textureBits = AssetDirectory.Textures.Extras.FusionRay[1].Value;
+            Texture2D textureGlow = AssetDirectory.Textures.Extras.FusionRay[2].Value;
+            Texture2D textureSecond = AssetDirectory.Textures.Extras.FusionRay[3].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D ray = AssetDirectory.Textures.GlowRay.Value;
 
             Color startColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             startColor.A = 0;

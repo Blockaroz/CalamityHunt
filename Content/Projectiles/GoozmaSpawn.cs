@@ -274,10 +274,10 @@ namespace CalamityHunt.Content.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
-            Texture2D glow = AssetDirectory.Textures.Glow;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D eye = AssetDirectory.Textures.Extras.GoozmaGodEye;
+            Texture2D eye = AssetDirectory.Textures.Extras.GoozmaGodEye.Value;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time * 0.33f) * 1.2f;
             glowColor.A = 0;

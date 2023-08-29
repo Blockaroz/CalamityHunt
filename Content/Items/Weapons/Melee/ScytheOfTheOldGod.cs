@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Systems;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
@@ -49,27 +50,27 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
 
         }
 
-        public static Texture2D glowTexture;
+        public static Asset<Texture2D> glowTexture;
 
         public override void Load()
         {
-            glowTexture = new TextureAsset(Texture + "Glow");
+            glowTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Glow");
         }
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.33f, 0.33f).Value;
             glowColor.A = 0;
-            spriteBatch.Draw(glowTexture, position, frame, glowColor, 0, origin, scale, 0, 0);
-            spriteBatch.Draw(glowTexture, position, frame, glowColor * 0.5f, 0, origin, scale * 1.02f, 0, 0);
+            spriteBatch.Draw(glowTexture.Value, position, frame, glowColor, 0, origin, scale, 0, 0);
+            spriteBatch.Draw(glowTexture.Value, position, frame, glowColor * 0.5f, 0, origin, scale * 1.02f, 0, 0);
         }
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.33f, 0.33f).Value;
             glowColor.A = 0;
-            spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), glowColor, rotation, Item.Size * 0.5f, scale, 0, 0);
-            spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, glowTexture.Frame(), glowColor * 0.5f, rotation, Item.Size * 0.5f, scale * 1.02f, 0, 0);
+            spriteBatch.Draw(glowTexture.Value, Item.Center - Main.screenPosition, glowTexture.Value.Frame(), glowColor, rotation, Item.Size * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glowTexture.Value, Item.Center - Main.screenPosition, glowTexture.Value.Frame(), glowColor * 0.5f, rotation, Item.Size * 0.5f, scale * 1.02f, 0, 0);
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[ModContent.ProjectileType<ScytheOfTheOldGodHeld>()] <= 0;

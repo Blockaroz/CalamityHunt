@@ -90,7 +90,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D sparkle = AssetDirectory.Textures.Sparkle;
+            Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
             Vector2 direction = Projectile.rotation.ToRotationVector2() * 10;
 
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)

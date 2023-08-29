@@ -18,7 +18,7 @@ namespace CalamityHunt.Content.Buffs
 {
     public class SlimeCaneBuff : ModBuff
     {
-        public override string Texture => AssetDirectory.Textures.Buffs.SlimeCane[0];
+        public override string Texture => $"{Mod.Name}/Assets/Textures/Buffs/SlimeCane_0";
 
         public override void SetStaticDefaults()
         {
@@ -40,7 +40,7 @@ namespace CalamityHunt.Content.Buffs
         public override bool PreDraw(SpriteBatch spriteBatch, int buffIndex, ref BuffDrawParams drawParams)
         {
             bool finalTier = Main.LocalPlayer.GetModPlayer<SlimeCanePlayer>().SlimeRank() == SlimeCanePlayer.HighestRank;
-            drawParams.Texture = AssetDirectory.Textures.Buffs.SlimeCane[finalTier ? 1 : 0];
+            drawParams.Texture = AssetDirectory.Textures.Buffs.SlimeCane[finalTier ? 1 : 0].Value;
             return true;
         }
     }

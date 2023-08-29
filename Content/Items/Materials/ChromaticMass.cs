@@ -4,8 +4,9 @@ using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
+using CalamityHunt.Common.Utilities;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -55,19 +56,19 @@ namespace CalamityHunt.Content.Items.Materials
             }
         }
 
-        public static Texture2D glowTexture;
-        public static Texture2D auraTexture;
+        public static Asset<Texture2D> glowTexture;
+        public static Asset<Texture2D> auraTexture;
 
         public override void Load()
         {
-            glowTexture = new TextureAsset(Texture + "Glow");
-            auraTexture = new TextureAsset(Texture + "Aura");
+            glowTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Glow");
+            auraTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Aura");
         }
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             float backScale = 1f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 8f % MathHelper.TwoPi) * 0.1f;
-            spriteBatch.Draw(auraTexture, position, auraTexture.Frame(), Color.Black * 0.3f, 1f, auraTexture.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
+            spriteBatch.Draw(auraTexture.Value, position, auraTexture.Value.Frame(), Color.Black * 0.3f, 1f, auraTexture.Value.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
 
             return true;
         }
@@ -75,25 +76,25 @@ namespace CalamityHunt.Content.Items.Materials
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
             float backScale = 1f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 8f % MathHelper.TwoPi) * 0.1f;
-            spriteBatch.Draw(auraTexture, Item.Center - Main.screenPosition, auraTexture.Frame(), Color.Black * 0.4f, 1f, auraTexture.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
+            spriteBatch.Draw(auraTexture.Value, Item.Center - Main.screenPosition, auraTexture.Value.Frame(), Color.Black * 0.4f, 1f, auraTexture.Value.Size() * 0.5f, scale * backScale * 1.2f, 0, 0);
             return true;
         }
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Color color = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 40f);
-            spriteBatch.Draw(glowTexture, position, frame, Color.White, 0, origin, scale, 0, 0);
-            spriteBatch.Draw(glowTexture, position, frame, new Color(50, 50, 50, 0), 0, origin, scale, 0, 0);
-            spriteBatch.Draw(auraTexture, position, auraTexture.Frame(), new Color(color.R, color.G, color.B, 0) * 0.1f, 0, auraTexture.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glowTexture.Value, position, frame, Color.White, 0, origin, scale, 0, 0);
+            spriteBatch.Draw(glowTexture.Value, position, frame, new Color(50, 50, 50, 0), 0, origin, scale, 0, 0);
+            spriteBatch.Draw(auraTexture.Value, position, auraTexture.Value.Frame(), new Color(color.R, color.G, color.B, 0) * 0.1f, 0, auraTexture.Value.Size() * 0.5f, scale, 0, 0);
         }
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Rectangle frame = Main.itemAnimations[Type].GetFrame(glowTexture, Main.itemFrameCounter[whoAmI]);
+            Rectangle frame = Main.itemAnimations[Type].GetFrame(glowTexture.Value, Main.itemFrameCounter[whoAmI]);
             Color color = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 40f);
-            spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, frame, Color.White, rotation, frame.Size() * 0.5f, scale, 0, 0);
-            spriteBatch.Draw(glowTexture, Item.Center - Main.screenPosition, frame, new Color(50, 50, 50, 0), rotation, frame.Size() * 0.5f, scale, 0, 0);
-            spriteBatch.Draw(auraTexture, Item.Center - Main.screenPosition, auraTexture.Frame(), new Color(color.R, color.G, color.B, 0) * 0.1f, rotation, auraTexture.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glowTexture.Value, Item.Center - Main.screenPosition, frame, Color.White, rotation, frame.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(glowTexture.Value, Item.Center - Main.screenPosition, frame, new Color(50, 50, 50, 0), rotation, frame.Size() * 0.5f, scale, 0, 0);
+            spriteBatch.Draw(auraTexture.Value, Item.Center - Main.screenPosition, auraTexture.Value.Frame(), new Color(color.R, color.G, color.B, 0) * 0.1f, rotation, auraTexture.Value.Size() * 0.5f, scale, 0, 0);
         }
     }
 }

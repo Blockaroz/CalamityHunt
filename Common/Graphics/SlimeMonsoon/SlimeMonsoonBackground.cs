@@ -150,13 +150,13 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
             if (maxDepth >= float.MaxValue && minDepth < float.MaxValue)
             {
                 spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
-                spriteBatch.Draw(AssetDirectory.Textures.SlimeMonsoon.SkyTexture, new Rectangle(0, -yOffset, Main.screenWidth, Main.screenHeight * 2), darkColor * _strength * 0.66f);
+                spriteBatch.Draw(AssetDirectory.Textures.SlimeMonsoon.SkyTexture.Value, new Rectangle(0, -yOffset, Main.screenWidth, Main.screenHeight * 2), darkColor * _strength * 0.66f);
             }
 
             Effect skyClouds = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad).Value;
-            skyClouds.Parameters["uTex0"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyTexture.Texture);
-            skyClouds.Parameters["uTex1"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
-            skyClouds.Parameters["uMap"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyColorMap.Texture);
+            skyClouds.Parameters["uTex0"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyTexture.Value);
+            skyClouds.Parameters["uTex1"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Value);
+            skyClouds.Parameters["uMap"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyColorMap.Value);
             skyClouds.Parameters["uBrightness"].SetValue(_brightness - yOffPower * 0.1f);
 
             for (int i = 0; i < 4; i++)
@@ -200,8 +200,8 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
                     .UseIntensity(1f)
                     .UseOpacity(_strength * 0.1f * distortionStrength * Config.Instance.monsoonDistortion);
-                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
-                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Texture);
+                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Value);
+                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Value);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["inEdge"].SetValue(-1f);
                 Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["outEdge"].SetValue(0.8f - Main.LocalPlayer.Distance(radialDistortPos) * 0.0001f);
@@ -256,8 +256,8 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
                 Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.BackgroundViewMatrix.NormalizedTransformationmatrix);
-                lightningEffect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Texture);
-                lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Texture);
+                lightningEffect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Value);
+                lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Value);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
                 lightningEffect.Parameters["uTime"].SetValue(-(float)Math.Cbrt(maxTime - time) * 0.3f);
                 lightningEffect.Parameters["uBackPower"].SetValue(0f);
