@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using log4net;
 using log4net.Core;
 using log4net.Repository.Hierarchy;
 using Mono.Cecil.Cil;

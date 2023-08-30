@@ -24,9 +24,8 @@ namespace CalamityHunt.Common.Systems
         //Cant use load because dragonlens loads after
         public override void PostSetupContent()
         {
-            if (!CalamityHunt.UndercoverMode || !ModLoader.HasMod("Dragonlens"))
+            if (!ModContent.GetInstance<GatekeepSystem>().Undercover || !ModLoader.HasMod("Dragonlens"))
                 return;
-
 
             Assembly dragonlensCode = ModLoader.GetMod("DragonLens").Code;
 
