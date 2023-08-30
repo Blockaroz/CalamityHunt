@@ -2,7 +2,6 @@
 
 using System;
 using System.Reflection;
-using System.Runtime.Versioning;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common;
@@ -13,16 +12,15 @@ namespace CalamityHunt.Common;
 public static class ModCompatibility
 {
     /// <summary>
-    ///     Statically provides a mod's internal name. This is used for taking
+    ///     Provides a mod's internal name. This is used for taking
     ///     advantage of how CLR generics work.
     /// </summary>
-    [RequiresPreviewFeatures]
-    public interface IModName
+    public interface IModNameProvider
     {
         /// <summary>
         ///     The internal name of the mod.
         /// </summary>
-        static abstract string ModName { get; }
+        string ModName { get; }
     }
 
     /// <summary>
@@ -30,9 +28,10 @@ public static class ModCompatibility
     ///     advantage of how CLR generics work.
     /// </summary>
     /// <typeparam name="TModName">The mod name.</typeparam>
-    [RequiresPreviewFeatures]
-    public abstract class BaseModCompatibility<TModName> where TModName : IModName
+    public abstract class BaseModCompatibility<TModName> where TModName : IModNameProvider, new()
     {
+        private static readonly IModNameProvider name_provider = new TModName();
+
         // TODO: We could just use mod != null, but who cares?
         private static readonly Lazy<bool> is_loaded = new(() => ModLoader.HasMod(ModName));
         private static readonly Lazy<Mod?> mod = new(() => ModLoader.TryGetMod(ModName, out var theMod) ? theMod : null);
@@ -40,7 +39,7 @@ public static class ModCompatibility
         /// <summary>
         ///     The internal name of the mod.
         /// </summary>
-        public static string ModName => TModName.ModName;
+        public static string ModName => name_provider.ModName;
 
         /// <summary>
         ///     Whether the mod is loaded.
@@ -58,12 +57,11 @@ public static class ModCompatibility
         public static Assembly? Assembly => Mod?.Code;
     }
 
-    [RequiresPreviewFeatures]
-    public abstract class Calamity : BaseModCompatibility<Calamity.CalamityName>
+    public abstract class Calamity : BaseModCompatibility<Calamity.CalamityNameProvider>
     {
-        public abstract class CalamityName : IModName
+        public sealed class CalamityNameProvider : IModNameProvider
         {
-            static string IModName.ModName => "CalamityMod";
+            string IModNameProvider.ModName => "CalamityMod";
         }
     }
 }

@@ -1,11 +1,9 @@
-﻿using System.Runtime.Versioning;
-using Terraria.GameContent.ItemDropRules;
+﻿using Terraria.GameContent.ItemDropRules;
 
 namespace CalamityHunt.Common.DropRules
 {
     public class YharonDownedDropRule : IItemDropRuleCondition
     {
-        [RequiresPreviewFeatures]
         bool IItemDropRuleCondition.CanDrop(DropAttemptInfo info)
         {
             if (!ModCompatibility.Calamity.IsLoaded)
