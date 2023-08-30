@@ -1,17 +1,18 @@
-﻿using CalamityHunt.Common.Systems;
+﻿using System.Runtime.Versioning;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.DropRules
 {
     public class YharonDownedDropRule : IItemDropRuleCondition
     {
+        [RequiresPreviewFeatures]
         bool IItemDropRuleCondition.CanDrop(DropAttemptInfo info)
-            {
-                if (!ModLoader.HasMod("CalamityMod"))
-                    return false;
-                return ModLoader.HasMod("CalamityMod") && !(bool)ModLoader.GetMod("CalamityMod").Call("GetBossDowned", "yharon");
-            }
+        {
+            if (!ModCompatibility.Calamity.IsLoaded)
+                return false;
+
+            return (bool)ModCompatibility.Calamity.Mod!.Call("GetBossDowned", "yharon");
+        }
 
         bool IItemDropRuleCondition.CanShowItemDropInUI() => true;
 

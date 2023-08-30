@@ -1,15 +1,13 @@
-﻿using CalamityHunt.Common.Systems;
-using Terraria.GameContent.ItemDropRules;
+﻿using Terraria.GameContent.ItemDropRules;
 using Terraria;
 
-namespace CalamityHunt.Common.DropRules
+namespace CalamityHunt.Common.DropRules;
+
+public class DDIDropRule : IItemDropRuleCondition
 {
-    public class DDIDropRule : IItemDropRuleCondition
-    {
-        bool IItemDropRuleCondition.CanDrop(DropAttemptInfo info) => Main.remixWorld;
+    bool IItemDropRuleCondition.CanDrop(DropAttemptInfo info) => Main.remixWorld;
 
-        bool IItemDropRuleCondition.CanShowItemDropInUI() => false;
+    bool IItemDropRuleCondition.CanShowItemDropInUI() => false;
 
-        string IProvideItemConditionDescription.GetConditionDescription() => "";
-    }
+    string IProvideItemConditionDescription.GetConditionDescription() => "";
 }
