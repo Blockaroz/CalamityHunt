@@ -186,7 +186,7 @@ namespace CalamityHunt.Common.Graphics
             //    {
             //        for (int i = 0; i < 5; i++)
             //        {
-            //            Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Main.MouseWorld, Main.rand.NextVector2Circular(8, 8), Color.White, 1f + Main.rand.NextFloat(2f));
+            //            Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Main.MouseWorld, Main.rand.NextVector2Circular(8, 8), Color.White, 1f + Main.rand.NextFloat(2f));
             //            smoke.data = "Cosmos";
             //        }
             //    }
@@ -197,7 +197,7 @@ namespace CalamityHunt.Common.Graphics
             //        {
             //            Color drawColor = new GradientColor(SlimeUtils.GoozColorArray, 0.1f, 0.1f).Value;
             //            drawColor.A = 0;
-            //            Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Main.MouseWorld, Main.rand.NextVector2Circular(5, 5), drawColor, 1f + Main.rand.NextFloat(2f));
+            //            Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Main.MouseWorld, Main.rand.NextVector2Circular(5, 5), drawColor, 1f + Main.rand.NextFloat(2f));
             //        }
             //    }
             //}

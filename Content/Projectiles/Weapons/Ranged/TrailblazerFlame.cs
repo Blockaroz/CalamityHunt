@@ -53,13 +53,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             {
                 if (Main.rand.NextBool(8))
                 {
-                    Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, Projectile.velocity * Main.rand.NextFloat(), glowColor, (1f + Main.rand.NextFloat()));
+                    Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, Projectile.velocity * Main.rand.NextFloat(), glowColor, (1f + Main.rand.NextFloat()));
                     hue.data = Projectile.localAI[0];
                     hue.emit = true;
                 }
 
                 if (Main.rand.NextBool(4))
-                    Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(64, 64) * expand, Projectile.velocity * Main.rand.NextFloat(2f), glowColor, (1f + Main.rand.NextFloat()) * expand * 0.5f);
+                    Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(64, 64) * expand, Projectile.velocity * Main.rand.NextFloat(2f), glowColor, (1f + Main.rand.NextFloat()) * expand * 0.5f);
 
                 if (Main.rand.NextBool(5) && Projectile.velocity.LengthSquared() > 2f)
                 {

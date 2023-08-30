@@ -148,7 +148,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Time + 10);
 
             Vector2 inward = Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.5f) * Main.rand.NextFloat(Size * Projectile.ai[2] * 1.5f);
-            Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + inward, -inward * 0.03f, glowColor, 1f + Main.rand.NextFloat());
+            Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + inward, -inward * 0.03f, glowColor, 1f + Main.rand.NextFloat());
             Dust d = Dust.NewDustPerfect(Projectile.Center + inward, DustID.Sand, -inward * 0.04f, 10, Color.Black, 1f + Main.rand.NextFloat());
             d.noGravity = true;
         }
@@ -158,7 +158,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Time + 10);
 
             for (int i = 0; i < 5; i++)
-                Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(3, 3), glowColor, 2f);
+                Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(3, 3), glowColor, 2f);
 
         }
 

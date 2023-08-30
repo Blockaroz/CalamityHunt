@@ -98,7 +98,7 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
 
             if (Main.rand.NextBool(7))
             {
-                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Projectile.velocity * 0.2f, Color.White, 1f);
+                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Projectile.velocity * 0.2f, Color.White, 1f);
                 hue.data = Projectile.localAI[0];
             }
 

@@ -11,15 +11,9 @@ namespace CalamityHunt.Common.Systems.Particles
     [Autoload(Side = ModSide.Client)]
     public class ParticleSystem : ModSystem
     {
-        private static int nextID;
-
         internal static readonly IList<Particle> particleTypes = new List<Particle>();
 
         public static IList<Particle> particle = new List<Particle>();
-
-        internal static int ReserveParticleID() => nextID++;
-
-        public static Particle GetParticle(int type) => (type == -1) ? null : particleTypes[type];
 
         public override void OnModLoad()
         {
@@ -35,7 +29,6 @@ namespace CalamityHunt.Common.Systems.Particles
             On_Main.DrawDust -= DrawParticles;
 
             particleTypes.Clear();
-            nextID = 0;
         }
 
         public static void UpdateParticles()

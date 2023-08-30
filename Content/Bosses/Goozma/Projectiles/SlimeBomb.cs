@@ -72,7 +72,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 if (Main.rand.NextBool(8))
                 {
-                    Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(40, 40), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 1.2f);
+                    Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(40, 40), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 1.2f);
                     hue.data = Projectile.localAI[1];
                 }
 
@@ -112,14 +112,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     for (int i = 0; i < 5; i++)
                     {
                         Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
-                        Particle goo = Particle.NewParticle(Particle.ParticleType<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, (3f - Time) + Main.rand.NextFloat());
+                        Particle goo = Particle.NewParticle(ModContent.GetInstance<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, (3f - Time) + Main.rand.NextFloat());
                         goo.data = Projectile.localAI[1];
                     }
                 }
 
                 if (Time < 10)
                 {
-                    Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(25, 25), Color.White, 1.5f);
+                    Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(25, 25), Color.White, 1.5f);
                     hue.data = Projectile.localAI[1];
 
                     for (int i = 0; i < 10; i++)

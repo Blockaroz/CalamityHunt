@@ -145,12 +145,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 smokeColor.A = 0;
                 int smokeCount = (int)(smokePower * 12f);
                 for (int i = 0; i < smokeCount; i++)
-                    Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20, Projectile.rotation.ToRotationVector2().RotatedByRandom((float)Math.Sqrt(1f - smokePower * 0.5f)) * Main.rand.NextFloat(15f, 25f) * smokePower, smokeColor, 1f + Main.rand.NextFloat());
+                    Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20, Projectile.rotation.ToRotationVector2().RotatedByRandom((float)Math.Sqrt(1f - smokePower * 0.5f)) * Main.rand.NextFloat(15f, 25f) * smokePower, smokeColor, 1f + Main.rand.NextFloat());
             }
 
             if (!Main.rand.NextBool((int)(Time * 0.5f + 15)))
             {
-                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(1f) * Main.rand.NextFloat(5f, 15f), Color.White, 2f);
+                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(1f) * Main.rand.NextFloat(5f, 15f), Color.White, 2f);
                 hue.data = Projectile.localAI[0];
             }
             if (Time > ChargeTime - 15 && Time < ChargeTime + LaserDuration + 60)
@@ -162,11 +162,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 100) * grow;
                     color.A = 0;
                     Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-80f, 80f) * (progress / 3300f)).RotatedBy(Projectile.rotation);
-                    Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
+                    Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
                     smoke.behindEntities = true;
                     if (Main.rand.NextBool(5))
                     {
-                        Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), Color.White, 4f * grow);
+                        Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), Color.White, 4f * grow);
                         hue.data = Projectile.localAI[0] - (progress / 3300f) * 60;
                     }
                 }

@@ -55,7 +55,7 @@ namespace CalamityHunt.Content.Items.Misc
         {
             if (Main.rand.NextBool(player.itemAnimation > 0 ? 40 : 80))
             {
-                Particle hue = Particle.NewParticle(Particle.ParticleType<HueLightDust>(), new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), new Vector2(0, -1), rainbowGlow, 1f);
+                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), new Vector2(0, -1), rainbowGlow, 1f);
                 hue.data = Main.GlobalTimeWrappedHourly;
             }
 

@@ -57,12 +57,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             //int count = 10 + (int)(Main.projectile[(int)Start].Distance(Main.projectile[(int)End].Center) * 0.01f);
             //for (int i = 0; i < count; i++)
             //{
-            //    Particle smoke = Particle.NewParticle(Particle.ParticleType<CosmicSmoke>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, i / (float)count), Main.rand.NextVector2Circular(4, 4), Color.White, 1f + Main.rand.NextFloat(0.7f));
+            //    Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, i / (float)count), Main.rand.NextVector2Circular(4, 4), Color.White, 1f + Main.rand.NextFloat(0.7f));
             //    smoke.data = "Cosmos";
             //}
 
             if (Time > 95 && Time < 180 && Main.rand.NextBool(5))
-                Particle.NewParticle(Particle.ParticleType<PrettySparkle>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, Main.rand.NextFloat()), Main.rand.NextVector2Circular(1, 1), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()));
+                Particle.NewParticle(ModContent.GetInstance<PrettySparkle>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, Main.rand.NextFloat()), Main.rand.NextVector2Circular(1, 1), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()));
 
             if (Time > 180)
                 Projectile.Kill();

@@ -22,50 +22,50 @@ namespace CalamityHunt.Content.NPCs
                     switch (npc.type)
                     {
                         case NPCID.BlueSlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingNormalSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingNormalSlime>());
                             break;
                         case NPCID.GreenSlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingNormalSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingNormalSlime>());
                             break;
                         case NPCID.Pinky:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingNormalSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingNormalSlime>());
                             break;
                         case NPCID.RedSlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingNormalSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingNormalSlime>());
                             break;
                         case NPCID.JungleSlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingNormalSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingNormalSlime>());
                             break;
                         case NPCID.BlackSlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingNormalSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingNormalSlime>());
                             break;
                         case NPCID.BabySlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingNormalSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingNormalSlime>());
                             break;
                         case NPCID.PurpleSlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingBigSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingBigSlime>());
                             break;
                         case NPCID.YellowSlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingBigSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingBigSlime>());
                             break;
                         case NPCID.MotherSlime:
-                            Slime(proj, npc, velocity, Particle.ParticleType<FlyingBigSlime>());
+                            Slime(proj, npc, velocity, ModContent.GetInstance<FlyingBigSlime>());
                             break;
                         case NPCID.WindyBalloon:
                             NPC npc2 = npc.AI_113_WindyBalloon_GetSlaveNPC();
                             switch (npc2.type)
                             {
                                 case NPCID.BlueSlime:
-                                    Balloon(proj, npc2, velocity, Particle.ParticleType<FlyingBalloonSlime>(), npc.frame.Y);
+                                    Balloon(proj, npc2, velocity, ModContent.GetInstance<FlyingBalloonSlime>(), npc.frame.Y);
                                     break;
                                 case NPCID.GreenSlime:
-                                    Balloon(proj, npc2, velocity, Particle.ParticleType<FlyingBalloonSlime>(), npc.frame.Y);
+                                    Balloon(proj, npc2, velocity, ModContent.GetInstance<FlyingBalloonSlime>(), npc.frame.Y);
                                     break;
                                 case NPCID.PurpleSlime:
-                                    Balloon(proj, npc2, velocity, Particle.ParticleType<FlyingBalloonSlime>(), npc.frame.Y);
+                                    Balloon(proj, npc2, velocity, ModContent.GetInstance<FlyingBalloonSlime>(), npc.frame.Y);
                                     break;
                                 case NPCID.Pinky:
-                                    Balloon(proj, npc2, velocity, Particle.ParticleType<FlyingBalloonSlime>(), npc.frame.Y);
+                                    Balloon(proj, npc2, velocity, ModContent.GetInstance<FlyingBalloonSlime>(), npc.frame.Y);
                                     break;
                                 default:
                                     break;
@@ -73,97 +73,97 @@ namespace CalamityHunt.Content.NPCs
                             npc.life = 0;
                             break;
                         case NPCID.RainbowSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingRainbowSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingRainbowSlime>());
                             break;
                         case NPCID.Gastropod:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingGastropod>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingGastropod>());
                             break;
                         case NPCID.IlluminantSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingIlluminantSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingIlluminantSlime>());
                             break;
                         case NPCID.LavaSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingLavaSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingLavaSlime>());
                             break;
                         case NPCID.SlimedZombie:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingZombieSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingZombieSlime>());
                             break;
                         case NPCID.ArmedZombieSlimed:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingZombieSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingZombieSlime>());
                             break;
                         case NPCID.ShimmerSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingShimmerSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingShimmerSlime>());
                             break;
                         case NPCID.IceSlime:
-                            Ice(proj, npc, velocity, Particle.ParticleType<FlyingIceSlime>(), false);
+                            Ice(proj, npc, velocity, ModContent.GetInstance<FlyingIceSlime>(), false);
                             break;
                         case NPCID.SandSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingSandSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingSandSlime>());
                             break;
                         case NPCID.SpikedJungleSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingJungleSlimeSpiked>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingJungleSlimeSpiked>());
                             break;
                         case NPCID.SpikedIceSlime:
-                            Ice(proj, npc, velocity, Particle.ParticleType<FlyingIceSlime>(), true);
+                            Ice(proj, npc, velocity, ModContent.GetInstance<FlyingIceSlime>(), true);
                             break;
                         case NPCID.SlimeSpiked:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingSpikedSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingSpikedSlime>());
                             break;
                         case NPCID.QueenSlimeMinionPink:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingBouncySlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingBouncySlime>());
                             break;
                         case NPCID.QueenSlimeMinionBlue:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCrystalSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrystalSlime>());
                             break;
                         case NPCID.QueenSlimeMinionPurple:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingHeavenlySlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingHeavenlySlime>());
                             break;
                         case NPCID.UmbrellaSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingUmbrellaSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingUmbrellaSlime>());
                             break;
                         case NPCID.CorruptSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCorruptSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlime>());
                             break;
                         case NPCID.Slimeling:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCorruptSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlime>());
                             break;
                         case NPCID.Slimer:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingSlimer>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingSlimer>());
                             break;
                         case NPCID.Slimer2:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCorruptSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlime>());
                             break;
                         case NPCID.Crimslime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCrimslime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimslime>());
                             break;
                         case NPCID.ToxicSludge:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingToxicSludge>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingToxicSludge>());
                             break;
                         case NPCID.DungeonSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingDungeonSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingDungeonSlime>());
                             break;
                         case NPCID.HoppinJack:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingHoppinJack>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingHoppinJack>());
                             break;
                         case NPCID.GoldenSlime:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingGoldSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingGoldSlime>());
                             break;
                         case NPCID.BunnySlimed:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingBunnySlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingBunnySlime>());
                             break;
                         case NPCID.SlimeMasked:
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingSlimeBunny>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingSlimeBunny>());
                             break;
                         case NPCID.SlimeRibbonRed:
-                            Ribbon(proj, npc, velocity, Particle.ParticleType<FlyingPresentSlime>(), 0);
+                            Ribbon(proj, npc, velocity, ModContent.GetInstance<FlyingPresentSlime>(), 0);
                             break;
                         case NPCID.SlimeRibbonGreen:
-                            Ribbon(proj, npc, velocity, Particle.ParticleType<FlyingPresentSlime>(), 1);
+                            Ribbon(proj, npc, velocity, ModContent.GetInstance<FlyingPresentSlime>(), 1);
                             break;
                         case NPCID.SlimeRibbonYellow:
-                            Ribbon(proj, npc, velocity, Particle.ParticleType<FlyingPresentSlime>(), 2);
+                            Ribbon(proj, npc, velocity, ModContent.GetInstance<FlyingPresentSlime>(), 2);
                             break;
                         case NPCID.SlimeRibbonWhite:
-                            Ribbon(proj, npc, velocity, Particle.ParticleType<FlyingPresentSlime>(), 3);
+                            Ribbon(proj, npc, velocity, ModContent.GetInstance<FlyingPresentSlime>(), 3);
                             break;
                         default:
                             break;
@@ -171,77 +171,77 @@ namespace CalamityHunt.Content.NPCs
                     if (ModLoader.HasMod("CalamityMod"))
                     {
                         if (npc.type == ModContent.Find<ModNPC>("CalamityMod/AeroSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingAeroSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingAeroSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/EbonianBlightSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingEbonianBlightSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingEbonianBlightSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CrimulanBlightSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCrimulanBlightSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimulanBlightSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CorruptSlimeSpawn").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCorruptSlimeSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlimeSpawn>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CorruptSlimeSpawn2").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCorruptSlimeSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlimeSpawn>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CrimsonSlimeSpawn").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCrimsonSlimeSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimsonSlimeSpawn>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CrimsonSlimeSpawn2").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCrimsonSlimeSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimsonSlimeSpawn>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/AstralSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingAstralSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingAstralSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CryoSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCryoSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCryoSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/IrradiatedSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingIrradiatedSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingIrradiatedSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/InfernalCongealment").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCharredSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCharredSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/PerennialSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingPerennialSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingPerennialSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/AureusSpawn").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<AureusSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<AureusSpawn>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/PestilentSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingPestilentSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingPestilentSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/BloomSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingBloomSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingBloomSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/GammaSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingGammaSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingGammaSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CragmawMire").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingCragmawMire>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCragmawMire>());
                     }
                     if (ModLoader.HasMod("CatalystMod"))
                     {
                         if (npc.type == ModContent.Find<ModNPC>("CatalystMod/NovaSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingNovaSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingNovaSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/NovaSlimer").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingNovaSlimer>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingNovaSlimer>());
                         else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/MetanovaSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingMetanovaSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingMetanovaSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/WulfrumSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingWulfrumSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingWulfrumSlime>());
                         else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/AscendedAstralSlime").Type)
-                            Slime2(proj, npc, velocity, Particle.ParticleType<FlyingAscendedAstralSlime>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingAscendedAstralSlime>());
                     }
                 }
             }
         }
-        private static void Slime(Projectile proj, NPC npc, Vector2 velocity, int type)
+        private static void Slime(Projectile proj, NPC npc, Vector2 velocity, Particle particle)
         {
-            Particle particle = Particle.NewParticle(type, npc.Center, velocity, npc.color, npc.scale);
+            particle = Particle.NewParticle(particle, npc.Center, velocity, npc.color, npc.scale);
             FlyingSlime slime = particle as FlyingSlime;
             slime.time = 20;
             particle.data = proj.Center;
             particle.behindEntities = true;
             npc.life = 0;
         }
-        private static void Slime2(Projectile proj, NPC npc, Vector2 velocity, int type)
+        private static void Slime2(Projectile proj, NPC npc, Vector2 velocity, Particle particle)
         {
-            Particle particle = Particle.NewParticle(type, npc.Center, velocity, Color.White, npc.scale);
+            particle = Particle.NewParticle(particle, npc.Center, velocity, Color.White, npc.scale);
             FlyingSlime slime = particle as FlyingSlime;
             slime.time = 20;
             particle.data = proj.Center;
             particle.behindEntities = true;
             npc.life = 0;
         }
-        private static void Ice(Projectile proj, NPC npc, Vector2 velocity, int type, bool ice)
+        private static void Ice(Projectile proj, NPC npc, Vector2 velocity, Particle particle, bool ice)
         {
-            Particle particle = Particle.NewParticle(type, npc.Center, velocity, Color.White, npc.scale);
+            particle = Particle.NewParticle(particle, npc.Center, velocity, Color.White, npc.scale);
             FlyingSlime slime = particle as FlyingSlime;
             slime.time = 20;
             FlyingIceSlime iced = particle as FlyingIceSlime;
@@ -250,9 +250,9 @@ namespace CalamityHunt.Content.NPCs
             particle.behindEntities = true;
             npc.life = 0;
         }
-        private static void Balloon(Projectile proj, NPC npc, Vector2 velocity, int type, int frame)
+        private static void Balloon(Projectile proj, NPC npc, Vector2 velocity, Particle particle, int frame)
         {
-            Particle particle = Particle.NewParticle(type, npc.Center, velocity, npc.color, npc.scale);
+            particle = Particle.NewParticle(particle, npc.Center, velocity, npc.color, npc.scale);
             FlyingSlime slime = particle as FlyingSlime;
             slime.time = 20;
             FlyingBalloonSlime ball = particle as FlyingBalloonSlime;
@@ -261,9 +261,9 @@ namespace CalamityHunt.Content.NPCs
             particle.behindEntities = true;
             npc.life = 0;
         }
-        private static void Ribbon(Projectile proj, NPC npc, Vector2 velocity, int type, int variant)
+        private static void Ribbon(Projectile proj, NPC npc, Vector2 velocity, Particle particle, int variant)
         {
-            Particle particle = Particle.NewParticle(type, npc.Center, velocity, Color.White, npc.scale);
+            particle = Particle.NewParticle(particle, npc.Center, velocity, Color.White, npc.scale);
             FlyingSlime slime = particle as FlyingSlime;
             slime.time = 20;
             FlyingPresentSlime present = particle as FlyingPresentSlime;

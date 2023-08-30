@@ -271,7 +271,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             {
                 Color color = new Color(255, 150, 150, 60);
                 color.A = 0;
-                Particle wave = Particle.NewParticle(Particle.ParticleType<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
+                Particle wave = Particle.NewParticle(ModContent.GetInstance<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
                 wave.data = new Color(255, 255, 168, 120);
                 for (int i = 0; i < Main.rand.Next(3, 7); i++)
                 {
