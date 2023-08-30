@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using Microsoft.Xna.Framework;
 using Terraria;
 
 namespace CalamityHunt.Core;
 
-public struct LightningData
+public readonly struct LightningData
 {
     public LightningData(Vector2 origin, Vector2 end, float strength = 1f, int overridePoints = 0)
     {
@@ -32,10 +33,10 @@ public struct LightningData
         this.strength = strength;
     }
 
-    public Vector2 origin, mid, end;
-    public float strength;
-    private int pointCount;
-
+    private readonly Vector2 origin, mid, end;
+    private readonly float strength;
+    private readonly int pointCount;
+    
     private List<Vector2> Calculate()
     {
         List<Vector2> points = new List<Vector2>();
@@ -53,5 +54,6 @@ public struct LightningData
         return points;
     }
 
+    [Pure]
     public List<Vector2> Value => Calculate();
 }

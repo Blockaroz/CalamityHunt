@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using Microsoft.Xna.Framework;
 
 namespace CalamityHunt.Core;
 
-public struct BezierCurve
+public readonly struct BezierCurve
 {
-    private List<Vector2> controlPoints;
+    private readonly List<Vector2> controlPoints;
 
     public BezierCurve(List<Vector2> controlPoints) => this.controlPoints = controlPoints;
 
@@ -26,8 +27,10 @@ public struct BezierCurve
         }
     }
 
+    [Pure]
     public Vector2 GetSinglePoint(float proportionalDistance) => EvaluateRecursive(controlPoints, Math.Clamp(proportionalDistance, 0f, 1f));
 
+    [Pure]
     public List<Vector2> GetPoints(int pointCount)
     {
         float interval = 1f / pointCount;
@@ -43,6 +46,7 @@ public struct BezierCurve
         return points;
     }
 
+    [Pure]
     public float Distance(int pointCount)
     {
         float interval = 1f / pointCount;
@@ -55,5 +59,6 @@ public struct BezierCurve
         return totalDistance;
     }
 
+    [Pure]
     public Vector2 this[int x] => controlPoints[x];
 }
