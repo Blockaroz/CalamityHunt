@@ -1,7 +1,9 @@
 ﻿#nullable enable
 
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace CalamityHunt.Common.Utilities;
 
@@ -25,7 +27,7 @@ public static class ReflectionUtilities
     ///     The property to make a getter and setter for.
     /// </param>
     /// <returns>Getters and setters for the given property.</returns>
-    public static (GetDelegate? getter, SetDelegate? setter) ResolvePropertyGetterAndSetter(this PropertyInfo? property)
+    public static unsafe (GetDelegate? getter, SetDelegate? setter) ResolvePropertyGetterAndSetter(this PropertyInfo? property)
     {
         if (property is null)
             return (null, null);
@@ -54,8 +56,45 @@ public static class ReflectionUtilities
             {
                 setter = (obj, value) =>
                 {
-                    ref object? backingFieldReference = ref Unsafe.AsRef(backingField.GetValue(obj));
-                    backingFieldReference = value;
+                    // Get a reference/pointer to the backing field.
+                    if (obj is null)
+                    {
+                        // Assume static context.
+                        /*var fieldPtr = backingField.FieldHandle.Value;
+
+                        if (value is null)
+                        {
+                            *fieldPtr.ToPointer() = default;
+                        }
+                        else
+                        {
+                            fixed (byte* ptr = &Unsafe.As<StrongBox<byte>>(value!).Value)
+                            {
+                                throw new NotImplementedException();
+                            }
+                        }*/
+
+                        var fieldPtr = backingField.FieldHandle.Value;
+                        
+                        if (value is null)
+                        {
+                            Marshal.WriteIntPtr(fieldPtr, IntPtr.Zero);
+                        }
+                        else
+                        {
+                            var objHandle = GCHandle.Alloc(obj, GCHandleType.Pinned);
+                            Marshal.WriteIntPtr(fieldPtr, objHandle.AddrOfPinnedObject());
+                        }
+                    }
+                    else
+                    {
+                        // Assume instance context.
+                        fixed (byte* ptr = &Unsafe.As<StrongBox<byte>>(obj).Value)
+                        {
+                            var fieldPtr = backingField.FieldHandle;
+                            throw new NotImplementedException();
+                        }
+                    }
                 };
             }
         }
