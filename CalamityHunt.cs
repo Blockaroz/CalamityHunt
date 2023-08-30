@@ -155,6 +155,7 @@ namespace CalamityHunt
         {
             var source = new SmartContentSource(base.CreateDefaultContentSource());
             source.AddDirectoryRedirect("Content", "Assets/Textures");
+            source.AddDirectoryRedirect("Common", "Assets/Textures");
             return source;
         }
     }
