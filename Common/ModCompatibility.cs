@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Terraria.ModLoader;
 
@@ -28,6 +29,7 @@ public static class ModCompatibility
     ///     advantage of how CLR generics work.
     /// </summary>
     /// <typeparam name="TModName">The mod name.</typeparam>
+    [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
     public abstract class BaseModCompatibility<TModName> where TModName : IModNameProvider, new()
     {
         private static readonly IModNameProvider name_provider = new TModName();

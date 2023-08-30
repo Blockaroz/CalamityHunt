@@ -1332,7 +1332,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void OnKill()
         {
-            BossDownedSystem.downedBoss["Goozma"] = true;
+            ModContent.GetInstance<BossDownedSystem>().GoozmaDowned = true;
 
             Main.StopSlimeRain();
 

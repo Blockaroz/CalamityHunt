@@ -125,7 +125,7 @@ namespace CalamityHunt
                 Vector2 centered = new Vector2(rect.Center.X - (texture.Width / 2), rect.Center.Y - (texture.Height / 2));
                 sb.Draw(texture, centered, color);
             };
-            bossChecklist.Call("LogBoss", this, "Goozma", 23.6, () => BossDownedSystem.downedBoss["Goozma"], ModContent.NPCType<Goozma>(), new Dictionary<string, object>()
+            bossChecklist.Call("LogBoss", this, "Goozma", 23.6, () => ModContent.GetInstance<BossDownedSystem>().GoozmaDowned, ModContent.NPCType<Goozma>(), new Dictionary<string, object>()
             {
                 ["spawnItems"] = sludge,
                 ["customPortrait"] = portrait,
