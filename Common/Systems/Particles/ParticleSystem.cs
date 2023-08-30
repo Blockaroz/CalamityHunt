@@ -11,8 +11,6 @@ namespace CalamityHunt.Common.Systems.Particles
     [Autoload(Side = ModSide.Client)]
     public class ParticleSystem : ModSystem
     {
-        internal static readonly IList<Particle> particleTypes = new List<Particle>();
-
         public static IList<Particle> particle = new List<Particle>();
 
         public override void OnModLoad()
@@ -27,8 +25,6 @@ namespace CalamityHunt.Common.Systems.Particles
             On_Main.UpdateParticleSystems -= UpdateParticles;
             On_Main.DoDraw_DrawNPCsOverTiles -= DrawParticlesUnderEntities;
             On_Main.DrawDust -= DrawParticles;
-
-            particleTypes.Clear();
         }
 
         public static void UpdateParticles()

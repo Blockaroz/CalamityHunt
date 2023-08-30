@@ -43,7 +43,6 @@ namespace CalamityHunt.Common.Systems.Particles
         protected sealed override void Register()
         {
             ModTypeLookup<Particle>.Register(this);
-            ParticleSystem.particleTypes.Add(this);
         }
 
         public sealed override void SetupContent()
