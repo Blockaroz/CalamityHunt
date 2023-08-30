@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
+using CalamityHunt.Core;
 using Terraria.GameContent;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Magic

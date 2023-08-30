@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CalamityHunt.Core;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;

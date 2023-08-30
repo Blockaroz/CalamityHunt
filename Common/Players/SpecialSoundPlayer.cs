@@ -7,6 +7,7 @@ using Terraria.Audio;
 using Terraria;
 using Terraria.ModLoader;
 using CalamityHunt.Content.Items.Weapons.Ranged;
+using CalamityHunt.Core;
 using Microsoft.Xna.Framework;
 
 namespace CalamityHunt.Common.Players

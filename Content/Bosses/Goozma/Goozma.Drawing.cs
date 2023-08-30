@@ -10,6 +10,7 @@ using Terraria.Graphics;
 using Terraria.ID;
 using System.Linq;
 using System.Drawing.Drawing2D;
+using CalamityHunt.Core;
 using Terraria.Graphics.Shaders;
 
 namespace CalamityHunt.Content.Bosses.Goozma

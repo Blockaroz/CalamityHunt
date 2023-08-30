@@ -5,6 +5,7 @@ using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Melee;
 using CalamityHunt.Content.Tiles;
+using CalamityHunt.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;

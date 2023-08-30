@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Linq;
+using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;

@@ -7,6 +7,7 @@ using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;

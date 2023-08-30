@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+
+namespace CalamityHunt.Core;
 
 public struct BezierCurve
 {

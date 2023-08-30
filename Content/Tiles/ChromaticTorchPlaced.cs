@@ -16,6 +16,7 @@ using Terraria.ObjectData;
 
 using CalamityHunt.Content.Items.Placeable;
 using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Core;
 
 namespace CalamityHunt.Content.Tiles
 {

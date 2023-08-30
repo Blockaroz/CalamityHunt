@@ -6,6 +6,7 @@ using ReLogic.Content;
 using System;
 using System.Linq;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;

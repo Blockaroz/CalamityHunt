@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using CalamityHunt.Core;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;

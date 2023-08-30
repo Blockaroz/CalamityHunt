@@ -3,6 +3,7 @@ using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Particles;
+using CalamityHunt.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;

@@ -4,6 +4,7 @@ using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
+using CalamityHunt.Core;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;

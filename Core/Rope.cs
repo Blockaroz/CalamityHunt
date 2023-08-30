@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Xna.Framework;
 using Terraria;
+
+namespace CalamityHunt.Core;
 
 public class Rope
 {
