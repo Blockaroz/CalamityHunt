@@ -1,14 +1,19 @@
-﻿using Terraria;
+﻿using Arch.Core.Extensions;
+using CalamityHunt.Common.Systems.Particles;
+using Terraria;
 
-namespace CalamityHunt.Content.Particles.FlyingSlimes
+namespace CalamityHunt.Content.Particles.FlyingSlimes;
+
+public class FlyingUmbrellaSlimeParticleBehavior : FlyingSlimeParticleBehavior
 {
-    public class FlyingUmbrellaSlimeParticleBehavior : FlyingSlimeParticleBehavior
+    public override float SlimeSpeed => 7f;
+
+    public override float SlimeAcceleration => 0.2f;
+
+    public override void KillEffect(in Arch.Core.Entity entity)
     {
-        public override float SlimeSpeed => 7f;
-        public override float SlimeAcceleration => 0.2f;
-        public override void KillEffect()
-        {
-            Gore.NewGore(Entity.GetSource_None(), position, Main.rand.NextVector2Circular(1, 1), 314);
-        }
+        ref var position = ref entity.Get<ParticlePosition>();
+
+        Gore.NewGore(Entity.GetSource_None(), position.Value, Main.rand.NextVector2Circular(1, 1), 314);
     }
 }
