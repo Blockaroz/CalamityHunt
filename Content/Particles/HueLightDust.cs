@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using Arch.Core.Extensions;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Core;
@@ -7,19 +8,31 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleHueLightDust
+    {
+        public int Frame { get; set; }
+
+        public float Life { get; set; }
+    }
+    
     public class HueLightDust : ParticleBehavior
     {
-        private int frame;
-        private float life;
-
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            rotation += Main.rand.NextFloat(-3f, 3f);
-            scale *= 1.5f;
-            frame = Main.rand.Next(3);
+            ref var rotation = ref entity.Get<ParticleRotation>();
+            ref var scale = ref entity.Get<ParticleScale>();
+            rotation.Value += Main.rand.NextFloat(-3f, 3f);
+            scale.Value *= 1.5f;
+
+            var dust = new ParticleHueLightDust
+            {
+                Frame = Main.rand.Next(3),
+            };
+            entity.Add(dust);
         }
 
         public override void Update()

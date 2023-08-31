@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
@@ -25,13 +27,21 @@ namespace CalamityHunt.Content.Particles
     
     public class CosmicSmoke : ParticleBehavior
     {
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            variant = Main.rand.Next(8);
-            scale *= 0.8f + Main.rand.NextFloat(0.9f, 1.1f);
-            rotationalVelocity = Main.rand.NextFloat(-0.15f, 0.15f);
-            rotation += Main.rand.NextFloat(-3f, 3f);
-            maxTime = (int)(15 * (scale * 0.2f + 0.8f));
+            ref var scale = ref entity.Get<ParticleScale>();
+            ref var rotation = ref entity.Get<ParticleRotation>();
+
+            scale.Value *= 0.8f + Main.rand.NextFloat(0.9f, 1.1f);
+            rotation.Value += Main.rand.NextFloat(-3f, 3f);
+
+            var smoke = new ParticleCosmicSmoke
+            {
+                Variant = Main.rand.Next(8),
+                RotationalVelocity = Main.rand.NextFloat(-0.15f, 0.15f),
+                MaxTime = (int)(15 * (scale.Value * 0.2f + 0.8f))
+            };
+            entity.Add(smoke);
         }
 
         public override void Update()

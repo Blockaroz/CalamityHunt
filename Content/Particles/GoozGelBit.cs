@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Arch.Core.Extensions;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Core;
 using Terraria;
@@ -15,30 +16,45 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleGoozGelBit
+    {
+        public bool Colorful { get; set; }
+
+        public int Variant { get; set; }
+
+        public int Direction { get; set; }
+        
+        public float ColOffset { get; set; }
+        
+        public int Time { get; set; }
+        
+        public Vector2 HomePos { get; set; }
+    }
+    
     public class GoozGelBit : ParticleBehavior
     {
-        private bool colorful;
-        private int variant;
-        private int direction;
-        private float colOffset;
-        private int time;
-        private Vector2 homePos;
-
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            scale *= Main.rand.NextFloat(1f, 1.1f);
-            variant = Main.rand.Next(5);
+            ref var scale = ref entity.Get<ParticleScale>();
+            ref var position = ref entity.Get<ParticlePosition>();
+            scale.Value *= Main.rand.NextFloat(1f, 1.1f);
+            var bit = new ParticleGoozGelBit
+            {
+                Variant = Main.rand.Next(5),
+            };
+            
             if (Main.rand.NextBool(1000))
-                variant = Main.rand.Next(5, 8);            
-
-            direction = Main.rand.NextBool() ? 1 : -1;
-            colOffset = Main.rand.NextFloat();
-            homePos = position;
-            colorful = Main.rand.NextBool(2);
-            behindEntities = true;
+                bit.Variant = Main.rand.Next(5, 8);            
+            
+            bit.Direction = Main.rand.NextBool() ? 1 : -1;
+            bit.ColOffset = Main.rand.NextFloat();
+            bit.HomePos = position.Value;
+            bit.Colorful = Main.rand.NextBool(2);
+            entity.Add(bit, new ParticleDrawBehindEntities());
         }
 
         public override void Update()

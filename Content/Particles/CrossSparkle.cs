@@ -6,20 +6,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleCrossSparkle
+    {
+        public int Time { get; set; }
+    }
+    
     public class CrossSparkle : ParticleBehavior
     {
-        public int time;
-
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            rotation = velocity.ToRotation() + Main.rand.NextFloat(-0.05f, 0.05f);
-            velocity = Vector2.Zero;
+            ref var velocity = ref entity.Get<ParticleVelocity>();
+            ref var rotation = ref entity.Get<ParticleRotation>();
+            
+            rotation.Value = velocity.Value.ToRotation() + Main.rand.NextFloat(-0.05f, 0.05f);
+            velocity.Value = Vector2.Zero;
+            
+            entity.Add(new ParticleCrossSparkle());
         }
 
         public override void Update()

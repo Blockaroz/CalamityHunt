@@ -8,15 +8,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleGooBurst
+    {
+        public int Variant { get; set; }
+
+        public float ColOffset { get; set; }
+
+        public int FrameCounter { get; set; }
+
+        public int Frame { get; set; }
+    }
+    
     public class GooBurst : ParticleBehavior
     {
         private int variant;
@@ -24,12 +37,18 @@ namespace CalamityHunt.Content.Particles
         private int frameCounter;
         private int frame;
 
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            scale *= Main.rand.NextFloat(0.9f, 1.1f);
+            ref var scale = ref entity.Get<ParticleScale>();
+            ref var velocity = ref entity.Get<ParticleVelocity>();
+            ref var rotation = ref entity.Get<ParticleRotation>();
+            
+            scale.Value *= Main.rand.NextFloat(0.9f, 1.1f);
             variant = Main.rand.Next(0, 2);
-            rotation = velocity.ToRotation() + MathHelper.PiOver2;
-            velocity = Vector2.Zero;
+            rotation.Value = velocity.Value.ToRotation() + MathHelper.PiOver2;
+            velocity.Value = Vector2.Zero;
+            
+            entity.Add(new ParticleGooBurst());
         }
 
         public override void Update()

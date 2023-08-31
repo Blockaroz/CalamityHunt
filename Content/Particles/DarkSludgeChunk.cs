@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
@@ -26,10 +28,16 @@ namespace CalamityHunt.Content.Particles
     
     public class DarkSludgeChunk : ParticleBehavior
     {
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            scale *= Main.rand.NextFloat(0.7f, 0.9f);
-            variant = Main.rand.Next(2);
+            ref var scale = ref entity.Get<ParticleScale>();
+            scale.Value *= Main.rand.NextFloat(0.7f, 0.9f);
+            
+            var chunk = new ParticleDarkSludgeChunk
+            {
+                Variant = Main.rand.Next(2),
+            };
+            entity.Add(chunk);
         }
 
         public override void Update()

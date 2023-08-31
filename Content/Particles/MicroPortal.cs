@@ -2,23 +2,37 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using Arch.Core.Extensions;
 using CalamityHunt.Common.Utilities;
 using ReLogic.Content;
 using Terraria;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleMicroPortal
+    {
+        public Color SecondColor { get; set; }
+
+        public int Direction { get; set; }
+
+        public float Time { get; set; }
+    }
+    
     public class MicroPortal : ParticleBehavior
     {
-        public Color secondColor;
-        public int direction;
-        public float time;
-
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            rotation = velocity.ToRotation();
-            velocity = Vector2.Zero;
-            direction = Main.rand.NextBool().ToDirectionInt();
+            ref var velocity = ref entity.Get<ParticleVelocity>();
+            ref var rotation = ref entity.Get<ParticleRotation>();
+            rotation.Value = velocity.Value.ToRotation();
+            velocity.Value = Vector2.Zero;
+
+            var portal = new ParticleMicroPortal
+            {
+                Direction = Main.rand.NextBool().ToDirectionInt(),
+            };
+            entity.Add(portal);
         }
 
         public override void Update()

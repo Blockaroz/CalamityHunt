@@ -3,20 +3,30 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticlePrettySparkle
+    {
+        public int Time { get; set; }
+    }
+    
     public class PrettySparkle : ParticleBehavior
     {
-        private int time;
-
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            scale *= Main.rand.NextFloat(0.9f, 1.1f);
-            velocity *= Main.rand.NextFloat(0.9f, 1.1f);
-            rotation *= 0.05f;
+            ref var scale = ref entity.Get<ParticleScale>();
+            ref var velocity = ref entity.Get<ParticleVelocity>();
+            ref var rotation = ref entity.Get<ParticleRotation>();
+            scale.Value *= Main.rand.NextFloat(0.9f, 1.1f);
+            velocity.Value *= Main.rand.NextFloat(0.9f, 1.1f);
+            rotation.Value *= 0.05f;
+
+            entity.Add(new ParticlePrettySparkle());
         }
 
         public override void Update()

@@ -2,21 +2,31 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using Arch.Core.Extensions;
 using CalamityHunt.Common.Utilities;
 using ReLogic.Content;
 using Terraria;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleMicroShockwave
+    {
+        public float CurScale { get; set; }
+
+        public Color SecondColor { get; set; }
+    }
+    
     public class MicroShockwave : ParticleBehavior
     {
-        public float curScale;
-        public Color secondColor;
-
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            rotation = velocity.ToRotation();
-            velocity = Vector2.Zero;
+            ref var velocity = ref entity.Get<ParticleVelocity>();
+            ref var rotation = ref entity.Get<ParticleRotation>();
+            rotation.Value = velocity.Value.ToRotation();
+            velocity.Value = Vector2.Zero;
+
+            entity.Add(new ParticleMicroShockwave());
         }
 
         public override void Update()

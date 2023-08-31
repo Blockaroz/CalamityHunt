@@ -3,8 +3,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
@@ -21,11 +23,16 @@ namespace CalamityHunt.Content.Particles
     
     public class MegaFlame : ParticleBehavior
     {
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            variant = Main.rand.Next(8);
-            scale *= 0.8f + Main.rand.NextFloat(0.9f, 1.1f);
-            maxTime = (int)(25 * (scale * 0.2f + 0.8f));
+            ref var scale = ref entity.Get<ParticleScale>();
+            var flame = new ParticleMegaFlame
+            {
+                Variant = Main.rand.Next(8),
+            };
+            scale.Value *= 0.8f + Main.rand.NextFloat(0.9f, 1.1f);
+            flame.MaxTime = (int)(25 * (scale.Value * 0.2f + 0.8f));
+            entity.Add(flame);
         }
 
         public override void Update()

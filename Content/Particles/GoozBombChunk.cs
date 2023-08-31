@@ -8,27 +8,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleGoozBombChunk
+    {
+        public int Variant { get; set; }
+
+        public float ColOffset { get; set; }
+
+        public int Time { get; set; }
+
+        public bool Stuck { get; set; }
+    }
+    
     public class GoozBombChunk : ParticleBehavior
     {
-        private int variant;
-        private float colOffset;
-        private int time;
-        private bool stuck;
-
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            scale *= Main.rand.NextFloat(1f, 1.2f);
-            variant = Main.rand.Next(2);
-            colOffset = Main.rand.NextFloat();
+            ref var scale = ref entity.Get<ParticleScale>();
+            scale.Value *= Main.rand.NextFloat(1f, 1.2f);
+            
+            var chunk = new ParticleGoozBombChunk
+            {
+                Variant = Main.rand.Next(2),
+                ColOffset = Main.rand.NextFloat(),
+            };
+            entity.Add(chunk);
         }
 
         public override void Update()
