@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
                 if (Main.rand.NextBool(3))
                 {
                     Vector2 off = Main.rand.NextVector2Circular(20, 20);
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(5, 5), GetAlpha(Color.White).Value * 0.2f, 1f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(5, 5), GetAlpha(Color.White).Value * 0.2f, 1f + Main.rand.NextFloat());
                 }
 
                 if (Main.rand.NextBool(8))
@@ -119,14 +119,14 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
             {
                 Vector2 off = Main.rand.NextVector2Circular(30, 30);
                 float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(1, 1), GetAlpha(Color.White).Value * 0.2f, scale);
+                ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(1, 1), GetAlpha(Color.White).Value * 0.2f, scale);
             }
 
             if (Main.rand.NextBool(35))
             {
                 Vector2 off = Main.rand.NextVector2Circular(20, 20);
                 float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Item.Center + off, Main.rand.NextVector2Circular(14, 14), GetAlpha(Color.White).Value * 0.2f, scale * 0.5f);
+                ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(14, 14), GetAlpha(Color.White).Value * 0.2f, scale * 0.5f);
             }
 
             if (Main.rand.NextBool(5))

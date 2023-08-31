@@ -293,7 +293,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 12f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                        ParticleBehavior.NewParticle(ModContent.GetInstance<EbonBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<EbonBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
                 }
             }
@@ -323,7 +323,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(16, 16);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(50, 50) + new Vector2(velocity.X * 15f, 32f);
-                        ParticleBehavior.NewParticle(ModContent.GetInstance<EbonBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<EbonBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
 
                 if (Time == 30)

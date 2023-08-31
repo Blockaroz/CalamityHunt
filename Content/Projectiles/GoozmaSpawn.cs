@@ -65,7 +65,7 @@ namespace CalamityHunt.Content.Projectiles
                     Vector2 pos = Projectile.Center + Main.rand.NextVector2Circular(300, 300) * Projectile.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
                     Vector2 vel = pos.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * pos.Distance(Projectile.Center) * ((Time - 400) / 500f) * (0.1f / (1f + Projectile.scale));
 
-                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, vel, Color.White, 2f);
+                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), pos, vel, Color.White, 2f);
                     hue.Add(new ParticleData<float> { Value = Time * 0.33f });
                 }
 
@@ -76,7 +76,7 @@ namespace CalamityHunt.Content.Projectiles
             {
                 Vector2 pos = Projectile.Center + Main.rand.NextVector2CircularEdge(150, 150) * Projectile.scale + Main.rand.NextVector2Circular(40, 40);
 
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
                 hue.Add(new ParticleData<float> { Value = Time * 0.33f });
             }
 
@@ -132,7 +132,7 @@ namespace CalamityHunt.Content.Projectiles
                     Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(20f, 17f), 100, Color.Black, 3f + Main.rand.NextFloat()).noGravity = true;
                     if (Main.rand.NextBool())
                     {
-                        var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
+                        var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
                         hue.Add(new ParticleData<float> { Value = Time * 0.33f });
                     }
                 }
@@ -146,7 +146,7 @@ namespace CalamityHunt.Content.Projectiles
                 {
                     Vector2 velocity = Vector2.UnitY.RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(1f);
                     velocity.Y -= Main.rand.NextFloat();
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurst>(), Projectile.Center, velocity, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value, 2f + Main.rand.NextFloat(2f));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), Projectile.Center, velocity, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value, 2f + Main.rand.NextFloat(2f));
                 }
             }
 

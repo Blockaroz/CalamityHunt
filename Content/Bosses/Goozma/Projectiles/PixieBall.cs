@@ -130,7 +130,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 Cooldown--;
 
-                ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center, Main.rand.NextVector2Circular(3, 3) + Projectile.velocity.RotatedByRandom(0.1f) * 0.5f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), Projectile.scale + Main.rand.NextFloat(0.7f));
+                ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center, Main.rand.NextVector2Circular(3, 3) + Projectile.velocity.RotatedByRandom(0.1f) * 0.5f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), Projectile.scale + Main.rand.NextFloat(0.7f));
             }
 
             if (HitCount > 2)

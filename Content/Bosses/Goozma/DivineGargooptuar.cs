@@ -249,7 +249,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     SoundEngine.PlaySound(createSound, NPC.Center);
 
                     for (int i = 0; i < Main.rand.Next(14, 20); i++)
-                        ParticleBehavior.NewParticle(ModContent.GetInstance<HolyBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(80, 50), NPC.velocity.RotatedByRandom(1f) * Main.rand.NextFloat(), Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<HolyBombChunkParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(80, 50), NPC.velocity.RotatedByRandom(1f) * Main.rand.NextFloat(), Color.White, 0.1f + Main.rand.NextFloat(2f));
 
                 }
 
@@ -507,7 +507,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.frameCounter += 2;
 
             for (int i = 0; i < Time; i++)
-                ParticleBehavior.NewParticle(ModContent.GetInstance<HolyBombChunk>(), NPC.Center, Main.rand.NextVector2Circular(50, 50), Color.White, 0.7f + Time / 50f + Main.rand.NextFloat());
+                ParticleBehavior.NewParticle(ModContent.GetInstance<HolyBombChunkParticleBehavior>(), NPC.Center, Main.rand.NextVector2Circular(50, 50), Color.White, 0.7f + Time / 50f + Main.rand.NextFloat());
 
             if (Time == 1)
                 ShatterShield();

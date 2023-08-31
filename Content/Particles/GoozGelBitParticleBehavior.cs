@@ -29,7 +29,7 @@ public struct ParticleGoozGelBit
     public Vector2 HomePos { get; set; }
 }
     
-public class GoozGelBit : ParticleBehavior
+public class GoozGelBitParticleBehavior : ParticleBehavior
 {
     public override void OnSpawn(in Entity entity)
     {
@@ -53,47 +53,53 @@ public class GoozGelBit : ParticleBehavior
 
     public override void Update(in Entity entity)
     {
-        time++;
-        rotation += velocity.X * 0.02f;
+        ref var bit = ref entity.Get<ParticleGoozGelBit>();
+        ref var rotation = ref entity.Get<ParticleRotation>();
+        ref var velocity = ref entity.Get<ParticleVelocity>();
+        ref var position = ref entity.Get<ParticlePosition>();
+        ref var scale = ref entity.Get<ParticleScale>();
+        ref var active = ref entity.Get<ParticleActive>();
+        
+        bit.Time++;
+        rotation.Value += velocity.Value.X * 0.02f;
 
-        if (data is int)
+        if (entity.TryGet<ParticleData<int>>(out var data))
         {
-            if (time > 20 && time < (int)data)
+            if (bit.Time > 20 && bit.Time < data.Value)
             {
-                velocity *= 0.99f;
-                velocity = Vector2.Lerp(velocity, Main.rand.NextVector2Circular(78, 67), 0.02f);
+                velocity.Value *= 0.99f;
+                velocity.Value = Vector2.Lerp(velocity.Value, Main.rand.NextVector2Circular(78, 67), 0.02f);
             }
-            else if (time > (int)data + 20)
+            else if (bit.Time > data.Value + 20)
             {
-                velocity = Vector2.Lerp(velocity, position.DirectionTo(homePos).SafeNormalize(Vector2.Zero) * (position.Distance(homePos) + 10) * 0.02f, 0.1f * Utils.GetLerpValue((int)data + 20, (int)data + 40, time, true));
-                velocity = velocity.RotatedBy(0.03f * direction);
-                if (position.Distance(homePos) < 30)
-                    scale *= 0.9f;
+                velocity.Value = Vector2.Lerp(velocity.Value, position.Value.DirectionTo(bit.HomePos).SafeNormalize(Vector2.Zero) * (position.Value.Distance(bit.HomePos) + 10) * 0.02f, 0.1f * Utils.GetLerpValue(data.Value + 20, data.Value + 40, bit.Time, true));
+                velocity.Value = velocity.Value.RotatedBy(0.03f * bit.Direction);
+                if (position.Value.Distance(bit.HomePos) < 30)
+                    scale.Value *= 0.9f;
             }
         }
         else
-            velocity *= 0.98f;
-
-        if (scale < 0.5f)
-            Active = false;
+            velocity.Value *= 0.98f;
+        
+        if (scale.Value < 0.5f)
+            active.Value = false;
 
         if (Main.rand.NextBool(50))
         {
-            ParticleBehavior hue = NewParticle(ModContent.GetInstance<HueLightDust>(), position + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 2f, Color.White, 1f);
-            hue.data = time * 2f + colOffset; 
+            var hue = NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), position.Value + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 2f, Color.White, 1f);
+            hue.Add(new ParticleData<float> { Value = bit.Time * 2f + bit.ColOffset });
         }
-
 
         if (Main.rand.NextBool(120))
         {
-            Vector2 gooVelocity = -velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.2f);
-            ParticleBehavior goo = NewParticle(ModContent.GetInstance<GooBurst>(), position + Main.rand.NextVector2Circular(30, 30), gooVelocity, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
-            goo.data = time * 2f + colOffset;
+            Vector2 gooVelocity = -velocity.Value.SafeNormalize(Vector2.Zero).RotatedByRandom(0.2f);
+            var goo = NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), position.Value + Main.rand.NextVector2Circular(30, 30), gooVelocity, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
+            goo.Add(new ParticleData<float> { Value = bit.Time * 2f + bit.ColOffset });
 
         }
 
         if (Main.rand.NextBool(70))
-            Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(3, 3), 100, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
+            Dust.NewDustPerfect(position.Value + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(3, 3), 100, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
     }
 
     public static Asset<Texture2D> texture;
@@ -105,21 +111,27 @@ public class GoozGelBit : ParticleBehavior
 
     public override void Draw(in Entity entity, SpriteBatch spriteBatch)
     {
+        ref var bit = ref entity.Get<ParticleGoozGelBit>();
+        ref var rotation = ref entity.Get<ParticleRotation>();
+        ref var position = ref entity.Get<ParticlePosition>();
+        ref var scale = ref entity.Get<ParticleScale>();
+        ref var color = ref entity.Get<ParticleColor>();
+        
         Texture2D glow = AssetDirectory.Textures.Glow.Value;
-        Rectangle frame = texture.Value.Frame(8, 1, variant, 0);
+        Rectangle frame = texture.Value.Frame(8, 1, bit.Variant, 0);
 
-        Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(time * 2f + colOffset);
+        Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(bit.Time * 2f + bit.ColOffset);
         glowColor.A = 0;
 
         for (int i = 0; i < 4; i++)
         {
-            Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + rotation);
-            spriteBatch.Draw(texture.Value, position + off - Main.screenPosition, frame, glowColor, rotation, frame.Size() * 0.5f, scale, 0, 0);
+            Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 4f * i + rotation.Value);
+            spriteBatch.Draw(texture.Value, position.Value + off - Main.screenPosition, frame, glowColor, rotation.Value, frame.Size() * 0.5f, scale.Value, 0, 0);
         }
 
-        if (colorful)
+        if (bit.Colorful)
         {
-            GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
+            GetGradientMapValues(out float[] brightnesses, bit.Time, out Vector3[] colors);
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
             effect.Parameters["colors"].SetValue(colors);
@@ -130,16 +142,16 @@ public class GoozGelBit : ParticleBehavior
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
         }
 
-        spriteBatch.Draw(texture.Value, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.6f), rotation, frame.Size() * 0.5f, scale, 0, 0);
+        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, frame, Color.Lerp(color.Value, Color.Black, 0.6f), rotation.Value, frame.Size() * 0.5f, scale.Value, 0, 0);
 
-        if (colorful)
+        if (bit.Colorful)
         {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         }
     }
 
-    public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
+    public void GetGradientMapValues(out float[] brightnesses, int time, out Vector3[] colors)
     {
         float maxBright = 0.667f;
         brightnesses = new float[10];

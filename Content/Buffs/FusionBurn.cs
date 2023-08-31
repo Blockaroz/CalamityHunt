@@ -52,7 +52,7 @@ namespace CalamityHunt.Content.Buffs
                 {
                     Rectangle box = new Rectangle((int)Player.position.X, (int)Player.position.Y, Player.width, Player.height);
                     Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value; //goozma's main color
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Main.rand.NextVector2FromRectangle(box), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(3f), glowColor, 0.5f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Main.rand.NextVector2FromRectangle(box), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(3f), glowColor, 0.5f + Main.rand.NextFloat());
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace CalamityHunt.Content.Buffs
                 if (Main.rand.NextBool(5))
                 {
                     Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).Value; //oil, bc not from goozma
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Main.rand.NextVector2FromRectangle(npc.Hitbox), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(3f), glowColor, 0.5f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Main.rand.NextVector2FromRectangle(npc.Hitbox), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(3f), glowColor, 0.5f + Main.rand.NextFloat());
                 }
             }
         }

@@ -124,7 +124,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 for (int i = 0; i < 6; i++)
                 {
-                    var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f, Main.rand.NextVector2Circular(4, 4) + NPC.velocity * (i / 6f) * 0.5f, Color.White, (1.5f + Main.rand.NextFloat()) * NPC.scale);
+                    var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f, Main.rand.NextVector2Circular(4, 4) + NPC.velocity * (i / 6f) * 0.5f, Color.White, (1.5f + Main.rand.NextFloat()) * NPC.scale);
                     smoke.Add(new ParticleData<string> { Value = "Cosmos" });
                 }
                 if (Main.rand.NextBool(15))

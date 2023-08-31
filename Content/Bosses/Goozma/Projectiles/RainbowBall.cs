@@ -64,7 +64,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 13 * (1f + Utils.GetLerpValue(0, 600, Projectile.Distance(Main.player[target].MountedCenter), true) * 0.5f);
             }
 
-            var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity, -Projectile.velocity * 0.5f, Color.White, 2f * Projectile.scale);
+            var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity, -Projectile.velocity * 0.5f, Color.White, 2f * Projectile.scale);
             hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
 
             for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
@@ -90,7 +90,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             for (int i = 0; i < 40; i++)
             {
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, -Projectile.velocity * 0.2f + Main.rand.NextVector2Circular(3, 3), Color.White, 2f);
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, -Projectile.velocity * 0.2f + Main.rand.NextVector2Circular(3, 3), Color.White, 2f);
                 hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
             }
         }

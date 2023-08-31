@@ -85,7 +85,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Main.rand.NextBool(20))
             {
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Projectile.velocity * (Time / 150f), Color.White, 1f);
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Projectile.velocity * (Time / 150f), Color.White, 1f);
                 hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
             }
 

@@ -47,7 +47,7 @@ namespace CalamityHunt.Content.Projectiles
         {
             for (int i = 0; i < 36; i++)
             {
-                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(1200, 1200) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(4, 4) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (1f + Main.rand.NextFloat(12f)) * Projectile.scale);
+                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(1200, 1200) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(4, 4) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (1f + Main.rand.NextFloat(12f)) * Projectile.scale);
                 smoke.Add(new ParticleData<string> { Value = "Cosmos" });
             }
 

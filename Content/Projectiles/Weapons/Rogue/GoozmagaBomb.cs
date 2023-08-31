@@ -70,7 +70,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 			if (speedGate)
 			{
 				Color color = new Color(Main.rand.Next(150, 255), Main.rand.Next(150, 255), Main.rand.Next(150, 255));
-				ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Vector2.Zero, color, 1f);
+				ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Vector2.Zero, color, 1f);
 			}
 			else
 			{
@@ -153,7 +153,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 							{
 								Color color = new Color(Main.rand.Next(150, 255), Main.rand.Next(150, 255), Main.rand.Next(150, 255));
 								Vector2 inward = Projectile.Center + Main.rand.NextVector2Circular(1, 1);
-								ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), inward, -inward.DirectionTo(Projectile.Center) * Main.rand.NextFloat(3f), color, 1f);
+								ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), inward, -inward.DirectionTo(Projectile.Center) * Main.rand.NextFloat(3f), color, 1f);
 							}
 							Projectile.Kill();
 							break;

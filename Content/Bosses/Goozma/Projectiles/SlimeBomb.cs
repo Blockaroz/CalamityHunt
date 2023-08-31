@@ -73,7 +73,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 if (Main.rand.NextBool(8))
                 {
-                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(40, 40), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 1.2f);
+                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(40, 40), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 1.2f);
                     hue.Add(new ParticleData<float> { Value = Projectile.localAI[1] });
                 }
 
@@ -113,14 +113,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     for (int i = 0; i < 5; i++)
                     {
                         Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
-                        var goo = ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, (3f - Time) + Main.rand.NextFloat());
+                        var goo = ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), Projectile.Center + gooVelocity * 2, gooVelocity, Color.White, (3f - Time) + Main.rand.NextFloat());
                         goo.Add(new ParticleData<float> { Value = Projectile.localAI[1] });
                     }
                 }
 
                 if (Time < 10)
                 {
-                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(25, 25), Color.White, 1.5f);
+                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(25, 25), Color.White, 1.5f);
                     hue.Add(new ParticleData<float> { Value = Projectile.localAI[1] });
 
                     for (int i = 0; i < 10; i++)

@@ -53,7 +53,7 @@ namespace CalamityHunt.Content.Items.Materials
             
             if (Main.rand.NextBool(20))
             {
-                var spark = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Item.Center + Main.rand.NextVector2Circular(15, 15), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 0.7f + Main.rand.NextFloat());
+                var spark = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Item.Center + Main.rand.NextVector2Circular(15, 15), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 0.7f + Main.rand.NextFloat());
                 spark.Add(new ParticleData<float> { Value = Main.GlobalTimeWrappedHourly * 40f });
             }
         }

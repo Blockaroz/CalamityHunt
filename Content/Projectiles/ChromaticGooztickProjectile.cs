@@ -33,7 +33,7 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Main.rand.NextBool(5))
             {
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, new Vector2(0, -1), rainbowGlow, 1f);
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, new Vector2(0, -1), rainbowGlow, 1f);
                 hue.Add(new ParticleData<float> { Value = Main.GlobalTimeWrappedHourly });
             }
         }

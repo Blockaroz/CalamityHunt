@@ -80,7 +80,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < 6; i++)
             {
-                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(200, 200) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(15, 15) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (3f + Main.rand.NextFloat(3f)) * Projectile.scale);
+                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(200, 200) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(15, 15) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (3f + Main.rand.NextFloat(3f)) * Projectile.scale);
                 smoke.Add(new ParticleData<string> { Value = "Cosmos" });
             }
 
