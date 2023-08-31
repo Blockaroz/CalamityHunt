@@ -45,7 +45,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
             Color flameColor = Color.Lerp(Color.Chartreuse, Color.GreenYellow, Main.rand.NextFloat());
             flameColor.A = 0;
-            ParticleBehavior.NewParticle(ModContent.GetInstance<MegaFlame>(), Projectile.Center, Projectile.velocity, flameColor, 0.2f + Main.rand.NextFloat());
+            ParticleBehavior.NewParticle(ModContent.GetInstance<MegaFlameParticleBehavior>(), Projectile.Center, Projectile.velocity, flameColor, 0.2f + Main.rand.NextFloat());
 
         }
 

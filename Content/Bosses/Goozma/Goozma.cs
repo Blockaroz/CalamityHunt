@@ -1292,7 +1292,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 16f);
                         Vector2 position = ActiveSlime.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 12f, 32f);
-                        ParticleBehavior.NewParticle(ModContent.GetInstance<StarBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<StarBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
 
                     break;

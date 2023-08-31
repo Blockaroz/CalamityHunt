@@ -67,7 +67,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     Vector2 vel = Main.rand.NextVector2Circular(100, 100);
                     float distanceScale = 2f / Math.Max(vel.Length(), 0.9f) + Main.rand.NextFloat();
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<Particles.PrettySparkle>(), Projectile.Center, vel, Main.hslToRgb(Time / 50f, 0.5f, 0.5f, 128), 1f + distanceScale);
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<Particles.PrettySparkleParticleBehavior>(), Projectile.Center, vel, Main.hslToRgb(Time / 50f, 0.5f, 0.5f, 128), 1f + distanceScale);
                 }
 
                 for (int i = 0; i < 2; i++)

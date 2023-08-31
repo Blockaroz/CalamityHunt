@@ -109,7 +109,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             smoke.Add(new ParticleData<string> { Value = "Cosmos" });
 
             if (Main.rand.NextBool(50))
-                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(24, 24) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()) * Projectile.scale);
+                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(24, 24) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()) * Projectile.scale);
 
             Projectile.rotation += Projectile.velocity.Length() * Projectile.direction * 0.0015f;
 

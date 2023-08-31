@@ -192,7 +192,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
 
             if (Main.rand.NextBool(10))
-                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkle>(), NPC.Center + Main.rand.NextVector2Circular(100, 80), Main.rand.NextVector2Circular(3, 3), Main.hslToRgb(NPC.localAI[0] * 0.1f % 1f, 0.5f, 0.7f, 0), 0.3f + Main.rand.NextFloat());
+                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(100, 80), Main.rand.NextVector2Circular(3, 3), Main.hslToRgb(NPC.localAI[0] * 0.1f % 1f, 0.5f, 0.7f, 0), 0.3f + Main.rand.NextFloat());
 
             Time++;
             NPC.localAI[0]++;

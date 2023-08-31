@@ -71,7 +71,7 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
                 {
                     Vector2 off = Main.rand.NextVector2Circular(20, 20);
                     float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkle>(), Item.Center + off, Main.rand.NextVector2Circular(7, 7), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(7, 7), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
                 }
 
                 Dust soul = Dust.NewDustPerfect(Item.Center, DustID.PortalBoltTrail, Main.rand.NextVector2Circular(10, 10), 0, GetAlpha(Color.White).Value, Main.rand.NextFloat(2f));
@@ -112,7 +112,7 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
             {
                 Vector2 off = Main.rand.NextVector2Circular(20, 20);
                 float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkle>(), Item.Center + off, Main.rand.NextVector2Circular(4, 4), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
+                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(4, 4), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
             }
 
             if (Main.rand.NextBool(5))
