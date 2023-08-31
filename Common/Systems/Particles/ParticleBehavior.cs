@@ -8,6 +8,18 @@ namespace CalamityHunt.Common.Systems.Particles
 {
     public abstract class ParticleBehavior : ModTexturedType
     {
+        public override string Texture
+        {
+            get
+            {
+                var texture = base.Texture;
+                if (!texture.EndsWith(nameof(ParticleBehavior)))
+                    return texture;
+
+                return !ModContent.RequestIfExists<Texture2D>(texture, out _) ? texture[..^nameof(ParticleBehavior).Length] : texture;
+            }
+        }
+
         public virtual void Update(in Entity entity)
         { }
 
