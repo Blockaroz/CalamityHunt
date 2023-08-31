@@ -15,7 +15,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class EbonBombChunk : Particle
+    public class EbonBombChunk : ParticleBehavior
     {
         private int variant;
         private int time;

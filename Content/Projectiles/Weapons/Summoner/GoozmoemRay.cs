@@ -84,7 +84,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Color color = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + (progress / 1000f) * 60) * grow * Utils.GetLerpValue(0, 25, Projectile.timeLeft, true);
                 color.A = 0;
                 Vector2 position = Projectile.Center + new Vector2(progress, 0).RotatedBy(Utils.AngleLerp(StartAngle, EndAngle, 1f - (Projectile.timeLeft - 5) / 80f));
-                Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(20f, 25f), color, (1.5f + (progress / 1222f)) * grow * Utils.GetLerpValue(-15, 25, Projectile.timeLeft, true));
+                ParticleBehavior smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(20f, 25f), color, (1.5f + (progress / 1222f)) * grow * Utils.GetLerpValue(-15, 25, Projectile.timeLeft, true));
                 smoke.behindEntities = true;
             }
 

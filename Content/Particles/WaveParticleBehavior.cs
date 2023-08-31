@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class WaveParticle : Particle
+    public class WaveParticleBehavior : ParticleBehavior
     {
         public int time;
         public int maxTime;

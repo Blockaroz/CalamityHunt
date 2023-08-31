@@ -100,7 +100,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     velocities.Add(Projectile.DirectionTo(endPoint).RotatedByRandom(1.5f) * Main.rand.NextFloat(1f, 3f));
                 }
 
-                Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), endPoint, Vector2.Zero, Main.hslToRgb((Projectile.localAI[0] * 0.03f + 0.6f) % 1f, 0.5f, 0.5f, 128), 1f + Main.rand.NextFloat());
+                ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkle>(), endPoint, Vector2.Zero, Main.hslToRgb((Projectile.localAI[0] * 0.03f + 0.6f) % 1f, 0.5f, 0.5f, 128), 1f + Main.rand.NextFloat());
             }
 
             if (Time > 1)
@@ -126,10 +126,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                 }
 
                 if (Main.rand.NextBool(10))
-                    Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), Main.rand.Next(points) + Main.rand.NextVector2Circular(10, 10), Vector2.Zero, Main.hslToRgb((Projectile.localAI[0] * 0.03f + 0.6f) % 1f, 0.5f, 0.5f, 128), 0.1f + Main.rand.NextFloat(0.6f));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkle>(), Main.rand.Next(points) + Main.rand.NextVector2Circular(10, 10), Vector2.Zero, Main.hslToRgb((Projectile.localAI[0] * 0.03f + 0.6f) % 1f, 0.5f, 0.5f, 128), 0.1f + Main.rand.NextFloat(0.6f));
 
                 if (Time <= 17 && Time % 5 == 1)
-                    Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), endPoint + Main.rand.NextVector2Circular(40, 40), Vector2.Zero, Main.hslToRgb((Projectile.localAI[0] * 0.03f + 0.6f) % 1f, 0.5f, 0.5f, 128), Main.rand.NextFloat(1.5f));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkle>(), endPoint + Main.rand.NextVector2Circular(40, 40), Vector2.Zero, Main.hslToRgb((Projectile.localAI[0] * 0.03f + 0.6f) % 1f, 0.5f, 0.5f, 128), Main.rand.NextFloat(1.5f));
             }
             if (Time > 40)
                 Projectile.Kill();

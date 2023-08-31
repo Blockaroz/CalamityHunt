@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class MegaFlame : Particle
+    public class MegaFlame : ParticleBehavior
     {
         public int time;
         public int maxTime;

@@ -25,7 +25,7 @@ namespace CalamityHunt.Content.Projectiles
     public class GoozmaSpawn : ModProjectile
     {
         public static readonly SoundStyle slimeabsorb = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeAbsorb", 8) with { MaxInstances = 0, Volume = 0.1f};
-        public WeightedRandom<Particle> randomType = new();
+        public WeightedRandom<ParticleBehavior> randomType = new();
         public override void SetDefaults()
         {
             Projectile.width = 92;
@@ -64,7 +64,7 @@ namespace CalamityHunt.Content.Projectiles
                     Vector2 pos = Projectile.Center + Main.rand.NextVector2Circular(300, 300) * Projectile.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
                     Vector2 vel = pos.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * pos.Distance(Projectile.Center) * ((Time - 400) / 500f) * (0.1f / (1f + Projectile.scale));
 
-                    Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, vel, Color.White, 2f);
+                    ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, vel, Color.White, 2f);
                     hue.data = Time * 0.33f;
                 }
 
@@ -75,7 +75,7 @@ namespace CalamityHunt.Content.Projectiles
             {
                 Vector2 pos = Projectile.Center + Main.rand.NextVector2CircularEdge(150, 150) * Projectile.scale + Main.rand.NextVector2Circular(40, 40);
 
-                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
+                ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
                 hue.data = Time * 0.33f;
             }
 
@@ -118,7 +118,7 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Time == 900)
             {
-                Particle finalSlime = Particle.NewParticle(ModContent.GetInstance<FlyingRainbowSlime>(), Projectile.Center - Vector2.UnitY * 700, Vector2.Zero, Color.White, 1f);
+                ParticleBehavior finalSlime = ParticleBehavior.NewParticle(ModContent.GetInstance<FlyingRainbowSlime>(), Projectile.Center - Vector2.UnitY * 700, Vector2.Zero, Color.White, 1f);
                 finalSlime.data = Projectile.Center;
             }
 
@@ -131,7 +131,7 @@ namespace CalamityHunt.Content.Projectiles
                     Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(20f, 17f), 100, Color.Black, 3f + Main.rand.NextFloat()).noGravity = true;
                     if (Main.rand.NextBool())
                     {
-                        Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
+                        ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
                         hue.data = Time * 0.33f;
                     }
                 }
@@ -145,7 +145,7 @@ namespace CalamityHunt.Content.Projectiles
                 {
                     Vector2 velocity = Vector2.UnitY.RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(1f);
                     velocity.Y -= Main.rand.NextFloat();
-                    Particle.NewParticle(ModContent.GetInstance<GooBurst>(), Projectile.Center, velocity, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value, 2f + Main.rand.NextFloat(2f));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurst>(), Projectile.Center, velocity, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value, 2f + Main.rand.NextFloat(2f));
                 }
             }
 
@@ -267,9 +267,9 @@ namespace CalamityHunt.Content.Projectiles
             float scale = 1f;
             Color color = Color.White;
 
-            Particle particle = Particle.NewParticle(randomType, position, velocity, color, scale);
-            particle.data = Projectile.Center;
-            particle.behindEntities = true;
+            ParticleBehavior particleBehavior = ParticleBehavior.NewParticle(randomType, position, velocity, color, scale);
+            particleBehavior.data = Projectile.Center;
+            particleBehavior.behindEntities = true;
         }
 
         public override bool PreDraw(ref Color lightColor)

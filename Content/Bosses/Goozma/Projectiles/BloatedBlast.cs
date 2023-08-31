@@ -78,7 +78,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 if (Main.rand.NextBool(5))
                 {
-                    Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Projectile.velocity, Main.rand.NextVector2Circular(2, 2), Color.White, 1f);
+                    ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Projectile.velocity, Main.rand.NextVector2Circular(2, 2), Color.White, 1f);
                     hue.data = Projectile.localAI[0];
                 }
 
@@ -130,7 +130,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         Vector2 outward = new Vector2(size + Main.rand.NextFloat(), 0).RotatedBy(MathHelper.TwoPi / 30f * j);
                         outward.X *= 0.4f;
 
-                        Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, outward.RotatedBy(rotation), Color.White, 1.5f);
+                        ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, outward.RotatedBy(rotation), Color.White, 1.5f);
                         hue.data = (j * 30f + i) / 10f;
                     }
                 }
@@ -154,7 +154,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < 10; i++)
             {
-                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(10, 10), Color.White, 1f);
+                ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(10, 10), Color.White, 1f);
                 hue.data = Projectile.localAI[0];
 
                 Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(4, 4), 100, Color.Black, 1.5f).noGravity = true;

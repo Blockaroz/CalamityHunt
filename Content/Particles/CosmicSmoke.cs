@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class CosmicSmoke : Particle
+    public class CosmicSmoke : ParticleBehavior
     {
         public int time;
         public int maxTime;

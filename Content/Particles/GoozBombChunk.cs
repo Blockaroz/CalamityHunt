@@ -17,7 +17,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class GoozBombChunk : Particle
+    public class GoozBombChunk : ParticleBehavior
     {
         private int variant;
         private float colOffset;

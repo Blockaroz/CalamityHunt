@@ -354,7 +354,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             {
                                 Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
                                 Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                                Particle.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                                ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                             }
                         }
 
@@ -455,7 +455,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         {
                             Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
                             Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                            Particle.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                            ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                         }
                     }
 
@@ -527,7 +527,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
                     Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                    Particle.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                 }
 
                 squishFactor = new Vector2(1.5f, 0.5f);
@@ -614,7 +614,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                        Particle.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
                 }
             }
@@ -693,7 +693,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(15f, 20f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                        Particle.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
                 }
                 if (Time > 90)

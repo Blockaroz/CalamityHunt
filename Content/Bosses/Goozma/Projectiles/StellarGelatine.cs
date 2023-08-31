@@ -73,7 +73,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < 2; i++)
             {
-                Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * i * 0.5f, Color.White, (0.5f + Main.rand.NextFloat()) * Projectile.scale);
+                ParticleBehavior smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * i * 0.5f, Color.White, (0.5f + Main.rand.NextFloat()) * Projectile.scale);
                 smoke.data = "Cosmos";
             }
 
@@ -103,7 +103,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.ai[1] = 1;
 
             if (Main.rand.NextBool(30))
-                Particle.NewParticle(ModContent.GetInstance<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(12, 12) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.4f + Main.rand.NextFloat()) * Projectile.scale);
+                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkle>(), Projectile.Center + Main.rand.NextVector2Circular(12, 12) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.4f + Main.rand.NextFloat()) * Projectile.scale);
 
             Projectile.rotation += Projectile.velocity.Length() * Projectile.direction * 0.02f;
 

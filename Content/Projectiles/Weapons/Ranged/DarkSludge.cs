@@ -57,14 +57,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 Projectile.rotation = Projectile.velocity.ToRotation();
 
                 if (Main.rand.NextBool(50))
-                    Particle.NewParticle(ModContent.GetInstance<DarkSludgeChunk>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 3 + Projectile.velocity) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.1f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<DarkSludgeChunk>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 3 + Projectile.velocity) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.1f + Main.rand.NextFloat());
             }
             else
             {
                 Projectile.velocity *= 0.05f;
 
                 if (Main.rand.NextBool(150))
-                    Particle.NewParticle(ModContent.GetInstance<DarkSludgeChunk>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 6 + Projectile.velocity) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.1f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<DarkSludgeChunk>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 6 + Projectile.velocity) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.1f + Main.rand.NextFloat());
             }
 
             if (StickHost > -1)
@@ -146,7 +146,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
 
                 for (int i = 0; i < 2; i++)
-                    Particle.NewParticle(ModContent.GetInstance<DarkSludgeChunk>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 9) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.2f + Main.rand.NextFloat(0.6f));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<DarkSludgeChunk>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 9) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.2f + Main.rand.NextFloat(0.6f));
             }
 
             if (Grounded == 0 && MathF.Abs(Projectile.velocity.Y - oldVelocity.Y) > 0)

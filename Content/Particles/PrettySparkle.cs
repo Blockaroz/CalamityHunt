@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class PrettySparkle : Particle
+    public class PrettySparkle : ParticleBehavior
     {
         private int time;
 

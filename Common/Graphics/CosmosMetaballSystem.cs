@@ -57,7 +57,7 @@ namespace CalamityHunt.Common.Graphics
             Main.graphics.GraphicsDevice.SetRenderTarget(SpaceTarget);
             Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 
-            foreach (Particle particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
+            foreach (ParticleBehavior particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
             {
                 CosmicSmoke smoke = particle as CosmicSmoke;
 

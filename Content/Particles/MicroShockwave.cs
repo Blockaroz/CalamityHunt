@@ -8,7 +8,7 @@ using Terraria;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class MicroShockwave : Particle
+    public class MicroShockwave : ParticleBehavior
     {
         public float curScale;
         public Color secondColor;

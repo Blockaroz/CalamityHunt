@@ -221,55 +221,55 @@ namespace CalamityHunt.Content.NPCs
                 }
             }
         }
-        private static void Slime(Projectile proj, NPC npc, Vector2 velocity, Particle particle)
+        private static void Slime(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior)
         {
-            particle = Particle.NewParticle(particle, npc.Center, velocity, npc.color, npc.scale);
-            FlyingSlime slime = particle as FlyingSlime;
+            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, npc.color, npc.scale);
+            FlyingSlime slime = particleBehavior as FlyingSlime;
             slime.time = 20;
-            particle.data = proj.Center;
-            particle.behindEntities = true;
+            particleBehavior.data = proj.Center;
+            particleBehavior.behindEntities = true;
             npc.life = 0;
         }
-        private static void Slime2(Projectile proj, NPC npc, Vector2 velocity, Particle particle)
+        private static void Slime2(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior)
         {
-            particle = Particle.NewParticle(particle, npc.Center, velocity, Color.White, npc.scale);
-            FlyingSlime slime = particle as FlyingSlime;
+            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
+            FlyingSlime slime = particleBehavior as FlyingSlime;
             slime.time = 20;
-            particle.data = proj.Center;
-            particle.behindEntities = true;
+            particleBehavior.data = proj.Center;
+            particleBehavior.behindEntities = true;
             npc.life = 0;
         }
-        private static void Ice(Projectile proj, NPC npc, Vector2 velocity, Particle particle, bool ice)
+        private static void Ice(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, bool ice)
         {
-            particle = Particle.NewParticle(particle, npc.Center, velocity, Color.White, npc.scale);
-            FlyingSlime slime = particle as FlyingSlime;
+            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
+            FlyingSlime slime = particleBehavior as FlyingSlime;
             slime.time = 20;
-            FlyingIceSlime iced = particle as FlyingIceSlime;
+            FlyingIceSlime iced = particleBehavior as FlyingIceSlime;
             iced.spiked = ice;
-            particle.data = proj.Center;
-            particle.behindEntities = true;
+            particleBehavior.data = proj.Center;
+            particleBehavior.behindEntities = true;
             npc.life = 0;
         }
-        private static void Balloon(Projectile proj, NPC npc, Vector2 velocity, Particle particle, int frame)
+        private static void Balloon(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, int frame)
         {
-            particle = Particle.NewParticle(particle, npc.Center, velocity, npc.color, npc.scale);
-            FlyingSlime slime = particle as FlyingSlime;
+            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, npc.color, npc.scale);
+            FlyingSlime slime = particleBehavior as FlyingSlime;
             slime.time = 20;
-            FlyingBalloonSlime ball = particle as FlyingBalloonSlime;
+            FlyingBalloonSlime ball = particleBehavior as FlyingBalloonSlime;
             ball.balloonVariant = frame - 1;
-            particle.data = proj.Center;
-            particle.behindEntities = true;
+            particleBehavior.data = proj.Center;
+            particleBehavior.behindEntities = true;
             npc.life = 0;
         }
-        private static void Ribbon(Projectile proj, NPC npc, Vector2 velocity, Particle particle, int variant)
+        private static void Ribbon(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, int variant)
         {
-            particle = Particle.NewParticle(particle, npc.Center, velocity, Color.White, npc.scale);
-            FlyingSlime slime = particle as FlyingSlime;
+            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
+            FlyingSlime slime = particleBehavior as FlyingSlime;
             slime.time = 20;
-            FlyingPresentSlime present = particle as FlyingPresentSlime;
+            FlyingPresentSlime present = particleBehavior as FlyingPresentSlime;
             present.variant = variant;
-            particle.data = proj.Center;
-            particle.behindEntities = true;
+            particleBehavior.data = proj.Center;
+            particleBehavior.behindEntities = true;
             npc.life = 0;
         }
     }

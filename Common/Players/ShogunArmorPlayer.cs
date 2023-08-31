@@ -78,7 +78,7 @@ namespace CalamityHunt.Common.Players
                     for (int i = 0; i < 6; i++)
                         Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(25, 25), DustID.TintableDust, Player.velocity * -Main.rand.NextFloat(-0.5f, 1f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
-                    Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(25, 25), Player.velocity * -Main.rand.NextFloat(-0.6f, 0.6f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(25, 25), Player.velocity * -Main.rand.NextFloat(-0.6f, 0.6f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
                 }
                 //else if (slamPower > 0)
                 //{
@@ -145,7 +145,7 @@ namespace CalamityHunt.Common.Players
                         Dust.NewDustPerfect(Player.Bottom + Main.rand.NextVector2Circular(20, 5), DustID.TintableDust, Main.rand.NextVector2Circular(10, 1) - Vector2.UnitY * Main.rand.NextFloat(5f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
                     for (int i = 0; i < 5; i++)
-                        Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Player.Bottom + Main.rand.NextVector2Circular(30, 5), Main.rand.NextVector2Circular(6, 1) - Vector2.UnitY * Main.rand.NextFloat(2f), Player.shirtColor, 1f);
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Player.Bottom + Main.rand.NextVector2Circular(30, 5), Main.rand.NextVector2Circular(6, 1) - Vector2.UnitY * Main.rand.NextFloat(2f), Player.shirtColor, 1f);
 
                     slamPower = 0;
                 }
@@ -162,7 +162,7 @@ namespace CalamityHunt.Common.Players
                             Dust.NewDustPerfect(Player.Bottom + Main.rand.NextVector2Circular(20, 5), DustID.TintableDust, -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(7f) * (i / 40f) - new Vector2(Player.direction * 10f, 0f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
 
                         for (int i = 0; i < 5; i++)
-                            Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Player.Bottom + Main.rand.NextVector2Circular(20, 5), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(2f) * (i / 40f) - new Vector2(Player.direction * 10f, 0f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
+                            ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Player.Bottom + Main.rand.NextVector2Circular(20, 5), -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(2f) * (i / 40f) - new Vector2(Player.direction * 10f, 0f), Player.shirtColor, 0.5f + Main.rand.NextFloat());
 
                     }
                 }

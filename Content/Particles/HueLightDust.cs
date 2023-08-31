@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class HueLightDust : Particle
+    public class HueLightDust : ParticleBehavior
     {
         private int frame;
         private float life;
@@ -44,7 +44,7 @@ namespace CalamityHunt.Content.Particles
 
             if (Main.rand.NextBool(150) && scale > 0.25f)
             {
-                Particle hue = NewParticle(this, position, Main.rand.NextVector2Circular(1, 1), color * 0.99f, MathHelper.Clamp(scale * 2f, 0.1f, 1.5f));
+                ParticleBehavior hue = NewParticle(this, position, Main.rand.NextVector2Circular(1, 1), color * 0.99f, MathHelper.Clamp(scale * 2f, 0.1f, 1.5f));
                 hue.data = data;
             }
 

@@ -8,7 +8,7 @@ using Terraria;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class MicroPortal : Particle
+    public class MicroPortal : ParticleBehavior
     {
         public Color secondColor;
         public int direction;

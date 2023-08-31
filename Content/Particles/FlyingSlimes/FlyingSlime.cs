@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
-    public abstract class FlyingSlime : Particle
+    public abstract class FlyingSlime : ParticleBehavior
     {
         public int time;
         public float distanceFade;

@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class CrossSparkle : Particle
+    public class CrossSparkle : ParticleBehavior
     {
         public int time;
 

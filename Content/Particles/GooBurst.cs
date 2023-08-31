@@ -17,7 +17,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class GooBurst : Particle
+    public class GooBurst : ParticleBehavior
     {
         private int variant;
         private float colOffset;
