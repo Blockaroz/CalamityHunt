@@ -66,7 +66,7 @@ namespace CalamityHunt.Common.Players
                 }
             }
             if (drawInfo.shadow == 0 && Main.rand.NextBool(8) && stressedOut)
-                Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, goo, 1f);
+                ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Player.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, goo, 1f);
         }
         public override void FrameEffects()
         {

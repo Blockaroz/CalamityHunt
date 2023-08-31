@@ -21,6 +21,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using System.Security.Principal;
+using Arch.Core.Extensions;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -123,16 +124,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 for (int i = 0; i < 6; i++)
                 {
-                    Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f, Main.rand.NextVector2Circular(4, 4) + NPC.velocity * (i / 6f) * 0.5f, Color.White, (1.5f + Main.rand.NextFloat()) * NPC.scale);
-                    smoke.data = "Cosmos";
+                    var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f, Main.rand.NextVector2Circular(4, 4) + NPC.velocity * (i / 6f) * 0.5f, Color.White, (1.5f + Main.rand.NextFloat()) * NPC.scale);
+                    smoke.Add(new ParticleData<string> { Value = "Cosmos" });
                 }
                 if (Main.rand.NextBool(15))
-                    Particle.NewParticle(ModContent.GetInstance<PrettySparkle>(), NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()) * NPC.scale);
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()) * NPC.scale);
 
                 if (Main.rand.NextBool(4))
                 {
                     Vector2 discOff = (Main.rand.NextVector2CircularEdge(150, 50) + Main.rand.NextVector2Circular(18, 18)).RotatedBy(discRot) * discScale;
-                    Particle.NewParticle(ModContent.GetInstance<PrettySparkle>(), discPos + discOff, discOff.RotatedBy(MathHelper.PiOver4) * 0.01f, new Color(30, 15, 10, 0), (0.1f + Main.rand.NextFloat(0.5f)) * NPC.scale);
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), discPos + discOff, discOff.RotatedBy(MathHelper.PiOver4) * 0.01f, new Color(30, 15, 10, 0), (0.1f + Main.rand.NextFloat(0.5f)) * NPC.scale);
                 }
             }
 
@@ -543,7 +544,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(10f, 20f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 12f, 32f);
-                        Particle.NewParticle(ModContent.GetInstance<StarBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<StarBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
 
                     NPC.localAI[0] = 0;
@@ -653,7 +654,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(10f, 20f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) * NPC.scale + new Vector2(velocity.X * 12f, 32f);
-                        Particle.NewParticle(ModContent.GetInstance<StarBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<StarBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
                 }
             }

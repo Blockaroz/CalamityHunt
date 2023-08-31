@@ -8,6 +8,7 @@ using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
@@ -98,8 +99,8 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
 
             if (Main.rand.NextBool(7))
             {
-                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Projectile.velocity * 0.2f, Color.White, 1f);
-                hue.data = Projectile.localAI[0];
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Projectile.velocity * 0.2f, Color.White, 1f);
+                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
             }
 
             Lighting.AddLight(Projectile.Center, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]).ToVector3() * 0.2f);

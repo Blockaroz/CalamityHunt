@@ -66,14 +66,14 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
                 if (Main.rand.NextBool(5))
                 {
                     Vector2 off = Main.rand.NextVector2Circular(20, 20);
-                    Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(5, 5), glowColor * 0.2f, 1f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(5, 5), glowColor * 0.2f, 1f + Main.rand.NextFloat());
                 }
 
                 if (Main.rand.NextBool(8))
                 {
                     Vector2 off = Main.rand.NextVector2Circular(20, 20);
                     float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                    Particle.NewParticle(ModContent.GetInstance<PrettySparkle>(), Item.Center + off, Main.rand.NextVector2Circular(7, 7), glowColor * 0.2f, scale * 0.6f);
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(7, 7), glowColor * 0.2f, scale * 0.6f);
                 }
 
                 Dust soul = Dust.NewDustPerfect(Item.Center, DustID.PortalBoltTrail, Main.rand.NextVector2Circular(10, 10), 0, glowColor, Main.rand.NextFloat(2f));
@@ -124,7 +124,7 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
             {
                 Vector2 off = Main.rand.NextVector2Circular(40, 40);
                 float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), Item.Center + off, Main.rand.NextVector2Circular(1, 1), GetAlpha(Color.White).Value * 0.2f, scale);
+                ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(1, 1), GetAlpha(Color.White).Value * 0.2f, scale);
             }
 
             for (int i = 0; i < 2; i++)
@@ -133,7 +133,7 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
                 float scale = Main.rand.NextFloat(2f) + Utils.GetLerpValue(50, 0, off.Length(), true);
                 Color glowColor = Color.Lerp(GetAlpha(Color.White).Value, Color.OrangeRed, 0.6f);
                 glowColor.A = 0;
-                Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Item.Center + off, Main.rand.NextVector2Circular(2, 2), glowColor, scale * 0.6f);
+                ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(2, 2), glowColor, scale * 0.6f);
             }
 
             if (Main.rand.NextBool(5))

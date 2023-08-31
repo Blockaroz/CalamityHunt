@@ -62,7 +62,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             //}
 
             if (Time > 95 && Time < 180 && Main.rand.NextBool(5))
-                Particle.NewParticle(ModContent.GetInstance<PrettySparkle>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, Main.rand.NextFloat()), Main.rand.NextVector2Circular(1, 1), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()));
+                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, Main.rand.NextFloat()), Main.rand.NextVector2Circular(1, 1), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()));
 
             if (Time > 180)
                 Projectile.Kill();

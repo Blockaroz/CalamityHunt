@@ -185,7 +185,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 Projectile.EmitEnchantmentVisualsAt(scytheEnd - new Vector2(75), 150, 150);
 
                 if (Main.rand.NextBool(5))
-                    Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), scytheEnd + Main.rand.NextVector2Circular(70, 70), Vector2.Zero, glowColor, Main.rand.NextFloat(1.5f));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), scytheEnd + Main.rand.NextVector2Circular(70, 70), Vector2.Zero, glowColor, Main.rand.NextFloat(1.5f));
 
             }
 
@@ -279,7 +279,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).Value;
-            Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
+            ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 300);
             shakeStrength *= 1.5f;
 
@@ -289,7 +289,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).Value;
-            Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
+            ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 300);
             shakeStrength *= 1.5f;
 

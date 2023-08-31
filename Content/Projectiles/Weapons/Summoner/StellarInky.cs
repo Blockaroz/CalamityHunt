@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Drawing.Drawing2D;
 using System.IO;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -164,15 +165,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                         if (teleportTime++ > 150 && Main.rand.NextBool(20))
                         {
                             Color color = new Color(5, 10, 100, 0);
-                            Particle portal = Particle.NewParticle(ModContent.GetInstance<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portal.data = new Color(255, 200, 90, 120);
+                            var portal = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroPortalParticleBehavior>(), Projectile.Center, Vector2.Zero, color, 1f);
+                            portal.Add(new ParticleData<Color> { Value = new Color(255, 200, 90, 120) });
 
                             teleportTime = 0;
                             Projectile.Center -= Projectile.velocity.RotatedByRandom(2f) * Main.rand.Next(8, 15);
                             Projectile.netUpdate = true;
 
-                            Particle portalAfter = Particle.NewParticle(ModContent.GetInstance<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portalAfter.data = new Color(255, 200, 90, 120);
+                            var portalAfter = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroPortalParticleBehavior>(), Projectile.Center, Vector2.Zero, color, 1f);
+                            portalAfter.Add(new ParticleData<Color> { Value = new Color(255, 200, 90, 120) });
 
                             //SoundStyle warpSound = SoundID.Item135;
                         }
@@ -298,14 +299,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                             teleportTime = 10;
 
                             Color color = new Color(5, 10, 100, 0);
-                            Particle portal = Particle.NewParticle(ModContent.GetInstance<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portal.data = new Color(255, 200, 90, 120);
+                            var portal = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroPortalParticleBehavior>(), Projectile.Center, Vector2.Zero, color, 1f);
+                            portal.Add(new ParticleData<Color> { Value = new Color(255, 200, 90, 120) });
 
                             targetPositionOffset += Main.rand.NextVector2Circular(1, 5);
                             Projectile.Center = target.Center + targetPositionOffset;
 
-                            Particle portalAfter = Particle.NewParticle(ModContent.GetInstance<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portalAfter.data = new Color(255, 200, 90, 120);
+                            var portalAfter = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroPortalParticleBehavior>(), Projectile.Center, Vector2.Zero, color, 1f);
+                            portalAfter.Add(new ParticleData<Color> { Value = new Color(255, 200, 90, 120) });
 
                             //
                         }
@@ -361,8 +362,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             {
                 Color color = new Color(255, 150, 150, 60);
                 color.A = 0;
-                Particle wave = Particle.NewParticle(ModContent.GetInstance<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
-                wave.data = new Color(255, 255, 168, 120);
+                var wave = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroShockwaveParticleBehavior>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
+                wave.Add(new ParticleData<Color> { Value = new Color(255, 255, 168, 120) });
                 for (int i = 0; i < Main.rand.Next(3, 7); i++)
                 {
                     Dust sparkle = Dust.NewDustPerfect(Projectile.Bottom + Main.rand.NextVector2Circular(9, 4), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(3, 1) - Vector2.UnitY * (i + 1) * 0.7f, 0, color, 1f + Main.rand.NextFloat());

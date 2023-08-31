@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
@@ -84,8 +85,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Main.rand.NextBool(20))
             {
-                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Projectile.velocity * (Time / 150f), Color.White, 1f);
-                hue.data = Projectile.localAI[0];
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Projectile.velocity * (Time / 150f), Color.White, 1f);
+                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
             }
 
             Time++;

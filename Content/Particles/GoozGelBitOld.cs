@@ -1,4 +1,4 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿/*using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
-    public class GoozGelBitOld : Particle
+    public class GoozGelBitOld : ParticleBehavior
     {
         private bool colorful;
         private int variant;
@@ -66,7 +66,7 @@ namespace CalamityHunt.Content.Particles
 
             if (Main.rand.NextBool(50))
             {
-                Particle hue = NewParticle(ModContent.GetInstance<HueLightDust>(), position + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 2f, Color.White, 1f);
+                ParticleBehavior hue = NewParticle(ModContent.GetInstance<HueLightDust>(), position + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 2f, Color.White, 1f);
                 hue.data = time * 2f + colOffset; 
             }
 
@@ -74,7 +74,7 @@ namespace CalamityHunt.Content.Particles
             if (Main.rand.NextBool(120))
             {
                 Vector2 gooVelocity = -velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.2f);
-                Particle goo = NewParticle(ModContent.GetInstance<GooBurst>(), position + Main.rand.NextVector2Circular(30, 30), gooVelocity, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
+                ParticleBehavior goo = NewParticle(ModContent.GetInstance<GooBurst>(), position + Main.rand.NextVector2Circular(30, 30), gooVelocity, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
                 goo.data = time * 2f + colOffset;
 
             }
@@ -114,3 +114,4 @@ namespace CalamityHunt.Content.Particles
         }
     }
 }
+*/

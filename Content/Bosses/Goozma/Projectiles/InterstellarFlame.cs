@@ -6,6 +6,7 @@ using ReLogic.Content;
 using ReLogic.Utilities;
 using System;
 using System.Linq;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -46,8 +47,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.scale += 0.1f;
             Color flameColor = Color.Lerp(Color.Lerp(new Color(150, 70, 35, 0), new Color(30, 15, 10, 0), Utils.GetLerpValue(1, 3, Time, true)), Color.DarkBlue * 0.1f, Utils.GetLerpValue(3, 8, Time, true)) * Utils.GetLerpValue(15, 5, Time, true);
             flameColor.A = 10;
-            Particle interstellarFlame = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * Utils.GetLerpValue(0, 8, Time, true), flameColor, (1f + Main.rand.NextFloat()) * Projectile.scale);
-            interstellarFlame.data = "Interstellar";
+            var interstellarFlame = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * Utils.GetLerpValue(0, 8, Time, true), flameColor, (1f + Main.rand.NextFloat()) * Projectile.scale);
+            interstellarFlame.Add(new ParticleData<string> { Value = "Interstellar" });
 
             Time++;
 

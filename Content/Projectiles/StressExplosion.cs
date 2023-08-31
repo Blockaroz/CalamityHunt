@@ -46,7 +46,7 @@ namespace CalamityHunt.Content.Projectiles
                 for (int i = 0; i < 5; i++)
                 {
                     Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
-                    Particle.NewParticle(ModContent.GetInstance<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, gooColor, 0.5f + (Main.rand.NextFloat()/2));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), Projectile.Center + gooVelocity * 2, gooVelocity, gooColor, 0.5f + (Main.rand.NextFloat()/2));
                 }
             }
             else if (Time == 1 && Stressed > 0)
@@ -58,7 +58,7 @@ namespace CalamityHunt.Content.Projectiles
                 for (int i = 0; i < 5; i++)
                 {
                     Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
-                    Particle.NewParticle(ModContent.GetInstance<GooBurst>(), Projectile.Center + gooVelocity * 2, gooVelocity, gooColor, 1f + (Main.rand.NextFloat() / 2));
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), Projectile.Center + gooVelocity * 2, gooVelocity, gooColor, 1f + (Main.rand.NextFloat() / 2));
                 }
             }
             if (Time > 20)

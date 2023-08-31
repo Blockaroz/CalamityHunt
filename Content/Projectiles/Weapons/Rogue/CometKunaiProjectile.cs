@@ -99,8 +99,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
                 if (Projectile.timeLeft == 10)
                 {
-                    Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), Projectile.Center, MathHelper.PiOver4.ToRotationVector2(), new Color(50, 180, 255, 0), 1f);
-                    Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), Projectile.Center, Vector2.Zero, new Color(50, 180, 255, 0), 0.5f);
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Projectile.Center, MathHelper.PiOver4.ToRotationVector2(), new Color(50, 180, 255, 0), 1f);
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Projectile.Center, Vector2.Zero, new Color(50, 180, 255, 0), 0.5f);
                 }
             }
         }

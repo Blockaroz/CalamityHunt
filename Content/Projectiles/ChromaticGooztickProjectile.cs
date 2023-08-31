@@ -3,6 +3,7 @@ using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.ID;
@@ -32,8 +33,8 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Main.rand.NextBool(5))
             {
-                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, new Vector2(0, -1), rainbowGlow, 1f);
-                hue.data = Main.GlobalTimeWrappedHourly;
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, new Vector2(0, -1), rainbowGlow, 1f);
+                hue.Add(new ParticleData<float> { Value = Main.GlobalTimeWrappedHourly });
             }
         }
 

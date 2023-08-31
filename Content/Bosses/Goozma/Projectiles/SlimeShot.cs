@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Linq;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.DataStructures;
@@ -51,8 +52,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Main.rand.NextBool(5))
             {
-                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Projectile.velocity * 0.4f, Color.White, 1f);
-                hue.data = Projectile.localAI[0];
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Projectile.velocity * 0.4f, Color.White, 1f);
+                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
             }
 
             Projectile.frameCounter++;
@@ -70,8 +71,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             for (int i = 0; i < 30; i++)
             {
-                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(6, 6), Color.White, 1f);
-                hue.data = Projectile.localAI[0];
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Main.rand.NextVector2Circular(6, 6), Color.White, 1f);
+                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
 
                 if (!Main.rand.NextBool(3))
                     Dust.NewDustPerfect(Projectile.Center, 4, Main.rand.NextVector2Circular(3, 3), 100, Color.Black, 1.5f).noGravity = true;

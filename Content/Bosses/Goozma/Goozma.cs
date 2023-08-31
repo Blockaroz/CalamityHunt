@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
@@ -418,7 +419,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         {
                             Vector2 velocity = Vector2.UnitY.RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(1f);
                             velocity.Y -= 1f + Main.rand.NextFloat();
-                            Particle.NewParticle(ModContent.GetInstance<GooBurst>(), Main.rand.NextVector2FromRectangle(NPC.Hitbox), velocity, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value, 1f + Main.rand.NextFloat(1f));
+                            ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), Main.rand.NextVector2FromRectangle(NPC.Hitbox), velocity, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value, 1f + Main.rand.NextFloat(1f));
                         }
                     }
                     if (Time % 3 == 0)
@@ -445,8 +446,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             for (int i = 0; i < 3; i++)
                             {
                                 Vector2 inward = NPC.Center + Main.rand.NextVector2Circular(70, 70) + Main.rand.NextVector2CircularEdge(100 - Time, 100 - Time);
-                                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), inward, inward.DirectionTo(NPC.Center) * Main.rand.NextFloat(3f), Color.White, 1f);
-                                hue.data = NPC.localAI[0];
+                                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), inward, inward.DirectionTo(NPC.Center) * Main.rand.NextFloat(3f), Color.White, 1f);
+                                hue.Add(new ParticleData<float> { Value = NPC.localAI[0] });
                             }
                         }
 
@@ -459,8 +460,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             for (int i = 0; i < 45; i++)
                             {
                                 Vector2 outward = NPC.Center + Main.rand.NextVector2Circular(10, 10);
-                                Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), outward, outward.DirectionFrom(NPC.Center) * Main.rand.NextFloat(3f, 10f), Color.White, 2f);
-                                hue.data = NPC.localAI[0];
+                                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), outward, outward.DirectionFrom(NPC.Center) * Main.rand.NextFloat(3f, 10f), Color.White, 2f);
+                                hue.Add(new ParticleData<float> { Value = NPC.localAI[0] });
                             }
 
                             //for (int i = 0; i < Main.rand.Next(3, 8); i++)
@@ -721,7 +722,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         for (int i = 0; i < 5; i++)
                         {
                             Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(20, 20), 200, Color.Black, Main.rand.NextFloat(2, 4)).noGravity = true;
-                            Particle.NewParticle(ModContent.GetInstance<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 8f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
+                            ParticleBehavior.NewParticle(ModContent.GetInstance<GoozBombChunkParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 8f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
                         }
                     }
 
@@ -731,8 +732,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         NPC.Center += Main.rand.NextVector2Circular(5, 5);
                         for (int i = 0; i < Main.rand.Next(1, 4); i++)
                         {
-                            Particle gelBit = Particle.NewParticle(ModContent.GetInstance<GoozGelBit>(), NPC.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2CircularEdge(10, 10) + Main.rand.NextVector2Circular(20, 20), Color.White, 1f + Main.rand.NextFloat());
-                            gelBit.data = (int)(300 - Time + Main.rand.Next(55));
+                            var gelBit = ParticleBehavior.NewParticle(ModContent.GetInstance<GoozGelBitParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(30, 40), Main.rand.NextVector2CircularEdge(10, 10) + Main.rand.NextVector2Circular(20, 20), Color.White, 1f + Main.rand.NextFloat());
+                            gelBit.Add(new ParticleData<int> { Value = (int)(300 - Time + Main.rand.Next(55)) });
                         }
                     }
                     else
@@ -748,8 +749,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (Time < 70 || Time > 400)
                     {
                         Vector2 gooVelocity = Main.rand.NextVector2Circular(2, 3);
-                        Particle goo = Particle.NewParticle(ModContent.GetInstance<GooBurst>(), NPC.Center + Main.rand.NextVector2Circular(50, 80) * NPC.scale, gooVelocity, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
-                        goo.data = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f);
+                        var goo = ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(50, 80) * NPC.scale, gooVelocity, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
+                        goo.Add(new ParticleData<float> { Value = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f) });
                     }
 
                     if (Time == 1)
@@ -798,7 +799,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             SortedProjectileAttack(Target.Center + Target.Velocity * 1.5f, SortedProjectileAttackTypes.BurstLightning);
 
                             if (Main.rand.NextBool(30))
-                                Particle.NewParticle(ModContent.GetInstance<GoozBombChunk>(), NPC.Bottom + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(5, 2) - Vector2.UnitY * 5f + NPC.velocity * 0.1f, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
+                                ParticleBehavior.NewParticle(ModContent.GetInstance<GoozBombChunkParticleBehavior>(), NPC.Bottom + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(5, 2) - Vector2.UnitY * 5f + NPC.velocity * 0.1f, Color.White, 0.1f + Main.rand.NextFloat(1.5f));
                            
                             if (Time > 640)
                             {
@@ -844,11 +845,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                         {
                                             Vector2 position = Vector2.Lerp(NPC.position, NPC.oldPos[0], i / 24f) + NPC.Size * 0.5f;
 
-                                            Particle hueTop = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity, -NPC.velocity.RotatedBy((float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f), Color.White, 2f);
-                                            hueTop.data = NPC.localAI[0];
+                                            var hueTop = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity, -NPC.velocity.RotatedBy((float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f), Color.White, 2f);
+                                            hueTop.Add(new ParticleData<float> { Value = NPC.localAI[0] });
 
-                                            Particle hueBot = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity, -NPC.velocity.RotatedBy(-(float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f), Color.White, 2f);
-                                            hueBot.data = NPC.localAI[0];
+                                            var hueBot = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity, -NPC.velocity.RotatedBy(-(float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f), Color.White, 2f);
+                                            hueBot.Add(new ParticleData<float> { Value = NPC.localAI[0] });
                                         }
 
                                         NPC.velocity += NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 0.5f;
@@ -1029,13 +1030,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Main.rand.NextBool(2 + (int)(60 - Time / 5f)))
                         for (int i =0; i < Main.rand.Next(1, 4); i++)
-                            Particle.NewParticle(ModContent.GetInstance<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
+                            ParticleBehavior.NewParticle(ModContent.GetInstance<GoozBombChunkParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(10, 10), Main.rand.NextVector2Circular(20, 20) - Vector2.UnitY * 10f, Color.White, 0.5f + Main.rand.NextFloat(1.5f));
 
                     if (Main.rand.NextBool(1 + (int)(65 - Time / 4.66f)) || Time > 250)
                     {
                         Vector2 deathGooVelocity = Main.rand.NextVector2CircularEdge(1, 2);
-                        Particle deathGoo = Particle.NewParticle(ModContent.GetInstance<GooBurst>(), NPC.Center + deathGooVelocity * Main.rand.NextFloat(4, 16) * NPC.scale, deathGooVelocity, Color.White, 0.5f + Main.rand.NextFloat());
-                        deathGoo.data = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f);
+                        var deathGoo = ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), NPC.Center + deathGooVelocity * Main.rand.NextFloat(4, 16) * NPC.scale, deathGooVelocity, Color.White, 0.5f + Main.rand.NextFloat());
+                        deathGoo.Add(new ParticleData<float> { Value = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f) });
                     }
 
                     if (Time % 3 == 0)
@@ -1043,7 +1044,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0] + Main.rand.NextFloat(0.1f));
                         Vector2 off = Main.rand.NextVector2Circular(150, 220);
                         float sparkleScale = Utils.GetLerpValue(200, 0, off.Length() + Main.rand.Next(-10, 10));
-                        Particle.NewParticle(ModContent.GetInstance<CrossSparkle>(), NPC.Center + off, Vector2.Zero, glowColor, sparkleScale * 2f);
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), NPC.Center + off, Vector2.Zero, glowColor, sparkleScale * 2f);
                     }
 
                     if (Time > 250)
@@ -1106,8 +1107,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (Main.rand.NextBool(3))
                     {
                         Vector2 deathGooVelocity = Main.rand.NextVector2CircularEdge(2, 3);
-                        Particle deathGoo = Particle.NewParticle(ModContent.GetInstance<GooBurst>(), NPC.Center + deathGooVelocity * Main.rand.NextFloat(4, 16) * NPC.scale, deathGooVelocity, Color.White, 0.75f + Main.rand.NextFloat());
-                        deathGoo.data = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f);
+                        var deathGoo = ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), NPC.Center + deathGooVelocity * Main.rand.NextFloat(4, 16) * NPC.scale, deathGooVelocity, Color.White, 0.75f + Main.rand.NextFloat());
+                        deathGoo.Add(new ParticleData<float> { Value = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f) });
                     }
 
                     break;
@@ -1174,8 +1175,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     else if (Main.rand.NextBool(20))
                     {
                         Vector2 deathGooVelocity = Main.rand.NextVector2CircularEdge(1, 2);
-                        Particle deathGoo = Particle.NewParticle(ModContent.GetInstance<GooBurst>(), NPC.Center + deathGooVelocity * Main.rand.NextFloat(4, 16) * NPC.scale, deathGooVelocity, Color.White, 0.75f + Main.rand.NextFloat());
-                        deathGoo.data = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f);
+                        var deathGoo = ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), NPC.Center + deathGooVelocity * Main.rand.NextFloat(4, 16) * NPC.scale, deathGooVelocity, Color.White, 0.75f + Main.rand.NextFloat());
+                        deathGoo.Add(new ParticleData<float> { Value = NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f) });
                     }
 
                     break;
@@ -1229,8 +1230,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
                 if (Main.rand.NextBool(8))
                 {
-                    Particle hue = Particle.NewParticle(ModContent.GetInstance<HueLightDust>(), NPC.Center + Main.rand.NextVector2Circular(60, 80), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, Color.White, 1f);
-                    hue.data = NPC.localAI[0];
+                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(60, 80), Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f, Color.White, 1f);
+                    hue.Add(new ParticleData<float> { Value = NPC.localAI[0] });
                 }
             }
 
@@ -1258,7 +1259,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 16f);
                         Vector2 position = ActiveSlime.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 12f, 32f);
-                        Particle.NewParticle(ModContent.GetInstance<EbonBombChunk>(), position, velocity + NPC.velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<EbonBombChunkParticleBehavior>(), position, velocity + NPC.velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
 
                     break;
@@ -1269,7 +1270,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 16f);
                         Vector2 position = ActiveSlime.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 12f, 32f);
-                        Particle.NewParticle(ModContent.GetInstance<HolyBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<HolyBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
 
                     break;
@@ -1280,7 +1281,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 18f);
                         Vector2 position = ActiveSlime.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 16f, 32f);
-                        Particle.NewParticle(ModContent.GetInstance<CrimBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
 
                     break;
@@ -1291,7 +1292,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 16f);
                         Vector2 position = ActiveSlime.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 12f, 32f);
-                        Particle.NewParticle(ModContent.GetInstance<StarBombChunk>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        ParticleBehavior.NewParticle(ModContent.GetInstance<StarBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
                     }
 
                     break;
@@ -1312,7 +1313,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Main.rand.NextBool(3))
                 for (int i = 0; i < Main.rand.Next(6); i++)
-                    Particle.NewParticle(ModContent.GetInstance<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(30, 30), NPC.DirectionFrom(player.Center).RotatedByRandom(0.2f) * Main.rand.Next(4, 10), Color.White, 0.5f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<GoozBombChunkParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(30, 30), NPC.DirectionFrom(player.Center).RotatedByRandom(0.2f) * Main.rand.Next(4, 10), Color.White, 0.5f + Main.rand.NextFloat());
         }
 
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
@@ -1327,7 +1328,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Main.rand.NextBool(3))
                 for (int i = 0; i < Main.rand.Next(6); i++)
-                    Particle.NewParticle(ModContent.GetInstance<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(30, 30), NPC.DirectionFrom(projectile.Center).RotatedByRandom(0.2f) * Main.rand.Next(4, 10), Color.White, 0.5f + Main.rand.NextFloat());
+                    ParticleBehavior.NewParticle(ModContent.GetInstance<GoozBombChunkParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(30, 30), NPC.DirectionFrom(projectile.Center).RotatedByRandom(0.2f) * Main.rand.Next(4, 10), Color.White, 0.5f + Main.rand.NextFloat());
         }
 
         public override void OnKill()
@@ -1348,7 +1349,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Explode.WithPitchOffset(0.2f).WithVolumeScale(0.9f), NPC.Center);
 
             for (int i = 0; i < 200; i++)
-                Particle.NewParticle(ModContent.GetInstance<GoozBombChunk>(), NPC.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(30, 30) - Vector2.UnitY * 15f, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                ParticleBehavior.NewParticle(ModContent.GetInstance<GoozBombChunkParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(20, 20), Main.rand.NextVector2Circular(30, 30) - Vector2.UnitY * 15f, Color.White, 0.1f + Main.rand.NextFloat(2f));
         }
 
         private void Fly()
