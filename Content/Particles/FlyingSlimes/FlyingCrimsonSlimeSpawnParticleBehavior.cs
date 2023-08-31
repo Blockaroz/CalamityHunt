@@ -15,7 +15,7 @@ public struct ParticleFlyingCrimsonSlime
     public bool Spiked { get; set; }
 }
 
-public class FlyingCrimsonSlimeParticleBehaviorSpawn : FlyingSlimeParticleBehavior
+public class FlyingCrimsonSlimeSpawnParticleBehavior : FlyingSlimeParticleBehavior
 {
     public override bool ShouldDraw => false;
 

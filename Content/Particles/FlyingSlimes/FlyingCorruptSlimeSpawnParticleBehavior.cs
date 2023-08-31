@@ -6,7 +6,7 @@ using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes;
 
-public class FlyingCorruptSlimeParticleBehaviorSpawn : FlyingSlimeParticleBehavior
+public class FlyingCorruptSlimeSpawnParticleBehavior : FlyingSlimeParticleBehavior
 {
     public override float SlimeSpeed => 30f;
 

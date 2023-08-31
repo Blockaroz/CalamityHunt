@@ -16,7 +16,7 @@ public struct ParticleAureusSpawnFlyingSlime
     public float FrameCounter { get; set; }
 }
 
-public class AureusSpawnFlyingSlimeParticleBehavior : FlyingSlimeParticleBehavior
+public class FlyingAureusSpawnSlimeParticleBehavior : FlyingSlimeParticleBehavior
 {
     public override float SlimeSpeed => 16;
 

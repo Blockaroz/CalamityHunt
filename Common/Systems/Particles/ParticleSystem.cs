@@ -47,7 +47,7 @@ public sealed class ParticleSystem : ModSystem
 
                 position.Value += velocity.Value;
                 particle.Behavior.Update(in entity);
-                if (active.Value)
+                if (!active.Value)
                     ParticleWorld.Destroy(entity);
             }
         );

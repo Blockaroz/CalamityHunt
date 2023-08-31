@@ -101,7 +101,7 @@ namespace CalamityHunt.Content.NPCs
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingSandSlimeParticleBehavior>());
                             break;
                         case NPCID.SpikedJungleSlime:
-                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingJungleSlimeParticleBehaviorSpiked>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingJungleSlimeSpikedParticleBehavior>());
                             break;
                         case NPCID.SpikedIceSlime:
                             Ice(proj, npc, velocity, ModContent.GetInstance<FlyingIceSlimeParticleBehavior>(), true);
@@ -152,7 +152,7 @@ namespace CalamityHunt.Content.NPCs
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingBunnySlimeParticleBehavior>());
                             break;
                         case NPCID.SlimeMasked:
-                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingSlimeParticleBehaviorBunny>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingSlimeBunnyParticleBehavior>());
                             break;
                         case NPCID.SlimeRibbonRed:
                             Ribbon(proj, npc, velocity, ModContent.GetInstance<FlyingPresentSlimeParticleBehavior>(), 0);
@@ -178,13 +178,13 @@ namespace CalamityHunt.Content.NPCs
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CrimulanBlightSlime").Type)
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimulanBlightSlimeParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CorruptSlimeSpawn").Type)
-                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlimeParticleBehaviorSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlimeSpawnParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CorruptSlimeSpawn2").Type)
-                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlimeParticleBehaviorSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCorruptSlimeSpawnParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CrimsonSlimeSpawn").Type)
-                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimsonSlimeParticleBehaviorSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimsonSlimeSpawnParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CrimsonSlimeSpawn2").Type)
-                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimsonSlimeParticleBehaviorSpawn>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCrimsonSlimeSpawnParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/AstralSlime").Type)
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingAstralSlimeParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CryoSlime").Type)
@@ -196,7 +196,7 @@ namespace CalamityHunt.Content.NPCs
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/PerennialSlime").Type)
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingPerennialSlimeParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/AureusSpawn").Type)
-                            Slime2(proj, npc, velocity, ModContent.GetInstance<AureusSpawnFlyingSlimeParticleBehavior>());
+                            Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingAureusSpawnSlimeParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/PestilentSlime").Type)
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingPestilentSlimeParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/BloomSlime").Type)

@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes;
 
-public class FlyingSlimeParticleBehaviorBunny : FlyingSlimeParticleBehavior
+public class FlyingSlimeBunnyParticleBehavior : FlyingSlimeParticleBehavior
 {
     public override bool ShouldDraw => false;
 

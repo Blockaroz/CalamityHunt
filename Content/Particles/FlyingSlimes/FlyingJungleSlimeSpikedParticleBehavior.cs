@@ -6,7 +6,7 @@ using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes;
 
-public class FlyingJungleSlimeParticleBehaviorSpiked : FlyingSlimeParticleBehavior
+public class FlyingJungleSlimeSpikedParticleBehavior : FlyingSlimeParticleBehavior
 {
     public override void PostUpdate(in Entity entity)
     {
