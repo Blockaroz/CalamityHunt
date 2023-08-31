@@ -9,11 +9,15 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
+    public struct ParticleFlyingSlime
+    {
+        public int Time { get; set; }
+
+        public float DistanceFade { get; set; }
+    }
+    
     public abstract class FlyingSlime : ParticleBehavior
     {
-        public int time;
-        public float distanceFade;
-
         /// <summary>
         /// The update function for the slime. Runs after the rest of Update()
         /// </summary>

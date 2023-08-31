@@ -7,9 +7,13 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
+    public struct ParticleFlyingIceSlime
+    {
+        public bool Spiked { get; set; }
+    }
+    
     public class FlyingIceSlime : FlyingSlime
     {
-        public bool spiked;
         public override bool ShouldDraw => false;
 
         public override void OnSpawn()

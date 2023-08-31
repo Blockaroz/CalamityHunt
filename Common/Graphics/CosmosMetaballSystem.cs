@@ -7,9 +7,12 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Linq;
+using Arch.Core;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.Map;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Common.Graphics
 {
@@ -57,25 +60,46 @@ namespace CalamityHunt.Common.Graphics
             Main.graphics.GraphicsDevice.SetRenderTarget(SpaceTarget);
             Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 
-            foreach (ParticleBehavior particle in ParticleSystem.particle.Where(n => n.Active && n is CosmicSmoke && n.data is string))
-            {
-                CosmicSmoke smoke = particle as CosmicSmoke;
+            var query = new QueryDescription().WithAll<Particle, ParticleCosmicSmoke, ParticlePosition, ParticleColor, ParticleScale, ParticleRotation, ParticleActive, ParticleStringData>();
+            var particleSystem = ModContent.GetInstance<ParticleSystem>();
+            particleSystem.ParticleWorld.Query(
+                in query,
+                (in Entity entity) =>
+                {
+                    ref readonly var active = ref entity.Get<ParticleActive>();
+                    if (!active.Value)
+                        return;
 
-                if ((string)particle.data == "Cosmos")
-                {
-                    Rectangle frame = smokeParticleTexture.Frame(4, 2, smoke.variant % 4, (int)(smoke.variant / 4f));
-                    float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.maxTime * 0.2f, smoke.time, true));
-                    float opacity = Utils.GetLerpValue(smoke.maxTime * 0.7f, smoke.maxTime * 0.2f, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
-                    Main.spriteBatch.Draw(smokeParticleTexture, smoke.position - Main.screenPosition, frame, Color.White * 0.5f * opacity * grow, smoke.rotation, frame.Size() * 0.5f, smoke.scale * grow * 0.5f, 0, 0);
+                    ref readonly var particle = ref entity.Get<Particle>();
+                    ref readonly var smoke = ref entity.Get<ParticleCosmicSmoke>();
+                    ref readonly var position = ref entity.Get<ParticlePosition>();
+                    ref readonly var color = ref entity.Get<ParticleColor>();
+                    ref readonly var scale = ref entity.Get<ParticleScale>();
+                    ref readonly var rotation = ref entity.Get<ParticleRotation>();
+                    ref readonly var data = ref entity.Get<ParticleStringData>();
+
+                    switch (data.Value)
+                    {
+                        case "Cosmos":
+                        {
+                            Rectangle frame = smokeParticleTexture.Frame(4, 2, smoke.Variant % 4, (int)(smoke.Variant / 4f));
+                            float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.MaxTime * 0.2f, smoke.Time, true));
+                            float opacity = Utils.GetLerpValue(smoke.MaxTime * 0.7f, smoke.MaxTime * 0.2f, smoke.Time, true) * Math.Clamp(scale.Value, 0, 1);
+                            Main.spriteBatch.Draw(smokeParticleTexture, position.Value - Main.screenPosition, frame, Color.White * 0.5f * opacity * grow, rotation.Value, frame.Size() * 0.5f, scale.Value * grow * 0.5f, 0, 0);
+                            break;
+                        }
+
+                        case "Interstellar":
+                        {
+                            Rectangle frame = smokeParticleTexture.Frame(4, 2, smoke.Variant % 4, (int)(smoke.Variant / 4f));
+                            float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.MaxTime * 0.2f, smoke.Time, true));
+                            float opacity = Utils.GetLerpValue(smoke.MaxTime * 0.7f, 0, smoke.Time, true) * Math.Clamp(scale.Value, 0, 1);
+                            Main.spriteBatch.Draw(smokeParticleTexture, position.Value - Main.screenPosition, frame, Color.White * 0.7f * opacity * color.Value.ToVector4().Length(), rotation.Value, frame.Size() * 0.5f, scale.Value * grow * 0.5f, 0, 0);
+                            break;
+                        }
+                    }
                 }
-                if ((string)particle.data == "Interstellar")
-                {
-                    Rectangle frame = smokeParticleTexture.Frame(4, 2, smoke.variant % 4, (int)(smoke.variant / 4f));
-                    float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.maxTime * 0.2f, smoke.time, true));
-                    float opacity = Utils.GetLerpValue(smoke.maxTime * 0.7f, 0, smoke.time, true) * Math.Clamp(smoke.scale, 0, 1);
-                    Main.spriteBatch.Draw(smokeParticleTexture, smoke.position - Main.screenPosition, frame, Color.White * 0.7f * opacity * smoke.color.ToVector4().Length(), smoke.rotation, frame.Size() * 0.5f, smoke.scale * grow * 0.5f, 0, 0);
-                }
-            }
+            );
 
             Effect absorbEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceAbsorb", AssetRequestMode.ImmediateLoad).Value;
             absorbEffect.Parameters["uRepeats"].SetValue(1f);

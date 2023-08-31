@@ -8,6 +8,7 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
@@ -150,8 +151,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (!Main.rand.NextBool((int)(Time * 0.5f + 15)))
             {
-                ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(1f) * Main.rand.NextFloat(5f, 15f), Color.White, 2f);
-                hue.data = Projectile.localAI[0];
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(1f) * Main.rand.NextFloat(5f, 15f), Color.White, 2f);
+                hue.Add(new ParticleFloatData { Value = Projectile.localAI[0] });
             }
             if (Time > ChargeTime - 15 && Time < ChargeTime + LaserDuration + 60)
             {
@@ -162,12 +163,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 100) * grow;
                     color.A = 0;
                     Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-80f, 80f) * (progress / 3300f)).RotatedBy(Projectile.rotation);
-                    ParticleBehavior smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
-                    smoke.behindEntities = true;
+                    var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
+                    smoke.Add(new ParticleDrawBehindEntities());
                     if (Main.rand.NextBool(5))
                     {
-                        ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), Color.White, 4f * grow);
-                        hue.data = Projectile.localAI[0] - (progress / 3300f) * 60;
+                        var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), Color.White, 4f * grow);
+                        hue.Add(new ParticleFloatData { Value = Projectile.localAI[0] - (progress / 3300f) * 60 });
                     }
                 }
             }

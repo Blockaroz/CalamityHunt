@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Linq;
+using Arch.Core.Extensions;
 using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
@@ -64,8 +65,8 @@ namespace CalamityHunt.Content.Projectiles
                     Vector2 pos = Projectile.Center + Main.rand.NextVector2Circular(300, 300) * Projectile.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
                     Vector2 vel = pos.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * pos.Distance(Projectile.Center) * ((Time - 400) / 500f) * (0.1f / (1f + Projectile.scale));
 
-                    ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, vel, Color.White, 2f);
-                    hue.data = Time * 0.33f;
+                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, vel, Color.White, 2f);
+                    hue.Add(new ParticleFloatData { Value = Time * 0.33f });
                 }
 
                 Projectile.position.Y -= 0.5f;
@@ -75,8 +76,8 @@ namespace CalamityHunt.Content.Projectiles
             {
                 Vector2 pos = Projectile.Center + Main.rand.NextVector2CircularEdge(150, 150) * Projectile.scale + Main.rand.NextVector2Circular(40, 40);
 
-                ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
-                hue.data = Time * 0.33f;
+                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
+                hue.Add(new ParticleFloatData { Value = Time * 0.33f });
             }
 
             if (Time == 0)
@@ -118,8 +119,8 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Time == 900)
             {
-                ParticleBehavior finalSlime = ParticleBehavior.NewParticle(ModContent.GetInstance<FlyingRainbowSlime>(), Projectile.Center - Vector2.UnitY * 700, Vector2.Zero, Color.White, 1f);
-                finalSlime.data = Projectile.Center;
+                var finalSlime = ParticleBehavior.NewParticle(ModContent.GetInstance<FlyingRainbowSlime>(), Projectile.Center - Vector2.UnitY * 700, Vector2.Zero, Color.White, 1f);
+                finalSlime.Add(new ParticleVector2Data { Value = Projectile.Center });
             }
 
             if (Time > 1060)
@@ -131,8 +132,8 @@ namespace CalamityHunt.Content.Projectiles
                     Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(20f, 17f), 100, Color.Black, 3f + Main.rand.NextFloat()).noGravity = true;
                     if (Main.rand.NextBool())
                     {
-                        ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
-                        hue.data = Time * 0.33f;
+                        var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
+                        hue.Add(new ParticleFloatData { Value = Time * 0.33f });
                     }
                 }
 
@@ -267,9 +268,8 @@ namespace CalamityHunt.Content.Projectiles
             float scale = 1f;
             Color color = Color.White;
 
-            ParticleBehavior particleBehavior = ParticleBehavior.NewParticle(randomType, position, velocity, color, scale);
-            particleBehavior.data = Projectile.Center;
-            particleBehavior.behindEntities = true;
+            var particleBehavior = ParticleBehavior.NewParticle(randomType, position, velocity, color, scale);
+            particleBehavior.Add(new ParticleVector2Data { Value = Projectile.Center }, new ParticleDrawBehindEntities());
         }
 
         public override bool PreDraw(ref Color lightColor)

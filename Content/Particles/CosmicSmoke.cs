@@ -12,13 +12,19 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleCosmicSmoke
+    {
+        public int Time { get; set; }
+
+        public int MaxTime { get; set; }
+
+        public int Variant { get; set; }
+
+        public float RotationalVelocity { get; set; }
+    }
+    
     public class CosmicSmoke : ParticleBehavior
     {
-        public int time;
-        public int maxTime;
-        public int variant;
-        public float rotationalVelocity;
-
         public override void OnSpawn()
         {
             variant = Main.rand.Next(8);

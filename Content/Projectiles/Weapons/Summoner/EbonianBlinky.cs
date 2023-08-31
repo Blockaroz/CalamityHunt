@@ -5,6 +5,7 @@ using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -246,9 +247,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             {
                 Color color = new Color(150, 160, 255, 60);
                 color.A = 0;
-                ParticleBehavior wave = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
-                wave.data = new Color(245, 255, 168, 120);
-                wave.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
+                var wave = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
+                wave.Add(new ParticleColorData { Value = new Color(245, 255, 168, 120) }, new ParticleShader { Value = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player) });
                 for (int i = 0; i < Main.rand.Next(3, 7); i++)
                 {
                     Dust sparkle = Dust.NewDustPerfect(Projectile.Bottom + Main.rand.NextVector2Circular(9, 4), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(3, 1) - Vector2.UnitY * (i + 1) * 0.7f, 0, color, 1f + Main.rand.NextFloat());

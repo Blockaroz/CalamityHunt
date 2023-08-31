@@ -27,10 +27,10 @@ namespace CalamityHunt.Common.Systems.Particles
             SetStaticDefaults();
         }
 
-        public static Entity? NewParticle(ParticleBehavior particleBehavior, Vector2 position, Vector2 velocity, Color color, float scale = 1f)
+        public static Entity NewParticle(ParticleBehavior particleBehavior, Vector2 position, Vector2 velocity, Color color, float scale = 1f)
         {
             if (Main.gamePaused || Main.dedServ || ModContent.GetInstance<ParticleSystem>() is not { } particleSystem)
-                return null;
+                return Entity.Null;
 
             var particle = new Particle { Behavior = particleBehavior };
             var particlePosition = new ParticlePosition { Value = position };

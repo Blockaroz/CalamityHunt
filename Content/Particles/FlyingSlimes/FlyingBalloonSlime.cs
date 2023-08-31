@@ -9,10 +9,15 @@ using Terraria.Utilities;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
+    public struct ParticleFlyingBalloonSlime
+    {
+        public int BalloonWobbleTime { get; set; }
+
+        public int BalloonVariant { get; set; }
+    }
+    
     public class FlyingBalloonSlime : FlyingSlime
     {
-        public int balloonWobbleTime;
-        public int balloonVariant;
         public override bool ShouldDraw => false;
         public override float SlimeSpeed => 13f;
         public override float SlimeAcceleration => 0.2f;

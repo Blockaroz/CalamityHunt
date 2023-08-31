@@ -6,6 +6,11 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
+    public struct ParticleFlyingPresentSlime
+    {
+        public int Variant { get; set; }
+    }
+    
     public class FlyingPresentSlime : FlyingSlime
     {
         public int variant;

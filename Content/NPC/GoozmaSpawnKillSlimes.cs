@@ -1,3 +1,4 @@
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -223,53 +224,32 @@ namespace CalamityHunt.Content.NPCs
         }
         private static void Slime(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior)
         {
-            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, npc.color, npc.scale);
-            FlyingSlime slime = particleBehavior as FlyingSlime;
-            slime.time = 20;
-            particleBehavior.data = proj.Center;
-            particleBehavior.behindEntities = true;
+            var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, npc.color, npc.scale);
+            entity.Add(new ParticleVector2Data { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 });
             npc.life = 0;
         }
         private static void Slime2(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior)
         {
-            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
-            FlyingSlime slime = particleBehavior as FlyingSlime;
-            slime.time = 20;
-            particleBehavior.data = proj.Center;
-            particleBehavior.behindEntities = true;
+            var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
+            entity.Add(new ParticleVector2Data { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 });
             npc.life = 0;
         }
         private static void Ice(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, bool ice)
         {
-            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
-            FlyingSlime slime = particleBehavior as FlyingSlime;
-            slime.time = 20;
-            FlyingIceSlime iced = particleBehavior as FlyingIceSlime;
-            iced.spiked = ice;
-            particleBehavior.data = proj.Center;
-            particleBehavior.behindEntities = true;
+            var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
+            entity.Add(new ParticleVector2Data { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 }, new ParticleFlyingIceSlime { Spiked = ice });
             npc.life = 0;
         }
         private static void Balloon(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, int frame)
         {
-            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, npc.color, npc.scale);
-            FlyingSlime slime = particleBehavior as FlyingSlime;
-            slime.time = 20;
-            FlyingBalloonSlime ball = particleBehavior as FlyingBalloonSlime;
-            ball.balloonVariant = frame - 1;
-            particleBehavior.data = proj.Center;
-            particleBehavior.behindEntities = true;
+            var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, npc.color, npc.scale);
+            entity.Add(new ParticleVector2Data { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 }, new ParticleFlyingBalloonSlime { BalloonVariant = frame - 1});
             npc.life = 0;
         }
         private static void Ribbon(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, int variant)
         {
-            particleBehavior = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
-            FlyingSlime slime = particleBehavior as FlyingSlime;
-            slime.time = 20;
-            FlyingPresentSlime present = particleBehavior as FlyingPresentSlime;
-            present.variant = variant;
-            particleBehavior.data = proj.Center;
-            particleBehavior.behindEntities = true;
+            var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
+            entity.Add(new ParticleVector2Data { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 }, new ParticleFlyingPresentSlime { Variant = variant });
             npc.life = 0;
         }
     }

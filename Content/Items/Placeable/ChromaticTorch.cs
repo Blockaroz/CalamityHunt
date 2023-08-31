@@ -1,4 +1,5 @@
 ﻿using System;
+using Arch.Core.Extensions;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Materials;
@@ -43,8 +44,8 @@ namespace CalamityHunt.Content.Items.Placeable
 		{
 			if (Main.rand.NextBool(player.itemAnimation > 0 ? 40 : 80))
 			{
-				ParticleBehavior hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), new Vector2(0, -1), rainbowGlow, 1f);
-				hue.data = Main.GlobalTimeWrappedHourly;
+				var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), new Vector2(0, -1), rainbowGlow, 1f);
+				hue.Add(new ParticleFloatData { Value = Main.GlobalTimeWrappedHourly });
 			}
 
 			Vector2 position = player.RotatedRelativePoint(new Vector2(player.itemLocation.X + 12f * player.direction + player.velocity.X, player.itemLocation.Y - 14f + player.velocity.Y), true);

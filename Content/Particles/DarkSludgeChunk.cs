@@ -15,12 +15,17 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles
 {
+    public struct ParticleDarkSludgeChunk
+    {
+        public int Variant { get; set; }
+
+        public int Time { get; set; }
+
+        public bool Stuck { get; set; }
+    }
+    
     public class DarkSludgeChunk : ParticleBehavior
     {
-        public int variant;
-        public int time;
-        public bool stuck;
-
         public override void OnSpawn()
         {
             scale *= Main.rand.NextFloat(0.7f, 0.9f);

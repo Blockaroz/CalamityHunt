@@ -5,6 +5,7 @@ using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using Arch.Core.Extensions;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Core;
 using ReLogic.Content;
@@ -52,8 +53,8 @@ namespace CalamityHunt.Content.Items.Materials
             
             if (Main.rand.NextBool(20))
             {
-                ParticleBehavior spark = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Item.Center + Main.rand.NextVector2Circular(15, 15), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 0.7f + Main.rand.NextFloat());
-                spark.data = Main.GlobalTimeWrappedHourly * 40f;
+                var spark = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Item.Center + Main.rand.NextVector2Circular(15, 15), -Vector2.UnitY * Main.rand.NextFloat(2f), Color.White, 0.7f + Main.rand.NextFloat());
+                spark.Add(new ParticleFloatData { Value = Main.GlobalTimeWrappedHourly * 40f });
             }
         }
 

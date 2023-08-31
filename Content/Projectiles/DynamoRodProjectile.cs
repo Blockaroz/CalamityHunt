@@ -4,6 +4,7 @@ using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using Arch.Core.Extensions;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
@@ -46,8 +47,8 @@ namespace CalamityHunt.Content.Projectiles
         {
             for (int i = 0; i < 36; i++)
             {
-                ParticleBehavior smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(1200, 1200) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(4, 4) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (1f + Main.rand.NextFloat(12f)) * Projectile.scale);
-                smoke.data = "Cosmos";
+                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Main.rand.NextVector2Circular(1200, 1200) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(4, 4) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (1f + Main.rand.NextFloat(12f)) * Projectile.scale);
+                smoke.Add(new ParticleStringData { Value = "Cosmos" });
             }
 
             if (Projectile.owner == Main.myPlayer)

@@ -35,12 +35,29 @@ public struct ParticleColor
     public Color Value { get; set; }
 }
 
-// emit
-
-// TODO: Create different components for different data types.
-public struct ParticleData
+public struct ParticleStringData
 {
-    public object? Value { get; set; }
+    public string Value { get; set; }
+}
+
+public struct ParticleFloatData
+{
+    public float Value { get; set; }
+}
+
+public struct ParticleIntData
+{
+    public int Value { get; set; }
+}
+
+public struct ParticleVector2Data
+{
+    public Vector2 Value { get; set; }
+}
+
+public struct ParticleColorData
+{
+    public Color Value { get; set; }
 }
 
 public struct ParticleDrawBehindEntities
