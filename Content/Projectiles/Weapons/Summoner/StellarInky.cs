@@ -166,14 +166,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                         {
                             Color color = new Color(5, 10, 100, 0);
                             var portal = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portal.Add(new ParticleColorData { Value = new Color(255, 200, 90, 120) });
+                            portal.Add(new ParticleData<Color> { Value = new Color(255, 200, 90, 120) });
 
                             teleportTime = 0;
                             Projectile.Center -= Projectile.velocity.RotatedByRandom(2f) * Main.rand.Next(8, 15);
                             Projectile.netUpdate = true;
 
                             var portalAfter = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portalAfter.Add(new ParticleColorData { Value = new Color(255, 200, 90, 120) });
+                            portalAfter.Add(new ParticleData<Color> { Value = new Color(255, 200, 90, 120) });
 
                             //SoundStyle warpSound = SoundID.Item135;
                         }
@@ -300,13 +300,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
                             Color color = new Color(5, 10, 100, 0);
                             var portal = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portal.Add(new ParticleColorData { Value = new Color(255, 200, 90, 120) });
+                            portal.Add(new ParticleData<Color> { Value = new Color(255, 200, 90, 120) });
 
                             targetPositionOffset += Main.rand.NextVector2Circular(1, 5);
                             Projectile.Center = target.Center + targetPositionOffset;
 
                             var portalAfter = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroPortal>(), Projectile.Center, Vector2.Zero, color, 1f);
-                            portalAfter.Add(new ParticleColorData { Value = new Color(255, 200, 90, 120) });
+                            portalAfter.Add(new ParticleData<Color> { Value = new Color(255, 200, 90, 120) });
 
                             //
                         }
@@ -363,7 +363,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Color color = new Color(255, 150, 150, 60);
                 color.A = 0;
                 var wave = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroShockwave>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
-                wave.Add(new ParticleColorData { Value = new Color(255, 255, 168, 120) });
+                wave.Add(new ParticleData<Color> { Value = new Color(255, 255, 168, 120) });
                 for (int i = 0; i < Main.rand.Next(3, 7); i++)
                 {
                     Dust sparkle = Dust.NewDustPerfect(Projectile.Bottom + Main.rand.NextVector2Circular(9, 4), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(3, 1) - Vector2.UnitY * (i + 1) * 0.7f, 0, color, 1f + Main.rand.NextFloat());

@@ -55,7 +55,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 if (Main.rand.NextBool(8))
                 {
                     var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, Projectile.velocity * Main.rand.NextFloat(), glowColor, (1f + Main.rand.NextFloat()));
-                    hue.Add(new ParticleFloatData { Value = Projectile.localAI[0] });
+                    hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
                     // TODO: What is this for? - hue.emit = true;
                 }
 

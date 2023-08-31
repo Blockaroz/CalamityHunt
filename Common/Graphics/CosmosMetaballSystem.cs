@@ -60,7 +60,7 @@ namespace CalamityHunt.Common.Graphics
             Main.graphics.GraphicsDevice.SetRenderTarget(SpaceTarget);
             Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 
-            var query = new QueryDescription().WithAll<Particle, ParticleCosmicSmoke, ParticlePosition, ParticleColor, ParticleScale, ParticleRotation, ParticleActive, ParticleStringData>();
+            var query = new QueryDescription().WithAll<Particle, ParticleCosmicSmoke, ParticlePosition, ParticleColor, ParticleScale, ParticleRotation, ParticleActive, ParticleData<string>>();
             var particleSystem = ModContent.GetInstance<ParticleSystem>();
             particleSystem.ParticleWorld.Query(
                 in query,
@@ -76,7 +76,7 @@ namespace CalamityHunt.Common.Graphics
                     ref readonly var color = ref entity.Get<ParticleColor>();
                     ref readonly var scale = ref entity.Get<ParticleScale>();
                     ref readonly var rotation = ref entity.Get<ParticleRotation>();
-                    ref readonly var data = ref entity.Get<ParticleStringData>();
+                    ref readonly var data = ref entity.Get<ParticleData<string>>();
 
                     switch (data.Value)
                     {

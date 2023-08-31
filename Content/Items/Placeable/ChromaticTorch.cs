@@ -45,7 +45,7 @@ namespace CalamityHunt.Content.Items.Placeable
 			if (Main.rand.NextBool(player.itemAnimation > 0 ? 40 : 80))
 			{
 				var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), new Vector2(0, -1), rainbowGlow, 1f);
-				hue.Add(new ParticleFloatData { Value = Main.GlobalTimeWrappedHourly });
+				hue.Add(new ParticleData<float> { Value = Main.GlobalTimeWrappedHourly });
 			}
 
 			Vector2 position = player.RotatedRelativePoint(new Vector2(player.itemLocation.X + 12f * player.direction + player.velocity.X, player.itemLocation.Y - 14f + player.velocity.Y), true);

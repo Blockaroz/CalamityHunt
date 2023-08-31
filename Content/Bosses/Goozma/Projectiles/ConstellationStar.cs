@@ -81,7 +81,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkle>(), Projectile.Center, Main.rand.NextVector2Circular(4, 4), new Color(30, 15, 8, 0), (0.15f + Main.rand.NextFloat()) * Projectile.scale);
 
             var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center + Projectile.velocity * 2f, Main.rand.NextVector2Circular(6, 6), Color.White, (1f + Main.rand.NextFloat()) * Projectile.scale);
-            smoke.Add(new ParticleStringData { Value = "Cosmos" });
+            smoke.Add(new ParticleData<string> { Value = "Cosmos" });
 
             if (Time + (int)(WhoAmI * 0.3f) > 640)
                 Projectile.Kill();

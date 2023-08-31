@@ -53,7 +53,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Main.rand.NextBool(5))
             {
                 var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20), Projectile.velocity * 0.4f, Color.White, 1f);
-                hue.Add(new ParticleFloatData { Value = Projectile.localAI[0] });
+                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
             }
 
             Projectile.frameCounter++;
@@ -72,7 +72,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             for (int i = 0; i < 30; i++)
             {
                 var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(6, 6), Color.White, 1f);
-                hue.Add(new ParticleFloatData { Value = Projectile.localAI[0] });
+                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
 
                 if (!Main.rand.NextBool(3))
                     Dust.NewDustPerfect(Projectile.Center, 4, Main.rand.NextVector2Circular(3, 3), 100, Color.Black, 1.5f).noGravity = true;

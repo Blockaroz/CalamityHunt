@@ -66,7 +66,7 @@ namespace CalamityHunt.Content.Projectiles
                     Vector2 vel = pos.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * pos.Distance(Projectile.Center) * ((Time - 400) / 500f) * (0.1f / (1f + Projectile.scale));
 
                     var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, vel, Color.White, 2f);
-                    hue.Add(new ParticleFloatData { Value = Time * 0.33f });
+                    hue.Add(new ParticleData<float> { Value = Time * 0.33f });
                 }
 
                 Projectile.position.Y -= 0.5f;
@@ -77,7 +77,7 @@ namespace CalamityHunt.Content.Projectiles
                 Vector2 pos = Projectile.Center + Main.rand.NextVector2CircularEdge(150, 150) * Projectile.scale + Main.rand.NextVector2Circular(40, 40);
 
                 var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
-                hue.Add(new ParticleFloatData { Value = Time * 0.33f });
+                hue.Add(new ParticleData<float> { Value = Time * 0.33f });
             }
 
             if (Time == 0)
@@ -120,7 +120,7 @@ namespace CalamityHunt.Content.Projectiles
             if (Time == 900)
             {
                 var finalSlime = ParticleBehavior.NewParticle(ModContent.GetInstance<FlyingRainbowSlime>(), Projectile.Center - Vector2.UnitY * 700, Vector2.Zero, Color.White, 1f);
-                finalSlime.Add(new ParticleVector2Data { Value = Projectile.Center });
+                finalSlime.Add(new ParticleData<Vector2> { Value = Projectile.Center });
             }
 
             if (Time > 1060)
@@ -133,7 +133,7 @@ namespace CalamityHunt.Content.Projectiles
                     if (Main.rand.NextBool())
                     {
                         var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
-                        hue.Add(new ParticleFloatData { Value = Time * 0.33f });
+                        hue.Add(new ParticleData<float> { Value = Time * 0.33f });
                     }
                 }
 
@@ -269,7 +269,7 @@ namespace CalamityHunt.Content.Projectiles
             Color color = Color.White;
 
             var particleBehavior = ParticleBehavior.NewParticle(randomType, position, velocity, color, scale);
-            particleBehavior.Add(new ParticleVector2Data { Value = Projectile.Center }, new ParticleDrawBehindEntities());
+            particleBehavior.Add(new ParticleData<Vector2> { Value = Projectile.Center }, new ParticleDrawBehindEntities());
         }
 
         public override bool PreDraw(ref Color lightColor)

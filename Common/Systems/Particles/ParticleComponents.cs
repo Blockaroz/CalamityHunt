@@ -35,29 +35,10 @@ public struct ParticleColor
     public Color Value { get; set; }
 }
 
-public struct ParticleStringData
+// Specifically for extra data like in regular Terraria entities.
+public struct ParticleData<T>
 {
-    public string Value { get; set; }
-}
-
-public struct ParticleFloatData
-{
-    public float Value { get; set; }
-}
-
-public struct ParticleIntData
-{
-    public int Value { get; set; }
-}
-
-public struct ParticleVector2Data
-{
-    public Vector2 Value { get; set; }
-}
-
-public struct ParticleColorData
-{
-    public Color Value { get; set; }
+    public T Value { get; set; }
 }
 
 public struct ParticleDrawBehindEntities

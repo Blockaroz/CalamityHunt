@@ -152,7 +152,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (!Main.rand.NextBool((int)(Time * 0.5f + 15)))
             {
                 var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(1f) * Main.rand.NextFloat(5f, 15f), Color.White, 2f);
-                hue.Add(new ParticleFloatData { Value = Projectile.localAI[0] });
+                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
             }
             if (Time > ChargeTime - 15 && Time < ChargeTime + LaserDuration + 60)
             {
@@ -168,7 +168,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     if (Main.rand.NextBool(5))
                     {
                         var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDust>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), Color.White, 4f * grow);
-                        hue.Add(new ParticleFloatData { Value = Projectile.localAI[0] - (progress / 3300f) * 60 });
+                        hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] - (progress / 3300f) * 60 });
                     }
                 }
             }

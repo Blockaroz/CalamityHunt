@@ -93,7 +93,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 }
             );
             
-            query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleRotation, ParticleScale, ParticleStringData, ParticleMegaFlame>();
+            query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleRotation, ParticleScale, ParticleData<string>, ParticleMegaFlame>();
             particleSystem.ParticleWorld.Query(
                 in query,
                 (in Entity entity) =>
@@ -102,7 +102,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                     ref readonly var position = ref entity.Get<ParticlePosition>();
                     ref readonly var rotation = ref entity.Get<ParticleRotation>();
                     ref readonly var scale = ref entity.Get<ParticleScale>();
-                    ref readonly var stringData = ref entity.Get<ParticleStringData>();
+                    ref readonly var stringData = ref entity.Get<ParticleData<string>>();
                     ref readonly var megaFlame = ref entity.Get<ParticleMegaFlame>();
 
                     if (stringData.Value != "Sludge")
