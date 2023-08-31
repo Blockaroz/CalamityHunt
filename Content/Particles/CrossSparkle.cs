@@ -2,60 +2,53 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Arch.Core.Extensions;
 using Terraria;
-using Terraria.GameContent;
-using Terraria.ModLoader;
 using Entity = Arch.Core.Entity;
 
-namespace CalamityHunt.Content.Particles
+namespace CalamityHunt.Content.Particles;
+
+public struct ParticleCrossSparkle
 {
-    public struct ParticleCrossSparkle
-    {
-        public int Time { get; set; }
-    }
+    public int Time { get; set; }
+}
     
-    public class CrossSparkle : ParticleBehavior
+public class CrossSparkle : ParticleBehavior
+{
+    public override void OnSpawn(in Entity entity)
     {
-        public override void OnSpawn(in Entity entity)
-        {
-            ref var velocity = ref entity.Get<ParticleVelocity>();
-            ref var rotation = ref entity.Get<ParticleRotation>();
+        ref var velocity = ref entity.Get<ParticleVelocity>();
+        ref var rotation = ref entity.Get<ParticleRotation>();
             
-            rotation.Value = velocity.Value.ToRotation() + Main.rand.NextFloat(-0.05f, 0.05f);
-            velocity.Value = Vector2.Zero;
+        rotation.Value = velocity.Value.ToRotation() + Main.rand.NextFloat(-0.05f, 0.05f);
+        velocity.Value = Vector2.Zero;
             
-            entity.Add(new ParticleCrossSparkle());
-        }
+        entity.Add(new ParticleCrossSparkle());
+    }
 
-        public override void Update()
-        {
-            time++;
-            if (time > 15)
-                Active = false;
-            if (emit)
-                Main.NewText("default is on");
-        }
+    public override void Update(in Entity entity)
+    {
+        time++;
+        if (time > 15)
+            Active = false;
+        if (emit)
+            Main.NewText("default is on");
+    }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            Texture2D texture = AssetDirectory.Textures.Sparkle.Value;
+    public override void Draw(in Entity entity, SpriteBatch spriteBatch)
+    {
+        Texture2D texture = AssetDirectory.Textures.Sparkle.Value;
 
-            float power = scale * MathF.Pow(Utils.GetLerpValue(15, 6, time, true), 2.5f) * Utils.GetLerpValue(0, 5, time, true);
-            Color drawColor = color;
-            drawColor.A = 0;
-            spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), color * 0.2f, rotation - MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.3f, 0.5f), 0, 0);
-            spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), color * 0.2f, rotation + MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.3f, 0.5f), 0, 0);
-            spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), drawColor, rotation - MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.6f, 1f), 0, 0);
-            spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), drawColor, rotation + MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.6f, 1f), 0, 0);
-            spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), drawColor * 0.2f, rotation - MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.4f, 2f), 0, 0);
-            spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), drawColor * 0.2f, rotation + MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.4f, 2f), 0, 0);
-            spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), rotation - MathHelper.PiOver4, texture.Size() * 0.5f, power * 0.5f, 0, 0);
-            spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), rotation + MathHelper.PiOver4, texture.Size() * 0.5f, power * 0.5f, 0, 0);
-        }
+        float power = scale * MathF.Pow(Utils.GetLerpValue(15, 6, time, true), 2.5f) * Utils.GetLerpValue(0, 5, time, true);
+        Color drawColor = color;
+        drawColor.A = 0;
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), color * 0.2f, rotation - MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.3f, 0.5f), 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), color * 0.2f, rotation + MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.3f, 0.5f), 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), drawColor, rotation - MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.6f, 1f), 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), drawColor, rotation + MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.6f, 1f), 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), drawColor * 0.2f, rotation - MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.4f, 2f), 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), drawColor * 0.2f, rotation + MathHelper.PiOver4, texture.Size() * 0.5f, power * new Vector2(0.4f, 2f), 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), rotation - MathHelper.PiOver4, texture.Size() * 0.5f, power * 0.5f, 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), rotation + MathHelper.PiOver4, texture.Size() * 0.5f, power * 0.5f, 0, 0);
     }
 }
