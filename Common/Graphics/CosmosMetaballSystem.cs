@@ -62,7 +62,7 @@ namespace CalamityHunt.Common.Graphics
 
             var query = new QueryDescription().WithAll<Particle, ParticleCosmicSmoke, ParticlePosition, ParticleColor, ParticleScale, ParticleRotation, ParticleActive, ParticleData<string>>();
             var particleSystem = ModContent.GetInstance<ParticleSystem>();
-            particleSystem.ParticleWorld.Query(
+            particleSystem?.ParticleWorld.Query(
                 in query,
                 (in Entity entity) =>
                 {
