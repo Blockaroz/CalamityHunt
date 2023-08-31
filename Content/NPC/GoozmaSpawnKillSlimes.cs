@@ -225,31 +225,47 @@ namespace CalamityHunt.Content.NPCs
         private static void Slime(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior)
         {
             var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, npc.color, npc.scale);
-            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 });
+            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities());
+            ref var flyingSlime = ref entity.Get<ParticleFlyingSlime>();
+            flyingSlime.Time = 20;
             npc.life = 0;
         }
         private static void Slime2(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior)
         {
             var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
-            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 });
+            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities());
+            ref var flyingSlime = ref entity.Get<ParticleFlyingSlime>();
+            flyingSlime.Time = 20;
             npc.life = 0;
         }
         private static void Ice(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, bool ice)
         {
             var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
-            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 }, new ParticleFlyingIceSlime { Spiked = ice });
+            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities());
+            ref var flyingSlime = ref entity.Get<ParticleFlyingSlime>();
+            ref var iceSlime = ref entity.Get<ParticleFlyingIceSlime>();
+            flyingSlime.Time = 20;
+            iceSlime.Spiked = ice;
             npc.life = 0;
         }
         private static void Balloon(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, int frame)
         {
             var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, npc.color, npc.scale);
-            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 }, new ParticleFlyingBalloonSlime { BalloonVariant = frame - 1});
+            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities());
+            ref var flyingSlime = ref entity.Get<ParticleFlyingSlime>();
+            ref var balloonSlime = ref entity.Get<ParticleFlyingBalloonSlime>();
+            flyingSlime.Time = 20;
+            balloonSlime.BalloonVariant = frame - 1;
             npc.life = 0;
         }
         private static void Ribbon(Projectile proj, NPC npc, Vector2 velocity, ParticleBehavior particleBehavior, int variant)
         {
             var entity = ParticleBehavior.NewParticle(particleBehavior, npc.Center, velocity, Color.White, npc.scale);
-            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities(), new ParticleFlyingSlime { Time = 20 }, new ParticleFlyingPresentSlime { Variant = variant });
+            entity.Add(new ParticleData<Vector2> { Value = proj.Center }, new ParticleDrawBehindEntities());
+            ref var flyingSlime = ref entity.Get<ParticleFlyingSlime>();
+            ref var presentSlime = ref entity.Get<ParticleFlyingPresentSlime>();
+            flyingSlime.Time = 20;
+            presentSlime.Variant = variant;
             npc.life = 0;
         }
     }

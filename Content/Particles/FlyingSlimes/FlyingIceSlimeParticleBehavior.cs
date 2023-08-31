@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Arch.Core.Extensions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
@@ -16,9 +18,15 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
     {
         public override bool ShouldDraw => false;
 
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            spiked = Main.rand.NextBool();
+            base.OnSpawn(in entity);
+
+            var iceSlime = new ParticleFlyingIceSlime
+            {
+                Spiked = Main.rand.NextBool(),
+            };
+            entity.Add(iceSlime);
         }
 
         public override void PostUpdate()

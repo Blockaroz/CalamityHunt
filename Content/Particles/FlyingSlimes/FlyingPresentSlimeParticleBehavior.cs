@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Arch.Core.Extensions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
@@ -13,13 +14,14 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
     
     public class FlyingPresentSlimeParticleBehavior : FlyingSlimeParticleBehavior
     {
-        public int variant;
         public override float SlimeSpeed => 25f;
         public override bool ShouldDraw => false;
 
-        public override void OnSpawn()
+        public override void OnSpawn(in Arch.Core.Entity entity)
         {
-            variant = Main.rand.Next(4);
+            base.OnSpawn(in entity);
+
+            entity.Add(new ParticleFlyingPresentSlime { Variant = Main.rand.Next(4) });
         }
 
         public override void KillEffect()

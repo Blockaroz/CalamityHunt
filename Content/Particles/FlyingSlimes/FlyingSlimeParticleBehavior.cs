@@ -59,6 +59,8 @@ public abstract class FlyingSlimeParticleBehavior : ParticleBehavior
     {
         ref var scale = ref entity.Get<ParticleScale>();
         scale.Value *= Main.rand.NextFloat(0.9f, 1.1f);
+        
+        entity.Add(new ParticleFlyingSlime());
     }
 
     public override void Update(in Entity entity)

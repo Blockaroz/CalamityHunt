@@ -2,10 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using Arch.Core.Extensions;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles.FlyingSlimes
 {
@@ -22,9 +24,15 @@ namespace CalamityHunt.Content.Particles.FlyingSlimes
         public override float SlimeSpeed => 13f;
         public override float SlimeAcceleration => 0.2f;
 
-        public override void OnSpawn()
+        public override void OnSpawn(in Entity entity)
         {
-            balloonVariant = Main.rand.Next(7);
+            base.OnSpawn(in entity);
+
+            var balloonSlime = new ParticleFlyingBalloonSlime
+            {
+                BalloonVariant = Main.rand.Next(7),
+            };
+            entity.Add(balloonSlime);
         }
 
         public override void PostUpdate()
