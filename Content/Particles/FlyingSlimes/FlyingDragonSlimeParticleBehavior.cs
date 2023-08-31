@@ -1,9 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿namespace CalamityHunt.Content.Particles.FlyingSlimes;
 
-namespace CalamityHunt.Content.Particles.FlyingSlimes
-{
-    public class FlyingDragonSlimeParticleBehavior : FlyingSlimeParticleBehavior
-    {
-    }
-}
+public class FlyingDragonSlimeParticleBehavior : FlyingSlimeParticleBehavior
+{ }

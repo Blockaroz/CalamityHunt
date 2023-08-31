@@ -1,46 +1,63 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Projectiles;
-using Terraria.Audio;
+﻿using Arch.Core.Extensions;
+using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
-namespace CalamityHunt.Content.Particles.FlyingSlimes
+namespace CalamityHunt.Content.Particles.FlyingSlimes;
+
+public struct ParticleFlyingCrimsonSlime
 {
-    public class FlyingCrimsonSlimeParticleBehaviorSpawn : FlyingSlimeParticleBehavior
+    public bool Spiked { get; set; }
+}
+
+public class FlyingCrimsonSlimeParticleBehaviorSpawn : FlyingSlimeParticleBehavior
+{
+    public override bool ShouldDraw => false;
+
+    public override void OnSpawn(in Entity entity)
     {
-        public bool spiked;
-        public override bool ShouldDraw => false;
+        base.OnSpawn(in entity);
+        
+        entity.Add(new ParticleFlyingCrimsonSlime { Spiked = Main.rand.NextBool() });
+    }
 
-        public override void OnSpawn()
-        {
-            spiked = Main.rand.NextBool();
-        }
+    public override void PostUpdate(in Entity entity)
+    {
+        ref var position = ref entity.Get<ParticlePosition>();
+        ref var velocity = ref entity.Get<ParticleVelocity>();
+        ref var color = ref entity.Get<ParticleColor>();
+        
+        if (!Main.rand.NextBool(10))
+            return;
 
-        public override void PostUpdate()
-        {
-            if (Main.rand.NextBool(10))
-            {
-                Dust slime = Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(20, 20), 306, velocity * 0.2f, DustID.Blood, color, 0.5f + Main.rand.NextFloat() * 0.3f);
-                slime.noGravity = true;
-            }
-        }
+        Dust slime = Dust.NewDustPerfect(position.Value + Main.rand.NextVector2Circular(20, 20), 306, velocity.Value * 0.2f, DustID.Blood, color.Value, 0.5f + Main.rand.NextFloat() * 0.3f);
+        slime.noGravity = true;
+    }
 
-        public override void DrawSlime(SpriteBatch spriteBatch)
-        {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            if (spiked)
-                texture = ModContent.Request<Texture2D>(Texture + "Spiked");
+    public override void DrawSlime(in Entity entity, SpriteBatch spriteBatch)
+    {
+        ref var flyingSlime = ref entity.Get<ParticleFlyingSlime>();
+        ref var crimsonSlime = ref entity.Get<ParticleFlyingCrimsonSlime>();
+        ref var position = ref entity.Get<ParticlePosition>();
+        ref var velocity = ref entity.Get<ParticleVelocity>();
+        ref var color = ref entity.Get<ParticleColor>();
+        ref var rotation = ref entity.Get<ParticleRotation>();
+        ref var scale = ref entity.Get<ParticleScale>();
+        
+        Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+        if (crimsonSlime.Spiked)
+            texture = ModContent.Request<Texture2D>(Texture + "Spiked");
 
-            float fadeIn = Utils.GetLerpValue(0, 30, time, true) * distanceFade;
+        float fadeIn = Utils.GetLerpValue(0, 30, flyingSlime.Time, true) * flyingSlime.DistanceFade;
 
-            for (int i = 0; i < 10; i++)
-                spriteBatch.Draw(texture.Value, position - velocity * i * 0.5f - Main.screenPosition, null, color.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn * ((10f - i) / 80f), rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade * 1.05f, 0, 0);
+        for (int i = 0; i < 10; i++)
+            spriteBatch.Draw(texture.Value, position.Value - velocity.Value * i * 0.5f - Main.screenPosition, null, color.Value.MultiplyRGBA(Lighting.GetColor(position.Value.ToTileCoordinates())) * fadeIn * ((10f - i) / 80f), rotation.Value + MathHelper.PiOver2, texture.Size() * 0.5f, scale.Value * flyingSlime.DistanceFade * 1.05f, 0, 0);
 
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, color.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn, rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade, 0, 0);
-        }
+        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, null, color.Value.MultiplyRGBA(Lighting.GetColor(position.Value.ToTileCoordinates())) * fadeIn, rotation.Value + MathHelper.PiOver2, texture.Size() * 0.5f, scale.Value * flyingSlime.DistanceFade, 0, 0);
     }
 }

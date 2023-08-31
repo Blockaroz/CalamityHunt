@@ -1,7 +1,6 @@
-﻿namespace CalamityHunt.Content.Particles.FlyingSlimes
+﻿namespace CalamityHunt.Content.Particles.FlyingSlimes;
+
+public class FlyingHeavenlySlimeParticleBehavior : FlyingSlimeParticleBehavior
 {
-    public class FlyingHeavenlySlimeParticleBehavior : FlyingSlimeParticleBehavior
-    {
-        public override float SlimeSpeed => 35f;
-    }
+    public override float SlimeSpeed => 35f;
 }

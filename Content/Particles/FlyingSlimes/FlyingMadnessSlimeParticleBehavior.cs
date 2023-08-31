@@ -1,10 +1,5 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using Terraria;
-using Terraria.ID;
+﻿namespace CalamityHunt.Content.Particles.FlyingSlimes;
 
-namespace CalamityHunt.Content.Particles.FlyingSlimes
+public class FlyingMadnessSlimeParticleBehavior : FlyingSlimeParticleBehavior
 {
-    public class FlyingMadnessSlimeParticleBehavior : FlyingSlimeParticleBehavior
-    {
-    }
 }
