@@ -1,37 +1,46 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Projectiles;
-using Terraria.Audio;
+﻿using Arch.Core.Extensions;
+using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
+using Entity = Arch.Core.Entity;
 
-namespace CalamityHunt.Content.Particles.FlyingSlimes
+namespace CalamityHunt.Content.Particles.FlyingSlimes;
+
+public class FlyingLavaSlimeParticleBehavior : FlyingSlimeParticleBehavior
 {
-    public class FlyingLavaSlimeParticleBehavior : FlyingSlimeParticleBehavior
+    public override float SlimeSpeed => 30f;
+    public override bool ShouldDraw => false;
+
+    public override void PostUpdate(in Entity entity)
     {
-        public override float SlimeSpeed => 30f;
-        public override bool ShouldDraw => false;
+        ref var position = ref entity.Get<ParticlePosition>();
+        ref var velocity = ref entity.Get<ParticleVelocity>();
+            
+        Lighting.AddLight(position.Value + velocity.Value, Color.Orange.ToVector3());
+    }
 
-        public override void PostUpdate()
-        {
-            Lighting.AddLight(position + velocity, Color.Orange.ToVector3());
-        }
+    public override void DrawSlime(in Entity entity, SpriteBatch spriteBatch)
+    {
+        ref var flyingSlime = ref entity.Get<ParticleFlyingSlime>();
+        ref var position = ref entity.Get<ParticlePosition>();
+        ref var velocity = ref entity.Get<ParticleVelocity>();
+        ref var rotation = ref entity.Get<ParticleRotation>();
+        ref var scale = ref entity.Get<ParticleScale>();
+        ref var color = ref entity.Get<ParticleColor>();
+            
+        Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
 
-        public override void DrawSlime(SpriteBatch spriteBatch)
-        {
-            Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+        float fadeIn = Utils.GetLerpValue(0, 30, flyingSlime.Time, true) * flyingSlime.DistanceFade;
 
-            float fadeIn = Utils.GetLerpValue(0, 30, time, true) * distanceFade;
+        Color drawColor = color.Value;
+        drawColor.A /= 2;
 
-            Color drawColor = color;
-            drawColor.A /= 2;
+        for (int i = 0; i < 10; i++)
+            spriteBatch.Draw(texture.Value, position.Value - velocity.Value * i * 0.5f - Main.screenPosition, null, drawColor.MultiplyRGBA(Lighting.GetColor(position.Value.ToTileCoordinates())) * fadeIn * ((10f - i) / 60f), rotation.Value + MathHelper.PiOver2, texture.Size() * 0.5f, scale.Value * flyingSlime.DistanceFade, 0, 0);
 
-            for (int i = 0; i < 10; i++)
-                spriteBatch.Draw(texture.Value, position - velocity * i * 0.5f - Main.screenPosition, null, drawColor.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn * ((10f - i) / 60f), rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade, 0, 0);
-
-            spriteBatch.Draw(texture.Value, position - Main.screenPosition, null, drawColor.MultiplyRGBA(Lighting.GetColor(position.ToTileCoordinates())) * fadeIn, rotation + MathHelper.PiOver2, texture.Size() * 0.5f, scale * distanceFade, 0, 0);
-        }
+        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, null, drawColor.MultiplyRGBA(Lighting.GetColor(position.Value.ToTileCoordinates())) * fadeIn, rotation.Value + MathHelper.PiOver2, texture.Size() * 0.5f, scale.Value * flyingSlime.DistanceFade, 0, 0);
     }
 }
