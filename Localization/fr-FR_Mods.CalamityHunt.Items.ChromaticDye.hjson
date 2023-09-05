@@ -1,0 +1,148 @@
+Name: Teinture chromatique: {0}
+Variant0: Huile
+Variant1: Nucl�aire
+//CALIG DO THE REST
+//ok
+Variant2: Dor�e
+Variant3: Niveaux de gris
+Variant4: Mielleuse
+Variant5: Magistrale
+Variant6: Energie t�n�breuse
+Variant7: Poulpe
+Variant8: Tritanopique
+Variant9: Caligineuse
+Variant10: ZX Spectrum
+Variant11: Mal�fique
+Variant12: Flamme d'ombre
+Variant13: Dogmatique
+Variant14: FIREBLU
+Variant15: Distordue
+Variant16: �l�ctrique
+Variant17: Polterplasmique
+Variant18: �xhum�e
+Variant19: Raptur�e
+Variant20: Ibanique
+Variant21: Arc-en-ciel acide
+Variant22: Rubicon
+Variant23: Double arc-en-ciel
+Variant24: D�plaisante
+Variant25: Jaspe oc�an
+Variant26: Coquillage
+Variant27: Citrouille d'Halloween
+Variant28: Barbe � papa
+Variant29: Verd�tre
+Variant30: Calibration de coulers
+Variant31: Enchant�e
+Variant32: Sisyphe
+Variant33: Babil
+Variant34: Apocalyptique
+Variant35: Rugamarienne
+Variant36: Merdeuse
+Variant37: Festive
+Variant38: Tapis sale
+Variant39: Hein
+Variant40: Zeromus
+Variant41: Aquatique
+Variant42: Stellaire
+Variant43: Carmin
+Variant44: Corruption
+Variant45: Sacr�e
+Variant46: Draconique
+Variant47: Speevil
+Variant48: Sang Super-r�alistique
+Variant49: Tesla aurique
+Variant50: Pikmin
+Variant51: Flamme
+Variant52: Pologne
+Variant53: Cr�che
+Variant54: Daniel
+Variant55: Automnale
+Variant56: Interdimensionelle
+
+"": {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+0: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+1: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+2: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+3: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+4: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+5: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+6: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+7: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+8: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}
+
+9: {
+	Tooltip: {
+		$parentVal: {
+			// $parentVal: ""
+		}
+	}
+}

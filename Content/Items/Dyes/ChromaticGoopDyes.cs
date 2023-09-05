@@ -141,6 +141,7 @@ namespace CalamityHunt.Content.Items.Dyes
         #endregion
 
         public override LocalizedText DisplayName => Language.GetText("Mods.CalamityHunt.Items.ChromaticDye.Name").WithFormatArgs(Language.GetText("Mods.CalamityHunt.Items.ChromaticDye.Variant" + Index.ToString()));
+        public override LocalizedText Tooltip => Language.GetText("Mods.CalamityHunt.Items.ChromaticDye.Tooltip");
 
         public override void SetStaticDefaults()
         {
