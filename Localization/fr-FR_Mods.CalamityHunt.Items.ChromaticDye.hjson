@@ -1,38 +1,39 @@
 Name: Teinture chromatique: {0}
+Tooltip: ""
 Variant0: Huile
-Variant1: Nucl�aire
+Variant1: Nucléaire
 //CALIG DO THE REST
 //ok
-Variant2: Dor�e
+Variant2: Dorée
 Variant3: Niveaux de gris
 Variant4: Mielleuse
 Variant5: Magistrale
-Variant6: Energie t�n�breuse
+Variant6: Energie ténébreuse
 Variant7: Poulpe
 Variant8: Tritanopique
 Variant9: Caligineuse
 Variant10: ZX Spectrum
-Variant11: Mal�fique
+Variant11: Maléfique
 Variant12: Flamme d'ombre
 Variant13: Dogmatique
 Variant14: FIREBLU
 Variant15: Distordue
-Variant16: �l�ctrique
+Variant16: Éléctrique
 Variant17: Polterplasmique
-Variant18: �xhum�e
-Variant19: Raptur�e
+Variant18: Éxhumée
+Variant19: Rapturée
 Variant20: Ibanique
 Variant21: Arc-en-ciel acide
 Variant22: Rubicon
 Variant23: Double arc-en-ciel
-Variant24: D�plaisante
-Variant25: Jaspe oc�an
+Variant24: Déplaisante
+Variant25: Jaspe océan
 Variant26: Coquillage
 Variant27: Citrouille d'Halloween
-Variant28: Barbe � papa
-Variant29: Verd�tre
-Variant30: Calibration de coulers
-Variant31: Enchant�e
+Variant28: Barbe à papa
+Variant29: Verdâtre
+Variant30: Calibration de couleurs
+Variant31: Enchantée
 Variant32: Sisyphe
 Variant33: Babil
 Variant34: Apocalyptique
@@ -46,103 +47,26 @@ Variant41: Aquatique
 Variant42: Stellaire
 Variant43: Carmin
 Variant44: Corruption
-Variant45: Sacr�e
+Variant45: Sacrée
 Variant46: Draconique
 Variant47: Speevil
-Variant48: Sang Super-r�alistique
+Variant48: Sang Super-réalistique
 Variant49: Tesla aurique
 Variant50: Pikmin
 Variant51: Flamme
 Variant52: Pologne
-Variant53: Cr�che
+Variant53: Crêche
 Variant54: Daniel
 Variant55: Automnale
 Variant56: Interdimensionelle
-
-"": {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-0: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-1: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-2: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-3: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-4: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-5: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-6: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-7: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-8: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
-
-9: {
-	Tooltip: {
-		$parentVal: {
-			// $parentVal: ""
-		}
-	}
-}
+// .Tooltip: ""
+// 0.Tooltip: ""
+// 1.Tooltip: ""
+// 2.Tooltip: ""
+// 3.Tooltip: ""
+// 4.Tooltip: ""
+// 5.Tooltip: ""
+// 6.Tooltip: ""
+// 7.Tooltip: ""
+// 8.Tooltip: ""
+// 9.Tooltip: ""

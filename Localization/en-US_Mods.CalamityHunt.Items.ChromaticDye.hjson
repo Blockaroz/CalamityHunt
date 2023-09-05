@@ -1,6 +1,5 @@
 Name: Chromatic Dye: {0}
 Tooltip: ""
-
 Variant0: Oil
 Variant1: Nuclear
 //CALIG DO THE REST
@@ -60,69 +59,14 @@ Variant53: Kindergarten
 Variant54: Daniel
 Variant55: Autumnal
 Variant56: Subworld
-
-"": {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-0: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-1: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-2: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-3: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-4: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-5: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-6: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-7: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-8: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
-
-9: {
-	Tooltip: {
-		$parentVal: ""
-	}
-}
+.Tooltip: ""
+0.Tooltip: ""
+1.Tooltip: ""
+2.Tooltip: ""
+3.Tooltip: ""
+4.Tooltip: ""
+5.Tooltip: ""
+6.Tooltip: ""
+7.Tooltip: ""
+8.Tooltip: ""
+9.Tooltip: ""
