@@ -3,4 +3,4 @@ loadAfter = CalamityMod
 author = Team Hypnos
 version = 1.0.3
 sortAfter = WMITF
-dllReferences = Arch,Collections.Pooled,CommunityToolkit.HighPerformance,JobScheduler,Microsoft.Extensions.ObjectPool
+dllReferences = arch/Arch,arch/Collections.Pooled,arch/CommunityToolkit.HighPerformance,arch/JobScheduler,arch/Microsoft.Extensions.ObjectPool

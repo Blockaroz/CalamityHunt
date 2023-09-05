@@ -224,6 +224,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public static Texture2D crownMaskTexture;
         public static Texture2D tentacleTexture;
         public static Texture2D ornamentTexture;
+        public static GoozmaCordTargetContent cordContent;
 
         private void LoadAssets()
         {
@@ -232,6 +233,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             crownMaskTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaCrown_Mask", AssetRequestMode.ImmediateLoad).Value;
             tentacleTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/GoozmaTentacle", AssetRequestMode.ImmediateLoad).Value;
             ornamentTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaOrnament", AssetRequestMode.ImmediateLoad).Value;
+            Main.ContentThatNeedsRenderTargets.Add(cordContent = new GoozmaCordTargetContent());
         }
 
         private void DrawGoozma(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 position, float rotation, Vector2 velocity, Vector2 tentacleVelocity, Color color)
@@ -282,14 +284,22 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             spriteBatch.Draw(dressTexture, dressPos - screenPos, null, color, extraTilt * 0.2f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dressTexture.Size() * new Vector2(0.5f, 0f), headScale * NPC.scale, direction, 0);
 
-            if (cordTarget != null)
+            cordContent.Host = this;
+            cordContent.Request();
+            if (cordContent.IsReady)
             {
-                if (NPC.IsABestiaryIconDummy)
-                    spriteBatch.Draw(cordTarget, position, null, color, 0, cordTarget.Size() * 0.5f, NPC.scale * 2f, 0, 0);
-
-                else
-                    spriteBatch.Draw(cordTarget, position - screenPos, null, color, 0, cordTarget.Size() * 0.5f, NPC.scale * 2f, 0, 0);
+                Texture2D cordTexture = cordContent.GetTarget();
+                spriteBatch.Draw(cordTexture, position - screenPos, null, color, 0, cordTexture.Size() * 0.5f, NPC.scale * 2f, direction, 0);
             }
+
+            //if (cordTarget != null)
+            //{
+            //    if (NPC.IsABestiaryIconDummy)
+            //        spriteBatch.Draw(cordTarget, position, null, color, 0, cordTarget.Size() * 0.5f, NPC.scale * 2f, 0, 0);
+
+            //    else
+            //        spriteBatch.Draw(cordTarget, position - screenPos, null, color, 0, cordTarget.Size() * 0.5f, NPC.scale * 2f, 0, 0);
+            //}
 
             spriteBatch.Draw(texture, position + drawOffset - screenPos, null, color, extraTilt * 0.9f + rotation, texture.Size() * 0.5f, headScale * NPC.scale, direction, 0);
             spriteBatch.Draw(crownTexture, crownPos - screenPos, null, color, extraTilt + rotation, crownTexture.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);

@@ -696,6 +696,11 @@ Configs: {
 			Tooltip: "{$Mods.CalamityHunt.Config.LightningToggle.Tooltip}"
 			Label: "{$Mods.CalamityHunt.Config.LightningToggle.Label}"
 		}
+
+		shadowspecCurse: {
+			Label: shadowspec Curse
+			Tooltip: ""
+		}
 	}
 }
 
@@ -717,3 +722,4 @@ StickyHandStats:
 	Reelback Velocity: 10
 	Pull Velocity: 17
 	'''
+GoozmaShadowspecCurse: Mods.CalamityHunt.GoozmaShadowspecCurse

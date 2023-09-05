@@ -35,6 +35,7 @@ namespace CalamityHunt
                 public static readonly Asset<Texture2D> GoozmoemCrown = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/GoozmoemCrown");
                 public static readonly Asset<Texture2D> CometKunaiFlame = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/CometKunaiFlame");
                 public static readonly Asset<Texture2D>[] FusionRay = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/FusionRay_", 4);
+                public static readonly Asset<Texture2D> QuestionMark = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/icon_small");
             }
             
             public static class Bars

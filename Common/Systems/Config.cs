@@ -43,5 +43,8 @@ namespace CalamityHunt.Common.Systems
         [Tooltip("$Mods.CalamityHunt.Config.StressShake.Tooltip")]
         public float stressShake { get; set; }
 
+        [DefaultValue(true)]
+        public bool shadowspecCurse;
+
     }
 }

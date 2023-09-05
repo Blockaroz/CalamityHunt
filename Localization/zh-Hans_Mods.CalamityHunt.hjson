@@ -696,6 +696,11 @@ Configs: {
 			Tooltip: "{$Mods.CalamityHunt.Config.LightningToggle.Tooltip}"
 			Label: "{$Mods.CalamityHunt.Config.LightningToggle.Label}"
 		}
+
+		shadowspecCurse: {
+			// Label: shadowspec Curse
+			// Tooltip: ""
+		}
 	}
 }
 
@@ -717,3 +722,4 @@ StickyHandStats:
 	回收速度: 10
 	牵引速度: 17
 	'''
+// GoozmaShadowspecCurse: Mods.CalamityHunt.GoozmaShadowspecCurse

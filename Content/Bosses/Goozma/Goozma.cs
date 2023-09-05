@@ -49,9 +49,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
     {
         public override void SetStaticDefaults()
         {
-            if (nPCsToDrawCordOn == null)
-                nPCsToDrawCordOn = new List<NPC>();
-
             // DisplayName.SetDefault("Goozma");
             NPCID.Sets.TrailCacheLength[Type] = 10;
             NPCID.Sets.TrailingMode[Type] = -1;
@@ -125,13 +122,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Main.drunkWorld)
                 SlimeUtils.GoozmaColorType = Main.rand.Next(10);
 
-            if (NPC.IsABestiaryIconDummy)
-            {
-                if (nPCsToDrawCordOn.Count > 10)
-                    nPCsToDrawCordOn.RemoveAt(5);//preserve 5 of them
+            //if (NPC.IsABestiaryIconDummy)
+            //{
+            //    if (nPCsToDrawCordOn.Count > 10)
+            //        nPCsToDrawCordOn.RemoveAt(5);//preserve 5 of them
 
-                nPCsToDrawCordOn.Add(NPC);
-            }
+            //    nPCsToDrawCordOn.Add(NPC);
+            //}
 
             SlimeUtils.GoozmaColorType = Main.rand.Next(54);
         }
@@ -151,9 +148,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             trophyTypes[3] = BossDropAutoloader.AddBossTrophy("CrimulanGlopstrosity");          
             trophyTypes[4] = BossDropAutoloader.AddBossTrophy("StellarGeliath");          
             On_Main.UpdateAudio += FadeMusicOut;
-            On_Main.CheckMonoliths += DrawCordShapes;
-
-            nPCsToDrawCordOn = new List<NPC>();
+            //On_Main.CheckMonoliths += DrawCordShapes;
+            //nPCsToDrawCordOn = new List<NPC>();
 
             LoadAssets();
         }
