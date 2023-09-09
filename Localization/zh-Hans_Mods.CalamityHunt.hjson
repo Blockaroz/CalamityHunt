@@ -723,3 +723,8 @@ StickyHandStats:
 	牵引速度: 17
 	'''
 // GoozmaShadowspecCurse: Mods.CalamityHunt.GoozmaShadowspecCurse
+
+CalamityModName: {
+	Display: Calamity Mod
+	Internal: CalamityMod
+}

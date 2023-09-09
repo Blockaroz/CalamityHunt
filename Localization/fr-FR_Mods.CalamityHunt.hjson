@@ -724,3 +724,8 @@ StickyHandStats:
 	Vitesse de traction: 17
 	'''
 // GoozmaShadowspecCurse: Mods.CalamityHunt.GoozmaShadowspecCurse
+
+CalamityModName: {
+	Display: Calamity Mod
+	Internal: CalamityMod
+}

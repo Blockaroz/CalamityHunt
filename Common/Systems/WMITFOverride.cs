@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Terraria;
-using Terraria.Chat;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -16,23 +14,25 @@ namespace CalamityHunt.Common.Systems
     public class WMITFOverride : ModSystem
     {
 
-        static public string MouseText;
-        static public bool SecondLine;
-        static public bool Hunted;
+        public static string MouseText;
+        public static bool SecondLine;
+        public static bool Hunted;
+        public static string Display = Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.CalamityModName.Display").Value;
+        public static string Internal = Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.CalamityModName.Internal").Value;
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int index = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
             if (index != -1 && Hunted)
             {
                 layers.RemoveAll(l => l.Name.Equals("WMITF: Mouse Text"));
-                layers.Insert(index, new LegacyGameInterfaceLayer("Calamity Hunt: Mouse Text", delegate
+                layers.Insert(index, new LegacyGameInterfaceLayer("CalamityHunt: Mouse Text", delegate
                 {
                     if (ModLoader.TryGetMod("WMITF", out Mod wmitf) && wmitf.TryFind("Config", out ModConfig config))
                     {
                         var t = config.GetType().GetField("DisplayWorldTooltips", BindingFlags.Public | BindingFlags.Instance);
-                        if ((bool)t.GetValue(config) && !String.IsNullOrEmpty(MouseText))
+                        if ((bool)t.GetValue(config) && !string.IsNullOrEmpty(MouseText))
                         {
-                            string coloredString = String.Format("[c/{1}:[{0}][c/{1}:]]", MouseText, Colors.RarityBlue.Hex3());
+                            string coloredString = string.Format("[c/{1}:[{0}][c/{1}:]]", MouseText, Colors.RarityBlue.Hex3());
                             var text = ChatManager.ParseMessage(coloredString, Color.White).ToArray();
                             float x = ChatManager.GetStringSize(Terraria.GameContent.FontAssets.MouseText.Value, text, Vector2.One).X;
                             var pos = Main.MouseScreen + new Vector2(16f, 16f);
@@ -65,7 +65,7 @@ namespace CalamityHunt.Common.Systems
                         tooltips.RemoveAll(i => i.Text.Contains(Mod.Name));
                         tooltips.RemoveAll(i => i.Text.Contains(Mod.DisplayName));
                         var n = config.GetType().GetField("DisplayTechnicalNames", BindingFlags.Public | BindingFlags.Instance);
-                        string text = ((bool)n.GetValue(config)) ? ("CalamityMod:" + item.ModItem.Name) : "Calamity Mod";
+                        string text = ((bool)n.GetValue(config)) ? (WMITFOverride.Internal + ":" + item.ModItem.Name) : WMITFOverride.Display;
                         TooltipLine line = new(Mod, Mod.Name, "[" + text + "]");
                         line.OverrideColor = Colors.RarityBlue;
                         tooltips.Add(line);
@@ -75,7 +75,7 @@ namespace CalamityHunt.Common.Systems
                         TooltipLine tt = tooltips.Find(i => i.Text.Contains(Mod.Name));
                         if (tt.Name.Equals("Terraria.ItemName"))
                         {
-                            tt.Text = item.Name + " [CalamityMod]";
+                            tt.Text = item.Name + " ["+ WMITFOverride.Internal + "]";
                         }
                     }
                     else if (item.ModItem.Mod == Mod && !item.Name.Contains("[" + item.ModItem.Mod.DisplayName + "]"))
@@ -83,7 +83,7 @@ namespace CalamityHunt.Common.Systems
                         TooltipLine tt = tooltips.Find(i => i.Text.Contains(Mod.DisplayName));
                         if (tt.Name.Equals("Terraria.ItemName"))
                         {
-                            tt.Text = item.Name + " [Calamity Mod]";
+                            tt.Text = item.Name + " [" + WMITFOverride.Display + "]";
                         }
                     }
                 }
@@ -96,7 +96,7 @@ namespace CalamityHunt.Common.Systems
         {
             if (!Main.dedServ && ModLoader.TryGetMod("WMITF", out Mod wmitf) && wmitf.TryFind("Config", out ModConfig config))
             {
-                WMITFOverride.MouseText = String.Empty;
+                WMITFOverride.MouseText = string.Empty;
                 WMITFOverride.SecondLine = false;
                 WMITFOverride.Hunted = false;
 
@@ -108,10 +108,7 @@ namespace CalamityHunt.Common.Systems
                     if (modTile != null)
                     {
                         if (modTile.Mod == Mod)
-                        {
-                            WMITFOverride.MouseText = tech ? ("CalamityMod:" + modTile.Name) : "Calamity Mod";
-                            WMITFOverride.Hunted = true;
-                        }
+                            Replace(tech, modTile.Name);
                     }
                 }
                 else
@@ -120,10 +117,7 @@ namespace CalamityHunt.Common.Systems
                     if (modWall != null)
                     {
                         if (modWall.Mod == Mod)
-                        {
-                            WMITFOverride.MouseText = tech ? ("CalamityMod:" + modWall.Name) : "Calamity Mod";
-                            WMITFOverride.Hunted = true;
-                        }
+                            Replace(tech, modWall.Name);
                     }
                 }
                 var mousePos = Main.MouseWorld;
@@ -137,17 +131,19 @@ namespace CalamityHunt.Common.Systems
                         {
                             if (modNPC.Mod == Mod)
                             {
-                                WMITFOverride.MouseText = tech ? ("CalamityMod:" + modNPC.Name) : "Calamity Mod";
+                                Replace(tech, modNPC.Name);
                                 WMITFOverride.SecondLine = true;
-                                WMITFOverride.Hunted = true;
                                 break;
                             }
                         }
                     }
                 }
-                if (WMITFOverride.MouseText != String.Empty && Main.mouseText)
-                    WMITFOverride.SecondLine = true;
             }
+        }
+        private void Replace(bool tech, string name)
+        {
+            WMITFOverride.MouseText = tech ? (WMITFOverride.Internal + ":" + name) : WMITFOverride.Display;
+            WMITFOverride.Hunted = true;
         }
     }
 }
