@@ -326,6 +326,8 @@ namespace CalamityHunt.Common.Players
                 Player.buffImmune[calamity.Find<ModBuff>("SearingLava").Type] = true;
                 Player.buffImmune[calamity.Find<ModBuff>("ShellfishClaps").Type] = true;
                 Player.buffImmune[calamity.Find<ModBuff>("BrimstoneFlames").Type] = true;
+                calamity.Call("SetWearingRogueArmor", Player, true);
+                calamity.Call("SetWearingPostMLSummonerArmor", Player, true);
                 }
           }
           }
