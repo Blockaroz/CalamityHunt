@@ -156,7 +156,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaAuricSoul>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new ChromaticDropRule(), ModContent.ItemType<GoozmaAuricSoul>()));
             npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaLore>()));
             npcLoot.Add(ItemDropRule.ByCondition(new ZenithDropRule(), ModContent.ItemType<Goozmaga>()));
 
@@ -168,22 +168,23 @@ namespace CalamityHunt.Content.Bosses.Goozma
             npcLoot.Add(ItemDropRule.Common(trophyTypes[0], 10));
             npcLoot.Add(ItemDropRule.FewFromOptions(1, 10, trophyTypes[1], trophyTypes[2], trophyTypes[3], trophyTypes[4]));
 
-            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(relicType));
+            npcLoot.Add(ItemDropRule.ByCondition(new MasterRevDropRule(), (relicType)));
 
-            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<ImperialGelato>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new MasterRevDropRule(), ModContent.ItemType<ImperialGelato>(), 4));
 
             LeadingConditionRule classic = new LeadingConditionRule(new Conditions.NotExpert());
 
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<SplendorJam>()));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunHelm>(), 3));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunChestplate>(), 3));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ShogunPants>(), 3));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<StickyHand>(), 3));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
-            classic.OnSuccess(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 4));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<SplendorJam>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<ShogunHelm>(), 3));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<ShogunChestplate>(), 3));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<ShogunPants>(), 3));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<StickyHand>(), 3));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<PaladinPalanquin>(), 4));
 
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<EbonianMask>(), ModContent.ItemType<DivineMask>(), ModContent.ItemType<CrimulanMask>(), ModContent.ItemType<StellarMask>()));
             classic.OnSuccess(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<CometKunai>()));
+            npcLoot.Add(classic);
         }
 
         public override void BossLoot(ref string name, ref int potionType)

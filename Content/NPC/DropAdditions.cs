@@ -23,7 +23,7 @@ namespace CalamityHunt.Content.NPCs
                 Mod cal = ModLoader.GetMod("CalamityMod");
                 if (npc.type == cal.Find<ModNPC>("Yharon").Type)
                 {
-                    npcLoot.Add(ItemDropRule.ByCondition(new YharonDownedDropRule(), ModContent.ItemType<FieryAuricSoul>()));
+                    npcLoot.Add(ItemDropRule.ByCondition(new DraconicDropRule(), ModContent.ItemType<FieryAuricSoul>()));
                 }
             }
         }
