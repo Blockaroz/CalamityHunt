@@ -1,15 +1,18 @@
-﻿using CalamityHunt.Content.Items.Dyes;
-using CalamityHunt.Content.Items.Materials;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
+﻿using CalamityHunt.Content.Items.Materials;
 using Terraria;
-using Terraria.Graphics.Shaders;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Systems
 {
     public class CraftingSystem : ModSystem
     {
+        public static int AnyEvilBlock;
+        public override void AddRecipeGroups()
+        {
+            RecipeGroup evil = new RecipeGroup(() => Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.AnyEvilBlock").Value, 61, 836, 833, 835, 370, 1246, 3274, 3275, 3276, 3277);
+            AnyEvilBlock = RecipeGroup.RegisterGroup("CalamityHunt:AnyEvilBlock", evil);
+        }
         public override void PostAddRecipes()
         {
             Mod cal;

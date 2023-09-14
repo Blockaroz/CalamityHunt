@@ -1,9 +1,7 @@
-using CalamityHunt.Content.Items.Materials;
-using CalamityHunt.Content.Particles;
-using Microsoft.Xna.Framework;
-using CalamityHunt.Common.Systems.Particles;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Misc
@@ -19,6 +17,27 @@ namespace CalamityHunt.Content.Items.Misc
             Item.rare = ItemRarityID.LightRed;
             Item.channel = true;
             Item.maxStack = Item.CommonMaxStack;
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            TooltipLine tooltip = new(Mod, "CalamityHunt:SludgeWarning", Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.SludgeWarning").Value);
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                int check = tooltips.IndexOf(tooltips.Find(t => t.Text.Equals("Summons the Slime God")));
+                tooltips.RemoveAt(check);
+                tooltips.Insert(check, tooltip);
+            }
+        }
+        public override void AddRecipes()
+        {
+            if (!ModLoader.HasMod("CalamityMod"))
+            {
+                CreateRecipe()
+                    .AddIngredient(ItemID.PinkGel, 40)
+                    .AddRecipeGroup("CalamityHunt:AnyEvilBlock", 40)
+                    .AddTile(TileID.DemonAltar)
+                    .Register();
+            }
         }
     }
 }

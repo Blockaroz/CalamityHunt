@@ -724,6 +724,8 @@ StickyHandStats:
 	Vitesse de traction: 17
 	'''
 // GoozmaShadowspecCurse: Mods.CalamityHunt.GoozmaShadowspecCurse
+// AnyEvilBlock: Any Evil Block
+// SludgeWarning: Cannot be used to summon the Slime God
 
 CalamityModName: {
 	Display: Calamity Mod
