@@ -168,6 +168,15 @@ namespace CalamityHunt.Content.Items.Dyes
             }
         }
 
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient<GoopDye>()
+                .AddIngredient<ChromaticMass>()
+                .AddTile(TileID.DyeVat)
+                .Register();
+        }
+
         #region Drawing in world
         public Effect GetShader()
         {
