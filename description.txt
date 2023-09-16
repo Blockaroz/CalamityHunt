@@ -3,7 +3,7 @@ Fight the one and only Goozma in this Calamity Mod addon.
 
 Main programmer - Blockaroz
 Mastermind - AmmyanDocCiesh
-Additional programmers - MisterGoodLuck, YuH
+Additional programmers - YuH, Tomat, MisterGoodLuck
 Main spriter - THEREDSTONEBRO
 Additional spriters - Willowmaine, Mochi
 Concept artist and additional programming - IbanPlay

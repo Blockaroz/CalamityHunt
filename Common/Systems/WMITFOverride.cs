@@ -13,7 +13,7 @@ namespace CalamityHunt.Common.Systems
 {
     public class WMITFOverride : ModSystem
     {
-
+        // Modified (obviously) from https://github.com/gardenappl/WMITF
         public static string MouseText;
         public static bool SecondLine;
         public static bool Hunted;
