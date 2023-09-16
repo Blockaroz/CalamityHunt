@@ -134,7 +134,7 @@ public sealed class ParticleSystem : ModSystem
                 if (!new Rectangle((int)position.Value.X - 3, (int)position.Value.Y - 3, 6, 6).Intersects(value))
                     return;
 
-                shader.Value.Apply(null);
+                shader.Value?.Apply(null);
                 particle.Behavior.Draw(in entity, spriteBatch);
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
             }
