@@ -139,7 +139,7 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
             Texture2D glowTexture = AssetDirectory.Textures.GlowBig.Value;
-            Texture2D eyeTexture = AssetDirectory.Textures.Extras.GoozmaGodEye.Value;
+            Texture2D eyeTexture = AssetDirectory.Textures.Goozma.GodEye.Value;
 
             Color glowColor = GetAlpha(Color.White).Value;
             glowColor.A = 0;

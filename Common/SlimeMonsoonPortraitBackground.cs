@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.ModLoader;
@@ -9,7 +9,7 @@ namespace CalamityHunt.Common
 {
 	public class SlimeMonsoonPortraitBackground : IBestiaryInfoElement, IBestiaryBackgroundImagePathAndColorProvider
 	{
-		public Asset<Texture2D> GetBackgroundImage() => ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/SlimeMonsoonBG");
+		public Asset<Texture2D> GetBackgroundImage() => AssetDirectory.Textures.SlimeMonsoon.Background;
 		public Color? GetBackgroundColor() => Color.White;
 		public UIElement ProvideUIElement(BestiaryUICollectionInfo info) => null;
 	}

@@ -70,7 +70,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void Load()
         {
-            eyeTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CorruptEye").Value;
+            eyeTexture = AssetDirectory.Textures.Goozma.CorruptEye.Value;
         }
 
         public override bool PreDraw(ref Color lightColor)

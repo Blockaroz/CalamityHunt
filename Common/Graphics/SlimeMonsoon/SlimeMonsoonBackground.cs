@@ -235,7 +235,7 @@ namespace CalamityHunt.Common.Graphics.SlimeMonsoon
 
                 rots.Add(points[data.Value.Count - 2].AngleTo(points[data.Value.Count - 1]));
 
-                SoundStyle thunderSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SlimeMonsoon/GoozmaMonsoonThunder", 3, SoundType.Ambient);
+                SoundStyle thunderSound = AssetDirectory.Sounds.MonsoonThunder;
                 thunderSound.MaxInstances = 0;
                 SoundEngine.PlaySound(thunderSound.WithVolumeScale(0.05f + strength * 0.15f).WithPitchOffset(Main.rand.NextFloat(-0.1f, 0.4f)), Main.LocalPlayer.Center);
             }

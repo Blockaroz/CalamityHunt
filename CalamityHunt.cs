@@ -91,7 +91,7 @@ namespace CalamityHunt
             int[] goozmaID = { ModContent.NPCType<Goozma>() };
             Action<int> pr = delegate (int npc)
             {
-                SoundStyle roar = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaAwaken");
+                SoundStyle roar = AssetDirectory.Sounds.Goozma.Awaken;
                 int whomst = Player.FindClosest(new Vector2(Main.maxTilesX, Main.maxTilesY) * 16f * 0.5f, 1, 1);
                 Player guy = Main.player[whomst];
                 SoundEngine.PlaySound(roar, guy.Center);
@@ -121,7 +121,7 @@ namespace CalamityHunt
                 sludge = ModLoader.GetMod("CalamityMod").Find<ModItem>("OverloadedSludge").Type;
             }
             Action<SpriteBatch, Rectangle, Color> portrait = (SpriteBatch sb, Rectangle rect, Color color) => {
-                Texture2D texture = ModContent.Request<Texture2D>("CalamityHunt/Assets/Textures/Goozma/GoozmaBC").Value;
+                Texture2D texture = AssetDirectory.Textures.Goozma.BC.Value;
                 Vector2 centered = new Vector2(rect.Center.X - (texture.Width / 2), rect.Center.Y - (texture.Height / 2));
                 sb.Draw(texture, centered, color);
             };

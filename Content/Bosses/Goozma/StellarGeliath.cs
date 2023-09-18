@@ -248,7 +248,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 saveTarget = NPC.Center;
 
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave, NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave, NPC.Center);
 
                 int count = 5 + Main.rand.Next(5, 7);
                 for (int i = 0; i < count; i++)
@@ -263,7 +263,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
             if (Time == 53)
             {
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave.WithPitchOffset(0.07f), NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave.WithPitchOffset(0.07f), NPC.Center);
 
                 int count = 4 + Main.rand.Next(4, 6);
                 for (int i = 0; i < count; i++)
@@ -280,7 +280,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 NPC.scale = 0f;
 
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationForm.WithPitchOffset(0.2f), NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationForm.WithPitchOffset(0.2f), NPC.Center);
 
                 int count = 3 + Main.rand.Next(8, 10);
                 for (int i = 0; i < count; i++)
@@ -331,9 +331,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         SpawnConstellation(2, 8);                    
                     
                     if ((Time - 70) % 150 == 25)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
                     if ((Time - 70) % 150 == 120)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationForm.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationForm.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
                 }
             }
 
@@ -344,7 +344,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             if (Time == 580)
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarReform, NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarReform, NPC.Center);
 
             if (Time > 680)
                 Reset();
@@ -512,7 +512,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             {
                 if (Time == 45)
                 {
-                    SoundStyle telegraph = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarSlimeStarfallTelegraph");
+                    SoundStyle telegraph = AssetDirectory.Sounds.Slime.StellarSlimeStarfallTelegraph;
                     SoundEngine.PlaySound(telegraph.WithVolumeScale(2f), NPC.Center);
                 }
 
@@ -534,7 +534,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.scale = Utils.GetLerpValue(40 + waitTime + 14, 40 + waitTime + 6, Time, true);
                 if (Time == 40 + waitTime + 2)
                 {
-                    SoundStyle slamSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarSlimeImpact");
+                    SoundStyle slamSound = AssetDirectory.Sounds.Slime.StellarSlimeImpact;
                     SoundEngine.PlaySound(slamSound, NPC.Center);
                 }
 
@@ -582,7 +582,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             if (Time == waitTime + 200)
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarReform, NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarReform, NPC.Center);
 
             if (Time > 40 && Time < 40 + waitTime + 10)
             {
@@ -640,7 +640,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             if (Time == 585)
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarBlackHoleGulp, NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarBlackHoleGulp, NPC.Center);
 
             if (Time > 530)
             {
@@ -810,7 +810,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             consumeTexture = ModContent.Request<Texture2D>(Texture + "Consume", AssetRequestMode.ImmediateLoad).Value;
             bestiarySpaceTexture = ModContent.Request<Texture2D>(Texture + "BestiarySpaceImage", AssetRequestMode.ImmediateLoad).Value;
-            constellationRing = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/ConstellationArea", AssetRequestMode.ImmediateLoad).Value;
+            constellationRing = AssetDirectory.Textures.Goozma.ConstellationArea.Value;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -839,8 +839,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
 
                 Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
-                effect.Parameters["uTextureClose"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
-                effect.Parameters["uTextureFar"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space1").Value);
+                effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Space.Space0.Value);
+                effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Space.Space1.Value);
                 effect.Parameters["uPosition"].SetValue(screenPos + new Vector2(0, MathF.Sin(Main.GlobalTimeWrappedHourly * 0.5f) * 0.1f));
                 effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
                 effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));
@@ -906,8 +906,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time > 570 && Time < 680)
                     {
-                        Texture2D swirlingRock0 = AssetDirectory.Textures.Extras.SwirlingRocks[0].Value;
-                        Texture2D swirlingRock1 = AssetDirectory.Textures.Extras.SwirlingRocks[1].Value;
+                        Texture2D swirlingRock0 = AssetDirectory.Textures.Goozma.SwirlingRocks[0].Value;
+                        Texture2D swirlingRock1 = AssetDirectory.Textures.Goozma.SwirlingRocks[1].Value;
                         spriteBatch.Draw(swirlingRock0, NPC.Center - screenPos, swirlingRock0.Frame(), Color.White, Main.GlobalTimeWrappedHourly * 1.5f, swirlingRock0.Size() * 0.5f, NPC.scale * 0.25f, 0, 0);
                         spriteBatch.Draw(swirlingRock1, NPC.Center - screenPos, swirlingRock1.Frame(), Color.White, Main.GlobalTimeWrappedHourly * 1.8f, swirlingRock1.Size() * 0.5f, NPC.scale * 0.25f, 0, 0);
                     }
@@ -941,8 +941,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             Effect discEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/StellarRing", AssetRequestMode.ImmediateLoad).Value;
             discEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-            discEffect.Parameters["uTexture0"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpaceTrail").Value);
-            discEffect.Parameters["uTexture1"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/SpaceTrailGlow").Value);
+            discEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Goozma.SpaceTrail.Value);
+            discEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Goozma.SpaceTrailGlow.Value);
             discEffect.Parameters["uColorLight"].SetValue(new Color(255, 200, 160).ToVector3());
             discEffect.Parameters["uColorAura"].SetValue(new Color(140, 45, 30).ToVector3());
             discEffect.Parameters["uColorDark"].SetValue(new Color(50, 70, 200).ToVector3());//new Color(80, 50, 35)

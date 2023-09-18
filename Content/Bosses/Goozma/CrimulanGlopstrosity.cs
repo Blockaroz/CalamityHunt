@@ -272,7 +272,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 if (localTime == 35)
                 {
-                    SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
+                    SoundStyle createSound = AssetDirectory.Sounds.Slime.CrimslimeTelegraph;
                     SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
                 }
 
@@ -282,9 +282,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(10, 26, localTime, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(10, 26, localTime, true)) * 0.5f);
                     if (localTime == 25)
                     {
-                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
-                        hop.MaxInstances = 0;
-                        hop.PitchVariance = 0.1f;
+                        SoundStyle hop = AssetDirectory.Sounds.Goozma.SlimeJump;
                         SoundEngine.PlaySound(hop, NPC.Center);
                         SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                     }
@@ -346,8 +344,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                                 player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 5;
 
-                            SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                            slam.MaxInstances = 0;
+                            SoundStyle slam = AssetDirectory.Sounds.Slime.SlimeSlam;
                             SoundEngine.PlaySound(slam, NPC.Center);
 
                             for (int i = 0; i < Main.rand.Next(30, 40); i++)
@@ -374,7 +371,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             int waitTime = 70;
             if (Time == waitTime + 5)
             {
-                SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
+                SoundStyle createSound = AssetDirectory.Sounds.Slime.CrimslimeTelegraph;
                 SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
             }
 
@@ -384,9 +381,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 squishFactor = new Vector2(1f + (float)Math.Cbrt(Utils.GetLerpValue(15, 56, Time, true)) * 0.4f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(15, 56, Time, true)) * 0.5f);
                 if (Time == 58)
                 {
-                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
-                    hop.MaxInstances = 0;
-                    hop.PitchVariance = 0.1f;
+                    SoundStyle hop = AssetDirectory.Sounds.Goozma.SlimeJump;
                     SoundEngine.PlaySound(hop, NPC.Center);
                     SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
@@ -447,8 +442,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                         //Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), 0, 0, ai1: 2000);
 
-                        SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                        slam.MaxInstances = 0;
+                        SoundStyle slam = AssetDirectory.Sounds.Slime.SlimeSlam;
                         SoundEngine.PlaySound(slam, NPC.Center);
 
                         for (int i = 0; i < Main.rand.Next(30, 40); i++)
@@ -474,9 +468,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                     if (Time == doubleWaitTime + 95)
                     {
-                        SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
-                        hop.MaxInstances = 0;
-                        hop.PitchVariance = 0.1f;
+                        SoundStyle hop = AssetDirectory.Sounds.Goozma.SlimeJump;
                         SoundEngine.PlaySound(hop, NPC.Center);
                     }
                 }
@@ -489,7 +481,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time == doubleWaitTime + 125)
             {
-                SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/CrimslimeTelegraph");
+                SoundStyle createSound = AssetDirectory.Sounds.Slime.CrimslimeTelegraph;
                 SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
             }
             if (Time > doubleWaitTime + 100 && Time < doubleWaitTime + 170)
@@ -519,8 +511,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), 0, 0, ai1: 2500);
 
-                SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                slam.MaxInstances = 0;
+                SoundStyle slam = AssetDirectory.Sounds.Slime.SlimeSlam;
                 SoundEngine.PlaySound(slam, NPC.Center);
 
                 for (int i = 0; i < Main.rand.Next(30, 40); i++)
@@ -573,9 +564,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.velocity.Y -= 30;
                     saveTarget = Target.Center + new Vector2((Main.rand.Next(0, 50) + Math.Abs(Target.Velocity.X) * 25 + 360) * (Target.Center.X > NPC.Center.X ? 1 : -1), NPC.height);
                     
-                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
-                    hop.MaxInstances = 0;
-                    hop.PitchVariance = 0.1f;
+                    SoundStyle hop = AssetDirectory.Sounds.Goozma.SlimeJump;
                     SoundEngine.PlaySound(hop, NPC.Center);
                 }
                 else if (localTime < (int)(jumpTime * 0.72f))
@@ -606,8 +595,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                         player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 3;
 
-                    SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                    slam.MaxInstances = 0;
+                    SoundStyle slam = AssetDirectory.Sounds.Slime.SlimeSlam;
                     SoundEngine.PlaySound(slam, NPC.Center);
 
                     for (int i = 0; i < Main.rand.Next(20, 30); i++)
@@ -633,10 +621,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (Time == 18)
                 {
                     NPC.velocity.Y = -20;
-                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
-                    hop.MaxInstances = 0;
-                    hop.Pitch = -0.3f;
-                    hop.PitchVariance = 0.1f;
+                    SoundStyle hop = AssetDirectory.Sounds.Goozma.SlimeJump with { Pitch = -0.3f };
                     SoundEngine.PlaySound(hop, NPC.Center);
                 }
             }
@@ -737,7 +722,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
-            Asset<Texture2D> ninja = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/DeadNinja");
+            Asset<Texture2D> ninja = AssetDirectory.Textures.Goozma.Ninja;
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
             Asset<Texture2D> rayTell = TextureAssets.Extra[60];
             Asset<Texture2D> tell = TextureAssets.Extra[178];

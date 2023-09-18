@@ -71,7 +71,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time == 1)
             {
-                SoundStyle invocation = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarBlackHoleSummon");
+                SoundStyle invocation = AssetDirectory.Sounds.Slime.StellarBlackHoleSummon;
                 SoundEngine.PlaySound(invocation.WithVolumeScale(1.5f), Projectile.Center);
             }
 
@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             pitch = (float)Math.Sqrt(Utils.GetLerpValue(-MaxTime * 0.5f, MaxTime, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime * 0.98f, Time, true)) * 2f - 1.5f;
 
             if (holeSound == null)
-                holeSound = new LoopingSound(AssetDirectory.Sounds.Goozma.StellarBlackHoleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+                holeSound = new LoopingSound(AssetDirectory.Sounds.Slime.StellarBlackHoleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
             if (windSound == null)
                 windSound = new LoopingSound(AssetDirectory.Sounds.Goozma.WindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
@@ -167,7 +167,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     .UseTargetPosition(Projectile.Center)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.1f % 1f)
                     .UseIntensity((float)Math.Sqrt(Utils.GetLerpValue(0.1f, 0.9f, Projectile.scale, true)) * 0.4f);
-                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortionSample"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Common/Graphics/SlimeMonsoon/DistortNoise").Value);
+                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortionSample"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Value);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uSize"].SetValue(new Vector2(1f));
             }

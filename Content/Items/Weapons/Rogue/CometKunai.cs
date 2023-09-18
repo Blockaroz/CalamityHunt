@@ -74,7 +74,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
                                 Vector2 offVel = velocity.RotatedBy(0.3f / 4f * i - 0.15f);
                                 Projectile.NewProjectileDirect(source, position, offVel, type, damage, knockback, player.whoAmI);
                             }
-                            SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave with { Pitch = 1f, Volume = 0.2f }, player.Center);
+                            SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave with { Pitch = 1f, Volume = 0.2f }, player.Center);
                         }
                         return false;
                     }
@@ -93,7 +93,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
                             Vector2 offVel = velocity.RotatedBy(0.3f / 4f * i - 0.15f);
                             Projectile.NewProjectileDirect(source, position, offVel, type, damage, knockback, player.whoAmI);
                         }
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.StellarConstellationWave with { Pitch = 1f, Volume = 0.2f }, player.Center);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave with { Pitch = 1f, Volume = 0.2f }, player.Center);
                     }
                     return false;
                 }

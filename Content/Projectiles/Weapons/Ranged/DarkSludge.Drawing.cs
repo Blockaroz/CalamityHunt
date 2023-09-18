@@ -127,8 +127,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         private void DrawSludge(On_Main.orig_DoDraw_Tiles_Solid orig, Main self)
         {
-            Texture2D baseTex = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DarkSludgeTexture").Value;
-            Texture2D glowTex = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DarkSludgeTextureGlow").Value;
+            Texture2D baseTex = AssetDirectory.Textures.Goozma.DarkSludge.Value;
+            Texture2D glowTex = AssetDirectory.Textures.Goozma.DarkSludgeGlow.Value;
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SludgeEffect", AssetRequestMode.ImmediateLoad).Value;
             effect.Parameters["uPosition"].SetValue(Main.screenPosition * 0.5f);
             effect.Parameters["uBaseTexture"].SetValue(baseTex);

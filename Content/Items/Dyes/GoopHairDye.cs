@@ -22,7 +22,7 @@ namespace CalamityHunt.Content.Items.Dyes
     {
         public GoopHairDyeShaderData(Ref<Effect> shader, string passName) : base(shader, passName)
         {
-            map = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/RainbowMap", AssetRequestMode.ImmediateLoad).Value;
+            map = AssetDirectory.Textures.Extras.RainbowMap.Value;
         }
 
         private Texture2D map;

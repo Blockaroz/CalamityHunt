@@ -98,7 +98,7 @@ public class HolyBombChunkParticleBehavior : ParticleBehavior
             shineFrame = texture.Frame(4, 2, chunk.Variant + 2, 1);
             squish = new Vector2(1f + (float)Math.Sqrt(Utils.GetLerpValue(20, 0, chunk.Time, true)) * 0.33f, 1f - (float)Math.Sqrt(Utils.GetLerpValue(20, 0, chunk.Time, true)) * 0.33f);
         }
-        Asset<Texture2D> colorMap = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/RainbowGelMap");
+        Asset<Texture2D> colorMap = AssetDirectory.Textures.Extras.RainbowGelMap;
         Effect gelEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel", AssetRequestMode.ImmediateLoad).Value;
         gelEffect.Parameters["uImageSize"].SetValue(texture.Size());
         gelEffect.Parameters["uSourceRect"].SetValue(new Vector4(frame.Left, frame.Top, frame.Width, frame.Height));

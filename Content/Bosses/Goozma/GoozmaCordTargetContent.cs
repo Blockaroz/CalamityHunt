@@ -44,8 +44,8 @@ public class GoozmaCordTargetContent : ARenderTargetContentByRequest
         Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoozmaCordMap", AssetRequestMode.ImmediateLoad).Value;
         effect.Parameters["uTransformMatrix"].SetValue(realMatrix);
         effect.Parameters["uTime"].SetValue(Host.NPC.localAI[0] * 0.005f % 1f);
-        effect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LiquidTrail").Value);
-        effect.Parameters["uMap"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GoozmaColorMap").Value);
+        effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.LiquidTrail.Value);
+        effect.Parameters["uMap"].SetValue(AssetDirectory.Textures.Goozma.ColorMap.Value);
         effect.CurrentTechnique.Passes[0].Apply();
 
         VertexStrip cord = new VertexStrip();

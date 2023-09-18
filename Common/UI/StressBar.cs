@@ -64,9 +64,9 @@ namespace CalamityHunt.Common.UI
                         "HuntOfTheOldGod: Stress Bar",
                         delegate
                         {
-                            Texture2D bar = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/StressBar").Value;
-                            Texture2D barCharge = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/StressBarFill").Value;
-                            Texture2D barTop = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/StressBarTopped").Value;
+                            Texture2D bar = AssetDirectory.Textures.Bars.Stress.Value;
+                            Texture2D barCharge = AssetDirectory.Textures.Bars.StressCharge.Value;
+                            Texture2D barTop = AssetDirectory.Textures.Bars.StressTopped.Value;
 
                             Vector2 vector = new Vector2(Config.Instance.stressX, Config.Instance.stressY);
                             if (vector.X < 0f || vector.X > 100f)

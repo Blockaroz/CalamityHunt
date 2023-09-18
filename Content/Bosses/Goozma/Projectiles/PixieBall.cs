@@ -99,7 +99,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Cooldown += 15;
 
                     if (Time > 40)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.PixieBallBounce, Projectile.Center);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.PixieBallBounce, Projectile.Center);
 
                     for (int i = 0; i < 40; i++)
                     {
@@ -191,13 +191,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.localAI[1] = 0;
                 float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f) * 1.1f - 1f;
                 float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, 0.05f, 2f) * Projectile.scale;
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.15f), Projectile.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.15f), Projectile.Center);
             }
 
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
 
             if (auraSound == null)
-                auraSound = new LoopingSound(AssetDirectory.Sounds.Goozma.PixieBallLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+                auraSound = new LoopingSound(AssetDirectory.Sounds.Slime.PixieBallLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
             auraSound.Update(() => Projectile.Center, () => volume, () => 0f);
         }
 
@@ -226,9 +226,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void Load()
         {
-            beachBallOverlay = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieBeachBall");
-            hitMeSign = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeSign");
-            hitMeHand = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/PixieHitMeHand");
+            beachBallOverlay = AssetDirectory.Textures.Goozma.PixieBeachBall;
+            hitMeSign = AssetDirectory.Textures.Goozma.PixieHitMeSign;
+            hitMeHand = AssetDirectory.Textures.Goozma.PixieHitMeHand;
         }
 
         public override bool PreDraw(ref Color lightColor)

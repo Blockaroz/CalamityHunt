@@ -135,9 +135,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (ambientCounter > Main.rand.Next(100, 160))
                 {
                     ambientCounter = 0;
-                    SoundStyle ambientNoise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Goozmite/GoozmiteAmbient", 1, 3);
-                    ambientNoise.Volume = 0.5f;
-                    ambientNoise.MaxInstances = 0;
+                    SoundStyle ambientNoise = AssetDirectory.Sounds.Goozmite.Ambient;
                     SoundEngine.PlaySound(ambientNoise, NPC.Center);
                 }
 
@@ -291,12 +289,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.dontTakeDamage = true;
                 NPC.ai[3] = 1;
 
-                SoundStyle deathNoise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Goozmite/GoozmiteDeath", 1, 3);
+                SoundStyle deathNoise = AssetDirectory.Sounds.Goozmite.Death;
                 SoundEngine.PlaySound(deathNoise, NPC.Center);
             }
             else if (NPC.ai[3] == 1)
             {
-                SoundStyle impactNoise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Goozmite/GoozmiteImpact", 1, 3);
+                SoundStyle impactNoise = AssetDirectory.Sounds.Goozmite.Impact;
                 SoundEngine.PlaySound(impactNoise, NPC.Center);
             }
             return (NPC.ai[3] == 0 && Time > TimeUntilDeath) || (NPC.ai[3] == 1 && Time > 10);
@@ -492,8 +490,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
             lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-            lightningEffect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
-            lightningEffect.Parameters["uGlow"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
+            lightningEffect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.LightningGlow.Value);
+            lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.Goozma.LightningGlow.Value);
             lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
             lightningEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.02f % 1f);
             lightningEffect.Parameters["uBackPower"].SetValue(0.2f);

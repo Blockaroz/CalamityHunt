@@ -57,8 +57,8 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
         {
             if (Main.LocalPlayer.HeldItem == Item || Main.mouseItem == Item)
             {
-                Texture2D bar = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/Style0_0").Value;
-                Texture2D barCharge = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/Style0_1").Value;
+                Texture2D bar = AssetDirectory.Textures.Bars.Bar.Value;
+                Texture2D barCharge = AssetDirectory.Textures.Bars.BarCharge.Value;
 
                 Rectangle chargeFrame = new Rectangle(0, 0, (int)(barCharge.Width * Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge), barCharge.Height);
 

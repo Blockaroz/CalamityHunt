@@ -88,7 +88,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             {
                 Projectile.velocity = Vector2.Zero;
                 Projectile.tileCollide = false;
-                SoundStyle attachSound = AssetDirectory.Sounds.Goozma.StellarConstellationForm with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.1f, Volume = 0.4f };
+                SoundStyle attachSound = AssetDirectory.Sounds.Slime.StellarConstellationForm with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.1f, Volume = 0.4f };
                 SoundEngine.PlaySound(attachSound, Projectile.Center);
             }
         }

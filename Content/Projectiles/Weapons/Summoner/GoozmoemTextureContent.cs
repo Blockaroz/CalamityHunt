@@ -119,8 +119,8 @@ public class GoozmoemCordTextureContent : ARenderTargetContentByRequest
         effect.Parameters["uTransformMatrix"].SetValue(Matrix.CreateOrthographicOffCenter(0, width, height, 0, -1, 1));
         if (!Main.gameInactive)
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.5f);
-        effect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LiquidTrail").Value);
-        effect.Parameters["uMap"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/GoozmaColorMap").Value);
+        effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.LiquidTrail.Value);
+        effect.Parameters["uMap"].SetValue(AssetDirectory.Textures.Goozma.ColorMap.Value);
 
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect);
         effect.CurrentTechnique.Passes[0].Apply();

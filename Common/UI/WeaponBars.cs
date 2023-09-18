@@ -75,8 +75,8 @@ namespace CalamityHunt.Common.UI
                             {
                                 float fade = Utils.GetLerpValue(0, 30, showTime, true);
 
-                                Texture2D bar = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/Style0_0").Value;
-                                Texture2D barCharge = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/ChargeBars/Style0_1").Value;
+                                Texture2D bar = AssetDirectory.Textures.Bars.Bar.Value;
+                                Texture2D barCharge = AssetDirectory.Textures.Bars.BarCharge.Value;
 
                                 int fillAmount = (fillPercent > 0.99f) ? barCharge.Width : (int)(barCharge.Width * fillPercent);
                                 Rectangle fillFrame = new Rectangle(0, 0, fillAmount, barCharge.Height);

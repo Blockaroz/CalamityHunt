@@ -248,9 +248,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 if (localTime == 0)
                 {
                     NPC.velocity.Y -= 10;
-                    SoundStyle hop = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeJump", 1, 2);
-                    hop.MaxInstances = 0; 
-                    hop.PitchVariance = 0.1f;
+                    SoundStyle hop = AssetDirectory.Sounds.Goozma.SlimeJump;
                     SoundEngine.PlaySound(hop, NPC.Center);
                     SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
@@ -285,8 +283,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                         player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 3;
 
-                    SoundStyle slam = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3);
-                    slam.MaxInstances = 0;
+                    SoundStyle slam = AssetDirectory.Sounds.Slime.SlimeSlam;
                     SoundEngine.PlaySound(slam, NPC.Center);
 
                     for (int i = 0; i < Main.rand.Next(14, 20); i++)
@@ -407,8 +404,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.velocity.Y -= 40;
                     saveTarget = saveTarget - new Vector2(0, 1400);
 
-                    SoundStyle raise = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneRaise");
-                    raise.MaxInstances = 0;
+                    SoundStyle raise = AssetDirectory.Sounds.Slime.EbonstoneRaise;
                     SoundEngine.PlaySound(raise, NPC.Center);
                 }
             }
@@ -449,16 +445,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     if ((Time - 150) % spikeTime == 30)
                     {
-                        SoundStyle spiking = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothTelegraph");
-                        spiking.MaxInstances = 0;
-                        spiking.PitchVariance = 0.2f;
+                        SoundStyle spiking = AssetDirectory.Sounds.Slime.EbonstoneToothTelegraph;
                         SoundEngine.PlaySound(spiking, Main.LocalPlayer.MountedCenter);
                     }
                     if ((Time - 150) % spikeTime > 55 && (Time - 150) % spikeTime < 61)
                     {
-                        SoundStyle spiked = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneToothEmerge", 1, 2);
-                        spiked.MaxInstances = 0;
-                        spiked.PitchVariance = 0.3f;
+                        SoundStyle spiked = AssetDirectory.Sounds.Slime.EbonstoneToothEmerge;
                         SoundEngine.PlaySound(spiked, Main.LocalPlayer.MountedCenter);
                     }
                 }
@@ -497,8 +489,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (Time == 150 + spikeCount * spikeTime)
             {
-                SoundStyle crumble = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/EbonstoneCrumble");
-                crumble.MaxInstances = 0;
+                SoundStyle crumble = AssetDirectory.Sounds.Slime.EbonstoneCrumble;
                 SoundEngine.PlaySound(crumble, NPC.Center);
             }
 
@@ -538,7 +529,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
-            Asset<Texture2D> eye = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CorruptEye");
+            Asset<Texture2D> eye = AssetDirectory.Textures.Goozma.CorruptEye;
             Asset<Texture2D> tell = TextureAssets.Extra[178];
 
             Color color = Color.White;

@@ -243,9 +243,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 if (Time % 150 == 5)
                 {
-                    SoundStyle createSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PrismDestroyerTelegraph");
-                    createSound.PitchVariance = 0.1f;
-                    createSound.MaxInstances = 0;
+                    SoundStyle createSound = AssetDirectory.Sounds.Slime.PrismDestroyerTelegraph;
                     SoundEngine.PlaySound(createSound, NPC.Center);
 
                     for (int i = 0; i < Main.rand.Next(14, 20); i++)
@@ -255,9 +253,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 if (Time % 150 == 70)
                 {
-                    SoundStyle expandSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PrismDestroyerExpand");
-                    expandSound.PitchVariance = 0.1f;
-                    expandSound.MaxInstances = 0;
+                    SoundStyle expandSound = AssetDirectory.Sounds.Slime.PrismDestroyerExpand;
                     SoundEngine.PlaySound(expandSound, NPC.Center);
                 }
 
@@ -424,8 +420,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             for (int i = 0; i < 14; i++)
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(12, 12), ModContent.GoreType<CrystalShieldFragment9>(), 1f);
 
-            SoundStyle shatter = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixiePrismDestroyed");
-            shatter.MaxInstances = 0;
+            SoundStyle shatter = AssetDirectory.Sounds.Slime.PixiePrismDestroyed;
             SoundEngine.PlaySound(shatter, NPC.Center);
         }
 
@@ -567,10 +562,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public float shineStrength;
         public float pixieBallDangerShine;
 
-        public static Texture2D shineTexture;
-        public static Texture2D trailTexture;
         public static Texture2D coreTexture;
         public static Texture2D wingsTexture;
+        public static Texture2D shineTexture;
+        public static Texture2D trailTexture;
 
         public static Texture2D dangerTexture;
         public static Texture2D dangerShieldTexture;
@@ -579,10 +574,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void Load()
         {
+            coreTexture = AssetDirectory.Textures.Goozma.CrystalMine.Value;
+            wingsTexture = AssetDirectory.Textures.Goozma.DivineWings.Value;
             shineTexture = ModContent.Request<Texture2D>(Texture + "Shine", AssetRequestMode.ImmediateLoad).Value;
             trailTexture = ModContent.Request<Texture2D>(Texture + "Trail", AssetRequestMode.ImmediateLoad).Value;
-            coreTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/CrystalMine", AssetRequestMode.ImmediateLoad).Value;
-            wingsTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/DivineGargooptuarWingsNevermindSorryDominic", AssetRequestMode.ImmediateLoad).Value;
             dangerTexture = ModContent.Request<Texture2D>(Texture + "Danger", AssetRequestMode.ImmediateLoad).Value;
             dangerShieldTexture = ModContent.Request<Texture2D>(Texture + "DangerShield", AssetRequestMode.ImmediateLoad).Value;
             dangerShieldCrackTexture = ModContent.Request<Texture2D>(Texture + "DangerShieldCracks", AssetRequestMode.ImmediateLoad).Value;
@@ -631,7 +626,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             spriteBatch.Draw(coreTexture, corePos - screenPos, null, color, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, coreTexture.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
             spriteBatch.Draw(coreTexture, corePos - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, coreTexture.Size() * 0.5f, NPC.scale * 1.1f * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
 
-            Asset<Texture2D> colorMap = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/RainbowGelMap");
+            Asset<Texture2D> colorMap = AssetDirectory.Textures.Extras.RainbowGelMap;
             Effect gelEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel", AssetRequestMode.ImmediateLoad).Value;
             gelEffect.Parameters["uImageSize"].SetValue(texture.Size());
             gelEffect.Parameters["uSourceRect"].SetValue(new Vector4(frame.Left, frame.Top, frame.Width, frame.Height));

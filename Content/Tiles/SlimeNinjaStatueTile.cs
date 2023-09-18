@@ -131,7 +131,7 @@ namespace CalamityHunt.Content.Tiles
                             Main.StartSlimeRain(true);
                             NetMessage.SendData(MessageID.SetMiscEventValues);
 
-                            SoundStyle spawnSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/SlimeRainActivate");
+                            SoundStyle spawnSound = AssetDirectory.Sounds.SlimeRainActivate;
                             SoundEngine.PlaySound(spawnSound, new Vector2(center * 16, (top - 1) * 16));
                         }
                     }

@@ -67,8 +67,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time == 1)
             {
-                SoundStyle shootSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmiteShoot", 1, 2);
-                shootSound.MaxInstances = 0;
+                SoundStyle shootSound = AssetDirectory.Sounds.Goozma.GoozmiteShoot;
                 SoundEngine.PlaySound(shootSound.WithVolumeScale(0.5f), Projectile.Center);
             }
 

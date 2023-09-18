@@ -39,8 +39,7 @@ namespace CalamityHunt.Content.Projectiles
             Color gooColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).Value;
             if (Time == 1 && Stressed == 0)
             {
-                SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
-                explodeSound.MaxInstances = 1;
+                SoundStyle explodeSound = AssetDirectory.Sounds.Goozma.BloatedBlastShoot;
                 SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.3f), Projectile.Center);
                 SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Projectile.Center);
                 for (int i = 0; i < 5; i++)
@@ -51,8 +50,7 @@ namespace CalamityHunt.Content.Projectiles
             }
             else if (Time == 1 && Stressed > 0)
             {
-                SoundStyle explodeSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBloatedBlastShoot");
-                explodeSound.MaxInstances = 1;
+                SoundStyle explodeSound = AssetDirectory.Sounds.Goozma.BloatedBlastShoot;
                 SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.3f), Projectile.Center);
                 SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Projectile.Center);
                 for (int i = 0; i < 5; i++)

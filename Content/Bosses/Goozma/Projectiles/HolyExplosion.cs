@@ -50,12 +50,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (Time == 0)
             {
-                SoundStyle explosion = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/PixieBallExplode");
+                SoundStyle explosion = AssetDirectory.Sounds.Slime.PixieBallExplode;
                 SoundEngine.PlaySound(explosion, Projectile.Center);
             }
             if (Time == 35)
             {
-                SoundStyle ringing = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaEarRinging");
+                SoundStyle ringing = AssetDirectory.Sounds.Goozma.EarRinging;
                 SoundEngine.PlaySound(ringing.WithVolumeScale(2f), Projectile.Center);
             }
 

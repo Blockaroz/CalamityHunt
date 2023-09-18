@@ -29,6 +29,7 @@ namespace CalamityHunt.Common.Players
 
         private bool t25, t50, t75;
         private bool activate;
+        private bool playFull;
         private float gooTime;
         SlotId loopSlot;
 
@@ -46,7 +47,7 @@ namespace CalamityHunt.Common.Players
             }
             if (Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15 && stress >= 0.25f && !stressedOut)
             {
-                SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageActivate") with { Volume = 0.75f }, Player.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.StressActivate, Player.Center);
                 activate = true;
                 stressedOut = true;
                 Player.AddBuff(ModContent.BuffType<SplendorJamBuff>(), (int)(checkStress * 16 + 4) * 60);
@@ -110,24 +111,24 @@ namespace CalamityHunt.Common.Players
                     stress = 1f;
                 if (stress > 0.25f && !t25)
                 {
-                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Pitch = -0.4f, Volume = 0.6f }, Player.Center);
+                    SoundEngine.PlaySound(AssetDirectory.Sounds.StressPing with { Pitch = -0.4f }, Player.Center);
                     t25 = true;
                 }
                 else if (stress > 0.5f && !t50)
                 {
-                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Pitch = -0.2f, Volume = 0.6f }, Player.Center);
+                    SoundEngine.PlaySound(AssetDirectory.Sounds.StressPing with { Pitch = -0.2f }, Player.Center);
                     t50 = true;
                 }
                 if (stress > 0.755f && !t75)
                 {
-                    SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") with { Volume = 0.6f }, Player.Center);
+                    SoundEngine.PlaySound(AssetDirectory.Sounds.StressPing, Player.Center);
                     t75 = true;
                 }
                 if (stressedOut && stress > 0)
                 {
                     stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
                     if (!SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))
-                        loopSlot = SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageLoop") with { Volume = 0.6f }, Player.Center);
+                        loopSlot = SoundEngine.PlaySound(AssetDirectory.Sounds.StressLoop, Player.Center);
                     else
                         activeSound.Position = Player.Center;
                 }
@@ -157,8 +158,13 @@ namespace CalamityHunt.Common.Players
         }
         public override void PostUpdateMiscEffects()
         {
-            if (Player.whoAmI == Main.myPlayer && activate)
-                SoundEngine.PlaySound(new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageFull") with { Volume = 0.75f }, Player.Center);
+            if (Player.whoAmI == Main.myPlayer && playFull && checkStress >= 1f)
+            {
+                playFull = false;
+                SoundEngine.PlaySound(AssetDirectory.Sounds.StressFull, Player.Center);
+            }
+            else if (!playFull && checkStress < 1f)
+                playFull = true;
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {

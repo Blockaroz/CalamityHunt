@@ -151,8 +151,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 effect.Parameters["baseToMapPercent"].SetValue(-0.05f + Utils.GetLerpValue(20, 150, Time, true) * 0.1f);//-1f + Utils.GetLerpValue(20, 180, Time, true)
             }
 
-            Texture2D eyeBall = AssetDirectory.Textures.Extras.GoozmaEyeball.Value;
-            Texture2D godEye = AssetDirectory.Textures.Extras.GoozmaGodEye.Value;
+            Texture2D eyeBall = AssetDirectory.Textures.Goozma.Eyeball.Value;
+            Texture2D godEye = AssetDirectory.Textures.Goozma.GodEye.Value;
 
             Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.9f + NPC.rotation) * headScale * NPC.scale;
             spriteBatch.Draw(eyeBall, eyePos - screenPos, eyeBall.Frame(), Color.White, 0, eyeBall.Size() * 0.5f, 1, 0, 0);
@@ -228,11 +228,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void LoadAssets()
         {
-            dressTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/GoozmaDress", AssetRequestMode.ImmediateLoad).Value;
-            crownTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaCrown", AssetRequestMode.ImmediateLoad).Value;
-            crownMaskTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaCrown_Mask", AssetRequestMode.ImmediateLoad).Value;
-            tentacleTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/GoozmaTentacle", AssetRequestMode.ImmediateLoad).Value;
-            ornamentTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Crowns/GoozmaOrnament", AssetRequestMode.ImmediateLoad).Value;
+            dressTexture = AssetDirectory.Textures.Goozma.Dress.Value;
+            crownTexture = AssetDirectory.Textures.Goozma.Crown.Value;
+            crownMaskTexture = AssetDirectory.Textures.Goozma.CrownMask.Value;
+            tentacleTexture = AssetDirectory.Textures.Goozma.Tentacle.Value;
+            ornamentTexture = AssetDirectory.Textures.Goozma.Ornament.Value;
             Main.ContentThatNeedsRenderTargets.Add(cordContent = new GoozmaCordTargetContent());
         }
 

@@ -147,9 +147,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     dart.localAI[0] = Projectile.localAI[0] + i / dartCount * 90f;
                 }
 
-                SoundStyle dartSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaDartShoot", 1, 2);
-                dartSound.PitchVariance = 0.2f;
-                dartSound.Pitch = 0.3f;
+                SoundStyle dartSound = AssetDirectory.Sounds.Goozma.Dart with { Pitch = 0.3f };
                 SoundEngine.PlaySound(dartSound.WithVolumeScale(0.8f));
             }
 

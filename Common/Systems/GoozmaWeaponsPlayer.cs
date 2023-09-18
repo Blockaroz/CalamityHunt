@@ -56,9 +56,7 @@ namespace CalamityHunt.Common.Systems
 
             if (crystalGauntletsClapTime == 10)
             {
-                SoundStyle clapSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/CrystalGauntletClap");
-                clapSound.MaxInstances = 2;
-                clapSound.PitchVariance = 0.1f;
+                SoundStyle clapSound = AssetDirectory.Sounds.Weapon.CrystalGauntletClap;
                 SoundEngine.PlaySound(clapSound.WithVolumeScale(0.5f), Player.Center);
 
                 Projectile boom = Projectile.NewProjectileDirect(Player.GetSource_ItemUse(Player.HeldItem), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<CrystalBoom>(), Player.HeldItem.damage, 0, Player.whoAmI);

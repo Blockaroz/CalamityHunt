@@ -29,8 +29,8 @@ namespace CalamityHunt.Common.Graphics
 
             spaceNoise = new Texture2D[]
             {
-                ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Noise/Noise0", AssetRequestMode.ImmediateLoad).Value,
-                ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Noise/Noise1", AssetRequestMode.ImmediateLoad).Value
+                AssetDirectory.Textures.Space.Noise0.Value,
+                AssetDirectory.Textures.Space.Noise1.Value
             };
         }
 
@@ -103,8 +103,8 @@ namespace CalamityHunt.Common.Graphics
 
             Effect absorbEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceAbsorb", AssetRequestMode.ImmediateLoad).Value;
             absorbEffect.Parameters["uRepeats"].SetValue(1f);
-            absorbEffect.Parameters["uTexture0"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Noise/Noise0").Value);
-            absorbEffect.Parameters["uTexture1"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Noise/Noise1").Value);
+            absorbEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Space.Noise0.Value);
+            absorbEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Space.Noise1.Value);
 
             foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is BlackHoleBlender))
             {
@@ -186,8 +186,8 @@ namespace CalamityHunt.Common.Graphics
             }
             
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
-            effect.Parameters["uTextureClose"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space0").Value);
-            effect.Parameters["uTextureFar"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Space1").Value);
+            effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Space.Space0.Value);
+            effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Space.Space1.Value);
             effect.Parameters["uPosition"].SetValue((Main.LocalPlayer.oldPosition - Main.LocalPlayer.oldVelocity) * 0.001f);
             effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
             effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));

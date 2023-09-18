@@ -25,7 +25,7 @@ namespace CalamityHunt.Content.Projectiles
 {
     public class GoozmaSpawn : ModProjectile
     {
-        public static readonly SoundStyle slimeabsorb = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSlimeAbsorb", 8) with { MaxInstances = 0, Volume = 0.1f};
+        public static readonly SoundStyle slimeabsorb = AssetDirectory.Sounds.Goozma.SlimeAbsorb;
         public WeightedRandom<ParticleBehavior> randomType = new();
         public override void SetDefaults()
         {
@@ -82,9 +82,7 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Time == 0)
             {
-                SoundStyle devour = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaIntro");
-                devour.MaxInstances = 0;
-                devour.PlayOnlyIfFocused = true;
+                SoundStyle devour = AssetDirectory.Sounds.Goozma.Intro;
                 //SoundEngine.PlaySound(devour, Projectile.Center);
             }
 
@@ -94,9 +92,7 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Time == 650)
             {
-                SoundStyle intro = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaIntro");
-                intro.MaxInstances = 0;
-                intro.PlayOnlyIfFocused = true;
+                SoundStyle intro = AssetDirectory.Sounds.Goozma.Intro;
                 SoundEngine.PlaySound(intro, Projectile.Center);
             }  
            
@@ -277,7 +273,7 @@ namespace CalamityHunt.Content.Projectiles
             Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
             Texture2D glow = AssetDirectory.Textures.Glow.Value;
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D eye = AssetDirectory.Textures.Extras.GoozmaGodEye.Value;
+            Texture2D eye = AssetDirectory.Textures.Goozma.GodEye.Value;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time * 0.33f) * 1.2f;
             glowColor.A = 0;

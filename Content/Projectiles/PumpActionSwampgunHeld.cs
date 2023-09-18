@@ -89,9 +89,7 @@ namespace CalamityHunt.Content.Projectiles
             {
                 if (Time == 15)
                 {
-                    SoundStyle cock = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/GunCocking");
-                    cock.MaxInstances = 0;
-                    cock.PitchVariance = 0.2f;
+                    SoundStyle cock = AssetDirectory.Sounds.GunCocking;
                     SoundEngine.PlaySound(cock, Projectile.Center);
                 }
 

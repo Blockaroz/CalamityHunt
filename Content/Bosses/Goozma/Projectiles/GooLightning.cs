@@ -91,18 +91,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 if (Collides == 0)
                 {
-                    SoundStyle lightningSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaBigThunder");
-                    lightningSound.MaxInstances = 0;
-                    lightningSound.PitchVariance = 0.15f;
-
+                    SoundStyle lightningSound = AssetDirectory.Sounds.Goozma.BigThunder;
                     SoundEngine.PlaySound(lightningSound, Projectile.Center);
                 }
                 else
                 {
-                    SoundStyle lightningMiniSound = new SoundStyle($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/GoozmaSmallThunder", 1, 3);
-                    lightningMiniSound.MaxInstances = 0;
-                    lightningMiniSound.PitchVariance = 0.15f;
-
+                    SoundStyle lightningMiniSound = AssetDirectory.Sounds.Goozma.SmallThunder;
                     SoundEngine.PlaySound(lightningMiniSound, Projectile.Center);
                 }
 
@@ -190,8 +184,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-                lightningEffect.Parameters["uTexture"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/Lightning").Value);
-                lightningEffect.Parameters["uGlow"].SetValue(ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Goozma/LightningGlow").Value);
+                lightningEffect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.Lightning.Value);
+                lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.Goozma.LightningGlow.Value);
                 lightningEffect.Parameters["uColor"].SetValue(Vector3.One);
                 lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.05f);
                 lightningEffect.Parameters["uBackPower"].SetValue(0.5f);
