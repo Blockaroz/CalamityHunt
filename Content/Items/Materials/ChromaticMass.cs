@@ -24,7 +24,7 @@ namespace CalamityHunt.Content.Items.Materials
             ItemID.Sets.AnimatesAsSoul[Type] = true;
 
             ItemID.Sets.ItemNoGravity[Type] = true;
-            Item.ResearchUnlockCount = 50;
+            Item.ResearchUnlockCount = 25;
         }
 
         public override void SetDefaults()
