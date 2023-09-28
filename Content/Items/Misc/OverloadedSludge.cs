@@ -24,6 +24,10 @@ namespace CalamityHunt.Content.Items.Misc
             if (ModLoader.HasMod("CalamityMod"))
             {
                 int check = tooltips.IndexOf(tooltips.Find(t => t.Text.Equals("Summons the Slime God")));
+                if(check == -1)
+                {
+                    check = tooltips.IndexOf(tooltips.Find(t => t.Name == "Tooltip0"));
+                }
                 tooltips.RemoveAt(check);
                 tooltips.Insert(check, tooltip);
             }

@@ -1,64 +1,64 @@
-Name: Chromatic Dye: {0}
+﻿Name: 万象虹凝染料: {0}
 // Tooltip: ""
-Variant0: Oil
-Variant1: Nuclear
+Variant0: 油
+Variant1: 核
 //CALIG DO THE REST
 //ok
-Variant2: Golden
-Variant3: Grayscale
-Variant4: Honey
-Variant5: Masterful
-Variant6: Dark Energy
-Variant7: Squid
-Variant8: Tritanopic
-Variant9: Caliginous
+Variant2: 金色
+Variant3: 灰度
+Variant4: 蜂蜜
+Variant5: 大师级
+Variant6: 暗能量
+Variant7: 鱿鱼
+Variant8: 蓝色盲的
+Variant9: 朦胧
 Variant10: ZX Spectrum
-Variant11: Evil
-Variant12: Shadowflame
-Variant13: Dogmatic
-Variant14: FIREBLU
-Variant15: Distorted
-Variant16: Electric
-Variant17: Polterplasmic
-Variant18: Exhumed
-Variant19: Raptured
-Variant20: Ibanical
-Variant21: Acid Rainbow
-Variant22: Rubicon
-Variant23: Double Rainbow
-Variant24: Unpleasant
-Variant25: Ocean Jasper
-Variant26: Seashell
-Variant27: Jack O' Lantern
-Variant28: Cotton Candy
-Variant29: Mean Green
-Variant30: Color Calibration
-Variant31: Enchanted
-Variant32: Sisyphan
-Variant33: Babil
-Variant34: Doomsday
-Variant35: Rugamarian
-Variant36: Poo
-Variant37: Festive
-Variant38: Dirty Carpet
-Variant39: Hein
-Variant40: Zeromus
-Variant41: Water
-Variant42: Stellar
-Variant43: Crimson
-Variant44: Corruption
-Variant45: Hallow
-Variant46: The Dragon
-Variant47: Speevil
-Variant48: Hyper-realistic Bloody
-Variant49: Auric Tesla
-Variant50: Pikmin
-Variant51: Flame
-Variant52: Poland
-Variant53: Kindergarten
-Variant54: Daniel
-Variant55: Autumnal
-Variant56: Subworld
+Variant11: 邪恶
+Variant12: 暗影焰
+Variant13: 教条主义
+Variant14: 蓝色火焰
+Variant15: 扭曲
+Variant16: 电
+Variant17: 灵质
+Variant18: 挖掘
+Variant19: 狂喜
+Variant20: Iban款
+Variant21: 酸性彩虹
+Variant22: 无路可退
+Variant23: 双重彩虹
+Variant24: 粗鲁
+Variant25: 海洋石
+Variant26: 贝壳
+Variant27: 杰克南瓜灯
+Variant28: 棉花糖
+Variant29: 绿色兵团
+Variant30: 色彩校准
+Variant31: 炼注
+Variant32: 西西弗斯式
+Variant33: 巴比伦
+Variant34: 末日侵袭
+Variant35: 拉瓦隆款
+Variant36: 便便
+Variant37: 节日
+Variant38: 脏地毯
+Variant39: Hein款
+Variant40: 泽罗姆斯
+Variant41: 水
+Variant42: 恒星
+Variant43: 猩红
+Variant44: 腐化
+Variant45: 神圣
+Variant46: 龙
+Variant47: Speevil款
+Variant48: 超现实血腥
+Variant49: 古圣金源
+Variant50: 皮克敏
+Variant51: 火焰
+Variant52: 波兰
+Variant53: 幼儿园
+Variant54: Daniel款
+Variant55: 秋季
+Variant56: 地下世界
 // .Tooltip: ""
 // 0.Tooltip: ""
 // 1.Tooltip: ""

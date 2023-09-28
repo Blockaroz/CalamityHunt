@@ -218,7 +218,7 @@ Items: {
 	}
 
 	Parasanguine: {
-		DisplayName: 赤血凝伞
+		DisplayName: 赤血阳伞
 		Tooltip:
 			'''
 			按住<left>或攻击敌人会积攒额外的血液
@@ -475,7 +475,7 @@ Projectiles: {
 	EbonstoneTooth.DisplayName: 腐檀之齿
 	FoulSlime.DisplayName: 污浊史莱姆
 	PureSlimeball.DisplayName: 纯净史莱姆
-	SlimeShot.DisplayName: Slime Shot
+	SlimeShot.DisplayName: 凝虹弹
 	ToxicSludge.DisplayName: 毒性污泥
 	TrailingStar.DisplayName: 星之曳光
 	Wormhole.DisplayName: 虫洞
@@ -517,23 +517,23 @@ Projectiles: {
 	CrystalGauntletBallThrown.DisplayName: 球状闪电
 	CrystalPiercer.DisplayName: 魔晶穿刺
 	CrystalBoom.DisplayName: 鼓掌
-	CrimulanShockwave.DisplayName: 血腥震荡
+	CrimulanShockwave.DisplayName: 血腥震波
 	SludgeShakerHeld.DisplayName: 污泥混凝器
 	DarkSludge.DisplayName: 暗沉淤泥
-	// SludgeLighter.DisplayName: Sludge Lighter
+	SludgeLighter.DisplayName: 淤泥燃星
 	StickyHandProj.DisplayName: 黏黏小手
-	TrailblazerFlame.DisplayName: 开拓之焰
+	TrailblazerFlame.DisplayName: 虹光之焰
 	FissionFlyerProj.DisplayName: 裂变飞刃
 	FissionFlyerMiniRing.DisplayName: 环状利刃
 	ScytheOfTheOldGodHeld.DisplayName: 旧神巨镰
 	StressExplosion.DisplayName: 压力爆破
-	// GoomoireSuck.DisplayName: Goomoire Suction
+	GoomoireSuck.DisplayName: 蛊书旋风
 	SplendorTentacle.DisplayName: 奇观之触
-	// SlimeCaneGemCounter.DisplayName: Slime Cane Gem Counter
+	SlimeCaneGemCounter.DisplayName: 史莱姆手杖辅助弹幕
 	ChromaticBombProjectile.DisplayName: 虹色炸弹
 	ChromaticGooztickProjectile.DisplayName: 虹色凝光棒
-	// DynamoRodProjectile.DisplayName: Dynamo Dynamite
-	// CrimulanClyde.DisplayName: Crimulan Clyde
+	DynamoRodProjectile.DisplayName: 电流炸药
+	CrimulanClyde.DisplayName: 殷红小可
 	DivinePinky.DisplayName: 神圣小粉
 	EbonianBlinky.DisplayName: 腐檀小闪
 	StellarInky.DisplayName: 恒星小墨
@@ -722,9 +722,9 @@ StickyHandStats:
 	回收速度: 10
 	牵引速度: 17
 	'''
-// GoozmaShadowspecCurse: Mods.CalamityHunt.GoozmaShadowspecCurse
-// AnyEvilBlock: Any Evil Block
-// SludgeWarning: Cannot be used to summon the Slime God
+GoozmaShadowspecCurse: Mods.CalamityHunt.GoozmaShadowspecCurse
+AnyEvilBlock: 任意邪恶物块
+SludgeWarning: 不能用来召唤史莱姆之神
 
 CalamityModName: {
 	Display: Calamity Mod
