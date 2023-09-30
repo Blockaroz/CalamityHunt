@@ -54,8 +54,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPCID.Sets.TrailingMode[Type] = -1;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData { ImmuneToAllBuffsThatAreNotWhips = true };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+            NPCID.Sets.ImmuneToAllBuffs[Type] = true;
             NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
 
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)

@@ -184,7 +184,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 			}
         }
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item89, Projectile.position);
 			for (int d = 0; d < 20; d++)

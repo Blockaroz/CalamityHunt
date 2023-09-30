@@ -112,7 +112,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Projectile.rotation += Projectile.velocity.X * 0.1f * Main.rand.NextFloat(0.9f, 1.1f);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < 20; i++)
             {

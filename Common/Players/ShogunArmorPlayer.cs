@@ -211,7 +211,7 @@ namespace CalamityHunt.Common.Players
                     if (ModLoader.HasMod("CalamityMod"))
                         ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", Player, true);
 
-                    if (Player.controlJump && Player.wingTime > 0f && !Player.canJumpAgain_Cloud && Player.jump == 0)
+                    if (Player.controlJump && Player.wingTime > 0f && !Player.GetJumpState(ExtraJump.CloudInABottle).Available && Player.jump == 0)
                     {
                         bool hovering = Player.TryingToHoverDown && !Player.merman;
                         if (hovering)

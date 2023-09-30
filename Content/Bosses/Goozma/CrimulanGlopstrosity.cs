@@ -30,17 +30,16 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPCID.Sets.TrailingMode[Type] = 1;
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             NPCID.Sets.ShouldBeCountedAsBoss[Type] = false;
-            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Ichor] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.CursedInferno] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
+            if (Common.ModCompatibility.Calamity.IsLoaded)
             {
-                SpecificallyImmuneTo = new int[] {
-                    BuffID.OnFire,
-                    BuffID.Ichor,
-                    BuffID.CursedInferno,
-                    BuffID.Poisoned,
-                    BuffID.Confused
-				}
-            };
-            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+                NPCID.Sets.SpecificDebuffImmunity[Type][Common.ModCompatibility.Calamity.Mod.Find<ModBuff>("MiracleBlight").Type] = true;
+            }
 
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
@@ -121,11 +120,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.TargetClosestUpgraded();
             if (!NPC.HasPlayerTarget)
                 NPC.active = false;
-
-            if (ModLoader.HasMod("CalamityMod"))
-            {
-                NPC.buffImmune[ModLoader.GetMod("CalamityMod").Find<ModBuff>("MiracleBlight").Type] = true;
-            }
 
             //if (Attack != (int)AttackList.TooFar && Attack != (int)AttackList.SlamDown)
             //{

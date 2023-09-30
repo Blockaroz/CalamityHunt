@@ -105,7 +105,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundStyle killSound = SoundID.MaxMana with { MaxInstances = 0, Pitch = 1f, PitchVariance = 0.4f };
             SoundEngine.PlaySound(killSound, Projectile.Center);

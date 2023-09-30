@@ -68,7 +68,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 			}
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item89 with { Pitch = SoundID.Item62.Pitch + 0.2f, Volume = SoundID.Item62.Volume - 0.4f}, Projectile.position);
 			for (int d = 0; d < 10; d++)

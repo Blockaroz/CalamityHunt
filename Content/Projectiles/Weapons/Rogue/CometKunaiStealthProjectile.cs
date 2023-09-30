@@ -121,7 +121,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 Projectile.hide = false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < 18; i++)
             {

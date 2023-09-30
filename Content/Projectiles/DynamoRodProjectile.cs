@@ -43,7 +43,7 @@ namespace CalamityHunt.Content.Projectiles
             Projectile.velocity.Y = MathHelper.Clamp(Projectile.velocity.Y, int.MinValue, 10);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < 36; i++)
             {

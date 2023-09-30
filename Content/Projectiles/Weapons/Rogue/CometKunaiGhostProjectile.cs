@@ -72,7 +72,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.rotation = Projectile.velocity.ToRotation();
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundStyle killSound = SoundID.MaxMana with { MaxInstances = 0, Pitch = 0.5f, PitchVariance = 0.4f, Volume = 0.5f };
             SoundEngine.PlaySound(killSound, Projectile.Center);

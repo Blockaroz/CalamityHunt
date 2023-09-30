@@ -115,7 +115,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public Vector2[] oldVels;
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Projectile.ai[1] == 0)
             {

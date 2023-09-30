@@ -11,7 +11,7 @@ namespace CalamityHunt.Content.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            BuffID.Sets.IsAnNPCWhipDebuff[Type] = true;
+            BuffID.Sets.IsATagBuff[Type] = true;
         }
     }
 
