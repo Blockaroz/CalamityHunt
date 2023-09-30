@@ -37,7 +37,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.CursedInferno] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
-            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
             if (Common.ModCompatibility.Calamity.IsLoaded)
             {
                 NPCID.Sets.SpecificDebuffImmunity[Type][Common.ModCompatibility.Calamity.Mod.Find<ModBuff>("MiracleBlight").Type] = true;
