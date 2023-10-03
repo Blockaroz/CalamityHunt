@@ -1,4 +1,4 @@
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using CalamityHunt.Content.Items.Materials;
@@ -63,7 +63,11 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 				Vector2 mouseWorld = Main.MouseWorld;
 				player.LimitPointToPlayerReachableArea(ref mouseWorld);
 				velocity = velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * Main.rand.NextFloat(0.8f, 1.3f) * Math.Max(170, player.Distance(mouseWorld)) * MathF.E * 0.009f;
-                Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 0, stealth ? 1 : 0);
+                int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 0, stealth ? 1 : 0);
+                if (ModLoader.HasMod("CalamityMod") && stealth)
+                {
+                    ModLoader.GetMod("CalamityMod").Call("SetStealthProjectile", Main.projectile[p], true);
+                }
 
 			}
 

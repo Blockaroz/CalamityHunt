@@ -1,4 +1,4 @@
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using CalamityHunt.Content.Items.Rarities;
@@ -74,8 +74,9 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
 				if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
 				{
-					Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 1f);
-					return false;
+					int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 1f);
+                    calamity.Call("SetStealthProjectile", Main.projectile[p], true);
+                    return false;
 				}
 			}
 			else if (player.vortexStealthActive || player.shroomiteStealth)

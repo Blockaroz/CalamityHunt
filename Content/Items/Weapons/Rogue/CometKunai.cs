@@ -68,6 +68,7 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
                             Projectile stealthProj = Projectile.NewProjectileDirect(source, position, velocity * 3, ModContent.ProjectileType<CometKunaiStealthProjectile>(), damage * 2, knockback, player.whoAmI);
                             stealthProj.ai[1] = -1;
                             stealthProj.rotation += Main.rand.NextFloat(-1f, 1f);
+                            calamity.Call("SetStealthProjectile", stealthProj, true);
 
                             for (int i = 0; i < 5; i++)
                             {
