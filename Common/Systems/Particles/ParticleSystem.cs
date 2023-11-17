@@ -1,9 +1,9 @@
 ﻿#nullable enable
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Arch.Core;
 using Arch.Core.Extensions;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -21,6 +21,7 @@ public sealed class ParticleSystem : ModSystem
         On_Main.UpdateParticleSystems += UpdateParticles;
         On_Main.DoDraw_DrawNPCsOverTiles += DrawParticlesUnderEntities;
         On_Main.DrawDust += DrawParticles;
+        
     }
 
     public override void OnModUnload()
@@ -37,7 +38,7 @@ public sealed class ParticleSystem : ModSystem
 
         var query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleVelocity, ParticleActive>();
         ParticleWorld.Query(
-            in query,
+            in query, 
             (in Entity entity) =>
             {
                 ref var particle = ref entity.Get<Particle>();

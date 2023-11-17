@@ -1,4 +1,4 @@
-﻿using CalamityHunt.Common.Graphics.SlimeMonsoon;
+﻿using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
@@ -56,7 +56,7 @@ namespace CalamityHunt.Content.Projectiles
             if (!Main.slimeRain)
                 Main.StartSlimeRain(false);
 
-            SlimeMonsoonBackground.strengthTarget = Utils.GetLerpValue(120, 900, Time, true);
+            SlimeMonsoonSkyOld.strengthTarget = Utils.GetLerpValue(120, 900, Time, true);
 
             if (Time > 800)
             {
@@ -352,7 +352,7 @@ namespace CalamityHunt.Content.Projectiles
 
             //Pass the entire rainbow through modulo 1
             for (int i = 1; i < 10; i++)
-                brightnesses[i] = HuntOfTheOldGodUtils.Modulo(brightnesses[i], maxBright) * maxBright;
+                brightnesses[i] = HuntOfTheOldGodsUtils.Modulo(brightnesses[i], maxBright) * maxBright;
 
             //Store the first element's value so we can find it again later
             float firstBrightnessValue = brightnesses[1];

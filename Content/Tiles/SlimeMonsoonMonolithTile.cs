@@ -12,7 +12,7 @@ using ReLogic.Content;
 using Terraria.ID;
 using Terraria.GameContent.ObjectInteractions;
 using CalamityHunt.Common.Systems;
-using CalamityHunt.Common.Graphics.SlimeMonsoon;
+using CalamityHunt.Common.Graphics.Skies;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Audio;
@@ -37,8 +37,6 @@ namespace CalamityHunt.Content.Tiles
 
             DustType = DustID.Cobalt;
             AnimationFrameHeight = 56;
-
-            RegisterItemDrop(ModContent.ItemType<SlimeMonsoonMonolith>());
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
@@ -50,7 +48,7 @@ namespace CalamityHunt.Content.Tiles
             if (player is null)
                 return;
             if (player.active)
-                Main.LocalPlayer.GetModPlayer<EffectTilePlayer>().effectorCount["SlimeMonsoon"] = 60;
+                Main.LocalPlayer.GetModPlayer<SceneEffectPlayer>().effectActive[(ushort)SceneEffectPlayer.EffectorType.SlimeMonsoon] = 30;
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)

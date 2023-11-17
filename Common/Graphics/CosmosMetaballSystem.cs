@@ -20,18 +20,18 @@ namespace CalamityHunt.Common.Graphics
     {
         public void Load(Mod mod)
         {
-            On_Main.CheckMonoliths += DrawSpaceShapes;
-            On_Main.DoDraw_DrawNPCsOverTiles += DrawSpace;
-
-            smokeParticleTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Particles/CosmicSmoke", AssetRequestMode.ImmediateLoad).Value;
-            blackholeTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/Projectiles/BlackHoleBlender", AssetRequestMode.ImmediateLoad).Value;
-            blackholeTextureShadow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/Projectiles/BlackHoleBlenderShadow", AssetRequestMode.ImmediateLoad).Value;
+            smokeParticleTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Particles/CosmicSmoke", AssetRequestMode.ImmediateLoad).Value;
+            blackholeTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Bosses/Goozma/Projectiles/BlackHoleBlender", AssetRequestMode.ImmediateLoad).Value;
+            blackholeTextureShadow = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Bosses/Goozma/Projectiles/BlackHoleBlenderShadow", AssetRequestMode.ImmediateLoad).Value;
 
             spaceNoise = new Texture2D[]
             {
-                AssetDirectory.Textures.Space.Noise0.Value,
-                AssetDirectory.Textures.Space.Noise1.Value
+                AssetDirectory.Textures.Noise[2].Value,
+                AssetDirectory.Textures.Noise[3].Value
             };
+
+            On_Main.CheckMonoliths += DrawSpaceShapes;
+            On_Main.DoDraw_DrawNPCsOverTiles += DrawSpace;
         }
 
         public void Unload()
@@ -103,8 +103,8 @@ namespace CalamityHunt.Common.Graphics
 
             Effect absorbEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceAbsorb", AssetRequestMode.ImmediateLoad).Value;
             absorbEffect.Parameters["uRepeats"].SetValue(1f);
-            absorbEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Space.Noise0.Value);
-            absorbEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Space.Noise1.Value);
+            absorbEffect.Parameters["uTexture0"].SetValue(spaceNoise[0]);
+            absorbEffect.Parameters["uTexture1"].SetValue(spaceNoise[1]);
 
             foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is BlackHoleBlender))
             {
@@ -186,8 +186,8 @@ namespace CalamityHunt.Common.Graphics
             }
             
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
-            effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Space.Space0.Value);
-            effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Space.Space1.Value);
+            effect.Parameters["uTextureClose"].SetValue(spaceNoise[0]);
+            effect.Parameters["uTextureFar"].SetValue(spaceNoise[1]);
             effect.Parameters["uPosition"].SetValue((Main.LocalPlayer.oldPosition - Main.LocalPlayer.oldVelocity) * 0.001f);
             effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
             effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));

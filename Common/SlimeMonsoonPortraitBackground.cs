@@ -10,7 +10,7 @@ namespace CalamityHunt.Common
 	public class SlimeMonsoonPortraitBackground : IBestiaryInfoElement, IBestiaryBackgroundImagePathAndColorProvider
 	{
 		public Asset<Texture2D> GetBackgroundImage() => AssetDirectory.Textures.SlimeMonsoon.Background;
-		public Color? GetBackgroundColor() => Color.White;
+		public Color? GetBackgroundColor() => Color.Lavender;
 		public UIElement ProvideUIElement(BestiaryUICollectionInfo info) => null;
 	}
 }

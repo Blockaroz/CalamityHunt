@@ -1,4 +1,4 @@
-﻿using CalamityHunt.Common.Graphics.SlimeMonsoon;
+﻿using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Misc;
@@ -35,10 +35,14 @@ namespace CalamityHunt
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Load();
 
             Ref<Effect> distort = new Ref<Effect>(ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RadialDistortion", AssetRequestMode.ImmediateLoad).Value);
+            Filters.Scene["HuntOfTheOldGods:SlimeMonsoonOld"] = new Filter(new ScreenShaderData(distort, "DistortionPass"), EffectPriority.Medium);
+            Filters.Scene["HuntOfTheOldGods:SlimeMonsoonOld"].Load();
+            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"] = new SlimeMonsoonSkyOld();
+            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"].Load();            
+            
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"] = new Filter(new ScreenShaderData(distort, "DistortionPass"), EffectPriority.Medium);
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Load();
-
-            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonBackground();
+            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonSkyOld();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
         }
 
@@ -121,7 +125,7 @@ namespace CalamityHunt
                 sludge = ModLoader.GetMod("CalamityMod").Find<ModItem>("OverloadedSludge").Type;
             }
             Action<SpriteBatch, Rectangle, Color> portrait = (SpriteBatch sb, Rectangle rect, Color color) => {
-                Texture2D texture = AssetDirectory.Textures.Goozma.BC.Value;
+                Texture2D texture = AssetDirectory.Textures.Goozma.BossPortrait.Value;
                 Vector2 centered = new Vector2(rect.Center.X - (texture.Width / 2), rect.Center.Y - (texture.Height / 2));
                 sb.Draw(texture, centered, color);
             };

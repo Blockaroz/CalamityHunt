@@ -1,4 +1,5 @@
 ﻿using CalamityHunt.Common.Players;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Rarities;
 using Microsoft.Xna.Framework;

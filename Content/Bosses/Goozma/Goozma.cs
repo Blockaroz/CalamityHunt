@@ -1,6 +1,6 @@
 ﻿using CalamityHunt.Common;
 using CalamityHunt.Common.DropRules;
-using CalamityHunt.Common.Graphics.SlimeMonsoon;
+using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
@@ -41,6 +41,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using static CalamityHunt.Common.Systems.DifficultySystem;
+using CalamityHunt.Content.Items.Placeable;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -57,7 +58,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPCID.Sets.ImmuneToAllBuffs[Type] = true;
             NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
 
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 Rotation = 0.01f,
                 Velocity = 1f,
@@ -134,18 +135,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public int Music2;
 
-        private static int relicType;
-        public static int[] trophyTypes;
-
         public override void Load()
         {
-            relicType = BossDropAutoloader.AddBossRelic("Goozma");
-            trophyTypes = new int[5];
-            trophyTypes[0] = BossDropAutoloader.AddBossTrophy("Goozma");          
-            trophyTypes[1] = BossDropAutoloader.AddBossTrophy("EbonianBehemuck"); 
-            trophyTypes[2] = BossDropAutoloader.AddBossTrophy("DivineGargooptuar");          
-            trophyTypes[3] = BossDropAutoloader.AddBossTrophy("CrimulanGlopstrosity");          
-            trophyTypes[4] = BossDropAutoloader.AddBossTrophy("StellarGeliath");          
             On_Main.UpdateAudio += FadeMusicOut;
             //On_Main.CheckMonoliths += DrawCordShapes;
             //nPCsToDrawCordOn = new List<NPC>();
@@ -164,10 +155,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
             else
                 npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureTrunk>()));
 
-            npcLoot.Add(ItemDropRule.Common(trophyTypes[0], 10));
-            npcLoot.Add(ItemDropRule.FewFromOptions(1, 10, trophyTypes[1], trophyTypes[2], trophyTypes[3], trophyTypes[4]));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GoozmaTrophy>(), 10));
+            npcLoot.Add(ItemDropRule.FewFromOptions(1, 10, ModContent.ItemType<EbonianBehemuckTrophy>(), ModContent.ItemType<DivineGargooptuarTrophy>(), ModContent.ItemType<CrimulanGlopstrosityTrophy>(), ModContent.ItemType<StellarGeliathTrophy>()));
 
-            npcLoot.Add(ItemDropRule.ByCondition(new MasterRevDropRule(), (relicType)));
+            npcLoot.Add(ItemDropRule.ByCondition(new MasterRevDropRule(), ModContent.ItemType<GoozmaRelic>()));
 
             npcLoot.Add(ItemDropRule.ByCondition(new MasterRevDropRule(), ModContent.ItemType<ImperialGelato>(), 4));
 
@@ -1053,7 +1044,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Main.musicFade[Main.curMusic] = 0f;
                         Main.curMusic = -1;
 
-                        SlimeMonsoonBackground.forceStrength = 0f;
+                        SlimeMonsoonSkyOld.forceStrength = 0f;
                         NPC.justHit = true;
                         NPC.life = 0;
                         NPC.checkDead();
@@ -1182,7 +1173,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             };
 
             if (Phase >= 2)
-                SlimeMonsoonBackground.additionalLightningChance = -53;
+                SlimeMonsoonSkyOld.additionalLightningChance = -53;
 
             HandleLoopedSounds();
 
@@ -1445,7 +1436,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             goozmaWarblePitch = MathHelper.Lerp(goozmaWarblePitch, Math.Clamp(NPC.velocity.Length() * 0.02f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, -0.8f, 0.8f), 0.1f);
 
             if (goozmaWarble == null)
-                goozmaWarble = new LoopingSound(AssetDirectory.Sounds.Goozma.WarbleLoop, new HuntOfTheOldGodUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
+                goozmaWarble = new LoopingSound(AssetDirectory.Sounds.Goozma.WarbleLoop, new HuntOfTheOldGodsUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
             goozmaWarble.Update(() => NPC.Center, () => goozmaWarbleVolume, () => goozmaWarblePitch);
         }
 
@@ -1462,7 +1453,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 goozmaShootPowerCurrent = Utils.GetLerpValue(340, 510, Time, true) * 1.2f;
 
             if (goozmaShoot == null)
-                goozmaShoot = new LoopingSound(AssetDirectory.Sounds.Goozma.ShootLoop, () => new HuntOfTheOldGodUtils.NPCAudioTracker(NPC).IsActiveAndInGame() && goozmaShootPowerCurrent > 0.05f);
+                goozmaShoot = new LoopingSound(AssetDirectory.Sounds.Goozma.ShootLoop, () => new HuntOfTheOldGodsUtils.NPCAudioTracker(NPC).IsActiveAndInGame() && goozmaShootPowerCurrent > 0.05f);
             goozmaShoot.Update(() => NPC.Center, () => goozmaShootPowerCurrent * 1.5f, () => 0f);
 
             goozmaShootPowerTarget -= 0.05f;
@@ -1488,7 +1479,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             goozmaSimmerPitch = pitch;
 
             if (goozmaSimmer == null)
-                goozmaSimmer = new LoopingSound(AssetDirectory.Sounds.Goozma.SimmerLoop, new HuntOfTheOldGodUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
+                goozmaSimmer = new LoopingSound(AssetDirectory.Sounds.Goozma.SimmerLoop, new HuntOfTheOldGodsUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
             goozmaSimmer.Update(() => NPC.Center, () => goozmaSimmerVolume, () => goozmaSimmerPitch);
         }
 
@@ -1806,7 +1797,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                             if (Time % 46 == 30)
                             {
-                                Vector2 bombVelocity = HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, targetPos, 0.955f, 40).RotatedByRandom(0.5f) * Main.rand.NextFloat(0.8f, 1.2f);
+                                Vector2 bombVelocity = HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, targetPos, 0.955f, 40).RotatedByRandom(0.5f) * Main.rand.NextFloat(0.8f, 1.2f);
                                 Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, bombVelocity, ModContent.ProjectileType<SlimeBomb>(), GetDamage(5), 0);
                             }
                         }

@@ -12,7 +12,7 @@ using ReLogic.Content;
 using Terraria.ID;
 using Terraria.GameContent.ObjectInteractions;
 using CalamityHunt.Common.Systems;
-using CalamityHunt.Common.Graphics.SlimeMonsoon;
+using CalamityHunt.Common.Graphics.Skies;
 using Terraria.Enums;
 using Terraria.Audio;
 using Terraria.Chat;
@@ -104,7 +104,7 @@ namespace CalamityHunt.Content.Tiles
 
             if (!GoozmaSystem.GoozmaActive)
             {
-                if (GoozmaSystem.FindSlimeStatues(center, top, 20, 20))
+                if (GoozmaSystem.FindSlimeStatues(center, top, 40, 30))
                 {
                     if (player.HasItem(ModContent.ItemType<SludgeFocus>()))
                         GoozmaSystem.GoozmaEgg(new Vector2(center * 16, (top - 1) * 16));

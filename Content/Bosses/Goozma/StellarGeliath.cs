@@ -248,7 +248,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1600, 2000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.1f);
-                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
                     star.ai[0] = 0;
@@ -263,7 +263,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1000, 1500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.2f);
-                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
                     star.ai[0] = -18;
@@ -280,7 +280,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 for (int i = 0; i < count; i++)
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(50, 1000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
-                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
                     star.ai[0] = i * 2;
@@ -291,7 +291,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(10, 500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
 
-                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
+                    Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
                     star.localAI[0] = i / (float)count;
                     star.ai[0] = -35;
@@ -833,8 +833,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
 
                 Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
-                effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Space.Space0.Value);
-                effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Space.Space1.Value);
+                effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Noise[2].Value);
+                effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Noise[3].Value);
                 effect.Parameters["uPosition"].SetValue(screenPos + new Vector2(0, MathF.Sin(Main.GlobalTimeWrappedHourly * 0.5f) * 0.1f));
                 effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
                 effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));

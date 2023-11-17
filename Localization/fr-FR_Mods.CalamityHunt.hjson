@@ -34,6 +34,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	GoozmaRelic: {
+		// DisplayName: Goozma Relic
+		// Tooltip: ""
+	}
+
 	GoozmaLore: {
 		DisplayName: Goozma
 		Tooltip: tooltip
@@ -72,6 +77,11 @@ Items: {
 	GoozmaTrophyItem: {
 		DisplayName: Trophée de Goozma
 		Tooltip: ""
+	}
+
+	GoozmaTrophy: {
+		// DisplayName: Goozma Trophy
+		// Tooltip: ""
 	}
 
 	ImperialGelato: {
@@ -198,9 +208,19 @@ Items: {
 		Tooltip: ""
 	}
 
+	EbonianBehemuckTrophy: {
+		// DisplayName: Ebonian Behemuck Trophy
+		// Tooltip: ""
+	}
+
 	DivineGargooptuarTrophyItem: {
 		DisplayName: Trophée de la Divinité Gargadouesque
 		Tooltip: ""
+	}
+
+	DivineGargooptuarTrophy: {
+		// DisplayName: Divine Gargooptuar Trophy
+		// Tooltip: ""
 	}
 
 	CrimulanGlopstrosityTrophyItem: {
@@ -208,9 +228,19 @@ Items: {
 		Tooltip: ""
 	}
 
+	CrimulanGlopstrosityTrophy: {
+		// DisplayName: Crimulan Glopstrosity Trophy
+		// Tooltip: ""
+	}
+
 	StellarGeliathTrophyItem: {
 		DisplayName: Trophée du Geliath Stellaire
 		Tooltip: ""
+	}
+
+	StellarGeliathTrophy: {
+		// DisplayName: Stellar Geliath Trophy
+		// Tooltip: ""
 	}
 
 	PumpActionSwampgun: {
@@ -450,6 +480,11 @@ Items: {
 	GoopHairDye: {
 		DisplayName: Coloration visqueuse
 		Tooltip: ""
+	}
+
+	AncientSlimeMonsoonMonolith: {
+		// DisplayName: Ancient Slime Monsoon Monolith
+		// Tooltip: ""
 	}
 }
 
@@ -701,6 +736,11 @@ Configs: {
 		shadowspecCurse: {
 			Label: Shadowspec Maudit
 			Tooltip: ""
+		}
+
+		oldsky: {
+			// Label: oldsky
+			// Tooltip: ""
 		}
 	}
 }

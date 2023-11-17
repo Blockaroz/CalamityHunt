@@ -1,21 +1,17 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.GameContent.Animations.IL_Actions.Sprites;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 {
     public class PinkyLight : ModProjectile
     {
-        public override string Texture => $"{Mod.Name}/Assets/Textures/SharpSpark";
+        public override string Texture => $"{Mod.Name}/Assets/Textures/Extra/Empty";
 
         public override void SetStaticDefaults()
         {

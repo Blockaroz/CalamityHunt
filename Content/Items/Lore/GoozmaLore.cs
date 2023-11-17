@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using CalamityHunt.Content.Items.Placeable;
 
 namespace CalamityHunt.Content.Items.Lore
 {
@@ -55,7 +56,7 @@ namespace CalamityHunt.Content.Items.Lore
         public override void AddRecipes()
         {
                 CreateRecipe()
-                    .AddIngredient(Goozma.trophyTypes[0])
+                    .AddIngredient<GoozmaTrophy>()
                     .AddTile(TileID.Bookcases)
                     .Register();
         }

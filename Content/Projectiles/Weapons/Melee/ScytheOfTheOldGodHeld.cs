@@ -340,7 +340,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 return false;
 
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D swingTexture = AssetDirectory.Textures.SwordSwing.Basic.Value;
+            Texture2D swingTexture = AssetDirectory.Textures.SwordSwing[0].Value;
 
             Vector2 endOrigin = new Vector2(0.35f, 0.5f + 0.3f * Projectile.spriteDirection);
             Vector2 origin = endOrigin;

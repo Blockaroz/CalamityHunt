@@ -25,7 +25,7 @@ public class GoozmoemTextureContent : ARenderTargetContentByRequest
 
     protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
-        Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall.Value;
+        Texture2D asset = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
         PrepareARenderTarget_AndListenToEvents(ref _target, device, width, height, RenderTargetUsage.PreserveContents);
         device.SetRenderTarget(_target);
         device.Clear(Color.Transparent);
@@ -70,7 +70,7 @@ public class GoozmoemTextureContent : ARenderTargetContentByRequest
 
         //Pass the entire rainbow through modulo 1
         for (int i = 1; i < 10; i++)
-            brightnesses[i] = HuntOfTheOldGodUtils.Modulo(brightnesses[i], maxBright) * maxBright;
+            brightnesses[i] = HuntOfTheOldGodsUtils.Modulo(brightnesses[i], maxBright) * maxBright;
 
         //Store the first element's value so we can find it again later
         float firstBrightnessValue = brightnesses[1];
@@ -105,7 +105,7 @@ public class GoozmoemCordTextureContent : ARenderTargetContentByRequest
 
     protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
-        Texture2D asset = AssetDirectory.Textures.Extras.PaladinPalanquinBall.Value;
+        Texture2D asset = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
         PrepareARenderTarget_AndListenToEvents(ref _target, device, width, height, RenderTargetUsage.PreserveContents);
         device.SetRenderTarget(_target);
         device.Clear(Color.Transparent);
@@ -120,7 +120,7 @@ public class GoozmoemCordTextureContent : ARenderTargetContentByRequest
         if (!Main.gameInactive)
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.5f);
         effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.LiquidTrail.Value);
-        effect.Parameters["uMap"].SetValue(AssetDirectory.Textures.Goozma.ColorMap.Value);
+        effect.Parameters["uMap"].SetValue(AssetDirectory.Textures.ColorMap[0].Value);
 
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect);
         effect.CurrentTechnique.Passes[0].Apply();

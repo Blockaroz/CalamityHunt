@@ -102,11 +102,11 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
             if (heartbeatSound == null)
-                heartbeatSound = new LoopingSound(AssetDirectory.Sounds.GoozmaAuricSoulHeartbeat, new HuntOfTheOldGodUtils.ItemAudioTracker(Item).IsActiveAndInGame);
+                heartbeatSound = new LoopingSound(AssetDirectory.Sounds.GoozmaAuricSoulHeartbeat, new HuntOfTheOldGodsUtils.ItemAudioTracker(Item).IsActiveAndInGame);
             heartbeatSound.Update(() => Item.position, () => 1f, () => 0f);
 
             if (droneSound == null)
-                droneSound = new LoopingSound(AssetDirectory.Sounds.GoozmaAuricSoulDrone, new HuntOfTheOldGodUtils.ItemAudioTracker(Item).IsActiveAndInGame);
+                droneSound = new LoopingSound(AssetDirectory.Sounds.GoozmaAuricSoulDrone, new HuntOfTheOldGodsUtils.ItemAudioTracker(Item).IsActiveAndInGame);
             droneSound.Update(() => Item.position, () => 1.5f, () => 0f);
 
             if (breathSoundCounter-- <= 0)

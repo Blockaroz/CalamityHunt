@@ -394,7 +394,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D flare = TextureAssets.Extra[89].Value;
-            Texture2D slash = AssetDirectory.Textures.SwordSwing.Bloody.Value;
+            Texture2D slash = AssetDirectory.Textures.SwordSwing[1].Value;
             Texture2D splatTexture = ModContent.Request<Texture2D>(Texture + "Splat").Value;
             Rectangle frame = texture.Frame(1, 4, 0, Projectile.frame);
             Vector2 origin = frame.Size() * new Vector2(0.1f, 0.5f - 0.35f * Projectile.direction);

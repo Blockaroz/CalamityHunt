@@ -620,11 +620,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
             spriteBatch.Draw(coreTexture, corePos - screenPos, null, color, NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, coreTexture.Size() * 0.5f, NPC.scale * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
             spriteBatch.Draw(coreTexture, corePos - screenPos, null, color.MultiplyRGBA(rainbowColor), NPC.rotation + (float)Math.Sin(NPC.localAI[0] * 0.1f % MathHelper.TwoPi) * 0.1f, coreTexture.Size() * 0.5f, NPC.scale * 1.1f * (new Vector2(0.5f) + squishFactor * 0.5f), 0, 0);
 
-            Asset<Texture2D> colorMap = AssetDirectory.Textures.Extras.RainbowGelMap;
+            Texture2D colorMap = AssetDirectory.Textures.ColorMap[2].Value;
             Effect gelEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel", AssetRequestMode.ImmediateLoad).Value;
             gelEffect.Parameters["uImageSize"].SetValue(texture.Size());
             gelEffect.Parameters["uSourceRect"].SetValue(new Vector4(frame.Left, frame.Top, frame.Width, frame.Height));
-            gelEffect.Parameters["uMap"].SetValue(colorMap.Value);
+            gelEffect.Parameters["uMap"].SetValue(colorMap);
             gelEffect.Parameters["uRbThresholdLower"].SetValue(0.53f);
             gelEffect.Parameters["uRbThresholdUpper"].SetValue(0.6f);
             gelEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.5f % 1f);

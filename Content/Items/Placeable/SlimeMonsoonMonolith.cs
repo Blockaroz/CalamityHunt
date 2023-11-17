@@ -24,14 +24,17 @@ namespace CalamityHunt.Content.Items.Placeable
             }
         }
 
+
         public override void UpdateAccessory(Player player, bool visual)
         {
-            player.GetModPlayer<EffectTilePlayer>().effectorCount["SlimeMonsoon"] = 5;
+            UpdateVanity(player);
         }
+
         public override void UpdateVanity(Player player)
         {
-            player.GetModPlayer<EffectTilePlayer>().effectorCount["SlimeMonsoon"] = 5;
+            player.GetModPlayer<SceneEffectPlayer>().effectActive[(ushort)SceneEffectPlayer.EffectorType.SlimeMonsoon] = 30;
         }
+
 
         public override void AddRecipes()
         {

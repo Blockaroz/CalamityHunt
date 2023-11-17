@@ -106,7 +106,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Backpacks);
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && VanityUtils.NoBackpackOn(ref drawInfo);
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && VanityUtilities.NoBackpackOn(ref drawInfo);
 
         private int frame;
 
@@ -164,7 +164,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && VanityUtils.NoBackpackOn(ref drawInfo);
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<Trailblazer>() && VanityUtilities.NoBackpackOn(ref drawInfo);
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {

@@ -14,28 +14,14 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria;
 
-namespace CalamityHunt.Content.Tiles.Autoloaded
+namespace CalamityHunt.Content.Tiles
 {
-    [Autoload(false)]
-    public class AutoloadedBossTrophyTile : ModTile
+    public abstract class TrophyTile : ModTile
     {
         public const int FrameWidth = 18 * 3;
         public const int FrameHeight = 18 * 4;
-        public override string Texture => TexturePath + Name;
-        public override string Name => InternalName != "" ? InternalName : base.Name;
-
-        public string InternalName;
-        protected readonly int ItemType;
-        protected readonly string TexturePath;
 
         internal static Dictionary<int, Asset<Texture2D>> TrophyAssets;
-
-        public AutoloadedBossTrophyTile(string NPCname, int dropType, string path = null)
-        {
-            InternalName = NPCname + "TrophyTile";
-            ItemType = dropType;
-            TexturePath = path;
-        }
 
         public override void SetStaticDefaults()
         {
@@ -50,18 +36,5 @@ namespace CalamityHunt.Content.Tiles.Autoloaded
         }
 
         public override bool CreateDust(int i, int j, ref int type) => false;
-
-        public Asset<Texture2D> GetRelicTexture()
-        {
-            if (TrophyAssets == null)
-                TrophyAssets = new Dictionary<int, Asset<Texture2D>>();
-
-            if (TrophyAssets.TryGetValue(Type, out var asset))
-                return asset;
-
-            Asset<Texture2D> newAsset = ModContent.Request<Texture2D>(TexturePath + Name);
-            TrophyAssets.Add(Type, newAsset);
-            return newAsset;
-        }
     }
 }

@@ -11,7 +11,7 @@ using Terraria.ObjectData;
 
 namespace CalamityHunt
 {
-    public static class HuntOfTheOldGodUtils
+    public static class HuntOfTheOldGodsUtils
     {
         public static Vector2 GetDesiredVelocityForDistance(Vector2 start, Vector2 end, float slowDownFactor, int time)
         {

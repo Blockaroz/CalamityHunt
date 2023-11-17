@@ -1,4 +1,4 @@
-﻿using CalamityHunt.Common.Graphics.SlimeMonsoon;
+﻿using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;

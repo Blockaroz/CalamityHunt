@@ -56,7 +56,7 @@ public class ShadowspecLocker : GlobalItem
         if (!CanUseItem(item, Main.LocalPlayer) && ShadowspecItemFinder.ShadowspecItem(item.type))
         {
             Texture2D glow = AssetDirectory.Textures.Glow.Value;
-            Texture2D qmark = AssetDirectory.Textures.Extras.QuestionMark.Value;
+            Texture2D qmark = AssetDirectory.Textures.QuestionMark.Value;
 
             spriteBatch.Draw(glow, position, glow.Frame(), Color.Black * 0.5f, 0, glow.Size() * 0.5f, scale * 5f, 0, 0);
 

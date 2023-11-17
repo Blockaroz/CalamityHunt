@@ -198,7 +198,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (cordRope != null)
             {
                 Texture2D texture = TextureAssets.Projectile[Type].Value;
-                Texture2D eyeTexture = AssetDirectory.Textures.Extras.GoozmoemEye.Value;
+                Texture2D eyeTexture = AssetDirectory.Textures.Goozma.GoozmoemEye.Value;
                 Rectangle frame = texture.Frame(1, 7, 0, Projectile.frame, -2, -2);
 
                 goozmoemCordTextureContent.width = 512;
@@ -223,7 +223,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             SpriteEffects direction = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            Texture2D texture = AssetDirectory.Textures.Extras.GoozmoemCrown.Value;
+            Texture2D texture = AssetDirectory.Textures.Goozma.GoozmoemCrown.Value;
             Rectangle frame = texture.Frame(1, 7, 0, Projectile.frame, -2, -2);
             Main.EntitySpriteDraw(texture, new Vector2(256), frame, Color.White, Projectile.rotation, new Vector2(frame.Width * 0.5f, 22), 1f, direction, 0);
         }

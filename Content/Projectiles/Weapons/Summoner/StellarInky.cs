@@ -394,7 +394,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             lightColor = Color.Lerp(lightColor, Color.White, 0.5f);
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D ringTexture = AssetDirectory.Textures.Extras.InkyRings.Value;
+            Texture2D ringTexture = AssetDirectory.Textures.Goozma.InkyRings.Value;
             int ringXFrame = Player.GetModPlayer<SlimeCanePlayer>().SlimeRank() switch
             {
                 0 => 0,
@@ -424,7 +424,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             if (Projectile.frame > 5)
             {
-                Texture2D hatTexture = AssetDirectory.Textures.Extras.InkyHats.Value;
+                Texture2D hatTexture = AssetDirectory.Textures.Goozma.InkyHats.Value;
                 Rectangle hatFrame = hatTexture.Frame(1, 4, 0, Player.GetModPlayer<SlimeCanePlayer>().SlimeRank() - 1);
                 Vector2 hatOffset = new Vector2(0, -(18 + Projectile.velocity.Length() - Projectile.velocity.Y * 0.5f)).RotatedBy(-Projectile.velocity.X * 0.04f + (-0.75f + Projectile.velocity.Y * 0.05f) * Projectile.direction) * scale;
                 float hatRotation = hatOffset.AngleFrom(Vector2.Zero) + MathHelper.PiOver2 + 0.5f * Projectile.direction;//

@@ -167,7 +167,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     .UseTargetPosition(Projectile.Center)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.1f % 1f)
                     .UseIntensity((float)Math.Sqrt(Utils.GetLerpValue(0.1f, 0.9f, Projectile.scale, true)) * 0.4f);
-                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortionSample"].SetValue(AssetDirectory.Textures.SlimeMonsoon.SkyDistortion.Value);
+                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortionSample"].SetValue(AssetDirectory.Textures.Noise[4].Value);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uSize"].SetValue(new Vector2(1f));
             }
