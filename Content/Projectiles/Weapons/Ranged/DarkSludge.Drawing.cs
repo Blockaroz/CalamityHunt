@@ -63,9 +63,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
             var query = new QueryDescription().WithAll<Particle, ParticleVelocity, ParticlePosition, ParticleRotation, ParticleScale, ParticleDarkSludgeChunk>();
             var particleSystem = ModContent.GetInstance<ParticleSystem>();
-            particleSystem.ParticleWorld.Query(
+            particleSystem.ParticleWorld.Query<Entity>(
                 in query,
-                (in Entity entity) =>
+                (ref Entity entity) =>
                 {
                     ref readonly var particle = ref entity.Get<Particle>();
                     ref readonly var velocity = ref entity.Get<ParticleVelocity>();
@@ -94,9 +94,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             );
             
             query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleRotation, ParticleScale, ParticleData<string>, ParticleMegaFlame>();
-            particleSystem.ParticleWorld.Query(
+            particleSystem.ParticleWorld.Query<Entity>(
                 in query,
-                (in Entity entity) =>
+                (ref Entity entity) =>
                 {
                     ref readonly var particle = ref entity.Get<Particle>();
                     ref readonly var position = ref entity.Get<ParticlePosition>();

@@ -62,9 +62,9 @@ namespace CalamityHunt.Common.Graphics
 
             var query = new QueryDescription().WithAll<Particle, ParticleCosmicSmoke, ParticlePosition, ParticleColor, ParticleScale, ParticleRotation, ParticleActive, ParticleData<string>>();
             var particleSystem = ModContent.GetInstance<ParticleSystem>();
-            particleSystem?.ParticleWorld.Query(
+            particleSystem?.ParticleWorld.Query<Entity>(
                 in query,
-                (in Entity entity) =>
+                (ref Entity entity) =>
                 {
                     ref readonly var active = ref entity.Get<ParticleActive>();
                     if (!active.Value)
