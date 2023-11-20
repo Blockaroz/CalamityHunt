@@ -5,7 +5,7 @@
     <AssemblyName>CalamityHunt</AssemblyName>
     <TargetFramework>net6.0</TargetFramework>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>11</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Textures\Bosses\Goozma\ConstellationArea.png" />
