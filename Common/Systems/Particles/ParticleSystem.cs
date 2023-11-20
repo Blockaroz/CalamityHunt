@@ -37,9 +37,9 @@ public sealed class ParticleSystem : ModSystem
             return;
 
         var query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleVelocity, ParticleActive>();
-        ParticleWorld.Query<Entity>(
+        ParticleWorld.Query(
             in query, 
-            (ref Entity entity) =>
+            (in Entity entity) =>
             {
                 ref var particle = ref entity.Get<Particle>();
                 ref var position = ref entity.Get<ParticlePosition>();
@@ -63,9 +63,9 @@ public sealed class ParticleSystem : ModSystem
         Rectangle value = new Rectangle((int)Main.screenPosition.X - Main.screenWidth, (int)Main.screenPosition.Y - Main.screenHeight, Main.screenWidth * 2, Main.screenHeight * 2);
 
         var query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleDrawBehindEntities>().WithNone<ParticleShader>();
-        ParticleWorld.Query<Entity>(
+        ParticleWorld.Query(
             in query,
-            (ref Entity entity) =>
+            (in Entity entity) =>
             {
                 ref var particle = ref entity.Get<Particle>();
                 ref var position = ref entity.Get<ParticlePosition>();
@@ -79,9 +79,9 @@ public sealed class ParticleSystem : ModSystem
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         
         query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleDrawBehindEntities, ParticleShader>();
-        ParticleWorld.Query<Entity>(
+        ParticleWorld.Query(
             in query,
-            (ref Entity entity) =>
+            (in Entity entity) =>
             {
                 ref var particle = ref entity.Get<Particle>();
                 ref var position = ref entity.Get<ParticlePosition>();
@@ -108,9 +108,9 @@ public sealed class ParticleSystem : ModSystem
         Rectangle value = new Rectangle((int)Main.screenPosition.X - Main.screenWidth, (int)Main.screenPosition.Y - Main.screenHeight, Main.screenWidth * 2, Main.screenHeight * 2);
         
         var query = new QueryDescription().WithAll<Particle, ParticlePosition>().WithNone<ParticleShader, ParticleDrawBehindEntities>();
-        ParticleWorld.Query<Entity>(
+        ParticleWorld.Query(
             in query,
-            (ref Entity entity) =>
+            (in Entity entity) =>
             {
                 ref var particle = ref entity.Get<Particle>();
                 ref var position = ref entity.Get<ParticlePosition>();
@@ -124,9 +124,9 @@ public sealed class ParticleSystem : ModSystem
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         
         query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleShader>().WithNone<ParticleDrawBehindEntities>();
-        ParticleWorld.Query<Entity>(
+        ParticleWorld.Query(
             in query,
-            (ref Entity entity) =>
+            (in Entity entity) =>
             {
                 ref var particle = ref entity.Get<Particle>();
                 ref var position = ref entity.Get<ParticlePosition>();
