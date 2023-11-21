@@ -3,12 +3,18 @@ using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Tiles;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Placeable;
 
 public class AncientSlimeMonsoonMonolith : ModItem
 {
+    public override void SetStaticDefaults()
+    {
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SlimeMonsoonMonolith>();
+    }
+
     public override void SetDefaults()
     {
         Item.DefaultToPlaceableTile(ModContent.TileType<AncientSlimeMonsoonMonolithTile>());
@@ -31,22 +37,5 @@ public class AncientSlimeMonsoonMonolith : ModItem
     public override void UpdateVanity(Player player)
     {
         player.GetModPlayer<SceneEffectPlayer>().effectActive[(ushort)SceneEffectPlayer.EffectorType.SlimeMonsoonOld] = 30;
-    }
-
-    public override void AddRecipes()
-    {
-        if (ModLoader.HasMod("CalamityMod")) {
-            Mod calamity = ModLoader.GetMod("CalamityMod");
-            CreateRecipe()
-                .AddIngredient<ChromaticMass>(15)
-                .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
-                .Register();
-        }
-        else {
-            CreateRecipe()
-                .AddIngredient<ChromaticMass>(15)
-                .AddTile<SlimeNinjaStatueTile>()
-                .Register();
-        }
     }
 }

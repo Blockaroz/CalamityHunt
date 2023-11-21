@@ -3,12 +3,18 @@ using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Tiles;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Placeable
 {
     public class SlimeMonsoonMonolith : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<AncientSlimeMonsoonMonolith>();
+        }
+
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(ModContent.TileType<SlimeMonsoonMonolithTile>());
@@ -44,6 +50,7 @@ namespace CalamityHunt.Content.Items.Placeable
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
+                    .DisableDecraft()
                     .Register();
             }
             else
@@ -51,6 +58,7 @@ namespace CalamityHunt.Content.Items.Placeable
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()
+                    .DisableDecraft()
                     .Register();
             }
         }

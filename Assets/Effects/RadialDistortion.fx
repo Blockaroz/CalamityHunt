@@ -40,30 +40,22 @@ sampler2D dSample1 = sampler_state
     AddressU = wrap;
     AddressV = wrap;
 };
+
 float2 distortSize;
 
-float inEdge;
-float outEdge;
-float2 uSize;
-
-float donut(float2 coord)
-{
-    float mid = (outEdge + inEdge) / 2.0;
-    float d = 1.0 - length(coord);
-    return smoothstep(inEdge, outEdge, d) * smoothstep(outEdge, inEdge, d);
-}
 float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
     float2 targetCoords = (uTargetPosition - uScreenPosition) / uScreenResolution;
-    float2 center = ((coords - targetCoords)) * (uScreenResolution / uScreenResolution.y) / uZoom / uSize;
+    float2 center = ((coords - targetCoords)) * (uScreenResolution / uScreenResolution.y) / uZoom;    
 
-    float4 dist0 = tex2D(dSample0, (coords + uScreenPosition * 0.0005 + float2(-uProgress * 2, uProgress * 4)) * distortSize);
-    float4 dist1 = tex2D(dSample1, (coords * 0.5 + uScreenPosition * 0.0005 + float2(0, uProgress * 3)) * distortSize);
-    float distPower = length(dist0 * dist1) / 4;
-    float wave = sin((length(center) + uProgress) * 6.28 * uIntensity * distPower);
-    float2 distort = center * wave * uOpacity * donut(center);
-    float4 image = tex2D(uImage0, coords + distort);
-    return image * (1 - clamp(length(center + distort) * 0.4 * uOpacity, 0, 0.6));
+    float2 polar = float2(atan2(center.y, center.x) / (3.1415), length(center) * 0.2 * distortSize.y);
+
+    float dist0 = tex2D(dSample0, uScreenPosition * 0.000001 + (polar / 2 + float2(polar.y * 0.2 + uProgress, -uProgress * 4)));
+    float dist1 = tex2D(dSample1, uScreenPosition * 0.000001 + (polar + float2(-polar.y * 0.2, -uProgress * 3)) + dist0 * 0.1);
+    
+    float distortion = (dist1 - 0.5) * uOpacity * smoothstep(0.3, 0.9, length(center));
+    float2 direction = center;
+    return tex2D(uImage0, coords + distortion * direction);
 
 }
 

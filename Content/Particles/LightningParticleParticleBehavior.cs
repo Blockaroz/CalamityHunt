@@ -4,6 +4,7 @@ using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ModLoader;
 using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Content.Particles;
@@ -27,7 +28,7 @@ public class LightningParticleParticleBehavior : ParticleBehavior
         { 
             Variant = Main.rand.Next(5),
             Direction = Main.rand.NextBool().ToDirectionInt(),
-            MaxTime = Main.rand.Next(3, 6)
+            MaxTime = Main.rand.Next(3, 5)
         };
         entity.Add(portal);
     }
@@ -58,6 +59,6 @@ public class LightningParticleParticleBehavior : ParticleBehavior
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
         Rectangle frame = texture.Frame(1, 5, 0, particle.Variant);
         SpriteEffects flip = particle.Direction > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
-        spriteBatch.Draw(texture, position.Value - Main.screenPosition, frame, color.Value * Utils.GetLerpValue(1, particle.MaxTime, particle.Time, true), rotation.Value + MathHelper.Pi / 3f * particle.Direction, frame.Size() * 0.5f, scale.Value * new Vector2(1f, 1f + particle.Time * 0.05f), flip, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, frame, color.Value * Utils.GetLerpValue(particle.MaxTime, 2, particle.Time, true), rotation.Value + MathHelper.Pi / 3f * particle.Direction, frame.Size() * 0.5f, scale.Value * new Vector2(1f, 1f + particle.Time * 0.05f), flip, 0);
     }
 }

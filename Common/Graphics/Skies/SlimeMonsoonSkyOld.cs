@@ -183,24 +183,24 @@ public class SlimeMonsoonSkyOld : CustomSky
 
         }
 
-        if (Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Active)
-        {
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader()
-                .UseColor(Color.White)
-                .UseTargetPosition(radialDistortPos)
-                .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
-                .UseIntensity(1f)
-                .UseOpacity(_strength * 0.1f * Config.Instance.monsoonDistortion);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.Noise[4].Value);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.Noise[5].Value);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["inEdge"].SetValue(-1f);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["outEdge"].SetValue(0.8f - Main.LocalPlayer.Distance(radialDistortPos) * 0.0001f);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["uSize"].SetValue(new Vector2(1f, 0.7f));
+        //if (Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Active)
+        //{
+        //    Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader()
+        //        .UseColor(Color.White)
+        //        .UseTargetPosition(radialDistortPos)
+        //        .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
+        //        .UseIntensity(1f)
+        //        .UseOpacity(_strength * 0.1f * Config.Instance.monsoonDistortion);
+        //    Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.Noise[4].Value);
+        //    Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.Noise[5].Value);
+        //    Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["distortSize"].SetValue(Vector2.One * 0.4f);
+        //    Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["inEdge"].SetValue(-1f);
+        //    Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["outEdge"].SetValue(0.8f - Main.LocalPlayer.Distance(radialDistortPos) * 0.0001f);
+        //    Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader.Parameters["uSize"].SetValue(new Vector2(1f, 0.7f));
 
-            if (_strength < 0.02f)
-                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Deactivate();
-        }
+        //    if (_strength < 0.02f)
+        //        Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Deactivate();
+        //}
     }
 
     private class OldMonsoonStrike

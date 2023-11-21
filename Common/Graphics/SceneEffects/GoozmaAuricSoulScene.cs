@@ -29,11 +29,5 @@ public class GoozmaAuricSoulScene : ModSceneEffect
 
     public override void SpecialVisuals(Player player, bool isActive)
     {
-        if (!SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].IsActive() && isActive) {
-            SkyManager.Instance.Activate("HuntOfTheOldGods:SlimeMonsoon", player.Center);
-        }        
-        else if (SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].IsActive() && !isActive && !GoozmaSystem.GoozmaActive) {
-            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Deactivate();
-        }
     }
 }

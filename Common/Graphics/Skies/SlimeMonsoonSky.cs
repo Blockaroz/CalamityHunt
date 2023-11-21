@@ -55,7 +55,7 @@ public class SlimeMonsoonSky : CustomSky
     {
         if (inColor.R + inColor.G + inColor.B > 20) {
             float fastStrength = Math.Clamp(_strength * 3f, 0, 1f);
-            Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, Color.Black, fastStrength);
+            Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, (lightColor * 0.1f) with { A = 255 }, fastStrength);
             return inColor.MultiplyRGBA(Color.Lerp(Color.White, lightColor, fastStrength));
         }
         return inColor;
@@ -65,17 +65,19 @@ public class SlimeMonsoonSky : CustomSky
 
     public override void Update(GameTime gameTime)
     {
-        if (_active)
+        if (_active) {
             _strength = Math.Min(strengthTarget, _strength + 0.005f);
-        else
+        }
+        else {
             _strength = Math.Max(0f, _strength - 0.005f);
+        }
 
         if (forceStrength.HasValue) {
             _strength = forceStrength.Value;
             forceStrength = null;
         }
 
-        radialDistortPos = Vector2.Lerp(radialDistortPos, Main.LocalPlayer.Center, 0.5f);
+        radialDistortPos = Vector2.Lerp(radialDistortPos, Main.LocalPlayer.Center, 0.3f);
 
         _brightness = MathHelper.Lerp(_brightness, 0.15f, 0.08f);
         _windSpeed -= Main.WindForVisuals * 0.0025f;
@@ -92,17 +94,56 @@ public class SlimeMonsoonSky : CustomSky
         //gold: new Color(40, 22, 15);
         Color brightColor = new GradientColor(new Color[]
         {
-            new Color(20, 16, 42),
-            new Color(25, 20, 32),
-            new Color(30, 15, 20)
+            new Color(40, 36, 62),
+            new Color(45, 40, 62),
+            new Color(50, 35, 40)
 
         }, 2f, 2f).Value;
-        Color darkColor = Color.Lerp(brightColor, Color.Black, 0.3f);
-        lightColor = Color.Lerp(Color.DimGray, brightColor, 0.9f);
+        Color darkColor = Color.Lerp(brightColor, Color.Black, 0.9f);
+        lightColor = Color.Lerp(Color.DimGray, brightColor, 0.6f);
+
+        if (Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Active) {
+            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader()
+                .UseColor(Color.White)
+                .UseTargetPosition(radialDistortPos)
+                .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
+                .UseIntensity(1f)
+                .UseOpacity(_strength * 0.1f * Config.Instance.monsoonDistortion);
+            Effect filterEffect = Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader;
+            filterEffect.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.Noise[5].Value);
+            filterEffect.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.Noise[0].Value);
+            filterEffect.Parameters["distortSize"].SetValue(Vector2.One);
+
+            if (_strength < 0.2f) {
+                Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Deactivate();
+            }
+        }
 
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
             spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
-            spriteBatch.Draw(AssetDirectory.Textures.Noise[4].Value, new Rectangle(0, -yOffset, Main.screenWidth, Main.screenHeight * 2), darkColor * _strength * 0.66f);
+            spriteBatch.Draw(AssetDirectory.Textures.Noise[4].Value, new Rectangle(0, -yOffset - 100, Main.screenWidth, Main.screenHeight * 3), darkColor * _strength);
+        }       
+        
+        Effect skyEffect = AssetDirectory.Effects.SlimeMonsoonSkyEffect.Value;
+        skyEffect.Parameters["uMap"].SetValue(AssetDirectory.Textures.ColorMap[4].Value);
+
+        if (maxDepth >= 4 && minDepth < 5) {
+
+            skyEffect.Parameters["uWorldPos"].SetValue((Main.screenPosition + Main.ScreenSize.ToVector2() / 2f) * 0.0001f);
+            skyEffect.Parameters["uTime"].SetValue(_windSpeed * 3f);
+            skyEffect.Parameters["uStrength"].SetValue(_strength);
+            skyEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[5].Value);
+            skyEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Noise[0].Value);
+            skyEffect.Parameters["uHeight"].SetValue(0f);
+            skyEffect.Parameters["uBrightness"].SetValue(0.5f);
+
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, skyEffect, Main.BackgroundViewMatrix.TransformationMatrix);
+            
+            spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), darkColor * (float)Math.Sqrt(_strength));
+
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.BackgroundViewMatrix.TransformationMatrix);
         }
     }
 

@@ -20,7 +20,7 @@ public static class AssetDirectory
         public static readonly Asset<Texture2D> Empty = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Empty");
         public static readonly Asset<Texture2D> Template = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Template");
         public static readonly Asset<Texture2D>[] Noise = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Noise_", 6);
-        public static readonly Asset<Texture2D>[] ColorMap = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/ColorMap_", 4);
+        public static readonly Asset<Texture2D>[] ColorMap = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/ColorMap_", 5);
         public static readonly Asset<Texture2D>[] SwordSwing = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/SwordSwing_", 2);
         public static readonly Asset<Texture2D> QuestionMark = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/icon_small");
         public static Dictionary<int, Asset<Texture2D>> Particle = new Dictionary<int, Asset<Texture2D>>();
@@ -198,6 +198,7 @@ public static class AssetDirectory
     public static class Effects
     {
         public static Asset<Effect> SlimeMonsoonOldCloudLayer = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonOldCloudLayer", AssetRequestMode.ImmediateLoad);
+        public static Asset<Effect> SlimeMonsoonSkyEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonSkyEffect", AssetRequestMode.ImmediateLoad);
         //public static Asset<Effect> SlimeMonsoonBack = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad);
         //public static Asset<Effect> SlimeMonsoonStrike = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad);
     }

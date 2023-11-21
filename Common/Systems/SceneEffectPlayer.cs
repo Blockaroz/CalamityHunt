@@ -29,9 +29,6 @@ namespace CalamityHunt.Common.Systems
 
         public override void PostUpdateMiscEffects()
         {
-            if (GoozmaSystem.GoozmaActive)
-                effectActive[(ushort)EffectorType.SlimeMonsoon] = 50;
-
             //Player.ManageSpecialBiomeVisuals("HuntOfTheOldGods:SlimeMonsoon", effectorCount[(ushort)EffectorType.SlimeMonsoon] > 0, Player.Center);
         }
     }

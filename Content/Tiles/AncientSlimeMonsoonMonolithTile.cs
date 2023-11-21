@@ -55,7 +55,7 @@ namespace CalamityHunt.Content.Tiles
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = ModContent.ItemType<SlimeMonsoonMonolith>();
+            player.cursorItemIconID = ModContent.ItemType<AncientSlimeMonsoonMonolith>();
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;

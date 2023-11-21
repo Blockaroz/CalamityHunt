@@ -1,4 +1,4 @@
-displayName = Calamity: Hunt of the Old God
+displayName = Calamity: Hunt of the Old Gods
 loadAfter = CalamityMod
 author = Team Hypnos
 version = 1.1.0

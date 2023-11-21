@@ -108,13 +108,13 @@ public class AntiMassColliderProj : ModProjectile
 
         Time++;
 
-        for (int i = 0; i < 4; i++) {
-            if (recoilFactor > 0.03f && Main.rand.NextBool((int)(15 - recoilFactor * 14))) {
+        for (int i = 0; i < 8; i++) {
+            if (recoilFactor > 0.0005f && Main.rand.NextBool((int)(25 - recoilFactor * 24))) {
 
-                float particleRotation = Projectile.rotation + Main.rand.NextFloat(-0.4f, 0.4f);
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<LightningParticleParticleBehavior>(), muzzlePosition + Main.rand.NextVector2Circular(30, 10).RotatedBy(Projectile.rotation), particleRotation.ToRotationVector2(), Color.Gold with { A = 40 }, Main.rand.NextFloat(0.2f, 0.5f));
-                hue.Add(new ParticleRotation() { Value = particleRotation });
-                hue.Add(new ParticleData<Func<Vector2>> { Value = () => Player.velocity });
+                float particleRotation = Projectile.rotation + Main.rand.NextFloat(-1f, 1f);
+                var lightningParticle = ParticleBehavior.NewParticle(ModContent.GetInstance<LightningParticleParticleBehavior>(), muzzlePosition + Player.velocity + Main.rand.NextVector2Circular(27, 10).RotatedBy(Projectile.rotation), particleRotation.ToRotationVector2(), Color.Gold with { A = 40 }, Main.rand.NextFloat(0.1f, 0.7f));
+                lightningParticle.Add(new ParticleRotation() { Value = particleRotation + Main.rand.NextFloat(-1f, 1f) });
+                lightningParticle.Add(new ParticleData<Func<Vector2>> { Value = () => Player.velocity });
             }
         }
 

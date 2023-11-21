@@ -34,15 +34,13 @@ namespace CalamityHunt
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"] = new Filter(new ScreenShaderData(stellarblackhole, "BlackHolePass"), EffectPriority.VeryHigh);
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Load();
 
-            Ref<Effect> distort = new Ref<Effect>(ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RadialDistortion", AssetRequestMode.ImmediateLoad).Value);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoonOld"] = new Filter(new ScreenShaderData(distort, "DistortionPass"), EffectPriority.Medium);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoonOld"].Load();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"] = new SlimeMonsoonSkyOld();
-            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"].Load();            
-            
+            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"].Load();
+
+            Ref<Effect> distort = new Ref<Effect>(ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RadialDistortion", AssetRequestMode.ImmediateLoad).Value);
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"] = new Filter(new ScreenShaderData(distort, "DistortionPass"), EffectPriority.Medium);
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Load();
-            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonSkyOld();
+            SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonSky();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
         }
 
