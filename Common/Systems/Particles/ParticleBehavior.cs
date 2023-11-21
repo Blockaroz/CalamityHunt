@@ -1,5 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using CalamityHunt.Common.Utilities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
 using Entity = Arch.Core.Entity;
@@ -8,6 +11,8 @@ namespace CalamityHunt.Common.Systems.Particles
 {
     public abstract class ParticleBehavior : ModTexturedType
     {
+        public int Type { get; private set; }
+
         public override string Texture
         {
             get
@@ -32,7 +37,13 @@ namespace CalamityHunt.Common.Systems.Particles
         protected sealed override void Register()
         {
             ModTypeLookup<ParticleBehavior>.Register(this);
+            Type = IDCount++;
+            if (AssetDirectory.Textures.Particle is null)
+                AssetDirectory.Textures.Particle = new Dictionary<int, Asset<Texture2D>>();
+            AssetDirectory.Textures.Particle.Add(Type, AssetUtilities.RequestImmediate<Texture2D>(Texture));
         }
+
+        private static int IDCount;
 
         public sealed override void SetupContent()
         {

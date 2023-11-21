@@ -8,36 +8,12 @@
     <LangVersion>11</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Assets\Textures\Bosses\Goozma\ConstellationArea.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Crowns\CorruptEye.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Crowns\CrystalMine.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Crowns\DeadNinja.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Crowns\GoozmaCrown.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Crowns\GoozmaCrown_Mask.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Crowns\GoozmaOrnament.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Crowns\SwirlingRocks_0.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Crowns\SwirlingRocks_1.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\DarkSludgeTexture.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\DarkSludgeTextureGlow.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\DivineGargooptuarWingsNevermindSorryDominic.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\GoozmaBC.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\GoozmaSclera.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Lightning.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\LightningGlow.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\LiquidTrail.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\PixieBeachBall.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\PixieHitMeHand.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\PixieHitMeSign.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\SlimeballGrey.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\SlimeBase.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\SpaceTrail.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\SpaceTrailGlow.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\SpecialEye.png" />
-    <None Remove="Assets\Textures\Bosses\Goozma\Wormhole.png" />
-    <None Remove="Assets\Textures\Items\Placeable\AncientSlimeMonsoonMonolith.png" />
-    <None Remove="Assets\Textures\Tiles\AncientSlimeMonsoonMonolithTile.png" />
-    <None Remove="Assets\Textures\Tiles\AncientSlimeMonsoonMonolithTile_Highlight.png" />
-    <None Remove="Assets\Textures\Tiles\RelicPedestal_1.png" />
+    <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassCollider.png" />
+    <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassCollider_Glow.png" />
+    <None Remove="Assets\Textures\Particles\LightningParticle.png" />
+    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassBioBall.png" />
+    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassColliderProj.png" />
+    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassColliderProj_Glow.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />

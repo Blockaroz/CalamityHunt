@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CalamityHunt.Common.Systems;
-using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Projectiles;
-using CalamityHunt.Core;
+using CalamityHunt.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics.Effects;
-using Terraria.ModLoader;
 using Terraria.Utilities;
 
 namespace CalamityHunt.Common.Graphics.Skies;

@@ -486,6 +486,11 @@ Items: {
 		// DisplayName: Ancient Slime Monsoon Monolith
 		// Tooltip: ""
 	}
+
+	AntiMassCollider: {
+		// DisplayName: Anti Mass Collider
+		// Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -582,6 +587,8 @@ Projectiles: {
 	BlinkySpikeBall.DisplayName: La balle piquante de Blinky
 	PinkyLight.DisplayName: La lumière de Pinky
 	GoozmoemRay.DisplayName: Rayon à fusion
+	// AntiMassBioBall.DisplayName: Anti Mass Bio Ball
+	// AntiMassColliderProj.DisplayName: Anti Mass Collider Proj
 }
 
 Chat: {

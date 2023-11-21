@@ -6,11 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Projectiles
 {

@@ -44,27 +44,21 @@ public class MicroShockwaveParticleBehavior : ParticleBehavior
             shockwave.SecondColor = Color.White;
     }
 
-    private static Asset<Texture2D> texture;
-
-    public override void Load()
-    {
-        texture = AssetUtilities.RequestImmediate<Texture2D>(Texture);
-    }
-
     public override void Draw(in Entity entity, SpriteBatch spriteBatch)
     {
+        Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
         ref var shockwave = ref entity.Get<ParticleMicroShockwave>();
         ref var scale = ref entity.Get<ParticleScale>();
         ref var position = ref entity.Get<ParticlePosition>();
         ref var rotation = ref entity.Get<ParticleRotation>();
         ref var color = ref entity.Get<ParticleColor>();
         
-        Rectangle solidFrame = texture.Value.Frame(1, 3, 0, 0);
-        Rectangle colorFrame = texture.Value.Frame(1, 3, 0, 1);
-        Rectangle glowFrame = texture.Value.Frame(1, 3, 0, 2);
+        Rectangle solidFrame = texture.Frame(1, 3, 0, 0);
+        Rectangle colorFrame = texture.Frame(1, 3, 0, 1);
+        Rectangle glowFrame = texture.Frame(1, 3, 0, 2);
         float power = Utils.GetLerpValue(scale.Value, scale.Value * 0.7f, shockwave.CurScale, true);
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, solidFrame, Color.Black * 0.1f * power, rotation.Value, solidFrame.Size() * 0.5f, new Vector2(shockwave.CurScale, shockwave.CurScale * 0.5f), 0, 0);
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, colorFrame, color.Value * power, rotation.Value, colorFrame.Size() * 0.5f, new Vector2(shockwave.CurScale, shockwave.CurScale * 0.5f), 0, 0);
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, glowFrame, shockwave.SecondColor * power, rotation.Value, glowFrame.Size() * 0.5f, new Vector2(shockwave.CurScale, shockwave.CurScale * 0.5f), 0, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, solidFrame, Color.Black * 0.1f * power, rotation.Value, solidFrame.Size() * 0.5f, new Vector2(shockwave.CurScale, shockwave.CurScale * 0.5f), 0, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, colorFrame, color.Value * power, rotation.Value, colorFrame.Size() * 0.5f, new Vector2(shockwave.CurScale, shockwave.CurScale * 0.5f), 0, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, glowFrame, shockwave.SecondColor * power, rotation.Value, glowFrame.Size() * 0.5f, new Vector2(shockwave.CurScale, shockwave.CurScale * 0.5f), 0, 0);
     }
 }

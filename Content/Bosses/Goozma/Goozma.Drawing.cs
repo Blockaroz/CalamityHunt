@@ -1,17 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using CalamityHunt.Common.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.GameContent;
-using Terraria.Graphics;
 using Terraria.ID;
-using System.Linq;
-using System.Drawing.Drawing2D;
-using CalamityHunt.Core;
-using Terraria.Graphics.Shaders;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {

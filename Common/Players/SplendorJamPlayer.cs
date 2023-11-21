@@ -6,7 +6,7 @@ using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
 using System.Linq;
-using CalamityHunt.Core;
+using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;

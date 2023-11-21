@@ -5,17 +5,21 @@ using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Items.Misc
 {
     public class ChromaticGooztick : ModItem
     {
         public Color rainbowGlow => new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Main.GlobalTimeWrappedHourly * 100f);
+
+        public override bool IsLoadingEnabled(Mod mod) => false;
+
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 99;

@@ -7,8 +7,8 @@ using Terraria.Audio;
 using Terraria;
 using Terraria.ModLoader;
 using CalamityHunt.Content.Items.Weapons.Ranged;
-using CalamityHunt.Core;
 using Microsoft.Xna.Framework;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Common.Players
 {
@@ -42,7 +42,7 @@ namespace CalamityHunt.Common.Players
 
             if (trailBlazerSound == null)
                 trailBlazerSound = new LoopingSound(AssetDirectory.Sounds.Weapon.TrailblazerFireLoop, () => trailBlazerVolume > 0.1f);
-            trailBlazerSound.Update(() => Player.MountedCenter, () => trailBlazerVolume, () => MathF.Sin(Main.GlobalTimeWrappedHourly * 8) * 0.07f);
+            trailBlazerSound.PlaySound(() => Player.MountedCenter, () => trailBlazerVolume, () => MathF.Sin(Main.GlobalTimeWrappedHourly * 8) * 0.07f);
 
         }
     }

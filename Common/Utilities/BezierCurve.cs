@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Microsoft.Xna.Framework;
 
-namespace CalamityHunt.Core;
+namespace CalamityHunt.Common.Utilities;
 
 public readonly struct BezierCurve
 {
@@ -16,11 +16,10 @@ public readonly struct BezierCurve
         if (controls.Count <= 2)
             return Vector2.Lerp(controls[0], controls[1], distance);
 
-        else
-        {
+        else {
             List<Vector2> nextPoints = new List<Vector2>();
 
-            for (int i = 0; i < controls.Count - 1; ++i)
+            for (var i = 0; i < controls.Count - 1; ++i)
                 nextPoints.Add(Vector2.Lerp(controls[i], controls[i + 1], distance));
 
             return EvaluateRecursive(nextPoints, distance);
@@ -33,13 +32,12 @@ public readonly struct BezierCurve
     [Pure]
     public List<Vector2> GetPoints(int pointCount)
     {
-        float interval = 1f / pointCount;
+        var interval = 1f / pointCount;
 
         List<Vector2> points = new List<Vector2>();
 
-        for (float i = 0f; i <= 1f; i += interval)
-        {
-            Vector2 point = GetSinglePoint(i);
+        for (var i = 0f; i <= 1f; i += interval) {
+            var point = GetSinglePoint(i);
             points.Add(point);
         }
 
@@ -49,11 +47,11 @@ public readonly struct BezierCurve
     [Pure]
     public float Distance(int pointCount)
     {
-        float interval = 1f / pointCount;
+        var interval = 1f / pointCount;
 
-        float totalDistance = 0f;
+        var totalDistance = 0f;
 
-        for (float i = interval; i <= 1f; i += interval)
+        for (var i = interval; i <= 1f; i += interval)
             totalDistance += (GetSinglePoint(i) - GetSinglePoint(i - interval)).Length();
 
         return totalDistance;

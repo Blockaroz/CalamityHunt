@@ -9,12 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Arch.Core.Extensions;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Pets.BloatBabyPet
 {
@@ -116,7 +117,7 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
 
             if (travelSound == null)
                 travelSound = new LoopingSound(AssetDirectory.Sounds.BloatBabyWarbleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
-            travelSound.Update(() => Projectile.Center, () => travelVolume, () => travelPitch);
+            travelSound.PlaySound(() => Projectile.Center, () => travelVolume, () => travelPitch);
         }
 
         public float crownRotation;

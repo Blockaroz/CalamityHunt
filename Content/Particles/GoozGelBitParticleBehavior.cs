@@ -6,7 +6,7 @@ using ReLogic.Content;
 using System;
 using Arch.Core.Extensions;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

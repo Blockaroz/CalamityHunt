@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using Microsoft.Xna.Framework;
 using Terraria;
 
-namespace CalamityHunt.Core;
+namespace CalamityHunt.Common.Utilities;
 
 /// <summary>
 ///     A utility that can hold an arbitrary array of <see cref="Color"/>s with
@@ -32,8 +32,8 @@ public readonly struct GradientColor
     [Pure]
     public Color ValueAt(float time)
     {
-        float t = time % timePerColor / fadeSpeed;
-        int index = (int)(Math.Abs(time) / timePerColor) % colors.Length;
+        var t = time % timePerColor / fadeSpeed;
+        var index = (int)(Math.Abs(time) / timePerColor) % colors.Length;
         return Color.Lerp(colors[index], colors[(index + 1) % colors.Length], t);
     }
 

@@ -79,10 +79,10 @@ public class CosmicSmokeParticleBehavior : ParticleBehavior
         ref var color = ref entity.Get<ParticleColor>();
         ref var position = ref entity.Get<ParticlePosition>();
 
-        Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
         Rectangle frame = texture.Frame(4, 2, smoke.Variant % 4, (int)(smoke.Variant / 4f));
         float grow = (float)Math.Sqrt(Utils.GetLerpValue(0, smoke.MaxTime * 0.2f, smoke.Time, true));
         float opacity = Utils.GetLerpValue(smoke.MaxTime * 0.8f, 0, smoke.Time, true) * Math.Clamp(scale.Value, 0, 1);
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, frame, color.Value * opacity, rotation.Value, frame.Size() * 0.5f, scale.Value * grow * 0.5f, 0, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, frame, color.Value * opacity, rotation.Value, frame.Size() * 0.5f, scale.Value * grow * 0.5f, 0, 0);
     }
 }

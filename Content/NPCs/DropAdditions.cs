@@ -18,24 +18,20 @@ namespace CalamityHunt.Content.NPCs
 
         public override void ModifyShop(NPCShop shop)
         {
-            int type = shop.NpcType;
-            if (type == NPCID.Stylist)
-            {
+            var type = shop.NpcType;
+            if (type == NPCID.Stylist) {
                 shop.Add(ModContent.ItemType<GoopHairDye>(), goozDown);
             }
         }
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
-            if (npc.type == NPCID.QueenSlimeBoss)
-            {
+            if (npc.type == NPCID.QueenSlimeBoss) {
                 npcLoot.Add(ItemDropRule.ByCondition(new DDIDropRule(), ModContent.ItemType<SludgeFocus>()));
             }
-            if (ModLoader.HasMod("CalamityMod"))
-            {
-                Mod cal = ModLoader.GetMod("CalamityMod");
-                if (npc.type == cal.Find<ModNPC>("Yharon").Type)
-                {
+            if (ModLoader.HasMod("CalamityMod")) {
+                var cal = ModLoader.GetMod("CalamityMod");
+                if (npc.type == cal.Find<ModNPC>("Yharon").Type) {
                     npcLoot.Add(ItemDropRule.ByCondition(new DraconicDropRule(), ModContent.ItemType<FieryAuricSoul>()));
                 }
             }

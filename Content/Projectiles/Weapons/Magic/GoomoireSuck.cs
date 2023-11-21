@@ -8,7 +8,7 @@ using ReLogic.Content;
 using System;
 using System.Linq;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -208,7 +208,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             if (windSoundLoop == null)
                 windSoundLoop = new LoopingSound(AssetDirectory.Sounds.Weapon.GoomoireWindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
            
-            windSoundLoop.Update(() => Projectile.Center, () => Projectile.ai[2] * 0.5f, () => Projectile.ai[2] - 0.9f);
+            windSoundLoop.PlaySound(() => Projectile.Center, () => Projectile.ai[2] * 0.5f, () => Projectile.ai[2] - 0.9f);
         }
 
         public static Asset<Texture2D> ribbonTexture;

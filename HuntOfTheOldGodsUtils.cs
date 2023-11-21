@@ -54,6 +54,7 @@ namespace CalamityHunt
                 return false;
             }
         }
+
         public class ItemAudioTracker
         {
             private int _expectedType;

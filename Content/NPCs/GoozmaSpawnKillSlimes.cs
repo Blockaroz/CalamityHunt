@@ -14,14 +14,11 @@ namespace CalamityHunt.Content.NPCs
         public override bool InstancePerEntity => true;
         public override void PostAI(NPC npc)
         {
-            for (int i = 0; i < Main.maxProjectiles; i++)
-            {
-                Projectile proj = Main.projectile[i];
-                if (proj.active && proj.type == ModContent.ProjectileType<GoozmaSpawn>())
-                {
-                    Vector2 velocity = npc.Center.DirectionTo(proj.Center).SafeNormalize(Vector2.One).RotatedByRandom(3.0);
-                    switch (npc.type)
-                    {
+            for (var i = 0; i < Main.maxProjectiles; i++) {
+                var proj = Main.projectile[i];
+                if (proj.active && proj.type == ModContent.ProjectileType<GoozmaSpawn>()) {
+                    var velocity = npc.Center.DirectionTo(proj.Center).SafeNormalize(Vector2.One).RotatedByRandom(3.0);
+                    switch (npc.type) {
                         case NPCID.BlueSlime:
                             Slime(proj, npc, velocity, ModContent.GetInstance<FlyingNormalSlimeParticleBehavior>());
                             break;
@@ -53,9 +50,8 @@ namespace CalamityHunt.Content.NPCs
                             Slime(proj, npc, velocity, ModContent.GetInstance<FlyingBigSlimeParticleBehavior>());
                             break;
                         case NPCID.WindyBalloon:
-                            NPC npc2 = npc.AI_113_WindyBalloon_GetSlaveNPC();
-                            switch (npc2.type)
-                            {
+                            var npc2 = npc.AI_113_WindyBalloon_GetSlaveNPC();
+                            switch (npc2.type) {
                                 case NPCID.BlueSlime:
                                     Balloon(proj, npc2, velocity, ModContent.GetInstance<FlyingBalloonSlimeParticleBehavior>(), npc.frame.Y);
                                     break;
@@ -169,8 +165,7 @@ namespace CalamityHunt.Content.NPCs
                         default:
                             break;
                     }
-                    if (ModLoader.HasMod("CalamityMod"))
-                    {
+                    if (ModLoader.HasMod("CalamityMod")) {
                         if (npc.type == ModContent.Find<ModNPC>("CalamityMod/AeroSlime").Type)
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingAeroSlimeParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/EbonianBlightSlime").Type)
@@ -206,8 +201,7 @@ namespace CalamityHunt.Content.NPCs
                         else if (npc.type == ModContent.Find<ModNPC>("CalamityMod/CragmawMire").Type)
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingCragmawMireParticleBehavior>());
                     }
-                    if (ModLoader.HasMod("CatalystMod"))
-                    {
+                    if (ModLoader.HasMod("CatalystMod")) {
                         if (npc.type == ModContent.Find<ModNPC>("CatalystMod/NovaSlime").Type)
                             Slime2(proj, npc, velocity, ModContent.GetInstance<FlyingNovaSlimeParticleBehavior>());
                         else if (npc.type == ModContent.Find<ModNPC>("CatalystMod/NovaSlimer").Type)

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -18,6 +18,7 @@ using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Items.Misc.AuricSouls
 {
@@ -108,11 +109,11 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
         {
             if (heartbeatSound == null)
                 heartbeatSound = new LoopingSound(AssetDirectory.Sounds.YharonAuricSoulHeartbeat, new HuntOfTheOldGodsUtils.ItemAudioTracker(Item).IsActiveAndInGame);
-            heartbeatSound.Update(() => Item.position, () => 1f, () => 0f);
+            heartbeatSound.PlaySound(() => Item.position, () => 1f, () => 0f);
 
             if (droneSound == null)
                 droneSound = new LoopingSound(AssetDirectory.Sounds.YharonAuricSoulDrone, new HuntOfTheOldGodsUtils.ItemAudioTracker(Item).IsActiveAndInGame);
-            droneSound.Update(() => Item.position, () => 1.5f, () => 0f);
+            droneSound.PlaySound(() => Item.position, () => 1.5f, () => 0f);
 
             if (breathSoundCounter-- <= 0)
             {

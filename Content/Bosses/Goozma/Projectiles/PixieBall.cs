@@ -5,13 +5,12 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Linq;
-using CalamityHunt.Common.Utilities;
-using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -198,7 +197,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             if (auraSound == null)
                 auraSound = new LoopingSound(AssetDirectory.Sounds.Slime.PixieBallLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
-            auraSound.Update(() => Projectile.Center, () => volume, () => 0f);
+            auraSound.PlaySound(() => Projectile.Center, () => volume, () => 0f);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

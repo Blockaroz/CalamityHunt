@@ -54,13 +54,6 @@ public class MicroPortalParticleBehavior : ParticleBehavior
         rotation.Value += (1f - portal.Time * 0.5f) * 0.2f * portal.Direction;
     }
 
-    private static Asset<Texture2D> texture;
-
-    public override void Load()
-    {
-        texture = AssetUtilities.RequestImmediate<Texture2D>(Texture);
-    }
-
     public override void Draw(in Entity entity, SpriteBatch spriteBatch)
     {
         ref var portal = ref entity.Get<ParticleMicroPortal>();
@@ -68,16 +61,17 @@ public class MicroPortalParticleBehavior : ParticleBehavior
         ref var color = ref entity.Get<ParticleColor>();
         ref var rotation = ref entity.Get<ParticleRotation>();
         ref var scale = ref entity.Get<ParticleScale>();
-        
-        Rectangle solidFrame = texture.Value.Frame(1, 3, 0, 0);
-        Rectangle colorFrame = texture.Value.Frame(1, 3, 0, 1);
-        Rectangle glowFrame = texture.Value.Frame(1, 3, 0, 2);
-        float curScale = MathF.Sqrt(Utils.GetLerpValue(0, 0.1f, portal.Time, true) * Utils.GetLerpValue(1f, 0.5f, portal.Time, true));
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, solidFrame, Color.Black * 0.5f, -rotation.Value * 2f, solidFrame.Size() * 0.5f, scale.Value * 0.9f * curScale * (1f + MathF.Sin(portal.Time * 5f) * 0.15f), 0, 0);
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, colorFrame, color.Value * 0.5f, -rotation.Value * 0.7f, colorFrame.Size() * 0.5f, scale.Value * 1.1f * curScale * (1f + MathF.Sin(portal.Time * 5f) * 0.1f), 0, 0);
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, solidFrame, Color.Black * 0.5f, rotation.Value * 1.3f, solidFrame.Size() * 0.5f, scale.Value * 0.6f * curScale, 0, 0);
 
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, colorFrame, color.Value, rotation.Value, colorFrame.Size() * 0.5f, scale.Value * curScale * (1f + MathF.Sin(portal.Time * 10f) * 0.05f), 0, 0);
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, glowFrame, portal.SecondColor, rotation.Value, glowFrame.Size() * 0.5f, scale.Value * 1.05f * curScale * (1f + MathF.Sin(portal.Time * 10f) * 0.05f), 0, 0);
+        Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
+        Rectangle solidFrame = texture.Frame(1, 3, 0, 0);
+        Rectangle colorFrame = texture.Frame(1, 3, 0, 1);
+        Rectangle glowFrame = texture.Frame(1, 3, 0, 2);
+        float curScale = MathF.Sqrt(Utils.GetLerpValue(0, 0.1f, portal.Time, true) * Utils.GetLerpValue(1f, 0.5f, portal.Time, true));
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, solidFrame, Color.Black * 0.5f, -rotation.Value * 2f, solidFrame.Size() * 0.5f, scale.Value * 0.9f * curScale * (1f + MathF.Sin(portal.Time * 5f) * 0.15f), 0, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, colorFrame, color.Value * 0.5f, -rotation.Value * 0.7f, colorFrame.Size() * 0.5f, scale.Value * 1.1f * curScale * (1f + MathF.Sin(portal.Time * 5f) * 0.1f), 0, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, solidFrame, Color.Black * 0.5f, rotation.Value * 1.3f, solidFrame.Size() * 0.5f, scale.Value * 0.6f * curScale, 0, 0);
+
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, colorFrame, color.Value, rotation.Value, colorFrame.Size() * 0.5f, scale.Value * curScale * (1f + MathF.Sin(portal.Time * 10f) * 0.05f), 0, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, glowFrame, portal.SecondColor, rotation.Value, glowFrame.Size() * 0.5f, scale.Value * 1.05f * curScale * (1f + MathF.Sin(portal.Time * 10f) * 0.05f), 0, 0);
     }
 }

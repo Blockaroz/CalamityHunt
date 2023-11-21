@@ -15,7 +15,7 @@ using CalamityHunt.Content.Particles;
 using Terraria.GameContent;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Common;
-using CalamityHunt.Core;
+using CalamityHunt.Common.Utilities;
 using Terraria.Graphics;
 using Terraria.Map;
 using Terraria.Audio;
@@ -40,7 +40,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPCID.Sets.SpecificDebuffImmunity[Type][Common.ModCompatibility.Calamity.Mod.Find<ModBuff>("MiracleBlight").Type] = true;
             }
 
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 PortraitScale = 1f,
                 PortraitPositionYOverride = 16,

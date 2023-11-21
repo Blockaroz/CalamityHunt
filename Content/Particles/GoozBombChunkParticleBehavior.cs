@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using Arch.Core.Extensions;
-using CalamityHunt.Core;
+using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.ModLoader;
 using Entity = Arch.Core.Entity;

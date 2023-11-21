@@ -29,7 +29,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Arch.Core.Extensions;
-using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -42,6 +41,7 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using static CalamityHunt.Common.Systems.DifficultySystem;
 using CalamityHunt.Content.Items.Placeable;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -1044,7 +1044,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         Main.musicFade[Main.curMusic] = 0f;
                         Main.curMusic = -1;
 
-                        SlimeMonsoonSkyOld.forceStrength = 0f;
+                        SlimeMonsoonSky.forceStrength = 0f;
                         NPC.justHit = true;
                         NPC.life = 0;
                         NPC.checkDead();
@@ -1173,7 +1173,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             };
 
             if (Phase >= 2)
-                SlimeMonsoonSkyOld.additionalLightningChance = -53;
+                SlimeMonsoonSky.additionalLightningChance = -53;
 
             HandleLoopedSounds();
 
@@ -1437,7 +1437,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (goozmaWarble == null)
                 goozmaWarble = new LoopingSound(AssetDirectory.Sounds.Goozma.WarbleLoop, new HuntOfTheOldGodsUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
-            goozmaWarble.Update(() => NPC.Center, () => goozmaWarbleVolume, () => goozmaWarblePitch);
+            goozmaWarble.PlaySound(() => NPC.Center, () => goozmaWarbleVolume, () => goozmaWarblePitch);
         }
 
         public static LoopingSound goozmaShoot;
@@ -1454,7 +1454,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (goozmaShoot == null)
                 goozmaShoot = new LoopingSound(AssetDirectory.Sounds.Goozma.ShootLoop, () => new HuntOfTheOldGodsUtils.NPCAudioTracker(NPC).IsActiveAndInGame() && goozmaShootPowerCurrent > 0.05f);
-            goozmaShoot.Update(() => NPC.Center, () => goozmaShootPowerCurrent * 1.5f, () => 0f);
+            goozmaShoot.PlaySound(() => NPC.Center, () => goozmaShootPowerCurrent * 1.5f, () => 0f);
 
             goozmaShootPowerTarget -= 0.05f;
             if (goozmaShootPowerTarget < 0.1f)
@@ -1480,7 +1480,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (goozmaSimmer == null)
                 goozmaSimmer = new LoopingSound(AssetDirectory.Sounds.Goozma.SimmerLoop, new HuntOfTheOldGodsUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
-            goozmaSimmer.Update(() => NPC.Center, () => goozmaSimmerVolume, () => goozmaSimmerPitch);
+            goozmaSimmer.PlaySound(() => NPC.Center, () => goozmaSimmerVolume, () => goozmaSimmerPitch);
         }
 
         private void SortedProjectileAttack(Vector2 targetPos, SortedProjectileAttackTypes type)

@@ -1,14 +1,11 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using Arch.Core.Extensions;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using Arch.Core.Extensions;
-using CalamityHunt.Core;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityHunt.Content.Projectiles
 {

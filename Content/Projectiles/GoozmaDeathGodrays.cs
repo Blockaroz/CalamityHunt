@@ -8,7 +8,7 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Chat;
@@ -19,6 +19,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Projectiles
 {

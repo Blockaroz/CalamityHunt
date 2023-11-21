@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Arch.Core.Extensions;
-using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -20,6 +19,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -114,8 +114,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (windSound == null)
                 windSound = new LoopingSound(AssetDirectory.Sounds.Goozma.WindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
-            holeSound.Update(() => Projectile.Center, () => volume * 0.7f, () => pitch);
-            windSound.Update(() => Projectile.Center, () => volume, () => 0.3f + pitch * 0.5f);
+            holeSound.PlaySound(() => Projectile.Center, () => volume * 0.7f, () => pitch);
+            windSound.PlaySound(() => Projectile.Center, () => volume, () => 0.3f + pitch * 0.5f);
         }
 
         public override bool PreKill(int timeLeft)

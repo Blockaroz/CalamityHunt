@@ -7,7 +7,6 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -16,6 +15,7 @@ using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terraria.Utilities;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Common.Graphics.Skies;
 

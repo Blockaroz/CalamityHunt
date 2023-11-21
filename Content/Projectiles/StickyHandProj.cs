@@ -8,7 +8,7 @@ using ReLogic.Peripherals.RGB;
 using System;
 using System.Collections.Generic;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;

@@ -2,7 +2,7 @@
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Core;
+using CalamityHunt.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;

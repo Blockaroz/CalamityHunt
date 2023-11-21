@@ -11,12 +11,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CalamityHunt.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 {
@@ -121,7 +121,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             if (squartSound == null)
                 squartSound = new LoopingSound(AssetDirectory.Sounds.Weapon.SludgeShakerFiringLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
-            squartSound.Update(() => Projectile.Center, () => volume, () => pitch);
+            squartSound.PlaySound(() => Projectile.Center, () => volume, () => pitch);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => false;
