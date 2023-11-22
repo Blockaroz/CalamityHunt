@@ -752,6 +752,7 @@ Configs: {
 	}
 }
 
+// OrRev: " or Revengeance"
 SetBonuses.Shogun:
 	'''
 	+ 17% de dégats et +5 sbires maximum

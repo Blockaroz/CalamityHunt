@@ -751,6 +751,7 @@ Configs: {
 	}
 }
 
+// OrRev: " or Revengeance"
 SetBonuses.Shogun:
 	'''
 	增加17%伤害和5仆从栏

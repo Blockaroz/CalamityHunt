@@ -751,6 +751,7 @@ Configs: {
 	}
 }
 
+OrRev: " or Revengeance"
 SetBonuses.Shogun:
 	'''
 	17% increased damage and +5 max minions
