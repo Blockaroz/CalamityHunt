@@ -77,7 +77,7 @@ public class SlimeMonsoonSky : CustomSky
             forceStrength = null;
         }
 
-        radialDistortPos = Vector2.Lerp(radialDistortPos, Main.LocalPlayer.Center, 0.3f);
+        radialDistortPos = Vector2.Lerp(radialDistortPos, Main.screenPosition + Main.ScreenSize.ToVector2() / 2f, 0.3f);
 
         _brightness = MathHelper.Lerp(_brightness, 0.15f, 0.08f);
         _windSpeed -= Main.WindForVisuals * 0.0025f;
@@ -108,7 +108,7 @@ public class SlimeMonsoonSky : CustomSky
                 .UseTargetPosition(radialDistortPos)
                 .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
                 .UseIntensity(1f)
-                .UseOpacity(_strength * 0.1f * Config.Instance.monsoonDistortion);
+                .UseOpacity(_strength * (Main.zenithWorld ? 2f : 0.1f) * Config.Instance.monsoonDistortion);
             Effect filterEffect = Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader;
             filterEffect.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.Noise[5].Value);
             filterEffect.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.Noise[0].Value);

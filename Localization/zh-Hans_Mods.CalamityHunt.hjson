@@ -588,6 +588,7 @@ Projectiles: {
 	GoozmoemRay.DisplayName: 熔融射线
 	// AntiMassBioBall.DisplayName: Anti-Mass Bio Ball
 	// AntiMassColliderProj.DisplayName: Anti-Mass Collider
+	// AntiMassMacroLaser.DisplayName: Anti Mass Macro Laser
 }
 
 Chat: {

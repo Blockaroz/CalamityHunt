@@ -94,9 +94,6 @@ public class AntiMassBioBall : ModProjectile
         return false;
     }
 
-    private List<int> targets;
-    private List<Rope> ropeList;
-
     public override bool PreDraw(ref Color lightColor)
     {
         Texture2D texture = TextureAssets.Projectile[Type].Value;
@@ -107,16 +104,16 @@ public class AntiMassBioBall : ModProjectile
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Cyan * 0.3f) with { A = 0 }, 0, glow.Size() * 0.5f, scaleWobble, 0, 0);
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.MediumTurquoise * 0.2f) with { A = 0 }, 0, glow.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
 
-        Effect trailEffect = AssetDirectory.Effects.BasicTrail.Value;
-        trailEffect.Parameters["transformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-        trailEffect.Parameters["uColor"].SetValue((Color.MediumTurquoise with { A = 40 }).ToVector3());
+        //Effect trailEffect = AssetDirectory.Effects.BasicTrail.Value;
+        //trailEffect.Parameters["transformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+        //trailEffect.Parameters["uColor"].SetValue((Color.MediumTurquoise with { A = 40 }).ToVector3());
         //trailEffect.Parameters["uThickness"].SetValue(1f);
         //trailEffect.Parameters["uVaryThickness"].SetValue(1f);
-        trailEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.1f);
-        trailEffect.Parameters["uTexture0"].SetValue(TextureAssets.Extra[194].Value);
-        trailEffect.Parameters["uTexture1"].SetValue(TextureAssets.Extra[196].Value);
+        //trailEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.1f);
+        //trailEffect.Parameters["uTexture0"].SetValue(TextureAssets.Extra[194].Value);
+        //trailEffect.Parameters["uTexture1"].SetValue(TextureAssets.Extra[196].Value);
 
-        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        //Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
         return false;
     }

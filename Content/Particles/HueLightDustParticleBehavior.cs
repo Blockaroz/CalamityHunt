@@ -72,23 +72,18 @@ public class HueLightDustParticleBehavior : ParticleBehavior
             active.Value = false;
     }
 
-    public static Asset<Texture2D> texture;
-
-    public override void Load()
-    {
-        texture = AssetUtilities.RequestImmediate<Texture2D>(Texture);
-    }
-
     public override void Draw(in Entity entity, SpriteBatch spriteBatch)
     {
+
         ref var dust = ref entity.Get<ParticleHueLightDust>();
         ref var color = ref entity.Get<ParticleColor>();
         ref var position = ref entity.Get<ParticlePosition>();
         ref var rotation = ref entity.Get<ParticleRotation>();
         ref var scale = ref entity.Get<ParticleScale>();
         
+        Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
         Texture2D glow = AssetDirectory.Textures.Glow.Value;
-        Rectangle rect = texture.Value.Frame(1, 3, 0, dust.Frame);
+        Rectangle rect = texture.Frame(1, 3, 0, dust.Frame);
         Color drawColor = color.Value;
         drawColor.A /= 3;
         Color glowColor = color.Value * 0.2f;
@@ -96,10 +91,18 @@ public class HueLightDustParticleBehavior : ParticleBehavior
         Color whiteColor = Color.White;
         whiteColor.A = 0;
 
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, rect, drawColor, rotation.Value, rect.Size() * 0.5f, scale.Value, 0, 0);
+        if (Main.zenithWorld) {
+
+            texture = AssetDirectory.Textures.SplitParticle.Value;
+            rect = texture.Frame(1, 3, 0, dust.Frame);
+            spriteBatch.Draw(texture, position.Value - Main.screenPosition, rect, Color.Lerp(drawColor, Color.White, Main.rand.NextFloat()), rotation.Value, rect.Size() * 0.5f, scale.Value * 0.3f, 0, 0);
+            return;
+        }
+
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, rect, drawColor, rotation.Value, rect.Size() * 0.5f, scale.Value, 0, 0);
         spriteBatch.Draw(glow, position.Value - Main.screenPosition, null, glowColor * 0.5f, rotation.Value, glow.Size() * 0.5f, scale.Value * 0.5f, 0, 0);
 
         float innerGlowScale = 0.7f - Utils.GetLerpValue(0f, 1f, dust.Life, true) * 0.2f;
-        spriteBatch.Draw(texture.Value, position.Value - Main.screenPosition, rect, whiteColor, rotation.Value, rect.Size() * 0.5f, scale.Value * innerGlowScale * 0.7f, 0, 0);
+        spriteBatch.Draw(texture, position.Value - Main.screenPosition, rect, whiteColor, rotation.Value, rect.Size() * 0.5f, scale.Value * innerGlowScale * 0.7f, 0, 0);
     }
 }

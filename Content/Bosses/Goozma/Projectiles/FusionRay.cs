@@ -206,7 +206,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public void HandleSound()
         {
             volume = 1.3f * Utils.GetLerpValue(0, 0.05f, realSize, true);// * Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
-            pitch = (MathHelper.SmoothStep(0.1f, 1f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 50, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.5f * realSize) - 1f;
+            pitch = (MathHelper.SmoothStep(0.5f, Mode == 1 ? 2f : 1.2f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 350, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.2f * realSize) - 1f;
 
             if (raySound == null)
                 raySound = new LoopingSound(AssetDirectory.Sounds.Goozma.FusionRayLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
@@ -218,7 +218,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             if (Time > ChargeTime + 20 && Time < ChargeTime + LaserDuration + 10)
             {
-                float angle = 0.65f;
+                float angle = Mode == 1 ? (0.28f + Utils.GetLerpValue(ChargeTime, ChargeTime + 300, Time, true) * 0.45f) : 0.28f;
+;
                 float grow = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
 
                 //Dust.QuickDustLine(Projectile.Center, Projectile.Center + new Vector2(3500f * (0.5f + grow * 0.5f), 0).RotatedBy(Projectile.rotation + angle), 200, Color.Blue);
@@ -253,7 +254,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     float grow = Utils.GetLerpValue(ChargeTime - 15, ChargeTime + 40, projectile.ai[0], true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration, projectile.ai[0], true);
 
-                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - grow * 0.2f);
+                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - grow * 0.3f);
                     float tempFade = Main.musicFade[i];
                     Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.15f);
                     Main.musicFade[i] = tempFade;
@@ -277,8 +278,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             float laserCharge = Utils.GetLerpValue(50, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration + 20, Time, true);
             float laserRayCharge = Utils.GetLerpValue(0, ChargeTime, Projectile.localAI[1], true) * Utils.GetLerpValue(ChargeTime + 10, ChargeTime - 30, Time, true);
-            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, startColor, 0, glow.Size() * 0.5f, 2f * laserCharge, 0, 0);
-            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(255, 255, 255, 0) * laserCharge, 0, glow.Size() * 0.5f, 1.5f * laserCharge, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, startColor * 0.2f * laserCharge, 0, glow.Size() * 0.5f, 5f * laserCharge, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, startColor * 0.6f * laserCharge, 0, glow.Size() * 0.5f, 4f, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(255, 255, 255, 0) * laserCharge, 0, glow.Size() * 0.5f, 2f * laserCharge, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), startColor * 0.1f * laserCharge, 0, glow.Size() * 0.5f, 14f * laserCharge, 0, 0);
             Main.EntitySpriteDraw(ray, Projectile.Center - Main.screenPosition, ray.Frame(), startColor * laserRayCharge * 0.5f, Projectile.rotation, ray.Size() * new Vector2(0.02f, 0.5f), new Vector2(3f, 2f), 0, 0);
 
@@ -301,8 +303,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
                 lightningEffect.Parameters["uTexture0"].SetValue(texture);
                 lightningEffect.Parameters["uTexture1"].SetValue(textureSecond);
-                lightningEffect.Parameters["uGlow"].SetValue(textureGlow);
-                lightningEffect.Parameters["uBits"].SetValue(textureBits);
+                lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.SplitParticle.Value);
+                lightningEffect.Parameters["uBits"].SetValue(AssetDirectory.Textures.SplitParticle.Value);
                 lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.025f);
                 lightningEffect.Parameters["uFreq"].SetValue(1f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();
@@ -335,7 +337,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             float start = (float)Math.Pow(progress, 0.8f);
             float cap = (float)Math.Cbrt(Utils.GetLerpValue(1.01f, 0.7f, progress, true));
-            return start * cap * realSize * 4000f * (1.1f + (float)Math.Cos(Time) * (0.08f - progress * 0.06f));
+            return start * cap * realSize * (Mode == 1 ? (3500f + Utils.GetLerpValue(ChargeTime, ChargeTime + 300, Time, true) * 3000f) : 3500f) * (1.1f + (float)Math.Cos(Time) * (0.08f - progress * 0.06f));
         }
     }
 }

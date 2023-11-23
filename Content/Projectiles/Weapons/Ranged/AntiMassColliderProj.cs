@@ -62,7 +62,7 @@ public class AntiMassColliderProj : ModProjectile
             }
 
             if (Time == firstShot) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 10f, ModContent.ProjectileType<AntiMassBioBall>(), 5 + Projectile.damage / 4, Projectile.knockBack, Player.whoAmI);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 12f, ModContent.ProjectileType<AntiMassBioBall>(), 5 + Projectile.damage / 4, Projectile.knockBack, Player.whoAmI);
 
                 Player.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
                 Projectile.netUpdate = true;
@@ -80,6 +80,8 @@ public class AntiMassColliderProj : ModProjectile
             }
 
             if (Time == secondShot) {
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 12f, ModContent.ProjectileType<AntiMassMacroLaser>(), Projectile.damage, Projectile.knockBack, Player.whoAmI);
+
                 Player.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
                 Projectile.netUpdate = true;
             }
@@ -91,7 +93,7 @@ public class AntiMassColliderProj : ModProjectile
         }
 
         if (Time < firstShot) {
-            SoundEngine.PlaySound((SoundID.DD2_PhantomPhoenixShot with { MaxInstances = 0 }).WithVolumeScale(Time / firstShot * 0.5f).WithPitchOffset(Time / firstShot), Projectile.Center);
+            SoundEngine.PlaySound((SoundID.DD2_PhantomPhoenixShot with { MaxInstances = 0 }).WithVolumeScale(Time / firstShot * 0.8f).WithPitchOffset(Time / firstShot), Projectile.Center);
         }
 
         if (Time == firstShot) {
