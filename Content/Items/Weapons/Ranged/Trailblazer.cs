@@ -33,7 +33,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 			Item.useTime = 3;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 10f;
-			Item.UseSound = AssetDirectory.Sounds.Weapon.TrailBlazerFireStart;
+			Item.UseSound = AssetDirectory.Sounds.Weapons.TrailBlazerFireStart;
 			Item.channel = true;
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<TrailblazerFlame>();

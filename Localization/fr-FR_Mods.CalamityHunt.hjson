@@ -488,7 +488,7 @@ Items: {
 	}
 
 	AntiMassCollider: {
-		// DisplayName: Anti Mass Collider
+		// DisplayName: Anti-Mass Collider
 		// Tooltip: ""
 	}
 }
@@ -587,8 +587,8 @@ Projectiles: {
 	BlinkySpikeBall.DisplayName: La balle piquante de Blinky
 	PinkyLight.DisplayName: La lumière de Pinky
 	GoozmoemRay.DisplayName: Rayon à fusion
-	// AntiMassBioBall.DisplayName: Anti Mass Bio Ball
-	// AntiMassColliderProj.DisplayName: Anti Mass Collider Proj
+	// AntiMassBioBall.DisplayName: Anti-Mass Bio Ball
+	// AntiMassColliderProj.DisplayName: Anti-Mass Collider
 }
 
 Chat: {

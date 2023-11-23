@@ -59,11 +59,13 @@ public class CosmicSmokeParticleBehavior : ParticleBehavior
             scale.Value *= 0.93f - Math.Clamp(scale.Value * 0.0001f, 0f, 0.5f);
             velocity.Value *= 0.83f;
         }
-        else
+        else {
             velocity.Value *= 1.01f;
+        }
 
-        if (smoke.Time > smoke.MaxTime * 0.8f)
+        if (smoke.Time > smoke.MaxTime * 0.8f) {
             active.Value = false;
+        }
     }
     public override void Draw(in Entity entity, SpriteBatch spriteBatch)
     {

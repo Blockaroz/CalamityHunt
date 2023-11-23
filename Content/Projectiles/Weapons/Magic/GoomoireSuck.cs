@@ -206,7 +206,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         public void HandleSound()
         {
             if (windSoundLoop == null)
-                windSoundLoop = new LoopingSound(AssetDirectory.Sounds.Weapon.GoomoireWindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+                windSoundLoop = new LoopingSound(AssetDirectory.Sounds.Weapons.GoomoireWindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
            
             windSoundLoop.PlaySound(() => Projectile.Center, () => Projectile.ai[2] * 0.5f, () => Projectile.ai[2] - 0.9f);
         }

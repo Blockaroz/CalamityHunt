@@ -8,7 +8,10 @@
     <LangVersion>11</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Effects\BasicTrail.fx" />
+    <None Remove="Assets\Effects\LightningBeam.fx" />
     <None Remove="Assets\Effects\SlimeMonsoonSkyEffect.fx" />
+    <None Remove="Assets\Textures\Extra\Noise_6.png" />
     <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassCollider.png" />
     <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassCollider_Glow.png" />
     <None Remove="Assets\Textures\Particles\LightningParticle.png" />

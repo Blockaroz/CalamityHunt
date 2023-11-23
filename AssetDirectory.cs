@@ -19,7 +19,7 @@ public static class AssetDirectory
         public static readonly Asset<Texture2D> ShockRing = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/ShockRing");
         public static readonly Asset<Texture2D> Empty = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Empty");
         public static readonly Asset<Texture2D> Template = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Template");
-        public static readonly Asset<Texture2D>[] Noise = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Noise_", 6);
+        public static readonly Asset<Texture2D>[] Noise = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Noise_", 7);
         public static readonly Asset<Texture2D>[] ColorMap = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/ColorMap_", 5);
         public static readonly Asset<Texture2D>[] SwordSwing = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/SwordSwing_", 2);
         public static readonly Asset<Texture2D> QuestionMark = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/icon_small");
@@ -162,24 +162,31 @@ public static class AssetDirectory
             public static readonly SoundStyle StellarConstellationWave = new($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarSlimeConstellationWave") { MaxInstances = 0 };
             public static readonly SoundStyle StellarConstellationForm = new($"{nameof(CalamityHunt)}/Assets/Sounds/Goozma/Slimes/StellarSlimeConstellationForm") { MaxInstances = 0 };
         }
-        public static class Weapon
+        public static class Weapons
         {
-            public static readonly SoundStyle CrystalGauntletClap = new($"{nameof(CalamityHunt)}/Assets/Sounds/CrystalGauntletClap") { MaxInstances = 2, PitchVariance = 0.1f };
-            public static readonly SoundStyle ScytheOfTheOldGodSwing = new($"{nameof(CalamityHunt)}/Assets/Sounds/OldGodScytheSwing_" + 0) { MaxInstances = 0, PitchVariance = 0.1f };
-            public static readonly SoundStyle ScytheOfTheOldGodSwingStrong = new($"{nameof(CalamityHunt)}/Assets/Sounds/OldGodScytheSwing_" + 1) { MaxInstances = 0, PitchVariance = 0.1f };
-            public static readonly SoundStyle GoomoireWindLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/GoomoireWindLoop") { MaxInstances = 0, IsLooped = true };
-            public static readonly SoundStyle SludgeShakerFiringLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/SludgeShakerFiringLoop") { MaxInstances = 0, IsLooped = true };
-            public static readonly SoundStyle TrailBlazerFireStart = new($"{nameof(CalamityHunt)}/Assets/Sounds/TrailBlazerFireStart") { MaxInstances = 0, PitchVariance = 0.1f };
-            public static readonly SoundStyle TrailblazerFireLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/TrailBlazerFireLoop") { MaxInstances = 0, IsLooped = true };
-            public static readonly SoundStyle FissionFlyerExplode = new($"{nameof(CalamityHunt)}/Assets/Sounds/FissionFlyerExplode") { MaxInstances = 0 };
+            public static readonly SoundStyle CrystalGauntletClap = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/CrystalGauntletClap") { MaxInstances = 2, PitchVariance = 0.1f };
+            
+            public static readonly SoundStyle ScytheOfTheOldGodSwing = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/OldGodScytheSwing_" + 0) { MaxInstances = 0, PitchVariance = 0.1f };
+            public static readonly SoundStyle ScytheOfTheOldGodSwingStrong = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/OldGodScytheSwing_" + 1) { MaxInstances = 0, PitchVariance = 0.1f };
+            
+            public static readonly SoundStyle GoomoireWindLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/GoomoireWindLoop") { MaxInstances = 0, IsLooped = true };
+            public static readonly SoundStyle SludgeShakerFiringLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/SludgeShakerFiringLoop") { MaxInstances = 0, IsLooped = true };
+            public static readonly SoundStyle TrailBlazerFireStart = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/TrailBlazerFireStart") { MaxInstances = 0, PitchVariance = 0.1f };
+            public static readonly SoundStyle TrailblazerFireLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/Weapons/TrailBlazerFireLoop") { MaxInstances = 0, IsLooped = true };
+            public static readonly SoundStyle FissionFlyerExplode = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/FissionFlyerExplode") { MaxInstances = 0 };
+            public static readonly SoundStyle GoozmoemRay = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/GoozmoemFusionRayShoot") { MaxInstances = 0, Volume = 0.8f };
+           
+            public static readonly SoundStyle AntiMassColliderFire = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/AntiMassColliderFire") { MaxInstances = 0, Volume = 0.7f };
+            public static readonly SoundStyle ElectricLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/ElectricLoop") { MaxInstances = 0, IsLooped = true };
         }
+        public static readonly SoundStyle TestLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/TestLoop") { MaxInstances = 0, IsLooped = true };
+
         public static readonly SoundStyle MonsoonThunder = new($"{nameof(CalamityHunt)}/Assets/Sounds/SlimeMonsoon/GoozmaMonsoonThunder", 3, SoundType.Ambient) { MaxInstances = 0 };
         public static readonly SoundStyle SlimeRainActivate = new($"{nameof(CalamityHunt)}/Assets/Sounds/SlimeRainActivate") { MaxInstances = 0 };
 
-        public static readonly SoundStyle GunCocking = new($"{nameof(CalamityHunt)}/Assets/Sounds/GunCocking") { MaxInstances = 0, PitchVariance = 0.02f };
+        public static readonly SoundStyle GunCocking = new($"{nameof(CalamityHunt)}/Assets/Sounds/Weapons/GunCocking") { MaxInstances = 0, PitchVariance = 0.02f };
         public static readonly SoundStyle SupremeRestorationBigGulp = new($"{nameof(CalamityHunt)}/Assets/Sounds/SupremeRestorationBigGulp") { MaxInstances = 0, PitchVariance = 0.05f };
         public static readonly SoundStyle BloatBabyWarbleLoop = new($"{nameof(CalamityHunt)}/Assets/Sounds/BabyBloatTravelLoop") { MaxInstances = 0, IsLooped = true };
-        public static readonly SoundStyle GoozmoemRay = new($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmoemFusionRayShoot") { MaxInstances = 0, Volume = 0.8f };
 
         public static readonly SoundStyle StressActivate = new($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageActivate") { MaxInstances = 0, Volume = 0.8f };
         public static readonly SoundStyle StressPing = new($"{nameof(CalamityHunt)}/Assets/Sounds/GoozmaRageIndicator") { MaxInstances = 0, Volume = 0.65f };
@@ -201,5 +208,8 @@ public static class AssetDirectory
         public static Asset<Effect> SlimeMonsoonSkyEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonSkyEffect", AssetRequestMode.ImmediateLoad);
         //public static Asset<Effect> SlimeMonsoonBack = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad);
         //public static Asset<Effect> SlimeMonsoonStrike = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad);
+        public static Asset<Effect> BasicTrail = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/BasicTrail", AssetRequestMode.ImmediateLoad);
+        public static Asset<Effect> LightningBeam = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/LightningBeam", AssetRequestMode.ImmediateLoad);
+
     }
 }

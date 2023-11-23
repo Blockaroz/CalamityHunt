@@ -33,9 +33,5 @@ namespace CalamityHunt.Common.Systems
 
         [DefaultValue(true)]
         public bool shadowspecCurse;
-
-        [DefaultValue(false)]
-        public bool oldsky;
-
     }
 }

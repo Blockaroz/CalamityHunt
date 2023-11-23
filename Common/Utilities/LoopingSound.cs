@@ -13,7 +13,7 @@ public class LoopingSound
 
     public LoopingSound(SoundStyle soundStyle, Func<bool> activeCondition)
     {
-        style = soundStyle;
+        style = soundStyle with { IsLooped = true };
         condition = activeCondition;
         slot = SlotId.Invalid;
     }
@@ -41,4 +41,15 @@ public class LoopingSound
             activeSound.Pitch = pitch.Invoke();
         }
     }
+
+    public void StopSound()
+    {
+        SoundEngine.TryGetActiveSound(slot, out var activeSound);
+
+        if (activeSound != null) {
+            activeSound.Stop();
+        }
+        slot = SlotId.Invalid;
+    }
+
 }

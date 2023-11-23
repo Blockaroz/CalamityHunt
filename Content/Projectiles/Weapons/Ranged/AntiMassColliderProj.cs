@@ -40,6 +40,8 @@ public class AntiMassColliderProj : ModProjectile
 
     public ref Player Player => ref Main.player[Projectile.owner];
 
+    public static Color MainColor => Color.Gold with { A = 40 };
+
     public override void AI()
     {
         Player.heldProj = Projectile.whoAmI;
@@ -50,23 +52,23 @@ public class AntiMassColliderProj : ModProjectile
         }
 
         Vector2 muzzlePosition = Projectile.Center + new Vector2(20, -4 * Projectile.direction).RotatedBy(Projectile.velocity.ToRotation());
-        int firstShot = (int)(20 * Player.GetAttackSpeed(DamageClass.Ranged));
-        int secondShot = (int)(70 * Player.GetAttackSpeed(DamageClass.Ranged));
+        int firstShot = (int)(10 * Player.GetAttackSpeed(DamageClass.Ranged));
+        int secondShot = (int)(65 * Player.GetAttackSpeed(DamageClass.Ranged));
 
-        if (Main.netMode != NetmodeID.MultiplayerClient) {
+        if (Projectile.owner == Main.myPlayer) {
             if (Time == 0) {
                 Projectile.velocity = Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed;
                 Projectile.netUpdate = true;
             }
 
             if (Time == firstShot) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 12f, ModContent.ProjectileType<AntiMassBioBall>(), 1 + Projectile.damage / 4, Projectile.knockBack, Player.whoAmI);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 10f, ModContent.ProjectileType<AntiMassBioBall>(), 5 + Projectile.damage / 4, Projectile.knockBack, Player.whoAmI);
 
                 Player.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
                 Projectile.netUpdate = true;
             }
 
-            if (Time > (int)(35 * Player.GetAttackSpeed(DamageClass.Ranged)) && Time < (int)(60 * Player.GetAttackSpeed(DamageClass.Ranged))) {
+            if (Time > (int)(25 * Player.GetAttackSpeed(DamageClass.Ranged)) && Time < (int)(60 * Player.GetAttackSpeed(DamageClass.Ranged))) {
                 float timeToMove = Utils.GetLerpValue(55, 35, Time / Player.GetAttackSpeed(DamageClass.Ranged), true);
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed, 0.2f * timeToMove);
                 Projectile.netUpdate = true;
@@ -88,13 +90,17 @@ public class AntiMassColliderProj : ModProjectile
             }
         }
 
+        if (Time < firstShot) {
+            SoundEngine.PlaySound((SoundID.DD2_PhantomPhoenixShot with { MaxInstances = 0 }).WithVolumeScale(Time / firstShot * 0.5f).WithPitchOffset(Time / firstShot), Projectile.Center);
+        }
+
         if (Time == firstShot) {
-            SoundEngine.PlaySound(SoundID.Item61, Projectile.Center);
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderFire, Projectile.Center);
             recoilFactor = 1f;
         }
 
         if (Time == secondShot) {
-            SoundEngine.PlaySound(SoundID.Item61, Projectile.Center);
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderFire, Projectile.Center);
             recoilFactor = 1f;
         }
 
@@ -104,21 +110,22 @@ public class AntiMassColliderProj : ModProjectile
         Projectile.direction = Projectile.velocity.X > 0 ? 1 : -1;
         Player.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
         Projectile.Center = Player.MountedCenter - new Vector2(0, 6 * Player.gravDir) + Projectile.velocity.SafeNormalize(Vector2.Zero) * 10;
-        recoilFactor = MathHelper.Lerp(recoilFactor, 0f, 0.2f);
+        recoilFactor = Math.Max(0, recoilFactor - 0.025f);
 
         Time++;
 
+        Color lightningColor = Time < (int)(25 * Player.GetAttackSpeed(DamageClass.Ranged)) ? Color.MediumTurquoise with { A = 40 } : MainColor;
+
         for (int i = 0; i < 8; i++) {
             if (recoilFactor > 0.0005f && Main.rand.NextBool((int)(25 - recoilFactor * 24))) {
-
                 float particleRotation = Projectile.rotation + Main.rand.NextFloat(-1f, 1f);
-                var lightningParticle = ParticleBehavior.NewParticle(ModContent.GetInstance<LightningParticleParticleBehavior>(), muzzlePosition + Player.velocity + Main.rand.NextVector2Circular(27, 10).RotatedBy(Projectile.rotation), particleRotation.ToRotationVector2(), Color.Gold with { A = 40 }, Main.rand.NextFloat(0.1f, 0.7f));
+                var lightningParticle = ParticleBehavior.NewParticle(ModContent.GetInstance<LightningParticleParticleBehavior>(), muzzlePosition + Player.velocity + Main.rand.NextVector2Circular(27, 10).RotatedBy(Projectile.rotation), particleRotation.ToRotationVector2(), lightningColor, Main.rand.NextFloat(0.1f, 0.7f));
                 lightningParticle.Add(new ParticleRotation() { Value = particleRotation + Main.rand.NextFloat(-1f, 1f) });
                 lightningParticle.Add(new ParticleData<Func<Vector2>> { Value = () => Player.velocity });
             }
         }
 
-        Lighting.AddLight(Projectile.Center, Color.DarkGoldenrod.ToVector3() * 0.5f);
+        Lighting.AddLight(Projectile.Center, MainColor.ToVector3() * 0.2f);
 
         if (Time < Player.HeldItem.useTime) {
             Player.SetDummyItemTime(3);
@@ -155,12 +162,14 @@ public class AntiMassColliderProj : ModProjectile
 
         Vector2 drawScale = Projectile.scale * Vector2.Lerp(Vector2.One, new Vector2(0.97f, 1.05f), recoilFactor);
         Vector2 holdOffset = new Vector2(35 + recoilFactor * 5f, -16 * Projectile.direction).RotatedBy(Projectile.rotation) * drawScale;
-        Vector2 barrelOffset = new Vector2(MathF.Cbrt(Utils.GetLerpValue(0.01f, 0.4f, recoilFactor, true)) * 16, 0).RotatedBy(Projectile.rotation) * drawScale;
+        Vector2 barrelOffset = new Vector2(MathF.Pow(Utils.GetLerpValue(0f, 0.4f, recoilFactor, true), 0.5f) * 16, 0).RotatedBy(Projectile.rotation) * drawScale;
+
+        Color barrelColor = Time < (int)(55 * Player.GetAttackSpeed(DamageClass.Ranged)) ? Color.MediumTurquoise with { A = 40 } : MainColor;
 
         Main.EntitySpriteDraw(texture, Projectile.Center - holdOffset - barrelOffset - Main.screenPosition, barrelFrame, lightColor, Projectile.rotation, origin, drawScale, spriteEffects, 0);
-        Main.EntitySpriteDraw(glow, Projectile.Center - holdOffset - barrelOffset - Main.screenPosition, barrelFrame, Color.Gold with { A = 40 } * Utils.GetLerpValue(0f, 0.1f, recoilFactor, true), Projectile.rotation, origin, drawScale, spriteEffects, 0);
+        Main.EntitySpriteDraw(glow, Projectile.Center - holdOffset - barrelOffset - Main.screenPosition, barrelFrame, barrelColor * Utils.GetLerpValue(0.3f, 0.7f, recoilFactor, true), Projectile.rotation, origin, drawScale, spriteEffects, 0);
         Main.EntitySpriteDraw(texture, Projectile.Center - holdOffset - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, origin, drawScale, spriteEffects, 0);
-        Main.EntitySpriteDraw(glow, Projectile.Center - holdOffset - Main.screenPosition, baseFrame, Color.Gold with { A = 40 }, Projectile.rotation, origin, drawScale, spriteEffects, 0);
+        Main.EntitySpriteDraw(glow, Projectile.Center - holdOffset - Main.screenPosition, baseFrame, MainColor, Projectile.rotation, origin, drawScale, spriteEffects, 0);
 
         return false;
     }

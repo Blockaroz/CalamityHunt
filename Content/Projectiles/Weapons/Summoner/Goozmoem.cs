@@ -139,7 +139,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 {
                     SoundStyle deep = SoundID.Item15 with { MaxInstances = 0, Pitch = -1f, PitchVariance = 0.2f, Volume = 0.5f };
                     SoundEngine.PlaySound(deep, Projectile.Center);
-                    SoundStyle shootSound = AssetDirectory.Sounds.GoozmoemRay;
+                    SoundStyle shootSound = AssetDirectory.Sounds.Weapons.GoozmoemRay;
                     SoundEngine.PlaySound(shootSound, Projectile.Center);
 
                     int direction = Main.rand.NextBool().ToDirectionInt();
