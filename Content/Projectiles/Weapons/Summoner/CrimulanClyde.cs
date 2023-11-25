@@ -1,12 +1,10 @@
-﻿using CalamityHunt.Common.Players;
+﻿using System;
+using CalamityHunt.Common.Players;
 using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Buffs;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
-using Humanizer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using Arch.Core.Extensions;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -258,10 +256,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             jumpTime = 24;
             if (air)
             {
-                Color color = new Color(255, 150, 150, 60);
-                color.A = 0;
-                var wave = ParticleBehavior.NewParticle(ModContent.GetInstance<MicroShockwaveParticleBehavior>(), Projectile.Bottom, Vector2.Zero, color, 1.5f);
-                wave.Add(new ParticleData<Color> { Value = new Color(255, 255, 168, 120) }, new ParticleShader { Value = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player) });
+                Color color = new Color(255, 150, 150, 0);
+               
+                CalamityHunt.particles.Add(Particle.Create<MicroShockwave>(particle => {
+                    particle.position = Projectile.Bottom;
+                    particle.velocity = Vector2.Zero;
+                    particle.scale = 1.5f;
+                    particle.color = color;
+                    particle.secondColor = new Color(255, 255, 168, 120);
+                    particle.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
+                }));
+
                 for (int i = 0; i < Main.rand.Next(3, 7); i++)
                 {
                     Dust sparkle = Dust.NewDustPerfect(Projectile.Bottom + Main.rand.NextVector2Circular(9, 4), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(3, 1) - Vector2.UnitY * (i + 1) * 0.7f, 0, color, 1f + Main.rand.NextFloat());

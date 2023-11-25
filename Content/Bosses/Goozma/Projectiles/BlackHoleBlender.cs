@@ -1,25 +1,16 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Items.Weapons.Rogue;
-using CalamityHunt.Content.Particles;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityHunt.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using ReLogic.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Arch.Core.Extensions;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.Graphics.CameraModifiers;
 using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -78,12 +69,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.scale = (float)Math.Sqrt(MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(10, MaxTime * 0.2f, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime - 20, Time, true))) * 0.75f;
             Projectile.velocity = Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].Center) * 0.2f;
 
-            for (int i = 0; i < 6; i++)
-            {
-                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(200, 200) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(15, 15) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (3f + Main.rand.NextFloat(3f)) * Projectile.scale);
-                smoke.Add(new ParticleData<string> { Value = "Cosmos" });
-            }
-
             HandleSound();
 
             Time++;
@@ -107,22 +92,20 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public void HandleSound()
         {
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * (0.8f + Projectile.scale * 0.5f);
-            pitch = (float)Math.Sqrt(Utils.GetLerpValue(-MaxTime * 0.5f, MaxTime, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime * 0.98f, Time, true)) * 2f - 1.5f;
+            pitch = (float)Math.Sqrt(Utils.GetLerpValue(-MaxTime * 0.5f, MaxTime, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime * 0.99f, Time, true)) * 2f - 1.5f;
 
-            if (holeSound == null)
-                holeSound = new LoopingSound(AssetDirectory.Sounds.Slime.StellarBlackHoleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
-            if (windSound == null)
-                windSound = new LoopingSound(AssetDirectory.Sounds.Goozma.WindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            holeSound ??= new LoopingSound(AssetDirectory.Sounds.Slime.StellarBlackHoleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            windSound ??= new LoopingSound(AssetDirectory.Sounds.Goozma.WindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
-            holeSound.PlaySound(() => Projectile.Center, () => volume * 0.7f, () => pitch);
-            windSound.PlaySound(() => Projectile.Center, () => volume, () => 0.3f + pitch * 0.5f);
+            holeSound.PlaySound(() => Projectile.Center, () => volume * 0.6f, () => pitch);
+            windSound.PlaySound(() => Projectile.Center, () => volume * 0.4f, () => 0.3f + pitch * 0.3f);
         }
 
-        public override bool PreKill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
+            holeSound.StopSound();
+            windSound.StopSound();
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
-
-            return true;
         }
 
         public override void Load()
@@ -140,7 +123,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 for (int i = 0; i < Main.musicFade.Length; i++)
                 {
-                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - projectile.scale * 0.5f);
+                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - projectile.scale * 0.4f);
                     float tempFade = Main.musicFade[i];
                     Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.15f);
                     Main.musicFade[i] = tempFade;

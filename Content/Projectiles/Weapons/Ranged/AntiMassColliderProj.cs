@@ -1,5 +1,5 @@
 ﻿using System;
-using Arch.Core.Extensions;
+using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
@@ -8,9 +8,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.Graphics.Renderers;
 using Terraria.ID;
-using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Ranged;
@@ -40,7 +38,7 @@ public class AntiMassColliderProj : ModProjectile
 
     public ref Player Player => ref Main.player[Projectile.owner];
 
-    public static Color MainColor => Color.Gold with { A = 40 };
+    public static Color MainColor => Color.Goldenrod with { A = 40 };
 
     public override void AI()
     {
@@ -62,25 +60,24 @@ public class AntiMassColliderProj : ModProjectile
             }
 
             if (Time == firstShot) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 12f, ModContent.ProjectileType<AntiMassBioBall>(), 5 + Projectile.damage / 4, Projectile.knockBack, Player.whoAmI);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, ModContent.ProjectileType<AntiMassBioBall>(), 5 + Projectile.damage / 4, Projectile.knockBack, Player.whoAmI);
 
                 Player.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
                 Projectile.netUpdate = true;
             }
 
             if (Time > (int)(25 * Player.GetAttackSpeed(DamageClass.Ranged)) && Time < (int)(60 * Player.GetAttackSpeed(DamageClass.Ranged))) {
-                float timeToMove = Utils.GetLerpValue(55, 35, Time / Player.GetAttackSpeed(DamageClass.Ranged), true);
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed, 0.2f * timeToMove);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed, 0.2f);
                 Projectile.netUpdate = true;
 
-                if (Time > (int)(45 * Player.GetAttackSpeed(DamageClass.Ranged)) && !Player.channel) {
+                if (Time > (int)(35 * Player.GetAttackSpeed(DamageClass.Ranged)) && !Player.channel) {
                     Player.SetDummyItemTime(25);
                     Projectile.Kill();
                 }
             }
 
             if (Time == secondShot) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 12f, ModContent.ProjectileType<AntiMassMacroLaser>(), Projectile.damage, Projectile.knockBack, Player.whoAmI);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, ModContent.ProjectileType<AntiMassDeathLaser>(), Projectile.damage, Projectile.knockBack, Player.whoAmI);
 
                 Player.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
                 Projectile.netUpdate = true;
@@ -93,18 +90,30 @@ public class AntiMassColliderProj : ModProjectile
         }
 
         if (Time < firstShot) {
-            SoundEngine.PlaySound((SoundID.DD2_PhantomPhoenixShot with { MaxInstances = 0 }).WithVolumeScale(Time / firstShot * 0.8f).WithPitchOffset(Time / firstShot), Projectile.Center);
+            SoundEngine.PlaySound((SoundID.DD2_PhantomPhoenixShot with { MaxInstances = 0 }).WithVolumeScale(Time / firstShot * 0.5f).WithPitchOffset(Time / firstShot), Projectile.Center);
         }
 
         if (Time == firstShot) {
-            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderFire, Projectile.Center);
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderFire.WithPitchOffset(Main.rand.NextFloat(0.1f)).WithVolumeScale(0.7f), Projectile.Center);
             recoilFactor = 1f;
         }
 
+        //plasmaball chaingun
+        //if (Time > firstShot + 3 && Player.channel) {
+        //    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed, 0.5f);
+        //    Time = firstShot - 1;
+        //}
+
         if (Time == secondShot) {
-            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderFire, Projectile.Center);
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderLaserBlast, Projectile.Center);
             recoilFactor = 1f;
         }
+
+        //railcannon chaingun
+        //if (Time > secondShot + 6 && Player.channel) {
+        //    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed, 0.5f);
+        //    Time = secondShot - 1;
+        //}
 
         Projectile.rotation = Projectile.velocity.ToRotation() - recoilFactor * 0.01f * Projectile.direction;
 
@@ -116,20 +125,22 @@ public class AntiMassColliderProj : ModProjectile
 
         Time++;
 
-        Color lightningColor = Time < (int)(25 * Player.GetAttackSpeed(DamageClass.Ranged)) ? Color.MediumTurquoise with { A = 40 } : MainColor;
-
         for (int i = 0; i < 8; i++) {
             if (recoilFactor > 0.0005f && Main.rand.NextBool((int)(25 - recoilFactor * 24))) {
-                float particleRotation = Projectile.rotation + Main.rand.NextFloat(-1f, 1f);
-                var lightningParticle = ParticleBehavior.NewParticle(ModContent.GetInstance<LightningParticleParticleBehavior>(), muzzlePosition + Player.velocity + Main.rand.NextVector2Circular(27, 10).RotatedBy(Projectile.rotation), particleRotation.ToRotationVector2(), lightningColor, Main.rand.NextFloat(0.1f, 0.7f));
-                lightningParticle.Add(new ParticleRotation() { Value = particleRotation + Main.rand.NextFloat(-1f, 1f) });
-                lightningParticle.Add(new ParticleData<Func<Vector2>> { Value = () => Player.velocity });
+                CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
+                    particle.position = muzzlePosition + Main.rand.NextVector2Circular(27, 10).RotatedBy(Projectile.rotation);
+                    particle.rotation = Projectile.rotation + Main.rand.NextFloat(-1f, 1f);
+                    particle.velocity = particle.rotation.ToRotationVector2();
+                    particle.scale = Main.rand.NextFloat(0.1f, 0.7f);
+                    particle.color = Time < (int)(25 * Player.GetAttackSpeed(DamageClass.Ranged)) ? Color.MediumTurquoise with { A = 40 } : MainColor;
+                    particle.anchor = () => Player.velocity;
+                }));
             }
         }
 
         Lighting.AddLight(Projectile.Center, MainColor.ToVector3() * 0.2f);
 
-        if (Time < Player.HeldItem.useTime) {
+        if (Time <= Player.HeldItem.useTime) {
             Player.SetDummyItemTime(3);
         }
 

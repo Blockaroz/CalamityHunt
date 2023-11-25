@@ -1,23 +1,20 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Arch.Core.Extensions;
-using CalamityHunt.Common;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -54,13 +51,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (Owner < 0)
-            {
+            if (Owner < 0) {
                 Projectile.active = false;
                 return;
             }
-            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<Goozma>())
-            {
+            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<Goozma>()) {
                 Projectile.active = false;
                 return;
             }
@@ -71,12 +66,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Main.npc[(int)Owner].velocity += Projectile.rotation.ToRotationVector2() * -0.1f;
             Main.npc[(int)Owner].velocity *= 0.98f;
 
-            switch (Mode)
-            {
+            switch (Mode) {
                 default:
 
-                    if (Time % 4 == 0 && Time > ChargeTime && Time < ChargeTime + LaserDuration)
-                    {
+                    if (Time % 4 == 0 && Time > ChargeTime && Time < ChargeTime + LaserDuration) {
                         float shakeStrength = Utils.GetLerpValue(ChargeTime - LaserDuration * 0.5f, ChargeTime + LaserDuration, Time, true);
                         Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 8f, 12, 20, 5000));
                     }
@@ -96,8 +89,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     float waveChange = MathHelper.SmoothStep(0f, 1f, Utils.GetLerpValue(ChargeTime * 0.8f, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration * 0.9f, ChargeTime + LaserDuration * 0.5f, Time, true));
                     Projectile.rotation = targetRotation + totalOffRot * Projectile.direction * waveChange;
 
-                    if ((Main.npc[(int)Owner].ai[2] == 3 || Main.npc[(int)Owner].ai[2] == -2) && Time < ChargeTime + LaserDuration - 2)
-                    {
+                    if ((Main.npc[(int)Owner].ai[2] == 3 || Main.npc[(int)Owner].ai[2] == -2) && Time < ChargeTime + LaserDuration - 2) {
                         targetSize = 0;
                         Time = ChargeTime + LaserDuration - 2;
                         Mode = -1;
@@ -107,20 +99,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 case 1:
 
-                    if (Time % 4 == 0 && Time > ChargeTime && Time < ChargeTime + LaserDuration)
-                    {
+                    if (Time % 4 == 0 && Time > ChargeTime && Time < ChargeTime + LaserDuration) {
                         float shakeStrength = Utils.GetLerpValue(ChargeTime - LaserDuration * 0.5f, ChargeTime + LaserDuration, Time, true);
                         Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), shakeStrength * 8f, 12, 20, 5000));
                     }
-                    
+
                     Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center), 0.02f);
                     targetSize = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 60, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
 
                     if (Time > ChargeTime + LaserDuration - 4 && Time < ChargeTime + LaserDuration - 2)
                         Time = ChargeTime + LaserDuration - 10;
 
-                    if (Main.npc[(int)Owner].ai[2] == 3 && Time < ChargeTime + LaserDuration - 2)
-                    {
+                    if (Main.npc[(int)Owner].ai[2] == 3 && Time < ChargeTime + LaserDuration - 2) {
                         targetSize = 0;
                         Time = ChargeTime + LaserDuration - 2;
                         Mode = -1;
@@ -140,42 +130,51 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.velocity = Projectile.rotation.ToRotationVector2();
             Projectile.localAI[0] = Main.npc[(int)Owner].localAI[0];
 
-            if (Time > ChargeTime * 0.7f)
-            {
+            if (Time > ChargeTime * 0.7f) {
                 float smokePower = Utils.GetLerpValue(ChargeTime * 0.7f, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 70, ChargeTime + LaserDuration + 40, Time, true);
                 Color smokeColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * (0.5f + smokePower * 0.5f);
                 smokeColor.A = 0;
                 int smokeCount = (int)(smokePower * 12f);
-                for (int i = 0; i < smokeCount; i++)
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20, Projectile.rotation.ToRotationVector2().RotatedByRandom((float)Math.Sqrt(1f - smokePower * 0.5f)) * Main.rand.NextFloat(15f, 25f) * smokePower, smokeColor, 1f + Main.rand.NextFloat());
+                for (int i = 0; i < smokeCount; i++) {
+                    //Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20, Projectile.rotation.ToRotationVector2().RotatedByRandom((float)Math.Sqrt(1f - smokePower * 0.5f)) * Main.rand.NextFloat(15f, 25f) * smokePower, smokeColor, 1f + Main.rand.NextFloat());
+
+                    //CalamityHunt.particles.Add(Particle.Create<>(particle => 
+                }
             }
 
-            if (!Main.rand.NextBool((int)(Time * 0.5f + 15)))
-            {
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Projectile.rotation.ToRotationVector2().RotatedByRandom(1f) * Main.rand.NextFloat(5f, 15f), Color.White, 2f);
-                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
+            if (!Main.rand.NextBool((int)(Time * 0.5f + 15))) {
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                    particle.position = Projectile.Center;
+                    particle.velocity = Projectile.rotation.ToRotationVector2().RotatedByRandom(1f) * Main.rand.NextFloat(5f, 15f);
+                    particle.scale = 2f;
+                    particle.color = Color.White;
+                    particle.colorData = new ColorOffsetData(true, Projectile.localAI[0]);
+                }));
             }
-            if (Time > ChargeTime - 15 && Time < ChargeTime + LaserDuration + 60)
-            {
-                for (int i = 0; i < 15; i++)
-                {
+            if (Time > ChargeTime - 15 && Time < ChargeTime + LaserDuration + 60) {
+                for (int i = 0; i < 15; i++) {
                     float grow = Utils.GetLerpValue(ChargeTime - 15, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration, Time, true);
                     float progress = Main.rand.NextFloat(3300);
                     Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 100) * grow;
                     color.A = 0;
                     Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-80f, 80f) * (progress / 3300f)).RotatedBy(Projectile.rotation);
-                    var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
-                    smoke.Add(new ParticleDrawBehindEntities());
-                    if (Main.rand.NextBool(5))
-                    {
-                        var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), Color.White, 4f * grow);
-                        hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] - (progress / 3300f) * 60 });
+                    //var smoke = Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
+                    //smoke.Add(new ParticleDrawBehindEntities());
+                    if (Main.rand.NextBool(5)) {
+                        CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                            particle.position = position;
+                            particle.velocity = Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f);
+                            particle.scale = 4f * grow;
+                            particle.color = Color.White;
+                            particle.colorData = new ColorOffsetData(true, Projectile.localAI[0] - (progress / 3300f) * 60);
+                        }));
                     }
                 }
             }
 
-            if (Time == ChargeTime + LaserDuration + 20)
+            if (Mode != 1 && Time == ChargeTime + LaserDuration + 20) {
                 SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Sizzle, Projectile.Center);
+            }
 
             Time++;
             Projectile.localAI[1]++;
@@ -183,17 +182,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             HandleSound();
 
-            if (Time > ChargeTime + LaserDuration + 100)
-                Projectile.Kill();
+            if (Time > ChargeTime + LaserDuration + 100) {
 
-            foreach (Player player in Main.player.Where(n => n.active && !n.dead))
-            {
-                if (ModLoader.HasMod("CalamityMod"))
-                {
+                raySound.StopSound();
+                Projectile.Kill();
+            }
+
+            foreach (Player player in Main.player.Where(n => n.active && !n.dead)) {
+                if (ModLoader.HasMod("CalamityMod")) {
                     ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", player, true);
                 }
-                else
-                {
+                else {
                     player.wingTime = player.wingTimeMax;
                 }
             }
@@ -208,18 +207,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             volume = 1.3f * Utils.GetLerpValue(0, 0.05f, realSize, true);// * Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f + Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale * Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 20, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration + 30, Time, true);
             pitch = (MathHelper.SmoothStep(0.5f, Mode == 1 ? 2f : 1.2f, Utils.GetLerpValue(ChargeTime - 45, ChargeTime + 350, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true)) + Utils.GetLerpValue(ChargeTime, ChargeTime + LaserDuration, Time, true) * 0.2f * realSize) - 1f;
 
-            if (raySound == null)
-                raySound = new LoopingSound(AssetDirectory.Sounds.Goozma.FusionRayLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            raySound ??= new LoopingSound(AssetDirectory.Sounds.Goozma.FusionRayLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
             raySound.PlaySound(() => Projectile.Center, () => volume, () => pitch);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > ChargeTime + 20 && Time < ChargeTime + LaserDuration + 10)
-            {
+            if (Time > ChargeTime + 20 && Time < ChargeTime + LaserDuration + 10) {
                 float angle = Mode == 1 ? (0.28f + Utils.GetLerpValue(ChargeTime, ChargeTime + 300, Time, true) * 0.45f) : 0.28f;
-;
+                ;
                 float grow = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 40, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
 
                 //Dust.QuickDustLine(Projectile.Center, Projectile.Center + new Vector2(3500f * (0.5f + grow * 0.5f), 0).RotatedBy(Projectile.rotation + angle), 200, Color.Blue);
@@ -246,12 +243,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         {
             orig(self);
 
-            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>()))
-            {
+            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<FusionRay>())) {
                 Projectile projectile = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<FusionRay>());
 
-                for (int i = 0; i < Main.musicFade.Length; i++)
-                {
+                for (int i = 0; i < Main.musicFade.Length; i++) {
                     float grow = Utils.GetLerpValue(ChargeTime - 15, ChargeTime + 40, projectile.ai[0], true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 50, ChargeTime + LaserDuration, projectile.ai[0], true);
 
                     float volume = Main.musicFade[i] * Main.musicVolume * (1f - grow * 0.3f);
@@ -284,14 +279,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), startColor * 0.1f * laserCharge, 0, glow.Size() * 0.5f, 14f * laserCharge, 0, 0);
             Main.EntitySpriteDraw(ray, Projectile.Center - Main.screenPosition, ray.Frame(), startColor * laserRayCharge * 0.5f, Projectile.rotation, ray.Size() * new Vector2(0.02f, 0.5f), new Vector2(3f, 2f), 0, 0);
 
-            if (Time >= ChargeTime - 20)
-            {
+            if (Time >= ChargeTime - 20) {
                 float laserActive = Utils.GetLerpValue(ChargeTime - 30, ChargeTime + 70, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true);
 
                 Vector2[] positions = new Vector2[1500];
                 float[] rotations = new float[1500];
-                for (int i = 0; i < 1500; i++)
-                {
+                for (int i = 0; i < 1500; i++) {
                     positions[i] = Projectile.Center + new Vector2(3500 * (i / 1500f) * (0.5f + laserActive * 0.5f), 0).RotatedBy(Projectile.rotation);
                     rotations[i] = Projectile.rotation;
                 }
@@ -303,8 +296,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
                 lightningEffect.Parameters["uTexture0"].SetValue(texture);
                 lightningEffect.Parameters["uTexture1"].SetValue(textureSecond);
-                lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.SplitParticle.Value);
-                lightningEffect.Parameters["uBits"].SetValue(AssetDirectory.Textures.SplitParticle.Value);
+                lightningEffect.Parameters["uGlow"].SetValue(textureGlow);
+                lightningEffect.Parameters["uBits"].SetValue(textureBits);
                 lightningEffect.Parameters["uTime"].SetValue(-Projectile.localAI[0] * 0.025f);
                 lightningEffect.Parameters["uFreq"].SetValue(1f);
                 lightningEffect.CurrentTechnique.Passes[0].Apply();

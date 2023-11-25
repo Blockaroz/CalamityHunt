@@ -185,8 +185,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         break;
                 }
 
-            if (Main.rand.NextBool(10))
-                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(100, 80), Main.rand.NextVector2Circular(3, 3), Main.hslToRgb(NPC.localAI[0] * 0.1f % 1f, 0.5f, 0.7f, 0), 0.3f + Main.rand.NextFloat());
+            if (Main.rand.NextBool(10)) {
+                CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
+                    particle.position = NPC.Center + Main.rand.NextVector2Circular(100, 80);
+                    particle.velocity = Main.rand.NextVector2Circular(3, 3);
+                    particle.scale = Main.rand.NextFloat(0.3f, 1.3f);
+                    particle.color = Main.hslToRgb(NPC.localAI[0] * 0.1f % 1f, 0.5f, 0.7f, 0);
+                }));
+            }
 
             Time++;
             NPC.localAI[0]++;
@@ -240,9 +246,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     SoundStyle createSound = AssetDirectory.Sounds.Slime.PrismDestroyerTelegraph;
                     SoundEngine.PlaySound(createSound, NPC.Center);
 
-                    for (int i = 0; i < Main.rand.Next(14, 20); i++)
-                        ParticleBehavior.NewParticle(ModContent.GetInstance<HolyBombChunkParticleBehavior>(), NPC.Center + Main.rand.NextVector2Circular(80, 50), NPC.velocity.RotatedByRandom(1f) * Main.rand.NextFloat(), Color.White, 0.1f + Main.rand.NextFloat(2f));
-
+                    for (int i = 0; i < Main.rand.Next(14, 20); i++) {
+                        CalamityHunt.particles.Add(Particle.Create<DivineGelChunk>(particle => {
+                            particle.position = NPC.Center + Main.rand.NextVector2Circular(80, 50);
+                            particle.velocity = NPC.velocity.RotatedByRandom(1f) * Main.rand.NextFloat();
+                            particle.scale = Main.rand.NextFloat(0.1f, 2.1f);
+                            particle.color = Color.White;
+                        }));
+                    }
                 }
 
                 if (Time % 150 == 70)
@@ -495,8 +506,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
             squishFactor = Vector2.Lerp(squishFactor * 0.98f, squishFactor * 1.1f, 0.05f + Time / 60f);
             NPC.frameCounter += 2;
 
-            for (int i = 0; i < Time; i++)
-                ParticleBehavior.NewParticle(ModContent.GetInstance<HolyBombChunkParticleBehavior>(), NPC.Center, Main.rand.NextVector2Circular(50, 50), Color.White, 0.7f + Time / 50f + Main.rand.NextFloat());
+            for (int i = 0; i < Time; i++) {
+                CalamityHunt.particles.Add(Particle.Create<DivineGelChunk>(particle => {
+                    particle.position = NPC.Center;
+                    particle.velocity = Main.rand.NextVector2Circular(50, 50);
+                    particle.scale = Time / 50f + Main.rand.NextFloat(0.7f, 1.7f);
+                    particle.color = Color.White;
+                }));
+            }
 
             if (Time == 1)
                 ShatterShield();

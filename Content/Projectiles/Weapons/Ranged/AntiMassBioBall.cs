@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Arch.Core.Extensions;
+using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
@@ -11,10 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Ranged;
 
@@ -25,7 +20,7 @@ public class AntiMassBioBall : ModProjectile
         Projectile.width = 24;
         Projectile.height = 24;
         Projectile.friendly = true;
-        Projectile.timeLeft = 500;
+        Projectile.timeLeft = 200;
         Projectile.penetrate = -1;
         Projectile.tileCollide = true;
         Projectile.manualDirectionChange = true;
@@ -38,29 +33,36 @@ public class AntiMassBioBall : ModProjectile
     public override void AI()
     {
         Projectile.velocity.Y += 0.001f;
-        Projectile.velocity *= 0.995f;
 
         Projectile.scale = Utils.GetLerpValue(-15, 10, Time, true);
 
-        Time++;
-
         if (Main.myPlayer == Projectile.owner) {
             if (Main.rand.NextBool(3) || Time % 5 == 0) {
-
-
-
                 Projectile.netUpdate = true;
             }
         }
 
-        for (int i = 0; i < 8; i++) {
-            Color particleColor = Color.Lerp(AntiMassColliderProj.MainColor, Color.Turquoise, (!Main.rand.NextBool((int)(Time / 30f + 2))).ToInt()) with { A = 0 };
-            var lightningParticle = ParticleBehavior.NewParticle(ModContent.GetInstance<LightningParticleParticleBehavior>(), Projectile.Center + Projectile.velocity + Main.rand.NextVector2Circular(20, 20).RotatedBy(Projectile.rotation) * Projectile.scale, Main.rand.NextVector2Circular(6, 6), particleColor, Main.rand.NextFloat(0.2f, 0.7f) * Projectile.scale);
-            lightningParticle.Add(new ParticleRotation() { Value = Main.rand.NextFloat(-4f, 4f) });
-            lightningParticle.Add(new ParticleData<Func<Vector2>> { Value = () => Projectile.velocity });
+        if (Main.rand.NextBool(9)) {
+            Color color = Color.Lerp(AntiMassColliderProj.MainColor, Color.Turquoise, (!Main.rand.NextBool(10)).ToInt()) with { A = 20 };
+            Dust sparks = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16, 16), 278, Projectile.velocity.RotatedByRandom(0.2f) * 0.5f, 0, color * 0.7f, Main.rand.NextFloat(0.6f));
+            sparks.noGravity = true;
+        }
+
+        Time++;
+
+        for (int i = 0; i < 3; i++) {
+            CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
+                particle.position = Projectile.Center + Main.rand.NextVector2Circular(20, 20).RotatedBy(Projectile.rotation) * Projectile.scale;
+                particle.velocity = Main.rand.NextVector2Circular(6, 6);
+                particle.scale = Main.rand.NextFloat(0.2f, 0.9f) * Projectile.scale;
+                particle.color = Color.Lerp(AntiMassColliderProj.MainColor, Color.Turquoise, (!Main.rand.NextBool((int)(Time / 30f + 2))).ToInt()) with { A = 0 };
+                particle.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+                particle.anchor = () => Projectile.velocity;
+            }));       
         }
 
         Lighting.AddLight(Projectile.Center, Color.MediumTurquoise.ToVector3() * 0.6f);
+
         HandleSound();
     }
 
@@ -81,17 +83,22 @@ public class AntiMassBioBall : ModProjectile
 
         SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite.WithPitchOffset(-0.33f), Projectile.Center);
 
-        //for (int i = 0; i < 50; i++) {
-        //    Color particleColor = Color.Lerp(Color.Gold, Color.MediumAquamarine, (!Main.rand.NextBool((int)(Time / 20f + 2))).ToInt()) with { A = 40 };
-        //    Vector2 particleVelocity = Main.rand.NextVector2Circular(16, 16);
-        //    var lightningParticle = ParticleBehavior.NewParticle(ModContent.GetInstance<LightningParticleParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(20, 20).RotatedBy(Projectile.rotation) * Projectile.scale, particleVelocity, particleColor with { A = 40 }, Main.rand.NextFloat(0.5f, 1f) * Projectile.scale);
-        //    lightningParticle.Add(new ParticleRotation() { Value = particleVelocity.ToRotation() + Main.rand.NextFloat(-1f, 1f) });
-        //}
-    }
+        for (int i = 0; i < 40; i++) {
+            CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
+                particle.position = Projectile.Center + Main.rand.NextVector2Circular(10, 10).RotatedBy(Projectile.rotation) * Projectile.scale;
+                particle.velocity = Main.rand.NextVector2Circular(16, 16);
+                particle.scale = Main.rand.NextFloat(0.5f, 1.5f) * Projectile.scale;
+                particle.color = Color.Lerp(AntiMassColliderProj.MainColor, Color.MediumAquamarine, (!Main.rand.NextBool((int)(Time / 30f + 8))).ToInt()) with { A = 0 };
+                particle.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+                particle.anchor = () => Projectile.velocity * 0.2f;
+            }));
 
-    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-    {
-        return false;
+            if (Main.rand.NextBool()) {
+                Color color = Color.Lerp(AntiMassColliderProj.MainColor, Color.Turquoise, (!Main.rand.NextBool(10)).ToInt()) with { A = 20 };
+                Dust sparks = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16, 16), 278, Main.rand.NextVector2Circular(5, 5), 0, color * 0.7f, Main.rand.NextFloat());
+                sparks.noGravity = true;
+            }
+        }
     }
 
     public override bool PreDraw(ref Color lightColor)
@@ -100,6 +107,8 @@ public class AntiMassBioBall : ModProjectile
         Texture2D glow = AssetDirectory.Textures.Glow.Value;
 
         float scaleWobble = Projectile.scale + MathF.Sin(Projectile.timeLeft / 1.2f) * 0.2f;
+
+        Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), Color.Black * 0.4f, 0, glow.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
         Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.PaleTurquoise with { A = 200 }, 0, texture.Size() * 0.5f, (Projectile.scale + scaleWobble) / 2f, 0, 0);
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Cyan * 0.3f) with { A = 0 }, 0, glow.Size() * 0.5f, scaleWobble, 0, 0);
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.MediumTurquoise * 0.2f) with { A = 0 }, 0, glow.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);

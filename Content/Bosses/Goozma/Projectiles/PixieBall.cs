@@ -106,8 +106,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                         glowColor.A /= 2;
                         Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
                         
-                        if (Main.rand.NextBool(3))
-                            ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(54, 54), Main.rand.NextVector2Circular(10, 10) + Projectile.velocity * 0.1f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.5f, 0.5f + Main.rand.NextFloat());
+                        if (Main.rand.NextBool(3)) {
+                            CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
+                                particle.position = Projectile.Center + Main.rand.NextVector2Circular(54, 54);
+                                particle.velocity = Main.rand.NextVector2Circular(10, 10) + Projectile.velocity * 0.1f;
+                                particle.scale = Main.rand.NextFloat(0.5f, 1.5f);
+                                particle.color = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.5f;
+                            }));
+                        }
                     }
 
                     break;
@@ -129,7 +135,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 Cooldown--;
 
-                ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center, Main.rand.NextVector2Circular(3, 3) + Projectile.velocity.RotatedByRandom(0.1f) * 0.5f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), Projectile.scale + Main.rand.NextFloat(0.7f));
+                CalamityHunt.particles.Add(Particle.Create<BigFlame>(particle => {
+                    particle.position = Projectile.Center;
+                    particle.velocity = Main.rand.NextVector2Circular(3, 3) + Projectile.velocity.RotatedByRandom(0.1f) * 0.5f;
+                    particle.scale = Main.rand.NextFloat(0.7f) + Projectile.scale;
+                    particle.color = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
+                    particle.maxTime = Main.rand.Next(30, 40);
+                }));
             }
 
             if (HitCount > 2)
@@ -150,9 +162,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Main.rand.NextBool(5))
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(3, 3), 0, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.6f, 128), 1f + Main.rand.NextFloat(2f)).noGravity = true;
 
-            if (Main.rand.NextBool(2))
-                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(54, 54), Main.rand.NextVector2Circular(7, 7), Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), 0.2f + Main.rand.NextFloat());
-
+            if (Main.rand.NextBool(2)) {
+                CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
+                    particle.position = Projectile.Center + Main.rand.NextVector2Circular(54, 54);
+                    particle.velocity = Main.rand.NextVector2Circular(7, 7);
+                    particle.scale = Main.rand.NextFloat(0.2f, 1.2f);
+                    particle.color = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
+                }));
+            }
             //Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.1f) * 0.8f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), Projectile.scale + Main.rand.NextFloat(0.7f));
 
             for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)

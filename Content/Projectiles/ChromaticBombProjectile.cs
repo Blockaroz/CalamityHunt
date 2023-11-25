@@ -1,17 +1,11 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System.Collections.Generic;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Items.Misc;
-using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using Arch.Core.Extensions;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
-using Terraria.GameContent.Achievements;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityHunt.Content.Projectiles
 {
@@ -37,12 +31,6 @@ namespace CalamityHunt.Content.Projectiles
             // explosives don't scale with any damage
             Projectile.damage = ChromaticBomb.Damage;
             Projectile.knockBack = ChromaticBomb.Knockback;
-
-            for (int i = 0; i < 6; i++)
-            {
-                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(6, 6) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (1f + Main.rand.NextFloat(2f)) * Projectile.scale);
-                smoke.Add(new ParticleData<string> { Value = "Cosmos" });
-            }
 
             Projectile.rotation += 0.2f;
 

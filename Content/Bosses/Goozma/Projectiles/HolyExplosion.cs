@@ -11,6 +11,7 @@ using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
+using CalamityHunt.Content.Particles;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -67,14 +68,24 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 {
                     Vector2 vel = Main.rand.NextVector2Circular(100, 100);
                     float distanceScale = 2f / Math.Max(vel.Length(), 0.9f) + Main.rand.NextFloat();
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<Particles.PrettySparkleParticleBehavior>(), Projectile.Center, vel, Main.hslToRgb(Time / 50f, 0.5f, 0.5f, 128), 1f + distanceScale);
+                    CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
+                        particle.position = Projectile.Center;
+                        particle.velocity = vel;
+                        particle.scale = 1f + distanceScale;
+                        particle.color = Main.hslToRgb(Time / 50f, 0.5f, 0.5f, 128);
+                    }));
                 }
 
                 for (int i = 0; i < 2; i++)
                 {
                     Vector2 vel = Main.rand.NextVector2Circular(200, 200);
                     float distanceScale = 3f / Math.Max(vel.Length(), 0.9f) + Main.rand.NextFloat(2f);
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<Particles.CrossSparkleParticleBehavior>(), Projectile.Center + vel, Vector2.One, Main.hslToRgb(Time / 50f, 0.5f, 0.5f, 128), distanceScale + Main.rand.NextFloat(2f));
+                    CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
+                        particle.position = Projectile.Center + vel;
+                        particle.velocity = Vector2.One;
+                        particle.scale = distanceScale + Main.rand.NextFloat(2f);
+                        particle.color = Main.hslToRgb(Time / 50f, 0.5f, 0.5f, 128);
+                    }));
                 }
 
             }

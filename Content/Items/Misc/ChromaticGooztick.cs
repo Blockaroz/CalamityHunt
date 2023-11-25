@@ -1,16 +1,14 @@
-﻿using Arch.Core.Extensions;
-using CalamityHunt.Common.Systems.Particles;
+﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
-using CalamityHunt.Common;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Items.Misc
 {
@@ -58,10 +56,14 @@ namespace CalamityHunt.Content.Items.Misc
 
         public override void HoldItem(Player player)
         {
-            if (Main.rand.NextBool(player.itemAnimation > 0 ? 40 : 80))
-            {
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), new Vector2(0, -1), rainbowGlow, 1f);
-                hue.Add(new ParticleData<float> { Value = Main.GlobalTimeWrappedHourly });
+            if (Main.rand.NextBool(player.itemAnimation > 0 ? 40 : 80)) {
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                    particle.position = new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir);
+                    particle.velocity = -Vector2.UnitY;
+                    particle.scale =1f;
+                    particle.color = Color.White;
+                    particle.colorData = new ColorOffsetData(true, Main.GlobalTimeWrappedHourly);
+                }));
             }
 
             Vector2 position = player.RotatedRelativePoint(new Vector2(player.itemLocation.X + 12f * player.direction + player.velocity.X, player.itemLocation.Y - 14f + player.velocity.Y), true);

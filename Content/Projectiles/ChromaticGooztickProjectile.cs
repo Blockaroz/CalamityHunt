@@ -1,5 +1,4 @@
-﻿using Arch.Core.Extensions;
-using CalamityHunt.Common.Systems.Particles;
+﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
@@ -28,10 +27,14 @@ namespace CalamityHunt.Content.Projectiles
         {
             Projectile.rotation += Projectile.velocity.Length() * 0.09f * Projectile.direction;
 
-            if (Main.rand.NextBool(5))
-            {
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, new Vector2(0, -1), rainbowGlow, 1f);
-                hue.Add(new ParticleData<float> { Value = Main.GlobalTimeWrappedHourly });
+            if (Main.rand.NextBool(5)) {
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                    particle.position = Projectile.Center;
+                    particle.velocity = -Vector2.UnitY;
+                    particle.scale = 1f;
+                    particle.color = Color.White;
+                    particle.colorData = new ColorOffsetData(true, Main.GlobalTimeWrappedHourly);
+                }));
             }
         }
 

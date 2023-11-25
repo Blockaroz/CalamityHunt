@@ -1,17 +1,12 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Items.Misc;
-using CalamityHunt.Content.Particles;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Arch.Core.Extensions;
+using CalamityHunt.Content.Items.Misc;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
-using Terraria.GameContent.Achievements;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace CalamityHunt.Content.Projectiles
 {
@@ -45,20 +40,17 @@ namespace CalamityHunt.Content.Projectiles
 
         public override void OnKill(int timeLeft)
         {
-            for (int i = 0; i < 36; i++)
-            {
-                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(1200, 1200) * Projectile.scale + Projectile.velocity * (i / 6f) * 0.5f, (Main.rand.NextVector2Circular(4, 4) + Projectile.velocity * (i / 8f)) * Projectile.scale, Color.White, (1f + Main.rand.NextFloat(12f)) * Projectile.scale);
-                smoke.Add(new ParticleData<string> { Value = "Cosmos" });
+            if (Projectile.owner == Main.myPlayer) {
+                ExplodeandDestroyTiles(Projectile, 32, false, new List<int>() { }, new List<int>() { });
             }
-
-            if (Projectile.owner == Main.myPlayer)
-            ExplodeandDestroyTiles(Projectile, 32, false, new List<int>() { }, new List<int>() { });
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (Projectile.timeLeft > 0)
+            if (Projectile.timeLeft > 0) {
                 return true;
+            }
+
             Asset<Texture2D> shadowTexture = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Bosses/Goozma/Projectiles/BlackHoleBlenderShadow");
 
             Main.EntitySpriteDraw(shadowTexture.Value, Projectile.Center - Main.screenPosition, shadowTexture.Frame(), Color.Black * 0.5f, -Projectile.rotation * 0.7f, shadowTexture.Size() * 0.5f, Projectile.scale * 0.3f, SpriteEffects.FlipHorizontally, 0);

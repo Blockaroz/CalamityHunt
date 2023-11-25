@@ -184,9 +184,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
                 Projectile.EmitEnchantmentVisualsAt(scytheEnd - new Vector2(75), 150, 150);
 
-                if (Main.rand.NextBool(5))
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), scytheEnd + Main.rand.NextVector2Circular(70, 70), Vector2.Zero, glowColor, Main.rand.NextFloat(1.5f));
-
+                if (Main.rand.NextBool(5)) {
+                    CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
+                        particle.position = scytheEnd + Main.rand.NextVector2Circular(70, 70);
+                        particle.velocity = Vector2.Zero;
+                        particle.scale = Main.rand.NextFloat(1.5f);
+                        particle.color = glowColor;
+                    }));
+                }
             }
 
             Projectile.rotation = Projectile.velocity.ToRotation() + (rotation + MathHelper.WrapAngle(addRot)) * Projectile.direction;
@@ -279,7 +284,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).Value;
-            ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
+            CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
+                particle.position = Main.rand.NextVector2FromRectangle(target.Hitbox);
+                particle.velocity = Vector2.Zero;
+                particle.scale = Main.rand.NextFloat(1f, 3f);
+                particle.color = glowColor;
+            }));
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 300);
             shakeStrength *= 1.5f;
 
@@ -289,7 +299,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).Value;
-            ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Main.rand.NextVector2FromRectangle(target.Hitbox), Vector2.Zero, glowColor, 1f + Main.rand.NextFloat(2f));
+
+            CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
+                particle.position = Main.rand.NextVector2FromRectangle(target.Hitbox);
+                particle.velocity = Vector2.Zero;
+                particle.scale = Main.rand.NextFloat(1f, 3f);
+                particle.color = glowColor;
+            }));
+
             target.AddBuff(ModContent.BuffType<FusionBurn>(), 300);
             shakeStrength *= 1.5f;
 

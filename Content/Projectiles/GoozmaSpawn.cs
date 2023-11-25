@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Arch.Core.Extensions;
 using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
-using CalamityHunt.Content.Particles.FlyingSlimes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -18,14 +16,13 @@ using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.Utilities;
 
 namespace CalamityHunt.Content.Projectiles
 {
     public class GoozmaSpawn : ModProjectile
     {
         public static readonly SoundStyle slimeabsorb = AssetDirectory.Sounds.Goozma.SlimeAbsorb;
-        public WeightedRandom<ParticleBehavior> randomType = new();
+
         public override void SetDefaults()
         {
             Projectile.width = 92;
@@ -57,91 +54,92 @@ namespace CalamityHunt.Content.Projectiles
 
             SlimeMonsoonSkyOld.strengthTarget = Utils.GetLerpValue(120, 900, Time, true);
 
-            if (Time > 800)
-            {
-                for (int i = 0; i < (int)((Time - 400) / 800f) + 1; i++)
-                {
-                    Vector2 pos = Projectile.Center + Main.rand.NextVector2Circular(300, 300) * Projectile.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
-                    Vector2 vel = pos.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * pos.Distance(Projectile.Center) * ((Time - 400) / 500f) * (0.1f / (1f + Projectile.scale));
-
-                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), pos, vel, Color.White, 2f);
-                    hue.Add(new ParticleData<float> { Value = Time * 0.33f });
+            if (Time > 800) {
+                for (int i = 0; i < (int)((Time - 400) / 800f) + 1; i++) {
+                    CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle =>
+                    {
+                        particle.position = Projectile.Center + Main.rand.NextVector2Circular(300, 300) * Projectile.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
+                        particle.velocity = particle.position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * particle.position.Distance(Projectile.Center) * ((Time - 400) / 500f) * (0.1f / (1f + Projectile.scale));
+                        particle.color = Color.White;
+                        particle.scale = 2f;
+                        particle.colorData = new ColorOffsetData(true, Time * 0.33f);
+                    }));
                 }
 
                 Projectile.position.Y -= 0.5f;
             }
 
-            for (int i = 0; i < (int)(Time / 1000f) + 1; i++)
-            {
-                Vector2 pos = Projectile.Center + Main.rand.NextVector2CircularEdge(150, 150) * Projectile.scale + Main.rand.NextVector2Circular(40, 40);
-
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), pos, pos.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f), Color.White, 1f);
-                hue.Add(new ParticleData<float> { Value = Time * 0.33f });
+            for (int i = 0; i < (int)(Time / 1000f) + 1; i++) {
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle =>
+                {
+                    particle.position = Projectile.Center + Main.rand.NextVector2CircularEdge(150, 150) * Projectile.scale + Main.rand.NextVector2Circular(40, 40);
+                    particle.velocity = particle.position.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f);
+                    particle.color = Color.White;
+                    particle.scale = 2f;
+                    particle.colorData = new ColorOffsetData(true, Time * 0.33f);
+                }));
             }
 
-            if (Time == 0)
-            {
-                SoundStyle devour = AssetDirectory.Sounds.Goozma.Intro;
-                //SoundEngine.PlaySound(devour, Projectile.Center);
-            }
+            //if (Time == 0) {
+            //    SoundStyle devour = AssetDirectory.Sounds.Goozma.Intro;
+            //    SoundEngine.PlaySound(devour, Projectile.Center);
+            //}
 
-            if (((Time < 500 && Main.rand.NextBool(30)) || (!Main.rand.NextBool((int)Time + 1))) && Time < 750)
-                for (int i = 0; i < 1 + (int)(Utils.GetLerpValue(400, 900, Time, true) * 5); i++)
-                    SpawnSlimes();
+            //if (((Time < 500 && Main.rand.NextBool(30)) || (!Main.rand.NextBool((int)Time + 1))) && Time < 750)
+            //    for (int i = 0; i < 1 + (int)(Utils.GetLerpValue(400, 900, Time, true) * 5); i++)
+            //        SpawnSlimes();
 
-            if (Time == 650)
-            {
+            if (Time == 650) {
                 SoundStyle intro = AssetDirectory.Sounds.Goozma.Intro;
                 SoundEngine.PlaySound(intro, Projectile.Center);
-            }  
-           
-            if (Time == 720)
-            {
+            }
+
+            if (Time == 720) {
                 if (Main.dedServ)
                     ChatHelper.BroadcastChatMessage(NetworkText.FromKey(slimeMonsoonText.Value), new Color(50, 255, 130));
                 else
                     Main.NewText(NetworkText.FromKey(slimeMonsoonText.Value), new Color(50, 255, 130));
             }
 
-            //if (Time > 50 && Time % 20 == 0)
-            //{
-            //    Particle crack = Particle.NewParticle(ModContent.GetInstance<CrackSpot>(), Projectile.Center, Vector2.Zero, Color.DimGray, 5f + Time / 20f);
-            //    crack.data = "GoozmaBlack";
-            //}
 
             if (Time % 3 == 0 && Time > 200)
                 Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), Utils.GetLerpValue(200, 800, Time, true) * 7f, 6f, 10, 20000));
 
-            if (Time == 900)
-            {
-                var finalSlime = ParticleBehavior.NewParticle(ModContent.GetInstance<FlyingRainbowSlimeParticleBehavior>(), Projectile.Center - Vector2.UnitY * 700, Vector2.Zero, Color.White, 1f);
-                finalSlime.Add(new ParticleData<Vector2> { Value = Projectile.Center });
-            }
+            //if (Time == 900) {
+            //    var finalSlime = Particle.NewParticle(ModContent.GetInstance<FlyingRainbowSlimeParticleBehavior>(), Projectile.Center - Vector2.UnitY * 700, Vector2.Zero, Color.White, 1f);
+            //    finalSlime.Add(new ParticleData<Vector2> { Value = Projectile.Center });
+            //}
 
-            if (Time > 1060)
-            {
+            if (Time > 1060) {
                 NPC.SpawnBoss((int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<Goozma>(), 0);
 
-                for (int i = 0; i < 200; i++)
-                {
+                for (int i = 0; i < 200; i++) {
                     Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(20f, 17f), 100, Color.Black, 3f + Main.rand.NextFloat()).noGravity = true;
-                    if (Main.rand.NextBool())
-                    {
-                        var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Main.rand.NextVector2Circular(18f, 15f), Color.White, 2f);
-                        hue.Add(new ParticleData<float> { Value = Time * 0.33f });
+                    if (Main.rand.NextBool()) {
+                        CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                            particle.position = Projectile.Center;
+                            particle.velocity = Main.rand.NextVector2Circular(18f, 15f);
+                            particle.scale = 2f;
+                            particle.color = Color.White;
+                            particle.colorData = new ColorOffsetData(true, Time * 0.33f);
+                        }));
                     }
                 }
 
                 Projectile.Kill();
             }
 
-            if (Time > 1056)
-            {
-                for (int i = 0; i < 3; i++)
-                {
+            if (Time > 1056) {
+                for (int i = 0; i < 3; i++) {
                     Vector2 velocity = Vector2.UnitY.RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(1f);
                     velocity.Y -= Main.rand.NextFloat();
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<GooBurstParticleBehavior>(), Projectile.Center, velocity, new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value, 2f + Main.rand.NextFloat(2f));
+
+                    CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {
+                        particle.position = Projectile.Center;
+                        particle.velocity = velocity;
+                        particle.scale = Main.rand.NextFloat(2f, 4f);
+                        particle.color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value;
+                    }));
                 }
             }
 
@@ -163,11 +161,9 @@ namespace CalamityHunt.Content.Projectiles
         {
             orig(self);
 
-            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>()))
-            {
+            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>())) {
                 Projectile goozma = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>());
-                for (int i = 0; i < Main.musicFade.Length; i++)
-                {
+                for (int i = 0; i < Main.musicFade.Length; i++) {
                     float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(300, 60, goozma.ai[0], true);
                     float tempFade = Main.musicFade[i];
                     Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.1f && goozma.ai[0] < 600);
@@ -176,96 +172,96 @@ namespace CalamityHunt.Content.Projectiles
             }
         }
 
-        public void SpawnSlimes()
-        {
-            Vector2 position = Projectile.Center + Main.rand.NextVector2CircularEdge(1100, 1100) + Main.rand.NextVector2Circular(600, 600);
-            Vector2 velocity = position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(3f);
+        //public void SpawnSlimes()
+        //{
+        //    Vector2 position = Projectile.Center + Main.rand.NextVector2CircularEdge(1100, 1100) + Main.rand.NextVector2Circular(600, 600);
+        //    Vector2 velocity = position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(3f);
 
-            randomType.Add(ModContent.GetInstance<FlyingNormalSlimeParticleBehavior>(), 1f / 50f);
-            randomType.Add(ModContent.GetInstance<FlyingBigSlimeParticleBehavior>(), 1f / 100f); // this looks bad
-            randomType.Add(ModContent.GetInstance<FlyingBalloonSlimeParticleBehavior>(), 1f / 500f);
-            randomType.Add(ModContent.GetInstance<FlyingGastropodParticleBehavior>(), 1f / 800f);
-            randomType.Add(ModContent.GetInstance<FlyingIlluminantSlimeParticleBehavior>(), 1f / 800f);
-            randomType.Add(ModContent.GetInstance<FlyingLavaSlimeParticleBehavior>(), 1f / 700f);
-            randomType.Add(ModContent.GetInstance<FlyingZombieSlimeParticleBehavior>(), 1f / 700f);
-            randomType.Add(ModContent.GetInstance<FlyingShimmerSlimeParticleBehavior>(), 1f / 700f);
-            randomType.Add(ModContent.GetInstance<FlyingIceSlimeParticleBehavior>(), 1f / 700f);
-            randomType.Add(ModContent.GetInstance<FlyingSandSlimeParticleBehavior>(), 1f / 700f);
-            randomType.Add(ModContent.GetInstance<FlyingJungleSlimeSpikedParticleBehavior>(), 1f / 700f);
-            randomType.Add(ModContent.GetInstance<FlyingSpikedSlimeParticleBehavior>(), 1f / 700f);
-            randomType.Add(ModContent.GetInstance<FlyingBouncySlimeParticleBehavior>(), 1f / 800f);
-            randomType.Add(ModContent.GetInstance<FlyingCrystalSlimeParticleBehavior>(), 1f / 800f);
-            randomType.Add(ModContent.GetInstance<FlyingHeavenlySlimeParticleBehavior>(), 1f / 800f);
-            randomType.Add(ModContent.GetInstance<FlyingUmbrellaSlimeParticleBehavior>(), 1f / 1200f);
-            randomType.Add(ModContent.GetInstance<FlyingCorruptSlimeParticleBehavior>(), 1f / 500f);
-            randomType.Add(ModContent.GetInstance<FlyingSlimerParticleBehavior>(), 1f / 1000f);
-            randomType.Add(ModContent.GetInstance<FlyingCrimslimeParticleBehavior>(), 1f / 500f);
-            randomType.Add(ModContent.GetInstance<FlyingToxicSludgeParticleBehavior>(), 1f / 1000f);
-            randomType.Add(ModContent.GetInstance<FlyingDungeonSlimeParticleBehavior>(), 1f / 1500f);
-            randomType.Add(ModContent.GetInstance<FlyingHoppinJackParticleBehavior>(), Main.halloween ? (1f / 150f) : (1f / 2000f));
-            randomType.Add(ModContent.GetInstance<FlyingSlimeFishParticleBehavior>(), 1f / 1000f);
-            randomType.Add(ModContent.GetInstance<FlyingSlimeStatueParticleBehavior>(), 1f / 3000f);
-            randomType.Add(ModContent.GetInstance<FlyingFirstEncounterParticleBehavior>(), 1f / 3000f);
-            randomType.Add(ModContent.GetInstance<FlyingGoldSlimeParticleBehavior>(), 1f / 5000f);
-            randomType.Add(ModContent.GetInstance<FlyingYuHParticleBehavior>(), 1f / 10000f);
+        //    randomType.Add(ModContent.GetInstance<FlyingNormalSlimeParticleBehavior>(), 1f / 50f);
+        //    randomType.Add(ModContent.GetInstance<FlyingBigSlimeParticleBehavior>(), 1f / 100f); // this looks bad
+        //    randomType.Add(ModContent.GetInstance<FlyingBalloonSlimeParticleBehavior>(), 1f / 500f);
+        //    randomType.Add(ModContent.GetInstance<FlyingGastropodParticleBehavior>(), 1f / 800f);
+        //    randomType.Add(ModContent.GetInstance<FlyingIlluminantSlimeParticleBehavior>(), 1f / 800f);
+        //    randomType.Add(ModContent.GetInstance<FlyingLavaSlimeParticleBehavior>(), 1f / 700f);
+        //    randomType.Add(ModContent.GetInstance<FlyingZombieSlimeParticleBehavior>(), 1f / 700f);
+        //    randomType.Add(ModContent.GetInstance<FlyingShimmerSlimeParticleBehavior>(), 1f / 700f);
+        //    randomType.Add(ModContent.GetInstance<FlyingIceSlimeParticleBehavior>(), 1f / 700f);
+        //    randomType.Add(ModContent.GetInstance<FlyingSandSlimeParticleBehavior>(), 1f / 700f);
+        //    randomType.Add(ModContent.GetInstance<FlyingJungleSlimeSpikedParticleBehavior>(), 1f / 700f);
+        //    randomType.Add(ModContent.GetInstance<FlyingSpikedSlimeParticleBehavior>(), 1f / 700f);
+        //    randomType.Add(ModContent.GetInstance<FlyingBouncySlimeParticleBehavior>(), 1f / 800f);
+        //    randomType.Add(ModContent.GetInstance<FlyingCrystalSlimeParticleBehavior>(), 1f / 800f);
+        //    randomType.Add(ModContent.GetInstance<FlyingHeavenlySlimeParticleBehavior>(), 1f / 800f);
+        //    randomType.Add(ModContent.GetInstance<FlyingUmbrellaSlimeParticleBehavior>(), 1f / 1200f);
+        //    randomType.Add(ModContent.GetInstance<FlyingCorruptSlimeParticleBehavior>(), 1f / 500f);
+        //    randomType.Add(ModContent.GetInstance<FlyingSlimerParticleBehavior>(), 1f / 1000f);
+        //    randomType.Add(ModContent.GetInstance<FlyingCrimslimeParticleBehavior>(), 1f / 500f);
+        //    randomType.Add(ModContent.GetInstance<FlyingToxicSludgeParticleBehavior>(), 1f / 1000f);
+        //    randomType.Add(ModContent.GetInstance<FlyingDungeonSlimeParticleBehavior>(), 1f / 1500f);
+        //    randomType.Add(ModContent.GetInstance<FlyingHoppinJackParticleBehavior>(), Main.halloween ? (1f / 150f) : (1f / 2000f));
+        //    randomType.Add(ModContent.GetInstance<FlyingSlimeFishParticleBehavior>(), 1f / 1000f);
+        //    randomType.Add(ModContent.GetInstance<FlyingSlimeStatueParticleBehavior>(), 1f / 3000f);
+        //    randomType.Add(ModContent.GetInstance<FlyingFirstEncounterParticleBehavior>(), 1f / 3000f);
+        //    randomType.Add(ModContent.GetInstance<FlyingGoldSlimeParticleBehavior>(), 1f / 5000f);
+        //    randomType.Add(ModContent.GetInstance<FlyingYuHParticleBehavior>(), 1f / 10000f);
 
-            if (Main.halloween)
-            {
-                randomType.Add(ModContent.GetInstance<FlyingSlimeBunnyParticleBehavior>(), 1f / 150f);
-                randomType.Add(ModContent.GetInstance<FlyingBunnySlimeParticleBehavior>(), 1f / 150f);
-            }
-            if (Main.xMas)
-                randomType.Add(ModContent.GetInstance<FlyingPresentSlimeParticleBehavior>(), 1f / 150f);
+        //    if (Main.halloween)
+        //    {
+        //        randomType.Add(ModContent.GetInstance<FlyingSlimeBunnyParticleBehavior>(), 1f / 150f);
+        //        randomType.Add(ModContent.GetInstance<FlyingBunnySlimeParticleBehavior>(), 1f / 150f);
+        //    }
+        //    if (Main.xMas)
+        //        randomType.Add(ModContent.GetInstance<FlyingPresentSlimeParticleBehavior>(), 1f / 150f);
 
-            if (Main.zenithWorld)
-            {
-                randomType.Add(ModContent.GetInstance<FlyingYumeSlimeParticleBehavior>(), 1f / 15000f);
-                randomType.Add(ModContent.GetInstance<FlyingCoreSlimeParticleBehavior>(), 1f / 15000f);
-                randomType.Add(ModContent.GetInstance<FlyingDragonSlimeParticleBehavior>(), 1f / 15000f);
-                randomType.Add(ModContent.GetInstance<FlyingFatPixieParticleBehavior>(), 1f / 5000f);
-                randomType.Add(ModContent.GetInstance<FlyingMadnessSlimeParticleBehavior>(), 1f / 5000f);
-                randomType.Add(ModContent.GetInstance<FlyingMireSlimeParticleBehavior>(), 1f / 5000f);
-                randomType.Add(ModContent.GetInstance<FlyingInfernoSlimeParticleBehavior>(), 1f / 5000f);
-                randomType.Add(ModContent.GetInstance<FlyingOilSlimeParticleBehavior>(), 1f / 5000f);
-                randomType.Add(ModContent.GetInstance<FlyingWhiteSlimeParticleBehavior>(), 1f / 5000f);
-            }
+        //    if (Main.zenithWorld)
+        //    {
+        //        randomType.Add(ModContent.GetInstance<FlyingYumeSlimeParticleBehavior>(), 1f / 15000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingCoreSlimeParticleBehavior>(), 1f / 15000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingDragonSlimeParticleBehavior>(), 1f / 15000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingFatPixieParticleBehavior>(), 1f / 5000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingMadnessSlimeParticleBehavior>(), 1f / 5000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingMireSlimeParticleBehavior>(), 1f / 5000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingInfernoSlimeParticleBehavior>(), 1f / 5000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingOilSlimeParticleBehavior>(), 1f / 5000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingWhiteSlimeParticleBehavior>(), 1f / 5000f);
+        //    }
 
-            if (ModLoader.HasMod("CalamityMod"))
-            {
-                randomType.Add(ModContent.GetInstance<FlyingAeroSlimeParticleBehavior>(), 1f / 800f);
-                randomType.Add(ModContent.GetInstance<FlyingEbonianBlightSlimeParticleBehavior>(), 1f / 1500f);
-                randomType.Add(ModContent.GetInstance<FlyingCrimulanBlightSlimeParticleBehavior>(), 1f / 1500f);
-                randomType.Add(ModContent.GetInstance<FlyingCorruptSlimeSpawnParticleBehavior>(), 1f / 700f);
-                randomType.Add(ModContent.GetInstance<FlyingCrimsonSlimeSpawnParticleBehavior>(), 1f / 700f);
-                randomType.Add(ModContent.GetInstance<FlyingAstralSlimeParticleBehavior>(), 1f / 1000f);
-                randomType.Add(ModContent.GetInstance<FlyingCryoSlimeParticleBehavior>(), 1f / 1000f);
-                randomType.Add(ModContent.GetInstance<FlyingIrradiatedSlimeParticleBehavior>(), 1f / 800f);
-                randomType.Add(ModContent.GetInstance<FlyingCharredSlimeParticleBehavior>(), 1f / 1000f);
-                randomType.Add(ModContent.GetInstance<FlyingPerennialSlimeParticleBehavior>(), 1f / 1000f);
-                randomType.Add(ModContent.GetInstance<FlyingAureusSpawnSlimeParticleBehavior>(), 1f / 3000f);
-                randomType.Add(ModContent.GetInstance<FlyingPestilentSlimeParticleBehavior>(), 1f / 800f);
-                randomType.Add(ModContent.GetInstance<FlyingBloomSlimeParticleBehavior>(), 1f / 1000f);
-                randomType.Add(ModContent.GetInstance<FlyingGammaSlimeParticleBehavior>(), 1f / 800f);
-                randomType.Add(ModContent.GetInstance<FlyingCragmawMireParticleBehavior>(), 1f / 5000f);
-            }
-            if (ModLoader.HasMod("CatalystMod"))
-            {
-                randomType.Add(ModContent.GetInstance<FlyingWulfrumSlimeParticleBehavior>(), 1f / 800f);
-                randomType.Add(ModContent.GetInstance<FlyingAscendedAstralSlimeParticleBehavior>(), 1f / 1500f);
-                //if (!NPC.downedMoonlord || (bool)ModLoader.GetMod("CatalystMod").Call("worlddefeats.astrageldon"))
-                {
-                    randomType.Add(ModContent.GetInstance<FlyingNovaSlimeParticleBehavior>(), 1f / 700f);
-                    randomType.Add(ModContent.GetInstance<FlyingNovaSlimerParticleBehavior>(), 1f / 700f);
-                    randomType.Add(ModContent.GetInstance<FlyingMetanovaSlimeParticleBehavior>(), 1f / 1000f);
-                }
-            }
+        //    if (ModLoader.HasMod("CalamityMod"))
+        //    {
+        //        randomType.Add(ModContent.GetInstance<FlyingAeroSlimeParticleBehavior>(), 1f / 800f);
+        //        randomType.Add(ModContent.GetInstance<FlyingEbonianBlightSlimeParticleBehavior>(), 1f / 1500f);
+        //        randomType.Add(ModContent.GetInstance<FlyingCrimulanBlightSlimeParticleBehavior>(), 1f / 1500f);
+        //        randomType.Add(ModContent.GetInstance<FlyingCorruptSlimeSpawnParticleBehavior>(), 1f / 700f);
+        //        randomType.Add(ModContent.GetInstance<FlyingCrimsonSlimeSpawnParticleBehavior>(), 1f / 700f);
+        //        randomType.Add(ModContent.GetInstance<FlyingAstralSlimeParticleBehavior>(), 1f / 1000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingCryoSlimeParticleBehavior>(), 1f / 1000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingIrradiatedSlimeParticleBehavior>(), 1f / 800f);
+        //        randomType.Add(ModContent.GetInstance<FlyingCharredSlimeParticleBehavior>(), 1f / 1000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingPerennialSlimeParticleBehavior>(), 1f / 1000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingAureusSpawnSlimeParticleBehavior>(), 1f / 3000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingPestilentSlimeParticleBehavior>(), 1f / 800f);
+        //        randomType.Add(ModContent.GetInstance<FlyingBloomSlimeParticleBehavior>(), 1f / 1000f);
+        //        randomType.Add(ModContent.GetInstance<FlyingGammaSlimeParticleBehavior>(), 1f / 800f);
+        //        randomType.Add(ModContent.GetInstance<FlyingCragmawMireParticleBehavior>(), 1f / 5000f);
+        //    }
+        //    if (ModLoader.HasMod("CatalystMod"))
+        //    {
+        //        randomType.Add(ModContent.GetInstance<FlyingWulfrumSlimeParticleBehavior>(), 1f / 800f);
+        //        randomType.Add(ModContent.GetInstance<FlyingAscendedAstralSlimeParticleBehavior>(), 1f / 1500f);
+        //        //if (!NPC.downedMoonlord || (bool)ModLoader.GetMod("CatalystMod").Call("worlddefeats.astrageldon"))
+        //        {
+        //            randomType.Add(ModContent.GetInstance<FlyingNovaSlimeParticleBehavior>(), 1f / 700f);
+        //            randomType.Add(ModContent.GetInstance<FlyingNovaSlimerParticleBehavior>(), 1f / 700f);
+        //            randomType.Add(ModContent.GetInstance<FlyingMetanovaSlimeParticleBehavior>(), 1f / 1000f);
+        //        }
+        //    }
 
-            float scale = 1f;
-            Color color = Color.White;
+        //    float scale = 1f;
+        //    Color color = Color.White;
 
-            var particleBehavior = ParticleBehavior.NewParticle(randomType, position, velocity, color, scale);
-            particleBehavior.Add(new ParticleData<Vector2> { Value = Projectile.Center }, new ParticleDrawBehindEntities());
-        }
+        //    var particleBehavior = ParticleBehavior.NewParticle(randomType, position, velocity, color, scale);
+        //    particleBehavior.Add(new ParticleData<Vector2> { Value = Projectile.Center }, new ParticleDrawBehindEntities());
+        //}
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -293,12 +289,11 @@ namespace CalamityHunt.Content.Projectiles
 
             Vector2 drawPos = Projectile.Center + Main.rand.NextVector2Circular(2, 2);
             Rectangle frame = texture.Frame(7, 1, size, 0);
-            
+
             Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.2f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble * 0.4f, 0, 0);
             Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.1f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble, 0, 0);
 
-            for (int i = 0; i < 6; i++)
-            {
+            for (int i = 0; i < 6; i++) {
                 Vector2 off = new Vector2(2, 0).RotatedBy(Time * 0.2f + MathHelper.TwoPi / 6f * i);
                 Main.EntitySpriteDraw(texture, drawPos + off - Main.screenPosition, frame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(150, 450, Time, true)) * Projectile.scale, 0, frame.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
             }
@@ -365,8 +360,7 @@ namespace CalamityHunt.Content.Projectiles
             rainbowStartIndex--;
 
             //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
-            for (int i = 0; i < 9; i++)
-            {
+            for (int i = 0; i < 9; i++) {
                 colors[1 + (rainbowStartIndex + i) % 9] = SlimeUtils.GoozColorsVector3[i];
             }
 

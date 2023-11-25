@@ -70,8 +70,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 			if (speedGate)
 			{
 				Color color = new Color(Main.rand.Next(150, 255), Main.rand.Next(150, 255), Main.rand.Next(150, 255));
-				ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Vector2.Zero, color, 1f);
-			}
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                    particle.position = Projectile.Center;
+                    particle.velocity = Vector2.Zero;
+                    particle.scale = 1f;
+                    particle.color = color;
+                }));
+            }
 			else
 			{
 				Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Vector2.Zero, 22, Color.Black, 2f).noGravity = true;
@@ -153,7 +158,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 							{
 								Color color = new Color(Main.rand.Next(150, 255), Main.rand.Next(150, 255), Main.rand.Next(150, 255));
 								Vector2 inward = Projectile.Center + Main.rand.NextVector2Circular(1, 1);
-								ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), inward, -inward.DirectionTo(Projectile.Center) * Main.rand.NextFloat(3f), color, 1f);
+
+                                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                                    particle.position = inward;
+                                    particle.velocity = -inward.DirectionTo(Projectile.Center) * Main.rand.NextFloat(3f);
+                                    particle.scale = 1f;
+                                    particle.color = color;
+                                }));
 							}
 							Projectile.Kill();
 							break;

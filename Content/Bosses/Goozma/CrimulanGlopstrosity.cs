@@ -344,8 +344,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             {
                                 Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
                                 Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                                ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
-                            }
+                        CalamityHunt.particles.Add(Particle.Create<CrimGelChunk>(particle => {
+                            particle.position = position;
+                            particle.velocity = velocity;
+                            particle.scale = Main.rand.NextFloat(0.1f, 2.1f);
+                            particle.color = Color.White;
+                        }));                            }
                         }
 
                         if (Time >= 106 && Time % 2 == 0)
@@ -442,7 +446,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         {
                             Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
                             Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                            ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                            CalamityHunt.particles.Add(Particle.Create<CrimGelChunk>(particle => {
+                                particle.position = position;
+                                particle.velocity = velocity;
+                                particle.scale = Main.rand.NextFloat(0.1f, 2.1f);
+                                particle.color = Color.White;
+                            }));
                         }
                     }
 
@@ -511,7 +520,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 {
                     Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
                     Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                    CalamityHunt.particles.Add(Particle.Create<CrimGelChunk>(particle => {
+                        particle.position = position;
+                        particle.velocity = velocity;
+                        particle.scale = Main.rand.NextFloat(0.1f, 2.1f);
+                        particle.color = Color.White;
+                    }));
                 }
 
                 squishFactor = new Vector2(1.5f, 0.5f);
@@ -595,7 +609,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(7f, 15f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                        ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        CalamityHunt.particles.Add(Particle.Create<CrimGelChunk>(particle => {
+                            particle.position = position;
+                            particle.velocity = velocity;
+                            particle.scale = Main.rand.NextFloat(0.1f, 2.1f);
+                            particle.color = Color.White;
+                        }));
                     }
                 }
             }
@@ -671,7 +690,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(15f, 20f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 15f, 32f);
-                        ParticleBehavior.NewParticle(ModContent.GetInstance<CrimBombChunkParticleBehavior>(), position, velocity, Color.White, 0.1f + Main.rand.NextFloat(2f));
+                        CalamityHunt.particles.Add(Particle.Create<CrimGelChunk>(particle => {
+                            particle.position = position;
+                            particle.velocity = velocity;
+                            particle.scale = Main.rand.NextFloat(0.1f, 2.1f);
+                            particle.color = Color.White;
+                        }));
                     }
                 }
                 if (Time > 90)

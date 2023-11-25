@@ -1,20 +1,17 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Arch.Core.Extensions;
-using CalamityHunt.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -44,61 +41,70 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (Time <= 0)
+            if (Time <= 0) {
                 Speed = Projectile.velocity.Length();
+            }
 
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(-1, 8, Projectile.localAI[0], true));
 
             Time++;
 
-            if (Projectile.ai[1] == 0)
-            {
+            if (Projectile.ai[1] == 0) {
                 int target = -1;
-                if (Main.player.Any(n => n.active && !n.dead))
-                    target = Main.player.First(n => n.active && !n.dead).whoAmI;
 
-                if (target > -1 && Time < 55)
-                {
+                if (Main.myPlayer == Projectile.owner) {
+                    if (Main.player.Any(n => n.active && !n.dead)) {
+                        target = Main.player.First(n => n.active && !n.dead).whoAmI;
+                        Projectile.netUpdate = true;
+                    }
+                }
+
+                if (target > -1 && Time < 55) {
                     Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * (0.13f + Time * 0.015f);
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * 20f, 0.03f);
                     Projectile.Center += Main.player[target].velocity * 0.15f * Utils.GetLerpValue(100, 0, Time, true);
                 }
-                else
+                else {
                     Projectile.velocity *= 0.866f;
+                }
 
-                if (Time > 75)
+                if (Time > 75) {
                     Projectile.Kill();
+                }
             }
-            else
-            {
+            else {
                 Projectile.Resize(24, 24);
-                if (Time <= 100)
+                if (Time <= 100) {
                     Projectile.velocity = Projectile.oldVelocity.SafeNormalize(Vector2.Zero) * MathF.Pow(Utils.GetLerpValue(0, 100, Time, true), 1.2f) * Speed * 1.75f;
+                }
 
                 Projectile.velocity.Y *= 1.007f;
 
-                if (Main.rand.NextBool(5))
-                {
-                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center + Projectile.velocity, Main.rand.NextVector2Circular(2, 2), Color.White, 1f);
-                    hue.Add(new ParticleData<float> { Value = Projectile.localAI[0]});
+                if (Main.rand.NextBool(5)) {
+                    CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                        particle.position = Projectile.Center + Projectile.velocity;
+                        particle.velocity = Main.rand.NextVector2Circular(2, 2);
+                        particle.scale = 1f;
+                        particle.color = Color.White;
+                        particle.colorData = new ColorOffsetData(true, Projectile.localAI[0]);
+                    }));
                 }
 
-                if (Main.rand.NextBool())
+                if (Main.rand.NextBool()) {
                     Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.8f, DustID.TintableDust, Projectile.velocity * 0.4f, 100, Color.Black, 1f + Main.rand.NextFloat()).noGravity = true;
+                }
 
                 if (Time > 250)
                     Projectile.Kill();
             }
 
-            if (oldVels == null)
-            {
+            if (oldVels == null) {
                 oldVels = new Vector2[10];
                 for (int i = 0; i < oldVels.Length; i++)
                     oldVels[i] = Projectile.velocity;
             }
-            else
-            {
+            else {
                 for (int i = 9; i > 0; i--)
                     oldVels[i] = Vector2.Lerp(oldVels[i], oldVels[i - 1] * 1.2f, 0.6f);
                 oldVels[0] = Vector2.Lerp(oldVels[0], (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2(), 0.6f);
@@ -118,31 +124,33 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void OnKill(int timeLeft)
         {
-            if (Projectile.ai[1] == 0)
-            {
-                for (int i = 0; i < 4; i++)
-                {
+            if (Projectile.ai[1] == 0) {
+                for (int i = 0; i < 4; i++) {
                     float size = Main.rand.NextFloat(4f, 5f) + i * 2f;
                     float rotation = Main.rand.NextFloat(-2f, 2f);
 
-                    for (int j = 0; j < 30; j++)
-                    {
+                    for (int j = 0; j < 30; j++) {
                         Color glowColor = new GradientColor(SlimeUtils.GoozColors, 2f, 2f).ValueAt(j * 30f + i);
                         glowColor.A /= 2;
                         Vector2 outward = new Vector2(size + Main.rand.NextFloat(), 0).RotatedBy(MathHelper.TwoPi / 30f * j);
                         outward.X *= 0.4f;
 
-                        var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, outward.RotatedBy(rotation), Color.White, 1.5f);
-                        hue.Add(new ParticleData<float> { Value = (j * 30f + i) / 10f });
+                        CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                            particle.position = Projectile.Center;
+                            particle.velocity = outward.RotatedBy(rotation);
+                            particle.scale = 1.5f;
+                            particle.color = Color.White;
+                            particle.colorData = new ColorOffsetData(true, (j * 30f + i) / 10f);
+                        }));
                     }
                 }
 
-                for (int i = 0; i < 80; i++)
+                for (int i = 0; i < 80; i++) {
                     Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(15, 15), 100, Color.Black, 2f).noGravity = true;
+                }
 
                 int dartCount = (int)Common.Systems.DifficultySystem.DifficultyBasedValue(8, 12, 16, 18);
-                for (int i = 0; i < dartCount; i++)
-                {
+                for (int i = 0; i < dartCount; i++) {
                     Projectile dart = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(20, 0).RotatedBy(MathHelper.TwoPi / dartCount * i), Type, Projectile.damage, 0, ai1: 1);
                     dart.ai[1] = 1;
                     dart.localAI[0] = Projectile.localAI[0] + i / dartCount * 90f;
@@ -152,16 +160,21 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 SoundEngine.PlaySound(dartSound.WithVolumeScale(0.8f));
             }
 
-            for (int i = 0; i < 10; i++)
-            {
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, Main.rand.NextVector2Circular(10, 10), Color.White, 1f);
-                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
+            for (int i = 0; i < 10; i++) {
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                    particle.position = Projectile.Center;
+                    particle.velocity = Main.rand.NextVector2Circular(10, 10);
+                    particle.scale = 1f;
+                    particle.color = Color.White;
+                    particle.colorData = new ColorOffsetData(true, Projectile.localAI[0]);
+                }));
 
                 Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(4, 4), 100, Color.Black, 1.5f).noGravity = true;
             }
         }
 
-        public static Texture2D textureSmall; 
+        public static Texture2D textureSmall;
+        public static Texture2D textureTentacle;
 
         public override void Load()
         {
@@ -179,8 +192,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             bloomColor.A = 0;
 
-            if (Projectile.ai[1] == 0)
-            {
+            if (Projectile.ai[1] == 0) {
                 Color growColor = Color.Lerp(Color.Transparent, bloomColor, Utils.GetLerpValue(3, 40, Projectile.localAI[0], true));
                 Rectangle baseFrame = texture.Frame(3, 1, 0, 0);
                 Rectangle glowFrame = texture.Frame(3, 1, 1, 0);
@@ -203,8 +215,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, growColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(glow, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
             }
-            if (Projectile.ai[1] == 1)
-            {
+            if (Projectile.ai[1] == 1) {
                 Rectangle baseFrame = textureSmall.Frame(3, 1, 0, 0);
                 Rectangle glowFrame = textureSmall.Frame(3, 1, 1, 0);
                 //Rectangle outlineFrame = textureSmall.Frame(3, 1, 2, 0);
@@ -217,15 +228,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             return false;
         }
 
-        public static Texture2D textureTentacle;
-
         public void DrawTentacles(Color lightColor, Color growColor)
         {
             Texture2D glow = AssetDirectory.Textures.Glow.Value;
 
             float tentaCount = 2;
-            for (int j = 0; j < tentaCount; j++)
-            {
+            for (int j = 0; j < tentaCount; j++) {
                 int dir = j > 0 ? 1 : -1;
 
                 float rot = Projectile.rotation + MathHelper.PiOver2;
@@ -235,14 +243,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 Vector2 lastPos = pos;
 
-                for (int i = 0; i < segments; i++)
-                {
+                for (int i = 0; i < segments; i++) {
                     float prog = i / (float)segments;
                     int segFrame = Math.Clamp((int)(prog * 5f), 1, 3);
-                    if (i == 0)
+                    if (i == 0) {
                         segFrame = 0;
-                    if (i == segments - 1)
+                    }
+
+                    if (i == segments - 1) {
                         segFrame = 4;
+                    }
 
                     Rectangle frame = textureTentacle.Frame(3, 5, 0, segFrame);
                     Rectangle glowFrame = textureTentacle.Frame(3, 5, 1, segFrame);

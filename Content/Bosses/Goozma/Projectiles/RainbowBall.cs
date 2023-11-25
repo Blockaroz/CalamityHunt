@@ -1,18 +1,15 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Linq;
-using Arch.Core.Extensions;
-using CalamityHunt.Common;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -40,12 +37,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (Time == 0)
-            {
+            if (Time == 0) {
                 Projectile.localAI[0] = Main.rand.NextFloat(20);
 
-                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
-                {
+                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
                     Projectile.oldPos[i] = Projectile.Center;
                     Projectile.oldRot[i] = Projectile.rotation;
                 }
@@ -54,22 +49,26 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 25, Time, true));
 
             int target = -1;
-            if (Main.player.Any(n => n.active && !n.dead))
+            if (Main.player.Any(n => n.active && !n.dead)) {
                 target = Main.player.First(n => n.active && !n.dead).whoAmI;
+            }
 
-            if (target > -1)
-            {
+            if (target > -1) {
                 Projectile.extraUpdates = 1;
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero) * new Vector2(Main.rand.Next(22, 25), Main.rand.Next(22, 30)), 0.04f * Utils.GetLerpValue(0, 1400, Projectile.Distance(Main.player[target].MountedCenter), true));
                 Projectile.velocity += Projectile.DirectionTo(Main.player[target].MountedCenter).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f) * 0.3f * Utils.GetLerpValue(0, 1000, Projectile.Distance(Main.player[target].MountedCenter), true);
                 Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 13 * (1f + Utils.GetLerpValue(0, 600, Projectile.Distance(Main.player[target].MountedCenter), true) * 0.5f);
             }
 
-            var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity, -Projectile.velocity * 0.5f, Color.White, 2f * Projectile.scale);
-            hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
+            CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                particle.position = Projectile.Center + Main.rand.NextVector2Circular(30, 30) + Projectile.velocity;
+                particle.velocity = -Projectile.velocity * 0.5f;
+                particle.scale = 2f * Projectile.scale;
+                particle.color = Color.White;
+                particle.colorData = new ColorOffsetData(true, Projectile.localAI[0]);
+            }));
 
-            for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
-            {
+            for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
                 Projectile.oldPos[i] = Vector2.Lerp(Projectile.oldPos[i], Projectile.oldPos[i - 1], 0.66f);
                 Projectile.oldRot[i] = MathHelper.Lerp(Projectile.oldRot[i], Projectile.oldRot[i - 1], 0.66f);
             }
@@ -77,8 +76,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.oldRot[0] = MathHelper.Lerp(Projectile.oldRot[0], Projectile.rotation, 0.66f);
 
             Projectile.frameCounter++;
-            if (Projectile.frameCounter > (int)Math.Clamp((10f - Projectile.velocity.Length() * 0.33f), 2, 20))
-            {
+            if (Projectile.frameCounter > (int)Math.Clamp((10f - Projectile.velocity.Length() * 0.33f), 2, 20)) {
                 Projectile.frame = (Projectile.frame + 1) % 3;
                 Projectile.frameCounter = 0;
             }
@@ -89,10 +87,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void OnKill(int timeLeft)
         {
-            for (int i = 0; i < 40; i++)
-            {
-                var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center, -Projectile.velocity * 0.2f + Main.rand.NextVector2Circular(3, 3), Color.White, 2f);
-                hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
+            for (int i = 0; i < 40; i++) {
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                    particle.position = Projectile.Center;
+                    particle.velocity = -Projectile.velocity * 0.2f + Main.rand.NextVector2Circular(3, 3);
+                    particle.scale = 2f;
+                    particle.color = Color.White;
+                    particle.colorData = new ColorOffsetData(true, Projectile.localAI[0]);
+                }));
             }
         }
 
@@ -109,19 +111,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Texture2D glow = AssetDirectory.Textures.Glow.Value;
             Rectangle frame = speedTexture.Frame(3, 1, Projectile.frame, 0);
 
-            Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-            bloomColor.A = 0;
-            Color solidColor = bloomColor;
-            solidColor.A = 100;
+            Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) with { A = 0 };
+            Color solidColor = bloomColor with { A = 100 };
             SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            
+
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, solidColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
 
-            for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
-            {
-                Color trailColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 2f) * 0.15f;
-                trailColor.A = 0;
+            for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+                Color trailColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 2f) * 0.15f) with { A = 0 };
                 float fadeOut = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
                 float outScale = (float)Math.Pow(fadeOut, 1.5f);
                 Main.EntitySpriteDraw(texture, Projectile.oldPos[i] + Projectile.velocity * i * 0.1f - Main.screenPosition, null, trailColor * outScale, Projectile.oldRot[i], texture.Size() * 0.5f, Projectile.scale * 1.6f * fadeOut, direction, 0);

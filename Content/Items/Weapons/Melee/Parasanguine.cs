@@ -70,9 +70,10 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             if (player.ownedProjectileCounts[ModContent.ProjectileType<ParasanguineHeld>()] <= 0)
             {
                 int blood = 0;
-                if (player.altFunctionUse > 0 && player.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent > 0.5f)
+                if (player.altFunctionUse > 0 && player.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent > 0.5f) {
                     blood = 2;
-
+                }
+                    
                 Projectile.NewProjectileDirect(source, position, velocity, type, damage, 0, player.whoAmI, ai1: blood);
             }
 

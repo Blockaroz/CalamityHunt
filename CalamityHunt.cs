@@ -1,34 +1,48 @@
-﻿using CalamityHunt.Common.Graphics.Skies;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Misc;
 using CalamityHunt.Content.Items.Weapons.Summoner;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using CalamityHunt.Common.Utilities;
+using ReLogic.Content.Sources;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
-using Terraria.ModLoader;
-using ReLogic.Content.Sources;
-using Terraria.Audio;
 using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace CalamityHunt
 {
-	public class CalamityHunt : Mod
+    public class CalamityHunt : Mod
 	{
         public static Mod Instance;
+
+        public static ParticleSystem particles;
+        public static ParticleSystem particlesBehindEntities;
 
         public override void Load()
         {
             Instance = this;
+
+            particles = new ParticleSystem();
+            particles.Initialize();
+
+            particlesBehindEntities = new ParticleSystem();
+            particlesBehindEntities.Initialize();
+
+            On_Dust.UpdateDust += UpdateParticleSystems;
+            On_Main.DrawDust += DrawParticleSystems;
+            On_Main.DrawBackGore += DrawParticleSystemBehindEntities;
 
             Ref<Effect> stellarblackhole = new Ref<Effect>(ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceHole", AssetRequestMode.ImmediateLoad).Value);
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"] = new Filter(new ScreenShaderData(stellarblackhole, "BlackHolePass"), EffectPriority.VeryHigh);
@@ -42,6 +56,25 @@ namespace CalamityHunt
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Load();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonSky();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
+        }
+
+        private void UpdateParticleSystems(On_Dust.orig_UpdateDust orig)
+        {
+            orig();
+            particlesBehindEntities.Update();
+            particles.Update();
+        }
+
+        private void DrawParticleSystems(On_Main.orig_DrawDust orig, Main self)
+        {
+            orig(self);
+            particles.Draw(Main.spriteBatch);
+        }
+
+        private void DrawParticleSystemBehindEntities(On_Main.orig_DrawBackGore orig, Main self)
+        {
+            orig(self);
+            particlesBehindEntities.Draw(Main.spriteBatch, false);
         }
 
         public override void PostSetupContent()

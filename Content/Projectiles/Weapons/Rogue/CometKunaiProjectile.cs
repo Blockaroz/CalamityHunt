@@ -97,10 +97,19 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 Projectile.velocity *= 0.92f;
                 Projectile.localAI[0] -= 0.6f;
 
-                if (Projectile.timeLeft == 10)
-                {
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Projectile.Center, MathHelper.PiOver4.ToRotationVector2(), new Color(50, 180, 255, 0), 1f);
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Projectile.Center, Vector2.Zero, new Color(50, 180, 255, 0), 0.5f);
+                if (Projectile.timeLeft == 10) {
+                    CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
+                        particle.position = Projectile.Center;
+                        particle.velocity = MathHelper.PiOver4.ToRotationVector2();
+                        particle.scale = 1f;
+                        particle.color = new Color(50, 180, 255, 0);
+                    }));
+                    CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
+                        particle.position = Projectile.Center;
+                        particle.velocity = Vector2.Zero;
+                        particle.scale = 0.5f;
+                        particle.color = new Color(50, 180, 255, 0);
+                    }));
                 }
             }
         }

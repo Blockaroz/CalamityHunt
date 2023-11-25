@@ -1,17 +1,13 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Arch.Core.Extensions;
-using CalamityHunt.Common.Utilities;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -36,55 +32,59 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         public override void AI()
         {
-            if (Time == 0)
-            {
+            if (Time == 0) {
                 Projectile.rotation = Main.rand.NextFloat(-2f, 2f);
                 Target = -1;
             }
 
             Projectile.Resize((int)(150 * Utils.GetLerpValue(0, 80, Time, true)), (int)(150 * Utils.GetLerpValue(0, 80, Time, true)));
             Projectile.scale = MathF.Pow(Utils.GetLerpValue(5, 80, Time, true), 0.7f) * 3f;
-            Projectile.position += (Main.player[Projectile.owner].position - Main.player[Projectile.owner].oldPosition) * Utils.GetLerpValue(20, 15, Time, true) * 0.3f;
+            if (Main.myPlayer == Projectile.owner) {
+                Projectile.position += (Main.player[Projectile.owner].position - Main.player[Projectile.owner].oldPosition) * Utils.GetLerpValue(20, 15, Time, true) * 0.3f;
+                Projectile.netUpdate = true;
+            }
             float expand = Utils.GetLerpValue(0, 80, Time, true) * 2f;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + 3);
             glowColor.A /= 3;
 
-            if (Time > 10)
-            {
-                if (Main.rand.NextBool(8))
-                {
-                    var hue = ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand, Projectile.velocity * Main.rand.NextFloat(), glowColor, (1f + Main.rand.NextFloat()));
-                    hue.Add(new ParticleData<float> { Value = Projectile.localAI[0] });
-                    // TODO: What is this for? - hue.emit = true;
+            if (Time > 10) {
+                if (Main.rand.NextBool(8)) {
+                    CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                        particle.position = Projectile.Center + Main.rand.NextVector2Circular(100, 100) * expand;
+                        particle.velocity = Projectile.velocity * Main.rand.NextFloat();
+                        particle.scale = Main.rand.NextFloat(1f, 2f);
+                        particle.color = glowColor;
+                        particle.colorData = new ColorOffsetData(true, Projectile.localAI[0]);
+                    }));
                 }
 
-                if (Main.rand.NextBool(4))
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(64, 64) * expand, Projectile.velocity * Main.rand.NextFloat(2f), glowColor, (1f + Main.rand.NextFloat()) * expand * 0.5f);
+                CalamityHunt.particles.Add(Particle.Create<BigFlame>(particle => {
+                    particle.position = Projectile.Center + Main.rand.NextVector2Circular(32, 32) * expand;
+                    particle.velocity = Projectile.velocity.RotatedByRandom(0.1f) * Main.rand.NextFloat(1f, 1.5f);
+                    particle.scale = Main.rand.NextFloat(1f, 2f) * expand;
+                    particle.color = glowColor * 0.5f;
+                    particle.maxTime = Main.rand.Next(5, 7);
+                }));
 
-                if (Main.rand.NextBool(5) && Projectile.velocity.LengthSquared() > 2f)
-                {
+                if (Main.rand.NextBool(5) && Projectile.velocity.LengthSquared() > 2f) {
                     Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(180, 180) * expand, DustID.Sand, Projectile.velocity * Main.rand.NextFloat(3f), 0, Color.Black, 0.3f + Main.rand.NextFloat());
                     dust.noGravity = true;
                 }
             }
 
-            if (Time > 20)
-            {
-                if (Target > -1)
-                {
+            if (Time > 20) {
+                if (Target > -1) {
                     Projectile.velocity += Projectile.DirectionTo(Main.npc[(int)Target].Center) * Utils.GetLerpValue(1200, 0, Projectile.Distance(Main.npc[(int)Target].Center), true);
                     Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Projectile.oldVelocity.Length();
                 }
-                else
-                {
+                else {
                     Target = Projectile.FindTargetWithLineOfSight(1200);
                     if (Target > -1 && Main.netMode != NetmodeID.MultiplayerClient)
                         Projectile.netUpdate = true;
                 }
 
-                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(5))
-                {
+                if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(5)) {
                     Projectile.velocity += Main.rand.NextVector2Circular(1, 1);
                     Projectile.netUpdate = true;
                 }
@@ -112,7 +112,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle frame = texture.Frame(1, 7, 0, Projectile.frame);
 
             Color backColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * 0.9f;
@@ -122,8 +122,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             Color backDrawColor = backColor * Utils.GetLerpValue(80, 50, Time, true);
             Color drawColor = glowColor * Utils.GetLerpValue(80, 30, Time, true);
 
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 Color trailColor = backDrawColor * (1f - i / 4f);
                 Vector2 off = Projectile.velocity * i * 3.5f * MathF.Sqrt(Projectile.scale) * Utils.GetLerpValue(1, 15, Time, true);
                 Main.EntitySpriteDraw(texture, Projectile.Center - off - Main.screenPosition, frame, trailColor, Projectile.rotation + Main.GlobalTimeWrappedHourly * 5f * (1f + i / 4f) * -Projectile.direction, frame.Size() * 0.5f, Projectile.scale * 1.15f, 0, 0);

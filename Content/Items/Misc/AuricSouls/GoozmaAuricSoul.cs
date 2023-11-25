@@ -63,19 +63,6 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
         {
             for (int i = 0; i < 150; i++)
             {
-                if (Main.rand.NextBool(3))
-                {
-                    Vector2 off = Main.rand.NextVector2Circular(20, 20);
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(5, 5), GetAlpha(Color.White).Value * 0.2f, 1f + Main.rand.NextFloat());
-                }
-
-                if (Main.rand.NextBool(8))
-                {
-                    Vector2 off = Main.rand.NextVector2Circular(20, 20);
-                    float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                    ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(7, 7), GetAlpha(Color.White).Value * 0.2f, scale * 0.6f);
-                }
-
                 Dust soul = Dust.NewDustPerfect(Item.Center, DustID.PortalBoltTrail, Main.rand.NextVector2Circular(10, 10), 0, GetAlpha(Color.White).Value, Main.rand.NextFloat(2f));
                 soul.noGravity = true;
             }
@@ -114,20 +101,6 @@ namespace CalamityHunt.Content.Items.Misc.AuricSouls
             {
                 SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaAuricSoulBreathe, Item.Center);
                 breathSoundCounter = Main.rand.Next(300, 500);
-            }
-
-            if (Main.rand.NextBool(10))
-            {
-                Vector2 off = Main.rand.NextVector2Circular(30, 30);
-                float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                ParticleBehavior.NewParticle(ModContent.GetInstance<CrossSparkleParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(1, 1), GetAlpha(Color.White).Value * 0.2f, scale);
-            }
-
-            if (Main.rand.NextBool(35))
-            {
-                Vector2 off = Main.rand.NextVector2Circular(20, 20);
-                float scale = Main.rand.NextFloat() + Utils.GetLerpValue(50, 0, off.Length(), true);
-                ParticleBehavior.NewParticle(ModContent.GetInstance<HueLightDustParticleBehavior>(), Item.Center + off, Main.rand.NextVector2Circular(14, 14), GetAlpha(Color.White).Value * 0.2f, scale * 0.5f);
             }
 
             if (Main.rand.NextBool(5))

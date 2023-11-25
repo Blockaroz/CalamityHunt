@@ -1,14 +1,12 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using ReLogic.Utilities;
-using System;
-using System.Linq;
-using Arch.Core.Extensions;
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -58,59 +56,59 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Owner = -1;
         }
 
-        private Vector2 saveTarget;
-        private float direction;
-
         public override void AI()
         {
-            if (Owner < 0)
-            {
+            if (Owner < 0) {
                 Projectile.active = false;
                 return;
             }
-            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>())
-            {
+            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>()) {
                 Projectile.active = false;
                 return;
             }
 
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 15, 0.0001f);
 
-            foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 200))
-            {
+            foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 200)) {
                 otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.1f;
                 Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.1f;
             }
 
-            if (Time % TopTime == 1)
-            {
+            if (Time % TopTime == 1) {
                 Projectile.direction *= -1;
                 TopTime = Main.rand.Next(80, 140);
             }
 
-            if (Time % TopTime > TopTime * 0.7f)
+            if (Time % TopTime > TopTime * 0.7f) {
                 Projectile.velocity = Projectile.velocity.RotatedBy(0.05f * Projectile.direction);
-            else
+            }
+            else {
                 Projectile.velocity = Projectile.velocity.RotatedBy((Projectile.velocity.ToRotation() - Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center)) * 0.01f * Projectile.direction);
-            
+            }
+
             Projectile.velocity *= 0.99f;
 
-            if (Time > 500)
-            {
+            if (Time > 500) {
                 Projectile.damage = 0;
                 Projectile.scale = Utils.GetLerpValue(40, 120, Projectile.Distance(Main.npc[(int)Owner].Center), true);
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.2f * Utils.GetLerpValue(500, 600, Time, true), 0.2f * Utils.GetLerpValue(500, 600, Time, true)).RotatedBy(0.01f * Projectile.direction);
             }
 
-            if (Time > 600 || Projectile.scale < 0.1f)
+            if (Time > 600 || Projectile.scale < 0.1f) {
                 Projectile.Kill();
+            }
 
-            var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.2f, Color.White, (1f + Main.rand.NextFloat()) * Projectile.scale);
-            smoke.Add(new ParticleData<string> { Value = "Cosmos" });
+            //var smoke = Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.2f, Color.White, (1f + Main.rand.NextFloat()) * Projectile.scale);
+            //smoke.Add(new ParticleData<string> { Value = "Cosmos" });
 
-            if (Main.rand.NextBool(50))
-                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(24, 24) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.2f + Main.rand.NextFloat()) * Projectile.scale);
-
+            if (Main.rand.NextBool(50)) {
+                CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
+                    particle.position = Projectile.Center + Main.rand.NextVector2Circular(24, 24) * Projectile.scale + Projectile.velocity;
+                    particle.velocity = Main.rand.NextVector2Circular(3, 3);
+                    particle.scale = Main.rand.NextFloat(0.2f, 1.2f) * Projectile.scale;
+                    particle.color = new Color(30, 15, 10, 0);
+                }));
+            }
             Projectile.rotation += Projectile.velocity.Length() * Projectile.direction * 0.0015f;
 
             //Projectile.frameCounter++;
@@ -126,8 +124,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > 60)
+            if (Time > 60) {
                 return base.Colliding(projHitbox, targetHitbox);
+            }
             return false;
         }
 
@@ -144,8 +143,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Texture2D glow = AssetDirectory.Textures.Glow.Value;
             Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
-            for (int i = 0; i < 3; i++)
-            {
+            for (int i = 0; i < 3; i++) {
                 float wobble = (float)Math.Sin(Projectile.localAI[0] * 0.15f + i * 1.3f) * 0.05f;
                 float rotation = Projectile.rotation * (0.5f + i * 0.1f);
                 Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(20, 100, 150, 0) * 0.5f * (i > 0 ? 0.1f / i : 1f), rotation, auraTexture.Size() * 0.5f, Projectile.scale * (0.8f + wobble + i * 0.3f), 0, 0);

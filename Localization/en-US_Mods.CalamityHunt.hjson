@@ -589,6 +589,7 @@ Projectiles: {
 	AntiMassBioBall.DisplayName: Anti-Mass Bio Ball
 	AntiMassColliderProj.DisplayName: Anti-Mass Collider
 	AntiMassMacroLaser.DisplayName: Anti Mass Macro Laser
+	AntiMassDeathLaser.DisplayName: Anti Mass Death Laser
 }
 
 Chat: {

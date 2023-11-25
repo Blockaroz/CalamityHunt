@@ -1,14 +1,12 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using ReLogic.Utilities;
-using System;
-using System.Linq;
-using Arch.Core.Extensions;
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -56,9 +54,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Owner = -1;
         }
 
-        private Vector2 saveTarget;
-        private float direction;
-
         public override void AI()
         {
             if (Owner < 0)
@@ -74,8 +69,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             for (int i = 0; i < 2; i++)
             {
-                var smoke = ParticleBehavior.NewParticle(ModContent.GetInstance<CosmicSmokeParticleBehavior>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * i * 0.5f, Color.White, (0.5f + Main.rand.NextFloat()) * Projectile.scale);
-                smoke.Add(new ParticleData<string> { Value = "Cosmos" });
+                //var smoke = Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * i * 0.5f, Color.White, (0.5f + Main.rand.NextFloat()) * Projectile.scale);
+                //smoke.Add(new ParticleData<string> { Value = "Cosmos" });
             }
 
             if (Projectile.ai[1] == 0)
@@ -90,22 +85,30 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.15f;
                 }
             }
-            else if (Time < 40)
+            else if (Time < 40) {
                 Projectile.velocity *= 0.945f;
+            }
             else
             {
                 Projectile.scale = Utils.GetLerpValue(30, 100, Projectile.Distance(Main.npc[(int)Owner].Center), true);
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.07f, 0.15f * Utils.GetLerpValue(50, 150, Time, true)).RotatedBy(0.015f * Projectile.direction);
             }
-            if (Time > 300 || Projectile.scale < 0.1f)
+            if (Time > 300 || Projectile.scale < 0.1f) {
                 Projectile.Kill();
+            }
 
-            if (Time > 0)
+            if (Time > 0) {
                 Projectile.ai[1] = 1;
+            }
 
-            if (Main.rand.NextBool(30))
-                ParticleBehavior.NewParticle(ModContent.GetInstance<PrettySparkleParticleBehavior>(), Projectile.Center + Main.rand.NextVector2Circular(12, 12) * Projectile.scale + Projectile.velocity, Main.rand.NextVector2Circular(3, 3), new Color(30, 15, 10, 0), (0.4f + Main.rand.NextFloat()) * Projectile.scale);
-
+            if (Main.rand.NextBool(30)) {
+                CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
+                    particle.position = Projectile.Center + Main.rand.NextVector2Circular(12, 12) * Projectile.scale + Projectile.velocity;
+                    particle.velocity = Main.rand.NextVector2Circular(3, 3);
+                    particle.scale = Main.rand.NextFloat(0.4f, 1.4f) * Projectile.scale;
+                    particle.color = new Color(30, 15, 10, 0);
+                }));
+            }
             Projectile.rotation += Projectile.velocity.Length() * Projectile.direction * 0.02f;
 
             Time++;

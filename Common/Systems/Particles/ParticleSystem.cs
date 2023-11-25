@@ -1,166 +1,63 @@
-﻿#nullable enable
-
-using Arch.Core;
-using Arch.Core.Extensions;
-using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Entity = Arch.Core.Entity;
 
 namespace CalamityHunt.Common.Systems.Particles;
 
-[Autoload(Side = ModSide.Client)]
-public sealed class ParticleSystem : ModSystem
+public class ParticleSystem
 {
-    public World ParticleWorld { get; } = World.Create();
+    private HashSet<Particle> particles;
 
-    public override void OnModLoad()
+    public void Initialize()
     {
-        On_Main.UpdateParticleSystems += UpdateParticles;
-        On_Main.DoDraw_DrawNPCsOverTiles += DrawParticlesUnderEntities;
-        On_Main.DrawDust += DrawParticles;
-        
+        particles = new HashSet<Particle>();
     }
 
-    public override void OnModUnload()
-    {
-        On_Main.UpdateParticleSystems -= UpdateParticles;
-        On_Main.DoDraw_DrawNPCsOverTiles -= DrawParticlesUnderEntities;
-        On_Main.DrawDust -= DrawParticles;
-    }
+    public void Add(Particle particle) => particles.Add(particle);
 
-    public void UpdateParticles()
+    public void Clear() => particles.Clear();
+
+    public void Update()
     {
-        if (Main.dedServ || Main.gamePaused || Main.netMode == NetmodeID.Server)
+        if (Main.dedServ) {
             return;
+        }
 
-        var query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleVelocity, ParticleActive>();
-        ParticleWorld.Query(
-            in query, 
-            (in Entity entity) =>
-            {
-                ref var particle = ref entity.Get<Particle>();
-                ref var position = ref entity.Get<ParticlePosition>();
-                ref var velocity = ref entity.Get<ParticleVelocity>();
-                ref var active = ref entity.Get<ParticleActive>();
-
-                position.Value += velocity.Value;
-                particle.Behavior.Update(in entity);
-                if (!active.Value)
-                    ParticleWorld.Destroy(entity);
+        foreach (Particle particle in particles.ToHashSet()) {
+            if (particle is null) {
+                continue;
             }
-        );
+
+            particle.Update();
+            particle.position += particle.velocity;
+
+            if (particle.ShouldRemove) {
+                particles.Remove(particle);
+            }
+        }
     }
 
-    public void DrawParticlesUnderEntities(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch spriteBatch, bool begin = true)
     {
-        if (Main.dedServ || Main.gameMenu || Main.netMode == NetmodeID.Server)
+        if (Main.dedServ) {
             return;
+        }
+            
+        if (begin) {
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        }
 
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        Rectangle value = new Rectangle((int)Main.screenPosition.X - Main.screenWidth, (int)Main.screenPosition.Y - Main.screenHeight, Main.screenWidth * 2, Main.screenHeight * 2);
-
-        var query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleDrawBehindEntities>().WithNone<ParticleShader>();
-        ParticleWorld.Query(
-            in query,
-            (in Entity entity) =>
-            {
-                ref var particle = ref entity.Get<Particle>();
-                ref var position = ref entity.Get<ParticlePosition>();
-                
-                if (new Rectangle((int)position.Value.X - 3, (int)position.Value.Y - 3, 6, 6).Intersects(value))
-                    particle.Behavior.Draw(in entity, spriteBatch);
+        foreach (Particle particle in particles.ToHashSet()) {
+            if (particle is null) {
+                continue;
             }
-        );
 
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        
-        query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleDrawBehindEntities, ParticleShader>();
-        ParticleWorld.Query(
-            in query,
-            (in Entity entity) =>
-            {
-                ref var particle = ref entity.Get<Particle>();
-                ref var position = ref entity.Get<ParticlePosition>();
-                ref var shader = ref entity.Get<ParticleShader>();
+            particle.Draw(spriteBatch);
+        }
 
-                if (!new Rectangle((int)position.Value.X - 3, (int)position.Value.Y - 3, 6, 6).Intersects(value))
-                    return;
-
-                shader.Value.Apply(null);
-                particle.Behavior.Draw(in entity, spriteBatch);
-                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-            }
-        );
-
-        spriteBatch.End();
-    }
-
-    public void DrawParticles(SpriteBatch spriteBatch)
-    {
-        if (Main.dedServ || Main.gameMenu || Main.netMode == NetmodeID.Server)
-            return;
-
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        Rectangle value = new Rectangle((int)Main.screenPosition.X - Main.screenWidth, (int)Main.screenPosition.Y - Main.screenHeight, Main.screenWidth * 2, Main.screenHeight * 2);
-        
-        var query = new QueryDescription().WithAll<Particle, ParticlePosition>().WithNone<ParticleShader, ParticleDrawBehindEntities>();
-        ParticleWorld.Query(
-            in query,
-            (in Entity entity) =>
-            {
-                ref var particle = ref entity.Get<Particle>();
-                ref var position = ref entity.Get<ParticlePosition>();
-
-                if (new Rectangle((int)position.Value.X - 3, (int)position.Value.Y - 3, 6, 6).Intersects(value))
-                    particle.Behavior.Draw(in entity, spriteBatch);
-            }
-        );
-
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        
-        query = new QueryDescription().WithAll<Particle, ParticlePosition, ParticleShader>().WithNone<ParticleDrawBehindEntities>();
-        ParticleWorld.Query(
-            in query,
-            (in Entity entity) =>
-            {
-                ref var particle = ref entity.Get<Particle>();
-                ref var position = ref entity.Get<ParticlePosition>();
-                ref var shader = ref entity.Get<ParticleShader>();
-
-                if (!new Rectangle((int)position.Value.X - 3, (int)position.Value.Y - 3, 6, 6).Intersects(value))
-                    return;
-
-                shader.Value?.Apply(null);
-                particle.Behavior.Draw(in entity, spriteBatch);
-                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-            }
-        );
-
-        spriteBatch.End();
-    }
-
-    private void DrawParticlesUnderEntities(On_Main.orig_DoDraw_DrawNPCsOverTiles orig, Main self)
-    {
-        DrawParticlesUnderEntities(Main.spriteBatch);
-
-        orig(self);
-    }
-
-    private void DrawParticles(On_Main.orig_DrawDust orig, Main self)
-    {
-        DrawParticles(Main.spriteBatch);
-
-        orig(self);
-    }
-
-    private void UpdateParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
-    {
-        orig(self);
-        UpdateParticles();
+        if (begin) {
+            spriteBatch.End();
+        }
     }
 }
