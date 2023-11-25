@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,18 +20,21 @@ public class AntiMassBioBall : ModProjectile
 {
     public override void SetDefaults()
     {
-        Projectile.width = 24;
-        Projectile.height = 24;
+        Projectile.width = 28;
+        Projectile.height = 28;
         Projectile.friendly = true;
         Projectile.timeLeft = 200;
         Projectile.penetrate = -1;
         Projectile.tileCollide = true;
         Projectile.manualDirectionChange = true;
+        Projectile.localNPCHitCooldown = 10;
+        Projectile.usesLocalNPCImmunity = true;
     }
 
-    public const float MAX_MARKER_RANGE = 500;
+    public const float MAX_RANGE = 500;
 
     public ref float Time => ref Projectile.ai[0];
+    public ref float Target => ref Projectile.ai[1];
 
     public override void AI()
     {
@@ -37,13 +43,44 @@ public class AntiMassBioBall : ModProjectile
         Projectile.scale = Utils.GetLerpValue(-15, 10, Time, true);
 
         if (Main.myPlayer == Projectile.owner) {
-            if (Main.rand.NextBool(3) || Time % 5 == 0) {
+            if (Time < 5) {
+                Target = -1;
+                Projectile.netUpdate = true;
+            }
+            else {
+                if (Main.rand.NextBool(30) || Time % 5 == 0 || Target == -1) {
+
+                    int prevTarget = (int)Target;
+                    List<int> possibleTargets = new List<int>();
+                    foreach (NPC nPC in Main.npc.Where(n => n.active && n.CanBeChasedBy(Projectile) && n.whoAmI != (int)Target)) {
+                        possibleTargets.Add(nPC.whoAmI);
+                    }
+
+                    Target = possibleTargets.Count > 0 ? Main.rand.Next(possibleTargets) : -1;
+
+                    if ((int)Target != prevTarget) {
+                        Projectile.netUpdate = true;
+                    }
+                }
+
+                if (Main.npc.IndexInRange((int)Target)) {
+
+                    if (Projectile.Distance(Main.npc[(int)Target].Center) > MAX_RANGE) {
+                        Target = -1;
+                        Projectile.netUpdate = true;
+                    }
+                }
+            }
+            
+            if (Main.npc.Any(n => n.active && n.CanBeChasedBy(Projectile) && n.Distance(Projectile.Center) < 30)) {
+                Projectile.ResetLocalNPCHitImmunity();
+                Target = -1;
                 Projectile.netUpdate = true;
             }
         }
 
-        if (Main.rand.NextBool(9)) {
-            Color color = Color.Lerp(AntiMassColliderProj.MainColor, Color.Turquoise, (!Main.rand.NextBool(10)).ToInt()) with { A = 20 };
+        if (Main.rand.NextBool(7)) {
+            Color color = Color.Lerp(AntiMassColliderProj.MainColor, Color.Turquoise, (!Main.rand.NextBool(10)).ToInt()) with { A = 40 };
             Dust sparks = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16, 16), 278, Projectile.velocity.RotatedByRandom(0.2f) * 0.5f, 0, color * 0.7f, Main.rand.NextFloat(0.6f));
             sparks.noGravity = true;
         }
@@ -74,14 +111,17 @@ public class AntiMassBioBall : ModProjectile
 
         auraSound ??= new LoopingSound(sound, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
-        auraSound.PlaySound(() => Projectile.Center, () => Math.Max(0f, 0.5f - Projectile.Distance(Main.LocalPlayer.Center) * 0.00025f), () => -0.5f);
+        auraSound.PlaySound(() => Projectile.Center, () => Math.Max(0f, 0.5f - Projectile.Distance(Main.LocalPlayer.Center) * 0.0003f), () => -0.5f);
     }
 
     public override void OnKill(int timeLeft)
     {
         auraSound.StopSound();
 
-        SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite.WithPitchOffset(-0.33f), Projectile.Center);
+        SoundStyle deathSound = SoundID.DD2_KoboldIgnite;
+        deathSound.MaxInstances = 0;
+        deathSound.PitchVariance = 0.1f;
+        SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite.WithPitchOffset(-0.3f), Projectile.Center);
 
         for (int i = 0; i < 40; i++) {
             CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
@@ -93,12 +133,39 @@ public class AntiMassBioBall : ModProjectile
                 particle.anchor = () => Projectile.velocity * 0.2f;
             }));
 
-            if (Main.rand.NextBool()) {
-                Color color = Color.Lerp(AntiMassColliderProj.MainColor, Color.Turquoise, (!Main.rand.NextBool(10)).ToInt()) with { A = 20 };
+            if (!Main.rand.NextBool(4)) {
+                Color color = Color.Lerp(AntiMassColliderProj.MainColor, Color.Turquoise, (!Main.rand.NextBool(10)).ToInt()) with { A = 40 };
                 Dust sparks = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16, 16), 278, Main.rand.NextVector2Circular(5, 5), 0, color * 0.7f, Main.rand.NextFloat());
                 sparks.noGravity = true;
             }
         }
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+    {
+        target.AddBuff(ModContent.BuffType<Doomed>(), 240);
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info)
+    {
+        target.AddBuff(ModContent.BuffType<Doomed>(), 240);
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+    {
+        bool regularCollision = projHitbox.Intersects(targetHitbox);
+        if (regularCollision) {
+            Projectile.Kill();
+            return true;
+        }
+
+        if (Main.npc.IndexInRange((int)Target)) {
+            if (targetHitbox.Contains(Main.npc[(int)Target].Center.ToPoint())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public override bool PreDraw(ref Color lightColor)
@@ -113,16 +180,17 @@ public class AntiMassBioBall : ModProjectile
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Cyan * 0.3f) with { A = 0 }, 0, glow.Size() * 0.5f, scaleWobble, 0, 0);
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.MediumTurquoise * 0.2f) with { A = 0 }, 0, glow.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
 
-        //Effect trailEffect = AssetDirectory.Effects.BasicTrail.Value;
-        //trailEffect.Parameters["transformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-        //trailEffect.Parameters["uColor"].SetValue((Color.MediumTurquoise with { A = 40 }).ToVector3());
-        //trailEffect.Parameters["uThickness"].SetValue(1f);
-        //trailEffect.Parameters["uVaryThickness"].SetValue(1f);
-        //trailEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.1f);
-        //trailEffect.Parameters["uTexture0"].SetValue(TextureAssets.Extra[194].Value);
-        //trailEffect.Parameters["uTexture1"].SetValue(TextureAssets.Extra[196].Value);
+        Vector2[] points = new Vector2[24];
+        float[] rotations = new float[points.Length];
+        for (int i = 0; i < points.Length - 1; i++) {
+            rotations[i] = points[i].AngleTo(points[i + 1]);
+        }
+        rotations[^1] = rotations[^2];
 
-        //Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        for (int i = 0; i < points.Length - 2; i++) {
+            Vector2 stretch = new Vector2(points[i].Distance(points[i + 1]), 1f);
+            Main.EntitySpriteDraw(TextureAssets.BlackTile.Value, points[i] - Main.screenPosition, new Rectangle(0, 0, 1, 2), Color.Turquoise with { A = 0 }, rotations[i], Vector2.UnitX, stretch, 0, 0);
+        }
 
         return false;
     }

@@ -647,6 +647,11 @@ Buffs: {
 		DisplayName: Slime Soirée
 		Description: Inky, Blinky, Pinky, and Clyde will protect you
 	}
+
+	Doomed: {
+		DisplayName: Doomed
+		Description: Mods.CalamityHunt.Buffs.Doomed.Description
+	}
 }
 
 Tiles: {

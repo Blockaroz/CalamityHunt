@@ -648,6 +648,11 @@ Buffs: {
 		DisplayName: Soirée de gelée
 		Description: Inky, Blinky, Pinky, et Cylde vont se battre à vos côtés
 	}
+
+	Doomed: {
+		// DisplayName: Doomed
+		// Description: Mods.CalamityHunt.Buffs.Doomed.Description
+	}
 }
 
 Tiles: {

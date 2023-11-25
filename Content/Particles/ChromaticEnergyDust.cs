@@ -88,7 +88,7 @@ public class ChromaticEnergyDust : Particle
         }
 
         for (int i = 1; i < oldPos.Length; i++) {
-            Color trailColor = color with { A = 40 } * (float)Math.Pow(1f - ((float)i / oldPos.Length), 2f) * 0.1f;
+            Color trailColor = color with { A = 40 } * (float)Math.Pow(1f - ((float)i / oldPos.Length), 2f) * 0.15f;
             Vector2 trailStretch = new Vector2(oldPos[i].Distance(oldPos[i - 1]) + 0.05f, scale);
             spriteBatch.Draw(texture, oldPos[i] - Main.screenPosition, null, trailColor, oldRot[i], texture.Size() * 0.5f, trailStretch, 0, 0);
         }
@@ -96,6 +96,6 @@ public class ChromaticEnergyDust : Particle
         spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), color with { A = 40 }, rotation, texture.Size() * 0.5f, scale, 0, 0);
 
         float innerGlowScale = 0.7f - Utils.GetLerpValue(0f, 1f, life, true) * 0.2f;
-        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), Color.White with { A = 0 }, rotation, texture.Size() * 0.5f, scale * innerGlowScale * 0.7f, 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), Color.White with { A = 0 }, rotation, texture.Size() * 0.5f, scale * innerGlowScale * 0.8f, 0, 0);
     }
 }

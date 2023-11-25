@@ -18,11 +18,11 @@ public class AntiMassCollider : ModItem
 {
     public override void SetDefaults()
     {
-        Item.damage = 30;
+        Item.damage = 60;
         Item.DamageType = DamageClass.Ranged;
         Item.width = 100;
         Item.height = 42;
-        Item.useTime = 110;
+        Item.useTime = 100;
         Item.useAnimation = Item.useTime;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.knockBack = 6;

@@ -49,9 +49,9 @@ public class AntiMassColliderProj : ModProjectile
             return;
         }
 
-        Vector2 muzzlePosition = Projectile.Center + new Vector2(20, -4 * Projectile.direction).RotatedBy(Projectile.velocity.ToRotation());
+        Vector2 muzzlePosition = Projectile.Center + new Vector2(20, 2 * Projectile.direction).RotatedBy(Projectile.velocity.ToRotation());
         int firstShot = (int)(10 * Player.GetAttackSpeed(DamageClass.Ranged));
-        int secondShot = (int)(65 * Player.GetAttackSpeed(DamageClass.Ranged));
+        int secondShot = (int)(55 * Player.GetAttackSpeed(DamageClass.Ranged));
 
         if (Projectile.owner == Main.myPlayer) {
             if (Time == 0) {
@@ -60,7 +60,7 @@ public class AntiMassColliderProj : ModProjectile
             }
 
             if (Time == firstShot) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, ModContent.ProjectileType<AntiMassBioBall>(), 5 + Projectile.damage / 4, Projectile.knockBack, Player.whoAmI);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, ModContent.ProjectileType<AntiMassBioBall>(), 1 + Projectile.damage / 8, Projectile.knockBack, Player.whoAmI, 0, -1);
 
                 Player.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
                 Projectile.netUpdate = true;

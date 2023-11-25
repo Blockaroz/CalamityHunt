@@ -647,6 +647,11 @@ Buffs: {
 		DisplayName: 史莱姆派对
 		Description: Inky、Blinky、Pinky和Clyde会保护你
 	}
+
+	Doomed: {
+		// DisplayName: Doomed
+		// Description: Mods.CalamityHunt.Buffs.Doomed.Description
+	}
 }
 
 Tiles: {

@@ -1,5 +1,6 @@
 ﻿using System;
 using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,13 +20,16 @@ public class AntiMassDeathLaser : ModProjectile
 
     public override void SetDefaults()
     {
-        Projectile.width = 18;
-        Projectile.height = 18;
+        Projectile.width = 24;
+        Projectile.height = 24;
         Projectile.friendly = true;
         Projectile.timeLeft = 280;
         Projectile.penetrate = -1;
         Projectile.tileCollide = true;
+        Projectile.ownerHitCheck = true;
         Projectile.extraUpdates = 30;
+        Projectile.localNPCHitCooldown = 30;
+        Projectile.usesLocalNPCImmunity = true;
     }
 
     public ref float Time => ref Projectile.ai[0];
@@ -108,13 +112,23 @@ public class AntiMassDeathLaser : ModProjectile
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
-        int repetitions = (int)Math.Min(Time, 20);
-        for (int i = 0; i < repetitions; i++) {
-            Rectangle rect = projHitbox;
-            rect.Location -= (Projectile.velocity * i).ToPoint();
-            return base.Colliding(rect, targetHitbox);
+        Vector2 startPoint = Projectile.Center - Projectile.velocity * Time;
+        float collisionPoint = 0;
+        return Collision.CheckAABBvLineCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), startPoint, Projectile.Center, Projectile.width * 2, ref collisionPoint);
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+    {
+        if (target.HasBuff<Doomed>()) {
+            modifiers.FinalDamage *= 3f;
         }
-        return false;
+    }
+
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+    {
+        if (target.HasBuff<Doomed>()) {
+            modifiers.FinalDamage *= 3f;
+        }
     }
 
     private float visualSpeed;
