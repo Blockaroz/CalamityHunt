@@ -130,17 +130,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.velocity = Projectile.rotation.ToRotationVector2();
             Projectile.localAI[0] = Main.npc[(int)Owner].localAI[0];
 
-            if (Time > ChargeTime * 0.7f) {
-                float smokePower = Utils.GetLerpValue(ChargeTime * 0.7f, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 70, ChargeTime + LaserDuration + 40, Time, true);
-                Color smokeColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * (0.5f + smokePower * 0.5f);
-                smokeColor.A = 0;
-                int smokeCount = (int)(smokePower * 12f);
-                for (int i = 0; i < smokeCount; i++) {
-                    //Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20, Projectile.rotation.ToRotationVector2().RotatedByRandom((float)Math.Sqrt(1f - smokePower * 0.5f)) * Main.rand.NextFloat(15f, 25f) * smokePower, smokeColor, 1f + Main.rand.NextFloat());
+            //if (Time > ChargeTime * 0.7f) {
+            //    float smokePower = Utils.GetLerpValue(ChargeTime * 0.7f, ChargeTime, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 70, ChargeTime + LaserDuration + 40, Time, true);
+            //    Color smokeColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * (0.5f + smokePower * 0.5f);
+            //    smokeColor.A = 0;
+            //    int smokeCount = (int)(smokePower * 12f);
+            //    for (int i = 0; i < smokeCount; i++) {
+            //        //Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20, Projectile.rotation.ToRotationVector2().RotatedByRandom((float)Math.Sqrt(1f - smokePower * 0.5f)) * Main.rand.NextFloat(15f, 25f) * smokePower, smokeColor, 1f + Main.rand.NextFloat());
 
-                    //CalamityHunt.particles.Add(Particle.Create<>(particle => 
-                }
-            }
+            //        //CalamityHunt.particles.Add(Particle.Create<>(particle => 
+            //    }
+            //}
 
             if (!Main.rand.NextBool((int)(Time * 0.5f + 15))) {
                 CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
@@ -158,8 +158,6 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - (progress / 3500f) * 100) * grow;
                     color.A = 0;
                     Vector2 position = Projectile.Center + new Vector2(progress, Main.rand.NextFloat(-80f, 80f) * (progress / 3300f)).RotatedBy(Projectile.rotation);
-                    //var smoke = Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), position, Projectile.velocity.RotatedByRandom(0.4f) * Main.rand.NextFloat(15f, 45f), color, 1f + Main.rand.NextFloat(2f));
-                    //smoke.Add(new ParticleDrawBehindEntities());
                     if (Main.rand.NextBool(5)) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                             particle.position = position;

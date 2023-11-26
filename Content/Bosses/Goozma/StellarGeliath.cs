@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Particles;
@@ -36,8 +37,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.CursedInferno] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
-            if (Common.ModCompatibility.Calamity.IsLoaded)
-            {
+            if (Common.ModCompatibility.Calamity.IsLoaded) {
                 NPCID.Sets.SpecificDebuffImmunity[Type][Common.ModCompatibility.Calamity.Mod.Find<ModBuff>("MiracleBlight").Type] = true;
             }
 
@@ -48,15 +48,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             database.FindEntryByNPCID(Type).UIInfoProvider = new HighestOfMultipleUICollectionInfoProvider(new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[ModContent.NPCType<Goozma>()], true));
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.StellarGeliath"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
             });
             }
-            else
-            {
+            else {
                 bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> {
                 new FlavorTextBestiaryInfoElement("Mods.CalamityHunt.Bestiary.StellarGeliath"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.SlimeRain,
@@ -83,8 +81,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.npcSlots = 10f;
             NPC.aiStyle = -1;
             NPC.chaseable = false;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
@@ -113,12 +110,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void AI()
         {
-            if (NPC.scale > 0.1f)
-            {
-                for (int i = 0; i < 6; i++)
-                {
-                    //var smoke = Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f, Main.rand.NextVector2Circular(4, 4) + NPC.velocity * (i / 6f) * 0.5f, Color.White, (1.5f + Main.rand.NextFloat()) * NPC.scale);
-                    //smoke.Add(new ParticleData<string> { Value = "Cosmos" });
+            if (NPC.scale > 0.1f) {
+                for (int i = 0; i < 6; i++) {
+                    CosmosMetaballDrawer.cosmosParticles.Add(Particle.Create<CosmicFlame>(particle => {
+                        particle.position = NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f;
+                        particle.velocity = Main.rand.NextVector2Circular(4, 4) + NPC.velocity * (i / 6f) * 0.5f;
+                        particle.scale = Main.rand.NextFloat(1.5f, 2.5f) * NPC.scale;
+                        particle.color = Color.White;
+                    }));
                 }
                 if (Main.rand.NextBool(15)) {
                     CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
@@ -128,8 +127,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         particle.color = new Color(30, 15, 10, 0);
                     }));
                 }
-                if (Main.rand.NextBool(4))
-                {
+                if (Main.rand.NextBool(4)) {
                     Vector2 discOff = (Main.rand.NextVector2CircularEdge(150, 50) + Main.rand.NextVector2Circular(18, 18)).RotatedBy(discRot) * discScale;
                     CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
                         particle.position = discPos + discOff;
@@ -159,13 +157,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             NPC.damage = GetDamage(0);
 
-            if (Time < 0)
-            {
+            if (Time < 0) {
                 NPC.velocity *= 0.9f;
                 NPC.damage = 0;
                 squishFactor = new Vector2(1f - (float)Math.Pow(Utils.GetLerpValue(-10, -45, Time, true), 2) * 0.5f, 1f + (float)Math.Pow(Utils.GetLerpValue(-10, -45, Time, true), 2) * 0.4f);
-                if (Time == -2 && NPC.Distance(Target.Center) > 1000)
-                {
+                if (Time == -2 && NPC.Distance(Target.Center) > 1000) {
                     RememberAttack = Attack;
                     Attack = (int)AttackList.TooFar;
                 }
@@ -173,8 +169,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             else {
-                switch (Attack)
-                {
+                switch (Attack) {
                     case (int)AttackList.StarSigns:
                         NPC.damage = 0;
                         StarSigns();
@@ -211,8 +206,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         else
                             squishFactor = Vector2.Lerp(new Vector2(1.4f, 0.5f), Vector2.One, Utils.GetLerpValue(40, 54, Time, true));
 
-                        if (Time > 55)
-                        {
+                        if (Time > 55) {
                             NPC.velocity *= 0f;
                             Time = 0;
                             Attack = RememberAttack;
@@ -244,21 +238,18 @@ namespace CalamityHunt.Content.Bosses.Goozma
             NPC.dontTakeDamage = true;
             NPC.velocity *= 0.8f;
 
-            if (Time > 35 && Time < 600)
-            {
+            if (Time > 35 && Time < 600) {
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(saveTarget) > 1700))
                     player.velocity += player.DirectionTo(saveTarget) * Utils.GetLerpValue(1700, 1900, player.Distance(saveTarget));
             }
 
-            if (Time == 35)
-            {
+            if (Time == 35) {
                 saveTarget = NPC.Center;
 
                 SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave, NPC.Center);
 
                 int count = 5 + Main.rand.Next(5, 7);
-                for (int i = 0; i < count; i++)
-                {
+                for (int i = 0; i < count; i++) {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1600, 2000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.1f);
                     Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
@@ -267,13 +258,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     star.ai[1] = 0;
                 }
             }
-            if (Time == 53)
-            {
+            if (Time == 53) {
                 SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave.WithPitchOffset(0.07f), NPC.Center);
 
                 int count = 4 + Main.rand.Next(4, 6);
-                for (int i = 0; i < count; i++)
-                {
+                for (int i = 0; i < count; i++) {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(1000, 1500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.2f);
                     Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
@@ -282,15 +271,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     star.ai[1] = 1;
                 }
             }
-            if (Time == 70)
-            {
+            if (Time == 70) {
                 NPC.scale = 0f;
 
                 SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationForm.WithPitchOffset(0.2f), NPC.Center);
 
                 int count = 3 + Main.rand.Next(8, 10);
-                for (int i = 0; i < count; i++)
-                {
+                for (int i = 0; i < count; i++) {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(50, 1000), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
                     Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
                     star.direction = Main.rand.NextBool() ? -1 : 1;
@@ -299,8 +286,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     star.ai[1] = 2;
                 }
 
-                for (int i = 0; i < 8; i++)
-                {
+                for (int i = 0; i < 8; i++) {
                     Vector2 target = NPC.Center + new Vector2(Main.rand.Next(10, 500), 0).RotatedBy(MathHelper.TwoPi / count * i).RotatedByRandom(0.3f);
 
                     Projectile star = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(10, 10), HuntOfTheOldGodsUtils.GetDesiredVelocityForDistance(NPC.Center, target, 0.95f, 40), ModContent.ProjectileType<ConstellationStar>(), GetDamage(1), 0);
@@ -311,31 +297,27 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            if (Time > 58 && Time < 70)
-            {
+            if (Time > 58 && Time < 70) {
                 NPC.scale = MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(70, 62, Time, true));
                 int debrisCount = Main.rand.Next(1, 3);
                 debrisCount += (int)DifficultyBasedValue(0, 1, 1, 2, 3);
-                for (int i = 0; i < debrisCount; i++)
-                {
+                for (int i = 0; i < debrisCount; i++) {
                     Projectile debris = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(70, 60), NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) + Main.rand.NextVector2Circular(30, 30), ModContent.ProjectileType<StellarDebris>(), GetDamage(3), 0);
                     debris.ai[2] = NPC.whoAmI;
                 }
             }
 
-            if (Time > 70)
-            {
+            if (Time > 70) {
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.01f, 0.1f) * Utils.GetLerpValue(550, 580, Time, true);
 
-                if (Time < 521)
-                {
+                if (Time < 521) {
                     if ((Time - 70) % 150 == 5)
                         SpawnConstellation(0, 7);
                     if ((Time - 70) % 150 == 25)
                         SpawnConstellation(1, 10);
                     if ((Time - 70) % 150 == 45)
-                        SpawnConstellation(2, 8);                    
-                    
+                        SpawnConstellation(2, 8);
+
                     if ((Time - 70) % 150 == 25)
                         SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
                     if ((Time - 70) % 150 == 120)
@@ -343,8 +325,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            if (Time > 600)
-            {
+            if (Time > 600) {
                 NPC.scale = MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(600, 680, Time, true));
                 squishFactor = Vector2.Lerp(new Vector2(1f + (float)Math.Sin((Time - 600) * 0.1f) * 0.9f, 1f - (float)Math.Sin((Time - 600) * 0.1f) * 0.9f) * 3f, Vector2.One, NPC.scale);
             }
@@ -358,23 +339,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         private void SpawnConstellation(int checkType, int lineCount)
         {
-            switch (checkType)
-            {
+            switch (checkType) {
                 case 0:
 
-                    for (int i = 0; i < lineCount; i++)
-                    {
+                    for (int i = 0; i < lineCount; i++) {
                         Func<Projectile, bool> check1 = n =>
                         n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
                         n.ai[1] == 0 &&
-                        n.ai[2] == 0;                        
-                        if (Main.projectile.Any(check1))
-                        {
+                        n.ai[2] == 0;
+                        if (Main.projectile.Any(check1)) {
                             Projectile firstStar = Main.rand.Next(Main.projectile.Where(check1).ToArray());
                             firstStar.ai[2] = 1;
 
-                            for (int j = 0; j < Main.rand.Next(1, 2); j++)
-                            {
+                            for (int j = 0; j < Main.rand.Next(1, 2); j++) {
                                 Func<Projectile, bool> check2 = n =>
                                 n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
                                 n.Distance(firstStar.Center) > 250 &&
@@ -398,18 +375,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case 1:
 
-                    for (int i = 0; i < lineCount; i++)
-                    {
-                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && 
+                    for (int i = 0; i < lineCount; i++) {
+                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
                         n.ai[1] == 0 &&
                         n.ai[2] == 1;
-                        if (Main.projectile.Any(check1))
-                        {
+                        if (Main.projectile.Any(check1)) {
                             Projectile firstStar = Main.rand.Next(Main.projectile.Where(check1).ToArray());
                             firstStar.ai[2] = 2;
 
-                            for (int j = 0; j < Main.rand.Next(1, 3); j++)
-                            {
+                            for (int j = 0; j < Main.rand.Next(1, 3); j++) {
                                 Func<Projectile, bool> check2 = n =>
                                 n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
                                 n.Distance(firstStar.Center) > 250 &&
@@ -434,18 +408,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case 2:
 
-                    for (int i = 0; i < lineCount; i++)
-                    {
-                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && 
+                    for (int i = 0; i < lineCount; i++) {
+                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
                         n.ai[1] == 1 &&
                         n.ai[2] == 1;
-                        if (Main.projectile.Any(check1))
-                        {
+                        if (Main.projectile.Any(check1)) {
                             Projectile firstStar = Main.rand.Next(Main.projectile.Where(check1).ToArray());
                             firstStar.ai[2] = 2;
 
-                            for (int j = 0; j < Main.rand.Next(1, 3); j++)
-                            {
+                            for (int j = 0; j < Main.rand.Next(1, 3); j++) {
                                 Func<Projectile, bool> check2 = n =>
                                 n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
                                 n.Distance(firstStar.Center) > 250 &&
@@ -464,20 +435,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                 line.ai[2] = secondStar.whoAmI;
                             }
                         }
-                    }                    
-                    
-                    for (int i = 0; i < lineCount; i++)
-                    {
-                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() && 
+                    }
+
+                    for (int i = 0; i < lineCount; i++) {
+                        Func<Projectile, bool> check1 = n => n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
                         n.ai[1] == 2 &&
                         n.ai[2] == 0;
-                        if (Main.projectile.Any(check1))
-                        {
+                        if (Main.projectile.Any(check1)) {
                             Projectile firstStar = Main.rand.Next(Main.projectile.Where(check1).ToArray());
                             firstStar.ai[2] = 2;
 
-                            for (int j = 0; j < Main.rand.Next(1, 3); j++)
-                            {
+                            for (int j = 0; j < Main.rand.Next(1, 3); j++) {
                                 Func<Projectile, bool> check2 = n =>
                                 n.active && n.type == ModContent.ProjectileType<ConstellationStar>() &&
                                 n.Distance(firstStar.Center) > 250 &&
@@ -506,18 +474,15 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public void CosmicStomp()
         {
             int waitTime = (int)DifficultyBasedValue(110, 90, 70, 60);
-            if (Time < 40)
-            {
+            if (Time < 40) {
                 squishFactor = Vector2.SmoothStep(Vector2.One, new Vector2(1.5f, 0.6f), Time / 40f);
                 if (Time > 38)
                     NPC.velocity = new Vector2(Math.Sign(NPC.Center.X - Target.Center.X) * 40f, -30f);
                 else
                     NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 140) * 0.2f, 0.2f) * Utils.GetLerpValue(40, 20, Time, true);
             }
-            else if (Time < 40 + waitTime)
-            {
-                if (Time == 45)
-                {
+            else if (Time < 40 + waitTime) {
+                if (Time == 45) {
                     SoundStyle telegraph = AssetDirectory.Sounds.Slime.StellarSlimeStarfallTelegraph;
                     SoundEngine.PlaySound(telegraph.WithVolumeScale(2f), NPC.Center);
                 }
@@ -533,21 +498,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 NPC.localAI[0] += Utils.GetLerpValue(40, 40 + waitTime, Time, true) * 3f;
             }
-            else if (Time < 40 + waitTime + 15)
-            {
+            else if (Time < 40 + waitTime + 15) {
                 squishFactor = new Vector2(1.3f - NPC.velocity.Length() * 0.01f, 0.7f + NPC.velocity.Length() * 0.01f);
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(NPC.FindSmashSpot(saveTarget)).SafeNormalize(Vector2.Zero) * NPC.Distance(NPC.FindSmashSpot(saveTarget)) * 0.5f, 0.4f);
                 NPC.scale = Utils.GetLerpValue(40 + waitTime + 14, 40 + waitTime + 6, Time, true);
-                if (Time == 40 + waitTime + 2)
-                {
+                if (Time == 40 + waitTime + 2) {
                     SoundStyle slamSound = AssetDirectory.Sounds.Slime.StellarSlimeImpact;
                     SoundEngine.PlaySound(slamSound, NPC.Center);
                 }
 
-                if (Time > 40 + waitTime + 2)
-                {
-                    for (int i = 0; i < Main.rand.Next(2, 5); i++)
-                    {
+                if (Time > 40 + waitTime + 2) {
+                    for (int i = 0; i < Main.rand.Next(2, 5); i++) {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(10f, 20f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) + new Vector2(velocity.X * 12f, 32f);
                         CalamityHunt.particles.Add(Particle.Create<StellarGelChunk>(particle => {
@@ -562,8 +523,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(3, 3), 8f, 10, 12));
 
                     int count = (int)DifficultyBasedValue(2, 2, 3, 3, 4);
-                    for (int i = 0; i < count; i++)
-                    {
+                    for (int i = 0; i < count; i++) {
                         Vector2 starPosition = new Vector2(Main.rand.Next(-50, 50), Main.rand.Next(-10, 10));
                         Vector2 starVelocity = new Vector2(starPosition.X * 0.2f, -Main.rand.Next(5, 25)) + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Main.rand.Next(5);
                         Projectile starbit = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center + starPosition, starVelocity, ModContent.ProjectileType<StellarGelatine>(), GetDamage(4), 0f);
@@ -572,14 +532,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     }
                 }
             }
-            else if (Time < 40 + waitTime + 100)
-            {
+            else if (Time < 40 + waitTime + 100) {
                 NPC.damage = 0;
                 NPC.dontTakeDamage = true;
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 200) * 0.3f, 0.5f);
             }
-            else
-            {
+            else {
                 NPC.damage = 0;
 
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * (NPC.Distance(Target.Center) - 300) * 0.07f, 0.02f) * Utils.GetLerpValue(40 + waitTime + 130, 40 + waitTime + 150, Time, true);
@@ -595,10 +553,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time == waitTime + 200)
                 SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarReform, NPC.Center);
 
-            if (Time > 40 && Time < 40 + waitTime + 10)
-            {
-                for (int i = 0; i < 2; i++)
-                {
+            if (Time > 40 && Time < 40 + waitTime + 10) {
+                for (int i = 0; i < 2; i++) {
                     Vector2 rocketPosition = NPC.Center + (NPC.rotation + MathHelper.PiOver2).ToRotationVector2() * 30 + Main.rand.NextVector2Circular(70, 20).RotatedBy(NPC.rotation);
                     Vector2 rocketVelocity = (NPC.rotation + MathHelper.PiOver2).ToRotationVector2().RotatedByRandom(1.5) * Main.rand.Next(25, 35);
                     Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), rocketPosition, rocketVelocity, ModContent.ProjectileType<InterstellarFlame>(), GetDamage(4), 0f);
@@ -615,20 +571,17 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time < 60)
                 NPC.scale = (float)Math.Pow(Utils.GetLerpValue(90, 0, Time, true), 2f);
 
-            if (Time == 2)
-            {
+            if (Time == 2) {
                 Projectile hole = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<BlackHoleBlender>(), 9999, 0);
                 hole.ai[1] = 595;
                 hole.ai[2] = NPC.whoAmI;
             }
 
-            if (Time > 50 && Time < 600)
-            {
+            if (Time > 50 && Time < 600) {
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.03f, 0.2f);
                 NPC.velocity *= 0.75f;
 
-                foreach (Player player in Main.player.Where(n => n.active && !n.dead))
-                {
+                foreach (Player player in Main.player.Where(n => n.active && !n.dead)) {
                     if (player.Distance(NPC.Center) < holeSize)
                         player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} was shredded by gravity."), 9999, -1, false, true, -1, false, 0, 0, 0);
 
@@ -636,15 +589,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         player.velocity += player.DirectionTo(NPC.Center) * Utils.GetLerpValue(holeSize + 400, holeSize + 700, player.Distance(NPC.Center));
                 }
 
-                if (Time % 13 == 5 && Time < 430)
-                {
+                if (Time % 13 == 5 && Time < 430) {
                     int chosenSize = Main.rand.Next(0, 3);
                     Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Target.Center + NPC.DirectionTo(Target.Center + Target.Velocity * 30).SafeNormalize(Vector2.Zero).RotatedByRandom(1.6f) * Main.rand.Next(1300, 1600), Vector2.Zero, ModContent.ProjectileType<ThrowableChunk>(), GetDamage(6 + chosenSize), 0);
                     rock.ai[1] = chosenSize;
                 }
 
-                if (Time % 2 == 0)
-                {
+                if (Time % 2 == 0) {
                     float strength = Utils.GetLerpValue(50, 500, Time, true) * 10f;
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), strength, 4, 30, 20000));
                 }
@@ -653,16 +604,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
             if (Time == 585)
                 SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarBlackHoleGulp, NPC.Center);
 
-            if (Time > 530)
-            {
+            if (Time > 530) {
                 NPC.velocity *= 0.92f;
                 NPC.scale = 1f + MathHelper.SmoothStep(-0.15f, 1, Utils.GetLerpValue(685, 670, Time, true) * Utils.GetLerpValue(580, 595, Time, true)) * 3.5f * (float)Math.Sqrt(Utils.GetLerpValue(720, 670, Time, true) * Utils.GetLerpValue(580, 610, Time, true));
                 squishFactor = Vector2.Lerp(Vector2.One, Vector2.Lerp(new Vector2(0.8f, 1.2f), new Vector2(1.3f, 0.7f), 0.5f + (float)Math.Sin(Time * 0.1f) * 0.5f), Utils.GetLerpValue(600, 620, Time, true) * Utils.GetLerpValue(680, 630, Time, true) * 0.5f);
 
-                if (Time > 670 && Time < 690)
-                {
-                    for (int i = 0; i < Main.rand.Next(1, 5); i++)
-                    {
+                if (Time > 670 && Time < 690) {
+                    for (int i = 0; i < Main.rand.Next(1, 5); i++) {
                         Vector2 velocity = Main.rand.NextVector2Circular(8, 1) - Vector2.UnitY * Main.rand.NextFloat(10f, 20f);
                         Vector2 position = NPC.Center + Main.rand.NextVector2Circular(1, 50) * NPC.scale + new Vector2(velocity.X * 12f, 32f);
                         CalamityHunt.particles.Add(Particle.Create<StellarGelChunk>(particle => {
@@ -675,8 +623,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 }
             }
 
-            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ThrowableChunk>()))
-            {
+            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<ThrowableChunk>())) {
                 projectile.velocity = Vector2.Lerp(projectile.velocity, projectile.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (projectile.Distance(Target.Center) + 500) * 0.0013f * (4f - projectile.ai[1] * 0.66f) * 4.5f, 0.1f);
                 projectile.velocity = projectile.velocity.RotatedBy(0.033f * projectile.direction);
                 projectile.velocity += NPC.velocity * 0.1f;
@@ -807,8 +754,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter++;
-            if (NPC.frameCounter > 7)
-            {
+            if (NPC.frameCounter > 7) {
                 NPC.frameCounter = 0;
                 npcFrame = (npcFrame + 1) % Main.npcFrameCount[Type];
             }
@@ -836,7 +782,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             Texture2D bloom = AssetDirectory.Textures.GlowBig.Value;
 
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
-            
+
             Color color = Color.White;
 
             Vector2 oldDiscScale = new Vector2(1f + (float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 0.05f, 1.5f + (float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 0.3f);
@@ -846,8 +792,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             int cosStompWaitTime = (int)DifficultyBasedValue(100, 90, 80, 60);
 
-            if (NPC.IsABestiaryIconDummy)
-            {
+            if (NPC.IsABestiaryIconDummy) {
                 RasterizerState priorRrasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
                 Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
                 spriteBatch.End();
@@ -855,16 +800,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
 
                 Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
-                effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Noise[2].Value);
-                effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Noise[3].Value);
-                effect.Parameters["uPosition"].SetValue(screenPos + new Vector2(0, MathF.Sin(Main.GlobalTimeWrappedHourly * 0.5f) * 0.1f));
+                effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.05f);
+                effect.Parameters["uTextureNoise"].SetValue(AssetDirectory.Textures.Noise[8].Value);
+                effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Space[0].Value);
+                effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Space[1].Value);
+                effect.Parameters["uPosition"].SetValue((Main.LocalPlayer.oldPosition - Main.LocalPlayer.oldVelocity) * 0.001f);
                 effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
                 effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));
                 effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, Main.GlobalTimeWrappedHourly * 0.0004f % 2f));
-                effect.Parameters["uCloseColor"].SetValue(new Color(20, 80, 255).ToVector3());
-                effect.Parameters["uFarColor"].SetValue(new Color(110, 50, 200).ToVector3());
-                effect.Parameters["uOutlineColor"].SetValue(new Color(10, 5, 45, 0).ToVector4());
-                effect.Parameters["uImageRatio"].SetValue(new Vector2(bestiarySpaceTexture.Width / (float)bestiarySpaceTexture.Height, 1f) * 0.66f);
+                effect.Parameters["uCloseColor"].SetValue(Color.SteelBlue.ToVector3() * 0.7f);
+                effect.Parameters["uFarColor"].SetValue(Color.MidnightBlue.ToVector3() * 0.3f);
+                effect.Parameters["uOutlineColor"].SetValue(new Color(10, 35, 85, 0).ToVector4());
+                effect.Parameters["uImageSize"].SetValue(Main.ScreenSize.ToVector2());
+                effect.Parameters["uNoiseRepeats"].SetValue(0.1f);
 
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, effect, Main.UIScaleMatrix);
 
@@ -874,8 +822,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
             }
 
-            switch (Attack)
-            {
+            switch (Attack) {
                 case (int)AttackList.TooFar:
                     color = Color.Lerp(new Color(100, 100, 100, 0), Color.White, Math.Clamp(NPC.Distance(Target.Center), 100, 300) / 200f);
                     break;
@@ -899,8 +846,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case (int)AttackList.CosmicStomp:
 
-                    if (Time < 40 + cosStompWaitTime)
-                    {
+                    if (Time < 40 + cosStompWaitTime) {
                         Texture2D ray = AssetDirectory.Textures.GlowRay.Value;
                         float rayPower = Utils.GetLerpValue(50, 40 + cosStompWaitTime, Time, true);
                         Color rayColor = Color.Lerp(new Color(80, 20, 230), new Color(200, 80, 30), rayPower);
@@ -917,11 +863,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     break;
 
                 case (int)AttackList.BlackHole:
-                    
+
                     color = Color.White * (Utils.GetLerpValue(50, 20, Time, true) + Utils.GetLerpValue(540, 570, Time, true));
 
-                    if (Time > 570 && Time < 680)
-                    {
+                    if (Time > 570 && Time < 680) {
                         Texture2D swirlingRock0 = AssetDirectory.Textures.Goozma.SwirlingRocks[0].Value;
                         Texture2D swirlingRock1 = AssetDirectory.Textures.Goozma.SwirlingRocks[1].Value;
                         spriteBatch.Draw(swirlingRock0, NPC.Center - screenPos, swirlingRock0.Frame(), Color.White, Main.GlobalTimeWrappedHourly * 1.5f, swirlingRock0.Size() * 0.5f, NPC.scale * 0.25f, 0, 0);
@@ -931,14 +876,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     Texture2D shockRing = AssetDirectory.Textures.ShockRing.Value;
 
                     discScale = oldDiscScale * ((float)Math.Cbrt(Utils.GetLerpValue(70, 0, Time, true) + Utils.GetLerpValue(540, 580, Time, true)) + Utils.GetLerpValue(600, 700, Time, true) * Utils.GetLerpValue(640, 610, Time, true));
-                    if (Time < 680)
-                    {
+                    if (Time < 680) {
                         starnessSize = Utils.GetLerpValue(540, 580, Time, true) * 12f;
                         starnessThick = -10f;
                     }
 
-                    for (int i = 0; i < 7; i++)
-                    {
+                    for (int i = 0; i < 7; i++) {
                         float exist = Utils.GetLerpValue(20, 120, Time + i * 3f, true) * Utils.GetLerpValue(600, 500, Time - i * 3f, true);
                         float comeIn = (float)Math.Pow(1f - ((Time + i / 7f * 70) % 70) / 70f, 2f);
                         spriteBatch.Draw(shockRing, NPC.Center - screenPos, shockRing.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.3f, shockRing.Size() * 0.5f, 70f * comeIn, 0, 0);
@@ -965,8 +908,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             discEffect.Parameters["uDarkSpecial"].SetValue(new Vector2(0.1f, 0.8f));
             discEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.015f % 1f);
 
-            if (NPC.IsABestiaryIconDummy)
-            {
+            if (NPC.IsABestiaryIconDummy) {
                 NPC.localAI[0] = Main.GlobalTimeWrappedHourly * 25f;
                 discScale = oldDiscScale * 0.8f;
                 Matrix normalMatrix = Matrix.Invert(Matrix.Identity) * Matrix.CreateOrthographicOffCenter(0f, Main.screenWidth, Main.screenHeight, 0f, 0f, 1f);
@@ -983,8 +925,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 List<Vector2> bottomDiscPos = new List<Vector2>();
                 List<float> bottomDiscRot = new List<float>();
-                for (int i = 100; i <= 200; i++)
-                {
+                for (int i = 100; i <= 200; i++) {
                     Vector2 rotatedRing = new Vector2((150 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + (i - 200) / 40f * MathHelper.TwoPi) * starnessSize) * discScale.X, 0).RotatedBy(MathHelper.TwoPi / 200f * i) * (0.7f + NPC.scale * 0.3f);
                     rotatedRing.Y *= 0.1f * discScale.Y;
                     bottomDiscPos.Add(rotatedRing.RotatedBy(discRot));
@@ -994,8 +935,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 List<Vector2> topDiscPos = new List<Vector2>();
                 List<float> topDiscRot = new List<float>();
-                for (int i = 0; i <= 100; i++)
-                {
+                for (int i = 0; i <= 100; i++) {
                     Vector2 rotatedRing = new Vector2((150 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + i / 40f * MathHelper.TwoPi) * starnessSize) * discScale.X, 0).RotatedBy(MathHelper.TwoPi / 200f * i) * (0.7f + NPC.scale * 0.3f);
                     rotatedRing.Y *= 0.12f * discScale.Y;
                     topDiscPos.Add(rotatedRing.RotatedBy(discRot));
@@ -1013,8 +953,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 spriteBatch.Draw(texture, NPC.Center - screenPos, frame, color, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
-                for (int i = 0; i < 5; i++)
-                {
+                for (int i = 0; i < 5; i++) {
                     Vector2 off = new Vector2(15 + (float)Math.Sin(NPC.localAI[0] * 0.1f + i / 5f * 3f) * 8).RotatedBy(MathHelper.TwoPi / 5f * i + NPC.rotation * 0.5f - NPC.localAI[0] * 0.02f);
                     spriteBatch.Draw(texture, NPC.Center + off - screenPos, frame, new Color(80, 40, 35, 0).MultiplyRGBA(color) * 0.4f, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
                 }
@@ -1029,26 +968,23 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRrasterizerState, null, Main.UIScaleMatrix);
             }
-            else
-            {
+            else {
                 VertexStrip bottomStrip = new VertexStrip();
                 VertexStrip topStrip = new VertexStrip();
 
                 List<Vector2> bottomDiscPos = new List<Vector2>();
                 List<float> bottomDiscRot = new List<float>();
-                for (int i = 100; i <= 200; i++)
-                {
+                for (int i = 100; i <= 200; i++) {
                     Vector2 rotatedRing = new Vector2((150 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + (i - 200) / 40f * MathHelper.TwoPi) * starnessSize) * discScale.X, 0).RotatedBy(MathHelper.TwoPi / 200f * i) * (0.7f + NPC.scale * 0.3f);
                     rotatedRing.Y *= 0.1f * discScale.Y;
                     bottomDiscPos.Add(rotatedRing.RotatedBy(discRot));
                     bottomDiscRot.Add(MathHelper.TwoPi / 200f * i + MathHelper.PiOver2 + discRot);
                 }
                 bottomStrip.PrepareStrip(bottomDiscPos.ToArray(), bottomDiscRot.ToArray(), ColorFunction, BotWidthFunction, discPos - screenPos, bottomDiscRot.Count, true);
-                                
+
                 List<Vector2> topDiscPos = new List<Vector2>();
                 List<float> topDiscRot = new List<float>();
-                for (int i = 0; i <= 100; i++)
-                {
+                for (int i = 0; i <= 100; i++) {
                     Vector2 rotatedRing = new Vector2((150 + (float)Math.Sin(NPC.localAI[0] * 0.5f % MathHelper.TwoPi + i / 40f * MathHelper.TwoPi) * starnessSize) * discScale.X, 0).RotatedBy(MathHelper.TwoPi / 200f * i) * (0.7f + NPC.scale * 0.3f);
                     rotatedRing.Y *= 0.12f * discScale.Y;
                     topDiscPos.Add(rotatedRing.RotatedBy(discRot));
@@ -1062,22 +998,18 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-                if (Attack == (int)AttackList.BlackHole && Time > 500 && Time < 680)
-                {
+                if (Attack == (int)AttackList.BlackHole && Time > 500 && Time < 680) {
                     spriteBatch.Draw(consumeTexture, NPC.Center - screenPos, consumeTexture.Frame(), color, NPC.rotation, consumeTexture.Size() * 0.5f, NPC.scale * squishFactor * 0.5f, 0, 0);
 
-                    for (int i = 0; i < 5; i++)
-                    {
+                    for (int i = 0; i < 5; i++) {
                         Vector2 off = new Vector2(10 + (float)Math.Sin(NPC.localAI[0] * 0.1f + i / 5f * 3f) * 3).RotatedBy(MathHelper.TwoPi / 5f * i + NPC.rotation * 0.5f - NPC.localAI[0] * 0.02f);
                         spriteBatch.Draw(consumeTexture, NPC.Center + off - screenPos, consumeTexture.Frame(), new Color(60, 40, 35, 0).MultiplyRGBA(color) * 0.2f, NPC.rotation, consumeTexture.Size() * 0.5f, NPC.scale * squishFactor * 0.5f, 0, 0);
                     }
                 }
-                else
-                {
+                else {
                     spriteBatch.Draw(texture, NPC.Center - screenPos, frame, color, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
 
-                    for (int i = 0; i < 5; i++)
-                    {
+                    for (int i = 0; i < 5; i++) {
                         Vector2 off = new Vector2(15 + (float)Math.Sin(NPC.localAI[0] * 0.1f + i / 5f * 3f) * 8).RotatedBy(MathHelper.TwoPi / 5f * i + NPC.rotation * 0.5f - NPC.localAI[0] * 0.02f);
                         spriteBatch.Draw(texture, NPC.Center + off - screenPos, frame, new Color(60, 40, 35, 0).MultiplyRGBA(color) * 0.2f, NPC.rotation, frame.Size() * 0.5f, NPC.scale * squishFactor, 0, 0);
                     }
@@ -1094,12 +1026,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
             }
 
-            switch (Attack)
-            {
+            switch (Attack) {
                 case (int)AttackList.CosmicStomp:
 
-                    if (Time > 40 + cosStompWaitTime - 10 && Time < 40 + cosStompWaitTime + 30)
-                    {
+                    if (Time > 40 + cosStompWaitTime - 10 && Time < 40 + cosStompWaitTime + 30) {
                         Vector2 off = new Vector2(0, 800 - 800 * Utils.GetLerpValue(40 + cosStompWaitTime, 40 + cosStompWaitTime + 12, Time, true)).RotatedBy(NPC.rotation);
                         float stompFlashScale = Utils.GetLerpValue(40 + cosStompWaitTime - 5, 40 + cosStompWaitTime + 3, Time, true) * Utils.GetLerpValue(40 + cosStompWaitTime + 15, 40 + cosStompWaitTime + 10, Time, true);
                         Main.EntitySpriteDraw(flash, NPC.Center + off - screenPos, flash.Frame(), new Color(80, 30, 35, 0) * stompFlashScale, NPC.rotation, flash.Size() * 0.5f, new Vector2(3f, 22f) * (0.5f + stompFlashScale * 0.5f), 0, 0);

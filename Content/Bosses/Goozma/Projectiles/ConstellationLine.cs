@@ -42,24 +42,17 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (Start < 0 || Start > Main.maxProjectiles || End < 0 || End > Main.maxProjectiles)
-            {
+            if (Start < 0 || Start > Main.maxProjectiles || End < 0 || End > Main.maxProjectiles) {
                 Projectile.Kill();
                 return;
             }
-            if (!Main.projectile[(int)Start].active || Main.projectile[(int)Start].type != ModContent.ProjectileType<ConstellationStar>() || !Main.projectile[(int)End].active || Main.projectile[(int)End].type != ModContent.ProjectileType<ConstellationStar>())
+            if (!Main.projectile[(int)Start].active || Main.projectile[(int)Start].type != ModContent.ProjectileType<ConstellationStar>() || !Main.projectile[(int)End].active || Main.projectile[(int)End].type != ModContent.ProjectileType<ConstellationStar>()) {
                 Projectile.Kill();
+            }
 
             Projectile.Center = Main.projectile[(int)Start].Center;
             Projectile.rotation = Main.projectile[(int)Start].AngleTo(Main.projectile[(int)End].Center);
             Projectile.velocity = Projectile.rotation.ToRotationVector2();
-
-            //int count = 10 + (int)(Main.projectile[(int)Start].Distance(Main.projectile[(int)End].Center) * 0.01f);
-            //for (int i = 0; i < count; i++)
-            //{
-            //    Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Vector2.Lerp(Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, i / (float)count), Main.rand.NextVector2Circular(4, 4), Color.White, 1f + Main.rand.NextFloat(0.7f));
-            //    smoke.data = "Cosmos";
-            //}
 
             if (Time > 95 && Time < 180 && Main.rand.NextBool(5)) {
                 CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {

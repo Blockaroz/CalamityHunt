@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
@@ -98,8 +99,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.Kill();
             }
 
-            //var smoke = Particle.NewParticle(ModContent.GetInstance<CosmicFlame>(), Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24), Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.2f, Color.White, (1f + Main.rand.NextFloat()) * Projectile.scale);
-            //smoke.Add(new ParticleData<string> { Value = "Cosmos" });
+            CosmosMetaballDrawer.cosmosParticles.Add(Particle.Create<CosmicFlame>(particle => {
+                particle.position = Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24);
+                particle.velocity = Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.2f;
+                particle.scale = Main.rand.NextFloat(1f, 2f) * Projectile.scale;
+                particle.color = Color.White;
+            }));
 
             if (Main.rand.NextBool(50)) {
                 CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {

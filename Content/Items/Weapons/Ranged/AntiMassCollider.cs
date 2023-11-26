@@ -18,7 +18,7 @@ public class AntiMassCollider : ModItem
 {
     public override void SetDefaults()
     {
-        Item.damage = 60;
+        Item.damage = 545;
         Item.DamageType = DamageClass.Ranged;
         Item.width = 100;
         Item.height = 42;
@@ -35,6 +35,22 @@ public class AntiMassCollider : ModItem
         Item.noUseGraphic = true;
         Item.channel = true;
         Item.reuseDelay = 0;
+    }
+
+    public override void AddRecipes()
+    {
+        if (ModLoader.TryGetMod("CalamityMod", out Mod calamityMod)) {
+
+        }
+        else {
+            CreateRecipe()
+                .AddIngredient(ItemID.AdamantiteBar, 20)
+                .AddIngredient(ItemID.SoulofFright, 5)
+                .AddIngredient(ItemID.IllegalGunParts, 2)
+                .AddIngredient(ItemID.Glass, 25)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
+        }
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

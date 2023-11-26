@@ -53,6 +53,20 @@ public class AntiMassColliderProj : ModProjectile
         int firstShot = (int)(10 * Player.GetAttackSpeed(DamageClass.Ranged));
         int secondShot = (int)(55 * Player.GetAttackSpeed(DamageClass.Ranged));
 
+        if (Time < firstShot) {
+            SoundEngine.PlaySound((SoundID.DD2_PhantomPhoenixShot with { MaxInstances = 0 }).WithVolumeScale(Time / firstShot * 0.5f).WithPitchOffset(Time / firstShot), Projectile.Center);
+        }
+
+        if (Time == firstShot) {
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderFire.WithPitchOffset(Main.rand.NextFloat(0.1f)).WithVolumeScale(0.7f), Projectile.Center);
+            recoilFactor = 1f;
+        }
+
+        if (Time == secondShot) {
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderLaserBlast, Projectile.Center);
+            recoilFactor = 1f;
+        }
+
         if (Projectile.owner == Main.myPlayer) {
             if (Time == 0) {
                 Projectile.velocity = Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed;
@@ -60,7 +74,7 @@ public class AntiMassColliderProj : ModProjectile
             }
 
             if (Time == firstShot) {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, ModContent.ProjectileType<AntiMassBioBall>(), 1 + Projectile.damage / 8, Projectile.knockBack, Player.whoAmI, 0, -1);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), muzzlePosition, Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, ModContent.ProjectileType<AntiMassBioBall>(), 1 + Projectile.damage / 5, Projectile.knockBack, Player.whoAmI, 0, -1);
 
                 Player.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 2f;
                 Projectile.netUpdate = true;
@@ -89,25 +103,11 @@ public class AntiMassColliderProj : ModProjectile
             }
         }
 
-        if (Time < firstShot) {
-            SoundEngine.PlaySound((SoundID.DD2_PhantomPhoenixShot with { MaxInstances = 0 }).WithVolumeScale(Time / firstShot * 0.5f).WithPitchOffset(Time / firstShot), Projectile.Center);
-        }
-
-        if (Time == firstShot) {
-            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderFire.WithPitchOffset(Main.rand.NextFloat(0.1f)).WithVolumeScale(0.7f), Projectile.Center);
-            recoilFactor = 1f;
-        }
-
         //plasmaball chaingun
         //if (Time > firstShot + 3 && Player.channel) {
         //    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed, 0.5f);
         //    Time = firstShot - 1;
         //}
-
-        if (Time == secondShot) {
-            SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.AntiMassColliderLaserBlast, Projectile.Center);
-            recoilFactor = 1f;
-        }
 
         //railcannon chaingun
         //if (Time > secondShot + 6 && Player.channel) {
@@ -144,7 +144,7 @@ public class AntiMassColliderProj : ModProjectile
             Player.SetDummyItemTime(3);
         }
 
-        if (Time > Player.HeldItem.useTime) {
+        if (Time > Player.HeldItem.useTime + 1) {
             Projectile.Kill();
         }
     }

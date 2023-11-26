@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CalamityHunt.Common.Graphics.RenderTargets;
+using CalamityHunt.Common.Systems.GlobalNPCs;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Buffs;
@@ -20,8 +21,8 @@ public class AntiMassBioBall : ModProjectile
 {
     public override void SetDefaults()
     {
-        Projectile.width = 28;
-        Projectile.height = 28;
+        Projectile.width = 32;
+        Projectile.height = 32;
         Projectile.friendly = true;
         Projectile.timeLeft = 200;
         Projectile.penetrate = -1;
@@ -29,53 +30,48 @@ public class AntiMassBioBall : ModProjectile
         Projectile.manualDirectionChange = true;
         Projectile.localNPCHitCooldown = 10;
         Projectile.usesLocalNPCImmunity = true;
+        Projectile.ignoreWater = true;
     }
 
     public const float MAX_RANGE = 500;
 
     public ref float Time => ref Projectile.ai[0];
-    public ref float Target => ref Projectile.ai[1];
 
     public override void AI()
     {
         Projectile.velocity.Y += 0.001f;
+        Projectile.velocity *= 0.995f;
 
         Projectile.scale = Utils.GetLerpValue(-15, 10, Time, true);
 
         if (Main.myPlayer == Projectile.owner) {
-            if (Time < 5) {
-                Target = -1;
-                Projectile.netUpdate = true;
-            }
-            else {
-                if (Main.rand.NextBool(30) || Time % 5 == 0 || Target == -1) {
+            if (Time > 10 && Time % 8 == 0) {
 
-                    int prevTarget = (int)Target;
-                    List<int> possibleTargets = new List<int>();
-                    foreach (NPC nPC in Main.npc.Where(n => n.active && n.CanBeChasedBy(Projectile) && n.whoAmI != (int)Target)) {
-                        possibleTargets.Add(nPC.whoAmI);
+                List<int> doomedTargets = new List<int>();
+                List<int> newTargets = new List<int>();
+                bool anyTargets = false;
+                foreach (NPC npc in Main.npc.Where(n => n.active && n.CanBeChasedBy(Projectile) && Projectile.Distance(n.Center) < MAX_RANGE)) {
+                    if (npc.GetGlobalNPC<DoomedNPC>().doomCount > 0) {
+                        doomedTargets.Add(npc.whoAmI);
+                        anyTargets = true;
                     }
-
-                    Target = possibleTargets.Count > 0 ? Main.rand.Next(possibleTargets) : -1;
-
-                    if ((int)Target != prevTarget) {
-                        Projectile.netUpdate = true;
+                    else {
+                        newTargets.Add(npc.whoAmI);
+                        anyTargets = true;
                     }
                 }
-
-                if (Main.npc.IndexInRange((int)Target)) {
-
-                    if (Projectile.Distance(Main.npc[(int)Target].Center) > MAX_RANGE) {
-                        Target = -1;
-                        Projectile.netUpdate = true;
+                if (anyTargets) {
+                    int nextTarget = -1;
+                    if (newTargets.Count > 0) {
+                        nextTarget = Main.rand.Next(newTargets);
                     }
+                    else {
+                        nextTarget = Main.rand.Next(doomedTargets);
+                    }
+
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Main.npc[nextTarget].Center, Projectile.velocity.SafeNormalize(Vector2.Zero) * 15f, ModContent.ProjectileType<AntiMassBioStrike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, nextTarget, Projectile.whoAmI);
+                    Projectile.netUpdate = true;
                 }
-            }
-            
-            if (Main.npc.Any(n => n.active && n.CanBeChasedBy(Projectile) && n.Distance(Projectile.Center) < 30)) {
-                Projectile.ResetLocalNPCHitImmunity();
-                Target = -1;
-                Projectile.netUpdate = true;
             }
         }
 
@@ -143,29 +139,7 @@ public class AntiMassBioBall : ModProjectile
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
-        target.AddBuff(ModContent.BuffType<Doomed>(), 240);
-    }
-
-    public override void OnHitPlayer(Player target, Player.HurtInfo info)
-    {
-        target.AddBuff(ModContent.BuffType<Doomed>(), 240);
-    }
-
-    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-    {
-        bool regularCollision = projHitbox.Intersects(targetHitbox);
-        if (regularCollision) {
-            Projectile.Kill();
-            return true;
-        }
-
-        if (Main.npc.IndexInRange((int)Target)) {
-            if (targetHitbox.Contains(Main.npc[(int)Target].Center.ToPoint())) {
-                return true;
-            }
-        }
-
-        return false;
+        target.GetGlobalNPC<DoomedNPC>().doomCount = 240;
     }
 
     public override bool PreDraw(ref Color lightColor)
@@ -179,18 +153,6 @@ public class AntiMassBioBall : ModProjectile
         Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.PaleTurquoise with { A = 200 }, 0, texture.Size() * 0.5f, (Projectile.scale + scaleWobble) / 2f, 0, 0);
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Cyan * 0.3f) with { A = 0 }, 0, glow.Size() * 0.5f, scaleWobble, 0, 0);
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.MediumTurquoise * 0.2f) with { A = 0 }, 0, glow.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
-
-        Vector2[] points = new Vector2[24];
-        float[] rotations = new float[points.Length];
-        for (int i = 0; i < points.Length - 1; i++) {
-            rotations[i] = points[i].AngleTo(points[i + 1]);
-        }
-        rotations[^1] = rotations[^2];
-
-        for (int i = 0; i < points.Length - 2; i++) {
-            Vector2 stretch = new Vector2(points[i].Distance(points[i + 1]), 1f);
-            Main.EntitySpriteDraw(TextureAssets.BlackTile.Value, points[i] - Main.screenPosition, new Rectangle(0, 0, 1, 2), Color.Turquoise with { A = 0 }, rotations[i], Vector2.UnitX, stretch, 0, 0);
-        }
 
         return false;
     }

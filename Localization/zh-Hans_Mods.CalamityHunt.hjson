@@ -590,6 +590,7 @@ Projectiles: {
 	// AntiMassColliderProj.DisplayName: Anti-Mass Collider
 	// AntiMassMacroLaser.DisplayName: Anti Mass Macro Laser
 	// AntiMassDeathLaser.DisplayName: Anti Mass Death Laser
+	// AntiMassBioStrike.DisplayName: Anti Mass Bio Strike
 }
 
 Chat: {

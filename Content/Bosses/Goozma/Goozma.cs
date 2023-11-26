@@ -1179,13 +1179,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (NPC.velocity.Length() > 4) {
                         rotate = true;
                         NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.4f);
-
-                        //for (int i = 0; i < 5; i++)
-                        //{
-                        //    Color glowColor = new GradientColor(SlimeUtils.GoozColorArray, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
-                        //    glowColor.A /= 3;
-                        //    Particle smoke = Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), NPC.Center + Main.rand.NextVector2Circular(100, 100), -NPC.velocity * Main.rand.NextFloat(), glowColor, 1f + Main.rand.NextFloat());
-                        //}
                     }
                     else if (Main.rand.NextBool(20)) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {

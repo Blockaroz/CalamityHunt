@@ -16,6 +16,7 @@
     <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassCollider_Glow.png" />
     <None Remove="Assets\Textures\Particles\LightningParticle.png" />
     <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassBioBall.png" />
+    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassBioStrike.png" />
     <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassColliderProj.png" />
     <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassColliderProj_Glow.png" />
   </ItemGroup>
