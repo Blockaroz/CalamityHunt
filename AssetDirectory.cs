@@ -211,15 +211,15 @@ public static class AssetDirectory
 
     public static class Effects
     {
-        public static readonly Asset<Effect> SlimeMonsoonOldCloudLayer = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonOldCloudLayer", AssetRequestMode.ImmediateLoad);
-        public static readonly Asset<Effect> SlimeMonsoonSkyEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonSkyEffect", AssetRequestMode.ImmediateLoad);
-        //public static Asset<Effect> SlimeMonsoonBack = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad);
-        //public static Asset<Effect> SlimeMonsoonStrike = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonCloudLayer", AssetRequestMode.ImmediateLoad);
-        public static readonly Asset<Effect> BasicTrail = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/BasicTrail", AssetRequestMode.ImmediateLoad);
-        public static readonly Asset<Effect> LightningBeam = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/LightningBeam", AssetRequestMode.ImmediateLoad);
+        public static readonly Asset<Effect> SlimeMonsoonOldCloudLayer = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonOldCloudLayer");
+        public static readonly Asset<Effect> SlimeMonsoonSkyEffect = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SlimeMonsoonSkyEffect");
 
-        public static readonly Asset<Effect> Cosmos = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad);
-        public static readonly Asset<Effect> RainbowGel = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel", AssetRequestMode.ImmediateLoad);
+        public static readonly Asset<Effect> BasicTrail = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/BasicTrail");
+        public static readonly Asset<Effect> LightningBeam = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/LightningBeam");
+
+        public static readonly Asset<Effect> Cosmos = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect");
+        public static readonly Asset<Effect> ShakerSludge = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/ShakerSludge");
+        public static readonly Asset<Effect> RainbowGel = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RainbowGel");
 
     }
 }

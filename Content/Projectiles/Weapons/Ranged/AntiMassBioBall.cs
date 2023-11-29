@@ -30,6 +30,7 @@ public class AntiMassBioBall : ModProjectile
         Projectile.localNPCHitCooldown = 10;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.ignoreWater = true;
+        Projectile.penetrate = 2;
     }
 
     public const float MAX_RANGE = 500;

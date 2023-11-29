@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 {
-    public partial class DarkSludge : ModProjectile
+    public partial class ShakerSludge : ModProjectile
     {
         public override void SetStaticDefaults()
         {

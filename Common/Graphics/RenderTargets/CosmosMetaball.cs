@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using CalamityHunt.Common.Systems.Metaballs;
+using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -6,18 +7,18 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Graphics.RenderTargets;
 
-public class CosmosMetaballDrawer : ILoadable
+public class CosmosMetaball : MetaballDrawer
 {
-    public static CosmosMetaballContent cosmosContent;
+    public static ParticleSystem particles;
 
-    public static ParticleSystem cosmosParticles;
-
-    public void Load(Mod mod)
+    public override void Initialize()
     {
-        cosmosParticles = new ParticleSystem();
-        cosmosParticles.Initialize();
+        particles = new ParticleSystem();
+        particles.Initialize();
 
-        Main.ContentThatNeedsRenderTargets.Add(cosmosContent = new CosmosMetaballContent());
+        content.SetParameters(Main.screenWidth, Main.screenHeight, spriteBatch => {
+            particles.Draw(spriteBatch, true);
+        });
 
         On_Main.UpdateParticleSystems += UpdateCosmosParticleSystem;
         On_Main.DoDraw_DrawNPCsOverTiles += DrawTarget;
@@ -26,11 +27,7 @@ public class CosmosMetaballDrawer : ILoadable
     private void UpdateCosmosParticleSystem(On_Main.orig_UpdateParticleSystems orig, Main self)
     {
         orig(self);
-        cosmosParticles.Update();
-    }
-
-    public void Unload()
-    {
+        particles.Update();
     }
 
     private void DrawTarget(On_Main.orig_DoDraw_DrawNPCsOverTiles orig, Main self)
@@ -52,10 +49,10 @@ public class CosmosMetaballDrawer : ILoadable
 
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.GameViewMatrix.EffectMatrix);
 
-        cosmosContent.Request();
+        content.Request();
 
-        if (cosmosContent.IsReady) {
-            Texture2D texture = cosmosContent.GetTarget();
+        if (content.IsReady) {
+            Texture2D texture = content.GetTarget();
             Main.spriteBatch.Draw(texture, Vector2.Zero, texture.Frame(), Color.White, 0, Vector2.Zero, 1f, 0, 0);
         }
 

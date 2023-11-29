@@ -59,7 +59,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                     }));
                 }
 
-                CalamityHunt.particles.Add(Particle.Create<BigFlame>(particle => {
+                CalamityHunt.particles.Add(Particle.Create<CosmicFlame>(particle => {
                     particle.position = Projectile.Center + Main.rand.NextVector2Circular(32, 32) * expand;
                     particle.velocity = Projectile.velocity.RotatedByRandom(0.1f) * Main.rand.NextFloat(1f, 1.5f);
                     particle.scale = Main.rand.NextFloat(1f, 2f) * expand;

@@ -593,6 +593,7 @@ Projectiles: {
 	// AntiMassDeathLaser.DisplayName: Anti Mass Death Laser
 	// AntiMassBioStrike.DisplayName: Anti Mass Bio Strike
 	// AntiMassAccumulatorProj.DisplayName: Anti Mass Accumulator Proj
+	// ShakerSludge.DisplayName: Shaker Sludge
 }
 
 Chat: {
