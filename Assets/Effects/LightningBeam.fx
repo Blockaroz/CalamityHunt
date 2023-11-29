@@ -17,13 +17,14 @@ sampler2D tex1 = sampler_state
     magfilter = LINEAR;
     minfilter = LINEAR;
     mipfilter = LINEAR;
-    AddressU = wrap;
-    AddressV = wrap;
+    AddressU = clamp;
+    AddressV = clamp;
 };
 float4 uColor;
+float4 uBloomColor;
 float uTime;
-float uThickness;
-float uVaryThickness;
+float uNoiseThickness;
+float uNoiseSize;
 float uLength;
 matrix transformMatrix;
 
@@ -52,10 +53,13 @@ VertexShaderOutput VertexShaderFunction(in VertexShaderInput input)
 
 float4 PixelShaderFunction(in VertexShaderOutput input) : COLOR0
 {
-    float noise1 = length(tex2D(tex0, float2(input.Coord.x * uLength * 0.2, 0.3) + float2(-uTime, 0)).rgb) / 3 - 0.5;
-    float noise2 = length(tex2D(tex1, float2(input.Coord.x * uLength * 0.2, 0.3) + float2(-uTime * 2, 0) + noise1 * 0.5).rgb) / 3;
+    float endFadeOuts = smoothstep(0.0, 0.1, input.Coord.x / uLength) * smoothstep(1.0, 0.9, input.Coord.x / uLength);
+    float noise = (length(tex2D(tex0, float2(input.Coord.x / uNoiseSize - uTime, input.Coord.y / (uNoiseSize * 2) - uTime)).rgb) / 3 - 0.25) * uNoiseThickness * endFadeOuts;
+    float beam = length(tex2D(tex1, float2((input.Coord.x) * uLength * 0.2, input.Coord.y + noise)).rgb) / 2;
     
-    return smoothstep(0.95, 1, 1 - abs(input.Coord.y * 2 - 1));
+    float innerLine = smoothstep(0.75, 0.85, beam);
+    float bloom = smoothstep(0.05, 0.6, beam);
+    return (innerLine * uColor + bloom * uBloomColor) * (0.6f + noise * 0.4f);
 
 }
 

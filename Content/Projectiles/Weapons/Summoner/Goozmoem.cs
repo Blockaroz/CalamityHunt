@@ -10,6 +10,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Common.Graphics.RenderTargets;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 {

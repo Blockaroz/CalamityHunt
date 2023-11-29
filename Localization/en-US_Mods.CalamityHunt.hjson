@@ -486,8 +486,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	AntiMassCollider: {
-		DisplayName: Anti-Mass Collider
+	AntiMassAccumulator: {
+		DisplayName: Anti-Mass Accumulator
 		Tooltip: ""
 	}
 }
@@ -591,6 +591,7 @@ Projectiles: {
 	AntiMassMacroLaser.DisplayName: Anti Mass Macro Laser
 	AntiMassDeathLaser.DisplayName: Anti Mass Death Laser
 	AntiMassBioStrike.DisplayName: Anti Mass Bio Strike
+	AntiMassAccumulatorProj.DisplayName: Anti Mass Accumulator Proj
 }
 
 Chat: {

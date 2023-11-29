@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Terraria.Graphics;
 
-namespace CalamityHunt.Content.Projectiles.Weapons.Summoner;
+namespace CalamityHunt.Common.Graphics.RenderTargets;
 
 public class GoozmoemTextureContent : ARenderTargetContentByRequest
 {
@@ -25,13 +25,13 @@ public class GoozmoemTextureContent : ARenderTargetContentByRequest
 
     protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
-        Texture2D asset = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
-        PrepareARenderTarget_AndListenToEvents(ref _target, device, width, height, RenderTargetUsage.PreserveContents);
+        var asset = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
+        PrepareARenderTarget_AndListenToEvents(ref _target, device, width, height, RenderTargetUsage.PlatformContents);
         device.SetRenderTarget(_target);
         device.Clear(Color.Transparent);
 
-        GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
-        Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
+        GetGradientMapValues(out var brightnesses, out var colors);
+        var effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
         effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
         effect.Parameters["colors"].SetValue(colors);
         effect.Parameters["brightnesses"].SetValue(brightnesses);
@@ -53,8 +53,8 @@ public class GoozmoemTextureContent : ARenderTargetContentByRequest
         brightnesses = new float[10];
         colors = new Vector3[10];
 
-        float maxBright = 0.667f;
-        float rainbowStartOffset = 0.35f + Main.GlobalTimeWrappedHourly * 0.5f % (maxBright * 2f);
+        var maxBright = 0.667f;
+        var rainbowStartOffset = 0.35f + Main.GlobalTimeWrappedHourly * 0.5f % (maxBright * 2f);
         //Calculate and store every non-modulo brightness, with the shifting offset. 
         //The first brightness is ignored for the moment, it will be relevant later. Setting it to -1 temporarily
         brightnesses[0] = -1;
@@ -69,73 +69,29 @@ public class GoozmoemTextureContent : ARenderTargetContentByRequest
         brightnesses[9] = rainbowStartOffset + 0.75f;
 
         //Pass the entire rainbow through modulo 1
-        for (int i = 1; i < 10; i++)
+        for (var i = 1; i < 10; i++)
             brightnesses[i] = HuntOfTheOldGodsUtils.Modulo(brightnesses[i], maxBright) * maxBright;
 
         //Store the first element's value so we can find it again later
-        float firstBrightnessValue = brightnesses[1];
+        var firstBrightnessValue = brightnesses[1];
 
         //Sort the values from lowest to highest
         Array.Sort(brightnesses);
 
         //Find the new index of the original first element after the list being sorted
-        int rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
+        var rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
         //Substract 1 from the index, because we are ignoring the currently negative first array slot.
         rainbowStartIndex--;
 
         //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
-        for (int i = 0; i < 9; i++)
-        {
+        for (var i = 0; i < 9; i++) {
             colors[1 + (rainbowStartIndex + i) % 9] = GoozmaColorUtils.Oil[i];
         }
 
         //We always want a brightness at index 0 to be the lower bound
         brightnesses[0] = 0;
         //Make the color at index 0 be a mix between the first and last colors in the list, based on the distance between the 2.
-        float interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
+        var interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
         colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
-    }
-}
-
-public class GoozmoemCordTextureContent : ARenderTargetContentByRequest
-{
-    public int width;
-    public int height;
-    public Vector2[] positions;
-
-    protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
-    {
-        Texture2D asset = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
-        PrepareARenderTarget_AndListenToEvents(ref _target, device, width, height, RenderTargetUsage.PreserveContents);
-        device.SetRenderTarget(_target);
-        device.Clear(Color.Transparent);
-
-        float[] rotations = new float[positions.Length];
-        for (int i = 1; i < positions.Length; i++)
-            rotations[i] = positions[i - 1].AngleTo(positions[i]);
-        rotations[positions.Length - 1] = rotations[positions.Length - 2];
-
-        Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoozmaCordMap", AssetRequestMode.ImmediateLoad).Value;
-        effect.Parameters["uTransformMatrix"].SetValue(Matrix.CreateOrthographicOffCenter(0, width, height, 0, -1, 1));
-        if (!Main.gameInactive)
-            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.5f);
-        effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.LiquidTrail.Value);
-        effect.Parameters["uMap"].SetValue(AssetDirectory.Textures.ColorMap[0].Value);
-
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect);
-        effect.CurrentTechnique.Passes[0].Apply();
-
-        VertexStrip strip = new VertexStrip();
-
-        Color ColorFunc(float progress) => Color.White;
-        float WidthFunc(float progress) => MathF.Pow(Utils.GetLerpValue(0f, 0.3f, progress, true) * Utils.GetLerpValue(1f, 0.8f, progress, true), 0.7f) * 6f;
-        strip.PrepareStrip(positions, rotations, ColorFunc, WidthFunc, Vector2.Zero, positions.Length, true);
-        strip.DrawTrail();
-
-        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        spriteBatch.End();
-
-        device.SetRenderTarget(null);
-        _wasPrepared = true;
     }
 }

@@ -12,13 +12,13 @@
     <None Remove="Assets\Effects\LightningBeam.fx" />
     <None Remove="Assets\Effects\SlimeMonsoonSkyEffect.fx" />
     <None Remove="Assets\Textures\Extra\Noise_6.png" />
-    <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassCollider.png" />
-    <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassCollider_Glow.png" />
+    <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassAccumulator.png" />
+    <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassAccumulator_Glow.png" />
     <None Remove="Assets\Textures\Particles\LightningParticle.png" />
+    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassAccumulatorProj.png" />
+    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassAccumulatorProj_Glow.png" />
     <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassBioBall.png" />
     <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassBioStrike.png" />
-    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassColliderProj.png" />
-    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassColliderProj_Glow.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />

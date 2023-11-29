@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Ranged;
 
-public class AntiMassColliderProj : ModProjectile
+public class AntiMassAccumulatorProj : ModProjectile
 {
     public override void SetStaticDefaults()
     {

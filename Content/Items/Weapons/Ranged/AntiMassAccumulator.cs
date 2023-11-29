@@ -14,7 +14,7 @@ using ReLogic.Content;
 
 namespace CalamityHunt.Content.Items.Weapons.Ranged;
 
-public class AntiMassCollider : ModItem
+public class AntiMassAccumulator : ModItem
 {
     public override void SetDefaults()
     {
@@ -22,7 +22,7 @@ public class AntiMassCollider : ModItem
         Item.DamageType = DamageClass.Ranged;
         Item.width = 100;
         Item.height = 42;
-        Item.useTime = 100;
+        Item.useTime = 90;
         Item.useAnimation = Item.useTime;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.knockBack = 6;
@@ -30,11 +30,10 @@ public class AntiMassCollider : ModItem
         Item.rare = ItemRarityID.Red;
         Item.autoReuse = true;
         Item.shootSpeed = 5;
-        Item.shoot = ModContent.ProjectileType<AntiMassColliderProj>();
+        Item.shoot = ModContent.ProjectileType<AntiMassAccumulatorProj>();
         Item.noMelee = true;
         Item.noUseGraphic = true;
         Item.channel = true;
-        Item.reuseDelay = 0;
     }
 
     public override void AddRecipes()

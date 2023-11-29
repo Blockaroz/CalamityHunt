@@ -9,7 +9,7 @@ using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Mounts;
+namespace CalamityHunt.Common.Graphics.RenderTargets;
 
 public class PaladinPalanquinTextureContent : ARenderTargetContentByRequest
 {
@@ -18,14 +18,14 @@ public class PaladinPalanquinTextureContent : ARenderTargetContentByRequest
 
     protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
-        Texture2D asset = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
+        var asset = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
         PrepareARenderTarget_AndListenToEvents(ref _target, device, frame.Width, frame.Height, RenderTargetUsage.PreserveContents);
         device.SetRenderTarget(_target);
         device.Clear(Color.Transparent);
         DrawData value = new DrawData(asset, frame.Size() * 0.5f, frame, Color.White, rotation, frame.Size() * 0.5f, 1f, 0, 0);
 
-        GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
-        Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
+        GetGradientMapValues(out var brightnesses, out var colors);
+        var effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
         effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
         effect.Parameters["colors"].SetValue(colors);
         effect.Parameters["brightnesses"].SetValue(brightnesses);
@@ -47,8 +47,8 @@ public class PaladinPalanquinTextureContent : ARenderTargetContentByRequest
         brightnesses = new float[10];
         colors = new Vector3[10];
 
-        float maxBright = 0.667f;
-        float rainbowStartOffset = 0.35f + Main.GlobalTimeWrappedHourly * 0.5f % (maxBright * 2f);
+        var maxBright = 0.667f;
+        var rainbowStartOffset = 0.35f + Main.GlobalTimeWrappedHourly * 0.5f % (maxBright * 2f);
         //Calculate and store every non-modulo brightness, with the shifting offset. 
         //The first brightness is ignored for the moment, it will be relevant later. Setting it to -1 temporarily
         brightnesses[0] = -1;
@@ -63,30 +63,29 @@ public class PaladinPalanquinTextureContent : ARenderTargetContentByRequest
         brightnesses[9] = rainbowStartOffset + 0.75f;
 
         //Pass the entire rainbow through modulo 1
-        for (int i = 1; i < 10; i++)
+        for (var i = 1; i < 10; i++)
             brightnesses[i] = HuntOfTheOldGodsUtils.Modulo(brightnesses[i], maxBright) * maxBright;
 
         //Store the first element's value so we can find it again later
-        float firstBrightnessValue = brightnesses[1];
+        var firstBrightnessValue = brightnesses[1];
 
         //Sort the values from lowest to highest
         Array.Sort(brightnesses);
 
         //Find the new index of the original first element after the list being sorted
-        int rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
+        var rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
         //Substract 1 from the index, because we are ignoring the currently negative first array slot.
         rainbowStartIndex--;
 
         //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
-        for (int i = 0; i < 9; i++)
-        {
+        for (var i = 0; i < 9; i++) {
             colors[1 + (rainbowStartIndex + i) % 9] = GoozmaColorUtils.Oil[i];
         }
 
         //We always want a brightness at index 0 to be the lower bound
         brightnesses[0] = 0;
         //Make the color at index 0 be a mix between the first and last colors in the list, based on the distance between the 2.
-        float interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
+        var interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
         colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
     }
 
