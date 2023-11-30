@@ -171,8 +171,7 @@ public class AntiMassDeathLaser : ModProjectile
             modifiers.FinalDamage *= 5f;
             target.GetGlobalNPC<DoomedNPC>().doomCount = 0;
         }
-
-        Projectile.damage = (int)(Projectile.damage * 0.8f);
+        Projectile.damage = (int)(Projectile.damage * 0.9f);
     }
 
     private float visualSpeed;
