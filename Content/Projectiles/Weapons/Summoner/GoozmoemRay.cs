@@ -72,21 +72,21 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (Projectile.localAI[0] % 3 == 0)
                 Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), 2f, 5, 7, 1000));
 
-            for (int i = 0; i < 15; i++)
-            {
-                float grow = Utils.GetLerpValue(80, 70, Projectile.timeLeft, true) * Utils.GetLerpValue(-15, 25, Projectile.timeLeft, true);
-                float progress = Main.rand.NextFloat(900);
-                Color color = (new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + (progress / 1000f) * 60) * grow * Utils.GetLerpValue(0, 25, Projectile.timeLeft, true)) with { A = 0 };
-                Vector2 position = Projectile.Center + new Vector2(progress, 0).RotatedBy(Utils.AngleLerp(StartAngle, EndAngle, 1f - (Projectile.timeLeft - 5) / 80f));
+            //for (int i = 0; i < 15; i++)
+            //{
+            //    float grow = Utils.GetLerpValue(80, 70, Projectile.timeLeft, true) * Utils.GetLerpValue(-15, 25, Projectile.timeLeft, true);
+            //    float progress = Main.rand.NextFloat(900);
+            //    Color color = (new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + (progress / 1000f) * 60) * grow * Utils.GetLerpValue(0, 25, Projectile.timeLeft, true)) with { A = 0 };
+            //    Vector2 position = Projectile.Center + new Vector2(progress, 0).RotatedBy(Utils.AngleLerp(StartAngle, EndAngle, 1f - (Projectile.timeLeft - 5) / 80f));
 
-                CalamityHunt.particles.Add(Particle.Create<CosmicFlame>(particle => {
-                    particle.position = position;
-                    particle.velocity = Projectile.velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(20f, 25f);
-                    particle.scale = (1.5f + (progress / 1222f)) * grow * Utils.GetLerpValue(-15, 25, Projectile.timeLeft, true);
-                    particle.color = color;
-                    particle.maxTime = Main.rand.Next(30, 40);
-                }));
-            }
+            //    CalamityHunt.particles.Add(Particle.Create<CosmicFlameParticle>(particle => {
+            //        particle.position = position;
+            //        particle.velocity = Projectile.velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(20f, 25f);
+            //        particle.scale = (1.5f + (progress / 1222f)) * grow * Utils.GetLerpValue(-15, 25, Projectile.timeLeft, true);
+            //        particle.color = color;
+            //        particle.maxTime = Main.rand.Next(30, 40);
+            //    }));
+            //}
 
             //HandleSound();
         }

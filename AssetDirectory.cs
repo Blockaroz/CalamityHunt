@@ -9,10 +9,6 @@ namespace CalamityHunt;
 
 public static class AssetDirectory
 {
-    private const int NOISE_COUNT = 9;
-    private const int SPACE_COUNT = 2;
-    private const int COLORMAP_COUNT = 5;
-
     public static class Textures
     {
         public static readonly Asset<Texture2D> Sparkle = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Sparkle");
@@ -23,9 +19,11 @@ public static class AssetDirectory
         public static readonly Asset<Texture2D> ShockRing = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/ShockRing");
         public static readonly Asset<Texture2D> Empty = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Empty");
         public static readonly Asset<Texture2D> Template = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Template");
-        public static readonly Asset<Texture2D>[] Noise = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Noise_", NOISE_COUNT);
-        public static readonly Asset<Texture2D>[] Space = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Space_", SPACE_COUNT);
-        public static readonly Asset<Texture2D>[] ColorMap = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/ColorMap_", COLORMAP_COUNT);
+
+        public static readonly Asset<Texture2D>[] Noise = AssetUtilities.RequestArrayTotalImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Noise_");
+        public static readonly Asset<Texture2D>[] Space = AssetUtilities.RequestArrayTotalImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Space_");
+        public static readonly Asset<Texture2D>[] ColorMap = AssetUtilities.RequestArrayTotalImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/ColorMap_");
+       
         public static readonly Asset<Texture2D>[] SwordSwing = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/SwordSwing_", 2);
         public static readonly Asset<Texture2D> QuestionMark = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/icon_small");
         internal static readonly Asset<Texture2D> FrogParticle = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Particles/SplitParticle");
@@ -216,6 +214,7 @@ public static class AssetDirectory
 
         public static readonly Asset<Effect> BasicTrail = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/BasicTrail");
         public static readonly Asset<Effect> LightningBeam = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/LightningBeam");
+        public static readonly Asset<Effect> FlameDissolve = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/FlameDissolve");
 
         public static readonly Asset<Effect> Cosmos = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect");
         public static readonly Asset<Effect> ShakerSludge = AssetUtilities.RequestImmediate<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/ShakerSludge");

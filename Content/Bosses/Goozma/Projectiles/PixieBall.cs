@@ -135,7 +135,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 Cooldown--;
 
-                CalamityHunt.particles.Add(Particle.Create<CosmicFlame>(particle => {
+                CalamityHunt.particles.Add(Particle.Create<CosmicFlameParticle>(particle => {
                     particle.position = Projectile.Center;
                     particle.velocity = Main.rand.NextVector2Circular(3, 3) + Projectile.velocity.RotatedByRandom(0.1f) * 0.5f;
                     particle.scale = Main.rand.NextFloat(0.7f) + Projectile.scale;

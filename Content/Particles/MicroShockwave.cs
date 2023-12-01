@@ -30,10 +30,7 @@ public class MicroShockwave : Particle
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        if (shader != null) {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, shader.Shader, Main.Transform);
-        }
+        shader?.Shader?.CurrentTechnique.Passes[0].Apply();
 
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
         Rectangle solidFrame = texture.Frame(1, 3, 0, 0);
@@ -43,10 +40,7 @@ public class MicroShockwave : Particle
         spriteBatch.Draw(texture, position - Main.screenPosition, solidFrame, Color.Black * 0.1f * drawScale, rotation, solidFrame.Size() * 0.5f, new Vector2(scaleLife, scaleLife * 0.5f), 0, 0);
         spriteBatch.Draw(texture, position - Main.screenPosition, colorFrame, color * drawScale, rotation, colorFrame.Size() * 0.5f, new Vector2(scaleLife, scaleLife * 0.5f), 0, 0);
         spriteBatch.Draw(texture, position - Main.screenPosition, glowFrame, secondColor * drawScale, rotation, glowFrame.Size() * 0.5f, new Vector2(scaleLife, scaleLife * 0.5f), 0, 0);
-
-        if (shader != null) {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        }
+       
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
 }

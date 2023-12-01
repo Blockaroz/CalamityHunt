@@ -1,4 +1,5 @@
-﻿using ReLogic.Content;
+﻿using System.Collections.Generic;
+using ReLogic.Content;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Utilities;
@@ -27,6 +28,19 @@ public static class AssetUtilities
         for (int i = 0; i < assets.Length; i++)
             assets[i] = RequestImmediate<T>(path + (i + start));
         return assets;
+    }
+
+    public static Asset<T>[] RequestArrayTotalImmediate<T>(string name) where T : class
+    {
+        var assets = new List<Asset<T>>();
+
+        int i = 0;
+        while (ModContent.RequestIfExists(name + i, out Asset<T> asset, AssetRequestMode.ImmediateLoad)) {
+            assets.Add(asset);
+            i++;
+        }
+
+        return assets.ToArray();
     }
 
     private static Asset<T> Request<T>(string path, AssetRequestMode requestMode) where T : class

@@ -22,6 +22,8 @@ public class ParticleSystem
     public void Update()
     {
         if (Main.dedServ) {
+            if (particles.Count > 0)
+                particles.Clear();
             return;
         }
 
@@ -44,10 +46,11 @@ public class ParticleSystem
         if (Main.dedServ) {
             return;
         }
-            
-        if (begin) {
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+
+        if (!begin) {
+            spriteBatch.End();
         }
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
         foreach (Particle particle in particles.ToHashSet()) {
             if (particle is null) {
@@ -57,8 +60,10 @@ public class ParticleSystem
             particle.Draw(spriteBatch);
         }
 
-        if (begin) {
-            spriteBatch.End();
+        spriteBatch.End();
+
+        if (!begin) {
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         }
     }
 }

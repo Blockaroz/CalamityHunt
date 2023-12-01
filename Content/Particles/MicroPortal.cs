@@ -35,10 +35,7 @@ public class MicroPortal : Particle
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        if (shader.Shader != null) {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, shader.Shader, Main.Transform);
-        }
+        shader?.Shader?.CurrentTechnique.Passes[0].Apply();
 
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
         Rectangle solidFrame = texture.Frame(1, 3, 0, 0);
@@ -51,9 +48,6 @@ public class MicroPortal : Particle
         spriteBatch.Draw(texture, position - Main.screenPosition, colorFrame, color, rotation, colorFrame.Size() * 0.5f, scale * curScale * (1f + MathF.Sin(life * 10f) * 0.05f), 0, 0);
         spriteBatch.Draw(texture, position - Main.screenPosition, glowFrame, secondColor, rotation, glowFrame.Size() * 0.5f, scale * 1.05f * curScale * (1f + MathF.Sin(life * 10f) * 0.05f), 0, 0);
 
-        if (shader.Shader != null) {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        }
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
 }
