@@ -489,7 +489,12 @@ Items: {
 
 	AntiMassAccumulator: {
 		// DisplayName: Anti-Mass Accumulator
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+			Blasts out a ball of packed protons and a bolt of energized electrons
+			The ball can damage enemies in an area around itself, while the bolt does extra damage to anything damaged by the ball
+			'Do not look directly at the operational end of the device.'
+			''' */
 	}
 
 	GoozmaBoulderItem: {
@@ -497,7 +502,7 @@ Items: {
 		/* Tooltip:
 			'''
 			'Slippery
-			...when existant???'
+			...when existent???'
 			''' */
 	}
 }

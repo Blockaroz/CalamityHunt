@@ -18,7 +18,9 @@ public class ShakerSludgeMetaball : MetaballDrawer
         particles = new ParticleSystem();
         particles.Initialize();
 
-        content.SetParameters(Main.screenWidth, Main.screenHeight, DrawShapes);
+        content.width = Main.screenWidth;
+        content.height = Main.screenHeight;
+        content.draw = DrawShapes;
 
         On_Main.UpdateParticleSystems += UpdateCosmosParticleSystem;
         On_Main.DoDraw_DrawNPCsOverTiles += DrawTarget;
@@ -48,7 +50,9 @@ public class ShakerSludgeMetaball : MetaballDrawer
         Effect effect = AssetDirectory.Effects.ShakerSludge.Value;
 
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.GameViewMatrix.EffectMatrix);
-
+        
+        content.width = Main.screenWidth;
+        content.height = Main.screenHeight;
         content.Request();
 
         if (content.IsReady) {

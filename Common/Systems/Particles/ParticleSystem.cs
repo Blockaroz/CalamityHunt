@@ -50,6 +50,7 @@ public class ParticleSystem
         if (!begin) {
             spriteBatch.End();
         }
+
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
         foreach (Particle particle in particles.ToHashSet()) {
@@ -63,7 +64,7 @@ public class ParticleSystem
         spriteBatch.End();
 
         if (!begin) {
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
         }
     }
 }

@@ -45,8 +45,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             }
             float expand = Utils.GetLerpValue(0, 80, Time, true) * 2f;
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + 3);
-            glowColor.A /= 3;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + 3) with { A = 0 };
 
             if (Time > 10) {
                 if (Main.rand.NextBool(8)) {
@@ -59,13 +58,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                     }));
                 }
 
-                CalamityHunt.particles.Add(Particle.Create<CosmicFlameParticle>(particle => {
-                    particle.position = Projectile.Center + Main.rand.NextVector2Circular(32, 32) * expand;
-                    particle.velocity = Projectile.velocity.RotatedByRandom(0.1f) * Main.rand.NextFloat(1f, 1.5f);
-                    particle.scale = Main.rand.NextFloat(1f, 2f) * expand;
-                    particle.color = glowColor * 0.5f;
-                    particle.maxTime = Main.rand.Next(5, 7);
-                }));
+                if (Main.rand.NextBool()) {
+                    CalamityHunt.particles.Add(Particle.Create<FusionFlameParticle>(particle => {
+                        particle.position = Projectile.Center;
+                        particle.velocity = Projectile.velocity.RotatedByRandom(1.5f) * Main.rand.NextFloat(0.66f);
+                        particle.scale = Projectile.scale * 4f + Main.rand.NextFloat(1f, 2f);
+                        particle.maxTime = Main.rand.Next(15, 30);
+                        particle.color = glowColor * 0.9f;
+                        particle.fadeColor = glowColor * 0.6f;
+                    }));
+                }
 
                 if (Main.rand.NextBool(5) && Projectile.velocity.LengthSquared() > 2f) {
                     Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(180, 180) * expand, DustID.Sand, Projectile.velocity * Main.rand.NextFloat(3f), 0, Color.Black, 0.3f + Main.rand.NextFloat());

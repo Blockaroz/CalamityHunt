@@ -17,6 +17,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Common.Graphics.RenderTargets;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 {
@@ -59,55 +60,87 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 return;
             }
 
-            if (Time == 0)
-                Projectile.rotation = Projectile.velocity.ToRotation();
 
-            Owner.ChangeDir(Projectile.velocity.X > 0 ? 1 : -1);
-            Projectile.direction = Projectile.velocity.X > 0 ? 1 : -1;
-            Owner.SetDummyItemTime(3);
-            Owner.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
-            Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.rotation.AngleTowards(Owner.AngleTo(Main.MouseWorld), 0.4f), 0.5f * Utils.GetLerpValue(5, 10, Time % 10, true));
-            Projectile.velocity = Projectile.rotation.ToRotationVector2();
-            Projectile.Center = Owner.MountedCenter - new Vector2(0, 6 * Owner.gravDir) + Projectile.velocity.SafeNormalize(Vector2.Zero) * 10;
+            int shootSpeed = (int)(3f * Owner.GetAttackSpeed(DamageClass.Ranged));
+
+            if (Projectile.owner == Main.myPlayer) {
+
+                if (Time == 0) {
+                    Projectile.rotation = Projectile.velocity.ToRotation();
+                    Projectile.netUpdate = true;
+                }
+
+                Owner.ChangeDir(Projectile.velocity.X > 0 ? 1 : -1);
+                Projectile.direction = Projectile.velocity.X > 0 ? 1 : -1;
+                Owner.SetDummyItemTime(3);
+                Owner.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
+
+                Projectile.Center = Owner.MountedCenter - new Vector2(0, 6 * Owner.gravDir) + Projectile.velocity.SafeNormalize(Vector2.Zero) * 10;
+                Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.rotation.AngleTowards(Owner.AngleTo(Main.MouseWorld), 0.4f), 0.5f * Utils.GetLerpValue(1, 3, Time % 6, true));
+
+                if (Projectile.velocity != Projectile.rotation.ToRotationVector2()) {
+                    Projectile.velocity = Projectile.rotation.ToRotationVector2();
+                    Projectile.netUpdate = true;
+                }
+            }
+
             bool canKill = false;
 
-            if (Main.rand.NextBool())
-            {
+            if (Main.rand.NextBool()) {
                 Vector2 sludgeVelocity = (-(MathHelper.PiOver2 + MathHelper.PiOver4) * Projectile.direction + Projectile.rotation).ToRotationVector2() * Main.rand.NextFloat(1f, 4f);
                 Vector2 sludgeOff = -(new Vector2(22, 18 * Projectile.direction) + Main.rand.NextVector2Circular(15, 5).RotatedBy(-MathHelper.PiOver4 * Projectile.direction)).RotatedBy(Projectile.rotation);
-                Dust sludge = Dust.NewDustPerfect(Projectile.Center + sludgeOff * Projectile.scale * gunSquish, DustID.TintableDust, sludgeVelocity, 100, Color.Black, 0.5f + Main.rand.NextFloat(2f));
-                sludge.noGravity = !Main.rand.NextBool(25);
+                Dust sludge = Dust.NewDustPerfect(Projectile.Center + sludgeOff * Projectile.scale * gunSquish, DustID.TintableDust, sludgeVelocity, 100, Color.Black, Main.rand.NextFloat(0.5f, 1.5f));
+                sludge.fadeIn = 1f;
+                sludge.noGravity = Main.rand.NextBool(15);
             }
 
-            if (Time % 3 == 0)
-            {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.05f) * Main.rand.Next(15, 20), ModContent.ProjectileType<ShakerSludge>(), Owner.HeldItem.damage, 1f, Owner.whoAmI);
+            if (Time % shootSpeed == 0) {
+
+                for (int i = 0; i < 1; i++) {
+                    CalamityHunt.particles.Add(Particle.Create<FlameParticle>(particle => {
+                        particle.position = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 80;
+                        particle.scale = Main.rand.NextFloat(2f, 7f);
+                        particle.velocity = Projectile.velocity * Main.rand.NextFloat(15f, 20f);
+                        particle.maxTime = 1;// Main.rand.Next(25, 40);
+                        particle.color = Color.Orange with { A = 0 };
+                        particle.fadeColor = Color.Red with { A = 0 };
+                    }));
+
+                    CosmosMetaball.particles.Add(Particle.Create<CosmicMassParticle>(particle => {
+                        particle.position = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 80;
+                        particle.scale = Main.rand.NextFloat(2f, 5f);
+                        particle.velocity = Projectile.velocity * Main.rand.NextFloat(15f, 20f);
+                        particle.maxTime = Main.rand.Next(55, 100);
+                        particle.color = Color.GhostWhite with { A = 0 };
+                    }));
+                }
+
+                // Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.05f) * Main.rand.Next(15, 20), ModContent.ProjectileType<ShakerSludge>(), Owner.HeldItem.damage, 1f, Owner.whoAmI);
             }
 
-            //if (Time % 10 == 2)
-            //{
-            //    SoundStyle sludgeSound = SoundID.DD2_SkeletonSummoned;
-            //    sludgeSound.PitchVariance = 0.2f;
-            //    sludgeSound.MaxInstances = 0;
-            //    SoundEngine.PlaySound(sludgeSound, Projectile.Center);
-            //}
-
-            if (!Owner.channel)
+            if (!Owner.channel) {
                 canKill = true;
+            }
 
-            if (!canKill)
+            if (!canKill) {
                 Projectile.timeLeft = 10000;
+            }
 
-            if (canKill && Projectile.timeLeft > 27)
+            if (canKill && Projectile.timeLeft > 27) {
                 Projectile.timeLeft = 27;
+            }
 
-            float gunSquishProg = Utils.GetLerpValue(0, 3, Time % 10, true) * Utils.GetLerpValue(10, 3, Time % 10, true);
-            gunSquish = new Vector2(1.05f - gunSquishProg * 0.11f, 0.9f + gunSquishProg * 0.15f);
+            float gunSquishProg = Utils.GetLerpValue(0, shootSpeed * 3f, Time % (shootSpeed * 4), true) * Utils.GetLerpValue(shootSpeed * 4f, shootSpeed * 2f, Time % (shootSpeed * 4), true);
+            gunSquish = new Vector2(1f + gunSquishProg * 0.1f, 1f - gunSquishProg * 0.1f);
 
             Time++;
 
             HandleSound();
+        }
 
+        public override void OnKill(int timeLeft)
+        {
+            squartSound.StopSound();
         }
 
         public LoopingSound squartSound;
@@ -116,11 +149,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         public void HandleSound()
         {
-            volume = Utils.GetLerpValue(0, 8, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 5, Time, true) * 0.6f;
-            pitch = Utils.GetLerpValue(0, 8, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 5, Time, true) - 0.8f;
-            if (squartSound == null)
-                squartSound = new LoopingSound(AssetDirectory.Sounds.Weapons.SludgeShakerFiringLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
-
+            volume = Utils.GetLerpValue(0, 8, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 5, Time, true) * 0.2f;
+            pitch = Utils.GetLerpValue(0, 8, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 20, Time, true) - 0.1f + MathF.Sin(Time * 0.1f) * 0.1f;
+            squartSound ??= new LoopingSound(AssetDirectory.Sounds.Weapons.SludgeShakerFiringLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
             squartSound.PlaySound(() => Projectile.Center, () => volume, () => pitch);
         }
 

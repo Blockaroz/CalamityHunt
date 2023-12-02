@@ -488,7 +488,7 @@ Items: {
 
 	AntiMassAccumulator: {
 		DisplayName: Anti-Mass Accumulator
-		Tooltip: 
+		Tooltip:
 			'''
 			Blasts out balls of packed protons and bolts of energized electrons one after another
 			Proton balls charge anything they hit and can damage enemies in a radius

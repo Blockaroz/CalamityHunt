@@ -47,9 +47,10 @@ namespace CalamityHunt.Content.Buffs
                     dust.noGravity = true;
                 }
 
+                Rectangle box = new Rectangle((int)Player.position.X, (int)Player.position.Y, Player.width, Player.height);
+                Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value; //goozma's main color
+
                 if (Main.rand.NextBool(5)) {
-                    Rectangle box = new Rectangle((int)Player.position.X, (int)Player.position.Y, Player.width, Player.height);
-                    Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value; //goozma's main color
                     CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                         particle.position = Main.rand.NextVector2FromRectangle(box);
                         particle.velocity = -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(3f);
@@ -57,6 +58,15 @@ namespace CalamityHunt.Content.Buffs
                         particle.color = glowColor;
                     }));
                 }
+
+                CalamityHunt.particles.Add(Particle.Create<FlameParticle>(particle => {
+                    particle.position = Main.rand.NextVector2FromRectangle(box);
+                    particle.velocity = -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(2f);
+                    particle.scale = Main.rand.NextFloat(1f, 3f);
+                    particle.maxTime = Main.rand.Next(15, 20);
+                    particle.color = glowColor * 0.8f;
+                    particle.fadeColor = glowColor * 0.6f;
+                }));
             }
         }
 
@@ -84,8 +94,9 @@ namespace CalamityHunt.Content.Buffs
                     dust.noGravity = true;
                 }
 
-                if (Main.rand.NextBool(5)) {
-                    Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).Value; //oil, bc not from goozma
+                Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).Value with { A = 0 }; //oil, bc not from goozma
+
+                if (Main.rand.NextBool(3)) {
                     CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                         particle.position = Main.rand.NextVector2FromRectangle(npc.Hitbox);
                         particle.velocity = -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(3f);
@@ -93,6 +104,16 @@ namespace CalamityHunt.Content.Buffs
                         particle.color = glowColor;
                     }));
                 }
+
+                CalamityHunt.particles.Add(Particle.Create<FusionFlameParticle>(particle => {
+                    particle.position = Main.rand.NextVector2FromRectangle(npc.Hitbox);
+                    particle.velocity = -Vector2.UnitY.RotatedByRandom(0.5f) * Main.rand.NextFloat(1f, 5f);
+                    particle.rotation = particle.velocity.ToRotation();
+                    particle.scale = Main.rand.NextFloat(1f, 3f);
+                    particle.maxTime = Main.rand.Next(15, 20);
+                    particle.color = glowColor * 2f;
+                    particle.fadeColor = glowColor * 0.4f;
+                }));
             }
         }
 

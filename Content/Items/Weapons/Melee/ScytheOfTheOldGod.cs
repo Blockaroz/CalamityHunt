@@ -32,8 +32,8 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             Item.DamageType = DamageClass.Melee;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 40;
-            Item.useAnimation = 40;
+            Item.useTime = 35;
+            Item.useAnimation = 35;
             Item.channel = true;
             Item.noUseGraphic = true;
             Item.noMelee = true;
@@ -48,7 +48,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
                 Item.rare = r.Type;
             }
             swingStyle = 0;
-
+            Item.autoReuse = true;
         }
 
         public static Asset<Texture2D> glowTexture;

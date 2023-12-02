@@ -1,4 +1,3 @@
-# CalamityHunt
-Hunt of the Old God
+# Hunt of the Old Gods
 
-sorry for messy code
+The Goozma Mod

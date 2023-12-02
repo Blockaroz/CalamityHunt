@@ -13,6 +13,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria;
+using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Tiles
 {
@@ -22,8 +23,6 @@ namespace CalamityHunt.Content.Tiles
         public const int FrameHeight = 18 * 4;
         public override string Texture => $"{nameof(CalamityHunt)}/Assets/Textures/Tiles/RelicPedestal_" + PedestalStyle;
         public virtual int PedestalStyle { get; }
-
-        internal static Dictionary<int, Asset<Texture2D>> RelicAssets;
 
         public override void SetStaticDefaults()
         {
@@ -62,17 +61,13 @@ namespace CalamityHunt.Content.Tiles
             }
         }
 
-        public Asset<Texture2D> GetRelicTexture()
+        public override void Load()
         {
-            if (RelicAssets == null)
-                RelicAssets = new Dictionary<int, Asset<Texture2D>>();
+            if (AssetDirectory.Textures.Relic == null)
+                AssetDirectory.Textures.Relic = new Dictionary<int, Asset<Texture2D>>();
 
-            if (RelicAssets.TryGetValue(Type, out var asset))
-                return asset;
-
-            var newAsset = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Tiles/Relics" + Name);
-            RelicAssets.Add(Type, newAsset);
-            return newAsset;
+            var newAsset = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Tiles/Relics/" + Name);
+            AssetDirectory.Textures.Relic.Add(Type, newAsset);
         }
 
         public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
@@ -91,7 +86,7 @@ namespace CalamityHunt.Content.Tiles
             }
 
             // Get the initial draw parameters
-            var texture = GetRelicTexture().Value;
+            var texture = AssetDirectory.Textures.Relic[Type].Value;
 
             var frameY = tile.TileFrameX / FrameWidth; // Picks the frame on the sheet based on the placeStyle of the item
             var frame = texture.Frame(1, 1, 0, frameY);

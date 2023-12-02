@@ -135,12 +135,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             {
                 Cooldown--;
 
-                CalamityHunt.particles.Add(Particle.Create<CosmicFlameParticle>(particle => {
+                CalamityHunt.particles.Add(Particle.Create<FlameParticle>(particle => {
                     particle.position = Projectile.Center;
                     particle.velocity = Main.rand.NextVector2Circular(3, 3) + Projectile.velocity.RotatedByRandom(0.1f) * 0.5f;
-                    particle.scale = Main.rand.NextFloat(0.7f) + Projectile.scale;
-                    particle.color = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
-                    particle.maxTime = Main.rand.Next(30, 40);
+                    particle.scale = Main.rand.NextFloat(0.5f, 1.5f) + Projectile.scale;
+                    particle.color = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.8f, 0);
+                    particle.fadeColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.4f, 10);
+                    particle.maxTime = Main.rand.Next(15, 40);
+                    particle.anchor = () => particle.velocity * 0.1f;
                 }));
             }
 
@@ -171,13 +173,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }));
             }
 
-            //CalamityHunt.particles.Add(Particle.Create<CosmicFlame>(particle => {
-            //    particle.position = NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f;
-            //    particle.velocity = Main.rand.NextVector2Circular(4, 4) + NPC.velocity * (i / 6f) * 0.5f;
-            //    particle.scale = Main.rand.NextFloat(1.5f, 2.5f) * NPC.scale;
-            //    particle.color = Color.White;
-            //}));
-            //Particle.NewParticle(ModContent.GetInstance<CosmicSmoke>(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.1f) * 0.8f, Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0), Projectile.scale + Main.rand.NextFloat(0.7f));
+            CalamityHunt.particles.Add(Particle.Create<FlameParticle>(particle => {
+                particle.position = Projectile.Center;
+                particle.velocity = Projectile.velocity.RotatedByRandom(0.5f);
+                particle.scale = Projectile.scale + Main.rand.NextFloat(0.7f);
+                particle.maxTime = Main.rand.Next(10, 40);
+                particle.color = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
+                particle.fadeColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
+            }));
 
             for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
             {

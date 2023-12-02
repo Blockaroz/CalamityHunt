@@ -111,11 +111,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void AI()
         {
             if (NPC.scale > 0.1f) {
-                for (int i = 0; i < 6; i++) {
-                    CosmosMetaball.particles.Add(Particle.Create<CosmicFlameParticle>(particle => {
+                for (int i = 0; i < 3; i++) {
+                    CosmosMetaball.particles.Add(Particle.Create<CosmicMassParticle>(particle => {
                         particle.position = NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f;
-                        particle.velocity = Main.rand.NextVector2Circular(4, 4) + NPC.velocity * (i / 6f) * 0.5f;
-                        particle.scale = Main.rand.NextFloat(1.5f, 2.5f) * NPC.scale;
+                        particle.velocity = Main.rand.NextVector2Circular(3, 3) + NPC.velocity * (i / 6f) * 0.5f;
+                        particle.scale = Main.rand.NextFloat(2f, 5f) * (0.5f + NPC.scale * 0.5f);
+                        particle.maxTime = Main.rand.Next(30, 50);
                         particle.color = Color.White;
                     }));
                 }

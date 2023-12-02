@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
@@ -78,6 +79,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     particle.color = new Color(30, 15, 8, 0);
                 }));
             }
+
+            CosmosMetaball.particles.Add(Particle.Create<CosmicMassParticle>(particle => {
+                particle.position = Projectile.Center;
+                particle.velocity = Main.rand.NextVector2Circular(4, 4);
+                particle.scale = Main.rand.NextFloat(1f, 2f) * Projectile.scale;
+                particle.maxTime = Main.rand.Next(10, 30);
+                particle.color = Color.White;
+            }));
 
             if (Time + (int)(WhoAmI * 0.3f) > 640) {
                 Projectile.Kill();

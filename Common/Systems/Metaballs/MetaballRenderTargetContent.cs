@@ -7,16 +7,9 @@ namespace CalamityHunt.Common.Systems.Metaballs;
 
 public class MetaballRenderTargetContent : ARenderTargetContentByRequest
 {
-    private Action<SpriteBatch> draw;
-    private int width;
-    private int height;
-
-    public void SetParameters(int width, int height, Action<SpriteBatch> draw)
-    {
-        this.width = width;
-        this.height = height;
-        this.draw = draw;
-    }
+    public Action<SpriteBatch> draw;
+    public int width;
+    public int height;
 
     protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {

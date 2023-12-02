@@ -5,7 +5,7 @@ namespace CalamityHunt.Common.Systems.Metaballs;
 
 public abstract class MetaballDrawer : ILoadable
 {
-    public static MetaballRenderTargetContent content;
+    public MetaballRenderTargetContent content;
 
     public void Load(Mod mod)
     {

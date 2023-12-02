@@ -24,10 +24,12 @@ public static class AssetDirectory
         public static readonly Asset<Texture2D>[] Space = AssetUtilities.RequestArrayTotalImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/Space_");
         public static readonly Asset<Texture2D>[] ColorMap = AssetUtilities.RequestArrayTotalImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/ColorMap_");
        
-        public static readonly Asset<Texture2D>[] SwordSwing = AssetUtilities.RequestArrayImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/SwordSwing_", 2);
+        public static readonly Asset<Texture2D>[] SwordSwing = AssetUtilities.RequestArrayTotalImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Extra/SwordSwing_");
         public static readonly Asset<Texture2D> QuestionMark = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/icon_small");
         internal static readonly Asset<Texture2D> FrogParticle = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Particles/SplitParticle");
+        
         public static Dictionary<int, Asset<Texture2D>> Particle = new Dictionary<int, Asset<Texture2D>>();
+        public static Dictionary<int, Asset<Texture2D>> Relic = new Dictionary<int, Asset<Texture2D>>();
 
         public static class Goozma
         {

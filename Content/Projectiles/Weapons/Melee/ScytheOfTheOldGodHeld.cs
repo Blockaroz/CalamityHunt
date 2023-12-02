@@ -160,11 +160,24 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             }
 
             Vector2 scytheEnd = Projectile.Center + Projectile.rotation.ToRotationVector2() * 110 * (Projectile.scale + (1f - swingPercent) * swingPercent * 4f);
-            Vector2 swingEnd = Projectile.Center + Projectile.rotation.ToRotationVector2() * 180 * (Projectile.scale + (1f - swingPercent) * swingPercent * 4f);
+            Vector2 swingEnd = Projectile.Center + Projectile.rotation.ToRotationVector2() * 200 * (Projectile.scale + (1f - swingPercent) * swingPercent * 4f);
 
-            if (swingPercent2 > 0.4f && swingPercent2 < 0.8f)
+            if (swingPercent2 > 0.45f && swingPercent2 < 0.71f)
             {
-                Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).Value;
+                Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Time) with { A = 10 };
+
+                for (int i = 0; i < 2; i++) {
+                    CalamityHunt.particles.Add(Particle.Create<FusionFlameParticle>(particle => {
+                        particle.position = Vector2.Lerp(scytheEnd, swingEnd, Main.rand.NextFloat(0.4f, 0.5f)) + Main.rand.NextVector2Circular(10, 120).RotatedBy(Projectile.rotation);
+                        particle.velocity = (Projectile.rotation + MathHelper.PiOver2 * Projectile.spriteDirection).ToRotationVector2().RotatedByRandom(0.2f) * Main.rand.NextFloat(5f, 10f);
+                        particle.rotation = particle.velocity.ToRotation();
+                        particle.scale = Main.rand.NextFloat(2f, 10f);
+                        particle.maxTime = Main.rand.Next(36, 50);
+                        particle.color = glowColor * 1.5f;
+                        particle.fadeColor = glowColor * 0.4f;
+                        particle.anchor = () => Player.velocity * 0.5f;
+                    }));
+                }
 
                 for (int i = 0; i < 2; i++)
                 {
@@ -283,7 +296,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).Value;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Time) with { A = 128 };
             CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
                 particle.position = Main.rand.NextVector2FromRectangle(target.Hitbox);
                 particle.velocity = Vector2.Zero;
@@ -298,7 +311,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).Value;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Time) with { A = 128 };
 
             CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
                 particle.position = Main.rand.NextVector2FromRectangle(target.Hitbox);
@@ -357,14 +370,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 return false;
 
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D swingTexture = AssetDirectory.Textures.SwordSwing[0].Value;
+            Texture2D swingTexture = AssetDirectory.Textures.SwordSwing[2].Value;
 
             Vector2 endOrigin = new Vector2(0.35f, 0.5f + 0.3f * Projectile.spriteDirection);
             Vector2 origin = endOrigin;
             SpriteEffects spriteEffects = Projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).Value;
-            glowColor.A = 0;
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Time) with { A = 0 };
 
             float drawScale = Projectile.scale + (1f - swingPercent) * swingPercent * 4f;
             float swingStrength = Utils.GetLerpValue(0.1f, 0.7f, swingPercent, true) * Utils.GetLerpValue(0.9f, 0.6f, swingPercent2, true);
@@ -383,15 +395,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             {
                 for (int i = 0; i < Projectile.oldRot.Length; i++)
                 {
-                    Color trailGlowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 1.2f) * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
-                    trailGlowColor.A = 0;
+                    Color trailGlowColor = (new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Time + i * 1.2f) * swingStrength * (1f - (float)i / Projectile.oldRot.Length) * 0.4f) with { A = 0 };
 
-                    Main.EntitySpriteDraw(bladeTexture, Projectile.Center - Main.screenPosition, bladeTexture.Frame(), trailGlowColor, Projectile.oldRot[i] + MathHelper.PiOver4 * Projectile.spriteDirection, bladeTexture.Size() * origin, drawScale * (1f + MathF.Sqrt(i) * 0.1f), spriteEffects, 0);
+                    Main.EntitySpriteDraw(bladeTexture, Projectile.Center - Main.screenPosition, bladeTexture.Frame(), trailGlowColor, Projectile.oldRot[i] + MathHelper.PiOver4 * Projectile.spriteDirection, bladeTexture.Size() * origin, drawScale * (1.5f + MathF.Sqrt(i) * 0.1f), spriteEffects, 0);
                 }
 
                 for (int i = 0; i < 4; i++)
                 {
-                    Color trailBackColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 4) * 0.7f * (1f - (float)i / Projectile.oldRot.Length);
+                    Color trailBackColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Time + i * 4) * 0.7f * (1f - (float)i / Projectile.oldRot.Length);
                     trailBackColor.A = 200;
 
                     Rectangle frame = swingTexture.Frame(1, 4, 0, i);
@@ -399,7 +410,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 }
                 for (int i = 0; i < 4; i++)
                 {
-                    Color trailGlowColor = Color.Lerp(new Color(200, 200, 200, 0), new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Main.GlobalTimeWrappedHourly * 60 + i * 3), 0.6f + i / 10f) * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
+                    Color trailGlowColor = Color.Lerp(new Color(200, 200, 200, 0), new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Time + i * 3), 0.6f + i / 10f) * swingStrength * (1f - (float)i / Projectile.oldRot.Length);
                     trailGlowColor.A = 0;
 
                     Rectangle frame = swingTexture.Frame(1, 4, 0, i);
