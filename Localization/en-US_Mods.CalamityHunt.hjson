@@ -495,6 +495,15 @@ Items: {
 			'Do not look directly at the operational end of the device.'
 			'''
 	}
+
+	GoozmaBoulderItem: {
+		DisplayName: Motley Marble
+		Tooltip:
+			'''
+			'Slippery
+			...when existent???'
+			'''
+	}
 }
 
 NPCs: {
@@ -598,6 +607,7 @@ Projectiles: {
 	AntiMassBioStrike.DisplayName: Anti Mass Bio Strike
 	AntiMassAccumulatorProj.DisplayName: Anti Mass Accumulator Proj
 	ShakerSludge.DisplayName: Shaker Sludge
+	GoozmaBoulderProjectile.DisplayName: Motley Marble
 }
 
 Chat: {

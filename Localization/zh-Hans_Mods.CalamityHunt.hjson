@@ -490,6 +490,15 @@ Items: {
 		// DisplayName: Anti-Mass Accumulator
 		// Tooltip: ""
 	}
+
+	GoozmaBoulderItem: {
+		// DisplayName: Motley Marble
+		/* Tooltip:
+			'''
+			'Slippery
+			...when existant???'
+			''' */
+	}
 }
 
 NPCs: {
@@ -593,6 +602,7 @@ Projectiles: {
 	// AntiMassBioStrike.DisplayName: Anti Mass Bio Strike
 	// AntiMassAccumulatorProj.DisplayName: Anti Mass Accumulator Proj
 	// ShakerSludge.DisplayName: Shaker Sludge
+	// GoozmaBoulderProjectile.DisplayName: Motley Marble
 }
 
 Chat: {

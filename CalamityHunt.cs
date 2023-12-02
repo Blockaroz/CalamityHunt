@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems;
@@ -16,6 +17,8 @@ using ReLogic.Content;
 using ReLogic.Content.Sources;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Chat;
+using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
@@ -192,6 +195,30 @@ namespace CalamityHunt
             source.AddDirectoryRedirect("Content", "Assets/Textures");
             source.AddDirectoryRedirect("Common", "Assets/Textures");
             return source;
+        }
+
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            PacketType packet = (PacketType)reader.ReadByte();
+            switch (packet) {
+                case PacketType.TrollPlayer:
+                    ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("Got packet to epically troll someone"), Color.White);
+                    int playerNum = reader.ReadByte();
+                    int projNum = reader.ReadByte();
+                    ref Player player = ref Main.player[playerNum];
+
+                    if (player.difficulty != 1 && player.difficulty != 2)
+                        player.DropItems();
+                    player.ghost = true;
+                    player.statLife = 0;
+                    player.KillMe(PlayerDeathReason.ByProjectile(playerNum, projNum), 1, 0);
+                    break;
+            }
+        }
+
+        public enum PacketType : byte
+        {
+            TrollPlayer
         }
     }
 }
