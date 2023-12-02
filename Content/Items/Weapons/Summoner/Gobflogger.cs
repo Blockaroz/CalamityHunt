@@ -106,6 +106,6 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
             }
-	}
+	    }
     }
 }

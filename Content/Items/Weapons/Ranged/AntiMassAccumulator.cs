@@ -12,6 +12,26 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
+using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.Buffs;
+using CalamityHunt.Content.Items.Materials;
+using CalamityHunt.Content.Items.Rarities;
+using CalamityHunt.Content.Projectiles.Weapons.Summoner;
+using CalamityHunt.Content.Tiles;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CalamityHunt.Common;
+using Terraria;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
+
 namespace CalamityHunt.Content.Items.Weapons.Ranged;
 
 public class AntiMassAccumulator : ModItem
@@ -38,16 +58,37 @@ public class AntiMassAccumulator : ModItem
 
     public override void AddRecipes()
     {
-        if (ModLoader.TryGetMod("CalamityMod", out Mod calamityMod)) {
-
-        }
-        else {
+        if (ModLoader.HasMod("CalamityMod")) {
+            Mod calamity = ModLoader.GetMod("CalamityMod");
             CreateRecipe()
-                .AddIngredient(ItemID.AdamantiteBar, 20)
-                .AddIngredient(ItemID.SoulofFright, 5)
-                .AddIngredient(ItemID.IllegalGunParts, 2)
-                .AddIngredient(ItemID.Glass, 25)
-                .AddTile(TileID.MythrilAnvil)
+                .AddIngredient(calamity.Find<ModItem>("AdamantiteParticleAccelerator").Type)
+                .AddIngredient(calamity.Find<ModItem>("UelibloomBar").Type, 12)
+                .AddIngredient(calamity.Find<ModItem>("ExodiumCluster").Type, 30)
+                .AddIngredient(calamity.Find<ModItem>("MysteriousCircuitry").Type, 18)
+                .AddIngredient(calamity.Find<ModItem>("SuspiciousScrap").Type, 3) //this is the illegal gun parts of calamity
+                .AddTile(TileID.LunarCraftingStation)
+                .Register();
+        }
+        else { //vanilla recipe
+            CreateRecipe()
+                .AddIngredient(ItemID.AdamantiteBar, 10)
+                .AddIngredient(ItemID.SoulofFlight, 6)
+                .AddIngredient(ItemID.LunarBar, 90) //value of uelibloom bar and exodium cluster (108 gold) / value of liminite bar (1.2 gold) = 90 luminite bars
+                .AddIngredient(ItemID.IllegalGunParts, 3) //this is the illegal gun parts of vanilla
+                .AddTile(TileID.LunarCraftingStation)
+                .Register();
+        }
+
+        if (ModLoader.HasMod("CatalystMod")) {
+            Mod calamitnt = ModLoader.GetMod("CatalystMod");
+            Mod calamity = ModLoader.GetMod("CalamityMod");
+            CreateRecipe()
+                .AddIngredient(calamity.Find<ModItem>("AdamantiteParticleAccelerator").Type)
+                .AddIngredient(calamitnt.Find<ModItem>("MetanovaBar").Type, 6)
+                .AddIngredient(calamity.Find<ModItem>("ExodiumCluster").Type, 30)
+                .AddIngredient(calamity.Find<ModItem>("MysteriousCircuitry").Type, 18)
+                .AddIngredient(calamity.Find<ModItem>("SuspiciousScrap").Type, 3) 
+                .AddTile(TileID.LunarCraftingStation)
                 .Register();
         }
     }
