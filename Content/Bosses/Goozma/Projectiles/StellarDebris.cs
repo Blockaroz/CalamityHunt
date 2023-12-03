@@ -99,7 +99,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.Kill();
             }
 
-            CosmosMetaball.particles.Add(Particle.Create<CosmicMassParticle>(particle => {
+            CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
                 particle.position = Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24);
                 particle.velocity = Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.2f;
                 particle.scale = Main.rand.NextFloat(1f, 2f) * Projectile.scale;

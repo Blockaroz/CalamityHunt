@@ -96,22 +96,24 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
             if (Time % shootSpeed == 0) {
 
-                for (int i = 0; i < 1; i++) {
+                for (int i = 0; i < 8; i++) {
                     CalamityHunt.particles.Add(Particle.Create<FlameParticle>(particle => {
                         particle.position = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 80;
-                        particle.scale = Main.rand.NextFloat(2f, 7f);
+                        particle.scale = Main.rand.NextFloat(1f, 6f);
                         particle.velocity = Projectile.velocity * Main.rand.NextFloat(15f, 20f);
-                        particle.maxTime = 1;// Main.rand.Next(25, 40);
-                        particle.color = Color.Orange with { A = 0 };
-                        particle.fadeColor = Color.Red with { A = 0 };
+                        particle.maxTime = 1;//Main.rand.Next(25, 40);
+                        particle.color = Color.Orange with { A = 40 };
+                        particle.fadeColor = Color.Red with { A = 40 };
                     }));
 
-                    CosmosMetaball.particles.Add(Particle.Create<CosmicMassParticle>(particle => {
+                    CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
                         particle.position = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 80;
-                        particle.scale = Main.rand.NextFloat(2f, 5f);
-                        particle.velocity = Projectile.velocity * Main.rand.NextFloat(15f, 20f);
-                        particle.maxTime = Main.rand.Next(55, 100);
-                        particle.color = Color.GhostWhite with { A = 0 };
+                        particle.scale = Main.rand.NextFloat(1f, 5f);
+                        particle.velocity = Projectile.velocity * Main.rand.NextFloat(10f, 15f);
+                        particle.maxTime = Main.rand.Next(35, 50);
+                        particle.color = Color.White;
+                        particle.fadeColor = Color.White;
+                        particle.gravity = -Vector2.UnitY * 0.05f;
                     }));
                 }
 

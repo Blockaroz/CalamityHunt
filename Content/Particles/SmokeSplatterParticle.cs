@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles;
 
-public class CosmicMassParticle : Particle
+public class SmokeSplatterParticle : Particle
 {
     private int time;
 
@@ -22,12 +22,16 @@ public class CosmicMassParticle : Particle
 
     public Func<Vector2> anchor;
 
+    public Vector2 gravity;
+
+    public Color fadeColor;
+
     public override void OnSpawn()
     {
         style = Main.rand.Next(5);
         direction = Main.rand.NextBool().ToDirectionInt();
         scale *= Main.rand.NextFloat(0.9f, 1.1f);
-        rotationalVelocity = Main.rand.NextFloat(0.1f);
+        rotationalVelocity = Main.rand.NextFloat(0.05f);
     }
 
     public override void Update()
@@ -35,6 +39,7 @@ public class CosmicMassParticle : Particle
         float progress = time / (maxTime * 2f);
 
         velocity *= 1f - progress * 0.3f;
+        velocity += gravity * (1f + progress * 0.5f);
 
         if (time++ > maxTime) {
             ShouldRemove = true;
@@ -49,24 +54,25 @@ public class CosmicMassParticle : Particle
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        float progress = time / (maxTime * 2f);
+        float progress = time / (maxTime * 1.5f);
 
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
         Rectangle frame = texture.Frame(1, 5, 0, style);
         SpriteEffects flip = direction > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
-        float drawScale = scale * MathF.Sqrt(Utils.GetLerpValue(-1f, 5f, time, true)) * (0.5f + progress);
+        Color drawColor = Color.Lerp(color, fadeColor, Utils.GetLerpValue(0f, 0.2f, progress, true));
+        float drawScale = scale * MathF.Sqrt(Utils.GetLerpValue(-0.1f, 5f, time, true)) * (0.5f + progress * 1.33f);
 
         Effect dissolveEffect = AssetDirectory.Effects.FlameDissolve.Value;
-        dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[7].Value);
-        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(0.5f + scale * 0.033f));
+        dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[11].Value);
+        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(0.5f + scale * 0.05f));
         dissolveEffect.Parameters["uFrameCount"].SetValue(5);
         dissolveEffect.Parameters["uProgress"].SetValue(Math.Clamp(1f - MathF.Sqrt(1f - progress), 0f, 1f));
-        dissolveEffect.Parameters["uPower"].SetValue(1f +  Utils.GetLerpValue(0.2f, 0.5f, progress, true) * 60f);
-        dissolveEffect.Parameters["uNoiseStrength"].SetValue(1f);
+        dissolveEffect.Parameters["uPower"].SetValue(1f + Utils.GetLerpValue(0.15f, 0.8f, progress, true) * 50f);
+        dissolveEffect.Parameters["uNoiseStrength"].SetValue(0.7f);
         dissolveEffect.CurrentTechnique.Passes[0].Apply();
 
-        Vector2 squish = new Vector2(1f - progress * 0.2f, 1f + progress * 0.2f);
-        spriteBatch.Draw(texture, position - Main.screenPosition, frame, color, rotation + MathHelper.Pi / 3f * direction, frame.Size() * 0.5f, squish * drawScale * 0.66f, flip, 0);
+        Vector2 squish = new Vector2(1f - progress * 0.4f, 1f + progress * 0.4f);
+        spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation + MathHelper.Pi / 3f * direction, frame.Size() * 0.5f, squish * drawScale * 0.66f, flip, 0);
 
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }

@@ -112,12 +112,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
         {
             if (NPC.scale > 0.1f) {
                 for (int i = 0; i < 3; i++) {
-                    CosmosMetaball.particles.Add(Particle.Create<CosmicMassParticle>(particle => {
+                    CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
                         particle.position = NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f;
                         particle.velocity = Main.rand.NextVector2Circular(3, 3) + NPC.velocity * (i / 6f) * 0.5f;
-                        particle.scale = Main.rand.NextFloat(2f, 5f) * (0.5f + NPC.scale * 0.5f);
-                        particle.maxTime = Main.rand.Next(30, 50);
+                        particle.scale = Main.rand.NextFloat(2f, 8f) * (0.5f + NPC.scale * 0.5f);
+                        particle.maxTime = Main.rand.Next(20, 40);
                         particle.color = Color.White;
+                        particle.fadeColor = Color.White;
                     }));
                 }
                 if (Main.rand.NextBool(15)) {
@@ -802,11 +803,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CosmosEffect", AssetRequestMode.ImmediateLoad).Value;
                 effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.05f);
+                effect.Parameters["uZoom"].SetValue(1f);
                 effect.Parameters["uTextureNoise"].SetValue(AssetDirectory.Textures.Noise[8].Value);
                 effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Space[0].Value);
                 effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Space[1].Value);
                 effect.Parameters["uPosition"].SetValue((Main.LocalPlayer.oldPosition - Main.LocalPlayer.oldVelocity) * 0.001f);
-                effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
                 effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -Main.GlobalTimeWrappedHourly * 0.017f % 2f));
                 effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, Main.GlobalTimeWrappedHourly * 0.0004f % 2f));
                 effect.Parameters["uCloseColor"].SetValue(Color.SteelBlue.ToVector3() * 0.7f);

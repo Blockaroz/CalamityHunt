@@ -490,8 +490,9 @@ Items: {
 		// DisplayName: Anti-Mass Accumulator
 		/* Tooltip:
 			'''
-			Blasts out a ball of packed protons and a bolt of energized electrons
-			The ball can damage enemies in an area around itself, while the bolt does extra damage to anything damaged by the ball
+			Blasts out balls of packed protons and bolts of energized electrons one after another
+			Proton balls charge anything they hit and can damage enemies in a radius
+			Electron bolts do extra damage to positively charged enemies
 			'Do not look directly at the operational end of the device.'
 			''' */
 	}

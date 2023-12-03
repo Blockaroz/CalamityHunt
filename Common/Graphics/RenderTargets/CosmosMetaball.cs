@@ -36,11 +36,11 @@ public class CosmosMetaball : MetaballDrawer
     {
         Effect effect = AssetDirectory.Effects.Cosmos.Value;
         effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.05f);
+        effect.Parameters["uZoom"].SetValue(Main.GameZoomTarget);
         effect.Parameters["uTextureNoise"].SetValue(AssetDirectory.Textures.Noise[0].Value);
         effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Space[0].Value);
         effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Space[1].Value);
-        effect.Parameters["uPosition"].SetValue((Main.LocalPlayer.oldPosition - Main.LocalPlayer.oldVelocity) * 0.001f);
-        effect.Parameters["uParallax"].SetValue(new Vector2(0.5f, 0.2f));
+        effect.Parameters["uPosition"].SetValue(Main.screenPosition / 256f);
         effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -(Main.GlobalTimeWrappedHourly * 0.017f % 2f)));
         effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, -(Main.GlobalTimeWrappedHourly * 0.0004f % 2f)));
         effect.Parameters["uCloseColor"].SetValue(Color.Lerp(Color.SteelBlue, Color.Cyan, 0.1f).ToVector3());

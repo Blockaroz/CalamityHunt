@@ -59,12 +59,12 @@ namespace CalamityHunt.Content.Buffs
                     }));
                 }
 
-                CalamityHunt.particles.Add(Particle.Create<FlameParticle>(particle => {
+                CalamityHunt.particles.Add(Particle.Create<FusionFlameParticle>(particle => {
                     particle.position = Main.rand.NextVector2FromRectangle(box);
                     particle.velocity = -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(2f);
                     particle.scale = Main.rand.NextFloat(1f, 3f);
                     particle.maxTime = Main.rand.Next(15, 20);
-                    particle.color = glowColor * 0.8f;
+                    particle.color = glowColor;
                     particle.fadeColor = glowColor * 0.6f;
                 }));
             }
