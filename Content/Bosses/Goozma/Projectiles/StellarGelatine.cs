@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
@@ -21,7 +22,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.DrawScreenCheckFluff[Type] = 2000;
-            ProjectileID.Sets.TrailCacheLength[Type] = 20;
+            ProjectileID.Sets.TrailCacheLength[Type] = 3;
             ProjectileID.Sets.TrailingMode[Type] = -1;
         }
 
@@ -42,6 +43,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
+            Projectile.localAI[0] = Main.rand.Next(20);
             Projectile.localAI[1] = Main.rand.NextFloat(0.8f, 1.4f);
             WeightedRandom<int> typeOfStarBit = new WeightedRandom<int>();
             typeOfStarBit.Add(0, 0.2f);
@@ -51,6 +53,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.frame = typeOfStarBit;
             Projectile.direction = Main.rand.NextBool().ToDirectionInt();
             Projectile.rotation = Main.rand.NextFloat(-0.3f, 0.3f);
+
+            for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+                Projectile.oldPos[i] = Projectile.Center;
+                Projectile.oldRot[i] = Projectile.velocity.ToRotation();
+            }
 
             Owner = -1;
         }
@@ -68,15 +75,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 return;
             }
 
-            for (int i = 0; i < 2; i++) {
-                CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
-                    particle.position = Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24);
-                    particle.velocity = Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * i * 0.5f;
-                    particle.scale = Main.rand.NextFloat(0.5f, 1.5f) * Projectile.scale;
-                    particle.maxTime = Main.rand.Next(10, 30);
-                    particle.color = Color.White;
-                }));
-            }
+            CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
+                particle.position = Projectile.Center + Projectile.velocity * 2f + Main.rand.NextVector2Circular(24, 24);
+                particle.velocity = Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.1f;
+                particle.scale = Main.rand.NextFloat(1f, 3f) * Projectile.scale;
+                particle.maxTime = Main.rand.Next(10, 30);
+                particle.color = Color.White;
+                particle.fadeColor = Color.White;
+            }));
 
             if (Projectile.ai[1] == 0)
             {
@@ -133,16 +139,18 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
-            float scale = Projectile.localAI[1];
+            float scale = Projectile.localAI[1] * 1.1f;
 
-            if (Projectile.ai[1] == 0)
-                scale = Utils.GetLerpValue(-15, 15, Projectile.localAI[0], true) * Projectile.localAI[1];
+            if (Projectile.ai[1] == 0) {
+                scale = Utils.GetLerpValue(-15, 15, Projectile.localAI[0], true) * Projectile.localAI[1] * 1.1f;
+            }
 
-            Vector2 flameSquish = new Vector2(1f + (float)Math.Sin(Projectile.localAI[0] * 0.2f) * 0.2f, 1f + (float)Math.Cos(Projectile.localAI[0] * 0.2f) * 0.2f);
-            Color innerFlameColor = Color.Lerp(new Color(170, 100, 35, 0), new Color(20, 170, 200, 0), Utils.GetLerpValue(50, 30, Time, true));
+            Vector2 flameSquish = new Vector2(1f + (float)Math.Sin(Projectile.localAI[0] * 0.2f) * 0.1f, 1f + (float)Math.Cos(Projectile.localAI[0] * 0.2f) * 0.1f) * new Vector2(1f - Projectile.velocity.Length() * 0.005f, 0.8f + Projectile.velocity.Length() * 0.005f);
+            Color innerFlameColor = Color.Lerp(new Color(20, 20, 20, 0), new Color(20, 170, 200, 0), Utils.GetLerpValue(50, 30, Time, true));
 
             Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(10, 30, 110, 0) * 0.7f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * scale * flameSquish, 0, 0);
             Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), innerFlameColor * 0.7f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * 0.66f * scale * flameSquish, 0, 0);
+
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scale, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, new Color(70, 40, 35, 0), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.3f * scale, 0, 0);
 

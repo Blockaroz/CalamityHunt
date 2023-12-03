@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
+namespace CalamityHunt.Content.Bosses.Goozma
 {
-    public interface IDieWithGoozma
+    public interface IGoozmaSubject
     {
     }
 }

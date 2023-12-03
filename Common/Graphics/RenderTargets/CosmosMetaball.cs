@@ -36,7 +36,7 @@ public class CosmosMetaball : MetaballDrawer
     {
         Effect effect = AssetDirectory.Effects.Cosmos.Value;
         effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.05f);
-        effect.Parameters["uZoom"].SetValue(Main.GameZoomTarget);
+        effect.Parameters["uZoom"].SetValue(0.5f + Main.GameZoomTarget * 0.5f);
         effect.Parameters["uTextureNoise"].SetValue(AssetDirectory.Textures.Noise[0].Value);
         effect.Parameters["uTextureClose"].SetValue(AssetDirectory.Textures.Space[0].Value);
         effect.Parameters["uTextureFar"].SetValue(AssetDirectory.Textures.Space[1].Value);
@@ -45,7 +45,7 @@ public class CosmosMetaball : MetaballDrawer
         effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, -(Main.GlobalTimeWrappedHourly * 0.0004f % 2f)));
         effect.Parameters["uCloseColor"].SetValue(Color.Lerp(Color.SteelBlue, Color.Cyan, 0.1f).ToVector3());
         effect.Parameters["uFarColor"].SetValue((Color.MidnightBlue * 0.25f).ToVector3());
-        effect.Parameters["uOutlineColor"].SetValue(new Color(10, 35, 85, 0).ToVector4());
+        effect.Parameters["uOutlineColor"].SetValue(new Color(1, 7, 25, 0).ToVector4());
         effect.Parameters["uImageSize"].SetValue(Main.ScreenSize.ToVector2());
         effect.Parameters["uNoiseRepeats"].SetValue(0.1f);
 

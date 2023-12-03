@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class RainbowLaser : ModProjectile, IDieWithGoozma
+    public class RainbowLaser : ModProjectile, IGoozmaSubject
     {
         public override void SetStaticDefaults()
         {

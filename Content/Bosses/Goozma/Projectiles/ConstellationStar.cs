@@ -86,6 +86,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 particle.scale = Main.rand.NextFloat(1f, 2f) * Projectile.scale;
                 particle.maxTime = Main.rand.Next(10, 30);
                 particle.color = Color.White;
+                particle.fadeColor = Color.White;
             }));
 
             if (Time + (int)(WhoAmI * 0.3f) > 640) {

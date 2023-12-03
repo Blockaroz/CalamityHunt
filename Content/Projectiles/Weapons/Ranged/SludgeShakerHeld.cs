@@ -101,7 +101,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                         particle.position = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 80;
                         particle.scale = Main.rand.NextFloat(1f, 6f);
                         particle.velocity = Projectile.velocity * Main.rand.NextFloat(15f, 20f);
-                        particle.maxTime = 1;//Main.rand.Next(25, 40);
+                        particle.maxTime = Main.rand.Next(25, 40);
                         particle.color = Color.Orange with { A = 40 };
                         particle.fadeColor = Color.Red with { A = 40 };
                     }));
@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                         particle.position = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 80;
                         particle.scale = Main.rand.NextFloat(1f, 5f);
                         particle.velocity = Projectile.velocity * Main.rand.NextFloat(10f, 15f);
-                        particle.maxTime = Main.rand.Next(35, 50);
+                        particle.maxTime = 1;// Main.rand.Next(35, 50);
                         particle.color = Color.White;
                         particle.fadeColor = Color.White;
                         particle.gravity = -Vector2.UnitY * 0.05f;

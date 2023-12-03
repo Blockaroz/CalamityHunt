@@ -1,16 +1,16 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -131,18 +131,19 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 //    }
                 //}
             }
+
             if (Cooldown > 0)
             {
                 Cooldown--;
 
                 CalamityHunt.particles.Add(Particle.Create<FlameParticle>(particle => {
                     particle.position = Projectile.Center;
-                    particle.velocity = Main.rand.NextVector2Circular(3, 3) + Projectile.velocity.RotatedByRandom(0.1f) * 0.5f;
-                    particle.scale = Main.rand.NextFloat(0.5f, 1.5f) + Projectile.scale;
+                    particle.velocity = Main.rand.NextVector2Circular(3, 3) + Projectile.velocity.RotatedByRandom(0.1f) * 0.1f;
+                    particle.scale = Main.rand.NextFloat(1f, 3f) + Projectile.scale;
                     particle.color = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.8f, 0);
                     particle.fadeColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.4f, 10);
                     particle.maxTime = Main.rand.Next(15, 40);
-                    particle.anchor = () => particle.velocity * 0.1f;
+                    particle.anchor = () => Projectile.velocity * 0.8f;
                 }));
             }
 

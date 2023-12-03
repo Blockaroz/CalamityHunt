@@ -1,9 +1,7 @@
 ﻿using System.Linq;
 using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems;
-using CalamityHunt.Content.Items.Misc.AuricSouls;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Graphics.SceneEffects;
@@ -16,7 +14,7 @@ public class GoozmaAuricSoulScene : ModSceneEffect
 
     public override bool IsSceneEffectActive(Player player)
     {
-        var active = Main.item.Any(n => n.active && n.type == ModContent.ItemType<GoozmaAuricSoul>()) || GoozmaSystem.GoozmaActive;
+        var active = GoozmaSystem.GoozmaActive;
 
         if (active) {
             player.GetModPlayer<SceneEffectPlayer>().effectActive[(ushort)SceneEffectPlayer.EffectorType.SlimeMonsoon] = 15;

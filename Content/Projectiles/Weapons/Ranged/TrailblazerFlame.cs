@@ -38,14 +38,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             }
 
             Projectile.Resize((int)(150 * Utils.GetLerpValue(0, 80, Time, true)), (int)(150 * Utils.GetLerpValue(0, 80, Time, true)));
-            Projectile.scale = MathF.Pow(Utils.GetLerpValue(5, 80, Time, true), 0.7f) * 3f;
+            Projectile.scale = MathF.Pow(Utils.GetLerpValue(5, 80, Time, true), 0.8f) * 3f;
             if (Main.myPlayer == Projectile.owner) {
-                Projectile.position += (Main.player[Projectile.owner].position - Main.player[Projectile.owner].oldPosition) * Utils.GetLerpValue(20, 15, Time, true) * 0.3f;
+                Projectile.position += (Main.player[Projectile.owner].position - Main.player[Projectile.owner].oldPosition) * Utils.GetLerpValue(20, 10, Time, true) * 0.3f;
                 Projectile.netUpdate = true;
             }
             float expand = Utils.GetLerpValue(0, 80, Time, true) * 2f;
 
-            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + 3) with { A = 0 };
+            Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + 3) with { A = 128 };
 
             if (Time > 10) {
                 if (Main.rand.NextBool(8)) {
@@ -58,12 +58,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                     }));
                 }
 
-                if (Main.rand.NextBool()) {
+                if (Main.rand.NextBool(6)) {
                     CalamityHunt.particles.Add(Particle.Create<FusionFlameParticle>(particle => {
                         particle.position = Projectile.Center;
-                        particle.velocity = Projectile.velocity.RotatedByRandom(1.5f) * Main.rand.NextFloat(0.66f);
+                        particle.velocity = Projectile.velocity.RotatedByRandom(0.1f) * Main.rand.NextFloat(1f, 1.5f);
+                        particle.rotation = Projectile.velocity.ToRotation();
                         particle.scale = Projectile.scale * 4f + Main.rand.NextFloat(1f, 2f);
-                        particle.maxTime = Main.rand.Next(15, 30);
+                        particle.maxTime = Main.rand.Next(25, 30);
                         particle.color = glowColor * 0.9f;
                         particle.fadeColor = glowColor * 0.6f;
                     }));
@@ -121,8 +122,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             backColor.A = 150;
             Color glowColor = Color.Lerp(new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]), Color.White, 0.5f) * Utils.GetLerpValue(70, 50, Time, true);
             glowColor.A = 0;
-            Color backDrawColor = backColor * Utils.GetLerpValue(80, 50, Time, true);
-            Color drawColor = glowColor * Utils.GetLerpValue(80, 30, Time, true);
+            Color backDrawColor = backColor * Utils.GetLerpValue(80, 70, Time, true);
+            Color drawColor = glowColor * Utils.GetLerpValue(80, 50, Time, true);
 
             for (int i = 0; i < 4; i++) {
                 Color trailColor = backDrawColor * (1f - i / 4f);

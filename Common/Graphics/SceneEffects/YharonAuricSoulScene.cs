@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalamityHunt.Content.Items.Misc.AuricSouls;
-using Terraria.ModLoader;
+﻿using System.Linq;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Graphics.SceneEffects;
 
@@ -17,10 +12,6 @@ public class YharonAuricSoulScene : ModSceneEffect
 
     public override bool IsSceneEffectActive(Player player)
     {
-        var active = Main.item.Any(n => n.active && n.type == ModContent.ItemType<FieryAuricSoul>());
-
-        if (active && ModLoader.TryGetMod("CalamityMod", out var calamity)) {
-        }
-        return active;
+        return false;
     }
 }

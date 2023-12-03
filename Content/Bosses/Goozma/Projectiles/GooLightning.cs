@@ -17,7 +17,7 @@ using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class GooLightning : ModProjectile, IDieWithGoozma
+    public class GooLightning : ModProjectile, IGoozmaSubject
     {
         public override void SetDefaults()
         {

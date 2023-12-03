@@ -12,6 +12,7 @@
     <None Remove="Assets\Effects\FlameDissolve.fx" />
     <None Remove="Assets\Effects\LightningBeam.fx" />
     <None Remove="Assets\Effects\SlimeMonsoonSkyEffect.fx" />
+    <None Remove="Assets\Effects\SlimeMonsoonStrike.fx" />
     <None Remove="Assets\Textures\Extra\Noise_6.png" />
     <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassAccumulator.png" />
     <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassAccumulator_Glow.png" />

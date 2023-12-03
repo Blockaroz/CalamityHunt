@@ -31,7 +31,7 @@ namespace CalamityHunt.Common.Systems
             GoozmaSpawningOld();
 
             //stop black hole shader
-            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<BlackHoleBlender>()))
+            if (!Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<StellarBlackHole>()))
             {
                 if (Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Active)
                 {

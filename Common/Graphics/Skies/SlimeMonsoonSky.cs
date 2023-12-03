@@ -55,7 +55,7 @@ public class SlimeMonsoonSky : CustomSky
     {
         if (inColor.R + inColor.G + inColor.B > 20) {
             float fastStrength = Math.Clamp(_strength * 3f, 0, 1f);
-            Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, (lightColor * 0.1f) with { A = 255 }, fastStrength);
+            Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, (lightColor * 0.4f) with { A = 255 }, fastStrength);
             return inColor.MultiplyRGBA(Color.Lerp(Color.White, lightColor, fastStrength));
         }
         return inColor;
@@ -100,7 +100,7 @@ public class SlimeMonsoonSky : CustomSky
 
         }, 2f, 2f).Value;
         Color darkColor = Color.Lerp(brightColor, Color.Black, 0.9f);
-        lightColor = Color.Lerp(Color.DimGray, brightColor, 0.6f);
+        lightColor = Color.Lerp(Color.Purple, brightColor, 0.7f);
 
         if (Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Active) {
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader()
@@ -120,49 +120,21 @@ public class SlimeMonsoonSky : CustomSky
         }
 
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
-            spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
-            spriteBatch.Draw(AssetDirectory.Textures.Noise[4].Value, new Rectangle(0, -yOffset - 100, Main.screenWidth, Main.screenHeight * 3), darkColor * _strength);
+            //spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
+            //spriteBatch.Draw(AssetDirectory.Textures.Noise[4].Value, new Rectangle(0, -yOffset - 100, Main.screenWidth, Main.screenHeight * 3), darkColor * 0.1f * _strength);
         }       
         
-        Effect skyEffect = AssetDirectory.Effects.SlimeMonsoonSkyEffect.Value;
-        skyEffect.Parameters["uMap"].SetValue(AssetDirectory.Textures.ColorMap[4].Value);
 
         if (maxDepth >= 4 && minDepth < 5) {
 
-            skyEffect.Parameters["uWorldPos"].SetValue((Main.screenPosition + Main.ScreenSize.ToVector2() / 2f) * 0.0001f);
-            skyEffect.Parameters["uTime"].SetValue(_windSpeed * 3f);
-            skyEffect.Parameters["uStrength"].SetValue(_strength);
-            skyEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[5].Value);
-            skyEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Noise[0].Value);
-            skyEffect.Parameters["uHeight"].SetValue(0f);
-            skyEffect.Parameters["uBrightness"].SetValue(0.5f);
-
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, skyEffect, Main.BackgroundViewMatrix.TransformationMatrix);
-            
-            spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), darkColor * (float)Math.Sqrt(_strength));
-
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.BackgroundViewMatrix.TransformationMatrix);
         }        
         
         if (maxDepth >= 2 && minDepth < 3) {
 
-            skyEffect.Parameters["uWorldPos"].SetValue((Main.screenPosition + Main.ScreenSize.ToVector2() / 2f) * 0.0001f);
-            skyEffect.Parameters["uTime"].SetValue(_windSpeed * 3f);
-            skyEffect.Parameters["uStrength"].SetValue(_strength);
-            skyEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[5].Value);
-            skyEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Noise[0].Value);
-            skyEffect.Parameters["uHeight"].SetValue(0f);
-            skyEffect.Parameters["uBrightness"].SetValue(0.5f);
+        }        
+        
+        if (maxDepth >= 1 && minDepth < 2) {
 
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, skyEffect, Main.BackgroundViewMatrix.TransformationMatrix);
-            
-            spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), darkColor * (float)Math.Sqrt(_strength));
-
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.BackgroundViewMatrix.TransformationMatrix);
         }
     }
 

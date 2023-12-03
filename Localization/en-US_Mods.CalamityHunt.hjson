@@ -505,6 +505,16 @@ Items: {
 			...when existent???'
 			'''
 	}
+
+	IOUASoul: {
+		DisplayName: I O U A Soul
+		Tooltip: ""
+	}
+
+	StrangeManPortrait: {
+		DisplayName: Portrait of a Strange Man
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -609,6 +619,7 @@ Projectiles: {
 	AntiMassAccumulatorProj.DisplayName: Anti Mass Accumulator Proj
 	ShakerSludge.DisplayName: Shaker Sludge
 	GoozmaBoulderProjectile.DisplayName: Motley Marble
+	StellarBlackHole.DisplayName: Stellar Black Hole
 }
 
 Chat: {

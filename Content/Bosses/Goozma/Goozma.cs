@@ -1,8 +1,14 @@
-﻿using CalamityHunt.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using CalamityHunt.Common;
 using CalamityHunt.Common.DropRules;
 using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems;
+using CalamityHunt.Common.Systems.Camera;
 using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Items.Accessories;
 using CalamityHunt.Content.Items.Armor.Shogun;
@@ -12,8 +18,8 @@ using CalamityHunt.Content.Items.Lore;
 using CalamityHunt.Content.Items.Masks;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Misc;
-using CalamityHunt.Content.Items.Misc.AuricSouls;
 using CalamityHunt.Content.Items.Mounts;
+using CalamityHunt.Content.Items.Placeable;
 using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Content.Items.Weapons.Melee;
 using CalamityHunt.Content.Items.Weapons.Ranged;
@@ -24,10 +30,6 @@ using CalamityHunt.Content.Pets.BloatBabyPet;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -39,9 +41,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using static CalamityHunt.Common.Systems.DifficultySystem;
-using CalamityHunt.Content.Items.Placeable;
-using CalamityHunt.Common.Utilities;
-using CalamityHunt.Common.Systems.Camera;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -142,7 +141,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.ByCondition(new ChromaticDropRule(), ModContent.ItemType<GoozmaAuricSoul>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new ChromaticDropRule(), ModContent.ItemType<IOUASoul>()));
             npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaLore>()));
             npcLoot.Add(ItemDropRule.ByCondition(new ZenithDropRule(), ModContent.ItemType<Goozmaga>()));
 
@@ -1013,7 +1012,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     NPC.life = 1;
 
                     if (Time % 3 == 0) {
-                        foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is IDieWithGoozma)) {
+                        foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.ModProjectile is IGoozmaSubject)) {
                             projectile.Kill();
                         }
                     }

@@ -111,12 +111,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public override void AI()
         {
             if (NPC.scale > 0.1f) {
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 2; i++) {
                     CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
                         particle.position = NPC.Center + Main.rand.NextVector2Circular(90, 60) * NPC.scale + NPC.velocity * (i / 6f) * 0.3f;
-                        particle.velocity = Main.rand.NextVector2Circular(3, 3) + NPC.velocity * (i / 6f) * 0.5f;
-                        particle.scale = Main.rand.NextFloat(2f, 8f) * (0.5f + NPC.scale * 0.5f);
-                        particle.maxTime = Main.rand.Next(20, 40);
+                        particle.velocity = Main.rand.NextVector2Circular(2, 2) + NPC.velocity * (i / 6f) * 0.5f;
+                        particle.scale = Main.rand.NextFloat(2f, 6f) * (0.5f + NPC.scale * 0.5f);
+                        particle.maxTime = Main.rand.Next(20, 50);
                         particle.color = Color.White;
                         particle.fadeColor = Color.White;
                     }));
@@ -574,7 +574,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 NPC.scale = (float)Math.Pow(Utils.GetLerpValue(90, 0, Time, true), 2f);
 
             if (Time == 2) {
-                Projectile hole = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<BlackHoleBlender>(), 9999, 0);
+                Projectile hole = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<StellarBlackHole>(), 9999, 0);
                 hole.ai[1] = 595;
                 hole.ai[2] = NPC.whoAmI;
             }
@@ -629,7 +629,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectile.velocity = Vector2.Lerp(projectile.velocity, projectile.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * (projectile.Distance(Target.Center) + 500) * 0.0013f * (4f - projectile.ai[1] * 0.66f) * 4.5f, 0.1f);
                 projectile.velocity = projectile.velocity.RotatedBy(0.033f * projectile.direction);
                 projectile.velocity += NPC.velocity * 0.1f;
-                if (projectile.Distance(NPC.Center) < holeSize - 40)
+                if (projectile.Distance(NPC.Center) < 100)
                     projectile.Kill();
             }
 
