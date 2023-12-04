@@ -6,14 +6,13 @@ using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Misc;
 using CalamityHunt.Content.Items.Weapons.Summoner;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using ReLogic.Content.Sources;
 using Terraria;
 using Terraria.Audio;
@@ -47,14 +46,14 @@ namespace CalamityHunt
             On_Main.DrawDust += DrawParticleSystems;
             On_Main.DrawBackGore += DrawParticleSystemBehindEntities;
 
-            Ref<Effect> stellarblackhole = new Ref<Effect>(ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/SpaceHole", AssetRequestMode.ImmediateLoad).Value);
+            Ref<Effect> stellarblackhole = new Ref<Effect>(AssetDirectory.Effects.BlackHole.Value);
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"] = new Filter(new ScreenShaderData(stellarblackhole, "BlackHolePass"), EffectPriority.VeryHigh);
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Load();
 
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"] = new SlimeMonsoonSkyOld();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"].Load();
 
-            Ref<Effect> distort = new Ref<Effect>(ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/RadialDistortion", AssetRequestMode.ImmediateLoad).Value);
+            Ref<Effect> distort = new Ref<Effect>(AssetDirectory.Effects.SlimeMonsoonDistortion.Value);
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"] = new Filter(new ScreenShaderData(distort, "DistortionPass"), EffectPriority.Medium);
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Load();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonSky();
@@ -83,15 +82,15 @@ namespace CalamityHunt
         public override void PostSetupContent()
         {
             // Kill Old Duke and inject Goozma into boss rush
-            if (ModLoader.HasMod("CalamityMod")) {
-                BossRushInjection(ModLoader.GetMod("CalamityMod"));
+            if (ModLoader.TryGetMod(HUtils.CalamityMod, out Mod calamity)) {
+                BossRushInjection(calamity);
             }
-            if (ModLoader.HasMod("BossChecklist")) {
-                BossChecklist(ModLoader.GetMod("BossChecklist"));
+
+            if (ModLoader.TryGetMod("BossChecklist", out Mod bossChecklist)) {
+                BossChecklist(bossChecklist);
             }
-            // Add this whenever Slime Cane is added
-            if (ModLoader.HasMod("SummonersAssociation")) {
-                Mod sAssociation = ModLoader.GetMod("SummonersAssociation");
+
+            if (ModLoader.TryGetMod("SummonersAssociation", out Mod sAssociation)) {
                 sAssociation.Call("AddMinionInfo", ModContent.ItemType<SlimeCane>(), ModContent.BuffType<SlimeCaneBuff>(), new List<Dictionary<string, object>>
                 {
                     new Dictionary<string, object>()
@@ -149,8 +148,8 @@ namespace CalamityHunt
         public void BossChecklist(Mod bossChecklist)
         {
             int sludge = ModContent.ItemType<OverloadedSludge>();
-            if (ModLoader.HasMod("CalamityMod")) {
-                sludge = ModLoader.GetMod("CalamityMod").Find<ModItem>("OverloadedSludge").Type;
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                sludge = ModLoader.GetMod(HUtils.CalamityMod).Find<ModItem>("OverloadedSludge").Type;
             }
             Action<SpriteBatch, Rectangle, Color> portrait = (SpriteBatch sb, Rectangle rect, Color color) => {
                 Texture2D texture = AssetDirectory.Textures.Goozma.BossPortrait.Value;

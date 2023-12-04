@@ -23,9 +23,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Throwing;
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass d;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
                 Projectile.DamageType = d;
             }

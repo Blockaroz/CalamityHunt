@@ -1,8 +1,8 @@
 ﻿using System;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Rarities;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -32,9 +32,9 @@ namespace CalamityHunt.Content.Items.Materials
             Item.value = Item.sellPrice(0, 30);
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.maxStack = Item.CommonMaxStack;
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 ModRarity r;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }

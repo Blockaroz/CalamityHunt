@@ -29,9 +29,9 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
             Item.value = Item.sellPrice(gold: 20);
             Item.shoot = ModContent.ProjectileType<GoomoireSuck>();
             Item.shootSpeed = 4f;
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 ModRarity r;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }
@@ -53,8 +53,8 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod")) {
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("PrimordialAncient").Type)

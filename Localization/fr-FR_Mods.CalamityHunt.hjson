@@ -534,6 +534,7 @@ NPCs: {
 	EbonianBehemuck.DisplayName: Mastodonte d'éboue
 	StellarGeliath.DisplayName: Geliath stellaire
 	Goozmite.DisplayName: Goozinou
+	// GelatinousSpawn.DisplayName: Gelatinous Spawn
 }
 
 Projectiles: {
@@ -784,6 +785,16 @@ Configs: {
 
 		oldsky: {
 			// Label: oldsky
+			// Tooltip: ""
+		}
+
+		overrideVanillaBalance: {
+			// Label: override Vanilla Balance
+			// Tooltip: ""
+		}
+
+		photosensitiveToggle: {
+			// Label: photosensitive Toggle
 			// Tooltip: ""
 		}
 	}

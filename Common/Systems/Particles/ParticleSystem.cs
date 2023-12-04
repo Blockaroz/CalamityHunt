@@ -22,17 +22,21 @@ public class ParticleSystem
     public void Update()
     {
         if (Main.dedServ) {
-            if (particles.Count > 0)
+            if (particles.Count > 0) {
                 particles.Clear();
+            }
+
             return;
         }
 
-        particles.ToHashSet().AsParallel().ForAll(particle => {
-            particle.Update();
-            particle.position += particle.velocity;
+        particles.ToList().ForEach(particle => {
+            if (particle != null) {
+                particle.Update();
+                particle.position += particle.velocity;
 
-            if (particle.ShouldRemove) {
-                particles.Remove(particle);
+                if (particle.ShouldRemove) {
+                    particles.Remove(particle);
+                }
             }
         });
     }
@@ -54,14 +58,16 @@ public class ParticleSystem
 
         foreach (Particle particle in particles.ToHashSet()) {
 
-            float halfSize = 200 * particle.scale;
-            particleRect.X = (int)(particle.position.X - halfSize);
-            particleRect.Y = (int)(particle.position.Y - halfSize);
-            particleRect.Width = (int)(halfSize * 2f);
-            particleRect.Height = (int)(halfSize * 2f);
+            if (particle != null) {
+                float halfSize = 200 * particle.scale;
+                particleRect.X = (int)(particle.position.X - halfSize);
+                particleRect.Y = (int)(particle.position.Y - halfSize);
+                particleRect.Width = (int)(halfSize * 2f);
+                particleRect.Height = (int)(halfSize * 2f);
 
-            if (checkRect.Intersects(particleRect)) {
-                particle.Draw(spriteBatch);
+                if (checkRect.Intersects(particleRect)) {
+                    particle.Draw(spriteBatch);
+                }
             }
         }
 

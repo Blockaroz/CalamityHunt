@@ -13,9 +13,9 @@ public class IOUASoul : ModItem
         Item.value = Item.buyPrice(0, 10, 0, 0);
         Item.maxStack = 9999;
         Item.rare = ModContent.RarityType<VioletRarity>();
-        if (ModLoader.HasMod("CalamityMod")) {
+        if (ModLoader.HasMod(HUtils.CalamityMod)) {
             ModRarity r;
-            Mod calamity = ModLoader.GetMod("CalamityMod");
+            Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
             calamity.TryFind<ModRarity>("Violet", out r);
             Item.rare = r.Type;
         }

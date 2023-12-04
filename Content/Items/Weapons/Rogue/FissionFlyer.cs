@@ -32,10 +32,10 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.DamageType = DamageClass.Throwing;
             Item.value = Item.sellPrice(gold: 20);
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass d;
                 ModRarity r;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.DamageType = d;
@@ -47,8 +47,8 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             bool stealth = false;
-            if (ModLoader.HasMod("CalamityMod")) {
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
 
                 if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
                     stealth = true;
@@ -61,8 +61,8 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
                 player.LimitPointToPlayerReachableArea(ref mouseWorld);
                 velocity = velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f) * Main.rand.NextFloat(0.8f, 1.3f) * Math.Max(170, player.Distance(mouseWorld)) * MathF.E * 0.009f;
                 int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 0, stealth ? 1 : 0);
-                if (ModLoader.HasMod("CalamityMod") && stealth) {
-                    ModLoader.GetMod("CalamityMod").Call("SetStealthProjectile", Main.projectile[p], true);
+                if (ModLoader.HasMod(HUtils.CalamityMod) && stealth) {
+                    ModLoader.GetMod(HUtils.CalamityMod).Call("SetStealthProjectile", Main.projectile[p], true);
                 }
 
             }
@@ -72,8 +72,8 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod")) {
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("MangroveChakram").Type)

@@ -2,7 +2,7 @@
 using System.Linq;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using CalamityHunt.Content.Particles;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
@@ -278,7 +278,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             VertexStrip strip = new VertexStrip();
             strip.PrepareStripWithProceduralPadding(positions, rotations, StripColor, StripWidth, -Main.screenPosition, true);
 
-            Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoomoireSuckEffect", AssetRequestMode.ImmediateLoad).Value;
+            Effect lightningEffect = AssetDirectory.Effects.GoomoireWind.Value;
             lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
             lightningEffect.Parameters["uTexture0"].SetValue(laserTexture.Value);
             lightningEffect.Parameters["uTexture1"].SetValue(laserTexture2.Value);

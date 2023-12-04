@@ -1,7 +1,7 @@
 ﻿using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using CalamityHunt.Content.Projectiles.Weapons.Melee;
 using CalamityHunt.Content.Tiles;
 using Microsoft.Xna.Framework;
@@ -38,9 +38,9 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             Item.value = Item.sellPrice(gold: 20);
             Item.shoot = ModContent.ProjectileType<ScytheOfTheOldGodHeld>();
             Item.shootSpeed = 5f;
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 ModRarity r;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }
@@ -91,8 +91,8 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod")) {
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
                     .AddIngredient(calamity.Find<ModItem>("DeathsAscension").Type)

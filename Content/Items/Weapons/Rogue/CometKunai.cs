@@ -29,10 +29,10 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
             Item.DamageType = DamageClass.Throwing;
             Item.value = Item.sellPrice(gold: 20);
 
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass d;
                 ModRarity r;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.DamageType = d;
@@ -49,8 +49,8 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
             //    SoundEngine.PlaySound(Item.UseSound.Value, player.Center);
 
             if (player.whoAmI == Main.myPlayer) {
-                if (ModLoader.HasMod("CalamityMod")) {
-                    Mod calamity = ModLoader.GetMod("CalamityMod");
+                if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                    Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
 
                     if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
                     {

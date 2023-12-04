@@ -19,8 +19,8 @@ namespace CalamityHunt.Content.Items.Placeable
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod")) {
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 CreateRecipe()
                     .AddIngredient(ItemID.Boulder)
                     .AddIngredient<ChromaticMass>(5)

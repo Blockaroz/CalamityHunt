@@ -201,8 +201,8 @@ namespace CalamityHunt.Common.Players
                     Player.wingTimeMax = 1;
                     Player.equippedWings = Player.armor[1];
 
-                    if (ModLoader.HasMod("CalamityMod"))
-                        ModLoader.GetMod("CalamityMod").Call("ToggleInfiniteFlight", Player, true);
+                    if (ModLoader.HasMod(HUtils.CalamityMod))
+                        ModLoader.GetMod(HUtils.CalamityMod).Call("ToggleInfiniteFlight", Player, true);
 
                     if (Player.controlJump && Player.wingTime > 0f && !Player.GetJumpState(ExtraJump.CloudInABottle).Available && Player.jump == 0) {
                         bool hovering = Player.TryingToHoverDown && !Player.merman;
@@ -291,8 +291,8 @@ namespace CalamityHunt.Common.Players
                 Player.buffImmune[BuffID.Dazed] = true;
                 Player.buffImmune[BuffID.Venom] = true;
                 Player.buffImmune[BuffID.CursedInferno] = true;
-                if (ModLoader.HasMod("CalamityMod")) {
-                    Mod calamity = ModLoader.GetMod("CalamityMod");
+                if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                    Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                     Player.buffImmune[calamity.Find<ModBuff>("Clamity").Type] = true;
                     Player.buffImmune[calamity.Find<ModBuff>("Dragonfire").Type] = true;
                     Player.buffImmune[calamity.Find<ModBuff>("DoGExtremeGravity").Type] = true;

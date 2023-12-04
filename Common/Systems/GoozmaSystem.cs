@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CalamityHunt.Common.Utilities.Interfaces;
-using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Items.Misc;
-using CalamityHunt.Content.Projectiles;
+using CalamityHunt.Content.NPCs;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -87,7 +87,7 @@ namespace CalamityHunt.Common.Systems
                     break;
                 }
                 if (slimeBoss > -1) {
-                    ModLoader.TryGetMod("CalamityMod", out Mod calamity);
+                    ModLoader.TryGetMod(HUtils.CalamityMod, out Mod calamity);
                     if (calamity != null) {
                         foreach (Item item in Main.item.Where(n => n.active && n.type == calamity.Find<ModItem>("OverloadedSludge").Type))
                             if (Main.npc[slimeBoss].Hitbox.Intersects(item.Hitbox)) {

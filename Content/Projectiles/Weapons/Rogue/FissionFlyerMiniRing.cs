@@ -1,7 +1,7 @@
 ﻿using System;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -25,9 +25,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.timeLeft = 240;
             Projectile.extraUpdates = 1;
             Projectile.DamageType = DamageClass.Throwing;
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass d;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
                 Projectile.DamageType = d;
             }

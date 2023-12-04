@@ -1,5 +1,4 @@
 ﻿using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Accessories;
 using CalamityHunt.Content.Items.Armor.Shogun;
 using CalamityHunt.Content.Items.Masks;
@@ -11,6 +10,7 @@ using CalamityHunt.Content.Items.Weapons.Melee;
 using CalamityHunt.Content.Items.Weapons.Ranged;
 using CalamityHunt.Content.Items.Weapons.Rogue;
 using CalamityHunt.Content.Items.Weapons.Summoner;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;

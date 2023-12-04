@@ -16,7 +16,7 @@ namespace CalamityHunt.Common.Systems
         public override void PostAddRecipes()
         {
             Mod cal;
-            ModLoader.TryGetMod("CalamityMod", out cal);
+            ModLoader.TryGetMod(HUtils.CalamityMod, out cal);
             if (cal != null) {
                 for (int i = 0; i < Recipe.numRecipes; i++) {
                     Recipe recipe = Main.recipe[i];

@@ -9,7 +9,7 @@ namespace CalamityHunt.Common.Graphics.SceneEffects
     {
         public override SceneEffectPriority Priority => SceneEffectPriority.BossHigh;
 
-        public override string MapBackground => $"{nameof(CalamityHunt)}/Assets/Textures/SlimeMonsoonBG";
+        public override string MapBackground => AssetDirectory.AssetPath + "Textures/SlimeMonsoonBG";
 
         public override bool IsSceneEffectActive(Player player) => GoozmaSystem.GoozmaActive || player.GetModPlayer<SceneEffectPlayer>().effectActive[(ushort)SceneEffectPlayer.EffectorType.SlimeMonsoon] > 0;
 

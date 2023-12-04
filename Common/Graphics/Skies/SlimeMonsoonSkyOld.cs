@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.Effects;
-using Terraria.ModLoader;
 using Terraria.Utilities;
 
 namespace CalamityHunt.Common.Graphics.Skies;
@@ -236,7 +234,7 @@ public class SlimeMonsoonSkyOld : CustomSky
             VertexStrip strip = new VertexStrip();
             strip.PrepareStrip(points.ToArray(), rots.ToArray(), ColorFunction, WidthFunction, -Main.screenPosition * 0.5f / (1 + layer) + Main.ScreenSize.ToVector2() * 0.25f, points.Count, true);
 
-            Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GooLightningEffect", AssetRequestMode.ImmediateLoad).Value;
+            Effect lightningEffect = AssetDirectory.Effects.GooLightning.Value;
             lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.BackgroundViewMatrix.NormalizedTransformationmatrix);
             lightningEffect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Value);
             lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.SlimeMonsoon.Lightning.Value);

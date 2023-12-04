@@ -1,11 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Graphics.RenderTargets;
 
@@ -27,14 +25,15 @@ public class GoozmoemCordTextureContent : ARenderTargetContentByRequest
             rotations[i] = positions[i - 1].AngleTo(positions[i]);
         rotations[positions.Length - 1] = rotations[positions.Length - 2];
 
-        var effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoozmaCordMap", AssetRequestMode.ImmediateLoad).Value;
+        var effect = AssetDirectory.Effects.GoozmaCordMap.Value;
         effect.Parameters["uTransformMatrix"].SetValue(Matrix.CreateOrthographicOffCenter(0, width, height, 0, -1, 1));
-        if (!Main.gameInactive)
+        if (!Main.gameInactive) {
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.5f);
+        }
         effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.LiquidTrail.Value);
         effect.Parameters["uMap"].SetValue(AssetDirectory.Textures.ColorMap[0].Value);
 
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect);
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.GameViewMatrix.EffectMatrix);
         effect.CurrentTechnique.Passes[0].Apply();
 
         VertexStrip strip = new VertexStrip();

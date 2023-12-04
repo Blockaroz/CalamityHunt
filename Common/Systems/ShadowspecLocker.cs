@@ -71,7 +71,7 @@ public class ShadowspecItemFinder : ModSystem
     {
         shadowspecItemIDs = new HashSet<int>();
 
-        if (ModLoader.TryGetMod("CalamityMod", out Mod calamity)) {
+        if (ModLoader.TryGetMod(HUtils.CalamityMod, out Mod calamity)) {
             //Rarity method
             //Recipe method
             int shadowspecType = calamity.Find<ModItem>("ShadowspecBar").Type;

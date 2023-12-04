@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
@@ -198,7 +198,7 @@ namespace CalamityHunt.Common.Players
         }
         public static bool DummyCheck(NPC npc)
         {
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 if (npc.type == ModContent.Find<ModNPC>("CalamityMod/SuperDummyNPC").Type) {
                     return true;
                 }
@@ -231,8 +231,8 @@ namespace CalamityHunt.Common.Players
             if (summon > best) best = summon;
             // We intentionally don't check whip class, because it inherits 100% from Summon
 
-            if (ModLoader.HasMod("CalamityMod")) {
-                DamageClass roguetype = ModLoader.GetMod("CalamityMod").Find<DamageClass>("RogueDamageClass");
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                DamageClass roguetype = ModLoader.GetMod(HUtils.CalamityMod).Find<DamageClass>("RogueDamageClass");
                 float rogue = player.GetTotalDamage(roguetype).Additive;
                 if (rogue > best) best = rogue;
             }

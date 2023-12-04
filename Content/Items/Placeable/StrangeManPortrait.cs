@@ -21,7 +21,7 @@ public class StrangeManPortrait : ModItem
 
     public override void AddRecipes()
     {
-        if (!ModLoader.TryGetMod("CalamityMod", out Mod Calamity)) {
+        if (!ModLoader.TryGetMod(HUtils.CalamityMod, out Mod Calamity)) {
             CreateRecipe()
                 .AddCondition(Condition.InEvilBiome)
                 .AddCondition(Condition.InSpace)

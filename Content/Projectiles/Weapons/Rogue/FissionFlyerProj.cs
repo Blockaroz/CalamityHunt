@@ -1,8 +1,8 @@
 ﻿using System;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,9 +27,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.hostile = false;
             Projectile.timeLeft = 10000;
             Projectile.DamageType = DamageClass.Throwing;
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass d;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
                 Projectile.DamageType = d;
             }

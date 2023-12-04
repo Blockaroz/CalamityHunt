@@ -65,7 +65,7 @@ public sealed class GaslightSystem : ModSystem
 
         c.Emit(OpCodes.Ldloc, modListStloc);
         c.EmitDelegate((IEnumerable<Mod> mods) => {
-            if (!ModLoader.HasMod("CalamityMod"))
+            if (!ModLoader.HasMod(HUtils.CalamityMod))
                 return mods;
 
             // TODO: Should we use GetMod here instead of GetInstance?

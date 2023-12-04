@@ -1,5 +1,4 @@
-﻿using CalamityHunt.Common.Systems;
-using CalamityHunt.Content.Projectiles.Weapons.Ranged;
+﻿using CalamityHunt.Content.Projectiles.Weapons.Ranged;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -14,7 +13,15 @@ public class AntiMassAccumulator : ModItem
 {
     public override void SetDefaults()
     {
-        Item.damage = BalanceSystem.BalanceToggleValue(60, 545);
+        if (HUtils.NonVanillaBalance) {
+            Item.damage = 98;
+            Item.rare = ItemRarityID.Red;
+        }
+        else {
+            Item.damage = 545;
+            Item.rare = ItemRarityID.Red;
+        }
+
         Item.DamageType = DamageClass.Ranged;
         Item.width = 100;
         Item.height = 42;
@@ -23,7 +30,6 @@ public class AntiMassAccumulator : ModItem
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.knockBack = 6;
         Item.value = 10000;
-        Item.rare = BalanceSystem.BalanceToggleValue(ItemRarityID.LightRed, ItemRarityID.Red);
         Item.autoReuse = true;
         Item.shootSpeed = 5;
         Item.shoot = ModContent.ProjectileType<AntiMassAccumulatorProj>();
@@ -34,36 +40,34 @@ public class AntiMassAccumulator : ModItem
 
     public override void AddRecipes()
     {
-        if (ModLoader.HasMod("CalamityMod")) {
-            Mod calamity = ModLoader.GetMod("CalamityMod");
-            CreateRecipe()
-                .AddIngredient(calamity.Find<ModItem>("AdamantiteParticleAccelerator").Type)
-                .AddIngredient(calamity.Find<ModItem>("UelibloomBar").Type, 12)
-                .AddIngredient(calamity.Find<ModItem>("ExodiumCluster").Type, 30)
-                .AddIngredient(calamity.Find<ModItem>("MysteriousCircuitry").Type, 18)
-                .AddIngredient(calamity.Find<ModItem>("SuspiciousScrap").Type, 3) //this is the illegal gun parts of calamity
-                .AddTile(TileID.LunarCraftingStation)
-                .Register();
+        if (ModLoader.TryGetMod(HUtils.CalamityMod, out Mod calamity)) {
+            if (ModLoader.TryGetMod(HUtils.CatalystMod, out Mod catalyst)) {
+                CreateRecipe() //calamity + catalyst recipe
+                    .AddIngredient(calamity.Find<ModItem>("AdamantiteParticleAccelerator").Type)
+                    .AddIngredient(catalyst.Find<ModItem>("MetanovaBar").Type, 6)
+                    .AddIngredient(calamity.Find<ModItem>("ExodiumCluster").Type, 30)
+                    .AddIngredient(calamity.Find<ModItem>("MysteriousCircuitry").Type, 18)
+                    .AddIngredient(calamity.Find<ModItem>("SuspiciousScrap").Type, 3)
+                    .AddTile(TileID.LunarCraftingStation)
+                    .Register();
+            }
+            else {
+                CreateRecipe() //calamity recipe
+                    .AddIngredient(calamity.Find<ModItem>("AdamantiteParticleAccelerator").Type)
+                    .AddIngredient(calamity.Find<ModItem>("UelibloomBar").Type, 12)
+                    .AddIngredient(calamity.Find<ModItem>("ExodiumCluster").Type, 30)
+                    .AddIngredient(calamity.Find<ModItem>("MysteriousCircuitry").Type, 18)
+                    .AddIngredient(calamity.Find<ModItem>("SuspiciousScrap").Type, 3) //this is the illegal gun parts of calamity
+                    .AddTile(TileID.LunarCraftingStation)
+                    .Register();
+            }
         }
-        else { //vanilla recipe
-            CreateRecipe()
+        else {
+            CreateRecipe() //vanilla recipe
                 .AddIngredient(ItemID.AdamantiteBar, 10)
                 .AddIngredient(ItemID.SoulofFlight, 6)
                 .AddIngredient(ItemID.LunarBar, 90) //value of uelibloom bar and exodium cluster (108 gold) / value of liminite bar (1.2 gold) = 90 luminite bars
                 .AddIngredient(ItemID.IllegalGunParts, 3) //this is the illegal gun parts of vanilla
-                .AddTile(TileID.LunarCraftingStation)
-                .Register();
-        }
-
-        if (ModLoader.HasMod("CatalystMod")) {
-            Mod calamitnt = ModLoader.GetMod("CatalystMod");
-            Mod calamity = ModLoader.GetMod("CalamityMod");
-            CreateRecipe()
-                .AddIngredient(calamity.Find<ModItem>("AdamantiteParticleAccelerator").Type)
-                .AddIngredient(calamitnt.Find<ModItem>("MetanovaBar").Type, 6)
-                .AddIngredient(calamity.Find<ModItem>("ExodiumCluster").Type, 30)
-                .AddIngredient(calamity.Find<ModItem>("MysteriousCircuitry").Type, 18)
-                .AddIngredient(calamity.Find<ModItem>("SuspiciousScrap").Type, 3)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
         }

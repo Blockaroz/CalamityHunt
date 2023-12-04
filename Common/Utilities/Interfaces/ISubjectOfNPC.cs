@@ -1,8 +1,6 @@
-﻿using Terraria.ModLoader;
+﻿namespace CalamityHunt.Common.Utilities.Interfaces;
 
-namespace CalamityHunt.Common.Utilities.Interfaces;
-
-public interface ISubjectOfNPC<T> where T : ModNPC
+public interface ISubjectOfNPC<T>
 {
     //Consider doing somemthing with this
 }

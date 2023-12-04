@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics;
@@ -130,7 +129,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             VertexStrip strip = new VertexStrip();
             strip.PrepareStripWithProceduralPadding(positions, rotations, StripColor, StripWidth, -Main.screenPosition, true);
 
-            Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/FusionRayEffect", AssetRequestMode.ImmediateLoad).Value;
+            Effect lightningEffect = AssetDirectory.Effects.FusionRay.Value;
             lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
             lightningEffect.Parameters["uTexture0"].SetValue(texture);
             lightningEffect.Parameters["uTexture1"].SetValue(textureSecond);

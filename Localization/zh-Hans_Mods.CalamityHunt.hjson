@@ -533,6 +533,7 @@ NPCs: {
 	EbonianBehemuck.DisplayName: 腐檀邪浆
 	StellarGeliath.DisplayName: 星恒黏兽
 	Goozmite.DisplayName: 古泽蚂
+	// GelatinousSpawn.DisplayName: Gelatinous Spawn
 }
 
 Projectiles: {
@@ -783,6 +784,16 @@ Configs: {
 
 		oldsky: {
 			// Label: oldsky
+			// Tooltip: ""
+		}
+
+		overrideVanillaBalance: {
+			// Label: override Vanilla Balance
+			// Tooltip: ""
+		}
+
+		photosensitiveToggle: {
+			// Label: photosensitive Toggle
 			// Tooltip: ""
 		}
 	}

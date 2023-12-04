@@ -12,8 +12,6 @@ namespace CalamityHunt.Common.UI
 {
     public class StressBar : ModSystem
     {
-        private static bool active;
-
         public static float fillPercent;
         public static float oldPercent;
 

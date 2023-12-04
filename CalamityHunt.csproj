@@ -44,6 +44,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\Bosses\Inventors\" />
+    <Folder Include="Assets\Textures\NPCs\Bosses\Inventors\" />
+    <Folder Include="Content\NPCs\Bosses\Inventors\" />
   </ItemGroup>
 </Project>

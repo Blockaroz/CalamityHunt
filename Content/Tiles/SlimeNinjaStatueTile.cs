@@ -1,6 +1,6 @@
 ﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Items.Misc;
-using CalamityHunt.Content.Projectiles;
+using CalamityHunt.Content.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;

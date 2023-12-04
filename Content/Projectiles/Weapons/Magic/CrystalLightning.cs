@@ -232,7 +232,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
                 strip.PrepareStrip(position, rotation, StripColor, StripWidth, -Main.screenPosition, position.Length * 2, true);
 
-                Effect lightningEffect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/CrystalLightningEffect", AssetRequestMode.ImmediateLoad).Value;
+                Effect lightningEffect = AssetDirectory.Effects.CrystalLightning.Value;
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
                 lightningEffect.Parameters["uTexture"].SetValue(texture);
                 lightningEffect.Parameters["uGlow"].SetValue(glowTexture);

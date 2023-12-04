@@ -1,13 +1,11 @@
 ﻿using System;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles;
 
@@ -110,7 +108,7 @@ public class GoozmaGelBit : Particle
 
         if (colorData.active) {
             GetGradientMapValues(out float[] brightnesses, time, out Vector3[] colors);
-            Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
+            Effect effect = AssetDirectory.Effects.HolographicGel.Value;
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
             effect.Parameters["colors"].SetValue(colors);
             effect.Parameters["brightnesses"].SetValue(brightnesses);
@@ -148,7 +146,7 @@ public class GoozmaGelBit : Particle
 
         //Pass the entire rainbow through modulo 1
         for (int i = 1; i < 10; i++) {
-            brightnesses[i] = HuntOfTheOldGodsUtils.Modulo(brightnesses[i], maxBright) * maxBright;
+            brightnesses[i] = HUtils.Modulo(brightnesses[i], maxBright) * maxBright;
         }
 
         //Store the first element's value so we can find it again later

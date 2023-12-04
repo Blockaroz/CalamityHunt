@@ -9,8 +9,6 @@ namespace CalamityHunt.Common.Graphics.SceneEffects
     {
         public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 
-        public override string MapBackground => $"{nameof(CalamityHunt)}/Assets/Textures/SlimeMonsoonBG";
-
         public override bool IsSceneEffectActive(Player player) => player.GetModPlayer<SceneEffectPlayer>().effectActive[(ushort)SceneEffectPlayer.EffectorType.SlimeMonsoonOld] > 0;
 
         public override void SpecialVisuals(Player player, bool isActive)

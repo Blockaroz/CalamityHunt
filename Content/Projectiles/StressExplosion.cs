@@ -1,7 +1,8 @@
 ﻿using System;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -13,7 +14,8 @@ namespace CalamityHunt.Content.Projectiles
 {
     public class StressExplosion : ModProjectile
     {
-        public override string Texture => $"{nameof(CalamityHunt)}/Content/Bosses/Goozma/Projectiles/SlimeBomb";
+        public override string Texture => ModContent.GetInstance<SlimeBomb>().Texture;
+
         public override void SetDefaults()
         {
             Projectile.width = 60;

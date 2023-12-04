@@ -23,7 +23,7 @@ namespace CalamityHunt.Content.Items.Placeable
                 .AddCondition(Condition.Hardmode)
                 .Register();
 
-            if (ModLoader.TryGetMod("CalamityMod", out _)) {
+            if (ModLoader.TryGetMod(HUtils.CalamityMod, out _)) {
                 Recipe.Create(ItemID.SlimeStatue)
                     .AddIngredient(ItemID.StoneBlock, 100)
                     .AddIngredient(ItemID.Gel, 200)

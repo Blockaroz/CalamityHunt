@@ -23,7 +23,6 @@ public class SpecialSoundPlayer : ModPlayer
             }
             if (!Player.ItemAnimationActive) {
                 trailBlazerInUse = false;
-                trailBlazerSound?.StopSound();
             }
 
             trailBlazerVolume += Player.ItemAnimationActive ? 0.2f : -0.05f;
@@ -37,7 +36,11 @@ public class SpecialSoundPlayer : ModPlayer
 
         trailBlazerSound ??= new LoopingSound(AssetDirectory.Sounds.Weapons.TrailblazerFireLoop, () => trailBlazerVolume > 0.1f);
 
-        trailBlazerSound.PlaySound(() => Player.MountedCenter, () => trailBlazerVolume, () => MathF.Sin(Main.GlobalTimeWrappedHourly * 8) * 0.07f);
-
+        if (trailBlazerVolume > 0.01f) {
+            trailBlazerSound.PlaySound(() => Player.MountedCenter, () => trailBlazerVolume, () => MathF.Sin(Main.GlobalTimeWrappedHourly * 8) * 0.07f);
+        }
+        else {
+            trailBlazerSound?.StopSound();
+        }
     }
 }

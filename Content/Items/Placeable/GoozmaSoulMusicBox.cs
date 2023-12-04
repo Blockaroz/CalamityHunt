@@ -11,7 +11,7 @@ namespace CalamityHunt.Content.Items.Placeable
         {
             ItemID.Sets.CanGetPrefixes[Type] = false;
             ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.MusicBox;
-            MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot($"{nameof(CalamityHunt)}/Assets/Music/GoozmaAuricSoulMusic"), ModContent.ItemType<GoozmaSoulMusicBox>(), ModContent.TileType<GoozmaSoulMusicBoxTile>());
+            MusicLoader.AddMusicBox(Mod, AssetDirectory.Music.Iridescence, ModContent.ItemType<GoozmaSoulMusicBox>(), ModContent.TileType<GoozmaSoulMusicBoxTile>());
         }
 
         public override void SetDefaults()
@@ -21,8 +21,8 @@ namespace CalamityHunt.Content.Items.Placeable
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod")) {
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 CreateRecipe()
                     .AddIngredient(ItemID.MusicBox)
                     .AddIngredient<ChromaticMass>(15)

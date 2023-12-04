@@ -2,7 +2,6 @@
 using CalamityHunt.Content.Items.Rarities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -37,7 +36,7 @@ namespace CalamityHunt.Content.Items.Dyes
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
 
             if (!Main.dedServ) {
-                Effect goopShader = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/GoopDye", AssetRequestMode.ImmediateLoad).Value;
+                Effect goopShader = AssetDirectory.Effects.Dyes.Goop.Value;
 
                 GameShaders.Armor.BindShader(ModContent.ItemType<GoopDye>(), new GoopDyeShaderData(new Ref<Effect>(goopShader), "LiquidPass"));
             }
@@ -49,9 +48,9 @@ namespace CalamityHunt.Content.Items.Dyes
             Item.CloneDefaults(ItemID.BrownDye);
             Item.dye = dye;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 ModRarity r;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }

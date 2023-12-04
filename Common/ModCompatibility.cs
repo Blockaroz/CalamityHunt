@@ -63,7 +63,7 @@ public static class ModCompatibility
     {
         public sealed class CalamityNameProvider : IModNameProvider
         {
-            string IModNameProvider.ModName => "CalamityMod";
+            string IModNameProvider.ModName => HUtils.CalamityMod;
         }
     }
 }

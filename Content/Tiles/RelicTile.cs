@@ -18,7 +18,7 @@ namespace CalamityHunt.Content.Tiles
     {
         public const int FrameWidth = 18 * 3;
         public const int FrameHeight = 18 * 4;
-        public override string Texture => $"{nameof(CalamityHunt)}/Assets/Textures/Tiles/RelicPedestal_" + PedestalStyle;
+        public override string Texture => AssetDirectory.AssetPath + "Textures/Tiles/RelicPedestal_" + PedestalStyle;
         public virtual int PedestalStyle { get; }
 
         public override void SetStaticDefaults()
@@ -63,7 +63,7 @@ namespace CalamityHunt.Content.Tiles
             if (AssetDirectory.Textures.Relic == null)
                 AssetDirectory.Textures.Relic = new Dictionary<int, Asset<Texture2D>>();
 
-            var newAsset = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Tiles/Relics/" + Name);
+            var newAsset = AssetUtilities.RequestImmediate<Texture2D>(AssetDirectory.AssetPath + "Textures/Tiles/Relics/" + Name);
             AssetDirectory.Textures.Relic.Add(Type, newAsset);
         }
 

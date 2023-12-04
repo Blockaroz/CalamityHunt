@@ -1,11 +1,9 @@
 ﻿using System;
-using CalamityHunt.Content.Bosses.Goozma;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Graphics.RenderTargets;
 
@@ -24,7 +22,7 @@ public class GoozmoemTextureContent : ARenderTargetContentByRequest
         device.Clear(Color.Transparent);
 
         GetGradientMapValues(out var brightnesses, out var colors);
-        var effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
+        var effect = AssetDirectory.Effects.HolographicGel.Value;
         effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
         effect.Parameters["colors"].SetValue(colors);
         effect.Parameters["brightnesses"].SetValue(brightnesses);
@@ -63,7 +61,7 @@ public class GoozmoemTextureContent : ARenderTargetContentByRequest
 
         //Pass the entire rainbow through modulo 1
         for (var i = 1; i < 10; i++)
-            brightnesses[i] = HuntOfTheOldGodsUtils.Modulo(brightnesses[i], maxBright) * maxBright;
+            brightnesses[i] = HUtils.Modulo(brightnesses[i], maxBright) * maxBright;
 
         //Store the first element's value so we can find it again later
         var firstBrightnessValue = brightnesses[1];

@@ -1,8 +1,8 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
@@ -40,9 +40,9 @@ namespace CalamityHunt.Content.Items.Misc
             Item.noUseGraphic = true;
             Item.UseSound = SoundID.Item1;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod")) {
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 ModRarity r;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.TryFind<ModRarity>("Violet", out r);
                 Item.rare = r.Type;
             }
