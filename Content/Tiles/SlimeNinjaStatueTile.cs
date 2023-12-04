@@ -18,6 +18,7 @@ using Terraria.Audio;
 using Terraria.Chat;
 using CalamityHunt.Content.Items.Misc;
 using static Terraria.ModLoader.PlayerDrawLayer;
+using CalamityHunt.Content.Projectiles;
 
 namespace CalamityHunt.Content.Tiles
 {
@@ -25,7 +26,7 @@ namespace CalamityHunt.Content.Tiles
     {
         public override void SetStaticDefaults()
         {
-            Main.tileFrameImportant[Type] = true; 
+            Main.tileFrameImportant[Type] = true;
             TileID.Sets.HasOutlines[Type] = true;
             TileID.Sets.DisableSmartCursor[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2);
@@ -77,8 +78,7 @@ namespace CalamityHunt.Content.Tiles
             int top = j;
             int center = i;
 
-            for (int y = 0; y <= 6; y++)
-            {
+            for (int y = 0; y <= 6; y++) {
                 Tile checkTile = Framing.GetTileSafely(i, j + y);
                 if (checkTile.HasTile && checkTile.TileType == Type)
                     top++;
@@ -88,42 +88,37 @@ namespace CalamityHunt.Content.Tiles
 
             top -= 5;
 
-            for (int x = 0; x <= 4; x++)
-            {
+            for (int x = 0; x <= 4; x++) {
                 Tile checkTile = Framing.GetTileSafely(i + x, top);
-                if (checkTile.TileType != Type)
-                {
+                if (checkTile.TileType != Type) {
                     center += x;
                     center -= 2;
                     break;
                 }
-                    
+
             }
 
             Player player = Main.LocalPlayer;
 
-            if (!GoozmaSystem.GoozmaActive)
-            {
-                if (GoozmaSystem.FindSlimeStatues(center, top, 40, 30))
-                {
-                    if (player.HasItem(ModContent.ItemType<SludgeFocus>()))
-                        GoozmaSystem.GoozmaEgg(new Vector2(center * 16, (top - 1) * 16));
+            if (!GoozmaSystem.GoozmaActive) {
+                if (GoozmaSystem.FindSlimeStatues(center, top, 40, 30)) {
+                    if (player.HasItem(ModContent.ItemType<SludgeFocus>())) {
+                        if (Main.netMode != NetmodeID.MultiplayerClient) {
+                            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), new Vector2(center * 16 - 8, top * 16), ModContent.NPCType<GelatinousSpawn>());
+                        }
+                    }
 
-                    else if (!Main.slimeRain)
-                    {
-                        if (player.ConsumeItem(ModContent.ItemType<GelatinousCatalyst>()))
-                        {
-                            foreach (Vector2 position in GoozmaSystem.slimeStatuePoints)
-                            {
-                                for (int r = 0; r < 5; r++)
-                                {
+
+                    else if (!Main.slimeRain) {
+                        if (player.ConsumeItem(ModContent.ItemType<GelatinousCatalyst>())) {
+                            foreach (Vector2 position in GoozmaSystem.slimeStatuePoints) {
+                                for (int r = 0; r < 5; r++) {
                                     Dust d = Dust.NewDustDirect(position - new Vector2(16, 0), 32, 38, DustID.TintableDust, 0, -Main.rand.NextFloat(2f, 5f), 160, new Color(200, 200, 255), 1f + Main.rand.NextFloat());
                                     d.noGravity = true;
                                 }
                             }
 
-                            for (int r = 0; r < 15; r++)
-                            {
+                            for (int r = 0; r < 15; r++) {
                                 Dust d = Dust.NewDustDirect(GoozmaSystem.ninjaStatuePoint - new Vector2(32, 4), 64, 92, DustID.TintableDust, 0, -Main.rand.NextFloat(2f, 5f), 160, new Color(200, 200, 255), 1f + Main.rand.NextFloat());
                                 d.noGravity = true;
                             }
@@ -136,8 +131,7 @@ namespace CalamityHunt.Content.Tiles
                         }
                     }
                 }
-                else
-                {
+                else {
                     Color color = new Color(255, 255, 0);
                     if (Main.netMode == NetmodeID.Server)
                         ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral(failText.Value), color, player.whoAmI);

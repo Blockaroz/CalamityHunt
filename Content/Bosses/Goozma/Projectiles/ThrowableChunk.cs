@@ -179,7 +179,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation);
                     Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, new Color(150, 50, 20, 0) * power, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
                 }
-                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.DarkGray, 0.2f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.Coral, 0.2f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
             }
             else {
                 lightColor = Color.White;
@@ -191,9 +191,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(35, 5, 10, 0) * 0.3f * power, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 1.7f, 0, 0);
 
-                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.White, 0.5f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.LightCyan, 0.5f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
 
-                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(35, 5, 10, 0) * 0.2f * power, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 3f, 0, 0);
+                Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(53, 90, 200, 0) * 0.5f * power, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 2f, 0, 0);
             }
 
             return false;

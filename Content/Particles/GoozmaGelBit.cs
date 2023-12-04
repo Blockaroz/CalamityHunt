@@ -118,15 +118,13 @@ public class GoozmaGelBit : Particle
             effect.Parameters["brightnesses"].SetValue(brightnesses);
             effect.Parameters["baseToScreenPercent"].SetValue(1f);
             effect.Parameters["baseToMapPercent"].SetValue(0f);
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
+            effect.CurrentTechnique.Passes[0].Apply();
         }
 
         spriteBatch.Draw(texture, position - Main.screenPosition, frame, Color.Lerp(color, Color.Black, 0.6f), rotation, frame.Size() * 0.5f, scale, 0, 0);
 
         if (colorData.active) {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
     }
 

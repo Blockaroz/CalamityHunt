@@ -38,6 +38,7 @@ public static class AssetDirectory
         {
             public static readonly Asset<Texture2D> Dress = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Bosses/Goozma/GoozmaDress");
             public static readonly Asset<Texture2D> Tentacle = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Bosses/Goozma/GoozmaTentacle");
+            public static readonly Asset<Texture2D> MicroTentacle = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Bosses/Goozma/GoozmaMicroTentacle");
 
             public static readonly Asset<Texture2D> BossPortrait = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Bosses/Goozma/GoozmaBC");
             public static readonly Asset<Texture2D> GodEye = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/Assets/Textures/Bosses/Goozma/SpecialEye");

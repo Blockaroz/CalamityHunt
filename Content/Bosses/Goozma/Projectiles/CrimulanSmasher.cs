@@ -28,7 +28,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = 120;
+            Projectile.width = 100;
             Projectile.height = 500;
             Projectile.tileCollide = false;
             Projectile.hostile = true;

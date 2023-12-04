@@ -42,7 +42,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time > 85)
                 Projectile.Kill();
 
-            if (Config.Instance.epilepsy)
+            if (Config.Instance.photosensitiveToggle)
             {
                 float strength = Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(80, 40, Time, true);
                 if (Time % 3 == 0)
@@ -60,7 +60,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 SoundEngine.PlaySound(ringing.WithVolumeScale(2f), Projectile.Center);
             }
 
-            bool shouldParticle = !Config.Instance.epilepsy ? Time % 5 == 0 : true;
+            bool shouldParticle = !Config.Instance.photosensitiveToggle ? Time % 5 == 0 : true;
 
             if (Time < 50 && shouldParticle)
             {
@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (Config.Instance.epilepsy)
+            if (Config.Instance.photosensitiveToggle)
             {
                 Texture2D texture = TextureAssets.Projectile[Type].Value;
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Common.Utilities.Interfaces;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,7 +16,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class BloatedBlast : ModProjectile, IGoozmaSubject
+    public class BloatedBlast : ModProjectile, ISubjectOfNPC<Goozma>
     {
         public override void SetDefaults()
         {
@@ -149,7 +150,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(15, 15), 100, Color.Black, 2f).noGravity = true;
                 }
 
-                int dartCount = (int)Common.Systems.DifficultySystem.DifficultyBasedValue(8, 12, 16, 18);
+                int dartCount = (int)Common.Systems.BalanceSystem.DifficultyBasedValue(8, 12, 16, 18);
                 for (int i = 0; i < dartCount; i++) {
                     Projectile dart = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(20, 0).RotatedBy(MathHelper.TwoPi / dartCount * i), Type, Projectile.damage, 0, ai1: 1);
                     dart.ai[1] = 1;

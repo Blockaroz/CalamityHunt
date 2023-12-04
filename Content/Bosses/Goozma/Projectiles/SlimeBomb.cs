@@ -2,6 +2,7 @@
 using System.Linq;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Common.Utilities.Interfaces;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,7 +15,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class SlimeBomb : ModProjectile, IGoozmaSubject
+    public class SlimeBomb : ModProjectile, ISubjectOfNPC<Goozma>
     {
         public override void SetDefaults()
         {

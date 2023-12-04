@@ -17,7 +17,7 @@ using Terraria.Graphics;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static CalamityHunt.Common.Systems.DifficultySystem;
+using static CalamityHunt.Common.Systems.BalanceSystem;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -875,21 +875,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         spriteBatch.Draw(swirlingRock1, NPC.Center - screenPos, swirlingRock1.Frame(), Color.White, Main.GlobalTimeWrappedHourly * 1.8f, swirlingRock1.Size() * 0.5f, NPC.scale * 0.25f, 0, 0);
                     }
 
-                    Texture2D shockRing = AssetDirectory.Textures.ShockRing.Value;
-
                     discScale = oldDiscScale * ((float)Math.Cbrt(Utils.GetLerpValue(70, 0, Time, true) + Utils.GetLerpValue(540, 580, Time, true)) + Utils.GetLerpValue(600, 700, Time, true) * Utils.GetLerpValue(640, 610, Time, true));
                     if (Time < 680) {
                         starnessSize = Utils.GetLerpValue(540, 580, Time, true) * 12f;
                         starnessThick = -10f;
                     }
-
-                    for (int i = 0; i < 7; i++) {
-                        float exist = Utils.GetLerpValue(20, 120, Time + i * 3f, true) * Utils.GetLerpValue(600, 500, Time - i * 3f, true);
-                        float comeIn = (float)Math.Pow(1f - ((Time + i / 7f * 70) % 70) / 70f, 2f);
-                        spriteBatch.Draw(shockRing, NPC.Center - screenPos, shockRing.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.3f, shockRing.Size() * 0.5f, 70f * comeIn, 0, 0);
-                        spriteBatch.Draw(shockRing, NPC.Center - screenPos, shockRing.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.3f, shockRing.Size() * 0.5f, 35f * comeIn, 0, 0);
-                    }
-
                     break;
             }
 

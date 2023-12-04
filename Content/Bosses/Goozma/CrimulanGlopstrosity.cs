@@ -1,7 +1,7 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Particles;
-using static CalamityHunt.Common.Systems.DifficultySystem;
+using static CalamityHunt.Common.Systems.BalanceSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;

@@ -1,36 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Projectiles.Weapons.Ranged;
-using Terraria.DataStructures;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-
-using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Buffs;
-using CalamityHunt.Content.Items.Materials;
-using CalamityHunt.Content.Items.Rarities;
-using CalamityHunt.Content.Projectiles.Weapons.Summoner;
-using CalamityHunt.Content.Tiles;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalamityHunt.Common;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Items.Weapons.Ranged;
 
@@ -38,7 +14,7 @@ public class AntiMassAccumulator : ModItem
 {
     public override void SetDefaults()
     {
-        Item.damage = 545;
+        Item.damage = BalanceSystem.BalanceToggleValue(60, 545);
         Item.DamageType = DamageClass.Ranged;
         Item.width = 100;
         Item.height = 42;
@@ -47,7 +23,7 @@ public class AntiMassAccumulator : ModItem
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.knockBack = 6;
         Item.value = 10000;
-        Item.rare = ItemRarityID.Red;
+        Item.rare = BalanceSystem.BalanceToggleValue(ItemRarityID.LightRed, ItemRarityID.Red);
         Item.autoReuse = true;
         Item.shootSpeed = 5;
         Item.shoot = ModContent.ProjectileType<AntiMassAccumulatorProj>();

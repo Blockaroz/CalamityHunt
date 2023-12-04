@@ -3,6 +3,7 @@ using System.Linq;
 using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Common.Utilities.Interfaces;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
@@ -19,35 +20,34 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles
 {
-    public class GoozmaSpawn : ModProjectile
+    public class GelatinousSpawn : ModNPC, ISubjectOfNPC<Goozma>
     {
         public static readonly SoundStyle slimeabsorb = AssetDirectory.Sounds.Goozma.SlimeAbsorb;
 
         public override void SetDefaults()
         {
-            Projectile.width = 92;
-            Projectile.height = 88;
-            Projectile.tileCollide = false;
-            Projectile.hostile = true;
-            Projectile.friendly = false;
-            Projectile.penetrate = -1;
-            Projectile.aiStyle = -1;
-            Projectile.damage = 0;
-            slimeMonsoonText = Language.GetOrRegister(Mod.GetLocalizationKey("Chat.SlimeMonsoon"));
+            NPC.width = 92;
+            NPC.height = 88;
+            NPC.noTileCollide = true;
+            NPC.noGravity = true;
+            NPC.immortal = true;
+            NPC.damage = 0;
+            NPC.dontTakeDamage = true;
+            slimeMonsoonText = Language.GetOrRegister(Mod.GetLocalizationKey("Chat.SlimeMonsoon"));      
         }
 
         public LocalizedText slimeMonsoonText;
 
-        public ref float Time => ref Projectile.ai[0];
+        public ref float Time => ref NPC.ai[0];
 
         public override void AI()
         {
             if (Time < 0)
                 Time = 0;
 
-            Projectile.damage = 0;
-            Projectile.velocity.X = 0;
-            Projectile.velocity.Y = MathF.Sqrt(Utils.GetLerpValue(800, 0, Time, true)) * -0.1f;
+            NPC.damage = 0;
+            NPC.velocity.X = 0;
+            NPC.velocity.Y = MathF.Sqrt(Utils.GetLerpValue(800, 0, Time, true)) * -0.1f;
 
             if (!Main.slimeRain)
                 Main.StartSlimeRain(false);
@@ -58,26 +58,35 @@ namespace CalamityHunt.Content.Projectiles
                 for (int i = 0; i < (int)((Time - 400) / 800f) + 1; i++) {
                     CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle =>
                     {
-                        particle.position = Projectile.Center + Main.rand.NextVector2Circular(300, 300) * Projectile.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
-                        particle.velocity = particle.position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * particle.position.Distance(Projectile.Center) * ((Time - 400) / 500f) * (0.1f / (1f + Projectile.scale));
+                        particle.position = NPC.Center + Main.rand.NextVector2Circular(300, 300) * NPC.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
+                        particle.velocity = particle.position.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * particle.position.Distance(NPC.Center) * ((Time - 400) / 500f) * (0.1f / (1f + NPC.scale));
                         particle.color = Color.White;
                         particle.scale = 2f;
                         particle.colorData = new ColorOffsetData(true, Time * 0.33f);
                     }));
                 }
 
-                Projectile.position.Y -= 0.5f;
+                NPC.position.Y -= 0.5f;
             }
 
             for (int i = 0; i < (int)(Time / 1000f) + 1; i++) {
-                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle =>
-                {
-                    particle.position = Projectile.Center + Main.rand.NextVector2CircularEdge(150, 150) * Projectile.scale + Main.rand.NextVector2Circular(40, 40);
-                    particle.velocity = particle.position.DirectionTo(Projectile.Center) * Main.rand.NextFloat(10f, 15f);
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+                    particle.position = NPC.Center + Main.rand.NextVector2CircularEdge(150, 150) * NPC.scale + Main.rand.NextVector2Circular(40, 40);
+                    particle.velocity = particle.position.DirectionTo(NPC.Center) * Main.rand.NextFloat(10f, 15f);
                     particle.color = Color.White;
                     particle.scale = 2f;
                     particle.colorData = new ColorOffsetData(true, Time * 0.33f);
                 }));
+
+                if (Main.rand.NextBool(10)) {
+                    CalamityHunt.particlesBehindEntities.Add(Particle.Create<SmokeSplatterParticle>(particle => {
+                        particle.position = NPC.Center + Main.rand.NextVector2CircularEdge(50, 50) * NPC.scale + Main.rand.NextVector2Circular(40, 40);
+                        particle.velocity = particle.position.DirectionFrom(NPC.Center) * Main.rand.NextFloat(1f, 5f);
+                        particle.scale = Main.rand.NextFloat(1f, 6f);
+                        particle.maxTime = Main.rand.Next(40, 100);
+                        particle.color = Color.Black;
+                    }));
+                }
             }
 
             //if (Time == 0) {
@@ -91,7 +100,7 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Time == 650) {
                 SoundStyle intro = AssetDirectory.Sounds.Goozma.Intro;
-                SoundEngine.PlaySound(intro, Projectile.Center);
+                SoundEngine.PlaySound(intro, NPC.Center);
             }
 
             if (Time == 720) {
@@ -103,7 +112,7 @@ namespace CalamityHunt.Content.Projectiles
 
 
             if (Time % 3 == 0 && Time > 200)
-                Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), Utils.GetLerpValue(200, 800, Time, true) * 7f, 6f, 10, 20000));
+                Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), Utils.GetLerpValue(200, 800, Time, true) * 7f, 6f, 10, 20000));
 
             //if (Time == 900) {
             //    var finalSlime = Particle.NewParticle(ModContent.GetInstance<FlyingRainbowSlimeParticleBehavior>(), Projectile.Center - Vector2.UnitY * 700, Vector2.Zero, Color.White, 1f);
@@ -111,13 +120,13 @@ namespace CalamityHunt.Content.Projectiles
             //}
 
             if (Time > 1060) {
-                NPC.SpawnBoss((int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<Goozma>(), 0);
+                NPC.SpawnBoss((int)NPC.Center.X, (int)NPC.Bottom.Y, ModContent.NPCType<Goozma>(), 0);
 
                 for (int i = 0; i < 200; i++) {
-                    Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(20f, 17f), 100, Color.Black, 3f + Main.rand.NextFloat()).noGravity = true;
+                    Dust.NewDustPerfect(NPC.Center, DustID.TintableDust, Main.rand.NextVector2Circular(20f, 17f), 100, Color.Black, 3f + Main.rand.NextFloat()).noGravity = true;
                     if (Main.rand.NextBool()) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
-                            particle.position = Projectile.Center;
+                            particle.position = NPC.Center;
                             particle.velocity = Main.rand.NextVector2Circular(18f, 15f);
                             particle.scale = 2f;
                             particle.color = Color.White;
@@ -126,7 +135,7 @@ namespace CalamityHunt.Content.Projectiles
                     }
                 }
 
-                Projectile.Kill();
+                NPC.active = false;
             }
 
             if (Time > 1056) {
@@ -135,7 +144,7 @@ namespace CalamityHunt.Content.Projectiles
                     velocity.Y -= Main.rand.NextFloat();
 
                     CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {
-                        particle.position = Projectile.Center;
+                        particle.position = NPC.Center;
                         particle.velocity = velocity;
                         particle.scale = Main.rand.NextFloat(2f, 4f);
                         particle.color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).Value;
@@ -143,7 +152,6 @@ namespace CalamityHunt.Content.Projectiles
                 }
             }
 
-            Projectile.direction = 1;
             Time++;
         }
 
@@ -161,8 +169,8 @@ namespace CalamityHunt.Content.Projectiles
         {
             orig(self);
 
-            if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>())) {
-                Projectile goozma = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<GoozmaSpawn>());
+            if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<GelatinousSpawn>())) {
+                Projectile goozma = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.NPCType<GelatinousSpawn>());
                 for (int i = 0; i < Main.musicFade.Length; i++) {
                     float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(300, 60, goozma.ai[0], true);
                     float tempFade = Main.musicFade[i];
@@ -263,7 +271,7 @@ namespace CalamityHunt.Content.Projectiles
         //    particleBehavior.Add(new ParticleData<Vector2> { Value = Projectile.Center }, new ParticleDrawBehindEntities());
         //}
 
-        public override bool PreDraw(ref Color lightColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
             Texture2D glow = AssetDirectory.Textures.Glow.Value;
@@ -272,10 +280,10 @@ namespace CalamityHunt.Content.Projectiles
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time * 0.33f) * 1.2f;
             glowColor.A = 0;
-            Vector2 drawOffset = new Vector2(14, 20).RotatedBy(Projectile.rotation) * Projectile.scale;
+            Vector2 drawOffset = new Vector2(14, 20).RotatedBy(NPC.rotation) * NPC.scale;
 
             int size = (int)(Utils.GetLerpValue(250, 850, Time, true) * 6);
-            Projectile.scale = Utils.GetLerpValue(0, 120, Time, true) + (MathF.Round(Utils.GetLerpValue(30, 820, Time, true), 2) - size * 0.12f) * 1.33f;
+            NPC.scale = Utils.GetLerpValue(0, 120, Time, true) + (MathF.Round(Utils.GetLerpValue(30, 820, Time, true), 2) - size * 0.12f) * 1.33f;
 
             float fastWobble = 0.6f + (float)Math.Sin(Time * 0.7f) * 0.4f;
 
@@ -287,24 +295,24 @@ namespace CalamityHunt.Content.Projectiles
             effect.Parameters["baseToScreenPercent"].SetValue(1f);
             effect.Parameters["baseToMapPercent"].SetValue(0f);
 
-            Vector2 drawPos = Projectile.Center + Main.rand.NextVector2Circular(2, 2);
+            Vector2 drawPos = NPC.Center + Main.rand.NextVector2Circular(2, 2);
             Rectangle frame = texture.Frame(7, 1, size, 0);
 
-            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.2f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble * 0.4f, 0, 0);
-            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.1f, 0, frame.Size() * 0.5f, Projectile.scale + fastWobble, 0, 0);
+            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.2f, 0, frame.Size() * 0.5f, NPC.scale + fastWobble * 0.4f, 0, 0);
+            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.1f, 0, frame.Size() * 0.5f, NPC.scale + fastWobble, 0, 0);
 
             for (int i = 0; i < 6; i++) {
                 Vector2 off = new Vector2(2, 0).RotatedBy(Time * 0.2f + MathHelper.TwoPi / 6f * i);
-                Main.EntitySpriteDraw(texture, drawPos + off - Main.screenPosition, frame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(150, 450, Time, true)) * Projectile.scale, 0, frame.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
+                Main.EntitySpriteDraw(texture, drawPos + off - Main.screenPosition, frame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(150, 450, Time, true)) * NPC.scale, 0, frame.Size() * 0.5f, NPC.scale * 0.9f, 0, 0);
             }
 
             FlipShadersOnOff(Main.spriteBatch, effect, false);
-            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.White, 0, frame.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
+            Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.White, 0, frame.Size() * 0.5f, NPC.scale * 0.9f, 0, 0);
             FlipShadersOnOff(Main.spriteBatch, null, false);
 
-            Main.EntitySpriteDraw(glow, drawPos - Main.screenPosition, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.2f, Utils.GetLerpValue(150, 450, Time, true)), 0, glow.Size() * 0.5f, 0.3f + Projectile.scale + size, 0, 0);
+            Main.EntitySpriteDraw(glow, drawPos - Main.screenPosition, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.2f, Utils.GetLerpValue(150, 450, Time, true)), 0, glow.Size() * 0.5f, 0.3f + NPC.scale + size, 0, 0);
 
-            Vector2 eyePos = Projectile.Center + drawOffset + new Vector2(-42, -37).RotatedBy(Projectile.rotation) * Projectile.scale;
+            Vector2 eyePos = NPC.Center + drawOffset + new Vector2(-42, -37).RotatedBy(NPC.rotation) * NPC.scale;
             float eyeScale = (float)Math.Sqrt(Utils.GetLerpValue(940, 950, Time, true)) * 3f;
             float eyeRot = (float)Math.Cbrt(Utils.GetLerpValue(940, 1080, Time, true)) * MathHelper.PiOver2 - MathHelper.PiOver4;
             Main.EntitySpriteDraw(sparkle, eyePos - Main.screenPosition, sparkle.Frame(), glowColor * 0.1f, eyeRot + MathHelper.PiOver2, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.3f, 2.4f), 0, 0);
@@ -330,7 +338,7 @@ namespace CalamityHunt.Content.Projectiles
             brightnesses = new float[10];
             colors = new Vector3[10];
 
-            float rainbowStartOffset = 0.35f + Projectile.ai[0] * 0.016f % (maxBright * 2f);
+            float rainbowStartOffset = 0.35f + NPC.ai[0] * 0.016f % (maxBright * 2f);
             //Calculate and store every non-modulo brightness, with the shifting offset. 
             //The first brightness is ignored for the moment, it will be relevant later. Setting it to -1 temporarily
             brightnesses[0] = -1;

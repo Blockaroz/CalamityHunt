@@ -14,11 +14,13 @@ public sealed class GirlbossSystem : ModSystem
     {
         base.OnModLoad();
 
-        if (Main.dedServ)
+        if (Main.dedServ) {
             return;
+        }
 
-        if (!ModContent.RequestIfExists($"{Mod.Name}/Charcoal", out Asset<Texture2D> asset, AssetRequestMode.ImmediateLoad))
+        if (!ModContent.RequestIfExists($"{Mod.Name}/Charcoal", out Asset<Texture2D> asset, AssetRequestMode.ImmediateLoad)) {
             throw new DataMisalignedException();
+        }
 
         var keySize = (x: 283, y: 238);
         const SurfaceFormat key_format = SurfaceFormat.Color;

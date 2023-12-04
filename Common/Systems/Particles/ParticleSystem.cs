@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 
@@ -27,18 +28,14 @@ public class ParticleSystem
             return;
         }
 
-        foreach (Particle particle in particles.ToHashSet()) {
-            if (particle is null) {
-                continue;
-            }
-
+        particles.ToHashSet().AsParallel().ForAll(particle => {
             particle.Update();
             particle.position += particle.velocity;
 
             if (particle.ShouldRemove) {
                 particles.Remove(particle);
             }
-        }
+        });
     }
 
     public void Draw(SpriteBatch spriteBatch, bool begin = true)
@@ -53,12 +50,20 @@ public class ParticleSystem
 
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-        foreach (Particle particle in particles.ToHashSet()) {
-            if (particle is null) {
-                continue;
-            }
+        Rectangle checkRect = new Rectangle((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.ScreenSize.X, Main.ScreenSize.Y);
+        Rectangle particleRect = new Rectangle(0, 0, 400, 400);
 
-            particle.Draw(spriteBatch);
+        foreach (Particle particle in particles.ToHashSet()) {
+
+            float halfSize = 200 * particle.scale;
+            particleRect.X = (int)(particle.position.X - halfSize);
+            particleRect.Y = (int)(particle.position.Y - halfSize);
+            particleRect.Width = (int)(halfSize * 2f);
+            particleRect.Height = (int)(halfSize * 2f);
+
+            if (checkRect.Intersects(particleRect)) {
+                particle.Draw(spriteBatch);
+            }
         }
 
         spriteBatch.End();

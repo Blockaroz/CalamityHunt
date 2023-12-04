@@ -32,14 +32,11 @@ public class DivineGelChunk : BaseGelChunk
         gelEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.5f % 1f);
         gelEffect.Parameters["uRbTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.8f % 1f);
         gelEffect.Parameters["uFrequency"].SetValue(1.1f);
-
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, gelEffect, Main.Transform);
+        gelEffect.CurrentTechnique.Passes[0].Apply();
 
         spriteBatch.Draw(texture, position - Main.screenPosition, frame, color, rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
 
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
         spriteBatch.Draw(texture, position - Main.screenPosition, shineFrame, new Color(255, 255, 255, 0) * 0.4f, rotation, frame.Size() * new Vector2(0.5f, 0.84f), scale * grow * squish, 0, 0);
 

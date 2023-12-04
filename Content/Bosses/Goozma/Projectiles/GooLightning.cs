@@ -14,10 +14,11 @@ using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Common.Utilities.Interfaces;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class GooLightning : ModProjectile, IGoozmaSubject
+    public class GooLightning : ModProjectile, ISubjectOfNPC<Goozma>
     {
         public override void SetDefaults()
         {

@@ -13,6 +13,7 @@ namespace CalamityHunt
 {
     public static class HuntOfTheOldGodsUtils
     {
+        //TODO: replace with actual math and not a guessing game
         public static Vector2 GetDesiredVelocityForDistance(Vector2 start, Vector2 end, float slowDownFactor, int time)
         {
             Vector2 velocity = start.DirectionTo(end).SafeNormalize(Vector2.Zero);

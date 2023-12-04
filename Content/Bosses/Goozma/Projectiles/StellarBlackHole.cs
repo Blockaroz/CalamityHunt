@@ -4,6 +4,7 @@ using System.Linq;
 using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
+using CalamityHunt.Common.Utilities.Interfaces;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,7 +19,7 @@ using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
-    public class StellarBlackHole : ModProjectile
+    public class StellarBlackHole : ModProjectile, ISubjectOfNPC<Goozma>, ISubjectOfNPC<StellarGeliath>
     {
         public override void SetStaticDefaults()
         {
@@ -54,21 +55,24 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 SoundEngine.PlaySound(invocation.WithVolumeScale(1.5f), Projectile.Center);
             }
 
-            //if (Owner < 0) {
-            //    Projectile.velocity *= 0.9f;
-            //    Projectile.scale *= 0.8f;
-            //    if (Projectile.scale < 0.01f)
-            //        Projectile.Kill(); return;
-            //}
-            //else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>())
-            //{
-            //    Projectile.velocity *= 0.9f;
-            //    Projectile.scale *= 0.8f;
-            //    if (Projectile.scale < 0.01f)
-            //        Projectile.Kill();
+            if (Owner < 0) {
+                Projectile.velocity *= 0.9f;
+                Projectile.scale *= 0.8f;
+                if (Projectile.scale < 0.01f) {
+                    Projectile.Kill();
+                    return;
+                }
 
-            //    return;
-            //}
+            }
+            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>()) {
+                Projectile.velocity *= 0.9f;
+                Projectile.scale *= 0.8f;
+                if (Projectile.scale < 0.01f) {
+                    Projectile.Kill();
+                }
+
+                return;
+            }
 
             Projectile.scale = (float)Math.Sqrt(MathHelper.SmoothStep(0, 1, Utils.GetLerpValue(10, MaxTime * 0.2f, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime - 20, Time, true))) * 0.75f;
             Projectile.velocity = Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].Center) * 0.2f;
@@ -86,12 +90,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Projectile.rotation += 0.1f * Projectile.direction;
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 5; i++) {
                 CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
                     particle.position = Projectile.Center;
-                    particle.velocity = Main.rand.NextVector2Circular(27, 27);
-                    particle.scale = Main.rand.NextFloat(10f, 15f) * Projectile.scale;
-                    particle.maxTime = Main.rand.Next(50, 100);
+                    particle.velocity = Main.rand.NextVector2Circular(50, 50);
+                    particle.scale = Main.rand.NextFloat(25f, 30f) * Projectile.scale;
+                    particle.maxTime = Main.rand.Next(70, 100);
                     particle.color = Color.White;
                     particle.fadeColor = Color.White;
                     particle.anchor = () => Projectile.velocity * 0.8f;
@@ -151,21 +155,31 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D glow = AssetDirectory.Textures.GlowBig.Value;
+            Texture2D ring = AssetDirectory.Textures.ShockRing.Value;
+
+            float intensity = (float)Math.Sqrt(Utils.GetLerpValue(0.2f, 0.6f, Projectile.scale, true));
 
             float scaleWobble = MathF.Sin(Main.GlobalTimeWrappedHourly * 40f) * 0.033f;
-            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Gold * 0.4f) with { A = 0 }, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 7f + scaleWobble, 0, 0);
-            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Red * 0.2f) with { A = 0 }, -Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 16f + scaleWobble * 2f, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Gold * 0.8f) with { A = 0 }, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 8f + scaleWobble, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Red * 0.6f) with { A = 0 }, -Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 20f + scaleWobble * 2f, 0, 0);
+
+            for (int i = 0; i < 7; i++) {
+                float exist = Utils.GetLerpValue(20, 60, Time + i * 3f, true) * intensity;
+                float comeIn = (float)Math.Pow(1f - ((Time + i / 7f * 70) % 70) / 70f, 2f);
+                Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, ring.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.3f, ring.Size() * 0.5f, 150f * comeIn, 0, 0);
+                Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, ring.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.3f, ring.Size() * 0.5f, 80f * comeIn, 0, 0);
+            }
 
             if (Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Active) {
-                float intensity = (float)Math.Sqrt(Utils.GetLerpValue(0.1f, 0.9f, Projectile.scale, true));
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader()
-                    .UseColor(Color.White)
+                    .UseColor(Color.Orange)
                     .UseTargetPosition(Projectile.Center)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.1f % 1f)
-                    .UseIntensity(intensity * 24f);
+                    .UseIntensity(intensity);
                 Effect shader = Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader;
-                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uSize"].SetValue((13f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 0.1f) * intensity);
-                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uAngle"].SetValue((-40f + MathF.Sin(Main.GlobalTimeWrappedHourly * 16f) * 2f) * intensity);
+                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uPower"].SetValue(24f * intensity);
+                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uSize"].SetValue((0.125f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 0.002f) * intensity);
+                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uAngle"].SetValue((-40f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 2f) * intensity);
             }
             else {
                 Filters.Scene.Activate("HuntOfTheOldGods:StellarBlackHole", Projectile.Center);

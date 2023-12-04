@@ -1,5 +1,5 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
-using static CalamityHunt.Common.Systems.DifficultySystem;
+using static CalamityHunt.Common.Systems.BalanceSystem;
 using CalamityHunt.Content.Bosses.Goozma.Projectiles;
 using CalamityHunt.Content.Gores.CrystalShieldGores;
 using CalamityHunt.Content.Particles;

@@ -53,7 +53,6 @@ public class FusionFlameParticle : Particle
             position += anchor.Invoke();
         }
 
-
         rotation += (1f - MathF.Cbrt(progress)) * rotationalVelocity * direction;
 
         if (emitLight) {
@@ -73,7 +72,7 @@ public class FusionFlameParticle : Particle
         Color drawColor = Color.Lerp(color, fadeColor, Utils.GetLerpValue(0f, 0.2f, progress, true));
         float drawScale = scale * MathF.Sqrt(Utils.GetLerpValue(0f, 3f, time, true)) * (0.6f + progress);
 
-        spriteBatch.Draw(glow, position - Main.screenPosition, glow.Frame(), fadeColor * 0.07f * Utils.GetLerpValue(0.33f, 0f, progress, true), rotation + MathHelper.Pi / 3f * direction, glow.Size() * 0.5f, drawScale * 0.17f, 0, 0);
+        spriteBatch.Draw(glow, position - Main.screenPosition, glow.Frame(), fadeColor * 0.07f * Utils.GetLerpValue(0.33f, 0f, progress, true), rotation, glow.Size() * 0.5f, drawScale * 0.17f, 0, 0);
 
         Effect dissolveEffect = AssetDirectory.Effects.FlameDissolve.Value;
 

@@ -32,15 +32,14 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            int owner = -1; 
+            int owner = -1;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active))
                 Projectile.active = false;
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active).whoAmI;
 
-            if (owner > -1)
-            {
-                int count = (int)Common.Systems.DifficultySystem.DifficultyBasedValue(3, 4, 5);
+            if (owner > -1) {
+                int count = (int)Common.Systems.BalanceSystem.DifficultyBasedValue(3, 4, 5);
 
                 Vector2 myHome = Main.npc[owner].Center + new Vector2(400 * (float)Math.Sqrt(Utils.GetLerpValue(-65, -40, Time, true)), 0).RotatedBy(Spin + MathHelper.TwoPi / count * WhoAmI);
                 Projectile.Center = Vector2.Lerp(Projectile.Center, myHome, 0.2f);
@@ -53,10 +52,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.rotation += -Projectile.direction * 0.002f;
 
             Projectile.scale = Utils.GetLerpValue(-2, 15, Time, true) * Utils.GetLerpValue(80, 60, Time, true) * 0.9f;
-            Projectile.velocity *= 0.5f;      
+            Projectile.velocity *= 0.5f;
 
-            for (int i = 0; i < Rays; i++)
-            {
+            for (int i = 0; i < Rays; i++) {
                 Color rayColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
                 DelegateMethods.v3_1 = rayColor.ToVector3() * 0.4f * Projectile.scale;
 
@@ -81,11 +79,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > 0)
-            {
+            if (Time > 0) {
                 float point = 0;
-                for (int i = 0; i < Rays; i++)
-                {
+                for (int i = 0; i < Rays; i++) {
                     bool wide = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(70 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 20f, ref point);
                     bool mid = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(180 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 12f, ref point);
                     bool tip = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(320 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 5f, ref point);
@@ -102,11 +98,9 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Texture2D tellTexture = AssetDirectory.Textures.Sparkle.Value;
             Texture2D bloom = AssetDirectory.Textures.Glow.Value;
 
-            if (Time <= 3)
-            {
+            if (Time <= 3) {
                 float tellScale = (float)Math.Cbrt(Utils.GetLerpValue(-60, -40, Time, true) * Utils.GetLerpValue(80, -50, Time, true)) * 0.7f;
-                for (int i = 0; i < Rays; i++)
-                {
+                for (int i = 0; i < Rays; i++) {
                     Color rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
 
                     float rotation = Projectile.rotation + MathHelper.PiOver2 + MathHelper.TwoPi / Rays * i;
@@ -114,8 +108,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, rainbow * 0.2f, rotation, tellTexture.Size() * new Vector2(0.5f, 0.75f), tellScale * new Vector2(1.3f, 15f), 0, 0);
                     Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(1f, 3f), 0, 0);
                     float numBetweens = (int)(8f - MathHelper.Min(Rays / 2f, 8f));
-                    for (int j = 1; j < numBetweens - 1; j++)
-                    {
+                    for (int j = 1; j < numBetweens - 1; j++) {
                         Color betweenRainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + (i + (j / numBetweens)) / Rays) % 1f, 0.7f, 0.6f, 0);
                         float lerpRotation = rotation + (MathHelper.TwoPi / Rays * (j / (numBetweens - 1)));
                         float betweenScale = (2.5f - (j / (numBetweens - 1f)) * (1f - j / (numBetweens - 1f)) * 5f) * Utils.GetLerpValue(20, -30, Time, true);
@@ -128,8 +121,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             float attackScale = Projectile.scale;
             Rectangle baseFrame = texture.Frame(1, 2, 0, 0);
             Rectangle glowFrame = texture.Frame(1, 2, 0, 1);
-            for (int i = 0; i < Rays; i++)
-            {
+            for (int i = 0; i < Rays; i++) {
                 Color rainbowSolid = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.6f, 200);
                 Color rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
 

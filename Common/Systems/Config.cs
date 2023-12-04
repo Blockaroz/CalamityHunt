@@ -10,7 +10,7 @@ namespace CalamityHunt.Common.Systems
 
         [Header("$Mods.CalamityHunt.Config.VisualHeader")]
         [DefaultValue(true)]
-        public bool epilepsy { get; set; }
+        public bool photosensitiveToggle { get; set; }
 
         [Range(0f, 1f)]
         [DefaultValue(1)]
@@ -33,5 +33,8 @@ namespace CalamityHunt.Common.Systems
 
         [DefaultValue(true)]
         public bool shadowspecCurse;
+
+        [DefaultValue(false)]
+        public bool overrideVanillaBalance;
     }
 }

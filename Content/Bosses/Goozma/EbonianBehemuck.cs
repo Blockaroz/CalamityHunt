@@ -1,5 +1,5 @@
 ﻿using CalamityHunt.Content.Bosses.Goozma.Projectiles;
-using static CalamityHunt.Common.Systems.DifficultySystem;
+using static CalamityHunt.Common.Systems.BalanceSystem;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
