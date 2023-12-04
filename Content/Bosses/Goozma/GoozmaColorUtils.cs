@@ -29,8 +29,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(186, 255, 0).ToVector3(),
             new Color(55, 255, 28).ToVector3(),
             new Color(0, 0, 0).ToVector3()
-        };        
-        
+        };
+
         public static Vector3[] Gold = new Vector3[] //obvious
         {
             new Color(0, 0, 0).ToVector3(),
@@ -56,7 +56,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(187, 187, 187).ToVector3(),
             new Color(0, 0, 0).ToVector3()
         };
-                
+
         public static Vector3[] Honey = new Vector3[] //honey; not the bees
         {
             new Color(0, 0, 0).ToVector3(),
@@ -68,8 +68,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(150, 150, 24).ToVector3(),
             new Color(190, 85, 143).ToVector3(),
             new Color(0, 0, 0).ToVector3()
-        };        
-        
+        };
+
         public static Vector3[] Masterful = new Vector3[] //master mode rarity; for the worthy
         {
             new Color(0, 0, 0).ToVector3(),

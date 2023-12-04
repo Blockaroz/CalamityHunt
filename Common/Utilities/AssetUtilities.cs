@@ -13,7 +13,7 @@ public static class AssetUtilities
     // originally made for a more sophisticated asset loading system. I'd like
     // to keep these methods in use in the event a use arises for them again.
     // - Tomat
-    
+
     /// <summary>
     ///     Makes a cacheable request for an asset.
     /// </summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using CalamityHunt.Common.GlobalNPCs;
 using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

@@ -1,12 +1,12 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using ReLogic.Utilities;
-using System.Linq;
-using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -39,14 +39,12 @@ namespace CalamityHunt.Common.Players
             active = false;
             wait = 0;
             delay = 0;
-            if (!stressedOut)
-            {
+            if (!stressedOut) {
                 checkStress = stress;
                 if (SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))
                     activeSound.Stop();
             }
-            if (Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15 && stress >= 0.25f && !stressedOut)
-            {
+            if (Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15 && stress >= 0.25f && !stressedOut) {
                 SoundEngine.PlaySound(AssetDirectory.Sounds.StressActivate, Player.Center);
                 activate = true;
                 stressedOut = true;
@@ -56,10 +54,8 @@ namespace CalamityHunt.Common.Players
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
             Color goo = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 100 + gooTime);
-            if (rainbow)
-            {
-                if (drawInfo.shadow != 0)
-                {
+            if (rainbow) {
+                if (drawInfo.shadow != 0) {
                     r = goo.R;
                     g = goo.G;
                     b = goo.B;
@@ -73,10 +69,8 @@ namespace CalamityHunt.Common.Players
                     particle.color = goo;
                 }));
             }
-            if (activate && drawInfo.shadow == 0)
-            {
-                for (int i = -70; i < 71; i += 14)
-                {
+            if (activate && drawInfo.shadow == 0) {
+                for (int i = -70; i < 71; i += 14) {
                     if (i < -14 || i > 42) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                             particle.position = Player.Center + new Vector2(i - 14, i - 14);
@@ -110,14 +104,12 @@ namespace CalamityHunt.Common.Players
         }
         public override void UpdateEquips()
         {
-            if (rainbow || active)
-            {
+            if (rainbow || active) {
                 gooTime = (gooTime + 1) % 60;
                 if (gooTime > 1200)
                     gooTime = 0;
             }
-            if (active)
-            {
+            if (active) {
                 int damage = (int)GetBestClassDamage(Player).ApplyTo(200);
                 Color goo = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 100 + gooTime);
                 Lighting.AddLight(Player.Center, new Vector3(goo.R, goo.G, goo.B) * 0.01f * checkStress);
@@ -132,31 +124,26 @@ namespace CalamityHunt.Common.Players
                     stress += 0.0001f;
                 else if (stress > 1f && !stressedOut)
                     stress = 1f;
-                if (stress > 0.25f && !t25)
-                {
+                if (stress > 0.25f && !t25) {
                     SoundEngine.PlaySound(AssetDirectory.Sounds.StressPing with { Pitch = -0.4f }, Player.Center);
                     t25 = true;
                 }
-                else if (stress > 0.5f && !t50)
-                {
+                else if (stress > 0.5f && !t50) {
                     SoundEngine.PlaySound(AssetDirectory.Sounds.StressPing with { Pitch = -0.2f }, Player.Center);
                     t50 = true;
                 }
-                if (stress > 0.755f && !t75)
-                {
+                if (stress > 0.755f && !t75) {
                     SoundEngine.PlaySound(AssetDirectory.Sounds.StressPing, Player.Center);
                     t75 = true;
                 }
-                if (stressedOut && stress > 0)
-                {
+                if (stressedOut && stress > 0) {
                     stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
                     if (!SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))
                         loopSlot = SoundEngine.PlaySound(AssetDirectory.Sounds.StressLoop, Player.Center);
                     else
                         activeSound.Position = Player.Center;
                 }
-                if (stressedOut && stress <= 0)
-                {
+                if (stressedOut && stress <= 0) {
                     t25 = false;
                     t50 = false;
                     t75 = false;
@@ -169,8 +156,7 @@ namespace CalamityHunt.Common.Players
                 if (delay > 0)
                     delay--;
             }
-            else
-            {
+            else {
                 t25 = false;
                 t50 = false;
                 t75 = false;
@@ -181,8 +167,7 @@ namespace CalamityHunt.Common.Players
         }
         public override void PostUpdateMiscEffects()
         {
-            if (Player.whoAmI == Main.myPlayer && playFull && checkStress >= 1f)
-            {
+            if (Player.whoAmI == Main.myPlayer && playFull && checkStress >= 1f) {
                 playFull = false;
                 SoundEngine.PlaySound(AssetDirectory.Sounds.StressFull, Player.Center);
             }
@@ -191,25 +176,21 @@ namespace CalamityHunt.Common.Players
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (active)
-            {
+            if (active) {
                 if (proj.type == ModContent.ProjectileType<SplendorTentacle>() || Main.myPlayer != proj.owner)
                     return;
-                if (stress < 1f && delay <= 0 && !stressedOut && target.type != NPCID.TargetDummy)
-                {
+                if (stress < 1f && delay <= 0 && !stressedOut && target.type != NPCID.TargetDummy) {
                     if (DummyCheck(target))
                         return;
                     float dis = Player.Distance(target.Center);
                     stress += 0.0005f + ((dis > 0 && dis <= 320) ? 0.0005f : 0.0005f - (dis / 320 * 0.0005f));
                     delay = 5;
                 }
-                if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && checkStress >= 0.25f && checkStress < 0.75)
-                {
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && checkStress >= 0.25f && checkStress < 0.75) {
                     Projectile.NewProjectile(proj.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, Player.whoAmI, 0, 0);
                     wait = 60;
                 }
-                else if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && stress >= 0.75f)
-                {
+                else if (Player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && wait == 0 && stress >= 0.75f) {
                     Projectile.NewProjectile(proj.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, Player.whoAmI, 0, 1);
                     wait = 60;
                 }
@@ -217,10 +198,8 @@ namespace CalamityHunt.Common.Players
         }
         public static bool DummyCheck(NPC npc)
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
-                if (npc.type == ModContent.Find<ModNPC>("CalamityMod/SuperDummyNPC").Type)
-                {
+            if (ModLoader.HasMod("CalamityMod")) {
+                if (npc.type == ModContent.Find<ModNPC>("CalamityMod/SuperDummyNPC").Type) {
                     return true;
                 }
                 return false;
@@ -252,8 +231,7 @@ namespace CalamityHunt.Common.Players
             if (summon > best) best = summon;
             // We intentionally don't check whip class, because it inherits 100% from Summon
 
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 DamageClass roguetype = ModLoader.GetMod("CalamityMod").Find<DamageClass>("RogueDamageClass");
                 float rogue = player.GetTotalDamage(roguetype).Additive;
                 if (rogue > best) best = rogue;
@@ -269,23 +247,19 @@ namespace CalamityHunt.Common.Players
         public override void OnHitNPC(Item item, Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             SplendorJamPlayer sp = player.GetModPlayer<SplendorJamPlayer>();
-            if (sp.active && item.type != ItemID.Zenith)
-            {
-                if (sp.stress < 1f && sp.delay <= 0 && !sp.stressedOut && target.type != NPCID.TargetDummy)
-                {
+            if (sp.active && item.type != ItemID.Zenith) {
+                if (sp.stress < 1f && sp.delay <= 0 && !sp.stressedOut && target.type != NPCID.TargetDummy) {
                     if (SplendorJamPlayer.DummyCheck(target))
                         return;
                     float dis = player.Distance(target.Center);
                     sp.stress += 0.0005f + ((dis > 0 && dis <= 320) ? 0.0005f : 0.0005f - (dis / 320 * 0.0005f));
                     sp.delay = 5;
                 }
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && sp.wait == 0 && sp.checkStress >= 0.25f && sp.checkStress < 0.75)
-                {
+                if (player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && sp.wait == 0 && sp.checkStress >= 0.25f && sp.checkStress < 0.75) {
                     Projectile.NewProjectile(player.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.2f), 0, player.whoAmI, 0, 0);
                     sp.wait = 60;
                 }
-                else if (player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && sp.wait == 0 && sp.checkStress >= 0.75f)
-                {
+                else if (player.ownedProjectileCounts[ModContent.ProjectileType<StressExplosion>()] < 1 && sp.wait == 0 && sp.checkStress >= 0.75f) {
                     Projectile.NewProjectile(player.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StressExplosion>(), (int)(damageDone * 0.4f), 0, player.whoAmI, 0, 1);
                     sp.wait = 60;
                 }

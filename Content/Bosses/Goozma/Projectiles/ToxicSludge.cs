@@ -1,8 +1,6 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -47,8 +45,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Main.rand.NextBool(9))
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24, 24), DustID.Corruption, Main.rand.NextVector2Circular(5, 5), 0, Color.White, 1.5f).noGravity = true;
 
-            if (Main.rand.NextBool())
-            {
+            if (Main.rand.NextBool()) {
                 Color color = Color.Lerp(Color.DarkGreen, Color.DarkOrchid, 0.7f + Main.rand.NextFloat(0.3f));
                 color.A /= 2;
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24, 24), 4, Projectile.velocity * 0.5f, 150, color, 2f).noGravity = true;
@@ -83,8 +80,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Color glowColor = new Color(100, 60, 255, 0);
             float opacity = 0.98f;
             float scaleUp = 1f;
-            if (Projectile.localAI[1] > 195)
-            {
+            if (Projectile.localAI[1] > 195) {
                 texture = eyeTexture;
                 frame = texture.Frame(8, 1, (int)(Projectile.localAI[1] % 8), 0);
                 glowFrame = frame;
@@ -95,8 +91,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Black * 0.05f, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp * 1.33f, 0, 0);
             Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * scaleUp * 2f, 0, 0);
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + ProjAIStyleID.Rainbow);
                 Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, glowFrame, glowColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
             }

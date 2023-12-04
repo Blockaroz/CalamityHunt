@@ -1,16 +1,10 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Particles;
+﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -46,19 +40,16 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (Projectile.ai[1] < 0)
-            {
+            if (Projectile.ai[1] < 0) {
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead))
                     Projectile.ai[1] = player.whoAmI;
             }
 
-            if (Time < 1)
-            {
+            if (Time < 1) {
                 saveTarget = new Vector2(Projectile.Center.X, Projectile.FindSmashSpot(Target.Center).Y);
 
                 Projectile.velocity.Y = 0;
-                if (Projectile.ai[2] == 1)
-                {
+                if (Projectile.ai[2] == 1) {
                     Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, (Target.Center.X - Projectile.Center.X) * 0.05f, 0.01f * Utils.GetLerpValue(0, -25, Time, true));
                     Projectile.velocity.X *= 0.98f * Utils.GetLerpValue(0, -25, Time, true);
                 }
@@ -96,8 +87,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Asset<Texture2D> trail = ModContent.Request<Texture2D>(Texture + "Trail");
             Asset<Texture2D> tell = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Projectiles/GoozmaDeathGodrays");
 
-            if (Time < 0)
-            {
+            if (Time < 0) {
                 float width = (float)Math.Pow(Utils.GetLerpValue(0, 15, Projectile.localAI[0], true) * Utils.GetLerpValue(5, -60, Time, true), 0.5f) * Projectile.width * 0.015f;
                 Color tellColor = new Color(180, 30, 0, 0);
                 Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, width * 40 - 20), null, tellColor, Projectile.rotation + MathHelper.Pi, tell.Size() * new Vector2(0.5f, 0.66f), new Vector2(width, 14f - width), 0, 0);
@@ -114,10 +104,8 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             float fadeOut = Utils.GetLerpValue(20, 15, Time, true) * Utils.GetLerpValue(-1, 5, Time, true);
             float trailOut = fadeOut * Utils.GetLerpValue(15, 10, Time, true) * 0.9f;
 
-            for (int i = 1; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
-            {
-                for (int j = 0; j < 5; j++)
-                {
+            for (int i = 1; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+                for (int j = 0; j < 5; j++) {
                     float superProg = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
                     float prog = j / 5f;
 

@@ -75,34 +75,27 @@ namespace CalamityHunt.Content.Projectiles
             int maxTileX = (int)projectile.position.X / 16 + explosionRadius;
             int minTileY = (int)projectile.position.Y / 16 - explosionRadius;
             int maxTileY = (int)projectile.position.Y / 16 + explosionRadius;
-            if (minTileX < 0)
-            {
+            if (minTileX < 0) {
                 minTileX = 0;
             }
-            if (maxTileX > Main.maxTilesX)
-            {
+            if (maxTileX > Main.maxTilesX) {
                 maxTileX = Main.maxTilesX;
             }
-            if (minTileY < 0)
-            {
+            if (minTileY < 0) {
                 minTileY = 0;
             }
-            if (maxTileY > Main.maxTilesY)
-            {
+            if (maxTileY > Main.maxTilesY) {
                 maxTileY = Main.maxTilesY;
             }
 
             bool canKillWalls = false;
             float projectilePositionX = projectile.position.X / 16f;
             float projectilePositionY = projectile.position.Y / 16f;
-            for (int x = minTileX; x <= maxTileX; x++)
-            {
-                for (int y = minTileY; y <= maxTileY; y++)
-                {
+            for (int x = minTileX; x <= maxTileX; x++) {
+                for (int y = minTileY; y <= maxTileY; y++) {
                     Vector2 explodeArea = new Vector2(Math.Abs(x - projectilePositionX), Math.Abs(y - projectilePositionY));
                     float distance = explodeArea.Length();
-                    if (distance < explosionRadius && Main.tile[x, y] != null && Main.tile[x, y].WallType == WallID.None)
-                    {
+                    if (distance < explosionRadius && Main.tile[x, y] != null && Main.tile[x, y].WallType == WallID.None) {
                         canKillWalls = true;
                         break;
                     }
@@ -120,22 +113,17 @@ namespace CalamityHunt.Content.Projectiles
             for (int i = 0; i < wallsToCheck.Count; ++i)
                 wallExcludeList.Add(wallsToCheck[i]);
 
-            for (int i = minTileX; i <= maxTileX; i++)
-            {
-                for (int j = minTileY; j <= maxTileY; j++)
-                {
+            for (int i = minTileX; i <= maxTileX; i++) {
+                for (int j = minTileY; j <= maxTileY; j++) {
                     Tile tile = Main.tile[i, j];
                     bool t = 1 == 1; bool f = 1 == 2;
 
                     Vector2 explodeArea = new Vector2(Math.Abs(i - projectilePositionX), Math.Abs(j - projectilePositionY));
                     float distance = explodeArea.Length();
-                    if (distance < explosionRadius)
-                    {
+                    if (distance < explosionRadius) {
                         bool canKillTile = true;
-                        if (tile != null && tile.HasTile)
-                        {
-                            if (checkExplosions)
-                            {
+                        if (tile != null && tile.HasTile) {
+                            if (checkExplosions) {
                                 if (!TileLoader.CanExplode(i, j))
                                     canKillTile = false;
                             }
@@ -147,28 +135,23 @@ namespace CalamityHunt.Content.Projectiles
                             if (tileExcludeList.Contains(tile.TileType))
                                 canKillTile = false;
 
-                            if (canKillTile)
-                            {
+                            if (canKillTile) {
                                 WorldGen.KillTile(i, j, false, false, false);
                                 if (!tile.HasTile && Main.netMode != NetmodeID.SinglePlayer)
                                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j, 0f, 0, 0, 0);
                             }
                         }
 
-                        if (canKillTile)
-                        {
-                            for (int x = i - 1; x <= i + 1; x++)
-                            {
-                                for (int y = j - 1; y <= j + 1; y++)
-                                {
+                        if (canKillTile) {
+                            for (int x = i - 1; x <= i + 1; x++) {
+                                for (int y = j - 1; y <= j + 1; y++) {
                                     bool canExplode = true;
                                     if (checkExplosions)
                                         canExplode = WallLoader.CanExplode(x, y, Main.tile[x, y].WallType);
                                     if (wallExcludeList.Contains(Main.tile[x, y].WallType))
                                         canKillWalls = false;
 
-                                    if (Main.tile[x, y] != null && Main.tile[x, y].WallType > WallID.None && canKillWalls && canExplode)
-                                    {
+                                    if (Main.tile[x, y] != null && Main.tile[x, y].WallType > WallID.None && canKillWalls && canExplode) {
                                         WorldGen.KillWall(x, y, false);
                                         if (Main.tile[x, y].WallType == WallID.None && Main.netMode != NetmodeID.SinglePlayer)
                                             NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, x, y, 0f, 0, 0, 0);

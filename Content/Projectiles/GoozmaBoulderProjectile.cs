@@ -1,11 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Mono.Cecil;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -16,7 +11,8 @@ namespace CalamityHunt.Content.Projectiles
 {
     public class GoozmaBoulderProjectile : ModProjectile
     {
-        public int TimesHit { 
+        public int TimesHit
+        {
             get => (int)Projectile.localAI[0];
             set => Projectile.localAI[0] = value;
         }
@@ -51,7 +47,7 @@ namespace CalamityHunt.Content.Projectiles
 
         public override void SendExtraAI(BinaryWriter writer)
         {
-            writer.Write(TimesHit); 
+            writer.Write(TimesHit);
             writer.Write(InsaneMode);
             writer.Write(InitialVelocityCheck);
         }
@@ -59,7 +55,7 @@ namespace CalamityHunt.Content.Projectiles
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             TimesHit = reader.ReadInt32();
-            InsaneMode = reader.ReadBoolean(); 
+            InsaneMode = reader.ReadBoolean();
             InitialVelocityCheck = reader.ReadBoolean();
         }
 
@@ -78,22 +74,19 @@ namespace CalamityHunt.Content.Projectiles
 
         public void NormalAI()
         {
-            if (Projectile.shimmerWet)
-            {
+            if (Projectile.shimmerWet) {
                 if (Projectile.velocity.Y > 10f)
                     Projectile.velocity.Y *= 0.97f;
                 Projectile.velocity.Y -= 0.7f;
                 if (Projectile.velocity.Y < -10f)
                     Projectile.velocity.Y = -10f;
             }
-            else
-            {
+            else {
                 Projectile.rotation += Projectile.velocity.X * 0.02f;
 
                 Projectile.velocity.Y = Math.Clamp(Projectile.velocity.Y, -16f, 16f);
 
-                if (Math.Abs(Projectile.velocity.Y) <= 1f)
-                {
+                if (Math.Abs(Projectile.velocity.Y) <= 1f) {
                     if (Projectile.velocity.X > 0f && Projectile.velocity.X < 22)
                         Projectile.velocity.X += 0.05f;
                     if (Projectile.velocity.X < 0f && Projectile.velocity.X > -22)
@@ -119,25 +112,21 @@ namespace CalamityHunt.Content.Projectiles
         {
             if (InsaneMode)
                 return false;
-            if (Projectile.velocity.X != oldVelocity.X && InitialVelocityCheck)
-            {
+            if (Projectile.velocity.X != oldVelocity.X && InitialVelocityCheck) {
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
                 SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
                 Projectile.velocity.X = -oldVelocity.X;
                 TimesHit += 1;
             }
-            if (!InitialVelocityCheck)
-            {
+            if (!InitialVelocityCheck) {
                 byte closestPlayer = FindClosestAlive(Projectile.position, Projectile.width, Projectile.height);
                 bool dir = Main.player[closestPlayer].position.X > Projectile.position.X;
                 Projectile.velocity.X = dir ? 0.5f : -0.5f;
                 InitialVelocityCheck = true;
             }
-            if (Projectile.velocity.Y != oldVelocity.Y)
-            {
+            if (Projectile.velocity.Y != oldVelocity.Y) {
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-                if (oldVelocity.Y >= 0.35)
-                {
+                if (oldVelocity.Y >= 0.35) {
                     SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
                     Projectile.velocity.Y = -oldVelocity.Y * 0.95f;
                     TimesHit += 1;
@@ -146,10 +135,9 @@ namespace CalamityHunt.Content.Projectiles
                 bool dir = Main.player[closestPlayer].position.X > Projectile.position.X;
                 Projectile.velocity.X = Math.Abs(Projectile.velocity.X);
                 Projectile.velocity.X *= dir ? 1 : -1;
-                
+
             }
-            if (TimesHit >= 20)
-            {
+            if (TimesHit >= 20) {
                 InsaneMode = true;
                 Projectile.tileCollide = false;
             }
@@ -158,16 +146,14 @@ namespace CalamityHunt.Content.Projectiles
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            if (Main.netMode == NetmodeID.SinglePlayer)
-            {
+            if (Main.netMode == NetmodeID.SinglePlayer) {
                 if (target.difficulty != 1 && target.difficulty != 2)
                     target.DropItems();
                 target.ghost = true;
                 target.statLife = 0;
                 target.KillMe(PlayerDeathReason.ByProjectile(target.whoAmI, Projectile.whoAmI), 1, 0);
             }
-            else
-            {
+            else {
                 ModPacket packet = Mod.GetPacket();
                 packet.Write((byte)CalamityHunt.PacketType.TrollPlayer);
                 packet.Write((byte)target.whoAmI);
@@ -184,22 +170,17 @@ namespace CalamityHunt.Content.Projectiles
         private static byte FindClosestAlive(Vector2 Position, int Width, int Height)
         {
             byte result = 0;
-            for (byte i = 0; i < 255; i++)
-            {
-                if (Main.player[i].active)
-                {
+            for (byte i = 0; i < 255; i++) {
+                if (Main.player[i].active) {
                     result = i;
                     break;
                 }
             }
             float num = -1f;
-            for (byte j = 0; j < 255; j++)
-            {
-                if (Main.player[j].active && !Main.player[j].dead && !Main.player[j].ghost)
-                {
+            for (byte j = 0; j < 255; j++) {
+                if (Main.player[j].active && !Main.player[j].dead && !Main.player[j].ghost) {
                     float num2 = Math.Abs(Main.player[j].position.X + (Main.player[j].width / 2) - (Position.X + (Width / 2))) + Math.Abs(Main.player[j].position.Y + (Main.player[j].height / 2) - (Position.Y + (Height / 2)));
-                    if (num == -1f || num2 < num)
-                    {
+                    if (num == -1f || num2 < num) {
                         num = num2;
                         result = j;
                     }

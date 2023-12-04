@@ -1,13 +1,11 @@
 ﻿using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
-using System;
-using CalamityHunt.Common;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Buffs
 {

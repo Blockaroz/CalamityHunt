@@ -1,14 +1,9 @@
-﻿using CalamityHunt.Common.Systems;
+﻿using System.Collections.Generic;
+using CalamityHunt.Common.Systems;
 using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Content.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -42,16 +37,14 @@ namespace CalamityHunt.Common.UI
                 showTime--;
 
             //decide which bar
-            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<Parasanguine>())
-            {
+            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<Parasanguine>()) {
                 anyBar = true;
                 baseColor = Color.DarkRed;
                 fillColor = Color.Lerp(Color.DarkRed * 0.5f, Color.Red, Utils.GetLerpValue(0.5f, 1f, Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent, true));
                 fillPercent = Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().ParasolBloodPercent;
-            }            
-            
-            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CrystalGauntlets>())
-            {
+            }
+
+            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CrystalGauntlets>()) {
                 anyBar = true;
                 baseColor = Color.SlateBlue;
                 fillColor = Color.Lerp(Color.MediumOrchid, Color.Turquoise, Utils.GetLerpValue(0.3f, 0.8f, Main.LocalPlayer.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge, true));
@@ -62,17 +55,14 @@ namespace CalamityHunt.Common.UI
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            if (showTime > 0)
-            {
+            if (showTime > 0) {
                 int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Entity Health Bars"));
-                if (mouseTextIndex != -1)
-                {
+                if (mouseTextIndex != -1) {
                     layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
                         "HuntOfTheOldGod: Weapon Charge Bars",
                         delegate
                         {
-                            if (anyBar)
-                            {
+                            if (anyBar) {
                                 float fade = Utils.GetLerpValue(0, 30, showTime, true);
 
                                 Texture2D bar = AssetDirectory.Textures.Bars.Bar.Value;

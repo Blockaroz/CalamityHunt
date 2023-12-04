@@ -1,9 +1,7 @@
-﻿using Terraria;
-using Terraria.ModLoader;
+﻿using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
-using Terraria.ID;
-using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Projectiles;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.NPCs
 {

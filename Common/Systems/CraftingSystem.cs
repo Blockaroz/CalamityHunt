@@ -17,10 +17,8 @@ namespace CalamityHunt.Common.Systems
         {
             Mod cal;
             ModLoader.TryGetMod("CalamityMod", out cal);
-            if (cal != null)
-            {
-                for (int i = 0; i < Recipe.numRecipes; i++)
-                {
+            if (cal != null) {
+                for (int i = 0; i < Recipe.numRecipes; i++) {
                     Recipe recipe = Main.recipe[i];
                     if (recipe.HasResult(cal.Find<ModItem>("ShadowspecBar").Type))
                         recipe.AddIngredient(ModContent.ItemType<ChromaticMass>());
@@ -29,19 +27,16 @@ namespace CalamityHunt.Common.Systems
             }
             Mod inf;
             ModLoader.TryGetMod("InfernumMode", out inf);
-            if (inf != null)
-            {
-                for (int i = 0; i < Recipe.numRecipes; i++)
-                {
+            if (inf != null) {
+                for (int i = 0; i < Recipe.numRecipes; i++) {
                     Recipe recipe = Main.recipe[i];
-                    if (recipe.HasResult(inf.Find<ModItem>("Kevin").Type))
-		    {
+                    if (recipe.HasResult(inf.Find<ModItem>("Kevin").Type)) {
                         recipe.RemoveIngredient(cal.Find<ModItem>("DubiousPlating").Type);
                         recipe.RemoveIngredient(cal.Find<ModItem>("MysteriousCircuitry").Type);
                         recipe.AddIngredient(ModContent.ItemType<ChromaticMass>(), 3);
                         recipe.AddIngredient(cal.Find<ModItem>("DubiousPlating").Type, 150);
                         recipe.AddIngredient(cal.Find<ModItem>("MysteriousCircuitry").Type, 150);
-		    }
+                    }
                 }
             }
         }

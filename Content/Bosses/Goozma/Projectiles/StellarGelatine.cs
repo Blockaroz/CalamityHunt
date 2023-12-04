@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -64,13 +62,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override void AI()
         {
-            if (Owner < 0)
-            {
+            if (Owner < 0) {
                 Projectile.active = false;
                 return;
             }
-            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>())
-            {
+            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<StellarGeliath>()) {
                 Projectile.active = false;
                 return;
             }
@@ -84,14 +80,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 particle.fadeColor = Color.White;
             }));
 
-            if (Projectile.ai[1] == 0)
-            {
+            if (Projectile.ai[1] == 0) {
                 Projectile.velocity += Main.npc[(int)Owner].GetTargetData().Velocity * 0.012f;
                 Projectile.velocity.Y += 0.3f;
                 Projectile.velocity.X += (Main.npc[(int)Owner].GetTargetData().Center.X - Projectile.Center.X) * 0.0002f;
 
-                foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 30))
-                {
+                foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 30)) {
                     otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.15f;
                     Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.15f;
                 }
@@ -99,8 +93,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             else if (Time < 40) {
                 Projectile.velocity *= 0.945f;
             }
-            else
-            {
+            else {
                 Projectile.scale = Utils.GetLerpValue(30, 100, Projectile.Distance(Main.npc[(int)Owner].Center), true);
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.07f, 0.15f * Utils.GetLerpValue(50, 150, Time, true)).RotatedBy(0.015f * Projectile.direction);
             }

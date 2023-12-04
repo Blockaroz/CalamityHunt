@@ -1,17 +1,7 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Buffs;
+﻿using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Rarities;
-using CalamityHunt.Content.Projectiles.Weapons.Ranged;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -44,8 +34,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             Item.autoReuse = true;
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.value = Item.sellPrice(gold: 20);
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);

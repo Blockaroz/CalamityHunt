@@ -40,8 +40,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.noUseGraphic = true;
             Item.UseSound = SoundID.Item1;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -60,7 +59,7 @@ namespace CalamityHunt.Content.Items.Misc
                 CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                     particle.position = new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir);
                     particle.velocity = -Vector2.UnitY;
-                    particle.scale =1f;
+                    particle.scale = 1f;
                     particle.color = Color.White;
                     particle.colorData = new ColorOffsetData(true, Main.GlobalTimeWrappedHourly);
                 }));

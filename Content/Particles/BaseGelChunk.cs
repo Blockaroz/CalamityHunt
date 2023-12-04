@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalamityHunt.Common.Systems.Particles;
+﻿using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Terraria;
 

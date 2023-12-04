@@ -46,7 +46,7 @@ namespace CalamityHunt.Content.Tiles
             };
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.CoordinatePadding = 2;
-            
+
             TileObjectData.newTile.Origin = new Point16(3, 5);
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.addTile(Type);
@@ -54,8 +54,7 @@ namespace CalamityHunt.Content.Tiles
 
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            if (Framing.GetTileSafely(i, j).TileFrameX == 0 && Framing.GetTileSafely(i, j).TileFrameY == 0)
-            {
+            if (Framing.GetTileSafely(i, j).TileFrameX == 0 && Framing.GetTileSafely(i, j).TileFrameY == 0) {
                 //Actuate corners
                 Main.tile[i, j].Get<TileWallWireStateData>().IsActuated = true;
                 Main.tile[i + 5, j].Get<TileWallWireStateData>().IsActuated = true;
@@ -101,16 +100,14 @@ namespace CalamityHunt.Content.Tiles
         {
             bool halfBrick = Main.tile[tileX, tileY].IsHalfBlock;
             SlopeType slope = Main.tile[tileX, tileY].Slope;
-            if (Main.tile[tileX, tileY].TileType == Type)
-            {
+            if (Main.tile[tileX, tileY].TileType == Type) {
                 Main.tile[tileX, tileY].Get<TileWallWireStateData>().IsHalfBlock = false;
                 Main.tile[tileX, tileY].Get<TileWallWireStateData>().Slope = SlopeType.Solid;
             }
 
             orig(self, drawData, solidLayer, waterStyleOverride, screenPosition, screenOffset, tileX, tileY);
 
-            if (Main.tile[tileX, tileY].TileType == Type)
-            {
+            if (Main.tile[tileX, tileY].TileType == Type) {
                 Main.tile[tileX, tileY].Get<TileWallWireStateData>().IsHalfBlock = halfBrick;
                 Main.tile[tileX, tileY].Get<TileWallWireStateData>().Slope = slope;
             }

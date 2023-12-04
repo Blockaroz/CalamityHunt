@@ -1,9 +1,9 @@
-﻿using Terraria.GameContent.ItemDropRules;
-using Terraria;
+﻿using Terraria;
+using Terraria.GameContent.ItemDropRules;
 
 namespace CalamityHunt.Common.DropRules;
 
-public class DDIDropRule : IItemDropRuleCondition
+public class RemixWorldDropRule : IItemDropRuleCondition
 {
     bool IItemDropRuleCondition.CanDrop(DropAttemptInfo info) => Main.remixWorld;
 

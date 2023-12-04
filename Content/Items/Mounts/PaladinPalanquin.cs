@@ -1,7 +1,6 @@
 ﻿using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Mounts;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Mounts
@@ -19,8 +18,7 @@ namespace CalamityHunt.Content.Items.Mounts
             Item.useStyle = 1;
             Item.noMelee = true;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);

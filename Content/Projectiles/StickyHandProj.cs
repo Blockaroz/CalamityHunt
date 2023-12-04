@@ -1,14 +1,10 @@
-﻿using CalamityHunt.Common.Players;
+﻿using System;
+using System.Collections.Generic;
+using CalamityHunt.Common.Players;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Items.Misc;
-using Humanizer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Peripherals.RGB;
-using System;
-using System.Collections.Generic;
-using CalamityHunt.Common.Utilities;
-using CalamityHunt.Common;
 using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
@@ -16,7 +12,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Humanizer.In;
 
 namespace CalamityHunt.Content.Projectiles
 {
@@ -45,8 +40,7 @@ namespace CalamityHunt.Content.Projectiles
         {
             Player player = Main.player[Projectile.owner];
 
-            if (player.dead || player.CCed)
-            {
+            if (player.dead || player.CCed) {
                 Projectile.Kill();
                 return false;
             }
@@ -59,12 +53,10 @@ namespace CalamityHunt.Content.Projectiles
             rope.EndPos = Projectile.Center;
             rope.Update();
 
-            if (Main.myPlayer == Projectile.owner)
-            {
+            if (Main.myPlayer == Projectile.owner) {
                 int x = (int)(Projectile.Center.X / 16f);
                 int y = (int)(Projectile.Center.Y / 16f);
-                if (x > 0 && y > 0 && x < Main.maxTilesX && y < Main.maxTilesY && !Main.tile[x, y].IsActuated && TileID.Sets.CrackedBricks[Main.tile[x, y].TileType] && Main.rand.NextBool(16))
-                {
+                if (x > 0 && y > 0 && x < Main.maxTilesX && y < Main.maxTilesY && !Main.tile[x, y].IsActuated && TileID.Sets.CrackedBricks[Main.tile[x, y].TileType] && Main.rand.NextBool(16)) {
                     WorldGen.KillTile(x, y);
                     if (Main.netMode != NetmodeID.SinglePlayer)
                         NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 20, x, y);
@@ -80,12 +72,10 @@ namespace CalamityHunt.Content.Projectiles
             if (distance > 2500)
                 Projectile.Kill();
 
-            if (Projectile.ai[0] == 0f)
-            {
+            if (Projectile.ai[0] == 0f) {
                 Projectile.extraUpdates = 2;
 
-                if (distance > GrappleRange())
-                {
+                if (distance > GrappleRange()) {
                     Projectile.ai[0] = 1f;
                     Projectile.ai[1] = 0f;
                 }
@@ -98,8 +88,7 @@ namespace CalamityHunt.Content.Projectiles
                 GrappleTile();
 
             }
-            else if (Projectile.ai[0] == 1f)
-            {
+            else if (Projectile.ai[0] == 1f) {
                 Projectile.frame = 0;
                 Projectile.extraUpdates = 4;
 
@@ -110,10 +99,8 @@ namespace CalamityHunt.Content.Projectiles
                 GrappleRetreatSpeed(Main.player[Projectile.owner], ref retreatSpeed);
                 Projectile.velocity = Projectile.DirectionTo(player.MountedCenter) * retreatSpeed * (0.1f + MathF.Pow(Utils.GetLerpValue(0, 70, Projectile.ai[1], true), 4f));
             }
-            else if (Projectile.ai[0] == 2f)
-            {
-                if (distance > GrappleRange() * 2f)
-                {
+            else if (Projectile.ai[0] == 2f) {
+                if (distance > GrappleRange() * 2f) {
                     Projectile.ai[0] = 1f;
                     Projectile.ai[1] = 0f;
                 }
@@ -128,8 +115,7 @@ namespace CalamityHunt.Content.Projectiles
                 player.GetModPlayer<MovementModifyPlayer>().stickyHand = true;
 
                 float factor = 0.2f;
-                if (player.controlHook)
-                {
+                if (player.controlHook) {
                     factor = 0.33f;
                     player.velocity = Vector2.Lerp(player.velocity, player.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * (player.velocity.Length() + 0.01f), 0.01f);
                 }
@@ -139,8 +125,7 @@ namespace CalamityHunt.Content.Projectiles
                 if (player.velocity.Length() > 31f)
                     player.velocity *= 0.9f;
 
-                if (distance < 96f && !player.controlHook)
-                {
+                if (distance < 96f && !player.controlHook) {
                     Projectile.ai[0] = 1f;
                     Projectile.ai[1] = 0f;
                 }
@@ -176,10 +161,8 @@ namespace CalamityHunt.Content.Projectiles
 
             Player player = Main.player[Projectile.owner];
             Vector2 tileWorldCoordinates = default;
-            for (int l = xLeftLimit; l < xRightLimit; l++)
-            {
-                for (int m = yTopLimit; m < yBottomLimit; m++)
-                {
+            for (int l = xLeftLimit; l < xRightLimit; l++) {
+                for (int m = yTopLimit; m < yBottomLimit; m++) {
                     if (Main.tile[l, m] == null)
                         Main.tile[l, m].ClearEverything();
 
@@ -201,10 +184,8 @@ namespace CalamityHunt.Content.Projectiles
 
                     NumGrappleHooks(player, ref maxGrappleCount);
 
-                    for (int proj = 0; proj < Main.maxProjectiles; proj++)
-                    {
-                        if (Main.projectile[proj].active && Main.projectile[proj].owner == Projectile.owner && Main.projectile[proj].type == ModContent.ProjectileType<StickyHandProj>())
-                        {
+                    for (int proj = 0; proj < Main.maxProjectiles; proj++) {
+                        if (Main.projectile[proj].active && Main.projectile[proj].owner == Projectile.owner && Main.projectile[proj].type == ModContent.ProjectileType<StickyHandProj>()) {
                             if (Main.projectile[proj].whoAmI != Projectile.whoAmI)
                                 projID = proj;
 
@@ -233,8 +214,7 @@ namespace CalamityHunt.Content.Projectiles
                     break;
                 }
 
-                if (Projectile.ai[0] == 2f)
-                {
+                if (Projectile.ai[0] == 2f) {
                     Projectile.ai[1] = 0f;
                     break;
                 }
@@ -244,8 +224,7 @@ namespace CalamityHunt.Content.Projectiles
         public override bool? CanUseGrapple(Player player)
         {
             int hooksOut = 0;
-            for (int l = 0; l < Main.maxProjectiles; l++)
-            {
+            for (int l = 0; l < Main.maxProjectiles; l++) {
                 if (Main.projectile[l].active && Main.projectile[l].owner == Main.myPlayer && Main.projectile[l].type == Projectile.type)
                     hooksOut++;
             }
@@ -303,8 +282,7 @@ namespace CalamityHunt.Content.Projectiles
         {
             Player player = Main.player[Projectile.owner];
 
-            if (rope != null)
-            {
+            if (rope != null) {
                 List<Vector2> points = rope.GetPoints();
                 points.Add(Projectile.Center);
                 BezierCurve curve = new BezierCurve(points);
@@ -320,8 +298,7 @@ namespace CalamityHunt.Content.Projectiles
 
                 Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 120);
 
-                for (int i = 0; i < points.Count - 1; i++)
-                {
+                for (int i = 0; i < points.Count - 1; i++) {
                     float rotation = points[i].AngleTo(points[i + 1]);
                     float thinning = 1f - MathF.Sin((float)i / points.Count * MathHelper.Pi) * 0.6f * Utils.GetLerpValue(0, 400, Projectile.Distance(player.MountedCenter) * 0.9f, true);
                     Vector2 stretch = new Vector2(Projectile.scale * thinning, points[i].Distance(points[i + 1]) / (chainTexture.Height() - 4));

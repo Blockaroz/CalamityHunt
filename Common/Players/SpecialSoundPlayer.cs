@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.Audio;
-using Terraria;
-using Terraria.ModLoader;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Items.Weapons.Ranged;
 using Microsoft.Xna.Framework;
-using CalamityHunt.Common.Utilities;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Players;
 

@@ -1,13 +1,9 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
+﻿using System.Collections.Generic;
+using CalamityHunt.Common.Utilities;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -38,9 +34,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Dust light = Dust.NewDustPerfect(points[points.Count - 3] + Main.rand.NextVector2Circular(12, 12), DustID.AncientLight, Projectile.velocity * Main.rand.NextFloat(5f) + Main.rand.NextVector2Circular(12, 12), 0, glowColor, scale * (1f + Main.rand.NextFloat()));
             light.noGravity = true;
             light.noLightEmittence = true;
-                      
-            for (int i = 0; i < 2; i++)
-            {
+
+            for (int i = 0; i < 2; i++) {
                 Dust dark = Dust.NewDustPerfect(points[points.Count - 3] + Main.rand.NextVector2Circular(12, 12), DustID.TintableDust, Projectile.velocity * Main.rand.NextFloat(5f) + Main.rand.NextVector2Circular(7, 7), 50, Color.Black, scale * (1f + Main.rand.NextFloat()));
                 dark.noGravity = true;
             }
@@ -65,8 +60,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             Vector2 origin = new Vector2(frame.Width * 0.5f, 2);
 
             Vector2 drawPosition = points[0];
-            for (int i = 0; i < points.Count - 2; i++)
-            {
+            for (int i = 0; i < points.Count - 2; i++) {
                 Vector2 change = points[i + 1] - points[i];
 
                 float rotation = change.ToRotation() - MathHelper.PiOver2;
@@ -89,16 +83,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D glow = ModContent.Request<Texture2D>(Texture + "Glow").Value;
-            SpriteEffects spriteEffects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;       
+            SpriteEffects spriteEffects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Vector2 drawPosition = points[0];
 
-            for (int i = 0; i < points.Count - 1; i++)
-            {
+            for (int i = 0; i < points.Count - 1; i++) {
                 int frameY = 0;
                 float scale = 0.6f + Utils.GetLerpValue(0, points.Count, i, true) * 0.8f;
 
-                if (i == points.Count - 2)
-                {
+                if (i == points.Count - 2) {
                     frameY = 4;
 
                     Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);

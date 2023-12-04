@@ -1,19 +1,14 @@
-﻿using CalamityHunt.Content.Items.Rarities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
+﻿using System;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
+using CalamityHunt.Content.Items.Weapons.Magic;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using CalamityHunt.Content.Items.Weapons.Magic;
-using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Particles;
-using CalamityHunt.Common.Utilities;
+using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 {
@@ -39,8 +34,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         public override void AI()
         {
             int target = Projectile.FindTargetWithLineOfSight(1000);
-            if (target >= 0)
-            {
+            if (target >= 0) {
                 if (Time % 8 == 4 && Projectile.Distance(Main.npc[target].Center) < 400) {
                     CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
                         particle.position = Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(16, 16);
@@ -65,8 +59,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         private void MagicParticles()
         {
-            for (int i = 0; i < 2; i++)
-            {
+            for (int i = 0; i < 2; i++) {
                 Color glowColor = new GradientColor(CrystalGauntlets.SpectralColor, 0.1f, 0.1f).ValueAt(Time * 0.5f);
                 Vector2 off = new Vector2(6f + MathF.Sin(Time * 0.5f - i * 0.02f) * 6f, 0).RotatedBy((Time - i / 2f) * 0.15f * Projectile.direction) * Projectile.scale;
                 Dust mainGlow = Dust.NewDustPerfect(Projectile.Center + off, DustID.PortalBoltTrail, off.SafeNormalize(Vector2.Zero) * 1.5f * MathF.Pow(Projectile.scale, 1.5f) + Projectile.velocity, 0, glowColor, 1.5f * Projectile.scale);
@@ -74,8 +67,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                 mainGlow.noLightEmittence = true;
             }
 
-            for (int i = 0; i < 3; i++)
-            {
+            for (int i = 0; i < 3; i++) {
                 Color glowColor = Main.hslToRgb((Time * 0.03f + i * 0.1f) % 1f, 0.5f, 0.5f, 128);
                 Vector2 off = new Vector2(15 + MathF.Sin(Time * 0.1f - i * MathHelper.TwoPi / 3f) * 12f, 0).RotatedBy((Time * 0.14f + i * MathHelper.PiOver2 / 5f) * (i % 2 == 1 ? (-1f) : 1f) * Projectile.direction) * Projectile.scale;
                 Dust mainGlow = Dust.NewDustPerfect(Projectile.Center + off, DustID.RainbowRod, off.SafeNormalize(Vector2.Zero) * MathF.Pow(Projectile.scale, 1.5f) + Projectile.velocity, 0, glowColor, 1.1f * Projectile.scale);

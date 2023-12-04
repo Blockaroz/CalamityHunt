@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
+﻿using CalamityHunt.Common.Systems;
+using CalamityHunt.Content.Items.Misc;
+using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
-using Terraria.Localization;
-using CalamityHunt.Content.Items.Placeable;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria.ID;
-using Terraria.GameContent.ObjectInteractions;
-using CalamityHunt.Common.Systems;
-using CalamityHunt.Common.Graphics.Skies;
-using Terraria.Enums;
+using Terraria;
 using Terraria.Audio;
 using Terraria.Chat;
-using CalamityHunt.Content.Items.Misc;
-using static Terraria.ModLoader.PlayerDrawLayer;
-using CalamityHunt.Content.Projectiles;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent.ObjectInteractions;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace CalamityHunt.Content.Tiles
 {

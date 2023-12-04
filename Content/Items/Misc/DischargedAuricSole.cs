@@ -12,8 +12,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.width = 30;
             Item.height = 28;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);

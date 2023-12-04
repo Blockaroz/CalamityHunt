@@ -1,10 +1,7 @@
-﻿using CalamityHunt.Content.Bosses.Goozma.Projectiles;
-using Terraria.ID;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
@@ -13,13 +10,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public static Vector2 FindSmashSpot(this NPC NPC, Vector2 target)
         {
             Vector2 pos = target;
-            for (int j = 0; j < 36; j++)
-            {
+            for (int j = 0; j < 36; j++) {
                 Point world = new Point(pos.ToTileCoordinates().X, pos.ToTileCoordinates().Y + j);
-                if (WorldGen.InWorld(world.X, world.Y))
-                {
-                    if (WorldGen.SolidTileAllowTopSlope(world.X, world.Y + j))
-                    {
+                if (WorldGen.InWorld(world.X, world.Y)) {
+                    if (WorldGen.SolidTileAllowTopSlope(world.X, world.Y + j)) {
                         pos.Y = (int)(pos.Y / 16f) * 16f + j * 16 - NPC.height / 2f - 8;
                         break;
                     }
@@ -31,13 +25,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public static Vector2 FindSmashSpot(this Projectile Projectile, Vector2 target)
         {
             Vector2 pos = target;
-            for (int j = 0; j < 32; j++)
-            {
+            for (int j = 0; j < 32; j++) {
                 Point world = new Point(pos.ToTileCoordinates().X, pos.ToTileCoordinates().Y + j);
-                if (WorldGen.InWorld(world.X, world.Y))
-                {
-                    if (WorldGen.SolidTileAllowTopSlope(world.X, world.Y + j))
-                    {
+                if (WorldGen.InWorld(world.X, world.Y)) {
+                    if (WorldGen.SolidTileAllowTopSlope(world.X, world.Y + j)) {
                         pos.Y = (int)(pos.Y / 16f) * 16f + j * 16 - Projectile.height / 2f + 16;
                         break;
                     }
@@ -54,8 +45,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             new Color(GoozColorsVector3[6]),
             new Color(GoozColorsVector3[7]),
         };
-                
-        
+
+
         public static Color[] GoozOilColors => new Color[]
         {
             new Color(GoozmaColorUtils.Oil[3]),
@@ -70,8 +61,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
             get
             {
                 if (Main.drunkWorld)
-                    return ColorsForFunnyWorlds(GoozmaColorType);                
-                
+                    return ColorsForFunnyWorlds(GoozmaColorType);
+
                 if ((Main.getGoodWorld && Main.masterMode) || Main.zenithWorld)
                     return GoozmaColorUtils.Nuclear;
 
@@ -86,13 +77,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
         }
 
         public static int GoozmaColorType;
-        
+
         private static Vector3[] ColorsForFunnyWorlds(int type)
         {
-            switch (GoozmaColorType)
-            {
+            switch (GoozmaColorType) {
                 default:
-                    return GoozmaColorUtils.Oil;                
+                    return GoozmaColorUtils.Oil;
                 case 0:
                     return GoozmaColorUtils.Nuclear;
                 case 1:

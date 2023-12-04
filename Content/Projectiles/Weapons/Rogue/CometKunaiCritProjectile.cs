@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -22,8 +18,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Throwing;
             Projectile.timeLeft = 100;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 DamageClass d;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
@@ -38,16 +33,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
         public override void AI()
         {
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < 5; i++) {
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
                 Dust d = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity / 5f * i, DustID.SparkForLightDisc, Vector2.Zero, 0, randomColor, 1.5f);
                 d.noGravity = true;
             }
 
-            if (Projectile.ai[0] == 0)
-            {
+            if (Projectile.ai[0] == 0) {
                 Projectile.ai[0]++;
                 oldVelocity = Projectile.velocity;
                 Projectile.rotation = Main.rand.NextFloat();
@@ -64,8 +57,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
         public override void OnKill(int timeLeft)
         {
-            for (int i = 0; i < 15; i++)
-            {
+            for (int i = 0; i < 15; i++) {
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
                 Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(10), 20, 20, DustID.SparkForLightDisc, 0, 0, 0, randomColor);

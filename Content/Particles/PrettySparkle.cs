@@ -2,9 +2,7 @@
 using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles;
 
@@ -20,7 +18,7 @@ public class PrettySparkle : Particle
     }
 
     public override void Update()
-    {        
+    {
         velocity *= 0.95f;
         time++;
 

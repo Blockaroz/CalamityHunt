@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
 using CalamityHunt.Content.Projectiles.Weapons.Ranged;

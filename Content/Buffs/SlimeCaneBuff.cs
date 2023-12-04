@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using CalamityHunt.Common.Players;
-using CalamityHunt.Content.Projectiles;
-using Microsoft.Xna.Framework;
+﻿using CalamityHunt.Common.Players;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
-using Mono.Cecil;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.DataStructures;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Buffs
 {

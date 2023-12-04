@@ -1,15 +1,13 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using CalamityHunt.Common.Utilities;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles;
-  
+
 public class ChromaticGooBurst : Particle
 {
     public ColorOffsetData colorData;
@@ -21,7 +19,7 @@ public class ChromaticGooBurst : Particle
     private int frameCounter;
 
     public override void OnSpawn()
-    {            
+    {
         scale *= Main.rand.NextFloat(0.9f, 1.1f);
         style = Main.rand.Next(2);
         rotation = velocity.ToRotation() + MathHelper.PiOver2;

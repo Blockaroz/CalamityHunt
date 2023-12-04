@@ -1,5 +1,6 @@
 ﻿using CalamityHunt.Common.Systems;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.DropRules;
@@ -10,5 +11,5 @@ public class GoozmaDownedDropRule : IItemDropRuleCondition
 
     bool IItemDropRuleCondition.CanShowItemDropInUI() => true;
 
-    string IProvideItemConditionDescription.GetConditionDescription() => "Drops only on the first kill";
+    string IProvideItemConditionDescription.GetConditionDescription() => Language.GetOrRegister($"{nameof(CalamityHunt)}.Common.DropOnFirstKill").Value;
 }

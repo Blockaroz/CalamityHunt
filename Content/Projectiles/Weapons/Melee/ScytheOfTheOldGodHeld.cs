@@ -1,21 +1,19 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.IO;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.IO;
-using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 {

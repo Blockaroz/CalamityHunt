@@ -21,8 +21,7 @@ namespace CalamityHunt.Content.Items.Placeable
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
                     .AddIngredient(ItemID.MusicBox)
@@ -30,8 +29,7 @@ namespace CalamityHunt.Content.Items.Placeable
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
-            else 
-            {
+            else {
                 CreateRecipe()
                     .AddIngredient(ItemID.MusicBox)
                     .AddIngredient<ChromaticMass>(15)

@@ -1,15 +1,9 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
-using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -31,8 +25,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.timeLeft = 240;
             Projectile.extraUpdates = 1;
             Projectile.DamageType = DamageClass.Throwing;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 DamageClass d;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
@@ -47,8 +40,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
 
             int target = Projectile.FindTargetWithLineOfSight();
-            if (target > -1)
-            {
+            if (target > -1) {
                 Projectile.velocity += Projectile.DirectionTo(Main.npc[target].Center) * 2f;
                 Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Projectile.oldVelocity.Length();
             }
@@ -61,8 +53,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Dust dust = Dust.NewDustPerfect(Projectile.Center - Main.rand.NextVector2Circular(30, 30) * Projectile.scale, DustID.Sand, Projectile.velocity * Main.rand.NextFloat(), 0, Color.Black, Main.rand.NextFloat());
             dust.noGravity = true;
 
-            if (Projectile.ai[1] == 1)
-            {
+            if (Projectile.ai[1] == 1) {
                 Projectile.penetrate = -1;
                 Projectile.scale = Utils.GetLerpValue(240, 200, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 120, Projectile.timeLeft, true) * 5;
                 Projectile.Resize((int)(60 * Projectile.scale), (int)(60 * Projectile.scale));
@@ -75,7 +66,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if (MathF.Abs(oldVelocity.X - Projectile.velocity.X) > 0)
-                Projectile.velocity.X = -oldVelocity.X;            
+                Projectile.velocity.X = -oldVelocity.X;
             if (MathF.Abs(oldVelocity.Y - Projectile.velocity.Y) > 0)
                 Projectile.velocity.Y = -oldVelocity.Y;
 

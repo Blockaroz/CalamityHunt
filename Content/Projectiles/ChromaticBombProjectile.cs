@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Items.Misc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,8 +33,7 @@ namespace CalamityHunt.Content.Projectiles
 
             Projectile.rotation += 0.2f;
 
-            if (Projectile.owner == Main.myPlayer)
-            {
+            if (Projectile.owner == Main.myPlayer) {
                 DynamoRodProjectile.ExplodeandDestroyTiles(Projectile, 6, false, new List<int>() { }, new List<int>() { });
             }
         }

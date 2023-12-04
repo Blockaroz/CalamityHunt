@@ -1,4 +1,5 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
+﻿using CalamityHunt.Common.Utilities;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
@@ -6,17 +7,10 @@ using CalamityHunt.Content.Projectiles.Weapons.Summoner;
 using CalamityHunt.Content.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalamityHunt.Common;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Items.Weapons.Summoner
 {
@@ -33,8 +27,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.channel = true;
             Item.value = Item.sellPrice(gold: 20);
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -44,8 +37,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
 
         public override bool CanUseItem(Player player)
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Item.autoReuse = true;
             }
             return base.CanUseItem(player);
@@ -73,8 +65,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CatalystMod"))
-            {
+            if (ModLoader.HasMod("CatalystMod")) {
                 Mod calamity = ModLoader.GetMod("CatalystMod");
                 Mod calamityfr = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
@@ -86,8 +77,7 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
                     .AddTile(calamityfr.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
-            else if (ModLoader.HasMod("CalamityMod"))
-            {
+            else if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
@@ -98,14 +88,13 @@ namespace CalamityHunt.Content.Items.Weapons.Summoner
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
-            else 
-            {
+            else {
                 CreateRecipe()
                     .AddIngredient(ItemID.RopeCoil, 5)
                     .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()
                     .Register();
             }
-	    }
+        }
     }
 }

@@ -63,7 +63,7 @@ public class AntiMassAccumulator : ModItem
                 .AddIngredient(calamitnt.Find<ModItem>("MetanovaBar").Type, 6)
                 .AddIngredient(calamity.Find<ModItem>("ExodiumCluster").Type, 30)
                 .AddIngredient(calamity.Find<ModItem>("MysteriousCircuitry").Type, 18)
-                .AddIngredient(calamity.Find<ModItem>("SuspiciousScrap").Type, 3) 
+                .AddIngredient(calamity.Find<ModItem>("SuspiciousScrap").Type, 3)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
         }

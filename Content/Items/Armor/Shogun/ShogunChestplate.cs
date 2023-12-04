@@ -1,5 +1,4 @@
-﻿using CalamityHunt.Common.Players;
-using CalamityHunt.Content.Items.Rarities;
+﻿using CalamityHunt.Content.Items.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -34,8 +33,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             Item.defense = 50;
             Item.lifeRegen = 3;
 
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -53,8 +51,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
 
         public override bool WingUpdate(Player player, bool inUse)
         {
-            if (inUse)
-            {
+            if (inUse) {
                 Dust d = Dust.NewDustDirect(player.Center - new Vector2(30), 60, 60, DustID.Sand, 0, 0, 100, Color.Black, 1f);
                 d.noGravity = true;
                 d.shader = GameShaders.Armor.GetSecondaryShader(player.cWings, player);
@@ -69,7 +66,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             ascentWhenRising = 0.1f;
             maxCanAscendMultiplier = 1f;
             maxAscentMultiplier = 4f;
-            constantAscend = 0.2f; 
+            constantAscend = 0.2f;
         }
 
         public override void HorizontalWingSpeeds(Player player, ref float speed, ref float acceleration)
@@ -80,10 +77,8 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
 
         public override void EquipFrameEffects(Player player, EquipType type)
         {
-            if (player.equippedWings != null)
-            {
-                if (player.equippedWings.wingSlot == player.wingsLogic)
-                {
+            if (player.equippedWings != null) {
+                if (player.equippedWings.wingSlot == player.wingsLogic) {
                     player.wings = Item.wingSlot;
                     player.cWings = player.cBody;
                 }
@@ -92,8 +87,7 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
             if (player.wingsLogic == Item.wingSlot && player.wings <= 0)
                 player.wings = Item.wingSlot;
 
-            if (player.body == Item.bodySlot)
-            {
+            if (player.body == Item.bodySlot) {
                 player.waist = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Waist);
                 player.cWaist = player.cBody;
             }

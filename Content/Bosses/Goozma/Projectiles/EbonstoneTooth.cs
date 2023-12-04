@@ -1,8 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -65,17 +64,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Rectangle frame = texture.Frame(4, 1, (int)Projectile.localAI[0], 0);
 
             SpriteEffects flip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            
+
             Color glowColor = new Color(100, 60, 255, 0);
 
-            if (Time < 10)
-            {
+            if (Time < 10) {
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, new Color(0, 0, 0, 60), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(20, 40, Projectile.localAI[1], true) * 0.8f, flip, 0);
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, glowColor * Utils.GetLerpValue(20, 80, Projectile.localAI[1], true), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(20, 40, Projectile.localAI[1], true), flip, 0);
             }
 
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
                 Main.EntitySpriteDraw(glow.Value, Projectile.Center + off - Main.screenPosition, frame, glowColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);
             }
@@ -84,7 +81,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, glowColor * sparklePower, Projectile.rotation, sparkle.Size() * new Vector2(0.5f, 0.66f), new Vector2(2f, 5f) * Projectile.scale, 0, 0);
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Lighting.GetColor(Projectile.Top.ToTileCoordinates()), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);
-            
+
             return false;
         }
     }

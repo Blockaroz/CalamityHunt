@@ -1,7 +1,6 @@
 ﻿using System;
 using CalamityHunt.Common.Players;
 using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,7 +26,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public override void SetDefaults()
         {
             Projectile.width = 40;
-            Projectile.height = 30; 
+            Projectile.height = 30;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
@@ -55,8 +54,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             else
                 Projectile.timeLeft = 2;
 
-            if (Projectile.Distance(HomePosition) > 1600)
-            {
+            if (Projectile.Distance(HomePosition) > 1600) {
                 State = (int)SlimeMinionState.Idle;
                 Projectile.Center = HomePosition;
                 Projectile.tileCollide = false;
@@ -69,8 +67,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             int target = -1;
             Projectile.Minion_FindTargetInRange(1200, ref target, false);
             bool hasTarget = false;
-            if (target > -1)
-            {
+            if (target > -1) {
                 hasTarget = true;
                 if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile))
                     Attack(target);
@@ -80,8 +77,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (!hasTarget)
                 Idle();
 
-            if (iAmInAir && Main.rand.NextBool() && jumpTime > 0)
-            {
+            if (iAmInAir && Main.rand.NextBool() && jumpTime > 0) {
                 Color color = new Color(255, 150, 150, 60);
                 Dust sparkle = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(13, 12), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(1, 1), 0, color, 0.2f + Main.rand.NextFloat());
                 sparkle.noGravity = Main.rand.NextBool(3);
@@ -109,8 +105,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 iAmInAir = true;
 
             bool tooFar = Projectile.Distance(HomePosition) > 900 && State != (int)SlimeMinionState.Attacking;
-            if (tooFar)
-            {
+            if (tooFar) {
                 State = (int)SlimeMinionState.IdleMoving;
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * Projectile.Distance(HomePosition) * 0.05f, 0.1f);
                 Projectile.rotation = Projectile.velocity.X * 0.02f;
@@ -122,8 +117,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             Projectile.velocity.X *= 0.6f;
 
-            if (Math.Abs(Projectile.Center.X - HomePosition.X) > 4 || InAir)
-            {
+            if (Math.Abs(Projectile.Center.X - HomePosition.X) > 4 || InAir) {
                 State = (int)SlimeMinionState.IdleMoving;
                 Projectile.velocity.X = (HomePosition.X - Projectile.Center.X) * 0.07f;
             }
@@ -131,16 +125,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (Projectile.Bottom.Y > HomePosition.Y + 30 && InAir && Projectile.velocity.Y >= 0)
                 Jump(-5 - Math.Max(Math.Abs(HomePosition.X - Projectile.Center.X) * 0.01f + (iAmInAir ? Math.Abs(HomePosition.Y - Projectile.Center.Y) * 0.026f : 0) + 0.5f, 0), iAmInAir);
 
-            if (State == (int)SlimeMinionState.IdleMoving)
-            {
-                if (++Projectile.frameCounter >= 8)
-                {
+            if (State == (int)SlimeMinionState.IdleMoving) {
+                if (++Projectile.frameCounter >= 8) {
                     Projectile.frameCounter = 0;
                     Projectile.frame = Math.Clamp(Projectile.frame + 1, 0, 5);
                 }
             }
-            else
-            {
+            else {
                 Projectile.frameCounter = 0;
                 Projectile.frame = 0;
             }
@@ -161,12 +152,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (Projectile.Distance(target.Center) < 250)
                 State = (int)SlimeMinionState.Attacking;
 
-            if (Projectile.Distance(target.Center) > 400 || State == (int)SlimeMinionState.IdleMoving)
-            {
+            if (Projectile.Distance(target.Center) > 400 || State == (int)SlimeMinionState.IdleMoving) {
                 State = (int)SlimeMinionState.IdleMoving;
 
-                if (++Projectile.frameCounter >= 7)
-                {
+                if (++Projectile.frameCounter >= 7) {
                     Projectile.frameCounter = 0;
                     Projectile.frame = Math.Clamp(Projectile.frame + 1, 0, 5);
                 }
@@ -177,15 +166,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, State == (int)SlimeMinionState.Attacking ? 0f : (target.Center.X - Projectile.Center.X) * 0.03f, 0.1f);
 
-            if (State == (int)SlimeMinionState.Attacking)
-            {
+            if (State == (int)SlimeMinionState.Attacking) {
                 Time++;
                 Projectile.tileCollide = false;
 
-                if (Time < 0)
-                {
-                    if (++Projectile.frameCounter >= 8)
-                    {
+                if (Time < 0) {
+                    if (++Projectile.frameCounter >= 8) {
                         Projectile.frameCounter = 0;
                         Projectile.frame = Math.Clamp(Projectile.frame + 1, 9, 10);
                     }
@@ -196,8 +182,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     newVel.X *= 0.1f;
                     Projectile.velocity += newVel;
                 }
-                else
-                {
+                else {
                     Projectile.damage = 2;
                     Projectile.tileCollide = false;
                     Projectile.velocity = Projectile.DirectionTo(target.Center - new Vector2(0, 10)) * (Time + 0.1f) * Projectile.Distance(target.Center) * 0.02f;
@@ -206,15 +191,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     if (Time == 0)
                         Projectile.frame = 5;
 
-                    if (++Projectile.frameCounter >= 4)
-                    {
+                    if (++Projectile.frameCounter >= 4) {
                         Projectile.frameCounter = 0;
                         Projectile.frame = Math.Clamp(Projectile.frame + 1, 6, 8);
                     }
                 }
             }
-            else
-            {
+            else {
                 State = (int)SlimeMinionState.IdleMoving;
                 Time = 0;
             }
@@ -228,8 +211,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (State == (int)SlimeMinionState.Attacking)
-            {
+            if (State == (int)SlimeMinionState.Attacking) {
                 Projectile.frame = 9;
                 Projectile.velocity.Y = -Math.Sign(Projectile.velocity.Y) * Math.Max(Math.Abs(Projectile.velocity.Y), 8) * Main.rand.NextFloat(0.6f, 1.1f);
                 Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * Math.Max(Math.Abs(Projectile.velocity.X), 8) * Main.rand.NextFloat(0.7f, 3f);
@@ -242,8 +224,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (State == (int)SlimeMinionState.IdleMoving)
-            {
+            if (State == (int)SlimeMinionState.IdleMoving) {
                 if (Projectile.velocity.Y >= 0)
                     Jump(-5 - Math.Max(Math.Abs(HomePosition.X - Projectile.Center.X) * 0.01f + (iAmInAir ? Math.Abs(HomePosition.Y - Projectile.Center.Y) * 0.026f : 0) + 0.5f, 0), iAmInAir);
             }
@@ -254,10 +235,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Jump(float height, bool air)
         {
             jumpTime = 24;
-            if (air)
-            {
+            if (air) {
                 Color color = new Color(255, 150, 150, 0);
-               
+
                 CalamityHunt.particles.Add(Particle.Create<MicroShockwave>(particle => {
                     particle.position = Projectile.Bottom;
                     particle.velocity = Vector2.Zero;
@@ -267,8 +247,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     particle.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
                 }));
 
-                for (int i = 0; i < Main.rand.Next(3, 7); i++)
-                {
+                for (int i = 0; i < Main.rand.Next(3, 7); i++) {
                     Dust sparkle = Dust.NewDustPerfect(Projectile.Bottom + Main.rand.NextVector2Circular(9, 4), DustID.SparkForLightDisc, Main.rand.NextVector2Circular(3, 1) - Vector2.UnitY * (i + 1) * 0.7f, 0, color, 1f + Main.rand.NextFloat());
                     sparkle.noGravity = Main.rand.NextBool(3);
                     sparkle.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);

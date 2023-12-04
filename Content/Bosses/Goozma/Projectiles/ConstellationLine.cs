@@ -1,14 +1,9 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Utilities;
-using System;
-using System.Linq;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -72,8 +67,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > 95 && Time < 180)
-            {
+            if (Time > 95 && Time < 180) {
                 float point = 0f;
                 return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, 90, ref point);
             }
@@ -91,8 +85,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Color lineColor = Color.Lerp(new Color(80, 50, 35, 0), new Color(255, 215, 180, 0), Utils.GetLerpValue(55, 65, Time, true) * 0.6f) * MathHelper.SmoothStep(0.15f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.1f, 1f, Utils.GetLerpValue(80, 95, Time, true)) * power;
             Color lineGlowColor = new Color(80, 50, 35, 0) * power;
             Color bloomColor = new Color(30, 14, 8, 0) * Utils.GetLerpValue(0, 20, Time, true) * Utils.GetLerpValue(180, 175, Time, true);
-            if (Time > 1)
-            {
+            if (Time > 1) {
                 float wobble = 1f + (float)Math.Sin((Projectile.localAI[0] * 0.5f) % MathHelper.TwoPi) * 0.2f;
 
                 //double end
@@ -100,10 +93,10 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Vector2 glowDistance = new Vector2(wobble * 0.7f * (0.4f + Utils.GetLerpValue(70, 80, Time, true) * 0.6f), Projectile.Distance(Main.projectile[(int)End].Center) / glowHalf.Height);
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, half, lineGlowColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
                 Main.EntitySpriteDraw(texture, Main.projectile[(int)End].Center - Main.screenPosition, half, lineGlowColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * distance, 0, 0);
-                
+
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, half, lineColor, Projectile.rotation + MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * new Vector2(0.33f, 1f) * distance, 0, 0);
                 Main.EntitySpriteDraw(texture, Main.projectile[(int)End].Center - Main.screenPosition, half, lineColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), Projectile.scale * new Vector2(0.33f, 2f) * distance, 0, 0);
-                
+
                 Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glowHalf, bloomColor * wobble, Projectile.rotation + MathHelper.PiOver2, glowHalf.Size() * new Vector2(0.5f, 1f), Projectile.scale * glowDistance, 0, 0);
                 Main.EntitySpriteDraw(glow, Main.projectile[(int)End].Center - Main.screenPosition, glowHalf, bloomColor * wobble, Projectile.rotation - MathHelper.PiOver2, glowHalf.Size() * new Vector2(0.5f, 1f), Projectile.scale * glowDistance, 0, 0);
 

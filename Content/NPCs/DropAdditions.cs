@@ -26,12 +26,12 @@ namespace CalamityHunt.Content.NPCs
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
             if (npc.type == NPCID.QueenSlimeBoss) {
-                npcLoot.Add(ItemDropRule.ByCondition(new DDIDropRule(), ModContent.ItemType<SludgeFocus>()));
+                npcLoot.Add(ItemDropRule.ByCondition(new RemixWorldDropRule(), ModContent.ItemType<SludgeFocus>()));
             }
             if (ModLoader.HasMod("CalamityMod")) {
                 var cal = ModLoader.GetMod("CalamityMod");
                 if (npc.type == cal.Find<ModNPC>("Yharon").Type) {
-                    npcLoot.Add(ItemDropRule.ByCondition(new DraconicDropRule(), ModContent.ItemType<IOUASoul>()));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<IOUASoul>()));
                 }
             }
         }

@@ -142,9 +142,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.ByCondition(new ChromaticDropRule(), ModContent.ItemType<IOUASoul>()));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<IOUASoul>()));
             npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaLore>()));
-            npcLoot.Add(ItemDropRule.ByCondition(new ZenithDropRule(), ModContent.ItemType<Goozmaga>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new ZenithWorldDropRule(), ModContent.ItemType<Goozmaga>()));
 
             if (Main.rand.NextBool(20))
                 npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureBucket>()));
@@ -431,8 +431,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             for (int i = 0; i < 3; i++) {
                                 Vector2 inward = NPC.Center + Main.rand.NextVector2Circular(70, 70) + Main.rand.NextVector2CircularEdge(100 - Time, 100 - Time);
 
-                                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle =>
-                                {
+                                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                                     particle.position = inward;
                                     particle.velocity = inward.DirectionTo(NPC.Center) * Main.rand.NextFloat(3f);
                                     particle.scale = 1f;
@@ -447,8 +446,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                             for (int i = 0; i < 45; i++) {
                                 Vector2 outward = NPC.Center + Main.rand.NextVector2Circular(10, 10);
 
-                                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle =>
-                                {
+                                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                                     particle.position = outward;
                                     particle.velocity = outward.DirectionFrom(NPC.Center) * Main.rand.NextFloat(3f, 10f);
                                     particle.scale = Main.rand.NextFloat(1f, 2f);
@@ -845,8 +843,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                                 Vector2 position = Vector2.Lerp(NPC.position, NPC.oldPos[0], i / 24f) + NPC.Size * 0.5f;
 
                                                 //top
-                                                CalamityHunt.particlesBehindEntities.Add(Particle.Create<ChromaticEnergyDust>(particle =>
-                                                {
+                                                CalamityHunt.particlesBehindEntities.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                                                     particle.position = position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity;
                                                     particle.velocity = -NPC.velocity.RotatedBy((float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f);
                                                     particle.scale = 1.5f;
@@ -855,8 +852,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                                 }));
 
                                                 //bottom
-                                                CalamityHunt.particlesBehindEntities.Add(Particle.Create<ChromaticEnergyDust>(particle =>
-                                                {
+                                                CalamityHunt.particlesBehindEntities.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                                                     particle.position = position + Main.rand.NextVector2Circular(8, 8) + NPC.velocity;
                                                     particle.velocity = -NPC.velocity.RotatedBy(-(float)Math.Sin((Time - (i / 8f)) * 0.23f) * 0.8f);
                                                     particle.scale = 1.5f;
@@ -874,7 +870,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                                             NPC.velocity *= 0.7f;
                                         }
                                     }
-                                  
+
                                     SortedProjectileAttack(Target.Center, SortedProjectileAttackTypes.DrillDash);
                                 }
                             }
@@ -1185,6 +1181,8 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
                 case -22:
 
+                    //Test phase
+
                     NPC.dontTakeDamage = false;
                     NPC.velocity *= 0.5f;
 
@@ -1194,15 +1192,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     if (NPC.velocity.Length() > 4) {
                         rotate = true;
                         NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.4f);
-                    }
-                    else if (Main.rand.NextBool(20)) {
-                        CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {
-                            particle.velocity = Main.rand.NextVector2CircularEdge(1, 2);
-                            particle.position = NPC.Center + particle.velocity * Main.rand.NextFloat(4, 16) * NPC.scale;
-                            particle.scale = Main.rand.NextFloat(0.75f, 1.75f);
-                            particle.color = Color.White;
-                            particle.colorData = new ColorOffsetData(true, NPC.localAI[0] + Main.rand.NextFloat(0.2f, 0.5f));
-                        }));
                     }
 
                     break;
@@ -1255,8 +1244,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                     dust.noGravity = true;
                 }
                 if (Main.rand.NextBool(8)) {
-                    CalamityHunt.particlesBehindEntities.Add(Particle.Create<ChromaticEnergyDust>(particle =>
-                    {
+                    CalamityHunt.particlesBehindEntities.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                         particle.position = NPC.Center + Main.rand.NextVector2Circular(60, 80);
                         particle.velocity = Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f;
                         particle.scale = 1f;
@@ -1376,7 +1364,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                         particle.colorData = new ColorOffsetData(true, NPC.localAI[0]);
                     }));
                 }
-            }        
+            }
         }
 
         public override void OnKill()
@@ -1395,6 +1383,10 @@ namespace CalamityHunt.Content.Bosses.Goozma
             for (int i = 0; i < Main.musicFade.Length; i++) {
                 Main.musicFade[i] = 0.2f;
             }
+
+            goozmaWarble.StopSound();
+            goozmaShoot.StopSound();
+            goozmaSimmer.StopSound();
 
             SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Pop, NPC.Center);
             SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Explode.WithPitchOffset(0.2f).WithVolumeScale(0.9f), NPC.Center);
@@ -1506,13 +1498,14 @@ namespace CalamityHunt.Content.Bosses.Goozma
         public void HandleGoozmaWarbleSound()
         {
             float volumeScale = (Phase > 1 ? 0.9f : 0.4f);
-            if (Phase == 3)
+            if (Phase == 3) {
                 volumeScale *= Utils.GetLerpValue(140, 0, Time, true);
+            }
+
             goozmaWarbleVolume = MathHelper.Lerp(goozmaWarbleVolume, Math.Clamp(1f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, 0, 1) * NPC.scale * volumeScale + NPC.velocity.Length() * 0.2f, 0.1f);
             goozmaWarblePitch = MathHelper.Lerp(goozmaWarblePitch, Math.Clamp(NPC.velocity.Length() * 0.02f - Main.LocalPlayer.Distance(NPC.Center) * 0.0001f, -0.8f, 0.8f), 0.1f);
 
-            if (goozmaWarble == null)
-                goozmaWarble = new LoopingSound(AssetDirectory.Sounds.Goozma.WarbleLoop, new HuntOfTheOldGodsUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
+            goozmaWarble ??= new LoopingSound(AssetDirectory.Sounds.Goozma.WarbleLoop, new HuntOfTheOldGodsUtils.NPCAudioTracker(NPC).IsActiveAndInGame);
             goozmaWarble.PlaySound(() => NPC.Center, () => goozmaWarbleVolume, () => goozmaWarblePitch);
         }
 
@@ -1874,8 +1867,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public override void FindFrame(int frameHeight)
         {
-            if (NPC.IsABestiaryIconDummy)
+            if (NPC.IsABestiaryIconDummy) {
                 NPC.localAI[0]++;
+            }
 
             if (oldVel == null) {
                 oldVel = new Vector2[NPCID.Sets.TrailCacheLength[Type]];
@@ -1886,8 +1880,9 @@ namespace CalamityHunt.Content.Bosses.Goozma
             drawOffset = new Vector2((float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 2, (float)Math.Cos(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 3);
             float offsetWobble = (float)Math.Cos(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 0.07f;
 
-            if (!rotate)
+            if (!rotate) {
                 NPC.rotation = NPC.rotation.AngleLerp(Math.Clamp(drawVelocity.X * 0.012f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.2f);
+            }
 
             extraTilt = MathHelper.Lerp(extraTilt, Math.Clamp(-drawVelocity.X * 0.025f, -1f, 1f) - 0.01f * NPC.direction, 0.15f);
             headScale = MathHelper.Lerp(headScale, 1f, 0.05f);
@@ -1903,7 +1898,19 @@ namespace CalamityHunt.Content.Bosses.Goozma
             }
 
             rotate = false;
+
+            microTentacles ??= new Rope[5];
+            for (int i = 0; i < microTentacles.Length; i++) {
+                microTentacles[i] ??= new Rope(NPC.Center, 30, 15f, Vector2.UnitY * 0.01f, 0.1f, 10);
+                microTentacles[i].StartPos = NPC.Center;
+                microTentacles[i].gravity = Vector2.UnitY.RotatedBy(NPC.rotation) * 0.01f;
+                microTentacles[i].Update();
+            }
+
+            Phase = -22;
         }
+
+        private Rope[] microTentacles;
 
         private void FadeMusicOut(On_Main.orig_UpdateAudio orig, Main self)
         {

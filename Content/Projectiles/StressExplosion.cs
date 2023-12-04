@@ -1,17 +1,11 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Particles;
-using Humanizer;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.Linq;
-using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -37,13 +31,11 @@ namespace CalamityHunt.Content.Projectiles
         public override void AI()
         {
             Color gooColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).Value;
-            if (Time == 1 && Stressed == 0)
-            {
+            if (Time == 1 && Stressed == 0) {
                 SoundStyle explodeSound = AssetDirectory.Sounds.Goozma.BloatedBlastShoot;
                 SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.3f), Projectile.Center);
                 SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Projectile.Center);
-                for (int i = 0; i < 5; i++)
-                {
+                for (int i = 0; i < 5; i++) {
                     Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
                     CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {
                         particle.position = Projectile.Center + gooVelocity * 2;
@@ -53,13 +45,11 @@ namespace CalamityHunt.Content.Projectiles
                     }));
                 }
             }
-            else if (Time == 1 && Stressed > 0)
-            {
+            else if (Time == 1 && Stressed > 0) {
                 SoundStyle explodeSound = AssetDirectory.Sounds.Goozma.BloatedBlastShoot;
                 SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.3f), Projectile.Center);
                 SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Projectile.Center);
-                for (int i = 0; i < 5; i++)
-                {
+                for (int i = 0; i < 5; i++) {
                     Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
                     CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {
                         particle.position = Projectile.Center + gooVelocity * 2;

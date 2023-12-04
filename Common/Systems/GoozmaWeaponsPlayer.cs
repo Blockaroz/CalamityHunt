@@ -1,18 +1,12 @@
-﻿using CalamityHunt.Content.Items.Weapons.Magic;
+﻿using System;
+using System.Linq;
 using CalamityHunt.Content.Items.Weapons.Summoner;
 using CalamityHunt.Content.Projectiles.Weapons.Magic;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
-using static Humanizer.In;
 
 namespace CalamityHunt.Common.Systems
 {
@@ -37,14 +31,14 @@ namespace CalamityHunt.Common.Systems
         public override void PostUpdateMiscEffects()
         {
             if (parasolBloodWaitTime > 0)
-                parasolBloodWaitTime--;            
-            
+                parasolBloodWaitTime--;
+
             if (crystalGauntletsWaitTime > 0)
                 crystalGauntletsWaitTime--;
 
             if (parasolBlood > 0 && parasolBloodWaitTime <= 0)
-                parasolBlood -= 100;            
-            
+                parasolBlood -= 100;
+
             if (CrystalGauntletsCharge > 0 && crystalGauntletsWaitTime <= 0)
                 CrystalGauntletsCharge *= 0.85f;
 
@@ -54,8 +48,7 @@ namespace CalamityHunt.Common.Systems
             parasolBlood = Math.Clamp(parasolBlood, 0, ParasolBloodMax);
             CrystalGauntletsCharge = Math.Clamp(CrystalGauntletsCharge, 0f, 1f);
 
-            if (crystalGauntletsClapTime == 10)
-            {
+            if (crystalGauntletsClapTime == 10) {
                 SoundStyle clapSound = AssetDirectory.Sounds.Weapons.CrystalGauntletClap;
                 SoundEngine.PlaySound(clapSound.WithVolumeScale(0.5f), Player.Center);
 
@@ -63,8 +56,7 @@ namespace CalamityHunt.Common.Systems
                 boom.ai[1] = 1f;
                 boom.localAI[0] = Main.GlobalTimeWrappedHourly * 7f;
 
-                foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<CrystalGauntletBallThrown>() && n.owner == Player.whoAmI))
-                {
+                foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<CrystalGauntletBallThrown>() && n.owner == Player.whoAmI)) {
                     NPC target = projectile.FindTargetWithinRange(2400);
                     Vector2 dir = Vector2.Zero;
                     if (target != null)
@@ -75,8 +67,7 @@ namespace CalamityHunt.Common.Systems
                     SoundEngine.PlaySound(clapSound.WithVolumeScale(0.2f), Player.Center);
 
                     Vector2 oldDir = dir;
-                    for (int i = 0; i < 10; i++)
-                    {
+                    for (int i = 0; i < 10; i++) {
                         if (oldDir.LengthSquared() < 5)
                             dir = new Vector2(700, 0).RotatedBy(MathHelper.TwoPi / 10f * i);
 
@@ -89,10 +80,8 @@ namespace CalamityHunt.Common.Systems
 
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-            if (drawInfo.shadow == 0f)
-            {
-                if (crystalGauntletsClapTime > 0)
-                {
+            if (drawInfo.shadow == 0f) {
+                if (crystalGauntletsClapTime > 0) {
                     float clapRotation = -0.4f + MathF.Sqrt(Utils.GetLerpValue(40, 10, crystalGauntletsClapTime, true)) * Utils.GetLerpValue(10, 15, crystalGauntletsClapTime, true) * 2f + MathHelper.SmoothStep(0, 0.5f, MathF.Sqrt(Utils.GetLerpValue(10, 0, crystalGauntletsClapTime, true)));
                     Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (-MathHelper.PiOver2 + clapRotation) * Player.direction);
                     Player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.ThreeQuarters, (-MathHelper.PiOver2 - clapRotation) * Player.direction);

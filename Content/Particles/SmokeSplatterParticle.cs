@@ -3,8 +3,6 @@ using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.Map;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles;
 

@@ -1,16 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using ReLogic.Content;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.Graphics;
-using Terraria.ID;
-using System.Linq;
-using Terraria.GameContent.Bestiary;
-using System.Reflection;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Bosses.Goozma;
 
@@ -29,8 +25,7 @@ public class GoozmaCordTargetContent : ARenderTargetContentByRequest
         List<float> rotations = new List<float>();
 
         float partitions = 50;
-        for (int i = 0; i < partitions; i++)
-        {
+        for (int i = 0; i < partitions; i++) {
             Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (140 + (float)Math.Sin((Host.NPC.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
             offset.X *= -1;// Host.NPC.direction;
             offset -= Host.drawVelocity * Utils.GetLerpValue(partitions / 3f, partitions, i, true);

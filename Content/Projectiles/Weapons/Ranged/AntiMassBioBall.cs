@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CalamityHunt.Common.GlobalNPCs;
-using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -89,7 +87,7 @@ public class AntiMassBioBall : ModProjectile
                 particle.color = Color.Lerp(AntiMassAccumulatorProj.MainColor, Color.Turquoise, (!Main.rand.NextBool((int)(Time / 30f + 2))).ToInt()) with { A = 0 };
                 particle.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 particle.anchor = () => Projectile.velocity;
-            }));       
+            }));
         }
 
         Lighting.AddLight(Projectile.Center, Color.MediumTurquoise.ToVector3() * 0.6f);

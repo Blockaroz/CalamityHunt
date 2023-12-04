@@ -4,7 +4,6 @@ using CalamityHunt.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.Graphics.Effects;
 using Terraria.Utilities;
 
@@ -122,17 +121,17 @@ public class SlimeMonsoonSky : CustomSky
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
             //spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
             //spriteBatch.Draw(AssetDirectory.Textures.Noise[4].Value, new Rectangle(0, -yOffset - 100, Main.screenWidth, Main.screenHeight * 3), darkColor * 0.1f * _strength);
-        }       
-        
+        }
+
 
         if (maxDepth >= 4 && minDepth < 5) {
 
-        }        
-        
+        }
+
         if (maxDepth >= 2 && minDepth < 3) {
 
-        }        
-        
+        }
+
         if (maxDepth >= 1 && minDepth < 2) {
 
         }

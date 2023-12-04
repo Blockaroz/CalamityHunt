@@ -1,18 +1,16 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using System;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Ranged;
 using CalamityHunt.Content.Tiles;
-using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using CalamityHunt.Common.Utilities;
 using ReLogic.Content;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Items.Weapons.Ranged
 {
@@ -24,26 +22,25 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
         }
 
         public override void SetDefaults()
-		{
-			Item.width = 90;
-			Item.height = 38;
-			Item.damage = 750;
-			Item.noMelee = true;
-			Item.useAnimation = 15;
-			Item.useTime = 3;
-			Item.useStyle = ItemUseStyleID.Shoot;
-			Item.knockBack = 10f;
-			Item.UseSound = AssetDirectory.Sounds.Weapons.TrailBlazerFireStart;
-			Item.channel = true;
-			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<TrailblazerFlame>();
-			Item.shootSpeed = 9.5f;
-			Item.rare = ModContent.RarityType<VioletRarity>();
-			Item.useAmmo = AmmoID.Gel;
+        {
+            Item.width = 90;
+            Item.height = 38;
+            Item.damage = 750;
+            Item.noMelee = true;
+            Item.useAnimation = 15;
+            Item.useTime = 3;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.knockBack = 10f;
+            Item.UseSound = AssetDirectory.Sounds.Weapons.TrailBlazerFireStart;
+            Item.channel = true;
+            Item.autoReuse = true;
+            Item.shoot = ModContent.ProjectileType<TrailblazerFlame>();
+            Item.shootSpeed = 9.5f;
+            Item.rare = ModContent.RarityType<VioletRarity>();
+            Item.useAmmo = AmmoID.Gel;
             Item.value = Item.sellPrice(gold: 20);
             Item.ArmorPenetration = 15;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -51,7 +48,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             }
             Item.DamageType = DamageClass.Ranged;
             Item.consumeAmmoOnFirstShotOnly = true;
-		}
+        }
 
         public override Vector2? HoldoutOffset() => new Vector2(-16f, 0f);
 
@@ -79,8 +76,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
@@ -91,8 +87,7 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
-            else 
-            {
+            else {
                 CreateRecipe()
                     .AddIngredient(ItemID.ElfMelter)
                     .AddIngredient<ChromaticMass>(15)
@@ -123,12 +118,10 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             vec5.ApplyVerticalOffset(drawInfo);
 
             Vector2 aPos = vec5 + new Vector2(9 * drawInfo.drawPlayer.direction, -18 * drawInfo.drawPlayer.gravDir);
-            for (int i = 0; i < 9; i++)
-            {
+            for (int i = 0; i < 9; i++) {
                 Color aColor = Lighting.GetColor(drawInfo.drawPlayer.MountedCenter.ToTileCoordinates());
                 Rectangle aFrame = antennaTexture.Frame(1, 3, 0, 2);
-                if (i == 8)
-                {
+                if (i == 8) {
                     aColor = Color.White;
                     aFrame = antennaTexture.Frame(1, 3, 0, 0);
                 }
@@ -141,10 +134,8 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
                 aPos += new Vector2(0, -aFrame.Height).RotatedBy(rot);
             }
 
-            if (drawInfo.shadow == 0f)
-            {
-                if (frameCounter++ > 5)
-                {
+            if (drawInfo.shadow == 0f) {
+                if (frameCounter++ > 5) {
                     frame = (frame + 1) % 5;
                     frameCounter = 0;
                 }
@@ -156,10 +147,10 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             Rectangle itemFrame = texture.Frame(1, 20, 0, (int)(drawInfo.drawPlayer.legFrame.Y / drawInfo.drawPlayer.legFrame.Height));
 
             DrawData item = new DrawData(texture, vec5, itemFrame, Lighting.GetColor(drawInfo.drawPlayer.MountedCenter.ToTileCoordinates()) * (1f - drawInfo.shadow), drawInfo.drawPlayer.bodyRotation, itemFrame.Size() * 0.5f, 1f, drawInfo.playerEffect);
-            drawInfo.DrawDataCache.Add(item);  
+            drawInfo.DrawDataCache.Add(item);
         }
-    }        
-    
+    }
+
     public class TrailblazerStrapLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
@@ -176,8 +167,8 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
             DrawData item = new DrawData(texture, vec5, drawInfo.drawPlayer.bodyFrame, drawInfo.colorArmorBody * (1f - drawInfo.shadow), drawInfo.drawPlayer.bodyRotation, new Vector2(texture.Width * 0.5f, drawInfo.bodyVect.Y), 1f, drawInfo.playerEffect);
             drawInfo.DrawDataCache.Add(item);
         }
-    }    
-    
+    }
+
     public class TrailblazerGogglesLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);

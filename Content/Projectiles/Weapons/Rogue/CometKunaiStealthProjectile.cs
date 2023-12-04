@@ -1,11 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -23,8 +18,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Throwing;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 DamageClass d;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
@@ -37,8 +31,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
         public override void AI()
         {
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
                 Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(18), 36, 36, DustID.SparkForLightDisc, 0, 0, 0, randomColor);
@@ -47,8 +40,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                     d.velocity += Main.rand.NextVector2Circular(12, 12);
             }
 
-            if (Projectile.ai[1] > -1)
-            {
+            if (Projectile.ai[1] > -1) {
                 NPC target = Main.npc[(int)Projectile.ai[1]];
                 if (target.active)
                     Projectile.Center += (target.position - target.oldPosition) / (Projectile.extraUpdates + 1);
@@ -58,10 +50,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
             if (Projectile.ai[0] == 0)
                 Projectile.rotation += Projectile.direction * 0.3f;
-            else
-            {
-                if (Projectile.ai[2]++ % 4 == 0)
-                {
+            else {
+                if (Projectile.ai[2]++ % 4 == 0) {
                     Vector2 position = Projectile.Center - new Vector2(0, 400) + Main.rand.NextVector2Circular(500, 300);
                     Vector2 velocity = position.DirectionTo(Projectile.Center).RotatedByRandom(0.12f).SafeNormalize(Vector2.Zero) * position.Distance(Projectile.Center) * 0.024f;
                     velocity.X *= 0.9f;
@@ -69,8 +59,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 }
             }
 
-            if (Projectile.frameCounter++ > 1)
-            {
+            if (Projectile.frameCounter++ > 1) {
                 Projectile.frameCounter = 0;
                 Projectile.frame = (Projectile.frame + 1) % 3;
             }
@@ -84,8 +73,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.ai[0] = stick ? -2 : -1;
             Projectile.localAI[1] = 1f;
             Projectile.timeLeft = stick ? 180 : 30;
-            if (stick)
-            {
+            if (stick) {
                 Projectile.velocity = Vector2.Zero;
                 Projectile.tileCollide = false;
                 SoundStyle attachSound = AssetDirectory.Sounds.Slime.StellarConstellationForm with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.1f, Volume = 0.4f };
@@ -123,17 +111,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
         public override void OnKill(int timeLeft)
         {
-            for (int i = 0; i < 18; i++)
-            {
+            for (int i = 0; i < 18; i++) {
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
                 Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(5), 10, 10, DustID.RainbowRod, newColor: randomColor);
                 d.noGravity = true;
                 d.velocity += Main.rand.NextVector2Circular(14, 14);
-            }            
-            
-            for (int i = 0; i < 6; i++)
-            {
+            }
+
+            for (int i = 0; i < 6; i++) {
                 Color randomColor = Color.Lerp(Color.Goldenrod, Color.Gold, Main.rand.NextFloat());
                 randomColor.A = 0;
                 Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(5), 10, 10, DustID.RainbowRod, newColor: randomColor);
@@ -141,8 +127,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 d.velocity += Main.rand.NextVector2Circular(6, 6);
             }
 
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < 5; i++) {
                 Vector2 velocity = new Vector2(0, -10).RotatedBy(Projectile.rotation + MathHelper.TwoPi / 5f * i);
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, velocity, ModContent.ProjectileType<CometKunaiGhostProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[1]);
             }
@@ -164,9 +149,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(5, 10, 60, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(0, 5, 30, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
-            
-            if (Projectile.ai[0] == 0)
-            {
+
+            if (Projectile.ai[0] == 0) {
                 float p = Utils.GetLerpValue(5, 20, Projectile.localAI[0], true);
                 Main.EntitySpriteDraw(flame, Projectile.Center - Main.screenPosition, fireFrame, Color.Black * p, Projectile.velocity.ToRotation() - MathHelper.PiOver2, fireFrame.Size() * new Vector2(0.5f, 0.75f), Projectile.scale * 1.2f, 0, 0);
                 Main.EntitySpriteDraw(flame, Projectile.Center - Main.screenPosition, fireFrame, new Color(0, 20, 200, 20) * p, Projectile.velocity.ToRotation() - MathHelper.PiOver2, fireFrame.Size() * new Vector2(0.5f, 0.75f), Projectile.scale * 1.3f, 0, 0);

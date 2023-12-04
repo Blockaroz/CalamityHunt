@@ -1,7 +1,7 @@
-﻿using CalamityHunt.Content.Tiles;
-using CalamityHunt.Content.Items.Materials;
+﻿using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles;
+using CalamityHunt.Content.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -37,8 +37,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.noUseGraphic = true;
             Item.UseSound = SoundID.Item1;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -53,8 +52,7 @@ namespace CalamityHunt.Content.Items.Misc
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe(100)
                     .AddIngredient(ItemID.Dynamite, 100)
@@ -62,8 +60,7 @@ namespace CalamityHunt.Content.Items.Misc
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
-            else
-            {
+            else {
                 CreateRecipe(100)
                     .AddIngredient(ItemID.Dynamite, 100)
                     .AddIngredient<ChromaticMass>()

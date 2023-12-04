@@ -34,32 +34,28 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override void AI()
         {
-            if (Projectile.ai[2] < 0)
-            {
+            if (Projectile.ai[2] < 0) {
                 Projectile.Kill();
                 return;
             }
 
             Projectile host = Main.projectile[(int)Projectile.ai[2]];
 
-            if (!host.active || host.type != ModContent.ProjectileType<DivinePinky>() || host.owner != Projectile.owner)
-            {
+            if (!host.active || host.type != ModContent.ProjectileType<DivinePinky>() || host.owner != Projectile.owner) {
                 Projectile.Kill();
                 return;
             }
 
             Projectile.Center = host.Center;
 
-            if (Projectile.timeLeft < 75 && Projectile.ai[0] < 1)
-            {
+            if (Projectile.timeLeft < 75 && Projectile.ai[0] < 1) {
                 SoundStyle ray = SoundID.Item29 with { MaxInstances = 0, Pitch = -0.4f, PitchVariance = 0.2f, Volume = 0.2f };
                 SoundEngine.PlaySound(ray, Projectile.Center);
 
                 Projectile.ai[0]++;
             }
 
-            if (Projectile.timeLeft < 75 && Projectile.timeLeft > 47 && Projectile.timeLeft % Projectile.localNPCHitCooldown == 0)
-            {
+            if (Projectile.timeLeft < 75 && Projectile.timeLeft > 47 && Projectile.timeLeft % Projectile.localNPCHitCooldown == 0) {
                 float scale = 1f + Projectile.ai[1] / 80f;
                 Color color = Color.Lerp(Color.Orchid, Color.CadetBlue, Utils.GetLerpValue(60, 70, Projectile.timeLeft, true));
                 color.A = 0;
@@ -71,8 +67,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (sparkles == null)
                 sparkles = new List<Sparkle>();
 
-            foreach (Sparkle sparkle in sparkles.ToList())
-            {
+            foreach (Sparkle sparkle in sparkles.ToList()) {
                 sparkle.Update();
                 if (!sparkle.active)
                     sparkles.Remove(sparkle);

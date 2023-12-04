@@ -1,13 +1,12 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Items.Rarities;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
 using System.Linq;
+using CalamityHunt.Content.Items.Placeable;
+using CalamityHunt.Content.Items.Rarities;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using CalamityHunt.Content.Items.Placeable;
 
 namespace CalamityHunt.Content.Items.Lore
 {
@@ -23,8 +22,7 @@ namespace CalamityHunt.Content.Items.Lore
             Item.width = 40;
             Item.height = 40;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -35,8 +33,7 @@ namespace CalamityHunt.Content.Items.Lore
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip0");
-            if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
-            {
+            if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift)) {
                 if (line != null)
                     line.Text = Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.LoreGeneric").Value;
                 return;
@@ -55,10 +52,10 @@ namespace CalamityHunt.Content.Items.Lore
 
         public override void AddRecipes()
         {
-                CreateRecipe()
-                    .AddIngredient<GoozmaTrophy>()
-                    .AddTile(TileID.Bookcases)
-                    .Register();
+            CreateRecipe()
+                .AddIngredient<GoozmaTrophy>()
+                .AddTile(TileID.Bookcases)
+                .Register();
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -45,16 +43,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override void AI()
         {
-            if (Projectile.ai[2] < 0)
-            {
+            if (Projectile.ai[2] < 0) {
                 Projectile.Kill();
                 return;
             }
 
             Projectile host = Main.projectile[(int)Projectile.ai[2]];
 
-            if (!host.active || host.type != ModContent.ProjectileType<Goozmoem>() || host.owner != Projectile.owner)
-            {
+            if (!host.active || host.type != ModContent.ProjectileType<Goozmoem>() || host.owner != Projectile.owner) {
                 Projectile.Kill();
                 return;
             }
@@ -126,8 +122,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             Vector2[] positions = new Vector2[1000];
             float[] rotations = new float[1000];
-            for (int i = 0; i < 1000; i++)
-            {
+            for (int i = 0; i < 1000; i++) {
                 positions[i] = Projectile.Center + new Vector2(1000 * (i / 1000f), 0).RotatedBy(Projectile.rotation);
                 rotations[i] = Projectile.rotation;
             }

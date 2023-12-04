@@ -21,8 +21,7 @@ namespace CalamityHunt.Content.Items.Placeable
             Item.rare = ModContent.RarityType<VioletRarity>();
             Item.accessory = true;
             Item.vanity = true;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -44,8 +43,7 @@ namespace CalamityHunt.Content.Items.Placeable
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
@@ -53,8 +51,7 @@ namespace CalamityHunt.Content.Items.Placeable
                     .DisableDecraft()
                     .Register();
             }
-            else
-            {
+            else {
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
                     .AddTile<SlimeNinjaStatueTile>()

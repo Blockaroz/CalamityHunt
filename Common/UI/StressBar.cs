@@ -1,14 +1,9 @@
-﻿using CalamityHunt.Common.Players;
+﻿using System.Collections.Generic;
+using System.Text;
+using CalamityHunt.Common.Players;
 using CalamityHunt.Common.Systems;
-using CalamityHunt.Content.Items.Weapons.Magic;
-using CalamityHunt.Content.Items.Weapons.Melee;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -30,21 +25,17 @@ namespace CalamityHunt.Common.UI
         {
             fillPercent = Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().stress;
             oldPercent = Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().checkStress;
-            if (Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().active)
-            {
+            if (Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().active) {
                 stressAnimDelay++;
-                if (stressAnimDelay >= 8 - (int)(oldPercent * 4))
-                {
+                if (stressAnimDelay >= 8 - (int)(oldPercent * 4)) {
                     stressFrame++;
                     stressAnimDelay = 0;
                 }
                 if (stressFrame >= 5)
                     stressFrame = 0;
-                if (fillPercent >= 1f && stressTopFrame <= 10)
-                {
+                if (fillPercent >= 1f && stressTopFrame <= 10) {
                     stressTopTimer++;
-                    if (stressTopTimer >= 5)
-                    {
+                    if (stressTopTimer >= 5) {
                         stressTopFrame++;
                         stressTopTimer = 0;
                     }
@@ -55,11 +46,9 @@ namespace CalamityHunt.Common.UI
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            if (Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().active)
-            {
+            if (Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().active) {
                 int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Entity Health Bars"));
-                if (mouseTextIndex != -1)
-                {
+                if (mouseTextIndex != -1) {
                     layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
                         "HuntOfTheOldGod: Stress Bar",
                         delegate
@@ -85,7 +74,7 @@ namespace CalamityHunt.Common.UI
                                 Main.instance.MouseText("Stress: " + StressString(fillPercent * 100, 100), 0, 0);
 
                             Rectangle barFrame = new Rectangle(0, stressFrame * (bar.Height / 5), bar.Width, bar.Height / 5);
-                            Rectangle fillFrame = new Rectangle(0, (int)(oldPercent / 0.25f)*(barCharge.Height / 5), fillAmount, barCharge.Height / 5);
+                            Rectangle fillFrame = new Rectangle(0, (int)(oldPercent / 0.25f) * (barCharge.Height / 5), fillAmount, barCharge.Height / 5);
                             Rectangle topFrame = new Rectangle(0, stressTopFrame * (barTop.Height / 9), barTop.Width, barTop.Height / 9);
 
                             Main.spriteBatch.Draw(bar, pos, barFrame, Color.White, 0, Vector2.Zero, 1f, 0, 0);

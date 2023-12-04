@@ -1,12 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Utilities;
-using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace CalamityHunt
@@ -90,11 +84,9 @@ namespace CalamityHunt
             i -= (tile.TileFrameX % data.CoordinateFullWidth) / (data.CoordinateWidth + data.CoordinatePadding);
             int heightY = tile.TileFrameY % data.CoordinateFullHeight; //Get the frame Y but for a single style variant
 
-            for (int l = 0; l < data.CoordinateHeights.Length; l++)
-            {
+            for (int l = 0; l < data.CoordinateHeights.Length; l++) {
                 int currentCoordinateHeight = data.CoordinateHeights[l] + data.CoordinatePadding;
-                if (heightY >= currentCoordinateHeight)
-                {
+                if (heightY >= currentCoordinateHeight) {
                     j--;
                     heightY -= currentCoordinateHeight;
                 }

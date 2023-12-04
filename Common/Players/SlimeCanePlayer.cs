@@ -1,8 +1,7 @@
-﻿using CalamityHunt.Content.Buffs;
+﻿using System.Linq;
+using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Projectiles.Weapons.Summoner;
-using System.Linq;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Players
@@ -20,7 +19,7 @@ namespace CalamityHunt.Common.Players
             int count = Player.ownedProjectileCounts[ModContent.ProjectileType<SlimeCaneGemCounter>()];
 
             if (count > 1)
-                num = 1;            
+                num = 1;
             if (count > 2)
                 num = 2;
             if (count > 3)
@@ -43,11 +42,9 @@ namespace CalamityHunt.Common.Players
 
         public void SetSlimes()
         {
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 int slimeType;
-                switch (i)
-                {
+                switch (i) {
                     case 1:
                         slimeType = ModContent.ProjectileType<EbonianBlinky>();
                         break;
@@ -61,8 +58,7 @@ namespace CalamityHunt.Common.Players
                         slimeType = ModContent.ProjectileType<CrimulanClyde>();
                         break;
                 }
-                if (Player.ownedProjectileCounts[slimeType] <= 0)
-                {
+                if (Player.ownedProjectileCounts[slimeType] <= 0) {
                     int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - (10 * i), Player.position.Y, 0, 0, slimeType, highestOriginalDamage, 0, Player.whoAmI);
                     if (Main.projectile.IndexInRange(p))
                         Main.projectile[p].originalDamage = highestOriginalDamage;
@@ -70,8 +66,7 @@ namespace CalamityHunt.Common.Players
             }
 
             int goozType = ModContent.ProjectileType<Goozmoem>();
-            if (SlimeRank() >= HighestRank && Player.ownedProjectileCounts[goozType] <= 0)
-            {
+            if (SlimeRank() >= HighestRank && Player.ownedProjectileCounts[goozType] <= 0) {
                 int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - 20, Player.position.Y, 0, 0, goozType, highestOriginalDamage, 0, Player.whoAmI);
                 if (Main.projectile.IndexInRange(p))
                     Main.projectile[p].originalDamage = highestOriginalDamage;
@@ -80,16 +75,13 @@ namespace CalamityHunt.Common.Players
 
         public override void PostUpdateBuffs()
         {
-            if (Player.HasBuff<SlimeCaneBuff>())
-            {
-                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SlimeCaneGemCounter>()] > 0)
-                {
+            if (Player.HasBuff<SlimeCaneBuff>()) {
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SlimeCaneGemCounter>()] > 0) {
                     highestOriginalDamage = 0;
                     slimes = true;
                     int count = 0;
 
-                    foreach (Projectile gem in Main.projectile.Where(n => n.owner == Player.whoAmI && n.type == ModContent.ProjectileType<SlimeCaneGemCounter>()))
-                    {
+                    foreach (Projectile gem in Main.projectile.Where(n => n.owner == Player.whoAmI && n.type == ModContent.ProjectileType<SlimeCaneGemCounter>())) {
                         count++;
 
                         if (highestOriginalDamage < gem.originalDamage)

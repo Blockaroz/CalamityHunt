@@ -1,15 +1,11 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Buffs;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -31,8 +27,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.hostile = false;
             Projectile.timeLeft = 10000;
             Projectile.DamageType = DamageClass.Throwing;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 DamageClass d;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
@@ -45,35 +40,29 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override void AI()
         {
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
-            if (Projectile.ai[1] == 0)
-            {
+            if (Projectile.ai[1] == 0) {
                 Projectile.scale = 0.3f + Utils.GetLerpValue(0, 60, Time, true) * 0.7f;
-                if (Time == 105)
-                {
-                     SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.FissionFlyerExplode, Projectile.Center);
+                if (Time == 105) {
+                    SoundEngine.PlaySound(AssetDirectory.Sounds.Weapons.FissionFlyerExplode, Projectile.Center);
                     int amt = Projectile.ai[2] == 1 ? 5 : 3;
-                    for (int i = 0; i < amt; i++)
-                    {
+                    for (int i = 0; i < amt; i++) {
                         Vector2 velocity = new Vector2(0, 10).RotatedBy(MathHelper.TwoPi / amt * i);
                         Projectile ring = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, velocity, ModContent.ProjectileType<FissionFlyerMiniRing>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         ring.ai[0] = Time;
                     }
 
-                    if (Projectile.ai[2] == 1)
-                    {
+                    if (Projectile.ai[2] == 1) {
                         Projectile ring = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FissionFlyerMiniRing>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                         ring.ai[1] = 1;
                     }
-                    for (int j = 0; j < 40; j++)
-                    {
+                    for (int j = 0; j < 40; j++) {
                         Dust splode = Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(15, 15), 0, glowColor, 1f + Main.rand.NextFloat());
                         splode.noGravity = true;
                     }
                 }
 
                 int target = Projectile.FindTargetWithLineOfSight();
-                if (target > -1)
-                {
+                if (target > -1) {
                     Projectile.velocity += Projectile.DirectionTo(Main.npc[target].Center) * 0.5f;
                     Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Projectile.oldVelocity.Length();
                 }
@@ -92,8 +81,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 if (Time > 130)
                     Projectile.ai[1] = 1f;
             }
-            if (Projectile.ai[1] == 1f)
-            {
+            if (Projectile.ai[1] == 1f) {
                 Projectile.tileCollide = false;
                 Projectile.extraUpdates = 1;
 
@@ -107,11 +95,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                     Projectile.Kill();
             }
 
-            if (Time < 70 || Time > 120)
-            {
+            if (Time < 70 || Time > 120) {
                 Vector2 off = new Vector2(22, 0).RotatedBy(Projectile.rotation) * Projectile.scale;
                 Dust left = Dust.NewDustPerfect(Projectile.Center - off, DustID.AncientLight, -Projectile.velocity * 0.5f, 0, glowColor, 2f * Projectile.scale);
-                left.noGravity = true;              
+                left.noGravity = true;
                 Dust right = Dust.NewDustPerfect(Projectile.Center + off, DustID.AncientLight, -Projectile.velocity * 0.5f, 0, glowColor, 2f * Projectile.scale);
                 right.noGravity = true;
             }
@@ -135,7 +122,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if (MathF.Abs(oldVelocity.X - Projectile.velocity.X) > 0)
-                Projectile.velocity.X = -oldVelocity.X * 1.33f;            
+                Projectile.velocity.X = -oldVelocity.X * 1.33f;
             if (MathF.Abs(oldVelocity.Y - Projectile.velocity.Y) > 0)
                 Projectile.velocity.Y = -oldVelocity.Y * 1.33f;
             return false;

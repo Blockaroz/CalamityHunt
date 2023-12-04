@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -53,8 +49,7 @@ public class ShadowspecLocker : GlobalItem
 
     public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
-        if (!CanUseItem(item, Main.LocalPlayer) && ShadowspecItemFinder.ShadowspecItem(item.type))
-        {
+        if (!CanUseItem(item, Main.LocalPlayer) && ShadowspecItemFinder.ShadowspecItem(item.type)) {
             Texture2D glow = AssetDirectory.Textures.Glow.Value;
             Texture2D qmark = AssetDirectory.Textures.QuestionMark.Value;
 
@@ -76,8 +71,7 @@ public class ShadowspecItemFinder : ModSystem
     {
         shadowspecItemIDs = new HashSet<int>();
 
-        if (ModLoader.TryGetMod("CalamityMod", out Mod calamity))
-        {
+        if (ModLoader.TryGetMod("CalamityMod", out Mod calamity)) {
             //Rarity method
             //Recipe method
             int shadowspecType = calamity.Find<ModItem>("ShadowspecBar").Type;

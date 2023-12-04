@@ -1,15 +1,10 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Particles;
+﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -47,15 +42,12 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.velocity.Y += 0.6f;
 
             int target = -1;
-            if (Projectile.velocity.Y > 1)
-            {
+            if (Projectile.velocity.Y > 1) {
                 if (Main.player.Any(n => n.active && !n.dead))
                     target = Main.player.First(n => n.active && !n.dead).whoAmI;
 
-                if (target > -1)
-                {
-                    if (Projectile.Center.Y > Main.player[target].MountedCenter.Y)
-                    {
+                if (target > -1) {
+                    if (Projectile.Center.Y > Main.player[target].MountedCenter.Y) {
                         Projectile.velocity.Y = -Projectile.velocity.Y * Main.rand.NextFloat(0.7f, 0.8f);
                         Projectile.velocity.X *= 0.9f;
                     }
@@ -65,8 +57,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }
             }
 
-            if (Main.rand.NextBool(19))
-            {
+            if (Main.rand.NextBool(19)) {
                 Color color = Color.Lerp(Color.DarkGreen, Color.MediumOrchid, Main.rand.NextFloat());
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.ToxicBubble, Projectile.velocity * 0.5f, 0, color, 1f).noGravity = true;
             }

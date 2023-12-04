@@ -1,9 +1,5 @@
-﻿using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Particles;
+﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -52,23 +48,20 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
             Grounded = (int)Math.Clamp(Grounded, 0, 1);
 
-            if (Grounded == 0)
-            {
+            if (Grounded == 0) {
                 Projectile.rotation = Projectile.velocity.ToRotation();
 
                 //if (Main.rand.NextBool(50))
                 //    Particle.NewParticle(ModContent.GetInstance<DarkSludgeChunkParticleBehavior>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 3 + Projectile.velocity) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.1f + Main.rand.NextFloat());
             }
-            else
-            {
+            else {
                 Projectile.velocity *= 0.05f;
 
                 //if (Main.rand.NextBool(150))
                 //    Particle.NewParticle(ModContent.GetInstance<DarkSludgeChunkParticleBehavior>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 6 + Projectile.velocity) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.1f + Main.rand.NextFloat());
             }
 
-            if (StickHost > -1)
-            {
+            if (StickHost > -1) {
                 Grounded = 1;
 
                 if (Time < 400)
@@ -136,8 +129,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (Grounded == 0 && Projectile.velocity.Y >= 0)
-            {
+            if (Grounded == 0 && Projectile.velocity.Y >= 0) {
                 Grounded = 1;
 
                 if (Time < 200)

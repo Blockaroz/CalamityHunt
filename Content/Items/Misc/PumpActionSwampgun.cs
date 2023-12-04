@@ -1,8 +1,6 @@
 ﻿using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -25,8 +23,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.shoot = ModContent.ProjectileType<PumpActionSwampgunHeld>();
             Item.shootSpeed = 5f;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);

@@ -1,11 +1,11 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -52,8 +52,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 eyeTypes.Add(i);
 
             eyeType = new List<int>();
-            for (int i = 0; i < eyeCount; i++)
-            {
+            for (int i = 0; i < eyeCount; i++) {
                 int rand = Main.rand.Next(eyeTypes.Count);
                 eyeType.Add(rand);
                 eyeTypes.RemoveAt(rand);
@@ -63,8 +62,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public override void AI()
         {
             int owner = -1;
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<EbonianBehemuck>() && n.active))
-            {
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<EbonianBehemuck>() && n.active)) {
                 Projectile.active = false;
                 return;
             }
@@ -74,8 +72,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             int slimeCount = 5;
 
             NPCAimedTarget target = Main.npc[owner].GetTargetData();
-            if (Time < 0)
-            {
+            if (Time < 0) {
                 Projectile.scale = MathHelper.Lerp(Projectile.scale, 0.8f, 0.1f);
                 Projectile.rotation = Projectile.AngleTo(Main.npc[owner].Center) - MathHelper.PiOver2;
 
@@ -90,18 +87,15 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 saveTarget = target.Center;
                 squish = Vector2.SmoothStep(Vector2.One, new Vector2(1.3f, 0.8f), Utils.GetLerpValue(-20, 0, Time, true));
             }
-            else if (Projectile.ai[1] >= 0)
-            {
+            else if (Projectile.ai[1] >= 0) {
                 squish = new Vector2(0.6f, 1.5f);
                 Projectile.velocity = Projectile.DirectionTo(saveTarget).SafeNormalize(Vector2.Zero) * Utils.GetLerpValue(5, 10, Time, true) * (float)Math.Pow(Utils.GetLerpValue(0, 30, Time, true), 1.5f) * 70;
-                if (Projectile.Distance(saveTarget) < 60)
-                {
+                if (Projectile.Distance(saveTarget) < 60) {
                     Projectile.Center = saveTarget;// + (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2();
                     Projectile.velocity = Vector2.Zero;
                     Projectile.ai[1] = -1;
                     Time = 0;
-                    for (int i = 0; i < Main.rand.Next(30, 40); i++)
-                    {
+                    for (int i = 0; i < Main.rand.Next(30, 40); i++) {
                         Vector2 velocity = Main.rand.NextVector2Circular(16, 16) - Projectile.rotation.ToRotationVector2() * 10f;
                         Vector2 position = Projectile.Center + Main.rand.NextVector2Circular(30, 30) + new Vector2(velocity.X * 15f, 32f);
                         CalamityHunt.particles.Add(Particle.Create<EbonGelChunk>(particle => {
@@ -119,8 +113,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 }
             }
-            else
-            {
+            else {
                 Projectile.velocity = Vector2.Zero;
                 squish = Vector2.Lerp(new Vector2(0.6f, 1.5f), Vector2.One, Utils.GetLerpValue(15, 1, Time, true)) * Utils.GetLerpValue(20, 8, Time, true);
                 if (Time > 20)
@@ -137,8 +130,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.localAI[0]++;
 
             Projectile.frameCounter++;
-            if (Projectile.frameCounter > 5)
-            {
+            if (Projectile.frameCounter > 5) {
                 Projectile.frameCounter = 0;
                 Projectile.frame = (Projectile.frame + 1) % 4;
             }
@@ -173,27 +165,23 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             float scale = 1f;
 
-            if (Time < -10)
-            {
+            if (Time < -10) {
                 scale = 1.33f;
                 texture = ballTexture;
                 frame = texture.Frame();
             }
 
-            for (int i = 0; i < (Projectile.ai[1] % 3) + 1; i++)
-            {
+            for (int i = 0; i < (Projectile.ai[1] % 3) + 1; i++) {
                 Rectangle eyeFrame = eyeTexture.Frame(8, 1, eyeType[i], 0);
                 Vector2 off = new Vector2((float)Math.Sin((Projectile.localAI[0] * 0.05f + i * 2f) % MathHelper.TwoPi) * 10 * (i % 2 == 0 ? 1 : -1), 0).RotatedBy((Projectile.localAI[0] * 0.008f + i * 2.4) % MathHelper.TwoPi);
                 Main.EntitySpriteDraw(eyeTexture, Projectile.Center + off * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, new Color(110, 50, 255, 20), Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale * 1.2f, 0, 0);
                 Main.EntitySpriteDraw(eyeTexture, Projectile.Center + off * squish - new Vector2(0, 45).RotatedBy(Projectile.rotation) * Projectile.scale * squish - Main.screenPosition, eyeFrame, Color.White, Projectile.rotation + Projectile.localAI[0] * 0.1f * (i % 2 == 0 ? 1 : -1), eyeFrame.Size() * 0.5f, Projectile.scale, 0, 0);
             }
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 Vector2 off = new Vector2(15 + (float)Math.Sin(Projectile.localAI[0] * 0.05f + i * 2f), 0).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.localAI[0] * 0.08f);
                 Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, Color.SlateBlue * 0.1f, Projectile.rotation, frame.Size() * new Vector2(0.5f, 0.9f), Projectile.scale * squish * scale, 0, 0);
             }
-            if (Projectile.ai[1] >= 0)
-            {
+            if (Projectile.ai[1] >= 0) {
                 float tellFade = (float)Math.Sqrt(Utils.GetLerpValue(-20, 0, Time, true) * Utils.GetLerpValue(10, 0, Time, true)) * 2f;
                 Main.EntitySpriteDraw(tell, Projectile.Center - Main.screenPosition, tell.Frame(), new Color(18, 8, 40, 0) * 0.8f * tellFade, Projectile.rotation, tell.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * (7f + Utils.GetLerpValue(-20, 10, Time, true)), 0, 0);
             }

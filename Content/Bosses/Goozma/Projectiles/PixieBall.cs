@@ -43,8 +43,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.rotation += Projectile.velocity.Length() * 0.01f * (Projectile.velocity.X > 0 ? 1 : -1);
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 17, Time, true) * Utils.GetLerpValue(480, 460, Time, true)) * 1.3f;
             owner = -1;
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active))
-            {
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active)) {
                 Projectile.active = false;
                 return;
             }
@@ -54,13 +53,11 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Time < 60)
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.npc[owner].GetTargetData().Velocity, 0.9f);
 
-            if (HitCount < 0 || HitCount == 1)
-            {
+            if (HitCount < 0 || HitCount == 1) {
                 Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 36f;
                 Cooldown = 0;
             }
-            else
-            {
+            else {
                 if (Main.rand.NextBool(5))
                     Projectile.velocity += Main.rand.NextVector2Circular(3, 3);
 
@@ -68,44 +65,38 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 Projectile.velocity += Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * (0.3f + Utils.GetLerpValue(500, 800, Projectile.Distance(Main.npc[owner].Center), true));
             }
 
-            if (Cooldown <= 0)
-            {
-                if (Projectile.Distance(Main.npc[owner].Center) < 84 && Time > 60)
-                {
+            if (Cooldown <= 0) {
+                if (Projectile.Distance(Main.npc[owner].Center) < 84 && Time > 60) {
                     HitCount++;
                     Main.npc[owner].localAI[1]++;
                     Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * (Main.npc[owner].GetTargetData().Velocity.Length() * 0.2f + Projectile.velocity.Length());
                     Cooldown = 15;
-                    for (int i = 0; i < 40; i++)
-                    {
+                    for (int i = 0; i < 40; i++) {
                         Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                         glowColor.A /= 2;
                         Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
                     }
                 }
 
-                foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(Projectile.Center) < 64))
-                {
-                    if (HitCount < 0 || HitCount == 1)
-                    {
+                foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(Projectile.Center) < 64)) {
+                    if (HitCount < 0 || HitCount == 1) {
                         HitCount++;
                         Cooldown += 15;
                         Projectile.velocity = -Vector2.UnitY * 10;
                     }
                     else
                         Projectile.velocity = Projectile.DirectionFrom(player.Center).SafeNormalize(Vector2.Zero) * (14f + Projectile.velocity.Length() + player.velocity.Length());
-                    
+
                     Cooldown += 15;
 
                     if (Time > 40)
                         SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.PixieBallBounce, Projectile.Center);
 
-                    for (int i = 0; i < 40; i++)
-                    {
+                    for (int i = 0; i < 40; i++) {
                         Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                         glowColor.A /= 2;
                         Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
-                        
+
                         if (Main.rand.NextBool(3)) {
                             CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
                                 particle.position = Projectile.Center + Main.rand.NextVector2Circular(54, 54);
@@ -132,8 +123,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 //}
             }
 
-            if (Cooldown > 0)
-            {
+            if (Cooldown > 0) {
                 Cooldown--;
 
                 CalamityHunt.particles.Add(Particle.Create<FlameParticle>(particle => {
@@ -147,8 +137,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 }));
             }
 
-            if (HitCount > 2)
-            {
+            if (HitCount > 2) {
                 Main.npc[owner].ai[0] = 0;
                 Main.npc[owner].ai[1] = -1;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -183,8 +172,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                 particle.fadeColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0);
             }));
 
-            for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
-            {
+            for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
                 Projectile.oldPos[i] = Projectile.oldPos[i - 1];
                 Projectile.oldRot[i] = Projectile.oldRot[i - 1];
             }
@@ -192,8 +180,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Projectile.oldRot[0] = Projectile.rotation;
 
             if (Time > 400)
-                for (int i = 0; i < 40 - (Time / 2); i++)
-                {
+                for (int i = 0; i < 40 - (Time / 2); i++) {
                     Color glowColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.5f, 0);
                     glowColor.A /= 2;
                     Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(25 - Time / 4f, 25 - Time / 4f), 0, glowColor, 2f + Main.rand.NextFloat(2f)).noGravity = true;
@@ -213,8 +200,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public void HandleSound()
         {
-            if (Projectile.localAI[1] > 10f)
-            {
+            if (Projectile.localAI[1] > 10f) {
                 Projectile.localAI[1] = 0;
                 float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f) * 1.1f - 1f;
                 float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, 0.05f, 2f) * Projectile.scale;
@@ -325,8 +311,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public void UpdateHitMeSign()
         {
-            if (signFrameCounter++ > 4)
-            {
+            if (signFrameCounter++ > 4) {
                 signFrame = (signFrame + 1) % 8;
                 signFrameCounter = 0;
             }
@@ -335,16 +320,13 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             handDir = homePos.X > Projectile.Center.X - Main.screenPosition.X ? 1 : -1;
 
-            if (Main.getGoodWorld)
-            {
+            if (Main.getGoodWorld) {
                 handFrame = 5;
                 handPosition = Vector2.SmoothStep(Projectile.Center - Main.screenPosition, homePos, Utils.GetLerpValue(0, 60, Time, true));
                 handRotation = MathF.Sin(Time * 0.4f) * Utils.GetLerpValue(45, 50, Time, true) * 0.6f;
             }
-            else
-            {
-                if (Time < 70)
-                {
+            else {
+                if (Time < 70) {
                     handFrame = 1 + (int)(Utils.GetLerpValue(0, 20, Time, true) * 2f);
                     handPosition = Vector2.SmoothStep(Projectile.Center - Main.screenPosition, homePos, Utils.GetLerpValue(0, 60, Time, true));
                     handRotation = MathF.Sin(Time * 0.4f) * Utils.GetLerpValue(60, 55, Time, true);
@@ -362,7 +344,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         public void DrawHitMeSign()
         {
             Color bloomColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f) % 1f, 1f, 0.7f, 0) * 0.3f;
-            
+
             float influence = Utils.GetLerpValue(0, 10, Time, true);
             float wobble = (0.7f + MathF.Sin(Time * 0.3f) * 0.1f);
 
@@ -373,8 +355,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             Rectangle hitMeFrame = hitMeSign.Value.Frame(1, 8, 0, signFrame);
 
             Main.EntitySpriteDraw(hitMeSign.Value, signPosition, hitMeFrame, new Color(255, 255, 255, 128) * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 Vector2 offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
                 Main.EntitySpriteDraw(hitMeSign.Value, signPosition + offset, hitMeFrame, bloomColor * influence * wobble, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
             }
@@ -383,8 +364,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
             SpriteEffects handEffect = handDir < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Main.EntitySpriteDraw(hitMeHand.Value, handPosition, pointerFrame, new Color(255, 255, 255, 128) * influence, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 Vector2 offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
                 Main.EntitySpriteDraw(hitMeHand.Value, handPosition + offset, pointerFrame, bloomColor * influence * wobble, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
             }

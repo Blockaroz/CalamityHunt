@@ -40,7 +40,7 @@ public class MicroShockwave : Particle
         spriteBatch.Draw(texture, position - Main.screenPosition, solidFrame, Color.Black * 0.1f * drawScale, rotation, solidFrame.Size() * 0.5f, new Vector2(scaleLife, scaleLife * 0.5f), 0, 0);
         spriteBatch.Draw(texture, position - Main.screenPosition, colorFrame, color * drawScale, rotation, colorFrame.Size() * 0.5f, new Vector2(scaleLife, scaleLife * 0.5f), 0, 0);
         spriteBatch.Draw(texture, position - Main.screenPosition, glowFrame, secondColor * drawScale, rotation, glowFrame.Size() * 0.5f, new Vector2(scaleLife, scaleLife * 0.5f), 0, 0);
-       
+
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
 }

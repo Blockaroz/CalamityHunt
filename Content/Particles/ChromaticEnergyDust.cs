@@ -62,8 +62,7 @@ public class ChromaticEnergyDust : Particle
         }
 
         if (Main.rand.NextBool(150) && scale > 0.25f) {
-            CalamityHunt.particles.Add(Create<ChromaticEnergyDust>(newParticle =>
-            {
+            CalamityHunt.particles.Add(Create<ChromaticEnergyDust>(newParticle => {
                 newParticle.position = position;
                 newParticle.color = color * 0.99f;
                 newParticle.scale = MathHelper.Clamp(scale * 2f, 0.1f, 1.5f);

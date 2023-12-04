@@ -27,7 +27,7 @@ using Terraria.ModLoader;
 namespace CalamityHunt
 {
     public class CalamityHunt : Mod
-	{
+    {
         public static Mod Instance;
 
         public static ParticleSystem particles;
@@ -81,19 +81,16 @@ namespace CalamityHunt
         }
 
         public override void PostSetupContent()
-        { 
+        {
             // Kill Old Duke and inject Goozma into boss rush
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 BossRushInjection(ModLoader.GetMod("CalamityMod"));
             }
-            if (ModLoader.HasMod("BossChecklist"))
-            {
+            if (ModLoader.HasMod("BossChecklist")) {
                 BossChecklist(ModLoader.GetMod("BossChecklist"));
-            } 
+            }
             // Add this whenever Slime Cane is added
-            if (ModLoader.HasMod("SummonersAssociation"))
-            {
+            if (ModLoader.HasMod("SummonersAssociation")) {
                 Mod sAssociation = ModLoader.GetMod("SummonersAssociation");
                 sAssociation.Call("AddMinionInfo", ModContent.ItemType<SlimeCane>(), ModContent.BuffType<SlimeCaneBuff>(), new List<Dictionary<string, object>>
                 {
@@ -120,7 +117,7 @@ namespace CalamityHunt
                 });
             }
         }
-        
+
         public static void BossRushInjection(Mod cal)
         {
             // Goozma
@@ -137,10 +134,8 @@ namespace CalamityHunt
             };
             int ODID = cal.Find<ModNPC>("OldDuke").Type;
 
-            for (int i = 0; i < brEntries.Count(); i++)
-            {
-                if (brEntries[i].Item1 == ODID)
-                {
+            for (int i = 0; i < brEntries.Count(); i++) {
+                if (brEntries[i].Item1 == ODID) {
                     brEntries.RemoveAt(i);
                     ODID = i;
                     break;
@@ -154,8 +149,7 @@ namespace CalamityHunt
         public void BossChecklist(Mod bossChecklist)
         {
             int sludge = ModContent.ItemType<OverloadedSludge>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 sludge = ModLoader.GetMod("CalamityMod").Find<ModItem>("OverloadedSludge").Type;
             }
             Action<SpriteBatch, Rectangle, Color> portrait = (SpriteBatch sb, Rectangle rect, Color color) => {
@@ -181,8 +175,7 @@ namespace CalamityHunt
             string adjective = "Mods.CalamityHunt.NPCs.Goozma.Titles.Adjective" + Main.rand.Next(1, numberOfAdjectives + 1);
             string noun = "Mods.CalamityHunt.NPCs.Goozma.Titles.Noun" + Main.rand.Next(1, numberOfNouns + 1);
             LocalizedText final = Language.GetText("Mods.CalamityHunt.NPCs.Goozma.BossChecklistIntegration.DespawnMessage").WithFormatArgs(Language.GetText(adjective), Language.GetText(noun));
-            if (Main.rand.NextBool(specialChance))
-            {
+            if (Main.rand.NextBool(specialChance)) {
                 string special = "Mods.CalamityHunt.NPCs.Goozma.Titles.Specific" + Main.rand.Next(1, numberOfSpecial + 1);
                 final = Language.GetText("Mods.CalamityHunt.NPCs.Goozma.BossChecklistIntegration.DespawnMessage").WithFormatArgs(Language.GetText(special), Language.GetOrRegister(""));
             }

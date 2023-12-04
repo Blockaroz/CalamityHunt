@@ -1,8 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -37,8 +35,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
             if (Projectile.ai[0] == 0)
                 Projectile.velocity.Y += 0.06f;
 
-            if (Main.rand.NextBool(2))
-            {
+            if (Main.rand.NextBool(2)) {
                 int dustType = Utils.SelectRandom(Main.rand, DustID.PinkCrystalShard, DustID.BlueCrystalShard, DustID.PurpleCrystalShard);
                 Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(15), 30, 30, dustType, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, Color.White, Main.rand.NextFloat());
                 dust.noGravity = true;

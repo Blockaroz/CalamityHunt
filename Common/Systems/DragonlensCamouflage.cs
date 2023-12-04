@@ -1,9 +1,9 @@
-﻿using Mono.Cecil.Cil;
-using MonoMod.Cil;
-using MonoMod.RuntimeDetour;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -30,22 +30,19 @@ namespace CalamityHunt.Common.Systems
             Assembly dragonlensCode = ModLoader.GetMod("DragonLens").Code;
 
             Type npcBrowser = dragonlensCode.GetType("DragonLens.Content.Tools.Spawners.NPCBrowser");
-            if (npcBrowser != null)
-            {
+            if (npcBrowser != null) {
                 HideFromNPCSpawner = new ILHook(npcBrowser.GetMethod("PopulateGrid"), HideCalHuntNPCsFromDragonLens);
                 HideCalamityHuntFilterNPC = new ILHook(npcBrowser.GetMethod("SetupFilters"), HideCalamityHuntFilter);
             }
 
             Type itemBrowser = dragonlensCode.GetType("DragonLens.Content.Tools.Spawners.ItemBrowser");
-            if (itemBrowser != null)
-            {
+            if (itemBrowser != null) {
                 HideFromItemSpawner = new ILHook(itemBrowser.GetMethod("PopulateGrid"), HideCalHuntItemsFromDragonLens);
                 HideCalamityHuntFilterItem = new ILHook(itemBrowser.GetMethod("SetupFilters"), HideCalamityHuntFilter);
             }
 
             Type projectileBrowser = dragonlensCode.GetType("DragonLens.Content.Tools.Spawners.ProjectileBrowser");
-            if (projectileBrowser != null)
-            {
+            if (projectileBrowser != null) {
                 HideFromProjectileSpawner = new ILHook(projectileBrowser.GetMethod("PopulateGrid"), HideCalHuntProjectilesFromDragonLens);
                 HideCalamityHuntFilterProjectile = new ILHook(projectileBrowser.GetMethod("SetupFilters"), HideCalamityHuntFilter);
             }
@@ -126,8 +123,7 @@ namespace CalamityHunt.Common.Systems
             if (!cursor.TryGotoNext(MoveType.After,
                 i => i.MatchNewobj(out _),
                 i => i.MatchStloc(out buttonListIndex)
-                ))
-            {
+                )) {
                 return;
             }
 
@@ -135,8 +131,7 @@ namespace CalamityHunt.Common.Systems
             if (!cursor.TryGotoNext(MoveType.After,
                i => i.MatchLdcI4(1),
                i => i.MatchStloc(out loopIteratorIndex)
-               ))
-            {
+               )) {
                 return;
             }
 
@@ -149,8 +144,7 @@ namespace CalamityHunt.Common.Systems
                 i => i.MatchLdarg(0),
                 i => i.MatchNewobj(out _),
                 i => i.MatchCallvirt(out _)
-                ))
-            {
+                )) {
                 return;
             }
 
@@ -166,8 +160,7 @@ namespace CalamityHunt.Common.Systems
                 i => i.MatchLdcI4(1),
                 i => i.MatchAdd(),
                 i => i.MatchStloc(loopIteratorIndex)
-                ))
-            {
+                )) {
                 return;
             }
 
@@ -183,8 +176,7 @@ namespace CalamityHunt.Common.Systems
             //Go to the loop for the mods
             if (!cursor.TryGotoNext(MoveType.After,
                 i => i.MatchCall(typeof(ModLoader).GetMethod("get_Mods", BindingFlags.Static | BindingFlags.Public))
-                ))
-            {
+                )) {
                 return;
             }
 
@@ -194,8 +186,7 @@ namespace CalamityHunt.Common.Systems
                 i => i.MatchLdloc(0),
                 i => i.MatchCallvirt(out _),
                 i => i.MatchBrtrue(out loopStartLabel)
-                ))
-            {
+                )) {
                 return;
             }
 
@@ -208,8 +199,7 @@ namespace CalamityHunt.Common.Systems
                 i => i.MatchLdloc(0),
                 i => i.MatchCallvirt(out _),
                 i => i.MatchStloc(1)
-                ))
-            {
+                )) {
                 return;
             }
 
@@ -222,7 +212,7 @@ namespace CalamityHunt.Common.Systems
         public bool IsThatCalamityHunt(Mod mod) => mod == Mod;
 
         public override void Unload()
-        {        
+        {
             HideFromNPCSpawner?.Undo();
             HideFromItemSpawner?.Undo();
             HideFromProjectileSpawner?.Undo();

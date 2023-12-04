@@ -37,7 +37,7 @@ public class AntiMassBioStrike : ModProjectile
     public override void AI()
     {
         Projectile.velocity.Y += 0.001f;
-  
+
         Projectile.scale = Utils.GetLerpValue(-15, 10, Time, true);
 
         if (Time == 0) {

@@ -50,7 +50,7 @@ public class ShakerSludgeMetaball : MetaballDrawer
         Effect effect = AssetDirectory.Effects.ShakerSludge.Value;
 
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.GameViewMatrix.EffectMatrix);
-        
+
         content.width = Main.screenWidth;
         content.height = Main.screenHeight;
         content.Request();

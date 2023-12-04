@@ -1,16 +1,14 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using System.Collections.Generic;
+using Terraria;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 
 namespace CalamityHunt.Content.Bosses.Goozma
 {
     public static class GoozmaResistances
-    {        
+    {
         public static void GoozmaProjectileResistances(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 List<(int, float)> projectiles = new List<(int, float)> { };
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 //projectiles.Add((calamity.Find<ModProjectile>("EssenceScythe").Type, 0.9f));
@@ -197,16 +195,13 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 projectiles.Add((calamity.Find<ModProjectile>("ScarletDevilBullet").Type, 0.1f));
                 projectiles.Add((calamity.Find<ModProjectile>("ScarletBlast").Type, 0.1f));*/
 
-                for (int i = 0; i < projectiles.Count; i++)
-                {
-                    if (projectile.type == projectiles[i].Item1)
-                    {
+                for (int i = 0; i < projectiles.Count; i++) {
+                    if (projectile.type == projectiles[i].Item1) {
                         modifiers.SourceDamage *= projectiles[i].Item2;
                     }
                 }
 
-                if (projectile.minion)
-                {
+                if (projectile.minion) {
                     modifiers.SourceDamage *= 0.85f;
                 }
             }
@@ -219,14 +214,11 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public static void DisablePointBlank()
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
-                for (int i = 0; i < Main.maxProjectiles; i++)
-                {
+                for (int i = 0; i < Main.maxProjectiles; i++) {
                     Projectile proj = Main.projectile[i];
-                    if (proj.active && (int)calamity.Call("GetPointBlankDuration", proj) > 0)
-                    {
+                    if (proj.active && (int)calamity.Call("GetPointBlankDuration", proj) > 0) {
                         calamity.Call("SetPointBlankDuration", proj, 0);
                     }
                 }

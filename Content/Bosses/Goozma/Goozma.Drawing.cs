@@ -53,8 +53,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
             rainbowStartIndex--;
 
             //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
-            for (int i = 0; i < 9; i++)
-            {
+            for (int i = 0; i < 9; i++) {
                 colors[1 + (rainbowStartIndex + i) % 9] = gradient[i];
             }
 
@@ -94,29 +93,24 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             if (NPC.IsABestiaryIconDummy)
                 headScale = 1f;
-            else
-            {
-                for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
-                {
+            else {
+                for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
                     Color trailColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
                     trailColor.A = 0;
                     DrawGoozma(spriteBatch, screenPos, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], oldTentacleVel[i], trailColor * trailStrength * NPC.scale);
                 }
             }
 
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + NPC.rotation);
                 DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, drawVelocity, tentacleVelocity, glowColor);
             }
 
             bool drawOrnaments = false;
-            if (drawOrnaments)
-            {
+            if (drawOrnaments) {
                 Rectangle ornamentBase = ornamentTexture.Frame(1, 2, 0, 0);
                 Rectangle ornamentGlow = ornamentTexture.Frame(1, 2, 0, 1);
-                for (int i = 0; i < 8; i++)
-                {
+                for (int i = 0; i < 8; i++) {
                     Color ornamentColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0] + i / 8f * 60);
                     ornamentColor.A /= 2;
                     float ornamentRotation = extraTilt + NPC.rotation + NPC.localAI[1] + MathHelper.TwoPi / 8f * i;
@@ -135,13 +129,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             spriteBatch.Draw(glow, NPC.Center - screenPos, null, glowColor * 0.2f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 5f * NPC.scale, 0, 0);
             Effect effect = ModContent.Request<Effect>($"{nameof(CalamityHunt)}/Assets/Effects/HolographEffect", AssetRequestMode.ImmediateLoad).Value;
-            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f); 
+            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
             effect.Parameters["colors"].SetValue(colors);
             effect.Parameters["brightnesses"].SetValue(brightnesses);
             effect.Parameters["baseToScreenPercent"].SetValue(1.05f);
             effect.Parameters["baseToMapPercent"].SetValue(-0.05f);
-            if (Phase == 3)
-            {
+            if (Phase == 3) {
                 effect.Parameters["baseToScreenPercent"].SetValue(1.05f - Utils.GetLerpValue(80, 180, Time, true) * 1.05f);
                 effect.Parameters["baseToMapPercent"].SetValue(-0.05f + Utils.GetLerpValue(20, 150, Time, true) * 0.1f);//-1f + Utils.GetLerpValue(20, 180, Time, true)
             }
@@ -166,13 +159,12 @@ namespace CalamityHunt.Content.Bosses.Goozma
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot + MathHelper.PiOver2, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.5f) + new Vector2(0, eyePower.Y), 0, 0);
             //spriteBatch.Draw(flare.Value, eyePos - Main.screenPosition, null, Color.Lerp(glowColor, new Color(255, 255, 255, 0), 0.2f), eyeRot, flare.Size() * 0.5f, eyeScale * new Vector2(0.5f, 1.1f) + new Vector2(0, eyePower.X), 0, 0);
 
-            if (Phase == 1 && Time >= 50)
-            {
+            if (Phase == 1 && Time >= 50) {
                 eyeScale *= (float)Math.Cbrt(Utils.GetLerpValue(290, 330, Time, true));
                 float eyeFlash = Utils.GetLerpValue(300, 360, Time, true);
                 spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), glowColor * (1f - eyeFlash) * 0.5f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f + eyeFlash * 3f), 0, 0);
                 spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), glowColor * (1f - eyeFlash) * 0.2f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f + eyeFlash * 9f), 0, 0);
-                
+
                 spriteBatch.Draw(eyeBall, eyePos - screenPos, eyeBall.Frame(), glowColor * 0.4f, 0, eyeBall.Size() * 0.5f, 1.05f, 0, 0);
                 spriteBatch.Draw(glow, eyePos - screenPos, null, glowColor * 0.5f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 1.2f, 0, 0);
             }
@@ -195,8 +187,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
         public void FlipShadersOnOff(SpriteBatch spriteBatch, Effect effect, bool immediate)
         {
-            if (NPC.IsABestiaryIconDummy)
-            {
+            if (NPC.IsABestiaryIconDummy) {
                 RasterizerState priorRasterizer = spriteBatch.GraphicsDevice.RasterizerState;
                 Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
                 spriteBatch.End();
@@ -204,8 +195,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRasterizer, effect, Main.UIScaleMatrix);
             }
-            else
-            {
+            else {
                 spriteBatch.End();
                 SpriteSortMode sortMode = SpriteSortMode.Deferred;
                 if (immediate)
@@ -244,8 +234,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             float tentaCount = 5;
             int segmentCount = 11;
-            for (int j = 0; j < tentaCount; j++)
-            {
+            for (int j = 0; j < tentaCount; j++) {
                 SpriteEffects spriteEffects = NPC.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                 float rot = rotation + (0.4f - (j / tentaCount) * 0.6f) * NPC.direction + MathHelper.PiOver2;
                 Vector2 pos = basePos + new Vector2(0, 20).RotatedBy(MathHelper.Lerp(0.5f, -1.3f, j / tentaCount) * NPC.direction + rotation + extraTilt) * NPC.scale;
@@ -253,8 +242,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
                 int segments = segmentCount - Math.Clamp(Math.Abs(j - (int)(tentaCount / 2f)), 1, 2);
                 Vector2 lastPos = pos;
                 float freq = 6f;
-                for (int i = 0; i < segments; i++)
-                {
+                for (int i = 0; i < segments; i++) {
                     float prog = i / (float)segments;
                     Rectangle frame = tentacleTexture.Frame(1, 10, 0, Math.Clamp((int)(prog * 8f) + 1, 2, 9));
                     if (i == 0)
@@ -281,8 +269,7 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             cordContent.Host = this;
             cordContent.Request();
-            if (cordContent.IsReady)
-            {
+            if (cordContent.IsReady) {
                 Texture2D cordTexture = cordContent.GetTarget();
                 spriteBatch.Draw(cordTexture, position - screenPos, null, color, 0, cordTexture.Size() * 0.5f, NPC.scale * 2f, direction, 0);
             }
@@ -298,6 +285,6 @@ namespace CalamityHunt.Content.Bosses.Goozma
 
             spriteBatch.Draw(texture, position + drawOffset - screenPos, null, color, extraTilt * 0.9f + rotation, texture.Size() * 0.5f, headScale * NPC.scale, direction, 0);
             spriteBatch.Draw(crownTexture, crownPos - screenPos, null, color, extraTilt + rotation, crownTexture.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
-        } 
+        }
     }
 }

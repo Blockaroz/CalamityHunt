@@ -1,5 +1,4 @@
 ﻿using System;
-using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;

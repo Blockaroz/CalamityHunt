@@ -17,8 +17,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.width = 32;
             Item.height = 30;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -53,8 +52,7 @@ namespace CalamityHunt.Content.Items.Misc
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
                     .AddIngredient(calamity.Find<ModItem>("AuricBar").Type, 10)
@@ -62,8 +60,7 @@ namespace CalamityHunt.Content.Items.Misc
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
-            else 
-            {
+            else {
                 CreateRecipe()
                     .AddIngredient(ItemID.GoldBar, 10)
                     .AddIngredient<ChromaticMass>(5)

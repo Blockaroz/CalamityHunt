@@ -1,18 +1,15 @@
-﻿using CalamityHunt.Content.Bosses.Goozma;
+﻿using System.Collections.Generic;
+using CalamityHunt.Common.Utilities;
+using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System.Collections.Generic;
-using CalamityHunt.Common;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Items.Misc
 {
@@ -26,8 +23,7 @@ namespace CalamityHunt.Content.Items.Misc
             Item.shoot = ModContent.ProjectileType<StickyHandProj>();
             Item.shootSpeed = 25f;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);

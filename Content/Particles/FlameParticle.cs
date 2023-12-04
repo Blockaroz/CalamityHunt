@@ -1,11 +1,8 @@
 ﻿using System;
-using CalamityHunt.Common.Graphics;
 using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Particles;
 
@@ -41,7 +38,7 @@ public class FlameParticle : Particle
     public override void Update()
     {
         float progress = time / (maxTime * 2f);
-        
+
         velocity *= 0.98f - progress * 0.15f;
         velocity += gravity;
 

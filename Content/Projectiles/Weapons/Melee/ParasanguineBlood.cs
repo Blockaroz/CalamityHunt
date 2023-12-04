@@ -1,7 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -58,14 +57,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             if (Time > 250)
                 Projectile.Kill();
 
-            if (Main.rand.NextBool(25) || (Main.rand.NextBool(7) && Mode == 0))
-            {
+            if (Main.rand.NextBool(25) || (Main.rand.NextBool(7) && Mode == 0)) {
                 Dust blood = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(12, 10), DustID.Blood, -Projectile.velocity * 0.5f + Main.rand.NextVector2Circular(5, 5), 0, Color.DarkRed, 2f + Main.rand.NextFloat());
                 blood.noGravity = true;
             }
 
-            if (StickHost > -1)
-            {
+            if (StickHost > -1) {
                 if (Time < 200)
                     Time = 200;
 
@@ -96,8 +93,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
         {
             Projectile.velocity.X *= 0.8f;
 
-            if (Mode == 0 && Projectile.velocity.Y >= 0)
-            {
+            if (Mode == 0 && Projectile.velocity.Y >= 0) {
                 Mode = 2;
                 if (Time < 200)
                     Time = 200;

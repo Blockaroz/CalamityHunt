@@ -1,12 +1,9 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Collections.Generic;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -31,8 +28,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Throwing;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 DamageClass d;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
@@ -48,8 +44,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
         public override void AI()
         {
-            if (Projectile.ai[0] == 0)
-            {
+            if (Projectile.ai[0] == 0) {
                 Projectile.ai[1] = -1;
 
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
@@ -57,13 +52,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 Dust d = Dust.NewDustPerfect(Projectile.Center - Projectile.velocity * Main.rand.NextFloat(), DustID.SparkForLightDisc, Projectile.velocity.RotatedByRandom(0.1f) * Main.rand.NextFloat(), 0, randomColor, 0.9f);
                 d.noGravity = true;
 
-                if (Projectile.timeLeft < 40)
-                {
+                if (Projectile.timeLeft < 40) {
                     int t = Projectile.FindTargetWithLineOfSight(400);
-                    if (t > -1 && Main.myPlayer == Projectile.owner)
-                    {
-                        if (Main.npc[t].Distance(Main.MouseWorld) < 600)
-                        {
+                    if (t > -1 && Main.myPlayer == Projectile.owner) {
+                        if (Main.npc[t].Distance(Main.MouseWorld) < 600) {
                             Projectile.velocity += Projectile.DirectionTo(Main.npc[t].Center).SafeNormalize(Vector2.Zero) * 1.1f;
                             Projectile.velocity *= 0.95f;
                             Projectile.netUpdate = true;
@@ -77,16 +69,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 if (Projectile.timeLeft < 2)
                     SetCollided(false);
             }
-            else
-            {
-                if (Projectile.ai[0] == -2)
-                {
+            else {
+                if (Projectile.ai[0] == -2) {
                     Projectile.localAI[1] = MathHelper.Clamp(Projectile.localAI[1] - 0.015f, 0f, 1f);
                     Projectile.rotation -= MathF.Sin(Projectile.localAI[0] * MathHelper.TwoPi * 2f) * 0.4f * Projectile.localAI[1] * Projectile.direction;
                 }
 
-                if (Projectile.ai[1] > -1)
-                {
+                if (Projectile.ai[1] > -1) {
                     NPC target = Main.npc[(int)Projectile.ai[1]];
                     if (target.active)
                         Projectile.Center += (target.position - target.oldPosition) / (Projectile.extraUpdates + 1);
@@ -118,8 +107,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         {
             SoundStyle killSound = SoundID.MaxMana with { MaxInstances = 0, Pitch = 1f, PitchVariance = 0.4f };
             SoundEngine.PlaySound(killSound, Projectile.Center);
-            for (int i = 0; i < 9; i++)
-            {
+            for (int i = 0; i < 9; i++) {
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
                 Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(5), 10, 10, DustID.SparkForLightDisc, 0, 0, 0, randomColor, 2f);
@@ -133,8 +121,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.ai[0] = stick ? -2 : -1;
             Projectile.localAI[1] = 1f;
             Projectile.timeLeft = stick ? 80 : 50;
-            if (stick)
-            {
+            if (stick) {
                 Projectile.tileCollide = false;
                 SoundStyle attachSound = SoundID.Item108 with { MaxInstances = 0, Pitch = 1f, PitchVariance = 0.2f, Volume = 0.2f };
                 SoundEngine.PlaySound(attachSound, Projectile.Center);
@@ -180,14 +167,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 
             VertexStrip strip = new VertexStrip();
 
-            if (Projectile.localAI[0] > 2)
-            {
+            if (Projectile.localAI[0] > 2) {
                 Vector2[] oldPos = new Vector2[Projectile.oldPos.Length * 2];
                 float[] oldRot = new float[Projectile.oldPos.Length * 2];
-                for (int i = 0; i < oldPos.Length; i++)
-                {
+                for (int i = 0; i < oldPos.Length; i++) {
                     Vector2 first = Projectile.oldPos[Math.Clamp(i / 2, 0, Projectile.oldPos.Length - 1)];
-                    Vector2 second = Projectile.oldPos[Math.Clamp(i /2 + 1, 0, Projectile.oldPos.Length - 1)];
+                    Vector2 second = Projectile.oldPos[Math.Clamp(i / 2 + 1, 0, Projectile.oldPos.Length - 1)];
                     oldPos[i] = Vector2.Lerp(first, second, (i % 2f) / 2f);
                 }
                 for (int i = 1; i < oldPos.Length; i++)
@@ -211,8 +196,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
             }
 
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 Vector2 offset = new Vector2(1).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
                 Main.EntitySpriteDraw(glowTexture, Projectile.Center + offset * 2 + direction - Main.screenPosition, glowTexture.Frame(), new Color(20, 20, 200, 0), Projectile.rotation, glowTexture.Size() * new Vector2(1f, 0.5f), Projectile.scale, 0, 0);
                 Main.EntitySpriteDraw(glowTexture, Projectile.Center + offset + direction - Main.screenPosition, glowTexture.Frame(), new Color(100, 200, 255, 0), Projectile.rotation, glowTexture.Size() * new Vector2(1f, 0.5f), Projectile.scale, 0, 0);

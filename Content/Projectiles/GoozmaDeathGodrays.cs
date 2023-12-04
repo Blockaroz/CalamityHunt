@@ -1,25 +1,14 @@
-﻿using CalamityHunt.Common.Graphics.Skies;
-using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using CalamityHunt.Common;
 using Terraria;
-using Terraria.Audio;
-using Terraria.Chat;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.Graphics.CameraModifiers;
-using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.Utilities;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Content.Projectiles
 {
@@ -55,8 +44,7 @@ namespace CalamityHunt.Content.Projectiles
             lengths = new List<float>();
 
             int count = Main.rand.Next(20, 30);
-            for (int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 rotations.Add(MathHelper.TwoPi / (float)count * i + Main.rand.NextFloat(-0.5f, 0.5f));
                 accelerations.Add(Main.rand.NextFloat(-3.1415f, 3.1415f));
                 waits.Add(Main.rand.Next(200));
@@ -73,8 +61,7 @@ namespace CalamityHunt.Content.Projectiles
 
             Projectile.Center = Host.Center;
 
-            for (int i = 0; i < rotations.Count; i++)
-            {
+            for (int i = 0; i < rotations.Count; i++) {
                 rotations[i] += (float)Math.Sin(Time * 0.9f + accelerations[i]) * 0.02f;
             }
 
@@ -89,8 +76,7 @@ namespace CalamityHunt.Content.Projectiles
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
 
-            for (int i = 0; i < rotations.Count; i++)
-            {
+            for (int i = 0; i < rotations.Count; i++) {
                 Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Host.localAI[0] + rotations[i] * 0.5f);
                 glowColor.A = 0;
                 float power = Utils.GetLerpValue(waits[i], waits[i] + 70, Time, true) * Utils.GetLerpValue(300, 290, Time, true);

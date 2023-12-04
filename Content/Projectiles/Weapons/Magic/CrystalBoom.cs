@@ -1,18 +1,9 @@
-﻿using CalamityHunt.Content.Items.Rarities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using CalamityHunt.Content.Items.Weapons.Magic;
-using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Content.Particles;
+using Terraria;
 using Terraria.GameContent;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 {

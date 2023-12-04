@@ -1,21 +1,18 @@
-﻿using CalamityHunt.Common.Systems;
+﻿using System;
+using System.Collections.Generic;
+using CalamityHunt.Common.Systems;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
-using CalamityHunt.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
 using Terraria.Utilities;
-using CalamityHunt.Common.Utilities;
 
 namespace CalamityHunt.Common.Graphics.Skies;
 
@@ -62,8 +59,7 @@ public class SlimeMonsoonSkyOld : CustomSky
 
     public override Color OnTileColor(Color inColor)
     {
-        if (inColor.R + inColor.G + inColor.B > 20)
-        {
+        if (inColor.R + inColor.G + inColor.B > 20) {
             float fastStrength = Math.Clamp(_strength * 3f, 0, 1f);
             Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, Color.Black, fastStrength);
             return inColor.MultiplyRGBA(Color.Lerp(Color.White, lightColor, fastStrength));
@@ -104,13 +100,11 @@ public class SlimeMonsoonSkyOld : CustomSky
                 new List<OldMonsoonStrike>(),
             };
 
-        for (int i = 0; i < thunder.Length; i++)
-        {
+        for (int i = 0; i < thunder.Length; i++) {
             if (_random.NextBool(Math.Clamp(120 + additionalLightningChance, 2, 1000)) && _strength > 0.65f && lightningEnabled && Config.Instance.monsoonLightning)
                 thunder[i].Add(new OldMonsoonStrike(Main.LocalPlayer.Center, _random.NextFloat(0.5f, 1.4f), _random.Next(50, 100), i));
 
-            for (int j = 0; j < thunder[i].Count; j++)
-            {
+            for (int j = 0; j < thunder[i].Count; j++) {
                 thunder[i][j].time--;
                 thunder[i][j].strength *= 0.9999f;
                 if (thunder[i][j].time < 0)
@@ -123,7 +117,7 @@ public class SlimeMonsoonSkyOld : CustomSky
     public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
     {
         SkyManager.Instance["Ambience"].Deactivate();
-        
+
         float yOffPower = (float)Utils.GetLerpValue(200, Main.rockLayer - 100, Main.LocalPlayer.Center.Y / 16f, true);
         int yOffset = (int)(yOffPower * 1600f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 0.275f % MathHelper.TwoPi) * 100f);
 
@@ -138,8 +132,7 @@ public class SlimeMonsoonSkyOld : CustomSky
         Color darkColor = Color.Lerp(brightColor, Color.Black, 0.3f);
         lightColor = Color.Lerp(Color.DimGray, brightColor, 0.9f);
 
-        if (maxDepth >= float.MaxValue && minDepth < float.MaxValue)
-        {
+        if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
             spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
             spriteBatch.Draw(AssetDirectory.Textures.Noise[4].Value, new Rectangle(0, -yOffset, Main.screenWidth, Main.screenHeight * 2), darkColor * _strength * 0.66f);
         }
@@ -150,10 +143,8 @@ public class SlimeMonsoonSkyOld : CustomSky
         skyClouds.Parameters["uMap"].SetValue(AssetDirectory.Textures.ColorMap[1].Value);
         skyClouds.Parameters["uBrightness"].SetValue(_brightness - yOffPower * 0.1f);
 
-        for (int i = 0; i < 4; i++)
-        {
-            switch (i)
-            {
+        for (int i = 0; i < 4; i++) {
+            switch (i) {
                 case 0:
                 case 1:
                     if (!(maxDepth >= float.MaxValue && minDepth < float.MaxValue))
@@ -164,7 +155,7 @@ public class SlimeMonsoonSkyOld : CustomSky
                         continue;
                     break;
             }
-            
+
             if (i < 3 && thunder != null)
                 thunder[i].ForEach(n => n.Draw(spriteBatch));
 

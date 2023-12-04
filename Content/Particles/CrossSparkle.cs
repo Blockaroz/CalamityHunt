@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 
 namespace CalamityHunt.Content.Particles;
-    
+
 public class CrossSparkle : Particle
 {
     private int time;
@@ -13,7 +13,7 @@ public class CrossSparkle : Particle
     public override void OnSpawn()
     {
         rotation = velocity.ToRotation() + Main.rand.NextFloat(-0.05f, 0.05f);
-        velocity = Vector2.Zero;         
+        velocity = Vector2.Zero;
     }
 
     public override void Update()

@@ -1,11 +1,9 @@
-﻿using CalamityHunt.Common.Systems;
-using CalamityHunt.Common.Utilities;
+﻿using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Bosses.Goozma;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Projectiles.Weapons.Melee;
 using CalamityHunt.Content.Tiles;
-using CalamityHunt.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -40,8 +38,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
             Item.value = Item.sellPrice(gold: 20);
             Item.shoot = ModContent.ProjectileType<ScytheOfTheOldGodHeld>();
             Item.shootSpeed = 5f;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<ModRarity>("Violet", out r);
@@ -82,8 +79,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<ScytheOfTheOldGodHeld>()] <= 0)
-            {
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<ScytheOfTheOldGodHeld>()] <= 0) {
                 Projectile.NewProjectileDirect(source, position, velocity, type, damage, 0, player.whoAmI, ai0: -1, ai1: swingStyle);
                 swingStyle = (swingStyle + 1) % 3;
             }
@@ -95,8 +91,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
 
         public override void AddRecipes()
         {
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
                     .AddIngredient<ChromaticMass>(15)
@@ -107,8 +102,7 @@ namespace CalamityHunt.Content.Items.Weapons.Melee
                     .AddTile(calamity.Find<ModTile>("DraedonsForge").Type)
                     .Register();
             }
-            else 
-            {
+            else {
                 CreateRecipe()
                     .AddIngredient(ItemID.Sickle)
                     .AddIngredient<ChromaticMass>(15)

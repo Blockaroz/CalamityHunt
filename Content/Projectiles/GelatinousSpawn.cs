@@ -33,7 +33,7 @@ namespace CalamityHunt.Content.Projectiles
             NPC.immortal = true;
             NPC.damage = 0;
             NPC.dontTakeDamage = true;
-            slimeMonsoonText = Language.GetOrRegister(Mod.GetLocalizationKey("Chat.SlimeMonsoon"));      
+            slimeMonsoonText = Language.GetOrRegister(Mod.GetLocalizationKey("Chat.SlimeMonsoon"));
         }
 
         public LocalizedText slimeMonsoonText;
@@ -56,8 +56,7 @@ namespace CalamityHunt.Content.Projectiles
 
             if (Time > 800) {
                 for (int i = 0; i < (int)((Time - 400) / 800f) + 1; i++) {
-                    CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle =>
-                    {
+                    CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                         particle.position = NPC.Center + Main.rand.NextVector2Circular(300, 300) * NPC.scale + Main.rand.NextVector2Circular(40, 40) * ((Time - 400) / 500f);
                         particle.velocity = particle.position.DirectionTo(NPC.Center).SafeNormalize(Vector2.Zero) * particle.position.Distance(NPC.Center) * ((Time - 400) / 500f) * (0.1f / (1f + NPC.scale));
                         particle.color = Color.White;

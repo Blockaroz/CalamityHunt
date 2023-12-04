@@ -1,9 +1,9 @@
-﻿using Terraria.GameContent.ItemDropRules;
-using Terraria;
+﻿using Terraria;
+using Terraria.GameContent.ItemDropRules;
 
 namespace CalamityHunt.Common.DropRules;
 
-public class ZenithDropRule : IItemDropRuleCondition
+public class ZenithWorldDropRule : IItemDropRuleCondition
 {
     bool IItemDropRuleCondition.CanDrop(DropAttemptInfo info) => Main.zenithWorld;
 

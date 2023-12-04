@@ -1,5 +1,4 @@
 ﻿using CalamityHunt.Common.Systems;
-using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
 using CalamityHunt.Content.Tiles;
 using Terraria;

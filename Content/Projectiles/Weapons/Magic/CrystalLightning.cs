@@ -1,13 +1,12 @@
-﻿using CalamityHunt.Common.Systems;
+﻿using System;
+using System.Collections.Generic;
+using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Particles;
-using CalamityHunt.Common.UI;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using CalamityHunt.Common.Utilities;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -51,21 +50,18 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public override void AI()
         {
-            if (Owner < 0)
-            {
+            if (Owner < 0) {
                 Projectile.Kill();
                 return;
             }
-            if (!Main.projectile[(int)Owner].active || (Main.projectile[(int)Owner].type != ModContent.ProjectileType<CrystalGauntletBall>() && Main.projectile[(int)Owner].type != ModContent.ProjectileType<CrystalGauntletBallThrown>()))
-            {
+            if (!Main.projectile[(int)Owner].active || (Main.projectile[(int)Owner].type != ModContent.ProjectileType<CrystalGauntletBall>() && Main.projectile[(int)Owner].type != ModContent.ProjectileType<CrystalGauntletBallThrown>())) {
                 Projectile.Kill();
                 return;
-            }    
-            
+            }
+
             Projectile.Center = Main.projectile[(int)Owner].Center;
 
-            if (Time < 1)
-            {
+            if (Time < 1) {
                 endPoint = Projectile.Center;
                 FindEndpoint();
 
@@ -73,8 +69,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                 midPoint = Vector2.Lerp(Projectile.Center, endPoint, 0.7f) + midOff;
             }
 
-            if (Time == 1)
-            {
+            if (Time == 1) {
                 points = new List<Vector2>();
                 offsets = new List<Vector2>();
                 velocities = new List<Vector2>();
@@ -94,8 +89,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                 }).GetPoints(Main.rand.Next(1, 4) + (int)(Projectile.Distance(endPoint) * 0.017f));
                 points.Add(endPoint);
 
-                for (int i = 0; i < points.Count; i++)
-                {
+                for (int i = 0; i < points.Count; i++) {
                     offsets.Add(Main.rand.NextVector2Circular(5, 20).RotatedBy(Projectile.AngleTo(endPoint)) * Utils.GetLerpValue(1, points.Count * 0.3f, i, true) * Utils.GetLerpValue(points.Count - 1, points.Count * 0.7f, i, true));
                     velocities.Add(Projectile.DirectionTo(endPoint).RotatedByRandom(1.5f) * Main.rand.NextFloat(1f, 3f));
                 }
@@ -107,20 +101,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                 }));
             }
 
-            if (Time > 1)
-            {
-                for (int i = 0; i < points.Count; i++)
-                {
+            if (Time > 1) {
+                for (int i = 0; i < points.Count; i++) {
                     float prog = Utils.GetLerpValue(1, points.Count, i, true) * Utils.GetLerpValue(points.Count - 1, 0, i, true) * 3f;
                     points[i] += (Projectile.position - Projectile.oldPosition) * (1f - i / (float)points.Count);
                     offsets[i] += (velocities[i] + Main.rand.NextVector2Circular(4, 4)) * prog;
                     velocities[i] *= Main.rand.NextFloat(0.95f, 1f) - i * 0.002f;
                 }
 
-                for (int i = 1; i < points.Count; i++)
-                {
-                    if (Main.rand.NextBool(10))
-                    {
+                for (int i = 1; i < points.Count; i++) {
+                    if (Main.rand.NextBool(10)) {
                         Vector2 vel = (Projectile.DirectionTo(endPoint).SafeNormalize(Vector2.Zero).RotatedByRandom(0.5f) + offsets[i] * 0.05f) * Main.rand.NextFloat(2f);
                         Color color = Main.hslToRgb((Projectile.localAI[0] * 0.03f + i / (float)points.Count * 0.5f) % 1f, 0.5f, 0.5f, 0);
                         Dust sparkle = Dust.NewDustPerfect(points[i], DustID.PortalBolt, vel, 0, color, Main.rand.NextFloat(2f));
@@ -157,12 +147,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         private void FindEndpoint()
         {
-            if (Main.myPlayer == Projectile.owner)
-            {
+            if (Main.myPlayer == Projectile.owner) {
                 Vector2 mouse = Main.MouseWorld;
 
-                if (Distance > 10f)
-                {
+                if (Distance > 10f) {
                     endPoint = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * Distance;
                     return;
                 }
@@ -171,10 +159,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     mouse = Projectile.Center + Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 1100;
 
                 int target = Projectile.FindTargetWithLineOfSight(1500);
-                if (target >= 0)
-                {
-                    if (Main.npc[target].Distance(Main.MouseWorld) < 600)
-                    {
+                if (target >= 0) {
+                    if (Main.npc[target].Distance(Main.MouseWorld) < 600) {
                         endPoint = Main.rand.NextVector2FromRectangle(Main.npc[target].Hitbox);
                         Projectile.netUpdate = true;
                         return;
@@ -190,10 +176,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         {
             Rectangle hitbox = new Rectangle((int)Projectile.Center.X - 30, (int)Projectile.Center.Y - 30, 60, 60);
 
-            if (Time > 2 && Time < 30)
-            {
-                for (int i = 0; i < points.Count - 1; i++)
-                {
+            if (Time > 2 && Time < 30) {
+                for (int i = 0; i < points.Count - 1; i++) {
                     Vector2 center = Vector2.Lerp(points[i], points[i + 1], 0.5f);
                     hitbox.Location = (center - hitbox.Size() * 0.5f).ToPoint();
 
@@ -227,8 +211,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (Time > 1)
-            {
+            if (Time > 1) {
                 Texture2D texture = TextureAssets.Projectile[Type].Value;
                 Texture2D bloom = AssetDirectory.Textures.Glow.Value;
                 VertexStrip strip = new VertexStrip();

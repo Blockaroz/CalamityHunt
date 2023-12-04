@@ -1,17 +1,17 @@
-﻿using CalamityHunt.Common.Systems.Particles;
+﻿using System;
+using System.Collections.Generic;
 using CalamityHunt.Common.Systems;
+using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent;
-using CalamityHunt.Content.Particles;
 
 namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 {
@@ -36,36 +36,31 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
         }
 
         public ref float Time => ref Projectile.ai[0];
-        
+
         public override void AI()
         {
             if (Time > 85)
                 Projectile.Kill();
 
-            if (Config.Instance.photosensitiveToggle)
-            {
+            if (Config.Instance.photosensitiveToggle) {
                 float strength = Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(80, 40, Time, true);
                 if (Time % 3 == 0)
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), strength * 70, 15, 5));
             }
 
-            if (Time == 0)
-            {
+            if (Time == 0) {
                 SoundStyle explosion = AssetDirectory.Sounds.Slime.PixieBallExplode;
                 SoundEngine.PlaySound(explosion, Projectile.Center);
             }
-            if (Time == 35)
-            {
+            if (Time == 35) {
                 SoundStyle ringing = AssetDirectory.Sounds.Goozma.EarRinging;
                 SoundEngine.PlaySound(ringing.WithVolumeScale(2f), Projectile.Center);
             }
 
             bool shouldParticle = !Config.Instance.photosensitiveToggle ? Time % 5 == 0 : true;
 
-            if (Time < 50 && shouldParticle)
-            {
-                for (int i = 0; i < 5; i++)
-                {
+            if (Time < 50 && shouldParticle) {
+                for (int i = 0; i < 5; i++) {
                     Vector2 vel = Main.rand.NextVector2Circular(100, 100);
                     float distanceScale = 2f / Math.Max(vel.Length(), 0.9f) + Main.rand.NextFloat();
                     CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
@@ -76,8 +71,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
                     }));
                 }
 
-                for (int i = 0; i < 2; i++)
-                {
+                for (int i = 0; i < 2; i++) {
                     Vector2 vel = Main.rand.NextVector2Circular(200, 200);
                     float distanceScale = 3f / Math.Max(vel.Length(), 0.9f) + Main.rand.NextFloat(2f);
                     CalamityHunt.particles.Add(Particle.Create<CrossSparkle>(particle => {
@@ -110,8 +104,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (Config.Instance.photosensitiveToggle)
-            {
+            if (Config.Instance.photosensitiveToggle) {
                 Texture2D texture = TextureAssets.Projectile[Type].Value;
 
                 Color bloomColor = Main.hslToRgb(Time / 50f % 1f, 0.5f, 0.7f, 0) * Utils.GetLerpValue(60, 30, Time, true);
@@ -128,7 +121,7 @@ namespace CalamityHunt.Content.Bosses.Goozma.Projectiles
 
                 for (int i = 0; i < 4; i++)
                     DrawSparkle(MathHelper.TwoPi / 4f * i + MathHelper.PiOver4, 2f, Projectile.Center, sparkleColor * 0.8f, time);
-            
+
                 for (int i = 0; i < 8; i++)
                     DrawSparkle(MathHelper.TwoPi / 8f * i + MathHelper.Pi / 8f, 1.5f, Projectile.Center, sparkleColor * 0.03f, time);
             }

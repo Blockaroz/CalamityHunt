@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.GameContent;
-using Humanizer;
-using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
 {
@@ -29,8 +23,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Throwing;
-            if (ModLoader.HasMod("CalamityMod"))
-            {
+            if (ModLoader.HasMod("CalamityMod")) {
                 DamageClass d;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
                 calamity.TryFind<DamageClass>("RogueDamageClass", out d);
@@ -65,7 +58,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Vector2 scale = new Vector2(p * 0.8f, MathF.Pow(p + 0.3f, 2) * 3f) * Projectile.scale;
             Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, sparkleFrame, new Color(10, 20, 180, 10), Projectile.rotation - MathHelper.PiOver2, sparkleFrame.Size() * new Vector2(0.5f, 1f), scale * 2.5f, 0, 0);
             Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, sparkleFrame, new Color(90, 200, 255, 0), Projectile.rotation - MathHelper.PiOver2, sparkleFrame.Size() * new Vector2(0.5f, 1f), scale * new Vector2(1.5f, 1f), 0, 0);
-            
+
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 20), Projectile.localAI[0], texture.Size() * new Vector2(0.5f, 0.55f), Projectile.scale * p * 1.66f, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(10, 20, 180, 10), Projectile.localAI[0], texture.Size() * new Vector2(0.5f, 0.55f), Projectile.scale * p * 3f, 0, 0);
 

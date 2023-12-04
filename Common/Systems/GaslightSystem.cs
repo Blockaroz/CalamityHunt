@@ -64,8 +64,7 @@ public sealed class GaslightSystem : ModSystem
             return;
 
         c.Emit(OpCodes.Ldloc, modListStloc);
-        c.EmitDelegate((IEnumerable<Mod> mods) =>
-        {
+        c.EmitDelegate((IEnumerable<Mod> mods) => {
             if (!ModLoader.HasMod("CalamityMod"))
                 return mods;
 

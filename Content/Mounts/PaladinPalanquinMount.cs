@@ -1,15 +1,12 @@
-﻿using CalamityHunt.Common.Graphics.RenderTargets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CalamityHunt.Common.Graphics.RenderTargets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -41,8 +38,7 @@ namespace CalamityHunt.Content.Mounts
             MountData.heightBoost = 16;
             MountData.playerYOffsets = Enumerable.Repeat(MountData.heightBoost, MountData.totalFrames).ToArray();
 
-            if (!Main.dedServ)
-            {
+            if (!Main.dedServ) {
                 MountData.textureWidth = MountData.backTexture.Width() + 20;
                 MountData.textureHeight = MountData.backTexture.Height();
             }
@@ -54,8 +50,7 @@ namespace CalamityHunt.Content.Mounts
             SoundEngine.PlaySound(SoundID.Item81.WithVolumeScale(1.5f).WithPitchOffset(0.7f), player.Center);
             skipDust = true;
 
-            for (int i = 0; i < 30; i++)
-            {
+            for (int i = 0; i < 30; i++) {
                 Dust d = Dust.NewDustDirect(player.MountedCenter - new Vector2(25, 20), 50, 80, DustID.TintableDust, 0, -Main.rand.NextFloat(5f), 100, Color.Black, Main.rand.NextFloat() + 1);
                 d.noGravity = true;
             }
@@ -65,8 +60,7 @@ namespace CalamityHunt.Content.Mounts
         {
             SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Pop.WithVolumeScale(0.5f).WithPitchOffset(1f), player.Center);
             skipDust = true;
-            for (int i = 0; i < 40; i++)
-            {
+            for (int i = 0; i < 40; i++) {
                 Dust d = Dust.NewDustDirect(player.MountedCenter - new Vector2(25, 20), 50, 80, DustID.TintableDust, 0, -Main.rand.NextFloat(5f), 100, Color.Black, Main.rand.NextFloat() + 1);
                 d.noGravity = true;
             }
@@ -76,8 +70,7 @@ namespace CalamityHunt.Content.Mounts
         {
             int heightBoost = 36;
 
-            if (player.mount._mountSpecificData is PaladinPalanquinData data)
-            {
+            if (player.mount._mountSpecificData is PaladinPalanquinData data) {
                 data.tilt = player.velocity.X * 0.02f;
 
                 data.rotation += player.velocity.X * 0.015f;
@@ -91,46 +84,39 @@ namespace CalamityHunt.Content.Mounts
                     player.velocity.Y = -10f;
 
                 data.frameCounter += (int)(Utils.GetLerpValue(-1, 15, Math.Abs(player.velocity.X), true) * 3);
-                if (data.frameCounter > 5)
-                {
+                if (data.frameCounter > 5) {
                     data.frameCounter = 0;
                     data.frameOffset = (data.frameOffset + 1) % 4;
                 }
                 data.frame = (int)(Utils.GetLerpValue(1, 5, Math.Abs(player.velocity.X), true) * 2);
 
-                if (Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) > 0.5f)
-                {
-                    if (data.ballFrameCounter++ > 6)
-                    {
+                if (Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y) > 0.5f) {
+                    if (data.ballFrameCounter++ > 6) {
                         data.ballFrameCounter = 0;
                         data.ballFrame = Math.Clamp(data.ballFrame + 1, 0, 2);
                     }
                     if (data.ballFrame < 2)
                         data.rotation = 0;
                 }
-                else
-                {
+                else {
                     data.ballFrameCounter++;
                     data.ballFrame = 2 - (int)(Utils.GetLerpValue(30, 50, data.ballFrameCounter, true) * 2);
                     heightBoost = 36 - (int)(Utils.GetLerpValue(30, 50, data.ballFrameCounter, true) * 2) * 4;
                     if (data.ballFrame < 2)
                         data.rotation = 0;
                 }
-                if (!player.controlJump)
-                {
+                if (!player.controlJump) {
                     data.wingFrameCounter = 0;
                     data.wingFrame = 1;
                 }
-                else if (data.wingFrameCounter++ > 2)
-                {
+                else if (data.wingFrameCounter++ > 2) {
                     data.wingFrameCounter = 0;
                     data.wingFrame = (data.wingFrame + 1) % 4;
                     if (data.wingFrame == 3)
                         SoundEngine.PlaySound(SoundID.Item32, player.Center);
                 }
 
-                if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, heightBoost + 20), 2, 20) && Math.Abs(player.velocity.X) > 1f)
-                {
+                if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, heightBoost + 20), 2, 20) && Math.Abs(player.velocity.X) > 1f) {
                     Dust d = Dust.NewDustPerfect(player.MountedCenter + new Vector2(0, heightBoost + 20) + Main.rand.NextVector2Circular(5, 3), DustID.TintableDust, new Vector2(-player.velocity.X * 0.1f, -1 - Math.Abs(player.velocity.X) * 0.2f).RotatedByRandom(1f), 100, Color.Black, 0.7f);
                     d.noGravity = Main.rand.NextBool(3);
                     d.shader = GameShaders.Armor.GetSecondaryShader(player.cMount, player);
@@ -145,8 +131,7 @@ namespace CalamityHunt.Content.Mounts
             //if (Collision.SolidCollision(player.MountedCenter + new Vector2(player.velocity.X * 3f - 10, -1), 2, 20) && Math.Abs(player.velocity.X) > 1f)
             //    player.velocity.X *= -0.5f;
 
-            if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, player.velocity.Y * 2f + 20), 2, 30) && Math.Abs(player.velocity.Y) > 0.5f && !player.controlDown)
-            {
+            if (Collision.SolidCollision(player.MountedCenter + new Vector2(0, player.velocity.Y * 2f + 20), 2, 30) && Math.Abs(player.velocity.Y) > 0.5f && !player.controlDown) {
                 player.velocity.Y *= -0.7f - Utils.GetLerpValue(0, 10, Math.Abs(player.velocity.X), true) * 0.4f;
 
                 SoundStyle bounceSound = SoundID.Item154 with { Pitch = -Utils.GetLerpValue(0, 20, Math.Abs(player.velocity.Y), true) + 0.7f, PitchVariance = 0.3f, Volume = Utils.GetLerpValue(0, 20, Math.Abs(player.velocity.Y), true) };
@@ -162,7 +147,7 @@ namespace CalamityHunt.Content.Mounts
             public float tilt;
 
             public int ballFrame;
-            public int ballFrameCounter;            
+            public int ballFrameCounter;
             public int wingFrame;
             public int wingFrameCounter;
 
@@ -180,10 +165,8 @@ namespace CalamityHunt.Content.Mounts
 
         public override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow)
         {
-            if (drawPlayer.mount._mountSpecificData is PaladinPalanquinData data)
-            {
-                switch (drawType)
-                {
+            if (drawPlayer.mount._mountSpecificData is PaladinPalanquinData data) {
+                switch (drawType) {
                     case 2:
 
                         Vector2 minusVelocity = new Vector2(-drawPlayer.velocity.X * 0.1f, Math.Max(-drawPlayer.velocity.Y * 1.5f, 0));
@@ -197,11 +180,10 @@ namespace CalamityHunt.Content.Mounts
                         ballTextureContent.rotation = data.rotation;
                         ballTextureContent.Request();
 
-                        if (ballTextureContent.IsReady)
-                        {
+                        if (ballTextureContent.IsReady) {
                             Texture2D ballTexture = ballTextureContent.GetTarget();
 
-                            DrawData ballData = new DrawData(ballTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(0, MountData.heightBoost + xS * 8f).RotatedBy(data.tilt) - Main.screenPosition, ballTexture.Frame(), drawColor, data.tilt, ballTexture.Size() * 0.5f, squish, 0, 0);                         
+                            DrawData ballData = new DrawData(ballTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(0, MountData.heightBoost + xS * 8f).RotatedBy(data.tilt) - Main.screenPosition, ballTexture.Frame(), drawColor, data.tilt, ballTexture.Size() * 0.5f, squish, 0, 0);
 
                             ballData.shader = drawPlayer.cMount;
                             playerDrawData.Add(ballData);
@@ -212,8 +194,7 @@ namespace CalamityHunt.Content.Mounts
                         palanquinData.shader = drawPlayer.cMount;
                         playerDrawData.Add(palanquinData);
 
-                        if (data.ballFrame == 2)
-                        {
+                        if (data.ballFrame == 2) {
                             Texture2D wingTexture = AssetDirectory.Textures.Goozma.PaladinPalanquinWings.Value;
                             Rectangle wingFrame = wingTexture.Frame(1, 4, 0, data.wingFrame);
 
@@ -232,7 +213,7 @@ namespace CalamityHunt.Content.Mounts
             else
                 drawPlayer.mount._mountSpecificData = new PaladinPalanquinData();
 
-            return false;   
+            return false;
         }
     }
 }

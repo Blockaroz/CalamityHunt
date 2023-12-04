@@ -1,16 +1,16 @@
-﻿using CalamityHunt.Common.Players;
+﻿using System;
+using System.Collections.Generic;
+using CalamityHunt.Common.Graphics.RenderTargets;
+using CalamityHunt.Common.Players;
+using CalamityHunt.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CalamityHunt.Common.Utilities;
-using CalamityHunt.Common.Graphics.RenderTargets;
 
 namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 {
@@ -26,7 +26,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public override void SetDefaults()
         {
             Projectile.width = 30;
-            Projectile.height = 50; 
+            Projectile.height = 50;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
@@ -59,8 +59,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             int target = -1;
             Projectile.Minion_FindTargetInRange(1200, ref target, true);
             bool hasTarget = false;
-            if (target > -1)
-            {
+            if (target > -1) {
                 hasTarget = true;
                 if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile))
                     Attack(target);
@@ -77,8 +76,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             if (AttackCD > 0)
                 AttackCD--;
 
-            if (Projectile.frameCounter++ > 3)
-            {
+            if (Projectile.frameCounter++ > 3) {
                 Projectile.frameCounter = 0;
                 Projectile.frame = (Projectile.frame + 1) % 6;
             }
@@ -108,8 +106,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             if (Projectile.Distance(HomePosition) > 14)
                 Projectile.velocity += Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(HomePosition) * 0.03f);
-            else
-            {
+            else {
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2Circular(2, 2), 0.3f);
                 Projectile.velocity *= 0.9f;
                 Projectile.netUpdate = true;
@@ -125,19 +122,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             if (Projectile.Distance(HomePosition) > 14)
                 Projectile.velocity += Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(HomePosition) * 0.03f);
-            else
-            {
+            else {
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2Circular(2, 2), 0.3f);
                 Projectile.velocity *= 0.9f;
                 Projectile.netUpdate = true;
             }
 
-            if (AttackCD == 0)
-            {
+            if (AttackCD == 0) {
                 Time++;
 
-                if (Time > 100)
-                {
+                if (Time > 100) {
                     SoundStyle deep = SoundID.Item15 with { MaxInstances = 0, Pitch = -1f, PitchVariance = 0.2f, Volume = 0.5f };
                     SoundEngine.PlaySound(deep, Projectile.Center);
                     SoundStyle shootSound = AssetDirectory.Sounds.Weapons.GoozmoemRay;
@@ -152,8 +146,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     AttackCD = 60;
                 }
             }
-            else
-            {
+            else {
                 Projectile.direction = Projectile.Center.X > target.Center.X ? -1 : 1;
                 eyeOffset = Vector2.Lerp(eyeOffset, new Vector2(4 * Projectile.direction, 0) + Main.rand.NextVector2Circular(4, 4), 0.3f);
             }
@@ -183,8 +176,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             goozmoemTextureContent.drawFunction = DrawCreature;
             goozmoemTextureContent.drawNonGlowFunction = DrawCreatureCrown;
             goozmoemTextureContent.Request();
-            if (goozmoemTextureContent.IsReady)
-            {
+            if (goozmoemTextureContent.IsReady) {
                 Texture2D goozmoem = goozmoemTextureContent.GetTarget();
                 Main.EntitySpriteDraw(goozmoem, Projectile.Center - Main.screenPosition, goozmoem.Frame(), Color.White, Projectile.rotation, goozmoem.Size() * 0.5f, scale, 0, 0);
             }
@@ -196,8 +188,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             SpriteEffects direction = Projectile.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            if (cordRope != null)
-            {
+            if (cordRope != null) {
                 Texture2D texture = TextureAssets.Projectile[Type].Value;
                 Texture2D eyeTexture = AssetDirectory.Textures.Goozma.GoozmoemEye.Value;
                 Rectangle frame = texture.Frame(1, 7, 0, Projectile.frame, -2, -2);
@@ -209,8 +200,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 goozmoemCordTextureContent.positions = points.ToArray();
                 goozmoemCordTextureContent.Request();
 
-                if (goozmoemCordTextureContent.IsReady)
-                {
+                if (goozmoemCordTextureContent.IsReady) {
                     Texture2D goozmoemCord = goozmoemCordTextureContent.GetTarget();
                     Main.EntitySpriteDraw(goozmoemCord, new Vector2(256), goozmoemCord.Frame(), Color.White, Projectile.rotation, goozmoemCord.Size() * 0.5f, 2f, 0, 0);
                 }

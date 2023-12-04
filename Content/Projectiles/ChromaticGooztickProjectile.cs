@@ -41,12 +41,10 @@ namespace CalamityHunt.Content.Projectiles
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
-            if (Projectile.velocity.X != oldVelocity.X)
-            {
+            if (Projectile.velocity.X != oldVelocity.X) {
                 Projectile.velocity.X = -oldVelocity.X;
             }
-            if (Projectile.velocity.Y != oldVelocity.Y)
-            {
+            if (Projectile.velocity.Y != oldVelocity.Y) {
                 Projectile.velocity.Y = -oldVelocity.Y;
             }
             return false;
