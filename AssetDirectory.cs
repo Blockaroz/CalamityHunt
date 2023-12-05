@@ -32,9 +32,11 @@ public static class AssetDirectory
         public static Dictionary<int, Asset<Texture2D>> Particle = new Dictionary<int, Asset<Texture2D>>();
         public static Dictionary<int, Asset<Texture2D>> Relic = new Dictionary<int, Asset<Texture2D>>();
 
-        //Jokes
+        //Jokes and Seasons
         internal static readonly Asset<Texture2D> FrogParticle = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/FrogParticle");
         internal static readonly Asset<Texture2D> WideMoto = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/WideMoto");
+        internal static readonly Asset<Texture2D> SantaHat = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/SantaHat");
+        internal static readonly Asset<Texture2D> ElfHat = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/ElfHat");
 
         public static class Goozma
         {
@@ -145,7 +147,7 @@ public static class AssetDirectory
             public static readonly SoundStyle SmallThunder = new(AssetPath + "Sounds/Goozma/GoozmaSmallThunder", 1, 3) { MaxInstances = 0, PitchVariance = 0.15f };
 
             public static readonly SoundStyle Sizzle = new(AssetPath + "Sounds/Goozma/GoozmaSizzle") { MaxInstances = 0 };
-            public static readonly SoundStyle WarbleLoop = new(AssetPath + "Sounds/Goozma/GoozmaTravelLoop") { MaxInstances = 0, IsLooped = true };
+            public static readonly SoundStyle WarbleLoop = new(AssetPath + "Sounds/Goozma/GoozmaDeepWarbleLoop") { MaxInstances = 0, IsLooped = true };
             public static readonly SoundStyle ShootLoop = new(AssetPath + "Sounds/Goozma/GoozmaShootLoop") { MaxInstances = 0, IsLooped = true };
             public static readonly SoundStyle SimmerLoop = new(AssetPath + "Sounds/Goozma/GoozmaSimmerLoop") { MaxInstances = 0, IsLooped = true };
             public static readonly SoundStyle FusionRayLoop = new(AssetPath + "Sounds/Goozma/GoozmaFusionRayLoop") { MaxInstances = 0, IsLooped = true };
@@ -158,12 +160,14 @@ public static class AssetDirectory
 
             public static readonly SoundStyle SlimeJump = new(AssetPath + "Sounds/Goozma/GoozmaSlimeJump", 1, 2) { MaxInstances = 0, PitchVariance = 0.1f };
         }
+
         public static class Goozmite
         {
             public static readonly SoundStyle Ambient = new(AssetPath + "Sounds/Goozma/Goozmite/GoozmiteAmbient", 1, 3) { MaxInstances = 0, Volume = 0.5f };
             public static readonly SoundStyle Death = new(AssetPath + "Sounds/Goozma/Goozmite/GoozmiteDeath", 1, 3) { MaxInstances = 0 };
             public static readonly SoundStyle Impact = new(AssetPath + "Sounds/Goozma/Goozmite/GoozmiteImpact", 1, 3) { MaxInstances = 0 };
         }
+
         public static class Slime
         {
             public static readonly SoundStyle SlimeSlam = new(AssetPath + "Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3) { MaxInstances = 0 };
@@ -192,6 +196,7 @@ public static class AssetDirectory
             public static readonly SoundStyle StellarConstellationWave = new(AssetPath + "Sounds/Goozma/Slimes/StellarSlimeConstellationWave") { MaxInstances = 0 };
             public static readonly SoundStyle StellarConstellationForm = new(AssetPath + "Sounds/Goozma/Slimes/StellarSlimeConstellationForm") { MaxInstances = 0 };
         }
+
         public static class Weapons
         {
             public static readonly SoundStyle CrystalGauntletClap = new(AssetPath + "Sounds/Weapons/CrystalGauntletClap") { MaxInstances = 2, PitchVariance = 0.1f };
@@ -210,6 +215,7 @@ public static class AssetDirectory
             public static readonly SoundStyle AntiMassColliderFire = new(AssetPath + "Sounds/Weapons/AntiMassColliderFire") { MaxInstances = 0, Volume = 0.66f, PitchVariance = 0.05f };
             public static readonly SoundStyle ElectricLoop = new(AssetPath + "Sounds/Weapons/ElectricLoop") { MaxInstances = 0, IsLooped = true };
         }
+
         public static readonly SoundStyle TestLoop = new(AssetPath + "Sounds/TestLoop") { MaxInstances = 0, IsLooped = true };
 
         public static readonly SoundStyle MonsoonThunder = new(AssetPath + "Sounds/SlimeMonsoon/GoozmaMonsoonThunder", 3, SoundType.Ambient) { MaxInstances = 0 };

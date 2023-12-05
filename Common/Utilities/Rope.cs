@@ -61,22 +61,25 @@ public class Rope
     {
         segments[0].position = StartPos;
 
-        if (twoPoint)
+        if (twoPoint) {
             segments[segments.Count - 1].position = EndPos;
+        }
 
         for (var i = 0; i < segments.Count; i++) {
-            if (segments[i].position.HasNaNs())
+            if (segments[i].position.HasNaNs()) {
                 segments[i].position = segments[0].position;
+            }
 
-            var velocity = (segments[i].position - segments[i].oldPosition) / (1f + damping) + gravity;
+            var velocity = (segments[i].position - segments[i].oldPosition) / (1f + damping) + gravity + segments[i].velocity;
             velocity = TileCollision(segments[i].position, velocity);
 
             segments[i].oldPosition = segments[i].position;
             segments[i].position += velocity;
         }
 
-        for (var i = 0; i < accuracy; i++)
+        for (var i = 0; i < accuracy; i++) {
             ConstrainPoints();
+        }
     }
 
     private void ConstrainPoints()
@@ -86,23 +89,26 @@ public class Rope
             var error = MathF.Abs(dist - segmentLength);
             var changeDirection = Vector2.Zero;
 
-            if (dist > segmentLength)
+            if (dist > segmentLength) {
                 changeDirection = (segments[i].position - segments[i + 1].position).SafeNormalize(Vector2.Zero);
-
-            else if (dist < segmentLength)
+            }
+            else if (dist < segmentLength) {
                 changeDirection = (segments[i + 1].position - segments[i].position).SafeNormalize(Vector2.Zero);
+            }
 
             var changeAmount = changeDirection * error;
             if (i != 0) {
                 segments[i].position += TileCollision(segments[i].position, changeAmount * -0.5f);
                 segments[i + 1].position += TileCollision(segments[i + 1].position, changeAmount * 0.5f);
             }
-            else
+            else {
                 segments[i + 1].position += TileCollision(segments[i + 1].position, changeAmount);
+            }
         }
 
-        if (!twoPoint)
+        if (!twoPoint) {
             EndPos = segments[segments.Count - 1].position;
+        }
     }
 
     private Vector2 TileCollision(Vector2 position, Vector2 velocity)
@@ -113,10 +119,13 @@ public class Rope
         var newVelocity = Collision.noSlopeCollision(position - new Vector2(3), velocity, 6, 6, true, true);
         var final = velocity;
 
-        if (Math.Abs(newVelocity.X) < Math.Abs(velocity.X))
+        if (Math.Abs(newVelocity.X) < Math.Abs(velocity.X)) {
             final.X = 0;
-        if (Math.Abs(newVelocity.Y) < Math.Abs(velocity.Y))
+        }
+
+        if (Math.Abs(newVelocity.Y) < Math.Abs(velocity.Y)) {
             final.Y = 0;
+        }
 
         return final;
     }
@@ -124,11 +133,13 @@ public class Rope
     public class RopeSegment
     {
         public Vector2 position;
+        public Vector2 velocity;
         public Vector2 oldPosition;
 
         public RopeSegment(Vector2 pos)
         {
             position = pos;
+            velocity = Vector2.Zero;
             oldPosition = pos;
         }
     }

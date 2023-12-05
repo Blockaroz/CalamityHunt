@@ -123,8 +123,6 @@ public partial class Goozma : ModNPC
             }
         }
 
-        //FlipShadersOnOff(spriteBatch, null, false);
-
         GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
 
         spriteBatch.Draw(glow, NPC.Center - screenPos, null, glowColor * 0.2f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 5f * NPC.scale, 0, 0);
@@ -144,6 +142,8 @@ public partial class Goozma : ModNPC
 
         Vector2 eyePos = NPC.Center + drawOffset + new Vector2(15 * NPC.direction, -22).RotatedBy(extraTilt * 0.9f + NPC.rotation) * headScale * NPC.scale;
         spriteBatch.Draw(eyeBall, eyePos - screenPos, eyeBall.Frame(), Color.White, 0, eyeBall.Size() * 0.5f, 1, 0, 0);
+
+        Texture2D microTentacleTexture = AssetDirectory.Textures.Goozma.MicroTentacle.Value;
 
         FlipShadersOnOff(spriteBatch, effect, false);
         DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, drawVelocity, tentacleVelocity, Color.White);
@@ -169,6 +169,12 @@ public partial class Goozma : ModNPC
             spriteBatch.Draw(glow, eyePos - screenPos, null, glowColor * 0.5f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 1.2f, 0, 0);
         }
 
+        if (Main.xMas) {
+            Texture2D santaHat = AssetDirectory.Textures.SantaHat.Value;
+            SpriteEffects opposite = direction == 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            spriteBatch.Draw(santaHat, crownPos - screenPos, null, Color.White, extraTilt + NPC.rotation + 0.66f * NPC.direction, santaHat.Size() * new Vector2(0.5f + 0.15f * NPC.direction, 0.55f), NPC.scale * 0.66f, opposite, 0);
+        }
+
         spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), Color.Black * 0.5f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f), 0, 0);
         spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), new Color(200, 200, 200, 0), eyeRot, godEye.Size() * 0.5f, eyeScale * 0.95f * (1f + eyePower.Length() * 0.06f), 0, 0);
         spriteBatch.Draw(godEye, eyePos - screenPos, godEye.Frame(), glowColor, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f), 0, 0);
@@ -177,7 +183,6 @@ public partial class Goozma : ModNPC
         spriteBatch.Draw(sparkle, eyePos - screenPos, sparkle.Frame(), glowColor * 0.15f, eyeRot, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 4f) + new Vector2(0, eyePower.X), 0, 0);
         spriteBatch.Draw(sparkle, eyePos - screenPos, sparkle.Frame(), glowColor * 0.15f, eyeRot + MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.X), 0, 0);
         spriteBatch.Draw(sparkle, eyePos - screenPos, sparkle.Frame(), glowColor * 0.15f, eyeRot - MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
-
 
         spriteBatch.Draw(glow, eyePos - screenPos, null, glowColor * 0.2f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 2f * eyeScale, 0, 0);
         spriteBatch.Draw(glow, eyePos - screenPos, null, glowColor * 0.05f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 5f * eyeScale, 0, 0);
@@ -233,7 +238,7 @@ public partial class Goozma : ModNPC
         Vector2 basePos = position + new Vector2(0, 10).RotatedBy(-extraTilt * 0.4f + rotation) * NPC.scale;
 
         float tentaCount = 5;
-        int segmentCount = 11;
+        int segmentCount = 12;
         for (int j = 0; j < tentaCount; j++) {
             SpriteEffects spriteEffects = NPC.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             float rot = rotation + (0.4f - (j / tentaCount) * 0.6f) * NPC.direction + MathHelper.PiOver2;
@@ -241,7 +246,7 @@ public partial class Goozma : ModNPC
             Vector2 stick = (rot.ToRotationVector2() * 12 - tentacleVelocity * 0.01f) * (0.5f + headScale * 0.5f) * NPC.scale;
             int segments = segmentCount - Math.Clamp(Math.Abs(j - (int)(tentaCount / 2f)), 1, 2);
             Vector2 lastPos = pos;
-            float freq = 6f;
+            float freq = 3f;
             for (int i = 0; i < segments; i++) {
                 float prog = i / (float)segments;
                 Rectangle frame = tentacleTexture.Frame(1, 10, 0, Math.Clamp((int)(prog * 8f) + 1, 2, 9));

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -28,8 +29,7 @@ public class ParticleSystem
 
             return;
         }
-
-        particles.ToList().ForEach(particle => {
+        foreach (Particle particle in particles.ToHashSet()) {
             if (particle != null) {
                 particle.Update();
                 particle.position += particle.velocity;
@@ -38,7 +38,7 @@ public class ParticleSystem
                     particles.Remove(particle);
                 }
             }
-        });
+        };
     }
 
     public void Draw(SpriteBatch spriteBatch, bool begin = true)

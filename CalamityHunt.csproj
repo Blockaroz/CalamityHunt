@@ -8,22 +8,6 @@
     <LangVersion>11</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Assets\Effects\BasicTrail.fx" />
-    <None Remove="Assets\Effects\FlameDissolve.fx" />
-    <None Remove="Assets\Effects\LightningBeam.fx" />
-    <None Remove="Assets\Effects\SlimeMonsoonSkyEffect.fx" />
-    <None Remove="Assets\Effects\SlimeMonsoonStrike.fx" />
-    <None Remove="Assets\Textures\Extra\Noise_6.png" />
-    <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassAccumulator.png" />
-    <None Remove="Assets\Textures\Items\Weapons\Ranged\AntiMassAccumulator_Glow.png" />
-    <None Remove="Assets\Textures\Particles\FlameParticle.png" />
-    <None Remove="Assets\Textures\Particles\LightningParticle.png" />
-    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassAccumulatorProj.png" />
-    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassAccumulatorProj_Glow.png" />
-    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassBioBall.png" />
-    <None Remove="Assets\Textures\Projectiles\Weapons\Ranged\AntiMassBioStrike.png" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>

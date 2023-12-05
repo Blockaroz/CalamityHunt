@@ -42,7 +42,7 @@ namespace CalamityHunt
             particlesBehindEntities = new ParticleSystem();
             particlesBehindEntities.Initialize();
 
-            On_Dust.UpdateDust += UpdateParticleSystems;
+            On_Main.UpdateParticleSystems += UpdateParticleSystems;
             On_Main.DrawDust += DrawParticleSystems;
             On_Main.DrawBackGore += DrawParticleSystemBehindEntities;
 
@@ -60,9 +60,9 @@ namespace CalamityHunt
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();
         }
 
-        private void UpdateParticleSystems(On_Dust.orig_UpdateDust orig)
+        private void UpdateParticleSystems(On_Main.orig_UpdateParticleSystems orig, Main self)
         {
-            orig();
+            orig(self);
             particlesBehindEntities.Update();
             particles.Update();
         }

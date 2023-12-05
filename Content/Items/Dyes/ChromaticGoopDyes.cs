@@ -167,7 +167,7 @@ namespace CalamityHunt.Content.Items.Dyes
         #region Drawing in world
         public Effect GetShader()
         {
-            Effect effect = AssetDirectory.Effects.HolographicGel.Value;
+            Effect effect = AssetDirectory.Effects.Dyes.Holograph.Value;
             Goozma.GetGradientMapValues(ChromaticDyeLoader.Palettes[Index], out float[] brightnesses, out Vector3[] colors);
 
             effect.Parameters["uColor"].SetValue(new Color(39, 31, 34).ToVector3());

@@ -1881,15 +1881,15 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         float offsetWobble = (float)Math.Cos(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 0.07f;
 
         if (!rotate) {
-            NPC.rotation = NPC.rotation.AngleLerp(Math.Clamp(drawVelocity.X * 0.012f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.2f);
+            NPC.rotation = NPC.rotation.AngleLerp(Math.Clamp(drawVelocity.X * 0.012f, -1f, 1f) - (offsetWobble - 0.1f) * NPC.direction, 0.1f);
         }
 
         extraTilt = MathHelper.Lerp(extraTilt, Math.Clamp(-drawVelocity.X * 0.025f, -1f, 1f) - 0.01f * NPC.direction, 0.15f);
         headScale = MathHelper.Lerp(headScale, 1f, 0.05f);
 
-        tentacleVelocity *= 0.8f;
-        tentacleAcceleration = NPC.velocity - oldVel[(int)(oldVel.Length / 2f)];
-        tentacleVelocity += tentacleAcceleration.RotatedBy(-NPC.rotation) * 0.5f;
+        tentacleVelocity *= 0.89f;
+        tentacleAcceleration = (NPC.velocity - oldVel[(int)(oldVel.Length / 3f)]) * 0.1f;
+        tentacleVelocity += tentacleAcceleration.RotatedBy(-NPC.rotation) * 0.7f;
 
         if (oldTentacleVel != null) {
             for (int i = NPCID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
@@ -1898,19 +1898,7 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         }
 
         rotate = false;
-
-        microTentacles ??= new Rope[5];
-        for (int i = 0; i < microTentacles.Length; i++) {
-            microTentacles[i] ??= new Rope(NPC.Center, 30, 15f, Vector2.UnitY * 0.01f, 0.1f, 10);
-            microTentacles[i].StartPos = NPC.Center;
-            microTentacles[i].gravity = Vector2.UnitY.RotatedBy(NPC.rotation) * 0.01f;
-            microTentacles[i].Update();
-        }
-
-        Phase = -22;
     }
-
-    private Rope[] microTentacles;
 
     private void FadeMusicOut(On_Main.orig_UpdateAudio orig, Main self)
     {

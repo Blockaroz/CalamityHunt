@@ -43,8 +43,8 @@ public class CosmosMetaball : MetaballDrawer
         effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -(Main.GlobalTimeWrappedHourly * 0.017f % 2f)));
         effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, -(Main.GlobalTimeWrappedHourly * 0.0004f % 2f)));
         effect.Parameters["uCloseColor"].SetValue(Color.Lerp(Color.SteelBlue, Color.Cyan, 0.1f).ToVector3());
-        effect.Parameters["uFarColor"].SetValue((Color.MidnightBlue * 0.25f).ToVector3());
-        effect.Parameters["uOutlineColor"].SetValue(new Color(1, 7, 25, 0).ToVector4());
+        effect.Parameters["uFarColor"].SetValue((Color.MidnightBlue * 0.3f).ToVector3());
+        effect.Parameters["uOutlineColor"].SetValue(new Color(1, 10, 60, 0).ToVector4());
         effect.Parameters["uImageSize"].SetValue(Main.ScreenSize.ToVector2());
         effect.Parameters["uNoiseRepeats"].SetValue(0.1f);
 

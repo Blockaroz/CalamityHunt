@@ -90,7 +90,7 @@ public class FusionFlameParticle : Particle
         }
 
         dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[11].Value);
-        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(1f + scale * 0.01f));
+        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(0.6f + scale * 0.01f));
         dissolveEffect.Parameters["uFrameCount"].SetValue(10);
         dissolveEffect.Parameters["uProgress"].SetValue(progress * 0.8f);
         dissolveEffect.Parameters["uPower"].SetValue(10f + progress * 60f);
@@ -98,7 +98,7 @@ public class FusionFlameParticle : Particle
         dissolveEffect.CurrentTechnique.Passes[0].Apply();
 
         Vector2 squish = new Vector2(1f - progress * 0.1f, 1f + progress * 0.1f);
-        spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation, frame.Size() * 0.5f, squish * drawScale * 0.45f, flip, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation - MathHelper.PiOver2 * direction, frame.Size() * 0.5f, squish * drawScale * 0.45f, flip, 0);
 
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
