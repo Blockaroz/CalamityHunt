@@ -20,6 +20,12 @@ public class AntiMassAccumulator : ModItem
         else {
             Item.damage = 545;
             Item.rare = ItemRarityID.Red;
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
+                ModRarity r;
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
+                calamity.TryFind<ModRarity>("Turquoise", out r);
+                Item.rare = r.Type;
+            }
         }
 
         Item.DamageType = DamageClass.Ranged;
