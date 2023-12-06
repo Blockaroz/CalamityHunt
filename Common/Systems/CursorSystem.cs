@@ -51,11 +51,10 @@ public class CursorSystem : ModSystem
 
                 for (int i = 1; i < ropeCount; i++) {
 
-                    ropes[i] ??= new Rope(mouseCenter, (int)(25 + Main.rand.NextFloat(20f)), 1.5f, Vector2.UnitY * 0.1f, 0.05f, 10);
+                    ropes[i] ??= new Rope(mouseCenter, (int)(60 + Main.rand.NextFloat(20f)), 1.5f, Vector2.UnitY * 0.1f, 0.03f, 30);
                     ropes[i].StartPos = mouseCenter;
-                    float spread = (ropeCount - i * 2);
+                    float spread = ropeCount - i * 2;
                     ropes[i].gravity = Vector2.UnitY.RotatedBy(spread * 0.1f + MathF.Sin((Main.GlobalTimeWrappedHourly * 3f + i) % MathHelper.TwoPi) * 0.4f) * 0.15f + (Main.MouseScreen - OldMouseScreen).RotatedBy(spread * 0.1f) * 0.01f;
-                    ropes[i].damping = 0.05f;
                     ropes[i].Update();
                 }
             }
@@ -84,6 +83,8 @@ public class CursorSystem : ModSystem
     {
         Player player = Main.LocalPlayer;
         if (player != null) {
+
+            int dye = player.GetModPlayer<VanityPlayer>().cTendril;
             if (player.GetModPlayer<VanityPlayer>().tendrilCursor) {
 
                 rainbowTendrilContent.width = Main.screenWidth;
@@ -96,8 +97,9 @@ public class CursorSystem : ModSystem
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.SamplerStateForCursor, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
 
                     DrawData drawData = new DrawData(screen, Vector2.Zero, screen.Frame(), Color.White, 0, Vector2.Zero, 2f, 0, 0);
-                    GameShaders.Armor.Apply(player.cPet, null, drawData);
+                    GameShaders.Armor.Apply(dye, null, drawData);
                     drawData.Draw(Main.spriteBatch);
+                    Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.SamplerStateForCursor, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);

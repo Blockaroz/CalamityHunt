@@ -117,13 +117,13 @@ public class AntiMassBioBall : ModProjectile
 
         for (int i = 0; i < 40; i++) {
             CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
-                particle.maxTime = Main.rand.Next(8, 14);
+                particle.maxTime = Main.rand.Next(10, 18);
                 particle.position = Projectile.Center + Main.rand.NextVector2Circular(10, 10).RotatedBy(Projectile.rotation) * Projectile.scale;
                 particle.velocity = Main.rand.NextVector2Circular(36, 36) * (1.5f / particle.maxTime);
                 particle.scale = Main.rand.NextFloat(0.5f, 1.5f) * Projectile.scale;
                 particle.color = Color.Lerp(AntiMassAccumulatorProj.MainColor, Color.MediumAquamarine, (!Main.rand.NextBool((int)(Time / 30f + 8))).ToInt()) with { A = 0 };
                 particle.rotation = particle.velocity.ToRotation() + Main.rand.NextFloat(-0.2f, 0.2f);
-                particle.anchor = () => Projectile.velocity * 0.1f;
+                particle.anchor = () => Projectile.velocity * 0.01f;
                 particle.flickerSpeed = 2.5f;
             }));
 

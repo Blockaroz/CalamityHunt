@@ -29,7 +29,7 @@ public class AntiMassDeathLaser : ModProjectile
         Projectile.penetrate = -1;
         Projectile.tileCollide = true;
         Projectile.ownerHitCheck = true;
-        Projectile.extraUpdates = 25;
+        Projectile.extraUpdates = 23;
         Projectile.localNPCHitCooldown = -1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.ignoreWater = true;
@@ -54,14 +54,14 @@ public class AntiMassDeathLaser : ModProjectile
             Dust sparks = Dust.NewDustPerfect(Projectile.Center, 278, Projectile.velocity.RotatedByRandom(0.2f) * Main.rand.NextFloat(), 0, color * 0.8f, Main.rand.NextFloat(0.9f));
             sparks.noGravity = true;
 
-            if (Time % 9 == 4) {
+            if (Time % 9 == 5) {
                 CalamityHunt.particles.Add(Particle.Create<StraightLightningParticle>(particle => {
                     particle.position = Projectile.Center - Projectile.velocity * 0.5f;
                     particle.velocity = Projectile.velocity * 0.15f;
                     particle.scale = Main.rand.NextFloat(1.5f, 3f) * Projectile.scale;
                     particle.color = Color.Lerp(AntiMassAccumulatorProj.MainColor, Color.Orange, Main.rand.NextBool((int)(Projectile.timeLeft / 1200f * 10) + 1).ToInt()) with { A = 20 };
                     particle.rotation = Projectile.rotation;
-                    particle.maxTime = (int)(Utils.GetLerpValue(0, 120, Time, true) * 35) + Main.rand.Next(2, 8);
+                    particle.maxTime = (int)(Utils.GetLerpValue(500, 240, Projectile.timeLeft, true) * 25) + Main.rand.Next(3, 6);
                     particle.stretch = Projectile.velocity.Length() * 0.25f / particle.scale * Projectile.scale;
                     particle.flickerSpeed = Main.rand.NextFloat(0.1f, 2f);
                 }));
@@ -71,11 +71,11 @@ public class AntiMassDeathLaser : ModProjectile
                 CalamityHunt.particles.Add(Particle.Create<StraightLightningParticle>(particle => {
                     particle.position = Projectile.Center - Projectile.velocity * 0.5f;
                     particle.velocity = Projectile.velocity * 0.1f;
-                    particle.scale = Main.rand.NextFloat(0.5f, 1f) * Projectile.scale;
+                    particle.scale = Main.rand.NextFloat(1f, 2f) * Projectile.scale;
                     particle.color = Color.Lerp(AntiMassAccumulatorProj.MainColor, Color.Turquoise, Main.rand.NextBool(3).ToInt()) with { A = 20 };
                     particle.rotation = Projectile.rotation;
-                    particle.maxTime = (int)(Utils.GetLerpValue(120, 0, Time, true) * 6) + Main.rand.Next(9, 15);
-                    particle.stretch = Projectile.velocity.Length() * 0.15f * Projectile.scale;
+                    particle.maxTime = (int)(Utils.GetLerpValue(500, 240, Projectile.timeLeft, true) * 5) + Main.rand.Next(5, 10);
+                    particle.stretch = Projectile.velocity.Length() * 0.11f * Projectile.scale;
                     particle.flickerSpeed = Main.rand.NextFloat(0.5f, 2f);
                 }));
             }
@@ -114,14 +114,16 @@ public class AntiMassDeathLaser : ModProjectile
             Projectile.velocity *= 0.9f;
         }
 
-        if (Main.rand.NextBool(6)) {
-            CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
-                particle.position = Projectile.Center;
-                particle.velocity = Main.rand.NextVector2Circular(10, 10);
-                particle.scale = Main.rand.NextFloat(1f, 2f);
-                particle.color = Color.Lerp(AntiMassAccumulatorProj.MainColor, Color.MediumTurquoise, Main.rand.NextBool(3).ToInt()) with { A = 40 };
-                particle.rotation = Projectile.rotation;
-            }));
+        if (Projectile.timeLeft < 180 || DrillTime > 0) {
+            if (Main.rand.NextBool(3)) {
+                CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
+                    particle.position = Projectile.Center;
+                    particle.velocity = Main.rand.NextVector2Circular(20, 20);
+                    particle.scale = Main.rand.NextFloat(1f, 2f);
+                    particle.color = Color.Lerp(AntiMassAccumulatorProj.MainColor, Color.MediumTurquoise, Main.rand.NextBool(3).ToInt()) with { A = 40 };
+                    particle.rotation = particle.velocity.ToRotation();
+                }));
+            }
         }
 
         Projectile.localAI[0] += 0.002f;
@@ -198,7 +200,6 @@ public class AntiMassDeathLaser : ModProjectile
         Vector2[] points = new Vector2[64];
         points[0] = Projectile.Center;
         float[] rotations = new float[64];
-        float totalLength;
         for (int i = 0; i < points.Length; i++) {
             points[i] = Vector2.Lerp(Projectile.Center, Projectile.Center - new Vector2(visualSpeed, 0).RotatedBy(Projectile.rotation), (float)i / points.Length);
             rotations[i] = Projectile.rotation;
@@ -212,7 +213,7 @@ public class AntiMassDeathLaser : ModProjectile
         lightningEffect.Parameters["uBloomColor"].SetValue((Color.DarkOrange with { A = 20 }).ToVector4());
         lightningEffect.Parameters["uLength"].SetValue(visualSpeed / 128f);
         lightningEffect.Parameters["uNoiseThickness"].SetValue(1f);
-        lightningEffect.Parameters["uNoiseSize"].SetValue(3f);
+        lightningEffect.Parameters["uNoiseSize"].SetValue(2f);
         lightningEffect.Parameters["uTime"].SetValue(Projectile.localAI[0]);
         lightningEffect.CurrentTechnique.Passes[0].Apply();
 
