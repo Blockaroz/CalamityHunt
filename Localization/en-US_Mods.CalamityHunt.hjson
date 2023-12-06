@@ -499,10 +499,7 @@ Items: {
 
 	GoozmaBoulderItem: {
 		DisplayName: Motley Marble
-		Tooltip:
-			'''
-			'Highly dangerous'
-			'''
+		Tooltip: "'Highly dangerous'"
 	}
 
 	IOUASoul: {
@@ -517,7 +514,7 @@ Items: {
 
 	TendrilCursorAttachment: {
 		DisplayName: Tendril Cursor Attachment
-		Tooltip: 
+		Tooltip:
 			'''
 			Attaches hanging chromatic tendrils to your mouse cursor
 			The amount of tendrils depends on the slot this item is placed in

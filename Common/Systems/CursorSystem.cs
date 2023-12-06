@@ -36,10 +36,12 @@ public class CursorSystem : ModSystem
         if (player != null) {
             int ropeCount = player.GetModPlayer<VanityPlayer>().tendrilCount;
 
-            Vector2 mouseCenter = Vector2.Lerp(Main.MouseScreen, OldMouseScreen, 0.66f) / Main.UIScale / 2f + new Vector2(3f);
+            Vector2 mouseCenter = Vector2.Lerp(Main.MouseScreen, OldMouseScreen, 0.66f) / 2f + new Vector2(3f);
 
             mouseCenter *= Main.GameZoomTarget;
             mouseCenter -= Main.ScreenSize.ToVector2() / 4f * (Main.GameZoomTarget - 1f);
+
+            mouseCenter /= Main.UIScale;
 
             if (player.GetModPlayer<VanityPlayer>().tendrilCursor) {
 
