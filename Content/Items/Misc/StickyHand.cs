@@ -34,8 +34,9 @@ namespace CalamityHunt.Content.Items.Misc
         {
             TooltipLine tooltip = new(Mod, "CalamityHunt:HookStats", Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.StickyHandStats").Value);
             int check = tooltips.IndexOf(tooltips.Find(t => t.Text.Equals("\'It won't break, I promise\'")));
-            if (ModLoader.HasMod(HUtils.CalamityMod))
+            if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 tooltips.Insert(check, tooltip);
+            }
         }
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {

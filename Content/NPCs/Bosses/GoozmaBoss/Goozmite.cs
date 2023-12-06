@@ -166,7 +166,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             }
             else if (NPC.ai[3] == 1) {
                 NPC.friendly = true;
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Host.Center).SafeNormalize(Vector2.Zero) * (float)Math.Pow(Utils.GetLerpValue(-20, 60, Time, true), 2f) * 50f, (float)Math.Pow(Utils.GetLerpValue(-20, 60, Time, true), 2f) * 0.3f);
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Host.Center).SafeNormalize(Vector2.Zero) * (float)Math.Pow(Utils.GetLerpValue(-20, 60, Time, true), 2f) * 50f, (float)Math.Pow(Utils.GetLerpValue(-20, 60, Time, true), 2f) * 0.1f);
                 NPC.velocity = NPC.velocity.RotatedBy(0.02f * NPC.direction);
                 NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.2f * Utils.GetLerpValue(0, 40, Time, true));
 
@@ -252,41 +252,17 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
             var randCounter = Main.rand.Next(45, 60);
             if ((Time - 40) % randCounter < Main.rand.Next(3)) {
-                zapPoints = new List<Vector2>();
-                zapVelocities = new List<Vector2>();
-                zapPoints.Add(NPC.Center);
-                var count = 6;
-                var offMid = Main.rand.NextVector2Circular(10, 100).RotatedBy(NPC.AngleTo(Host.Center));
-                for (var i = 1; i < count; i++) {
-                    var prog = Utils.GetLerpValue(0, count, i, true);
-                    var point = Vector2.Lerp(NPC.Center, Host.Center, i / (float)count) + (offMid * 0.5f + Main.rand.NextVector2Circular(1, 1).RotatedBy(NPC.AngleTo(Host.Center))) * prog;
-                    zapPoints.Add(point);
-                }
-                zapPoints.Add(Host.Center);
-
-                for (var i = 0; i < zapPoints.Count; i++) {
-                    var direction = NPC.DirectionTo(Host.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.1f);
-                    zapVelocities.Add(direction * -Main.rand.NextFloat(1f, 2f) + Main.rand.NextVector2Circular(1f, 1f).RotatedBy(direction.ToRotation()) + offMid * 0.05f);
-                }
-
-                if (zapPointsReal == null) {
-                    zapPointsReal = new List<Vector2>();
-                    zapPointsReal.AddRange(zapPoints);
-                }
+                zapRope = new Rope(NPC.Center, Host.Center, 45, NPC.Distance(Host.Center) * 0.02f, Main.rand.NextVector2Circular(1, 1));
             }
 
             if (Time > 40) {
-                for (var i = 0; i < zapPoints.Count; i++) {
-                    if ((Time + i) % randCounter > 15)
-                        zapVelocities[i] *= 0.98f;
-                    zapPoints[i] += zapVelocities[i] * (float)Math.Sin(i / (float)zapPoints.Count * MathHelper.Pi);
-                    zapPoints[i] += (NPC.position - NPC.oldPosition) * Utils.GetLerpValue(zapPoints.Count, 0, i, true);
-                    zapPoints[i] += (Host.position - Host.oldPosition) * Utils.GetLerpValue(0, zapPoints.Count, i, true);
-                }
-
-                for (var i = 0; i < zapPointsReal.Count; i++) {
-                    zapPointsReal[i] = Vector2.Lerp(zapPointsReal[i], zapPoints[i], 0.8f + 0.2f * (Utils.GetLerpValue(0.1f, 0f, i / (float)zapPointsReal.Count, true) + Utils.GetLerpValue(0.9f, 1f, i / (float)zapPointsReal.Count, true))) + Main.rand.NextVector2CircularEdge(2, 2) * (float)Math.Sin(i / (float)zapPointsReal.Count * MathHelper.Pi);
-                }
+                zapRope.StartPos = NPC.Center;
+                zapRope.EndPos = Host.Center;
+                zapRope.damping += 0.0033f;
+                zapRope.gravity *= 0.99f;
+                zapRope.gravity += NPC.velocity * 0.01f;
+                zapRope.segmentLength = MathHelper.Lerp(zapRope.segmentLength, NPC.Distance(Host.Center) * 0.023f, 0.5f);
+                zapRope.Update();
             }
         }
 
@@ -321,6 +297,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             return (int)(damage * modifier);
         }
 
+        public Rope zapRope;
         public Rope leftRope;
         public Rope rightRope;
 
@@ -388,6 +365,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                     spriteBatch.Draw(tentacleTexture, mtPoints[j] - screenPos, mtFrame, mtColor, mtRotation - MathHelper.PiOver2, mtFrame.Size() * new Vector2(0.5f, 0f), mtScale, 0, 0);
                 }
             }
+
             if (rightRope != null) {
                 Vector2[] mtPoints = rightRope.GetPoints().ToArray();
                 for (int j = 1; j < mtPoints.Length - 1; j++) {
@@ -519,10 +497,6 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
         }
 
-        private List<Vector2> zapPointsReal;
-        private List<Vector2> zapPoints;
-        private List<Vector2> zapVelocities;
-
         public void DrawHealZap(SpriteBatch spriteBatch, Vector2 screenPos)
         {
             VertexStrip strip = new VertexStrip();
@@ -530,35 +504,37 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             var myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]) with { A = 0 };
             var goozmaColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Host.localAI[0]) with { A = 0 };
 
-            Color StripColor(float progress) => (Color.Lerp(myColor, goozmaColor * 0.1f, progress * 1.1f)) with { A = 0 };
-            float StripWidth(float progress) => (1f - (float)Math.Sin(progress * 2.5f) * 0.85f) * 70f;
+            Color StripColor(float progress) => (Color.Lerp(myColor, goozmaColor * 0.5f, progress)) with { A = 0 };
+            float StripWidth(float progress) => (1f - (float)Math.Sin(progress * 2.5f) * 0.25f) * 30f;
 
-            float totalDistance = 0;
-            var rots = new float[zapPointsReal.Count];
-            for (var i = 0; i < zapPointsReal.Count - 1; i++) {
-                rots[i] = zapPointsReal[i].AngleFrom(zapPoints[i + 1]);
-                totalDistance += zapPointsReal[i].Distance(zapPoints[i + 1]);
-            }  
+            if (zapRope != null) {
+                Vector2[] zapPoints = zapRope.GetPoints().ToArray();
+                float totalDistance = 0;
+                var rots = new float[zapPoints.Length];
+                for (var i = 0; i < zapPoints.Length - 1; i++) {
+                    rots[i] = zapPoints[i].AngleTo(zapPoints[i + 1]);
+                    totalDistance += zapPoints[i].Distance(zapPoints[i + 1]);
+                }
 
-            rots[0] = zapPointsReal[0].AngleTo(zapPoints[1]);
-            strip.PrepareStrip(zapPointsReal.ToArray(), rots, StripColor, StripWidth, -Main.screenPosition, zapPointsReal.Count, true);
+                rots[0] = zapPoints[0].AngleTo(zapPoints[1]);
+                strip.PrepareStrip(zapPoints, rots, StripColor, StripWidth, -Main.screenPosition, zapPoints.Length, true);
 
-            Effect lightningEffect = AssetDirectory.Effects.LightningBeam.Value;
-            lightningEffect.Parameters["transformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-            lightningEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[7].Value);
-            lightningEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Goozma.LightningGlow.Value);
-            lightningEffect.Parameters["uColor"].SetValue((Color.White).ToVector4() * 2f);
-            lightningEffect.Parameters["uBloomColor"].SetValue((Color.White).ToVector4() * 2f);
-            lightningEffect.Parameters["uLength"].SetValue(totalDistance / 128f);
-            lightningEffect.Parameters["uNoiseThickness"].SetValue(1f);
-            lightningEffect.Parameters["uNoiseSize"].SetValue(2.5f);
-            lightningEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.01f);
-            lightningEffect.CurrentTechnique.Passes[0].Apply();
+                Effect lightningEffect = AssetDirectory.Effects.LightningBeam.Value;
+                lightningEffect.Parameters["transformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+                lightningEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[7].Value);
+                lightningEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Goozma.LightningGlow.Value);
+                lightningEffect.Parameters["uColor"].SetValue(Color.White.ToVector4());
+                lightningEffect.Parameters["uBloomColor"].SetValue(Color.White.ToVector4());
+                lightningEffect.Parameters["uLength"].SetValue(totalDistance / 400f);
+                lightningEffect.Parameters["uNoiseThickness"].SetValue(1f);
+                lightningEffect.Parameters["uNoiseSize"].SetValue(2.2f);
+                lightningEffect.Parameters["uTime"].SetValue(NPC.localAI[0] * 0.01f);
+                lightningEffect.CurrentTechnique.Passes[0].Apply();
 
-            strip.DrawTrail();
+                strip.DrawTrail();
 
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-
+                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+            }
         }
 
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)

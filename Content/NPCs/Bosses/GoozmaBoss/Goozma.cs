@@ -146,10 +146,12 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         npcLoot.Add(ItemDropRule.ByCondition(new GoozmaDownedDropRule(), ModContent.ItemType<GoozmaLore>()));
         npcLoot.Add(ItemDropRule.ByCondition(new ZenithWorldDropRule(), ModContent.ItemType<Goozmaga>()));
 
-        if (Main.rand.NextBool(20))
+        if (Main.rand.NextBool(20)) {
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureBucket>()));
-        else
+        }
+        else {
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureTrunk>()));
+        }
 
         npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GoozmaTrophy>(), 10));
         npcLoot.Add(ItemDropRule.FewFromOptions(1, 10, ModContent.ItemType<EbonianBehemuckTrophy>(), ModContent.ItemType<DivineGargooptuarTrophy>(), ModContent.ItemType<CrimulanGlopstrosityTrophy>(), ModContent.ItemType<StellarGeliathTrophy>()));
@@ -167,6 +169,7 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<StickyHand>(), 3));
         npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<ChromaticMass>(), 1, 20, 30));
         npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<PaladinPalanquin>(), 4));
+        npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<TendrilCursorAttachment>(), 20));
 
         classic.OnSuccess(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<EbonianMask>(), ModContent.ItemType<DivineMask>(), ModContent.ItemType<CrimulanMask>(), ModContent.ItemType<StellarMask>()));
         classic.OnSuccess(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<CometKunai>()));

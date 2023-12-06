@@ -5,19 +5,21 @@ using CalamityHunt.Common.Utilities;
 using CalamityHunt.Common.Utilities.Interfaces;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 {
-    public class RainbowLaser : ModProjectile, ISubjectOfNPC<Goozma>
+    public class RainbowLaser : ModProjectile, ISubjectOfNPC<Goozma>, ISubjectOfNPC<Goozmite>
     {
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Type] = 15;
+            ProjectileID.Sets.TrailCacheLength[Type] = 25;
             ProjectileID.Sets.TrailingMode[Type] = 2;
         }
 
@@ -32,6 +34,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.aiStyle = -1;
             Projectile.timeLeft = 200;
             Projectile.manualDirectionChange = true;
+            Projectile.extraUpdates = 9;
         }
 
         public ref float Time => ref Projectile.ai[0];
@@ -41,51 +44,34 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation();
-            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 2, Time, true) * Utils.GetLerpValue(0, 50, Projectile.timeLeft, true));
+            Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 2, Time, true) * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true));
 
-            if (Owner < 0) {
-                Projectile.active = false;
-                return;
-            }
-            else if (!Main.npc[(int)Owner].active || Main.npc[(int)Owner].type != ModContent.NPCType<Goozmite>() && Main.npc[(int)Owner].type != ModContent.NPCType<Goozma>()) {
-                Projectile.active = false;
-                return;
-            }
-
-            if (Time < 1) {
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center) * Projectile.oldVelocity.Length(), 0.05f);
-
-                Projectile.Center = Main.npc[(int)Owner].Center;
-                Projectile.oldVelocity = Projectile.velocity;
-                Projectile.direction = Main.rand.NextBool() ? -1 : 1;
-                Speed = Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.015f * Main.rand.NextFloat(0.7f, 1.3f);
+            if (Time <= 0) {
+                if (Main.myPlayer == Projectile.owner && Owner > -1) {
+                    Projectile.oldVelocity = Projectile.velocity;
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center) * Projectile.oldVelocity.Length(), 0.05f);
+                    Projectile.direction = Main.rand.NextBool() ? -1 : 1;
+                    Speed = Projectile.Distance(Main.npc[(int)Owner].GetTargetData().Center) * 0.02f * Main.rand.NextFloat(0.9f, 1.3f);
+                    Projectile.netUpdate = true;
+                }
             }
 
-            if (Time == 1) {
-                var shootSound = AssetDirectory.Sounds.Goozma.GoozmiteShoot;
+            if (Time == 0) {
+                SoundStyle shootSound = AssetDirectory.Sounds.Goozma.GoozmiteShoot;
                 SoundEngine.PlaySound(shootSound.WithVolumeScale(0.5f), Projectile.Center);
             }
 
-            var target = -1;
-            if (Main.player.Any(n => n.active && !n.dead)) {
-                target = Main.player.First(n => n.active && !n.dead).whoAmI;
-            }
-
-            if (target > -1 && Time >= 0) {
-                Projectile.extraUpdates = Main.npc[(int)Owner].type == ModContent.NPCType<Goozma>() ? 10 : 7;
-                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Speed * Utils.GetLerpValue(-10, 150, Projectile.timeLeft, true);
-                Projectile.velocity = Projectile.velocity.RotatedBy(0.0015f * Projectile.direction);
-            }
-
-            if (Main.rand.NextBool(20)) {
+            for (int i = 0; i < 3; i++) {
                 CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
-                    particle.position = Projectile.Center;
-                    particle.velocity = Projectile.velocity * (Time / 150f);
-                    particle.scale = 1f;
+                    particle.position = Projectile.Center - Projectile.velocity * i / 3f;
+                    particle.velocity = Projectile.velocity * 0.5f;
+                    particle.scale = 0.5f;
                     particle.color = Color.White;
                     particle.colorData = new ColorOffsetData(true, Projectile.localAI[0]);
                 }));
             }
+
+            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Speed * Utils.GetLerpValue(-10, 150, Projectile.timeLeft, true);
 
             Time++;
             Projectile.localAI[0]++;
@@ -100,36 +86,45 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             return false;
         }
 
+        private VertexStrip vertexStrip;
+
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var bloom = AssetDirectory.Textures.Glow.Value;
-            var ray = AssetDirectory.Textures.GlowRay.Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D ray = AssetDirectory.Textures.GlowRay.Value;
 
-            var glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) with { A = 0 };
+            Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) with { A = 0 };
 
-            var tellStrength = (float)Math.Sqrt(Utils.GetLerpValue(0, 40, Projectile.localAI[1], true));
+            float tellStrength = (float)Math.Sqrt(Utils.GetLerpValue(0, 40, Projectile.localAI[1], true));
             Vector2 telegraphScale = new Vector2(3f + tellStrength * 3f, (1f - tellStrength) * 0.2f);
-            Main.EntitySpriteDraw(ray, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * 0.3f, Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale, 0, 0);
-            Main.EntitySpriteDraw(ray, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * Utils.GetLerpValue(0, 20, Projectile.localAI[1], true), Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale * new Vector2(1f, 0.4f), 0, 0);
+            Main.EntitySpriteDraw(ray, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * 0.5f, Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale, 0, 0);
+            Main.EntitySpriteDraw(ray, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * Utils.GetLerpValue(0, 20, Projectile.localAI[1], true), Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale * new Vector2(2f, 1f), 0, 0);
 
-            for (var i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
-                var prog = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
-                var trailColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 5) * (1f - prog)) with { A = 0 };
-                var addRot = -0.003f * i * Projectile.direction;
-                var oldPos = Projectile.oldPos[i] + Projectile.Size * 0.5f - Projectile.velocity.RotatedBy(addRot) * i * Utils.GetLerpValue(0, 60, Time, true); //Projectile.Distance(Projectile.oldPos[i] + Projectile.Size * 0.5f) * 0.1f;
-                Main.EntitySpriteDraw(texture, oldPos - Main.screenPosition, texture.Frame(), trailColor * 0.2f, Projectile.oldRot[i] + MathHelper.PiOver2 + addRot, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(2f, 4f) * (1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type]), 0, 0);
-                Main.EntitySpriteDraw(texture, oldPos - Main.screenPosition, texture.Frame(), trailColor, Projectile.oldRot[i] + MathHelper.PiOver2 + addRot, texture.Size() * new Vector2(0.5f, 0.05f), Projectile.scale * new Vector2(0.5f, Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f) * (1.2f - prog), 0, 0);
-                Main.EntitySpriteDraw(bloom, oldPos - Main.screenPosition, bloom.Frame(), trailColor * 0.05f, Projectile.oldRot[i] + addRot, bloom.Size() * 0.5f, Projectile.scale * new Vector2(Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f, 1f) * (1f - prog), 0, 0);
-                Main.EntitySpriteDraw(bloom, oldPos - Main.screenPosition, bloom.Frame(), trailColor * 0.1f, Projectile.oldRot[i] + addRot, bloom.Size() * 0.5f, Projectile.scale * new Vector2(Projectile.position.Distance(Projectile.oldPos[i]) * 0.2f, 0.5f) * (1f - prog), 0, 0);
-            }
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.1f), Projectile.scale * new Vector2(1.1f, 3f), 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.White with { A = 0 }, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.1f), Projectile.scale * new Vector2(0.66f, 1.66f), 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.33f, Projectile.rotation + MathHelper.PiOver2, glow.Size() * new Vector2(0.5f, 0.4f), Projectile.scale * new Vector2(1f, 1.66f), 0, 0);
 
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor * 0.5f, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.2f), Projectile.scale * new Vector2(2f, 3f), 0, 0);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor * 0.5f, Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.25f), Projectile.scale * 2, 0, 0);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.15f), Projectile.scale * new Vector2(1f, 4f) * 0.7f, 0, 0);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.25f), Projectile.scale * new Vector2(0.6f, 1.2f), 0, 0);
-            Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.1f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 4f, 0, 0);
-            Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, bloom.Frame(), glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
+            Color StripColor(float progress) => (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - progress * 15) * 2f) with { A = 150 };
+            float StripWidth(float progress) => MathF.Sqrt(1f - progress) * 50f * Projectile.scale;
+
+            vertexStrip ??= new VertexStrip();
+
+            vertexStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColor, StripWidth, -Main.screenPosition + Projectile.Size * 0.5f, Projectile.oldPos.Length, true);
+
+            Effect lightningEffect = AssetDirectory.Effects.LightningBeam.Value;
+            lightningEffect.Parameters["transformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+            lightningEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[7].Value);
+            lightningEffect.Parameters["uTexture1"].SetValue(AssetDirectory.Textures.Goozma.LightningGlow.Value);
+            lightningEffect.Parameters["uColor"].SetValue(Color.White.ToVector4());
+            lightningEffect.Parameters["uBloomColor"].SetValue(Color.White.ToVector4());
+            lightningEffect.Parameters["uLength"].SetValue(Projectile.Distance(Projectile.oldPos[^1]) / 128f);
+            lightningEffect.Parameters["uNoiseThickness"].SetValue(1f);
+            lightningEffect.Parameters["uNoiseSize"].SetValue(2.5f);
+            lightningEffect.Parameters["uTime"].SetValue(Projectile.localAI[0] * 0.01f);
+            lightningEffect.CurrentTechnique.Passes[0].Apply();
+            vertexStrip.DrawTrail();
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
             return false;
         }

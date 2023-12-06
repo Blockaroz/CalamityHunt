@@ -516,6 +516,11 @@ Items: {
 		// DisplayName: Portrait of a Strange Man
 		// Tooltip: ""
 	}
+
+	TendrilCursorAttachment: {
+		// DisplayName: Tendril Cursor Attachment
+		// Tooltip: ""
+	}
 }
 
 NPCs: {
