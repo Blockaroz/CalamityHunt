@@ -501,8 +501,7 @@ Items: {
 		DisplayName: Motley Marble
 		Tooltip:
 			'''
-			'Slippery
-			...when existent???'
+			'Highly dangerous'
 			'''
 	}
 
@@ -518,7 +517,11 @@ Items: {
 
 	TendrilCursorAttachment: {
 		DisplayName: Tendril Cursor Attachment
-		Tooltip: ""
+		Tooltip: 
+			'''
+			Attaches hanging chromatic tendrils to your mouse cursor
+			The amount of tendrils depends on the slot this item is placed in
+			'''
 	}
 }
 
