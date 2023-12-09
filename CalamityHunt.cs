@@ -84,6 +84,12 @@ namespace CalamityHunt
             // Kill Old Duke and inject Goozma into boss rush
             if (ModLoader.TryGetMod(HUtils.CalamityMod, out Mod calamity)) {
                 BossRushInjection(calamity);
+                Predicate<NPC> hasGobbed = (NPC npc) => npc.HasBuff<Gobbed>();
+                Predicate<NPC> hasSwamped = (NPC npc) => npc.HasBuff<Swamped>();
+                Predicate<NPC> hasBurn = (NPC npc) => npc.GetGlobalNPC<FusionBurnNPC>().active;
+                calamity.Call("RegisterDebuff", "CalamityHunt/Assets/Textures/Buffs/Gobbed", hasGobbed);
+                calamity.Call("RegisterDebuff", "CalamityHunt/Assets/Textures/Buffs/Swamped", hasSwamped);
+                calamity.Call("RegisterDebuff", "CalamityHunt/Assets/Textures/Buffs/FusionBurn", hasBurn);
             }
 
             if (ModLoader.TryGetMod("BossChecklist", out Mod bossChecklist)) {
@@ -132,16 +138,19 @@ namespace CalamityHunt
                 NPC.SpawnOnPlayer(whomst, ModContent.NPCType<Goozma>());
             };
             int ODID = cal.Find<ModNPC>("OldDuke").Type;
+            int InsertID = cal.Find<ModNPC>("SupremeCalamitas").Type;
 
             for (int i = 0; i < brEntries.Count(); i++) {
                 if (brEntries[i].Item1 == ODID) {
                     brEntries.RemoveAt(i);
                     ODID = i;
-                    break;
+                }
+                if (brEntries[i].Item1 == InsertID) {
+                    InsertID = i;
                 }
             }
 
-            brEntries.Insert(ODID, (ModContent.NPCType<Goozma>(), -1, pr, 180, true, 0f, slimeIDs, goozmaID));
+            brEntries.Insert(InsertID + 1, (ModContent.NPCType<Goozma>(), -1, pr, 180, true, 0f, slimeIDs, goozmaID));
             cal.Call("SetBossRushEntries", brEntries);
         }
 

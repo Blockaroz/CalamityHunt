@@ -32,7 +32,7 @@ public class VanityPlayer : ModPlayer
     private void UpdateTendrilCount(On_Player.orig_UpdateVisibleAccessory orig, Player self, int itemSlot, Item item, bool modded)
     {
         if (item.type == ModContent.ItemType<TendrilCursorAttachment>()) {
-            int tendrilCount = 6;
+            int tendrilCount = 7;
             if (!modded) {
                 tendrilCount = Math.Clamp((itemSlot - 1) % 10, 1, 8);
             }

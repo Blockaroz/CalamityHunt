@@ -1372,6 +1372,9 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
 
     public override void OnKill()
     {
+        if (ModLoader.HasMod("CalamityMod")) {
+            ModLoader.GetMod("CalamityMod").Call("SendNPCAlert", new int[] { NPCID.Stylist }, ModContent.GetInstance<BossDownedSystem>().GoozmaDowned);
+        }
         ModContent.GetInstance<BossDownedSystem>().GoozmaDowned = true;
 
         Main.StopSlimeRain();
