@@ -3,20 +3,24 @@ using System.Linq;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Threading;
 using Terraria;
 
 namespace CalamityHunt.Common.Systems.Particles;
 
 public class ParticleSystem
 {
-    private HashSet<Particle> particles;
-
-    public void Initialize()
+    public ParticleSystem()
     {
         particles = new HashSet<Particle>();
     }
 
-    public void Add(Particle particle) => particles.Add(particle);
+    private HashSet<Particle> particles;
+
+    public void Add(Particle particle)
+    {
+        particles.Add(particle);
+    }
 
     public void Clear() => particles.Clear();
 
@@ -26,19 +30,18 @@ public class ParticleSystem
             if (particles.Count > 0) {
                 particles.Clear();
             }
-
             return;
         }
+
         foreach (Particle particle in particles.ToHashSet()) {
             if (particle != null) {
                 particle.Update();
                 particle.position += particle.velocity;
-
                 if (particle.ShouldRemove) {
                     particles.Remove(particle);
                 }
             }
-        };
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch, bool begin = true)

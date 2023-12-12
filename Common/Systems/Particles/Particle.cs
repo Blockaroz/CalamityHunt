@@ -33,20 +33,17 @@ public abstract class Particle : ModTexturedType
     protected override void Register()
     {
         Type = ParticleLoader.ReserveID();
-        if (AssetDirectory.Textures.Particle is null) {
-            AssetDirectory.Textures.Particle = new Dictionary<int, Asset<Texture2D>>();
-        }
+
+        AssetDirectory.Textures.Particle ??= new Dictionary<int, Asset<Texture2D>>();
         AssetDirectory.Textures.Particle.Add(Type, ModContent.Request<Texture2D>(Texture));
 
-        if (ParticleLoader.Instance is null) {
-            ParticleLoader.Instance = new Dictionary<Type, Particle>();
-        }
+        ParticleLoader.Instance ??= new Dictionary<Type, Particle>();
         ParticleLoader.Instance.Add(GetType(), this);
     }
 
     public static T Create<T>(Action<T> initializer) where T : Particle
     {
-        T newParticle = (T)ModContent.GetInstance<T>().MemberwiseClone();
+        T newParticle = (T)ParticleLoader.Instance[typeof(T)].MemberwiseClone();
         initializer(newParticle);
         newParticle.OnSpawn();
         return newParticle;

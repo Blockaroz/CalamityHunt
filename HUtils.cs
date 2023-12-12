@@ -98,5 +98,15 @@ namespace CalamityHunt
                 }
             }
         }
+
+        //thank you dominic
+        public static Vector2 FindIKElbow(Vector2 start, Vector2 end, float firstLength, float secondLength, bool flip)
+        {
+            float c = Vector2.Distance(start, end);
+            float angle = MathF.Acos(Math.Clamp((c * c + firstLength * firstLength - secondLength * secondLength) / (c * firstLength * 2f), -1f, 1f)) * flip.ToDirectionInt();
+            return start + (angle + start.AngleTo(end)).ToRotationVector2() * firstLength;
+        }
+
+        public static Matrix NormalizedEffectMatrix => Matrix.Invert(Main.GameViewMatrix.EffectMatrix) * Matrix.CreateOrthographicOffCenter(0f, Main.instance.GraphicsDevice.Viewport.Width, Main.instance.GraphicsDevice.Viewport.Height, 0f, 0f, 1f);
     }
 }

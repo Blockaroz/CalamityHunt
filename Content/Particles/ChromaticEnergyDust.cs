@@ -38,12 +38,15 @@ public class ChromaticEnergyDust : Particle
     public override void Update()
     {
         life += 0.1f;
-        scale *= 0.94f;
+        scale *= 0.99f;
         rotation += velocity.X * 0.2f;
 
-        scale -= 0.02f;
+        if (life > 4f) {
+            scale *= 0.95f;
+        }
+
         velocity *= 0.97f;
-        velocity = Vector2.Lerp(velocity, new Vector2(Main.rand.Next(-3, 3) * 0.005f, Main.rand.Next(-3, 3) * 0.008f), 0.04f);
+        velocity = Vector2.Lerp(velocity, Main.rand.NextVector2Circular(5, 5), 0.02f + life * 0.02f);
 
         if (colorData.active) {
             color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(colorData.offset + life * 0.05f);
@@ -57,11 +60,11 @@ public class ChromaticEnergyDust : Particle
         oldPos[0] = position;
 
         if (!Collision.SolidTiles(position, 2, 2)) {
-            scale *= 1.0004f;
+            scale *= 1.0005f;
             Lighting.AddLight(position, color.ToVector3() * 0.2f * scale);
         }
 
-        if (Main.rand.NextBool(150) && scale > 0.25f) {
+        if (Main.rand.NextBool(250) && scale > 0.25f) {
             CalamityHunt.particles.Add(Create<ChromaticEnergyDust>(newParticle => {
                 newParticle.position = position;
                 newParticle.color = color * 0.99f;
@@ -87,14 +90,14 @@ public class ChromaticEnergyDust : Particle
         }
 
         for (int i = 1; i < oldPos.Length; i++) {
-            Color trailColor = color with { A = 40 } * (float)Math.Pow(1f - ((float)i / oldPos.Length), 2f) * 0.15f;
-            Vector2 trailStretch = new Vector2(oldPos[i].Distance(oldPos[i - 1]) + 0.05f, scale);
+            Color trailColor = color with { A = 40 } * (float)Math.Pow(1f - ((float)i / oldPos.Length), 2f) * 0.3f;
+            Vector2 trailStretch = new Vector2(oldPos[i].Distance(oldPos[i - 1]), scale);
             spriteBatch.Draw(texture, oldPos[i] - Main.screenPosition, null, trailColor, oldRot[i], texture.Size() * 0.5f, trailStretch, 0, 0);
         }
 
-        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), color with { A = 40 }, rotation, texture.Size() * 0.5f, scale, 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), (color * 0.9f) with { A = 50 }, rotation, texture.Size() * 0.5f, scale, 0, 0);
 
-        float innerGlowScale = 0.7f - Utils.GetLerpValue(0f, 1f, life, true) * 0.2f;
-        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), Color.White with { A = 0 }, rotation, texture.Size() * 0.5f, scale * innerGlowScale * 0.8f, 0, 0);
+        float innerGlowScale = 0.5f * Utils.GetLerpValue(2f, 1.5f, life, true);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), Color.White with { A = 0 }, rotation, texture.Size() * 0.5f, scale * innerGlowScale, 0, 0);
     }
 }

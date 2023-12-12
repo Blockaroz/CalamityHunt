@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using BlockTest.Common.Utilities;
 using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -95,33 +99,33 @@ public partial class Goozma : ModNPC
             headScale = 1f;
         else {
             for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
-                Color trailColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]);
-                trailColor.A = 0;
+                Color trailColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]) * 0.77f) with { A = 0};
                 DrawGoozma(spriteBatch, screenPos, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], oldTentacleVel[i], trailColor * trailStrength * NPC.scale);
             }
         }
-
-        for (int i = 0; i < 8; i++) {
-            Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + NPC.rotation);
-            DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, drawVelocity, tentacleVelocity, glowColor);
+        FlipShadersOnOff(spriteBatch, null, true);
+        Main.pixelShader.CurrentTechnique.Passes["ColorOnly"].Apply();
+        for (int i = 0; i < 4; i++) {
+            Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + NPC.rotation);
+            DrawGoozma(spriteBatch, screenPos, NPC.Center + off, NPC.rotation, drawVelocity, tentacleVelocity, (glowColor * 0.66f) with { A = 128 });
         }
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        FlipShadersOnOff(spriteBatch, null, false);
 
-        bool drawOrnaments = false;
-        if (drawOrnaments) {
-            Rectangle ornamentBase = ornamentTexture.Frame(1, 2, 0, 0);
-            Rectangle ornamentGlow = ornamentTexture.Frame(1, 2, 0, 1);
-            for (int i = 0; i < 8; i++) {
-                Color ornamentColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0] + i / 8f * 60);
-                ornamentColor.A /= 2;
-                float ornamentRotation = extraTilt + NPC.rotation + NPC.localAI[1] + MathHelper.TwoPi / 8f * i;
-                float rotFix = MathHelper.PiOver2 + MathHelper.PiOver4 * NPC.direction;
-                Vector2 ornamentPos = NPC.Center + (new Vector2(-20 * NPC.direction, -10).RotatedBy(NPC.rotation) + new Vector2(80, 0).RotatedBy(ornamentRotation)) * NPC.scale;
+        //back ring
+        //Rectangle ornamentBase = ornamentTexture.Frame(1, 2, 0, 0);
+        //Rectangle ornamentGlow = ornamentTexture.Frame(1, 2, 0, 1);
+        //for (int i = 0; i < 8; i++) {
+        //    Color ornamentColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0] + i / 8f * 60);
+        //    ornamentColor.A /= 2;
+        //    float ornamentRotation = extraTilt + NPC.rotation + NPC.localAI[1] + MathHelper.TwoPi / 8f * i;
+        //    float rotFix = MathHelper.PiOver2 + MathHelper.PiOver4 * NPC.direction;
+        //    Vector2 ornamentPos = NPC.Center + (new Vector2(-20 * NPC.direction, -10).RotatedBy(NPC.rotation) + new Vector2(80, 0).RotatedBy(ornamentRotation)) * NPC.scale;
 
-                spriteBatch.Draw(ornamentTexture, ornamentPos - screenPos, ornamentBase, Color.White, ornamentRotation + rotFix, ornamentBase.Size() * 0.5f, NPC.scale, direction, 0);
-                spriteBatch.Draw(ornamentTexture, ornamentPos - screenPos, ornamentGlow, ornamentColor, ornamentRotation + rotFix, ornamentGlow.Size() * 0.5f, NPC.scale, direction, 0);
-                spriteBatch.Draw(sparkle, ornamentPos - screenPos, null, new Color(ornamentColor.R, ornamentColor.G, ornamentColor.B, 0) * 0.2f, ornamentRotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(1f, 2f), direction, 0);
-            }
-        }
+        //    spriteBatch.Draw(ornamentTexture, ornamentPos - screenPos, ornamentBase, Color.White, ornamentRotation + rotFix, ornamentBase.Size() * 0.5f, NPC.scale, direction, 0);
+        //    spriteBatch.Draw(ornamentTexture, ornamentPos - screenPos, ornamentGlow, ornamentColor, ornamentRotation + rotFix, ornamentGlow.Size() * 0.5f, NPC.scale, direction, 0);
+        //    spriteBatch.Draw(sparkle, ornamentPos - screenPos, null, new Color(ornamentColor.R, ornamentColor.G, ornamentColor.B, 0) * 0.2f, ornamentRotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(1f, 2f), direction, 0);
+        //}
 
         GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
 
@@ -145,11 +149,11 @@ public partial class Goozma : ModNPC
 
         Texture2D microTentacleTexture = AssetDirectory.Textures.Goozma.MicroTentacle.Value;
 
-        FlipShadersOnOff(spriteBatch, effect, false);
+        FlipShadersOnOff(spriteBatch, effect, true);
         DrawGoozma(spriteBatch, screenPos, NPC.Center, NPC.rotation, drawVelocity, tentacleVelocity, Color.White);
         FlipShadersOnOff(spriteBatch, null, false);
 
-        Vector2 crownPos = NPC.Center + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * headScale * NPC.scale;
+        Vector2 crownPos = NPC.Center + hitDirection * 0.5f + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + NPC.rotation) * headScale * NPC.scale;
         spriteBatch.Draw(crownMaskTexture, crownPos - screenPos, crownMaskTexture.Frame(), Color.White, extraTilt + NPC.rotation, crownMaskTexture.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
 
         float eyeRot = -MathHelper.PiOver4;
@@ -214,7 +218,8 @@ public partial class Goozma : ModNPC
     public static Texture2D crownMaskTexture;
     public static Texture2D tentacleTexture;
     public static Texture2D ornamentTexture;
-    public static GoozmaCordTargetContent cordContent;
+    public static RenderTargetDrawContent cordContent;
+    public VertexStrip cordStrip;
 
     private void LoadAssets()
     {
@@ -223,7 +228,7 @@ public partial class Goozma : ModNPC
         crownMaskTexture = AssetDirectory.Textures.Goozma.CrownMask.Value;
         tentacleTexture = AssetDirectory.Textures.Goozma.Tentacle.Value;
         ornamentTexture = AssetDirectory.Textures.Goozma.Ornament.Value;
-        Main.ContentThatNeedsRenderTargets.Add(cordContent = new GoozmaCordTargetContent());
+        Main.ContentThatNeedsRenderTargets.Add(cordContent = new RenderTargetDrawContent());
     }
 
     private void DrawGoozma(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 position, float rotation, Vector2 velocity, Vector2 tentacleVelocity, Color color)
@@ -232,8 +237,8 @@ public partial class Goozma : ModNPC
 
         SpriteEffects direction = NPC.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-        Vector2 crownPos = position + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + rotation) * headScale * NPC.scale;
-        Vector2 dressPos = position + drawOffset + new Vector2(4 * NPC.direction, 16).RotatedBy(-extraTilt * 0.4f + rotation) * headScale * NPC.scale;
+        Vector2 crownPos = position + hitDirection * 0.5f + drawOffset - new Vector2(6 * NPC.direction, 44).RotatedBy(extraTilt * 0.8f + rotation) * headScale * NPC.scale;
+        Vector2 dressPos = position + hitDirection * 0.5f + drawOffset + new Vector2(4 * NPC.direction, 16).RotatedBy(-extraTilt * 0.4f + rotation) * headScale * NPC.scale;
 
         Vector2 basePos = position + new Vector2(0, 10).RotatedBy(-extraTilt * 0.4f + rotation) * NPC.scale;
 
@@ -272,23 +277,48 @@ public partial class Goozma : ModNPC
 
         spriteBatch.Draw(dressTexture, dressPos - screenPos, null, color, extraTilt * 0.2f + rotation + (float)Math.Sin(NPC.localAI[0] * 0.35f % MathHelper.TwoPi) * 0.02f, dressTexture.Size() * new Vector2(0.5f, 0f), headScale * NPC.scale, direction, 0);
 
-        cordContent.Host = this;
-        cordContent.Request();
-        if (cordContent.IsReady) {
-            Texture2D cordTexture = cordContent.GetTarget();
-            spriteBatch.Draw(cordTexture, position - screenPos, null, color, 0, cordTexture.Size() * 0.5f, NPC.scale * 2f, direction, 0);
+        int identifier = NPC.IsABestiaryIconDummy ? -1 : NPC.whoAmI;
+        cordContent.Request(1024, 1024, identifier, spriteBatch => {
+            List<Vector2> positions = new List<Vector2>();
+            List<float> rotations = new List<float>();
+
+            float partitions = 50;
+            for (var i = 0; i < partitions; i++) {
+                var offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (150 + (float)Math.Sin((NPC.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
+                offset.X *= -1;// Host.NPC.direction;
+                offset -= velocity.RotatedBy(-rotation) * Utils.GetLerpValue(partitions / 3f, partitions, i, true) * 2f;
+                offset *= 0.5f;
+                positions.Add(new Vector2(512, 520) + offset);
+                rotations.Add(offset.ToRotation() - MathHelper.PiOver2 * (i / partitions) * -1);
+            }
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null);
+
+            var effect = AssetDirectory.Effects.GoozmaCordMap.Value;
+            effect.Parameters["uTransformMatrix"].SetValue(Matrix.Invert(Main.GameViewMatrix.EffectMatrix) * Matrix.CreateOrthographicOffCenter(0, 1024, 1024, 0, -1, 1));
+            effect.Parameters["uTime"].SetValue((NPC.IsABestiaryIconDummy ? Main.GlobalTimeWrappedHourly * 0.3f : NPC.localAI[0] * 0.005f) % 1f);
+            effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.LiquidTrail.Value);
+            effect.Parameters["uMap"].SetValue(AssetDirectory.Textures.ColorMap[0].Value);
+            effect.CurrentTechnique.Passes[0].Apply();
+
+            cordStrip ??= new VertexStrip();
+
+            Color ColorFunc(float progress) => Color.White;
+            float WidthFunc(float progress) => MathF.Pow(Utils.GetLerpValue(1.1f, 0.1f, progress, true), 0.7f) * 18f;
+
+            cordStrip.PrepareStrip(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, Vector2.Zero, positions.Count, true);
+            cordStrip.DrawTrail();
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+            spriteBatch.End();
+        });
+
+        if (cordContent.IsTargetReady(identifier)) {
+            Texture2D cordTexture = cordContent.GetTarget(identifier);
+            spriteBatch.Draw(cordTexture, position + drawOffset + hitDirection * 0.5f - screenPos, null, color, rotation, cordTexture.Size() * 0.5f, NPC.scale * 2f, direction, 0);
         }
 
-        //if (cordTarget != null)
-        //{
-        //    if (NPC.IsABestiaryIconDummy)
-        //        spriteBatch.Draw(cordTarget, position, null, color, 0, cordTarget.Size() * 0.5f, NPC.scale * 2f, 0, 0);
-
-        //    else
-        //        spriteBatch.Draw(cordTarget, position - screenPos, null, color, 0, cordTarget.Size() * 0.5f, NPC.scale * 2f, 0, 0);
-        //}
-
-        spriteBatch.Draw(texture, position + drawOffset - screenPos, null, color, extraTilt * 0.9f + rotation, texture.Size() * 0.5f, headScale * NPC.scale, direction, 0);
+        spriteBatch.Draw(texture, position + drawOffset + hitDirection - screenPos, null, color, extraTilt * 0.9f + rotation, texture.Size() * 0.5f, headScale * NPC.scale, direction, 0);
         spriteBatch.Draw(crownTexture, crownPos - screenPos, null, color, extraTilt + rotation, crownTexture.Size() * new Vector2(0.5f, 1f), NPC.scale, direction, 0);
     }
 }

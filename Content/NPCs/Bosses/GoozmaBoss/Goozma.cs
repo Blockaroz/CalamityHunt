@@ -1189,8 +1189,9 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
                 NPC.dontTakeDamage = false;
                 NPC.velocity *= 0.5f;
 
-                if (Main.mouseRight)
+                if (Main.mouseRight) {
                     NPC.velocity += NPC.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * NPC.Distance(Main.MouseWorld) * 0.1f;
+                }
 
                 if (NPC.velocity.Length() > 4) {
                     rotate = true;
@@ -1220,7 +1221,6 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         }
 
         if (!Main.dedServ) {
-            NPC.localAI[0]++;
             NPC.localAI[1] -= NPC.velocity.X * 0.001f + NPC.direction * 0.02f;
 
             for (int i = NPCID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
@@ -1246,10 +1246,10 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
                 Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(50), 100, 160, DustID.TintableDust, Main.rand.NextFloat(-1f, 1f), -4f, 230, Color.Black, 2f + Main.rand.NextFloat());
                 dust.noGravity = true;
             }
-            if (Main.rand.NextBool(8)) {
-                CalamityHunt.particlesBehindEntities.Add(Particle.Create<ChromaticEnergyDust>(particle => {
+            if (Main.rand.NextBool(7)) {
+                CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                     particle.position = NPC.Center + Main.rand.NextVector2Circular(60, 80);
-                    particle.velocity = Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 3f;
+                    particle.velocity = Main.rand.NextVector2Circular(1, 1) - Vector2.UnitY * 2f + NPC.velocity * 0.1f;
                     particle.scale = 1f;
                     particle.color = Color.White;
                     particle.colorData = new ColorOffsetData(true, NPC.localAI[0]);
@@ -1266,8 +1266,12 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
             ActiveSlime.active = false;
         }
 
-        if (hitTimer > 0)
+        if (hitTimer > 0) {
             hitTimer--;
+        }
+        hitDirection = Vector2.Lerp(hitDirection, Vector2.Zero, 0.05f + Utils.GetLerpValue(10, 0, hitTimer, true) * 0.1f);
+
+        Phase = -22;
     }
 
     private void KillSlime(int index)
@@ -1327,20 +1331,20 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
     }
 
     private int hitTimer;
+    private Vector2 hitDirection;
 
     public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
     {
         if (hitTimer <= 0) {
             hitTimer += Main.rand.Next(10, 18);
+            hitDirection = player.DirectionTo(NPC.Center) * 10;
             SoundStyle hurt = AssetDirectory.Sounds.Goozma.Hurt;
             SoundEngine.PlaySound(hurt, NPC.Center);
-        }
 
-        if (Main.rand.NextBool(3)) {
             for (int i = 0; i < Main.rand.Next(6); i++) {
                 CalamityHunt.particles.Add(Particle.Create<ChromaticGelChunk>(particle => {
-                    particle.position = NPC.Center + Main.rand.NextVector2Circular(30, 30);
-                    particle.velocity = NPC.DirectionFrom(player.Center).RotatedByRandom(0.2f) * Main.rand.Next(4, 10);
+                    particle.position = NPC.Center + Main.rand.NextVector2Circular(40, 50);
+                    particle.velocity = NPC.DirectionFrom(player.Center).RotatedByRandom(0.4f) * Main.rand.Next(4, 10);
                     particle.scale = Main.rand.NextFloat(0.5f, 1.5f);
                     particle.color = Color.White;
                     particle.colorData = new ColorOffsetData(true, NPC.localAI[0]);
@@ -1353,15 +1357,14 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
     {
         if (hitTimer <= 0) {
             hitTimer += Main.rand.Next(10, 18);
+            hitDirection = projectile.DirectionTo(NPC.Center) * 10;
             SoundStyle hurt = AssetDirectory.Sounds.Goozma.Hurt;
             SoundEngine.PlaySound(hurt, NPC.Center);
-        }
 
-        if (Main.rand.NextBool(3)) {
             for (int i = 0; i < Main.rand.Next(6); i++) {
                 CalamityHunt.particles.Add(Particle.Create<ChromaticGelChunk>(particle => {
-                    particle.position = NPC.Center + Main.rand.NextVector2Circular(30, 30);
-                    particle.velocity = NPC.DirectionFrom(projectile.Center).RotatedByRandom(0.2f) * Main.rand.Next(4, 10);
+                    particle.position = NPC.Center + Main.rand.NextVector2Circular(40, 50);
+                    particle.velocity = NPC.DirectionFrom(projectile.Center).RotatedByRandom(0.4f) * Main.rand.Next(4, 10);
                     particle.scale = Main.rand.NextFloat(0.5f, 1.5f);
                     particle.color = Color.White;
                     particle.colorData = new ColorOffsetData(true, NPC.localAI[0]);
@@ -1873,9 +1876,7 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
 
     public override void FindFrame(int frameHeight)
     {
-        if (NPC.IsABestiaryIconDummy) {
-            NPC.localAI[0]++;
-        }
+        NPC.localAI[0]++;
 
         if (oldVel == null) {
             oldVel = new Vector2[NPCID.Sets.TrailCacheLength[Type]];

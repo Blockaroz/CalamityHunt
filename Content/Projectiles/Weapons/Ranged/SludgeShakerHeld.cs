@@ -94,6 +94,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                         particle.maxTime = Main.rand.Next(25, 40);
                         particle.color = Color.Orange with { A = 40 };
                         particle.fadeColor = Color.Red with { A = 40 };
+                        particle.emitLight = true;
                     }));
 
                     CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {

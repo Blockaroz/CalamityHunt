@@ -55,7 +55,6 @@ public class FusionFlameParticle : Particle
         if (emitLight) {
             Lighting.AddLight(position, fadeColor.ToVector3() * Utils.GetLerpValue(0.5f, 0, progress, true));
         }
-
     }
 
     public override void Draw(SpriteBatch spriteBatch)

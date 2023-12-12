@@ -67,6 +67,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                         particle.maxTime = Main.rand.Next(25, 30);
                         particle.color = glowColor * 0.9f;
                         particle.fadeColor = glowColor * 0.6f;
+                        particle.emitLight = true;
                     }));
                 }
 

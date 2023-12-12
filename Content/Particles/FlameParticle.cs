@@ -71,8 +71,8 @@ public class FlameParticle : Particle
         spriteBatch.Draw(glow, position - Main.screenPosition, glow.Frame(), fadeColor * 0.05f * Utils.GetLerpValue(0.4f, 0.1f, progress, true), rotation, glow.Size() * 0.5f, drawScale * 0.2f, 0, 0);
 
         Effect dissolveEffect = AssetDirectory.Effects.FlameDissolve.Value;
-        dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[9].Value);
-        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(0.7f + scale * 0.1f));
+        dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[12].Value);
+        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(1f + scale * 0.1f));
         dissolveEffect.Parameters["uFrameCount"].SetValue(10);
         dissolveEffect.Parameters["uProgress"].SetValue(1f - MathF.Sqrt(1f - progress));
         dissolveEffect.Parameters["uPower"].SetValue(10f + progress * 70f);

@@ -37,10 +37,7 @@ namespace CalamityHunt
             Instance = this;
 
             particles = new ParticleSystem();
-            particles.Initialize();
-
             particlesBehindEntities = new ParticleSystem();
-            particlesBehindEntities.Initialize();
 
             On_Main.UpdateParticleSystems += UpdateParticleSystems;
             On_Main.DrawDust += DrawParticleSystems;

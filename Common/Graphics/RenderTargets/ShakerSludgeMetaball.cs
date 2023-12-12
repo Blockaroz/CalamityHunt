@@ -16,7 +16,6 @@ public class ShakerSludgeMetaball : MetaballDrawer
     public override void Initialize()
     {
         particles = new ParticleSystem();
-        particles.Initialize();
 
         content.width = Main.screenWidth;
         content.height = Main.screenHeight;
