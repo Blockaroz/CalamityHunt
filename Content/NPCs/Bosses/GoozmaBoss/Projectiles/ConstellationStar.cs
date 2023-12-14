@@ -108,7 +108,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         {
             var texture = TextureAssets.Projectile[Type].Value;
             var sparkle = AssetDirectory.Textures.Sparkle.Value;
-            var glow = AssetDirectory.Textures.Glow.Value;
+            var glow = AssetDirectory.Textures.Glow[0].Value;
 
             var wobble = 1f + (float)Math.Sin(Projectile.localAI[0] * 0.3f % MathHelper.TwoPi) * 0.05f;
 

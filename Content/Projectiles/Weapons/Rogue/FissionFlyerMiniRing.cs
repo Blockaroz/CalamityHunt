@@ -81,7 +81,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
 
             Color backColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             backColor.A = 180;

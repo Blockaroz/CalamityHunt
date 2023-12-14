@@ -7,7 +7,7 @@ namespace CalamityHunt.Common.DropRules;
 
 public class GoozmaDownedDropRule : IItemDropRuleCondition
 {
-    bool IItemDropRuleCondition.CanDrop(DropAttemptInfo info) => !ModContent.GetInstance<BossDownedSystem>().GoozmaDowned;
+    bool IItemDropRuleCondition.CanDrop(DropAttemptInfo info) => !BossDownedSystem.Instance.GoozmaDowned;
 
     bool IItemDropRuleCondition.CanShowItemDropInUI() => true;
 

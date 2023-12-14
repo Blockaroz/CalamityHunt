@@ -97,7 +97,7 @@ namespace CalamityHunt.Content.Tiles
                 if (GoozmaSystem.FindSlimeStatues(center, top, 40, 30)) {
                     if (player.HasItem(ModContent.ItemType<SludgeFocus>())) {
                         if (Main.netMode != NetmodeID.MultiplayerClient) {
-                            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), new Vector2(center * 16 - 8, top * 16), ModContent.NPCType<GelatinousSpawn>());
+                            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), new Vector2(center * 16 - 8, top * 16), ModContent.NPCType<PluripotentSpawn>());
                         }
                     }
 

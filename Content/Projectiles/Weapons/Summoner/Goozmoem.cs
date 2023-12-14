@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BlockTest.Common.Utilities;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Players;
 using CalamityHunt.Common.Utilities;

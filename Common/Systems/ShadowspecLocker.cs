@@ -25,7 +25,7 @@ public class ShadowspecLocker : GlobalItem
         bool usable = !ShadowspecItemFinder.ShadowspecItem(item.type);
 
         //remove if needed elsewhere
-        unlockItems = ModContent.GetInstance<BossDownedSystem>().GoozmaDowned || Config.Instance.shadowspecCurse;
+        unlockItems = BossDownedSystem.Instance.GoozmaDowned || Config.Instance.shadowspecCurse;
 
         return unlockItems || usable;
     }
@@ -50,7 +50,7 @@ public class ShadowspecLocker : GlobalItem
     public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
         if (!CanUseItem(item, Main.LocalPlayer) && ShadowspecItemFinder.ShadowspecItem(item.type)) {
-            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
             Texture2D qmark = AssetDirectory.Textures.QuestionMark.Value;
 
             spriteBatch.Draw(glow, position, glow.Frame(), Color.Black * 0.5f, 0, glow.Size() * 0.5f, scale * 5f, 0, 0);

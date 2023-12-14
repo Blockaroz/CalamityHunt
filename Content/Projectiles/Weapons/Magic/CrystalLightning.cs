@@ -213,7 +213,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         {
             if (Time > 1) {
                 Texture2D texture = TextureAssets.Projectile[Type].Value;
-                Texture2D bloom = AssetDirectory.Textures.Glow.Value;
+                Texture2D bloom = AssetDirectory.Textures.Glow[0].Value;
                 VertexStrip strip = new VertexStrip();
 
                 Color StripColor(float progress) => Main.hslToRgb((Projectile.localAI[0] * 0.03f + progress) % 1f, 0.5f, 0.6f) * Utils.GetLerpValue(40, 10, Time, true);

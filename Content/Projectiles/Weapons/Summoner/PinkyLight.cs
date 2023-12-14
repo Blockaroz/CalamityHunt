@@ -123,7 +123,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             public void Draw(Vector2 position)
             {
                 Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
-                Texture2D glow = AssetDirectory.Textures.Glow.Value;
+                Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
                 Rectangle glowFrame = glow.Frame(1, 2, 0, 0);
                 Vector2 drawScale = new Vector2(scale * 0.3f, scale * 1.4f) * Utils.GetLerpValue(0, maxTime * 0.1f, time, true);
                 Vector2 thinScale = new Vector2(scale * 0.06f, scale * 0.5f) * Utils.GetLerpValue(0, maxTime * 0.7f, time, true);

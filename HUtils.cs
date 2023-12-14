@@ -81,7 +81,7 @@ namespace CalamityHunt
             }
         }
 
-        public static void GetTopLeft(this Tile tile, ref int i, ref int j, out int tileWidth, out int tileHeight)
+        public static void GetTopLeftTile(this Tile tile, ref int i, ref int j, out int tileWidth, out int tileHeight)
         {
             TileObjectData data = TileObjectData.GetTileData(tile.TileType, 0);
             tileWidth = data.Width;

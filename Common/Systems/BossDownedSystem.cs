@@ -9,6 +9,8 @@ public sealed class BossDownedSystem : ModSystem
     public const string KeyPrefix = "downedBoss";
     public const string GoozmaKey = "Goozma";
 
+    public static BossDownedSystem Instance => ModContent.GetInstance<BossDownedSystem>();
+
     public bool GoozmaDowned
     {
         get => downedBoss[GoozmaKey];

@@ -152,7 +152,7 @@ public class SlimeBomb : ModProjectile
     public override bool PreDraw(ref Color lightColor)
     {
         var texture = TextureAssets.Projectile[Type].Value;
-        var glow = AssetDirectory.Textures.Glow.Value;
+        var glow = AssetDirectory.Textures.Glow[0].Value;
         var ring = AssetDirectory.Textures.GlowRing.Value;
         var baseFrame = texture.Frame(3, 4, 0, Projectile.frame);
         var glowFrame = texture.Frame(3, 4, 1, Projectile.frame);

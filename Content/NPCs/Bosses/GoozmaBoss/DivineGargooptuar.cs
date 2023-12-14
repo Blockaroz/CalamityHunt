@@ -231,7 +231,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 4f * Utils.GetLerpValue(100, 70, Time % 150, true), 10, 12));
 
                 if (Time % 150 == 5) {
-                    var createSound = AssetDirectory.Sounds.Slime.PrismDestroyerTelegraph;
+                    var createSound = AssetDirectory.Sounds.GoozmaMinions.PrismDestroyerTelegraph;
                     SoundEngine.PlaySound(createSound, NPC.Center);
 
                     for (var i = 0; i < Main.rand.Next(14, 20); i++) {
@@ -245,7 +245,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 }
 
                 if (Time % 150 == 70) {
-                    var expandSound = AssetDirectory.Sounds.Slime.PrismDestroyerExpand;
+                    var expandSound = AssetDirectory.Sounds.GoozmaMinions.PrismDestroyerExpand;
                     SoundEngine.PlaySound(expandSound, NPC.Center);
                 }
 
@@ -409,7 +409,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             for (var i = 0; i < 14; i++)
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(12, 12), ModContent.GoreType<CrystalShieldFragment9>(), 1f);
 
-            var shatter = AssetDirectory.Sounds.Slime.PixiePrismDestroyed;
+            var shatter = AssetDirectory.Sounds.GoozmaMinions.PixiePrismDestroyed;
             SoundEngine.PlaySound(shatter, NPC.Center);
         }
 
@@ -573,7 +573,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
         {
             var texture = TextureAssets.Npc[Type].Value;
             var sparkle = TextureAssets.Extra[89].Value;
-            var glow = AssetDirectory.Textures.GlowBig.Value;
+            var glow = AssetDirectory.Textures.Glow[1].Value;
             var ring = AssetDirectory.Textures.GlowRing.Value;
 
             var frame = texture.Frame(1, 4, 0, npcFrame);

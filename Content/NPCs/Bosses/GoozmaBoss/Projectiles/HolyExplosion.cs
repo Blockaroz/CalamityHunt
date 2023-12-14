@@ -49,7 +49,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             }
 
             if (Time == 0) {
-                var explosion = AssetDirectory.Sounds.Slime.PixieBallExplode;
+                var explosion = AssetDirectory.Sounds.GoozmaMinions.PixieBallExplode;
                 SoundEngine.PlaySound(explosion, Projectile.Center);
             }
             if (Time == 35) {

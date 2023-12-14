@@ -95,7 +95,7 @@ public class GoozmaGelBit : Particle
     public override void Draw(SpriteBatch spriteBatch)
     {
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
-        Texture2D glow = AssetDirectory.Textures.Glow.Value;
+        Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
         Rectangle frame = texture.Frame(8, 1, style, 0);
 
         Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(time * 2f + colorData.offset);

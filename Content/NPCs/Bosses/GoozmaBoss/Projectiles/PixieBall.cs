@@ -90,7 +90,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     Cooldown += 15;
 
                     if (Time > 40)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.PixieBallBounce, Projectile.Center);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.PixieBallBounce, Projectile.Center);
 
                     for (var i = 0; i < 40; i++) {
                         var glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
@@ -204,13 +204,13 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Projectile.localAI[1] = 0;
                 var warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f) * 1.1f - 1f;
                 var warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, 0.05f, 2f) * Projectile.scale;
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.15f), Projectile.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.15f), Projectile.Center);
             }
 
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
 
             if (auraSound == null)
-                auraSound = new LoopingSound(AssetDirectory.Sounds.Slime.PixieBallLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+                auraSound = new LoopingSound(AssetDirectory.Sounds.GoozmaMinions.PixieBallLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
             auraSound.PlaySound(() => Projectile.Center, () => volume, () => 0f);
         }
 
@@ -249,7 +249,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             var texture = TextureAssets.Projectile[Type].Value;
             var sparkle = TextureAssets.Extra[98].Value;
             var ring = AssetDirectory.Textures.GlowRing.Value;
-            var glow = AssetDirectory.Textures.Glow.Value;
+            var glow = AssetDirectory.Textures.Glow[0].Value;
 
             var bloomColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.7f, 0);
             var direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;

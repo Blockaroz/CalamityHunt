@@ -143,7 +143,7 @@ public class AntiMassBioBall : ModProjectile
     public override bool PreDraw(ref Color lightColor)
     {
         Texture2D texture = TextureAssets.Projectile[Type].Value;
-        Texture2D glow = AssetDirectory.Textures.Glow.Value;
+        Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
         Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
 
         float scaleWobble = Projectile.scale + MathF.Sin(Projectile.timeLeft / 1.2f) * 0.2f;

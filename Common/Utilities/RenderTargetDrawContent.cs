@@ -9,7 +9,7 @@ using Steamworks;
 using Terraria;
 using Terraria.GameContent;
 
-namespace BlockTest.Common.Utilities;
+namespace CalamityHunt.Common.Utilities;
 
 public class RenderTargetDrawContent : INeedRenderTargetContent
 {

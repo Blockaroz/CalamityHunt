@@ -261,7 +261,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                     foreach (var player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                         player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 3;
 
-                    var slam = AssetDirectory.Sounds.Slime.SlimeSlam;
+                    var slam = AssetDirectory.Sounds.GoozmaMinions.SlimeSlam;
                     SoundEngine.PlaySound(slam, NPC.Center);
 
                     for (var i = 0; i < Main.rand.Next(14, 20); i++) {
@@ -383,7 +383,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                     NPC.velocity.Y -= 40;
                     saveTarget = saveTarget - new Vector2(0, 1400);
 
-                    var raise = AssetDirectory.Sounds.Slime.EbonstoneRaise;
+                    var raise = AssetDirectory.Sounds.GoozmaMinions.EbonstoneRaise;
                     SoundEngine.PlaySound(raise, NPC.Center);
                 }
             }
@@ -418,11 +418,11 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
                 if (Time >= 150 && Time <= 150 + spikeCount * spikeTime) {
                     if ((Time - 150) % spikeTime == 30) {
-                        var spiking = AssetDirectory.Sounds.Slime.EbonstoneToothTelegraph;
+                        var spiking = AssetDirectory.Sounds.GoozmaMinions.EbonstoneToothTelegraph;
                         SoundEngine.PlaySound(spiking, Main.LocalPlayer.MountedCenter);
                     }
                     if ((Time - 150) % spikeTime > 55 && (Time - 150) % spikeTime < 61) {
-                        var spiked = AssetDirectory.Sounds.Slime.EbonstoneToothEmerge;
+                        var spiked = AssetDirectory.Sounds.GoozmaMinions.EbonstoneToothEmerge;
                         SoundEngine.PlaySound(spiked, Main.LocalPlayer.MountedCenter);
                     }
                 }
@@ -456,7 +456,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             //        player.AddBuff(BuffID.Obstructed, 20, true);
 
             if (Time == 150 + spikeCount * spikeTime) {
-                var crumble = AssetDirectory.Sounds.Slime.EbonstoneCrumble;
+                var crumble = AssetDirectory.Sounds.GoozmaMinions.EbonstoneCrumble;
                 SoundEngine.PlaySound(crumble, NPC.Center);
             }
 

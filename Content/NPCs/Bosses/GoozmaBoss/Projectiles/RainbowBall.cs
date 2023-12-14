@@ -109,7 +109,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             var texture = TextureAssets.Projectile[Type].Value;
-            var glow = AssetDirectory.Textures.Glow.Value;
+            var glow = AssetDirectory.Textures.Glow[0].Value;
             var frame = speedTexture.Frame(3, 1, Projectile.frame, 0);
 
             var bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) with { A = 0 };

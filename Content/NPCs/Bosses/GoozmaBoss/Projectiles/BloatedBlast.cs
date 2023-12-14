@@ -185,7 +185,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             var texture = TextureAssets.Projectile[Type].Value;
-            var glow = AssetDirectory.Textures.Glow.Value;
+            var glow = AssetDirectory.Textures.Glow[0].Value;
             var ring = AssetDirectory.Textures.GlowRing.Value;
             Vector2 squishFactor = new Vector2(1f - Projectile.velocity.Length() * 0.0045f, 1f + Projectile.velocity.Length() * 0.0075f);
 
@@ -230,7 +230,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public void DrawTentacles(Color lightColor, Color growColor)
         {
-            var glow = AssetDirectory.Textures.Glow.Value;
+            var glow = AssetDirectory.Textures.Glow[0].Value;
 
             float tentaCount = 2;
             for (var j = 0; j < tentaCount; j++) {

@@ -94,7 +94,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         {
             var texture = TextureAssets.Projectile[Type].Value;
             var tellTexture = AssetDirectory.Textures.Sparkle.Value;
-            var bloom = AssetDirectory.Textures.Glow.Value;
+            var bloom = AssetDirectory.Textures.Glow[0].Value;
 
             if (Time <= 3) {
                 var tellScale = (float)Math.Cbrt(Utils.GetLerpValue(-60, -40, Time, true) * Utils.GetLerpValue(80, -50, Time, true)) * 0.7f;

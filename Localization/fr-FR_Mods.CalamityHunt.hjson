@@ -540,6 +540,7 @@ NPCs: {
 	StellarGeliath.DisplayName: Geliath stellaire
 	Goozmite.DisplayName: Goozinou
 	// GelatinousSpawn.DisplayName: Gelatinous Spawn
+	// PluripotentSpawn.DisplayName: Pluripotent Spawn
 }
 
 Projectiles: {

@@ -62,7 +62,7 @@ public class FusionFlameParticle : Particle
         float progress = time / (maxTime * 1.66f);
 
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
-        Texture2D glow = AssetDirectory.Textures.GlowBig.Value;
+        Texture2D glow = AssetDirectory.Textures.Glow[1].Value;
         Rectangle frame = texture.Frame(1, 15, 0, style);
         SpriteEffects flip = direction > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
         Color drawColor = Color.Lerp(color, fadeColor, Utils.GetLerpValue(0f, 0.2f, progress, true));

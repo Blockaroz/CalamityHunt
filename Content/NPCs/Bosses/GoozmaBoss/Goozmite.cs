@@ -336,7 +336,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
         {
             var texture = TextureAssets.Npc[Type].Value;
             var tentacleTexture = AssetDirectory.Textures.Goozma.MicroTentacle.Value;
-            var glow = AssetDirectory.Textures.Glow.Value;
+            var glow = AssetDirectory.Textures.Glow[0].Value;
             var flare = AssetDirectory.Textures.Sparkle.Value;
 
             NPC.spriteDirection = NPC.direction > 0 ? -1 : 1;

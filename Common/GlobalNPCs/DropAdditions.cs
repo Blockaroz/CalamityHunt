@@ -13,7 +13,7 @@ namespace CalamityHunt.Common.GlobalNPCs
     {
         public override bool InstancePerEntity => true;
 
-        public static Condition goozDown = new("After Goozma has been defeated", () => ModContent.GetInstance<BossDownedSystem>().GoozmaDowned);
+        public static Condition goozDown = new("After Goozma has been defeated", () => BossDownedSystem.Instance.GoozmaDowned);
 
         public override void ModifyShop(NPCShop shop)
         {

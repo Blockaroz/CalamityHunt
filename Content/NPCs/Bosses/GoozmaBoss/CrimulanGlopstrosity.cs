@@ -251,7 +251,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 var localTime = Time % 170;
 
                 if (localTime == 35) {
-                    var createSound = AssetDirectory.Sounds.Slime.CrimslimeTelegraph;
+                    var createSound = AssetDirectory.Sounds.GoozmaMinions.CrimslimeTelegraph;
                     SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
                 }
 
@@ -313,7 +313,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                             foreach (var player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                                 player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 5;
 
-                            var slam = AssetDirectory.Sounds.Slime.SlimeSlam;
+                            var slam = AssetDirectory.Sounds.GoozmaMinions.SlimeSlam;
                             SoundEngine.PlaySound(slam, NPC.Center);
 
                             for (var i = 0; i < Main.rand.Next(30, 40); i++) {
@@ -343,7 +343,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
         {
             var waitTime = 70;
             if (Time == waitTime + 5) {
-                var createSound = AssetDirectory.Sounds.Slime.CrimslimeTelegraph;
+                var createSound = AssetDirectory.Sounds.GoozmaMinions.CrimslimeTelegraph;
                 SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
             }
 
@@ -405,7 +405,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
                         //Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), 0, 0, ai1: 2000);
 
-                        var slam = AssetDirectory.Sounds.Slime.SlimeSlam;
+                        var slam = AssetDirectory.Sounds.GoozmaMinions.SlimeSlam;
                         SoundEngine.PlaySound(slam, NPC.Center);
 
                         for (var i = 0; i < Main.rand.Next(30, 40); i++) {
@@ -443,7 +443,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             }
 
             if (Time == doubleWaitTime + 125) {
-                var createSound = AssetDirectory.Sounds.Slime.CrimslimeTelegraph;
+                var createSound = AssetDirectory.Sounds.GoozmaMinions.CrimslimeTelegraph;
                 SoundEngine.PlaySound(createSound.WithVolumeScale(1.5f), NPC.Center);
             }
             if (Time > doubleWaitTime + 100 && Time < doubleWaitTime + 170) {
@@ -470,7 +470,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
                 Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.Zero, ModContent.ProjectileType<CrimulanShockwave>(), 0, 0, ai1: 2500);
 
-                var slam = AssetDirectory.Sounds.Slime.SlimeSlam;
+                var slam = AssetDirectory.Sounds.GoozmaMinions.SlimeSlam;
                 SoundEngine.PlaySound(slam, NPC.Center);
 
                 for (var i = 0; i < Main.rand.Next(30, 40); i++) {
@@ -552,7 +552,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                     foreach (var player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 600))
                         player.velocity += player.DirectionFrom(NPC.Bottom + Vector2.UnitY * 10) * 3;
 
-                    var slam = AssetDirectory.Sounds.Slime.SlimeSlam;
+                    var slam = AssetDirectory.Sounds.GoozmaMinions.SlimeSlam;
                     SoundEngine.PlaySound(slam, NPC.Center);
 
                     for (var i = 0; i < Main.rand.Next(20, 30); i++) {

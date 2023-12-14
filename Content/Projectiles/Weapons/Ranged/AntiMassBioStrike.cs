@@ -134,7 +134,7 @@ public class AntiMassBioStrike : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D glow = AssetDirectory.Textures.Glow.Value;
+        Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
         Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
 
         Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.MediumTurquoise * 0.1f) with { A = 0 }, 0, glow.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);

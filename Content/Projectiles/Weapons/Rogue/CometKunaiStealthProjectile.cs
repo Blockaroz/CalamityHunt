@@ -76,7 +76,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             if (stick) {
                 Projectile.velocity = Vector2.Zero;
                 Projectile.tileCollide = false;
-                SoundStyle attachSound = AssetDirectory.Sounds.Slime.StellarConstellationForm with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.1f, Volume = 0.4f };
+                SoundStyle attachSound = AssetDirectory.Sounds.GoozmaMinions.StellarConstellationForm with { MaxInstances = 0, Pitch = 0.8f, PitchVariance = 0.1f, Volume = 0.4f };
                 SoundEngine.PlaySound(attachSound, Projectile.Center);
             }
         }
@@ -140,7 +140,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D flame = AssetDirectory.Textures.Goozma.CometKunaiFlame.Value;
-            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
             Rectangle fireFrame = flame.Frame(1, 3, 0, Projectile.frame);
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(0, 70, 100, 0), Projectile.rotation, texture.Size() * new Vector2(0.5f, 0.55f), Projectile.scale * 1.3f, 0, 0);

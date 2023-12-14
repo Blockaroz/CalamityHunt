@@ -248,7 +248,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             if (Time == 35) {
                 saveTarget = NPC.Center;
 
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave, NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.StellarConstellationWave, NPC.Center);
 
                 var count = 5 + Main.rand.Next(5, 7);
                 for (var i = 0; i < count; i++) {
@@ -261,7 +261,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 }
             }
             if (Time == 53) {
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave.WithPitchOffset(0.07f), NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.StellarConstellationWave.WithPitchOffset(0.07f), NPC.Center);
 
                 var count = 4 + Main.rand.Next(4, 6);
                 for (var i = 0; i < count; i++) {
@@ -276,7 +276,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             if (Time == 70) {
                 NPC.scale = 0f;
 
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationForm.WithPitchOffset(0.2f), NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.StellarConstellationForm.WithPitchOffset(0.2f), NPC.Center);
 
                 var count = 3 + Main.rand.Next(8, 10);
                 for (var i = 0; i < count; i++) {
@@ -321,9 +321,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                         SpawnConstellation(2, 8);
 
                     if ((Time - 70) % 150 == 25)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationWave.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.StellarConstellationWave.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
                     if ((Time - 70) % 150 == 120)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarConstellationForm.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.StellarConstellationForm.WithVolumeScale(0.7f).WithPitchOffset(-0.3f), NPC.Center);
                 }
             }
 
@@ -333,7 +333,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             }
 
             if (Time == 580)
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarReform, NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.StellarReform, NPC.Center);
 
             if (Time > 680)
                 Reset();
@@ -485,7 +485,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             }
             else if (Time < 40 + waitTime) {
                 if (Time == 45) {
-                    var telegraph = AssetDirectory.Sounds.Slime.StellarSlimeStarfallTelegraph;
+                    var telegraph = AssetDirectory.Sounds.GoozmaMinions.StellarSlimeStarfallTelegraph;
                     SoundEngine.PlaySound(telegraph.WithVolumeScale(2f), NPC.Center);
                 }
 
@@ -505,7 +505,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(NPC.FindSmashSpot(saveTarget)).SafeNormalize(Vector2.Zero) * NPC.Distance(NPC.FindSmashSpot(saveTarget)) * 0.5f, 0.4f);
                 NPC.scale = Utils.GetLerpValue(40 + waitTime + 14, 40 + waitTime + 6, Time, true);
                 if (Time == 40 + waitTime + 2) {
-                    var slamSound = AssetDirectory.Sounds.Slime.StellarSlimeImpact;
+                    var slamSound = AssetDirectory.Sounds.GoozmaMinions.StellarSlimeImpact;
                     SoundEngine.PlaySound(slamSound, NPC.Center);
                 }
 
@@ -553,7 +553,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             }
 
             if (Time == waitTime + 200)
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarReform, NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.StellarReform, NPC.Center);
 
             if (Time > 40 && Time < 40 + waitTime + 10) {
                 for (var i = 0; i < 2; i++) {
@@ -604,7 +604,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             }
 
             if (Time == 585)
-                SoundEngine.PlaySound(AssetDirectory.Sounds.Slime.StellarBlackHoleGulp, NPC.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.StellarBlackHoleGulp, NPC.Center);
 
             if (Time > 530) {
                 NPC.velocity *= 0.92f;
@@ -781,7 +781,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
         {
             var texture = TextureAssets.Npc[Type].Value;
             var flash = AssetDirectory.Textures.Sparkle.Value;
-            var bloom = AssetDirectory.Textures.GlowBig.Value;
+            var bloom = AssetDirectory.Textures.Glow[1].Value;
 
             var frame = texture.Frame(1, 4, 0, npcFrame);
 

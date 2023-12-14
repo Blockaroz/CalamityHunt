@@ -261,7 +261,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             var textureBits = AssetDirectory.Textures.Goozma.FusionRay[1].Value;
             var textureGlow = AssetDirectory.Textures.Goozma.FusionRay[2].Value;
             var textureSecond = AssetDirectory.Textures.Goozma.FusionRay[3].Value;
-            var glow = AssetDirectory.Textures.Glow.Value;
+            var glow = AssetDirectory.Textures.Glow[0].Value;
             var ray = AssetDirectory.Textures.GlowRay.Value;
 
             var startColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);

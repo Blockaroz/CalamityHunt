@@ -69,7 +69,7 @@ namespace CalamityHunt.Content.Tiles
 
         public override void HitWire(int i, int j)
         {
-            Main.tile[i, j].GetTopLeft(ref i, ref j, out _, out _);
+            Main.tile[i, j].GetTopLeftTile(ref i, ref j, out _, out _);
 
             for (int l = i; l < i + 2; l++) {
                 for (int m = j; m < j + 3; m++) {

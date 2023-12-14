@@ -16,8 +16,6 @@ public static class AssetDirectory
         public static readonly Asset<Texture2D> Sparkle = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/Sparkle");
         public static readonly Asset<Texture2D> GlowRing = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/GlowRing");
         public static readonly Asset<Texture2D> GlowRay = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/GlowRay");
-        public static readonly Asset<Texture2D> Glow = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/GlowSoft");
-        public static readonly Asset<Texture2D> GlowBig = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/GlowSoftBig");
         public static readonly Asset<Texture2D> ShockRing = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/ShockRing");
         public static readonly Asset<Texture2D> Empty = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/Empty");
         public static readonly Asset<Texture2D> Template = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/Template");
@@ -25,12 +23,14 @@ public static class AssetDirectory
         public static readonly Asset<Texture2D>[] Noise = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/Extra/Noise_");
         public static readonly Asset<Texture2D>[] Space = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/Extra/Space_");
         public static readonly Asset<Texture2D>[] ColorMap = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/Extra/ColorMap_");
+        public static readonly Asset<Texture2D>[] Glow = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/Extra/Glow_");
 
         public static readonly Asset<Texture2D>[] SwordSwing = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/Extra/SwordSwing_");
         public static readonly Asset<Texture2D> QuestionMark = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/icon_small");
 
         public static Dictionary<int, Asset<Texture2D>> Particle = new Dictionary<int, Asset<Texture2D>>();
         public static Dictionary<int, Asset<Texture2D>> Relic = new Dictionary<int, Asset<Texture2D>>();
+        public static Dictionary<int, Asset<Texture2D>> FlyingSlime = new Dictionary<int, Asset<Texture2D>>();
 
         //Jokes and Seasons
         internal static readonly Asset<Texture2D> FrogParticle = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/FrogParticle");
@@ -48,7 +48,7 @@ public static class AssetDirectory
 
             public static readonly Asset<Texture2D> BossPortrait = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaBC");
             public static readonly Asset<Texture2D> GodEye = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "SpecialEye");
-            public static readonly Asset<Texture2D> Eyeball = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaSclera");
+            public static readonly Asset<Texture2D> Sclera = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaSclera");
             public static readonly Asset<Texture2D> Wormhole = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "Wormhole");
             public static readonly Asset<Texture2D> DarkSludge = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "DarkSludgeTexture");
             public static readonly Asset<Texture2D> DarkSludgeGlow = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "DarkSludgeTextureGlow");
@@ -129,7 +129,7 @@ public static class AssetDirectory
             public static readonly SoundStyle SlimeAbsorb = new(AssetPath + "Sounds/Goozma/GoozmaSlimeAbsorb", 8) { MaxInstances = 0, Volume = 0.1f };
             public static readonly SoundStyle Intro = new(AssetPath + "Sounds/Goozma/GoozmaIntro") { MaxInstances = 0, PlayOnlyIfFocused = true };
             public static readonly SoundStyle Awaken = new(AssetPath + "Sounds/Goozma/GoozmaAwaken") { MaxInstances = 0 };
-            public static readonly SoundStyle Hurt = new(AssetPath + "Sounds/Goozma/GoozmaHurt", 1, 3) { MaxInstances = 0 };
+            public static readonly SoundStyle Hurt = new(AssetPath + "Sounds/Goozma/GoozmaHurt", 1, 3) { MaxInstances = 0, PitchVariance = 0.1f };
             public static readonly SoundStyle SpawnSlime = new(AssetPath + "Sounds/Goozma/GoozmaSpawnSlime") { MaxInstances = 0 };
             public static readonly SoundStyle EyeAppear = new(AssetPath + "Sounds/Goozma/GoozmaEyeAppear") { MaxInstances = 0 };
             public static readonly SoundStyle Reform = new(AssetPath + "Sounds/Goozma/GoozmaReform") { MaxInstances = 0 };
@@ -168,7 +168,7 @@ public static class AssetDirectory
             public static readonly SoundStyle Impact = new(AssetPath + "Sounds/Goozma/Goozmite/GoozmiteImpact", 1, 3) { MaxInstances = 0 };
         }
 
-        public static class Slime
+        public static class GoozmaMinions
         {
             public static readonly SoundStyle SlimeSlam = new(AssetPath + "Sounds/Goozma/Slimes/GoozmaSlimeSlam", 1, 3) { MaxInstances = 0 };
 
@@ -216,6 +216,17 @@ public static class AssetDirectory
             public static readonly SoundStyle ElectricLoop = new(AssetPath + "Sounds/Weapons/ElectricLoop") { MaxInstances = 0, IsLooped = true };
         }
 
+        public static class Souls
+        {
+            public static readonly SoundStyle ChromaticSoulHeartbeat = new(AssetPath + "Sounds/GoozmaAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
+            public static readonly SoundStyle ChromaticSoulDrone = new(AssetPath + "Sounds/GoozmaAuricSoulDrone") { MaxInstances = 0, IsLooped = true };
+            public static readonly SoundStyle ChromaticSoulBreathe = new(AssetPath + "Sounds/GoozmaAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.4f };
+
+            public static readonly SoundStyle DragonSoulHeartbeat = new(AssetPath + "Sounds/YharonAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
+            public static readonly SoundStyle DragonSoulDrone = new(AssetPath + "Sounds/YharonAuricSoulDrone") { MaxInstances = 0, Volume = 0.5f, IsLooped = true };
+            public static readonly SoundStyle DragonSoulBreathe = new(AssetPath + "Sounds/YharonAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.2f };
+        }
+
         public static readonly SoundStyle TestLoop = new(AssetPath + "Sounds/TestLoop") { MaxInstances = 0, IsLooped = true };
 
         public static readonly SoundStyle MonsoonThunder = new(AssetPath + "Sounds/SlimeMonsoon/GoozmaMonsoonThunder", 3, SoundType.Ambient) { MaxInstances = 0 };
@@ -229,14 +240,6 @@ public static class AssetDirectory
         public static readonly SoundStyle StressPing = new(AssetPath + "Sounds/GoozmaRageIndicator") { MaxInstances = 0, Volume = 0.65f };
         public static readonly SoundStyle StressLoop = new(AssetPath + "Sounds/GoozmaRageLoop") { MaxInstances = 0, Volume = 0.65f, IsLooped = true };
         public static readonly SoundStyle StressFull = new(AssetPath + "Sounds/GoozmaRageFull") { MaxInstances = 0, Volume = 0.75f };
-
-        public static readonly SoundStyle GoozmaAuricSoulHeartbeat = new(AssetPath + "Sounds/GoozmaAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
-        public static readonly SoundStyle GoozmaAuricSoulDrone = new(AssetPath + "Sounds/GoozmaAuricSoulDrone") { MaxInstances = 0, IsLooped = true };
-        public static readonly SoundStyle GoozmaAuricSoulBreathe = new(AssetPath + "Sounds/GoozmaAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.4f };
-
-        public static readonly SoundStyle YharonAuricSoulHeartbeat = new(AssetPath + "Sounds/YharonAuricSoulHeartbeat") { MaxInstances = 0, IsLooped = true };
-        public static readonly SoundStyle YharonAuricSoulDrone = new(AssetPath + "Sounds/YharonAuricSoulDrone") { MaxInstances = 0, Volume = 0.5f, IsLooped = true };
-        public static readonly SoundStyle YharonAuricSoulBreathe = new(AssetPath + "Sounds/YharonAuricSoulBreathe") { MaxInstances = 0, PitchVariance = 0.2f };
     }
 
     public static class Effects

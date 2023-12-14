@@ -62,7 +62,7 @@ public class FlameParticle : Particle
         float progress = time / (maxTime * 2f);
 
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
-        Texture2D glow = AssetDirectory.Textures.GlowBig.Value;
+        Texture2D glow = AssetDirectory.Textures.Glow[1].Value;
         Rectangle frame = texture.Frame(1, 15, 0, style);
         SpriteEffects flip = direction > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
         Color drawColor = Color.Lerp(color, fadeColor, Utils.GetLerpValue(0f, 0.3f, progress, true));
@@ -72,7 +72,7 @@ public class FlameParticle : Particle
 
         Effect dissolveEffect = AssetDirectory.Effects.FlameDissolve.Value;
         dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[12].Value);
-        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(1f + scale * 0.1f));
+        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(1.1f + scale * 0.1f));
         dissolveEffect.Parameters["uFrameCount"].SetValue(10);
         dissolveEffect.Parameters["uProgress"].SetValue(1f - MathF.Sqrt(1f - progress));
         dissolveEffect.Parameters["uPower"].SetValue(10f + progress * 70f);

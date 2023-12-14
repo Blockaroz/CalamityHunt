@@ -52,7 +52,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D glow = AssetDirectory.Textures.Glow.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
             float scale = Projectile.scale * 3f;
 
             Color rainbowColor = Main.hslToRgb(Projectile.localAI[0] * 0.03f % 1f, 0.5f, 0.55f, 0) * Utils.GetLerpValue(35, 15, Time, true) * 0.9f;

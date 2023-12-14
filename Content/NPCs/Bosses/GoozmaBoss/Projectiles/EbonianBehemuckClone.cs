@@ -161,7 +161,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             var texture = TextureAssets.Projectile[Type].Value;
             var frame = texture.Frame(1, 4, 0, Projectile.frame);
 
-            var tell = AssetDirectory.Textures.Glow.Value;
+            var tell = AssetDirectory.Textures.Glow[0].Value;
 
             var scale = 1f;
 

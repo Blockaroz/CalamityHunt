@@ -30,7 +30,7 @@ public class ChromaticEnergyDust : Particle
         oldPos = Enumerable.Repeat(position, 8).ToArray();
         oldRot = Enumerable.Repeat(rotation, 8).ToArray();
 
-        if (Main.zenithWorld && ModContent.GetInstance<BossDownedSystem>().GoozmaDowned) {
+        if (Main.zenithWorld && BossDownedSystem.Instance.GoozmaDowned) {
             frogicle = Main.rand.NextBool(100);
         }
     }
@@ -81,7 +81,7 @@ public class ChromaticEnergyDust : Particle
     public override void Draw(SpriteBatch spriteBatch)
     {
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
-        Texture2D glow = AssetDirectory.Textures.Glow.Value;
+        Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
 
         if (frogicle) {
             texture = AssetDirectory.Textures.FrogParticle.Value;

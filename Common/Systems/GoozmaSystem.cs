@@ -134,7 +134,7 @@ namespace CalamityHunt.Common.Systems
                 Main.npc[slimeBoss].active = false;
 
                 if (Main.netMode != NetmodeID.MultiplayerClient) {
-                    NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), spawnPos, ModContent.NPCType<GelatinousSpawn>());
+                    NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), spawnPos, ModContent.NPCType<PluripotentSpawn>());
                 }
             }
         }

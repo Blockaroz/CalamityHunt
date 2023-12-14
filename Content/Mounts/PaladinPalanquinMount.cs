@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlockTest.Common.Utilities;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;

@@ -47,7 +47,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             if (Time == 0) {
                 Projectile.netUpdate = true;
 
-                var invocation = AssetDirectory.Sounds.Slime.StellarBlackHoleSummon;
+                var invocation = AssetDirectory.Sounds.GoozmaMinions.StellarBlackHoleSummon;
                 SoundEngine.PlaySound(invocation.WithVolumeScale(1.5f), Projectile.Center);
             }
 
@@ -111,7 +111,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0002f, 0, 1) * (0.6f + Projectile.scale * 0.5f);
             pitch = (float)Math.Sqrt(Utils.GetLerpValue(0, MaxTime * 0.55f, Time, true) * Utils.GetLerpValue(MaxTime, MaxTime * 0.99f, Time, true)) - 1f;
 
-            holeSound ??= new LoopingSound(AssetDirectory.Sounds.Slime.StellarBlackHoleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            holeSound ??= new LoopingSound(AssetDirectory.Sounds.GoozmaMinions.StellarBlackHoleLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
             windSound ??= new LoopingSound(AssetDirectory.Sounds.Goozma.WindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
 
             holeSound.PlaySound(() => Projectile.Center, () => volume * 1f, () => pitch);
@@ -150,7 +150,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var glow = AssetDirectory.Textures.GlowBig.Value;
+            var glow = AssetDirectory.Textures.Glow[1].Value;
             var ring = AssetDirectory.Textures.ShockRing.Value;
 
             var intensity = (float)Math.Sqrt(Utils.GetLerpValue(0.2f, 0.6f, Projectile.scale, true));
