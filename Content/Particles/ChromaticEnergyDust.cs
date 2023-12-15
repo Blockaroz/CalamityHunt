@@ -26,10 +26,8 @@ public class ChromaticEnergyDust : Particle
     public override void OnSpawn()
     {
         rotation += Main.rand.NextFloat(-3f, 3f);
-        scale *= 2f;
         oldPos = Enumerable.Repeat(position, 8).ToArray();
         oldRot = Enumerable.Repeat(rotation, 8).ToArray();
-
         if (Main.zenithWorld && BossDownedSystem.Instance.GoozmaDowned) {
             frogicle = Main.rand.NextBool(100);
         }
@@ -91,13 +89,13 @@ public class ChromaticEnergyDust : Particle
 
         for (int i = 1; i < oldPos.Length; i++) {
             Color trailColor = color with { A = 40 } * (float)Math.Pow(1f - ((float)i / oldPos.Length), 2f) * 0.3f;
-            Vector2 trailStretch = new Vector2(oldPos[i].Distance(oldPos[i - 1]), scale);
+            Vector2 trailStretch = new Vector2(oldPos[i].Distance(oldPos[i - 1]) + 1f, scale * 0.2f);
             spriteBatch.Draw(texture, oldPos[i] - Main.screenPosition, null, trailColor, oldRot[i], texture.Size() * 0.5f, trailStretch, 0, 0);
         }
 
-        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), (color * 0.9f) with { A = 50 }, rotation, texture.Size() * 0.5f, scale, 0, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), (color * 0.9f) with { A = (byte)(color.A / 2f + 20) }, rotation, texture.Size() * 0.5f, scale, 0, 0);
 
-        float innerGlowScale = 0.5f * Utils.GetLerpValue(2f, 1.5f, life, true);
+        float innerGlowScale = 0.7f * Utils.GetLerpValue(5f, 1.5f, life, true);
         spriteBatch.Draw(texture, position - Main.screenPosition, texture.Frame(), Color.White with { A = 0 }, rotation, texture.Size() * 0.5f, scale * innerGlowScale, 0, 0);
     }
 }

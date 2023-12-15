@@ -84,7 +84,6 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         NPC.height = 150;
         NPC.damage = 0;
         NPC.defense = 110;
-        NPC.lifeMax = 2750000;
         NPC.HitSound = null;
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0f;
@@ -102,34 +101,38 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
             Music = AssetDirectory.Music.GlutinousArbitration;
             Music2 = AssetDirectory.Music.ViscousDesperation;
         }
-        if (Main.expertMode) {
-            NPC.lifeMax = 4500000;
-        }
-        if (ModLoader.HasMod(HUtils.CalamityMod)) {
-            Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
+
+        if (ModLoader.TryGetMod(HUtils.CalamityMod, out Mod calamity)) {
             calamity.Call("SetDebuffVulnerabilities", "poison", false);
             calamity.Call("SetDebuffVulnerabilities", "heat", true);
             calamity.Call("SetDefenseDamageNPC", NPC, true);
+
+            NPC.lifeMax = 2750000;
+            if (Main.expertMode) {
+                NPC.lifeMax = 4500000;
+            }
+
             if ((bool)calamity.Call("GetDifficultyActive", "revengeance")) {
                 NPC.lifeMax = 6500000;
             }
         }
-
-        if (Main.drunkWorld)
-            SlimeUtils.GoozmaColorType = Main.rand.Next(10);
-
-        //if (NPC.IsABestiaryIconDummy)
-        //{
-        //    if (nPCsToDrawCordOn.Count > 10)
-        //        nPCsToDrawCordOn.RemoveAt(5);//preserve 5 of them
-
-        //    nPCsToDrawCordOn.Add(NPC);
-        //}
+        else {
+            NPC.lifeMax = 2750000;
+            if (Main.expertMode) {
+                NPC.lifeMax = 4500000;
+            }
+        }
 
         SlimeUtils.GoozmaColorType = Main.rand.Next(54);
+
+        if (Main.drunkWorld) {
+            SlimeUtils.GoozmaColorType = Main.rand.Next(10);
+        }
     }
 
-    public int Music2;
+    public override void BossHeadRotation(ref float rotation) => rotation = NPC.velocity.X * 0.01f;
+
+    public static int Music2;
 
     public override void Load()
     {
@@ -203,52 +206,22 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
     {
         writer.Write(currentSlime);
 
-        for (int i = 0; i < nextAttack.Length; i++)
-            for (int j = 0; j < nextAttack[i].Count; j++)
+        for (int i = 0; i < nextAttack.Length; i++) {
+            for (int j = 0; j < nextAttack[i].Count; j++) {
                 writer.Write(nextAttack[i][j]);
+            }
+        }
     }
 
     public override void ReceiveExtraAI(BinaryReader reader)
     {
         currentSlime = reader.Read();
 
-        for (int i = 0; i < nextAttack.Length; i++)
-            for (int j = 0; j < nextAttack[i].Count; j++)
+        for (int i = 0; i < nextAttack.Length; i++) {
+            for (int j = 0; j < nextAttack[i].Count; j++) {
                 nextAttack[i][j] = reader.Read();
-    }
-
-    public override void OnSpawn(IEntitySource source)
-    {
-        NPC.ai[3] = -1;
-        currentSlime = -1;
-
-        nextAttack = new List<int>[]
-        {
-            new List<int> { 0, 1, 2},
-            new List<int> { 0, 1, 2},
-            new List<int> { 0, 1, 2},
-            new List<int> { 0, 1, 2}
-        };
-
-        SetPhase(-1);
-        headScale = 0.9f;
-
-        oldVel = new Vector2[NPCID.Sets.TrailCacheLength[Type]];
-        oldTentacleVel = new Vector2[NPCID.Sets.TrailCacheLength[Type]];
-        for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
-            NPC.oldPos[i] = NPC.position;
-            NPC.oldRot[i] = NPC.rotation;
-            oldVel[i] = NPC.velocity;
-            oldTentacleVel[i] = NPC.velocity;
+            }
         }
-
-        Main.newMusic = Music;
-        for (int i = 0; i < Main.musicFade.Length; i++)
-            Main.musicFade[i] = 0.1f;
-        Main.musicFade[Main.newMusic] = 1f;
-
-        SoundStyle roar = AssetDirectory.Sounds.Goozma.Awaken;
-        SoundEngine.PlaySound(roar, NPC.Center);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -263,11 +236,14 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         if (!Main.slimeRain) {
             Main.StartSlimeRain(false);
         }
+
+        if (Phase >= 2) {
+            SlimeMonsoonSky.additionalLightningChance = -53;
+        }
     }
 
     private Vector2 saveTarget;
     private Vector2 eyePower;
-    private Vector2[] oldVel;
 
     public override bool CheckDead()
     {
@@ -279,8 +255,9 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
                     NPC.life = 1;
                     NPC.lifeMax = (int)(NPC.lifeMax * 0.3f);
                     NPC.dontTakeDamage = true;
-                    if (!Main.expertMode && !Main.masterMode)
+                    if (!Main.expertMode && !Main.masterMode) {
                         SetPhase(3);
+                    }
 
                     break;
 
@@ -308,12 +285,14 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         int gotten = -1;
 
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            if (nextAttack[currentSlime] == null || nextAttack[currentSlime].Count == 0)
+            if (nextAttack[currentSlime] == null || nextAttack[currentSlime].Count == 0) {
                 nextAttack[currentSlime] = new List<int> { 0, 1, 2 };
+            }
 
             WeightedRandom<int> weightedRandom = new WeightedRandom<int>(Main.rand);
-            foreach (int j in nextAttack[currentSlime])
+            foreach (int j in nextAttack[currentSlime]) {
                 weightedRandom.Add(j, j == 2 ? SpecialAttackWeight : 1f);
+            }
 
             gotten = weightedRandom.Get();
             nextAttack[currentSlime].Remove(gotten);
@@ -324,22 +303,57 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         return gotten;
     }
 
+    public override void OnSpawn(IEntitySource source)
+    {
+        SetPhase(-1);
+    }
+
     public override void AI()
     {
+        if (Phase == -1 && Time <= 0) {
+
+            NPC.ai[3] = -1;
+            currentSlime = -1;
+
+            headScale = 0.9f;
+
+            Main.newMusic = Music;
+            for (int i = 0; i < Main.musicFade.Length; i++) {
+                Main.musicFade[i] = 0.1f;
+            }
+
+            Main.musicFade[Main.newMusic] = 1f;
+
+            SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Awaken, NPC.Center);
+        }
+
+        nextAttack ??= new List<int>[] {
+            new List<int> { 0, 1, 2 },
+            new List<int> { 0, 1, 2 },
+            new List<int> { 0, 1, 2 },
+            new List<int> { 0, 1, 2 }
+        };
+
         ChangeWeather();
         GoozmaResistances.DisablePointBlank();
+
         if (ModLoader.HasMod(HUtils.CalamityMod)) {
-            Main.player[Main.myPlayer].AddBuff(ModLoader.GetMod(HUtils.CalamityMod).Find<ModBuff>("BossEffects").Type, 2);
+            Main.LocalPlayer.AddBuff(ModLoader.GetMod(HUtils.CalamityMod).Find<ModBuff>("BossEffects").Type, 2);
         }
+
         bool noSlime = NPC.ai[3] < 0 || NPC.ai[3] >= Main.maxNPCs || ActiveSlime.ai[1] > 3 || !ActiveSlime.active;
-        if (Phase == 0 && noSlime)
+
+        if (Phase == 0 && noSlime) {
             SetAttack(AttackList.SpawnSlime);
+        }
 
-        if (NPC.velocity.HasNaNs())
+        if (NPC.velocity.HasNaNs()) {
             NPC.velocity = Vector2.Zero;
+        }
 
-        if (Target.Invalid)
+        if (Target.Invalid) {
             NPC.TargetClosestUpgraded();
+        }
 
         if (NPC.GetTargetData().Invalid && Phase != -5) {
             SetPhase(-5);
@@ -348,16 +362,18 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
             return;
         }
 
-        if (NPC.Distance(Target.Center) > 800 && Phase == 0 || Phase == 2)
+        if (NPC.Distance(Target.Center) > 800 && Phase == 0 || Phase == 2) {
             NPC.Center = Vector2.Lerp(NPC.Center, NPC.Center + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * Math.Max(0, NPC.Distance(Target.Center) - 800), 0.01f);
+        }
 
         if (Phase != 3) {
             if (NPC.velocity.Length() < 50f) {
                 if (Math.Abs(NPC.Center.X - Target.Center.X) > 20)
                     NPC.direction = NPC.Center.X > Target.Center.X ? -1 : 1;
             }
-            else
+            else {
                 NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
+            }
         }
 
         NPC.damage = 0;
@@ -366,16 +382,23 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
             NPC.damage = GetDamage(0);
             NPC.takenDamageMultiplier = 1f;
 
-            if (!noSlime)
-                if (NPC.Distance(ActiveSlime.Center) < 400)
+            if (!noSlime) {
+                if (NPC.Distance(ActiveSlime.Center) < 400) {
                     NPC.damage = 0;
+                }
+            }
 
-            if (Phase <= 1 && Time < 60)
+            if (Phase <= 1 && Time < 60) {
                 NPC.damage = 0;
+            }
         }
 
         //good luck religious passage
         //Matthew 25:31 When the Son of man shall come in his glory, and all the holy angels with him, then shall he sit upon the throne of his glory
+
+        //number 2
+        //1 Chronicles 16:11 Seek the Lord and His strength; Seek His face evermore!
+
         switch (Phase) {
             case -1:
 
@@ -389,7 +412,7 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
                 }
 
                 for (int i = 0; i < 3; i++) {
-                    if (Main.rand.NextBool((int)(Time + 1))) {
+                    if (Main.rand.NextBool((int)(Time + 2))) {
                         Vector2 particleVelocity = Vector2.UnitY.RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(1f);
                         particleVelocity.Y -= 1f + Main.rand.NextFloat();
 
@@ -401,8 +424,9 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
                         }));
                     }
                 }
-                if (Time % 3 == 0)
+                if (Time % 3 == 0) {
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(NPC.Center, Main.rand.NextVector2CircularEdge(1, 1), 10f, 6f, 10));
+                }
 
                 Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(10, 10), DustID.TintableDust, Main.rand.NextVector2CircularEdge(10, 10), 200, Color.Black, Main.rand.NextFloat(2f, 4f)).noGravity = true;
 
@@ -1193,10 +1217,10 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
                     NPC.velocity += NPC.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * NPC.Distance(Main.MouseWorld) * 0.1f;
                 }
 
-                //if (NPC.velocity.Length() > 4) {
-                //    rotate = true;
-                //    NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.4f);
-                //}
+                if (NPC.velocity.Length() > 41) {
+                    rotate = true;
+                    NPC.rotation = NPC.rotation.AngleLerp(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.4f);
+                }
 
                 break;
 
@@ -1207,40 +1231,38 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
                 break;
         };
 
-        if (Phase >= 2) {
-            SlimeMonsoonSky.additionalLightningChance = -53;
-        }
-
         HandleLoopedSounds();
 
-        if (Phase != -5) {
-            Time++;
+        if (Phase == -5) {
+            Time--;
         }
         else {
-            Time--;
+            Time++;
         }
 
         if (!Main.dedServ) {
+
+            oldVel ??= new Vector2[NPCID.Sets.TrailCacheLength[Type]];
             NPC.localAI[1] -= NPC.velocity.X * 0.001f + NPC.direction * 0.02f;
 
             for (int i = NPCID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
-                NPC.oldPos[i] = Vector2.Lerp(NPC.oldPos[i], NPC.oldPos[i - 1], 0.37f + (float)Math.Sin(NPC.localAI[0] * 0.33f - i * 2f) * 0.25f);
-                NPC.oldRot[i] = MathHelper.Lerp(NPC.oldRot[i], NPC.oldRot[i - 1], 0.37f + (float)Math.Sin(NPC.localAI[0] * 0.33f - i * 2f) * 0.25f);
-                oldVel[i] = Vector2.Lerp(oldVel[i], oldVel[i - 1], 0.25f);
+                NPC.oldPos[i] = Vector2.Lerp(NPC.oldPos[i], NPC.oldPos[i - 1], 0.3f + (float)Math.Sin(NPC.localAI[0] * 0.33f - i * 2f) * 0.1f);
+                NPC.oldRot[i] = MathHelper.Lerp(NPC.oldRot[i], NPC.oldRot[i - 1], 0.3f + (float)Math.Sin(NPC.localAI[0] * 0.33f - i * 2f) * 0.1f);
+                oldVel[i] = Vector2.Lerp(oldVel[i], oldVel[i - 1], 0.3f + (float)Math.Sin(NPC.localAI[0] * 0.33f - i * 2f) * 0.1f);
             }
-            NPC.oldPos[0] = Vector2.Lerp(NPC.oldPos[0], NPC.position, 0.37f + (float)Math.Sin(NPC.localAI[0] * 0.33f) * 0.25f);
-            NPC.oldRot[0] = MathHelper.Lerp(NPC.oldRot[0], NPC.rotation, 0.37f + (float)Math.Sin(NPC.localAI[0] * 0.33f) * 0.25f);
-            oldVel[0] = Vector2.Lerp(oldVel[0], drawVelocity, 0.25f);
+            NPC.oldPos[0] = Vector2.Lerp(NPC.oldPos[0], NPC.position, 0.3f + (float)Math.Sin(NPC.localAI[0] * 0.33f) * 0.1f);
+            NPC.oldRot[0] = MathHelper.Lerp(NPC.oldRot[0], NPC.rotation, 0.3f + (float)Math.Sin(NPC.localAI[0] * 0.33f) * 0.1f);
+            oldVel[0] = Vector2.Lerp(oldVel[0], NPC.velocity, 0.3f + (float)Math.Sin(NPC.localAI[0] * 0.33f) * 0.1f);
 
             //for (int i = NPCID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
             //{
             //    NPC.oldPos[i] = Vector2.Lerp(NPC.oldPos[i], NPC.oldPos[i - 1], 0.3f);
             //    NPC.oldRot[i] = MathHelper.Lerp(NPC.oldRot[i], NPC.oldRot[i - 1], 0.3f);
-            //    oldVel[i] = Vector2.Lerp(oldVel[i], oldVel[i - 1], 0.3f);
+            //    oldVelocity[i] = Vector2.Lerp(oldVelocity[i], oldVelocity[i - 1], 0.3f);
             //}
             //NPC.oldPos[0] = Vector2.Lerp(NPC.oldPos[0], NPC.position, 0.3f);
             //NPC.oldRot[0] = MathHelper.Lerp(NPC.oldRot[0], NPC.rotation, 0.3f);
-            //oldVel[0] = Vector2.Lerp(oldVel[0], NPC.velocity, 0.3f);
+            //oldVelocity[0] = Vector2.Lerp(oldVelocity[0], NPC.velocity, 0.3f);
 
             if (Main.rand.NextBool(5)) {
                 Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(50), 100, 160, DustID.TintableDust, Main.rand.NextFloat(-1f, 1f), -4f, 230, Color.Black, Main.rand.NextFloat(1f, 3f));
@@ -1480,7 +1502,7 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
 
     private enum SortedProjectileAttackTypes
     {
-        Default,
+        None,
         EbonianBubbles,
         EbonianTrifecta,
         CrystalStorm,
@@ -1571,7 +1593,7 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         SoundStyle fusionSound = AssetDirectory.Sounds.Goozma.Shot;
 
         switch (type) {
-            case SortedProjectileAttackTypes.Default:
+            case SortedProjectileAttackTypes.None:
 
                 break;
 
@@ -1851,18 +1873,36 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
 
     private int GetDamage(int attack, float modifier = 1f)
     {
-        int damage = attack switch
-        {
-            0 => Main.expertMode ? 600 : 300,//contact
-            1 => 75,//slime balls
-            2 => 105,//pure gel
-            3 => 125, //lightning
-            4 => 60, //static
-            5 => 100, //bloat
-            6 => Main.expertMode ? 400 : 200, //drill dash
-            7 => 200, //fusion ray
-            _ => 0
-        };
+        int damage = 0;
+
+        if (ModLoader.HasMod(HUtils.CalamityMod)) {
+            damage = attack switch
+            {
+                0 => Main.expertMode ? 600 : 300,//contact
+                1 => 75,//slime balls
+                2 => 105,//pure gel
+                3 => 125, //lightning
+                4 => 60, //static
+                5 => 100, //bloat
+                6 => Main.expertMode ? 400 : 200, //drill dash
+                7 => 300, //fusion ray
+                _ => 0
+            };
+        }
+        else {
+            damage = attack switch
+            {
+                0 => Main.expertMode ? 100 : 50,//contact
+                1 => 20,//slime balls
+                2 => 50,//pure gel
+                3 => 66, //lightning
+                4 => 30, //static
+                5 => 50, //bloat
+                6 => Main.expertMode ? 180 : 100, //drill dash
+                7 => 150, //fusion ray
+                _ => 0
+            };
+        }
 
         return (int)(damage * modifier);
     }
@@ -1873,7 +1913,7 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
     public Vector2 drawVelocity;
     private Vector2 tentacleVelocity;
     private Vector2 tentacleAcceleration;
-    private Vector2[] oldTentacleVel;
+    private Vector2[] oldVel;
     public bool rotate;
 
     public override void FindFrame(int frameHeight)
@@ -1882,8 +1922,9 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
 
         if (oldVel == null) {
             oldVel = new Vector2[NPCID.Sets.TrailCacheLength[Type]];
-            for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++)
+            for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
                 oldVel[i] = NPC.velocity;
+            }
         }
 
         drawOffset = new Vector2((float)Math.Sin(NPC.localAI[0] * 0.05f % MathHelper.TwoPi) * 2, (float)Math.Cos(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 3);
@@ -1896,15 +1937,9 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
         extraTilt = MathHelper.Lerp(extraTilt, Math.Clamp(-drawVelocity.X * 0.025f, -1f, 1f) - 0.01f * NPC.direction, 0.15f);
         headScale = MathHelper.Lerp(headScale, 1f, 0.05f);
 
-        tentacleVelocity *= 0.89f;
+        tentacleVelocity *= 0.93f;
         tentacleAcceleration = (NPC.velocity - oldVel[(int)(oldVel.Length / 3f)]) * 0.1f;
         tentacleVelocity += tentacleAcceleration.RotatedBy(-NPC.rotation) * 0.7f;
-
-        if (oldTentacleVel != null) {
-            for (int i = NPCID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
-                oldTentacleVel[i] = Vector2.Lerp(oldTentacleVel[i], oldTentacleVel[i - 1], 0.3f);
-            oldTentacleVel[0] = Vector2.Lerp(oldTentacleVel[0], tentacleVelocity, 0.3f);
-        }
 
         rotate = false;
     }
@@ -1946,7 +1981,7 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
 
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
     {
-        NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance);
+        NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
     }
 
     //helper methods to do syncing

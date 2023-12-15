@@ -73,36 +73,21 @@ public partial class Goozma : ModNPC
         Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
         Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
 
-        //Rectangle ornamentBase = ornament.Frame(1, 2, 0, 0);
-        //Rectangle ornamentGlow = ornament.Frame(1, 2, 0, 1);
-
         SpriteEffects direction = NPC.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
         glowColor.A = 0;
-        //config?
-        //Asset<Texture2D> stick = TextureAssets.FishingLine;
-        //spriteBatch.Draw(stick.Value, NPC.Center - Main.screenPosition, null, Color.DimGray, 0, TextureAssets.FishingLine.Size() * new Vector2(0.5f, 0f), new Vector2(6f, 150f / stick.Height() + 10 * NPC.scale), 0, 0);
-        //spriteBatch.Draw(stick.Value, NPC.Center - Main.screenPosition, null, Color.LightGray, 0, TextureAssets.FishingLine.Size() * new Vector2(0.5f, 0f), new Vector2(4f, 148f / stick.Height() + 10 * NPC.scale), 0, 0);
+
+        //Texture2D stick = TextureAssets.FishingLine.Value;
+        //spriteBatch.Draw(stick, NPC.Center - Main.screenPosition, null, Color.DimGray, 0, TextureAssets.FishingLine.Size() * new Vector2(0.5f, 0f), new Vector2(6f, 150f / stick.Height + 10 * NPC.scale), 0, 0);
+        //spriteBatch.Draw(stick, NPC.Center - Main.screenPosition, null, Color.LightGray, 0, TextureAssets.FishingLine.Size() * new Vector2(0.5f, 0f), new Vector2(4f, 148f / stick.Height + 10 * NPC.scale), 0, 0);
 
         oldVel ??= new Vector2[NPCID.Sets.TrailCacheLength[Type]];
 
         float trailStrength = Phase > 1 ? 1.3f : 0.5f;
 
-        if (!(Phase == 2 && Attack == (int)AttackList.FusionRay && Time > 520))
-            drawVelocity = NPC.velocity;
-
-        //FlipShadersOnOff(spriteBatch, null, true);
-        //GameShaders.Armor.Apply(ContentSamples.CommonlyUsedContentSamples.ColorOnlyShaderIndex, NPC);
-
         if (NPC.IsABestiaryIconDummy) {
             headScale = 1f;
         }
-        //else {
-        //    for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
-        //        Color trailColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(i * 4f - NPC.localAI[0]) * ((float)(NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type]) * 0.77f) with { A = 0};
-        //        DrawGoozma(spriteBatch, screenPos, NPC.oldPos[i] + NPC.Size * 0.5f, NPC.oldRot[i], oldVel[i], oldTentacleVel[i], trailColor * trailStrength * NPC.scale);
-        //    }
-        //}
 
         float eyeScale = 1.1f + (float)Math.Sin(NPC.localAI[0] * 0.025f % MathHelper.TwoPi) * 0.15f;
         float eyeRot = -MathHelper.PiOver4;
@@ -127,6 +112,9 @@ public partial class Goozma : ModNPC
             Texture2D goozmaTexture = goozmaContent.GetTarget(NPC.whoAmI);
 
             RestartSpriteBatch(spriteBatch, null, true);
+
+
+
             Main.pixelShader.CurrentTechnique.Passes["ColorOnly"].Apply();
             for (int i = 0; i < 4; i++) {
                 Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + NPC.rotation);
@@ -137,7 +125,7 @@ public partial class Goozma : ModNPC
 
             spriteBatch.Draw(goozmaTexture, NPC.Center + drawOffset - screenPos, goozmaTexture.Frame(), Color.White, NPC.rotation, goozmaTexture.Size() * 0.5f, NPC.scale, direction, 0);
 
-            //Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+            RestartSpriteBatch(spriteBatch, null, false);
         }
 
         spriteBatch.Draw(godEye, NPC.Center - screenPos + realEyeOffset, godEye.Frame(), new Color(200, 200, 200, 150), eyeRot, godEye.Size() * 0.5f, eyeScale * 1.3f * (1f + eyePower.Length() * 0.06f), 0, 0);
@@ -149,8 +137,6 @@ public partial class Goozma : ModNPC
         spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot - MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
 
         spriteBatch.Draw(glow, NPC.Center - screenPos + realEyeOffset, null, glowColor * 0.3f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 2f * eyeScale, 0, 0);
-
-        RestartSpriteBatch(spriteBatch, null, false);
 
         return false;
     }
@@ -320,17 +306,21 @@ public partial class Goozma : ModNPC
             }
 
             spriteBatch.Draw(texture, position + hitDirection, null, color, tilt * 0.9f, texture.Size() * 0.5f, headScale, 0, 0);
-            spriteBatch.Draw(crownTexture, crownPos, null, color, tilt, crownTexture.Size() * new Vector2(0.5f, 1f), 1f, 0, 0);
+
+            if (!Main.xMas) {
+                spriteBatch.Draw(crownTexture, crownPos, null, color, tilt, crownTexture.Size() * new Vector2(0.5f, 1f), 1f, 0, 0);
+            }
 
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
             Vector2 eyeOffset = new Vector2(15, -22).RotatedBy(tilt * 0.9) * headScale;
 
-            spriteBatch.Draw(crownMaskTexture, crownPos, crownMaskTexture.Frame(), Color.White, tilt, crownMaskTexture.Size() * new Vector2(0.5f, 1f), 1f, 0, 0);
-
             if (Main.xMas) {
                 Texture2D santaHat = AssetDirectory.Textures.SantaHat.Value;
-                spriteBatch.Draw(santaHat, crownPos, null, Color.White, tilt - 0.66f, santaHat.Size() * new Vector2(0.21f, 0.46f), 0.66f, SpriteEffects.FlipHorizontally, 0);
+                spriteBatch.Draw(santaHat, crownPos, null, Color.White, tilt - 0.66f, santaHat.Size() * new Vector2(0.25f, 0.46f), 0.66f, SpriteEffects.FlipHorizontally, 0);
+            }
+            else {
+                spriteBatch.Draw(crownMaskTexture, crownPos, crownMaskTexture.Frame(), Color.White, tilt, crownMaskTexture.Size() * new Vector2(0.5f, 1f), 1f, 0, 0);
             }
 
             sb.End();

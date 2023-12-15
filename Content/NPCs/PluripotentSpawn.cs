@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
+using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Common.Utilities.Interfaces;
 using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
+using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Chat;
 using Terraria.GameContent;
-using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -21,7 +22,7 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
     public override void SetStaticDefaults()
     {
         NPCID.Sets.MustAlwaysDraw[Type] = true;
-        NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
+        NPCID.Sets.ShouldBeCountedAsBoss[Type] = false;
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true });
     }
 
@@ -29,16 +30,16 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
 
     public override void SetDefaults()
     {
-        NPC.width = 92;
-        NPC.height = 88;
+        NPC.width = 100;
+        NPC.height = 100;
         NPC.noTileCollide = true;
         NPC.noGravity = true;
         NPC.immortal = true;
         NPC.damage = 0;
         NPC.dontTakeDamage = true;
-
         NPC.dontCountMe = true;
         NPC.ShowNameOnHover = false;
+        NPC.lifeMax = 2028;
 
         slimeMonsoonText = Language.GetOrRegister(Mod.GetLocalizationKey("Chat.SlimeMonsoon"));
     }
@@ -49,17 +50,35 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
 
     public bool Skip => true;// NPC.ai[3] == 1;
 
+    public float size;
+
     public override void AI()
     {
         bool spawnBoss = false;
 
+        if (Main.rand.NextBool(20)) {
+            CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
+                particle.position = NPC.Center + Main.rand.NextVector2Circular(30, 30) * NPC.scale;
+                particle.velocity = particle.position.DirectionFrom(NPC.Center) * Main.rand.NextFloat(0.5f, 2f);
+                particle.rotation = particle.velocity.ToRotation() + Main.rand.NextFloat(-0.1f, 0.1f);
+                particle.scale = Main.rand.NextFloat(0.6f, 1.5f);
+                particle.color = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]) * 1.5f) with { A = 128 };
+                particle.maxTime = Main.rand.Next(4, 15);
+                particle.anchor = () => NPC.velocity * 0.9f;
+            }));
+        }
+
         if (Skip) {
+            size = Utils.GetLerpValue(80, 130, Time, true) * 6;
+            NPC.scale = 1f + MathF.Round(Utils.GetLerpValue(70, 130, Time, true) - size * 0.2f, 2) * 1.1f;
+
             if (Time > 400) {
                 spawnBoss = true;
             }
         }
         else {
-
+            size = Utils.GetLerpValue(250, 850, Time, true) * 6;
+            NPC.scale = 1f + MathF.Round(Utils.GetLerpValue(30, 820, Time, true) - size * 0.2f, 2) * 1.1f;
 
             if (Time == 720) {
                 if (Main.dedServ) {
@@ -76,9 +95,8 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
         }
 
         if (spawnBoss) {
-            NPC.SpawnBoss((int)NPC.Center.X, (int)NPC.Bottom.Y, ModContent.NPCType<Goozma>(), 0);
-
             NPC.active = false;
+            NPC.SpawnBoss((int)NPC.Center.X, (int)NPC.Bottom.Y, ModContent.NPCType<Goozma>(), 0);
         }
 
         Time++;
@@ -88,6 +106,7 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
     public override void Load()
     {
         On_Main.UpdateAudio += FadeMusicOut;
+        LoadFlyingSlimes();
     }
 
     public override void Unload()
@@ -100,7 +119,7 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
         orig(self);
 
         if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<PluripotentSpawn>())) {
-            var goozma = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.NPCType<PluripotentSpawn>());
+            NPC goozma = Main.npc.FirstOrDefault(n => n.active && n.type == ModContent.NPCType<PluripotentSpawn>());
             for (var i = 0; i < Main.musicFade.Length; i++) {
                 var volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(200, 30, goozma.localAI[0], true);
                 var tempFade = Main.musicFade[i];
@@ -112,13 +131,8 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
 
     public void LoadFlyingSlimes()
     {
-
     }
 
-    public struct FlyingSlimeData
-    {
-
-    }
 
     //public void SpawnSlimes()
     //{
@@ -213,107 +227,50 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
+        if (NPC.IsABestiaryIconDummy) {
+            return false;
+        }
+
         Texture2D texture = TextureAssets.Npc[Type].Value;
         Texture2D eye = AssetDirectory.Textures.Goozma.GodEye.Value;
         Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
 
-        var glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time * 0.33f) * 1.2f;
+        Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Time * 0.33f) * 1.2f;
         glowColor.A = 0;
-        var drawOffset = new Vector2(14, 20).RotatedBy(NPC.rotation) * NPC.scale;
+        Vector2 drawOffset = new Vector2(14, 20).RotatedBy(NPC.rotation) * NPC.scale;
 
-        var size = (int)(Utils.GetLerpValue(250, 850, Time, true) * 6);
-        NPC.scale = Utils.GetLerpValue(0, 120, Time, true) + (MathF.Round(Utils.GetLerpValue(30, 820, Time, true), 2) - size * 0.12f) * 1.33f;
-
-        var fastWobble = 0.6f + (float)Math.Sin(Time * 0.7f) * 0.4f;
-
-        GetGradientMapValues(out var brightnesses, out var colors);
-        var effect = AssetDirectory.Effects.HolographicGel.Value;
+        Goozma.GetGradientMapValues(out var brightnesses, out var colors);
+        Effect effect = AssetDirectory.Effects.HolographicGel.Value;
         effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
         effect.Parameters["colors"].SetValue(colors);
         effect.Parameters["brightnesses"].SetValue(brightnesses);
         effect.Parameters["baseToScreenPercent"].SetValue(1f);
         effect.Parameters["baseToMapPercent"].SetValue(0f);
 
-        var drawPos = NPC.Center + Main.rand.NextVector2Circular(2, 2);
-        var frame = texture.Frame(7, 1, size, 0);
+        Vector2 drawPos = NPC.Center;
+        Rectangle frame = texture.Frame(7, 1, (int)size, 0);
 
-        Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.2f, 0, frame.Size() * 0.5f, NPC.scale + fastWobble * 0.4f, 0, 0);
-        Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.Black * 0.1f, 0, frame.Size() * 0.5f, NPC.scale + fastWobble, 0, 0);
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
 
-        for (var i = 0; i < 6; i++) {
-            var off = new Vector2(2, 0).RotatedBy(Time * 0.2f + MathHelper.TwoPi / 6f * i);
-            Main.EntitySpriteDraw(texture, drawPos + off - Main.screenPosition, frame, Color.Lerp(Color.Transparent, glowColor, Utils.GetLerpValue(150, 450, Time, true)) * NPC.scale, 0, frame.Size() * 0.5f, NPC.scale * 0.9f, 0, 0);
+        Main.pixelShader.CurrentTechnique.Passes["ColorOnly"].Apply();
+
+        for (var i = 0; i < 4; i++) {
+            var off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i);
+            Main.EntitySpriteDraw(texture, drawPos + off - screenPos, frame, glowColor, 0, frame.Size() * 0.5f, NPC.scale, 0, 0);
         }
 
-        FlipShadersOnOff(Main.spriteBatch, effect, false);
-        Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frame, Color.White, 0, frame.Size() * 0.5f, NPC.scale * 0.9f, 0, 0);
-        FlipShadersOnOff(Main.spriteBatch, null, false);
+        effect.CurrentTechnique.Passes[0].Apply();
 
-        Main.EntitySpriteDraw(glow, drawPos - Main.screenPosition, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.2f, Utils.GetLerpValue(150, 450, Time, true)), 0, glow.Size() * 0.5f, 0.3f + NPC.scale + size, 0, 0);
+        Main.EntitySpriteDraw(texture, drawPos - screenPos, frame, Color.White, 0, frame.Size() * 0.5f, NPC.scale, 0, 0);
 
-        Vector2 eyePos = NPC.Center + drawOffset + new Vector2(-42, -37).RotatedBy(NPC.rotation) * NPC.scale;
-        float eyeScale = (float)Math.Sqrt(Utils.GetLerpValue(940, 950, Time, true)) * 3f;
-        float eyeRot = (float)Math.Cbrt(Utils.GetLerpValue(940, 1080, Time, true)) * MathHelper.PiOver2 - MathHelper.PiOver4;
-        Main.EntitySpriteDraw(eye, eyePos - Main.screenPosition, eye.Frame(), glowColor, eyeRot, eye.Size() * 0.5f, eyeScale * 0.4f, 0, 0);
-        Main.EntitySpriteDraw(eye, eyePos - Main.screenPosition, eye.Frame(), new Color(255, 255, 255, 0), eyeRot, eye.Size() * 0.5f, eyeScale * 0.4f, 0, 0);
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+
+        Main.EntitySpriteDraw(glow, drawPos - screenPos, glow.Frame(), Color.Lerp(Color.Transparent, glowColor * 0.4f, Utils.GetLerpValue(150, 450, Time, true)), 0, glow.Size() * 0.5f, 0.3f + NPC.scale + size * 0.5f, 0, 0);
 
         return false;
     }
-
-    public void FlipShadersOnOff(SpriteBatch spriteBatch, Effect effect, bool immediate)
-    {
-        spriteBatch.End();
-        var sortMode = SpriteSortMode.Deferred;
-        if (immediate)
-            sortMode = SpriteSortMode.Immediate;
-        spriteBatch.Begin(sortMode, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
-    }
-
-    public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
-    {
-        var maxBright = 0.667f;
-        brightnesses = new float[10];
-        colors = new Vector3[10];
-
-        var rainbowStartOffset = 0.35f + NPC.ai[0] * 0.016f % (maxBright * 2f);
-        //Calculate and store every non-modulo brightness, with the shifting offset. 
-        //The first brightness is ignored for the moment, it will be relevant later. Setting it to -1 temporarily
-        brightnesses[0] = -1;
-        brightnesses[1] = rainbowStartOffset + 0.35f;
-        brightnesses[2] = rainbowStartOffset + 0.42f;
-        brightnesses[3] = rainbowStartOffset + 0.47f;
-        brightnesses[4] = rainbowStartOffset + 0.51f;
-        brightnesses[5] = rainbowStartOffset + 0.56f;
-        brightnesses[6] = rainbowStartOffset + 0.61f;
-        brightnesses[7] = rainbowStartOffset + 0.64f;
-        brightnesses[8] = rainbowStartOffset + 0.72f;
-        brightnesses[9] = rainbowStartOffset + 0.75f;
-
-        //Pass the entire rainbow through modulo 1
-        for (var i = 1; i < 10; i++)
-            brightnesses[i] = HUtils.Modulo(brightnesses[i], maxBright) * maxBright;
-
-        //Store the first element's value so we can find it again later
-        var firstBrightnessValue = brightnesses[1];
-
-        //Sort the values from lowest to highest
-        Array.Sort(brightnesses);
-
-        //Find the new index of the original first element after the list being sorted
-        var rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
-        //Substract 1 from the index, because we are ignoring the currently negative first array slot.
-        rainbowStartIndex--;
-
-        //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
-        for (var i = 0; i < 9; i++) {
-            colors[1 + (rainbowStartIndex + i) % 9] = SlimeUtils.GoozColorsVector3[i];
-        }
-
-        //We always want a brightness at index 0 to be the lower bound
-        brightnesses[0] = 0;
-        //Make the color at index 0 be a mix between the first and last colors in the list, based on the distance between the 2.
-        var interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
-        colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
-    }
-
 }
