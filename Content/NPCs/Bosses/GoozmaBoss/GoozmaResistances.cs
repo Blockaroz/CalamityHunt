@@ -10,7 +10,7 @@ public static class GoozmaResistances
     {
         if (ModLoader.HasMod(HUtils.CalamityMod)) {
             List<(int, float)> projectiles = new List<(int, float)> { };
-            var calamity = ModLoader.GetMod(HUtils.CalamityMod);
+            Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
             //projectiles.Add((calamity.Find<ModProjectile>("EssenceScythe").Type, 0.9f));
             projectiles.Add((calamity.Find<ModProjectile>("ExcelsusMain").Type, 0.5f));
             projectiles.Add((calamity.Find<ModProjectile>("ExcelsusPink").Type, 0.5f));
@@ -195,7 +195,7 @@ public static class GoozmaResistances
             projectiles.Add((calamity.Find<ModProjectile>("ScarletDevilBullet").Type, 0.1f));
             projectiles.Add((calamity.Find<ModProjectile>("ScarletBlast").Type, 0.1f));*/
 
-            for (var i = 0; i < projectiles.Count; i++) {
+            for (int i = 0; i < projectiles.Count; i++) {
                 if (projectile.type == projectiles[i].Item1) {
                     modifiers.SourceDamage *= projectiles[i].Item2;
                 }
@@ -215,9 +215,9 @@ public static class GoozmaResistances
     public static void DisablePointBlank()
     {
         if (ModLoader.HasMod(HUtils.CalamityMod)) {
-            var calamity = ModLoader.GetMod(HUtils.CalamityMod);
-            for (var i = 0; i < Main.maxProjectiles; i++) {
-                var proj = Main.projectile[i];
+            Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
+            for (int i = 0; i < Main.maxProjectiles; i++) {
+                Projectile proj = Main.projectile[i];
                 if (proj.active && (int)calamity.Call("GetPointBlankDuration", proj) > 0) {
                     calamity.Call("SetPointBlankDuration", proj, 0);
                 }

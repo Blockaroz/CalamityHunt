@@ -40,7 +40,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(-15, 30, Time, true)) * Projectile.localAI[0];
             Projectile.velocity.Y += 0.6f;
 
-            var target = -1;
+            int target = -1;
             if (Projectile.velocity.Y > 1) {
                 if (Main.player.Any(n => n.active && !n.dead))
                     target = Main.player.First(n => n.active && !n.dead).whoAmI;
@@ -62,7 +62,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             }
 
             if (Time > 200)
-                for (var i = 0; i < 5; i++)
+                for (int i = 0; i < 5; i++)
                     Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(12, 12), DustID.Corruption, Main.rand.NextVector2Circular(5, 5), 0, Color.White, 1.5f).noGravity = true;
 
             Time++;
@@ -70,10 +70,10 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = ModContent.Request<Texture2D>(Texture);
+            ReLogic.Content.Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             Projectile.rotation = 0;
 
-            var glowColor = Color.Indigo;
+            Color glowColor = Color.Indigo;
             glowColor.A = 0;
 
             Vector2 squish = new Vector2(1f - Math.Abs(Projectile.velocity.X + Projectile.velocity.Y * 0.1f) * 0.01f, 1f + Math.Abs(Projectile.velocity.Y) * 0.04f);

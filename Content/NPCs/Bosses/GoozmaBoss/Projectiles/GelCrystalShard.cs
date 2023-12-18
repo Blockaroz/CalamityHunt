@@ -48,16 +48,16 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
-            var frame = texture.Frame(4, 1, Projectile.frame, 0);
+            Microsoft.Xna.Framework.Graphics.Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
+            Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
-            var darkBack = Color.BlueViolet * 0.15f;
+            Color darkBack = Color.BlueViolet * 0.15f;
             darkBack.A /= 2;
-            var bloom = Color.MediumVioletRed * 0.25f;
+            Color bloom = Color.MediumVioletRed * 0.25f;
             bloom.A = 0;
 
-            var backColor = Color.SeaGreen * 0.5f;
+            Color backColor = Color.SeaGreen * 0.5f;
             backColor.A = 200;
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, backColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.4f, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, darkBack, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.66f, 0, 0);

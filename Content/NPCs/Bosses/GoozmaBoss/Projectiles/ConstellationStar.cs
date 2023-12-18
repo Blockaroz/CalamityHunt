@@ -47,12 +47,12 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             }
 
             if (Time > 50 && Time + WhoAmI < 500 && Time % 2 == 0) {
-                foreach (var otherStar in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 300)) {
+                foreach (Projectile otherStar in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 300)) {
                     otherStar.velocity += otherStar.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.2f * (3f - WhoAmI);
                     Projectile.velocity += Projectile.DirectionFrom(otherStar.Center).SafeNormalize(Vector2.Zero) * 0.2f * (3f - WhoAmI);
                 }
                 if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<StellarGeliath>())) {
-                    var owner = Main.npc.First(n => n.active && n.type == ModContent.NPCType<StellarGeliath>());
+                    NPC owner = Main.npc.First(n => n.active && n.type == ModContent.NPCType<StellarGeliath>());
 
                     Projectile.velocity += Projectile.DirectionTo(owner.Center).RotatedBy(MathHelper.PiOver2) * 0.1f;
                 }
@@ -106,14 +106,14 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var sparkle = AssetDirectory.Textures.Sparkle.Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
 
-            var wobble = 1f + (float)Math.Sin(Projectile.localAI[0] * 0.3f % MathHelper.TwoPi) * 0.05f;
+            float wobble = 1f + (float)Math.Sin(Projectile.localAI[0] * 0.3f % MathHelper.TwoPi) * 0.05f;
 
-            for (var i = 1; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
-                var prog = 1f - i / (float)ProjectileID.Sets.TrailCacheLength[Type];
+            for (int i = 1; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+                float prog = 1f - i / (float)ProjectileID.Sets.TrailCacheLength[Type];
                 Vector2 stretch;
                 if (i == 0) {
                     stretch = new Vector2(prog, Projectile.position.Distance(Projectile.oldPos[i]) / texture.Height * 3.5f);

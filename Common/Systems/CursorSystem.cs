@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Common.Players;
 using CalamityHunt.Common.Utilities;
@@ -10,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameInput;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 

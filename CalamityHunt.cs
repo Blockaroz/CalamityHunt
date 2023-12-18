@@ -41,7 +41,7 @@ namespace CalamityHunt
 
             On_Main.UpdateParticleSystems += UpdateParticleSystems;
             On_Main.DrawDust += DrawParticleSystems;
-            On_Main.DrawBackGore += DrawParticleSystemBehindEntities;
+            On_Main.DoDraw_DrawNPCsOverTiles += DrawParticleSystemBehindEntities;
 
             Ref<Effect> stellarblackhole = new Ref<Effect>(AssetDirectory.Effects.BlackHole.Value);
             Filters.Scene["HuntOfTheOldGods:StellarBlackHole"] = new Filter(new ScreenShaderData(stellarblackhole, "BlackHolePass"), EffectPriority.VeryHigh);
@@ -70,10 +70,10 @@ namespace CalamityHunt
             particles.Draw(Main.spriteBatch);
         }
 
-        private void DrawParticleSystemBehindEntities(On_Main.orig_DrawBackGore orig, Main self)
+        private void DrawParticleSystemBehindEntities(On_Main.orig_DoDraw_DrawNPCsOverTiles orig, Main self)
         {
+            particlesBehindEntities.Draw(Main.spriteBatch);
             orig(self);
-            particlesBehindEntities.Draw(Main.spriteBatch, false);
         }
 
         public override void PostSetupContent()
@@ -189,7 +189,7 @@ namespace CalamityHunt
 
         public override IContentSource CreateDefaultContentSource()
         {
-            var source = new SmartContentSource(base.CreateDefaultContentSource());
+            SmartContentSource source = new SmartContentSource(base.CreateDefaultContentSource());
             source.AddDirectoryRedirect("Content", "Assets/Textures");
             source.AddDirectoryRedirect("Common", "Assets/Textures");
             return source;

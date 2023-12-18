@@ -52,7 +52,7 @@ namespace CalamityHunt.Common.Systems
 
         public void HideCalHuntNPCsFromDragonLens(ILContext il)
         {
-            var npcs = Mod.GetContent<ModNPC>();
+            System.Collections.Generic.IEnumerable<ModNPC> npcs = Mod.GetContent<ModNPC>();
 
             modNPCStart = npcs.First().Type;
             modNPCEnd = modNPCStart + npcs.Count();
@@ -61,7 +61,7 @@ namespace CalamityHunt.Common.Systems
 
         public void HideCalHuntItemsFromDragonLens(ILContext il)
         {
-            var items = Mod.GetContent<ModItem>();
+            System.Collections.Generic.IEnumerable<ModItem> items = Mod.GetContent<ModItem>();
 
             modItemStart = items.First().Type;
             modItemEnd = modItemStart + items.Count();
@@ -69,7 +69,7 @@ namespace CalamityHunt.Common.Systems
         }
         public void HideCalHuntProjectilesFromDragonLens(ILContext il)
         {
-            var projs = Mod.GetContent<ModProjectile>();
+            System.Collections.Generic.IEnumerable<ModProjectile> projs = Mod.GetContent<ModProjectile>();
 
             modProjectileStart = projs.First().Type;
             modProjectileEnd = modProjectileStart + projs.Count();

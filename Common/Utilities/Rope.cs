@@ -20,7 +20,7 @@ public class Rope
     public Rope(Vector2 startPoint, int segmentCount, float segmentLength, Vector2 gravity, float damping = 0f, int accuracy = 15, bool tileCollide = false)
     {
         segments = new List<RopeSegment>();
-        for (var i = 0; i < segmentCount; i++)
+        for (int i = 0; i < segmentCount; i++)
             segments.Add(new RopeSegment(startPoint + gravity.SafeNormalize(Vector2.Zero) * i));
         StartPos = startPoint;
         EndPos = startPoint;
@@ -36,7 +36,7 @@ public class Rope
     public Rope(Vector2 startPoint, Vector2 endPoint, int segmentCount, float segmentLength, Vector2 gravity, float damping = 0f, int accuracy = 15, bool tileCollide = false)
     {
         segments = new List<RopeSegment>();
-        for (var i = 0; i < segmentCount; i++)
+        for (int i = 0; i < segmentCount; i++)
             segments.Add(new RopeSegment(Vector2.Lerp(startPoint, endPoint, (float)i / (segmentCount - 1))));
         StartPos = startPoint;
         EndPos = endPoint;
@@ -52,7 +52,7 @@ public class Rope
     public List<Vector2> GetPoints()
     {
         List<Vector2> points = new List<Vector2>();
-        foreach (var segment in segments)
+        foreach (RopeSegment segment in segments)
             points.Add(segment.position);
         return points;
     }
@@ -65,29 +65,29 @@ public class Rope
             segments[segments.Count - 1].position = EndPos;
         }
 
-        for (var i = 0; i < segments.Count; i++) {
+        for (int i = 0; i < segments.Count; i++) {
             if (segments[i].position.HasNaNs()) {
                 segments[i].position = segments[0].position;
             }
 
-            var velocity = (segments[i].position - segments[i].oldPosition) / (1f + damping) + gravity + segments[i].velocity;
+            Vector2 velocity = (segments[i].position - segments[i].oldPosition) / (1f + damping) + gravity + segments[i].velocity;
             velocity = TileCollision(segments[i].position, velocity);
 
             segments[i].oldPosition = segments[i].position;
             segments[i].position += velocity;
         }
 
-        for (var i = 0; i < accuracy; i++) {
+        for (int i = 0; i < accuracy; i++) {
             ConstrainPoints();
         }
     }
 
     private void ConstrainPoints()
     {
-        for (var i = 0; i < segments.Count - 1; i++) {
-            var dist = (segments[i].position - segments[i + 1].position).Length();
-            var error = MathF.Abs(dist - segmentLength);
-            var changeDirection = Vector2.Zero;
+        for (int i = 0; i < segments.Count - 1; i++) {
+            float dist = (segments[i].position - segments[i + 1].position).Length();
+            float error = MathF.Abs(dist - segmentLength);
+            Vector2 changeDirection = Vector2.Zero;
 
             if (dist > segmentLength) {
                 changeDirection = (segments[i].position - segments[i + 1].position).SafeNormalize(Vector2.Zero);
@@ -96,7 +96,7 @@ public class Rope
                 changeDirection = (segments[i + 1].position - segments[i].position).SafeNormalize(Vector2.Zero);
             }
 
-            var changeAmount = changeDirection * error;
+            Vector2 changeAmount = changeDirection * error;
             if (i != 0) {
                 segments[i].position += TileCollision(segments[i].position, changeAmount * -0.5f);
                 segments[i + 1].position += TileCollision(segments[i + 1].position, changeAmount * 0.5f);
@@ -116,8 +116,8 @@ public class Rope
         if (!tileCollide)
             return velocity;
 
-        var newVelocity = Collision.noSlopeCollision(position - new Vector2(3), velocity, 6, 6, true, true);
-        var final = velocity;
+        Vector2 newVelocity = Collision.noSlopeCollision(position - new Vector2(3), velocity, 6, 6, true, true);
+        Vector2 final = velocity;
 
         if (Math.Abs(newVelocity.X) < Math.Abs(velocity.X)) {
             final.X = 0;

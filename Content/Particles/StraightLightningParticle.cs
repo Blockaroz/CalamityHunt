@@ -61,5 +61,7 @@ public class StraightLightningParticle : Particle
         dissolveEffect.CurrentTechnique.Passes[0].Apply();
 
         spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation, frame.Size() * 0.5f, drawScale, flip, 0);
+
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
 }

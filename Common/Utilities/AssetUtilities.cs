@@ -32,7 +32,7 @@ public static class AssetUtilities
 
     public static Asset<T>[] RequestArrayTotalImmediate<T>(string name) where T : class
     {
-        var assets = new List<Asset<T>>();
+        List<Asset<T>> assets = new List<Asset<T>>();
 
         int i = 0;
         while (ModContent.RequestIfExists(name + i, out Asset<T> asset, AssetRequestMode.ImmediateLoad)) {

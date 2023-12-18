@@ -50,7 +50,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override void AI()
         {
-            var owner = -1;
+            int owner = -1;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active)) {
                 Projectile.Kill();
                 return;
@@ -68,7 +68,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             }
             if (Time == 0) {
                 if (Collides != 0) {
-                    for (var i = 0; i < (int)(Length / 16f); i++) {
+                    for (int i = 0; i < (int)(Length / 16f); i++) {
                         endPoint = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.05f) * 16 * i;
                         if (WorldGen.InWorld(endPoint.ToTileCoordinates().X, endPoint.ToTileCoordinates().Y)) {
                             if (Main.npc[owner].GetTargetData().Center.Distance(endPoint) > 20)
@@ -83,18 +83,18 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     endPoint = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.05f) * Length;
 
                 if (Collides == 0) {
-                    var lightningSound = AssetDirectory.Sounds.Goozma.BigThunder;
+                    SoundStyle lightningSound = AssetDirectory.Sounds.Goozma.BigThunder;
                     SoundEngine.PlaySound(lightningSound, Projectile.Center);
                 }
                 else {
-                    var lightningMiniSound = AssetDirectory.Sounds.Goozma.SmallThunder;
+                    SoundStyle lightningMiniSound = AssetDirectory.Sounds.Goozma.SmallThunder;
                     SoundEngine.PlaySound(lightningMiniSound, Projectile.Center);
                 }
 
                 LightningData data = new LightningData(Projectile.Center, endPoint, 0.5f);
                 points = data.Value;
                 pointVelocities = new List<Vector2>();
-                for (var i = 0; i < points.Count; i++)
+                for (int i = 0; i < points.Count; i++)
                     pointVelocities.Add(Main.rand.NextVector2Circular(1, 1) * Math.Min(1f, Projectile.Distance(endPoint) * 0.0012f));
 
                 //for (int i = 0; i < totalPoints; i++)
@@ -110,7 +110,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
                 Projectile.velocity = Vector2.Zero;
 
-                for (var i = 0; i < points.Count - 1; i++) {
+                for (int i = 0; i < points.Count - 1; i++) {
                     points[i] = Vector2.Lerp(points[i], Vector2.Lerp(Projectile.Center, endPoint, (float)i / points.Count) + pointVelocities[i] * 6, 0.6f * (1f - (float)i / points.Count));
                     pointVelocities[i] *= 1.07f * Math.Min(1f, Projectile.Distance(endPoint) * 0.003f) * Utils.GetLerpValue(0, 3, i, true) * Utils.GetLerpValue(points.Count, points.Count - 3, i, true);
                     points[i] += Main.rand.NextVector2Circular(2, 2) * Utils.GetLerpValue(0, 3, i, true) * Utils.GetLerpValue(points.Count, points.Count - 3, i, true); ;
@@ -137,7 +137,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float discard = 0;
-            var small = Collides == 0 ? 1f : 0.6f;
+            float small = Collides == 0 ? 1f : 0.6f;
             if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, endPoint, 50f * small * (1f - Time / 30f), ref discard))
                 return Time > 0 && Time < 20;
             return false;
@@ -151,24 +151,24 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             if (Time <= 0) {
-                var small = Collides == 0 ? 1f : 0.7f;
-                var color = new GradientColor(SlimeUtils.GoozColors, 0.1f, 0.1f).ValueAt(Time + colOffset) * small;
+                float small = Collides == 0 ? 1f : 0.7f;
+                Color color = new GradientColor(SlimeUtils.GoozColors, 0.1f, 0.1f).ValueAt(Time + colOffset) * small;
                 color.A = 0;
-                var tell = TextureAssets.Extra[178];
+                ReLogic.Content.Asset<Microsoft.Xna.Framework.Graphics.Texture2D> tell = TextureAssets.Extra[178];
                 Main.EntitySpriteDraw(tell.Value, Projectile.Center - Main.screenPosition, null, color * 0.7f * Utils.GetLerpValue(-50, 0, Time, true), Projectile.velocity.ToRotation(), Vector2.UnitY, new Vector2(2f * small, 5f), 0, 0);
                 Main.EntitySpriteDraw(tell.Value, Projectile.Center - Main.screenPosition, null, color * 1.5f * Utils.GetLerpValue(-50, 0, Time, true), Projectile.velocity.ToRotation(), Vector2.UnitY, new Vector2(1f * small, 2f), 0, 0);
             }
             if (Time > 0) {
                 VertexStrip strip = new VertexStrip();
-                var rotations = new float[points.Count];
-                for (var i = 0; i < points.Count - 1; i++)
+                float[] rotations = new float[points.Count];
+                for (int i = 0; i < points.Count - 1; i++)
                     rotations[i] = points[i].AngleTo(points[i + 1]);
 
                 rotations[points.Count - 1] = points[points.Count - 2].AngleTo(endPoint);
 
                 strip.PrepareStrip(points.ToArray(), rotations, ColorFunction, WidthFunction, -Main.screenPosition, points.Count, true);
 
-                var lightningEffect = AssetDirectory.Effects.GooLightning.Value;
+                Microsoft.Xna.Framework.Graphics.Effect lightningEffect = AssetDirectory.Effects.GooLightning.Value;
                 lightningEffect.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
                 lightningEffect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.Lightning.Value);
                 lightningEffect.Parameters["uGlow"].SetValue(AssetDirectory.Textures.Goozma.LightningGlow.Value);
@@ -187,15 +187,15 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public Color ColorFunction(float progress)
         {
-            var color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + progress * 120);
-            var small = Collides == 0 ? 1f : 0.7f;
+            Color color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + progress * 120);
+            float small = Collides == 0 ? 1f : 0.7f;
             return color * (float)Math.Pow(1f - Time / 30f, 0.6f) * small;
         }
 
         public float WidthFunction(float progress)
         {
-            var width = (50f + (float)Math.Sqrt(Utils.GetLerpValue(0.1f, 0.5f, progress, true) * Utils.GetLerpValue(0.9f, 0.5f, progress, true)) * 100f) * (float)Math.Pow(1f - Time / 30f, 0.8f);
-            var small = Collides == 0 ? Collides == 2 ? 1f : 1.4f : 0.33f;
+            float width = (50f + (float)Math.Sqrt(Utils.GetLerpValue(0.1f, 0.5f, progress, true) * Utils.GetLerpValue(0.9f, 0.5f, progress, true)) * 100f) * (float)Math.Pow(1f - Time / 30f, 0.8f);
+            float small = Collides == 0 ? Collides == 2 ? 1f : 1.4f : 0.33f;
             return width * small;
         }
     }

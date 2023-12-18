@@ -19,7 +19,7 @@ public readonly struct BezierCurve
         else {
             List<Vector2> nextPoints = new List<Vector2>();
 
-            for (var i = 0; i < controls.Count - 1; ++i)
+            for (int i = 0; i < controls.Count - 1; ++i)
                 nextPoints.Add(Vector2.Lerp(controls[i], controls[i + 1], distance));
 
             return EvaluateRecursive(nextPoints, distance);
@@ -32,12 +32,12 @@ public readonly struct BezierCurve
     [Pure]
     public List<Vector2> GetPoints(int pointCount)
     {
-        var interval = 1f / pointCount;
+        float interval = 1f / pointCount;
 
         List<Vector2> points = new List<Vector2>();
 
-        for (var i = 0f; i <= 1f; i += interval) {
-            var point = GetSinglePoint(i);
+        for (float i = 0f; i <= 1f; i += interval) {
+            Vector2 point = GetSinglePoint(i);
             points.Add(point);
         }
 
@@ -47,11 +47,11 @@ public readonly struct BezierCurve
     [Pure]
     public float Distance(int pointCount)
     {
-        var interval = 1f / pointCount;
+        float interval = 1f / pointCount;
 
-        var totalDistance = 0f;
+        float totalDistance = 0f;
 
-        for (var i = interval; i <= 1f; i += interval)
+        for (float i = interval; i <= 1f; i += interval)
             totalDistance += (GetSinglePoint(i) - GetSinglePoint(i - interval)).Length();
 
         return totalDistance;

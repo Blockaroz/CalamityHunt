@@ -89,11 +89,11 @@ public class FusionFlameParticle : Particle
         }
 
         dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[11].Value);
-        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(0.6f + scale * 0.01f));
-        dissolveEffect.Parameters["uFrameCount"].SetValue(10);
-        dissolveEffect.Parameters["uProgress"].SetValue(progress * 0.8f);
-        dissolveEffect.Parameters["uPower"].SetValue(10f + progress * 60f);
-        dissolveEffect.Parameters["uNoiseStrength"].SetValue(1f);
+        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(0.66f + scale * 0.01f));
+        dissolveEffect.Parameters["uFrameCount"].SetValue(15);
+        dissolveEffect.Parameters["uProgress"].SetValue(progress);
+        dissolveEffect.Parameters["uPower"].SetValue(10f + progress * 70f);
+        dissolveEffect.Parameters["uNoiseStrength"].SetValue(1.01f);
         dissolveEffect.CurrentTechnique.Passes[0].Apply();
 
         Vector2 squish = new Vector2(1f - progress * 0.1f, 1f + progress * 0.1f);

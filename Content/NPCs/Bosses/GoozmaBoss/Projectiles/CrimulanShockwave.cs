@@ -34,14 +34,14 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Projectile.damage = 0;
 
             if (Time > 0) {
-                var prog = MathF.Pow(Utils.GetLerpValue(0, 60, Time, true), 0.7f);
-                for (var i = 0; i < 2; i++) {
-                    var off = new Vector2(prog * Size * 0.45f, 0).RotatedBy(Projectile.rotation);
+                float prog = MathF.Pow(Utils.GetLerpValue(0, 60, Time, true), 0.7f);
+                for (int i = 0; i < 2; i++) {
+                    Vector2 off = new Vector2(prog * Size * 0.45f, 0).RotatedBy(Projectile.rotation);
                     Dust blood = Dust.NewDustPerfect(Projectile.Center + off + Main.rand.NextVector2Circular(70, 30).RotatedBy(Projectile.rotation), DustID.Blood, off.SafeNormalize(Vector2.Zero).RotatedByRandom(0.8f) * Main.rand.NextFloat(10, 25), 0, Color.DarkRed, 1f + Main.rand.NextFloat());
                     blood.noGravity = true;
                 }
-                for (var i = 0; i < 2; i++) {
-                    var off = new Vector2(-prog * Size * 0.45f, 0).RotatedBy(Projectile.rotation);
+                for (int i = 0; i < 2; i++) {
+                    Vector2 off = new Vector2(-prog * Size * 0.45f, 0).RotatedBy(Projectile.rotation);
                     Dust blood = Dust.NewDustPerfect(Projectile.Center + off + Main.rand.NextVector2Circular(70, 30).RotatedBy(Projectile.rotation), DustID.Blood, off.SafeNormalize(Vector2.Zero).RotatedByRandom(0.8f) * Main.rand.NextFloat(10, 25), 0, Color.DarkRed, 1f + Main.rand.NextFloat());
                     blood.noGravity = true;
                 }
@@ -52,22 +52,22 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = ModContent.Request<Texture2D>(Texture).Value;
+            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 
             //left
-            for (var i = 0; i < 4; i++) {
-                var frame = texture.Frame(1, 4, 0, 3 - i);
-                var waveColor = Color.Lerp(Color.Black * 0.5f, Color.Red, 1f - i / 4f) * Utils.GetLerpValue(45, 10, Time - i * 15f);
-                var waveScale = Vector2.Lerp(new Vector2(2f, 0.1f), new Vector2(0.5f, 2f), MathF.Pow(Utils.GetLerpValue(2, 60, Time - i * 4f), 1.7f)) * (1f - i / 4f);
-                var off = new Vector2(MathF.Pow(Utils.GetLerpValue(10, 60, Time - i * 4f, true), 0.7f) * Size * 0.4f, 20).RotatedBy(Projectile.rotation);
+            for (int i = 0; i < 4; i++) {
+                Rectangle frame = texture.Frame(1, 4, 0, 3 - i);
+                Color waveColor = Color.Lerp(Color.Black * 0.5f, Color.Red, 1f - i / 4f) * Utils.GetLerpValue(45, 10, Time - i * 15f);
+                Vector2 waveScale = Vector2.Lerp(new Vector2(2f, 0.1f), new Vector2(0.5f, 2f), MathF.Pow(Utils.GetLerpValue(2, 60, Time - i * 4f), 1.7f)) * (1f - i / 4f);
+                Vector2 off = new Vector2(MathF.Pow(Utils.GetLerpValue(10, 60, Time - i * 4f, true), 0.7f) * Size * 0.4f, 20).RotatedBy(Projectile.rotation);
                 Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, waveColor, Projectile.rotation, frame.Size() * new Vector2(0.7f, 0.66f), Projectile.scale * new Vector2(3f, 1.7f) * waveScale, SpriteEffects.None, 0);
             }
             //right
-            for (var i = 0; i < 4; i++) {
-                var frame = texture.Frame(1, 4, 0, 3 - i);
-                var waveColor = Color.Lerp(Color.Black * 0.5f, Color.Red, 1f - i / 4f) * Utils.GetLerpValue(45, 10, Time - i * 15f);
-                var waveScale = Vector2.Lerp(new Vector2(2f, 0.1f), new Vector2(0.5f, 2f), MathF.Pow(Utils.GetLerpValue(2, 60, Time - i * 6f), 1.7f)) * (1f - i / 4f);
-                var off = new Vector2(-MathF.Pow(Utils.GetLerpValue(10, 60, Time - i * 4f, true), 0.7f) * Size * 0.4f, 20).RotatedBy(Projectile.rotation);
+            for (int i = 0; i < 4; i++) {
+                Rectangle frame = texture.Frame(1, 4, 0, 3 - i);
+                Color waveColor = Color.Lerp(Color.Black * 0.5f, Color.Red, 1f - i / 4f) * Utils.GetLerpValue(45, 10, Time - i * 15f);
+                Vector2 waveScale = Vector2.Lerp(new Vector2(2f, 0.1f), new Vector2(0.5f, 2f), MathF.Pow(Utils.GetLerpValue(2, 60, Time - i * 6f), 1.7f)) * (1f - i / 4f);
+                Vector2 off = new Vector2(-MathF.Pow(Utils.GetLerpValue(10, 60, Time - i * 4f, true), 0.7f) * Size * 0.4f, 20).RotatedBy(Projectile.rotation);
                 Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, waveColor, Projectile.rotation, frame.Size() * new Vector2(0.3f, 0.66f), Projectile.scale * new Vector2(3f, 1.7f) * waveScale, SpriteEffects.FlipHorizontally, 0);
             }
 

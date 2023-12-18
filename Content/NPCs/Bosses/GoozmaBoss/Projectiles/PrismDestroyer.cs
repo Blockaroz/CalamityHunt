@@ -30,16 +30,16 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override void AI()
         {
-            var owner = -1;
+            int owner = -1;
             if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active))
                 Projectile.active = false;
             else
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active).whoAmI;
 
             if (owner > -1) {
-                var count = (int)Common.Systems.ConditionalValue.DifficultyBasedValue(3, 4, 5);
+                int count = (int)Common.Systems.ConditionalValue.DifficultyBasedValue(3, 4, 5);
 
-                var myHome = Main.npc[owner].Center + new Vector2(400 * (float)Math.Sqrt(Utils.GetLerpValue(-65, -40, Time, true)), 0).RotatedBy(Spin + MathHelper.TwoPi / count * WhoAmI);
+                Vector2 myHome = Main.npc[owner].Center + new Vector2(400 * (float)Math.Sqrt(Utils.GetLerpValue(-65, -40, Time, true)), 0).RotatedBy(Spin + MathHelper.TwoPi / count * WhoAmI);
                 Projectile.Center = Vector2.Lerp(Projectile.Center, myHome, 0.2f);
 
             }
@@ -52,8 +52,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.scale = Utils.GetLerpValue(-2, 15, Time, true) * Utils.GetLerpValue(80, 60, Time, true) * 0.9f;
             Projectile.velocity *= 0.5f;
 
-            for (var i = 0; i < Rays; i++) {
-                var rayColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
+            for (int i = 0; i < Rays; i++) {
+                Color rayColor = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
                 DelegateMethods.v3_1 = rayColor.ToVector3() * 0.4f * Projectile.scale;
 
                 if (Main.rand.NextBool(15)) {
@@ -79,10 +79,10 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         {
             if (Time > 0) {
                 float point = 0;
-                for (var i = 0; i < Rays; i++) {
-                    var wide = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(70 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 20f, ref point);
-                    var mid = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(180 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 12f, ref point);
-                    var tip = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(320 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 5f, ref point);
+                for (int i = 0; i < Rays; i++) {
+                    bool wide = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(70 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 20f, ref point);
+                    bool mid = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(180 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 12f, ref point);
+                    bool tip = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(320 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 5f, ref point);
                     if (wide || mid || tip)
                         return true;
                 }
@@ -92,38 +92,38 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var tellTexture = AssetDirectory.Textures.Sparkle.Value;
-            var bloom = AssetDirectory.Textures.Glow[0].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D tellTexture = AssetDirectory.Textures.Sparkle.Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D bloom = AssetDirectory.Textures.Glow[0].Value;
 
             if (Time <= 3) {
-                var tellScale = (float)Math.Cbrt(Utils.GetLerpValue(-60, -40, Time, true) * Utils.GetLerpValue(80, -50, Time, true)) * 0.7f;
-                for (var i = 0; i < Rays; i++) {
-                    var rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
+                float tellScale = (float)Math.Cbrt(Utils.GetLerpValue(-60, -40, Time, true) * Utils.GetLerpValue(80, -50, Time, true)) * 0.7f;
+                for (int i = 0; i < Rays; i++) {
+                    Color rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
 
-                    var rotation = Projectile.rotation + MathHelper.PiOver2 + MathHelper.TwoPi / Rays * i;
+                    float rotation = Projectile.rotation + MathHelper.PiOver2 + MathHelper.TwoPi / Rays * i;
                     Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, rainbow, rotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), (float)Math.Sqrt(tellScale) * new Vector2(1f, 4f), 0, 0);
                     Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, rainbow * 0.2f, rotation, tellTexture.Size() * new Vector2(0.5f, 0.75f), tellScale * new Vector2(1.3f, 15f), 0, 0);
                     Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(1f, 3f), 0, 0);
                     float numBetweens = (int)(8f - MathHelper.Min(Rays / 2f, 8f));
-                    for (var j = 1; j < numBetweens - 1; j++) {
-                        var betweenRainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + (i + j / numBetweens) / Rays) % 1f, 0.7f, 0.6f, 0);
-                        var lerpRotation = rotation + MathHelper.TwoPi / Rays * (j / (numBetweens - 1));
-                        var betweenScale = (2.5f - j / (numBetweens - 1f) * (1f - j / (numBetweens - 1f)) * 5f) * Utils.GetLerpValue(20, -30, Time, true);
+                    for (int j = 1; j < numBetweens - 1; j++) {
+                        Color betweenRainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + (i + j / numBetweens) / Rays) % 1f, 0.7f, 0.6f, 0);
+                        float lerpRotation = rotation + MathHelper.TwoPi / Rays * (j / (numBetweens - 1));
+                        float betweenScale = (2.5f - j / (numBetweens - 1f) * (1f - j / (numBetweens - 1f)) * 5f) * Utils.GetLerpValue(20, -30, Time, true);
                         Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, betweenRainbow * 0.2f, lerpRotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(0.8f, 2.2f) * betweenScale, 0, 0);
                         Main.EntitySpriteDraw(tellTexture, Projectile.Center - Main.screenPosition, null, betweenRainbow * 0.5f, lerpRotation, tellTexture.Size() * new Vector2(0.5f, 0.7f), tellScale * new Vector2(0.8f, 1.33f) * betweenScale, 0, 0);
                     }
                 }
             }
 
-            var attackScale = Projectile.scale;
-            var baseFrame = texture.Frame(1, 2, 0, 0);
-            var glowFrame = texture.Frame(1, 2, 0, 1);
-            for (var i = 0; i < Rays; i++) {
-                var rainbowSolid = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.6f, 200);
-                var rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
+            float attackScale = Projectile.scale;
+            Rectangle baseFrame = texture.Frame(1, 2, 0, 0);
+            Rectangle glowFrame = texture.Frame(1, 2, 0, 1);
+            for (int i = 0; i < Rays; i++) {
+                Color rainbowSolid = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.6f, 200);
+                Color rainbow = Main.hslToRgb((Projectile.localAI[0] * 0.01f + i / Rays) % 1f, 1f, 0.7f, 0);
 
-                var rotation = Projectile.rotation + MathHelper.TwoPi / Rays * i;
+                float rotation = Projectile.rotation + MathHelper.TwoPi / Rays * i;
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, rainbowSolid, rotation, baseFrame.Size() * new Vector2(0.01f, 0.5f), attackScale * new Vector2(0.5f, 0.3f), 0, 0);
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, rainbow, rotation, baseFrame.Size() * new Vector2(0.01f, 0.5f), attackScale * new Vector2(0.6f, 0.4f), 0, 0);
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, rainbowSolid * 0.3f, rotation, glowFrame.Size() * new Vector2(0.05f, 0.5f), attackScale * new Vector2(0.8f, 0.5f), 0, 0);

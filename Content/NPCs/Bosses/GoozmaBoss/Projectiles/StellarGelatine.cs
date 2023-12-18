@@ -52,7 +52,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.direction = Main.rand.NextBool().ToDirectionInt();
             Projectile.rotation = Main.rand.NextFloat(-0.3f, 0.3f);
 
-            for (var i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+            for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
                 Projectile.oldPos[i] = Projectile.Center;
                 Projectile.oldRot[i] = Projectile.velocity.ToRotation();
             }
@@ -85,7 +85,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Projectile.velocity.Y += 0.3f;
                 Projectile.velocity.X += (Main.npc[(int)Owner].GetTargetData().Center.X - Projectile.Center.X) * 0.0002f;
 
-                foreach (var otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 30)) {
+                foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 30)) {
                     otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.15f;
                     Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.15f;
                 }
@@ -129,16 +129,16 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var frame = texture.Frame(4, 1, Projectile.frame, 0);
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
-            var scale = Projectile.localAI[1] * 1.1f;
+            float scale = Projectile.localAI[1] * 1.1f;
 
             if (Projectile.ai[1] == 0) {
                 scale = Utils.GetLerpValue(-15, 15, Projectile.localAI[0], true) * Projectile.localAI[1] * 1.1f;
             }
 
-            var flameSquish = new Vector2(1f + (float)Math.Sin(Projectile.localAI[0] * 0.2f) * 0.1f, 1f + (float)Math.Cos(Projectile.localAI[0] * 0.2f) * 0.1f) * new Vector2(1f - Projectile.velocity.Length() * 0.005f, 0.8f + Projectile.velocity.Length() * 0.005f);
+            Vector2 flameSquish = new Vector2(1f + (float)Math.Sin(Projectile.localAI[0] * 0.2f) * 0.1f, 1f + (float)Math.Cos(Projectile.localAI[0] * 0.2f) * 0.1f) * new Vector2(1f - Projectile.velocity.Length() * 0.005f, 0.8f + Projectile.velocity.Length() * 0.005f);
             Color innerFlameColor = Color.Lerp(new Color(20, 20, 20, 0), new Color(20, 170, 200, 0), Utils.GetLerpValue(50, 30, Time, true));
 
             Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(10, 30, 110, 0) * 0.7f * Projectile.scale, Projectile.velocity.ToRotation() - MathHelper.PiOver2, auraTexture.Size() * new Vector2(0.5f, 0.8f), Projectile.scale * scale * flameSquish, 0, 0);

@@ -17,7 +17,7 @@ namespace CalamityHunt.Common.GlobalNPCs
 
         public override void ModifyShop(NPCShop shop)
         {
-            var type = shop.NpcType;
+            int type = shop.NpcType;
             if (type == NPCID.Stylist) {
                 shop.Add(ModContent.ItemType<GoopHairDye>(), goozDown);
             }
@@ -29,7 +29,7 @@ namespace CalamityHunt.Common.GlobalNPCs
                 npcLoot.Add(ItemDropRule.ByCondition(new RemixWorldDropRule(), ModContent.ItemType<SludgeFocus>()));
             }
             if (ModLoader.HasMod(HUtils.CalamityMod)) {
-                var cal = ModLoader.GetMod(HUtils.CalamityMod);
+                Mod cal = ModLoader.GetMod(HUtils.CalamityMod);
                 if (npc.type == cal.Find<ModNPC>("Yharon").Type) {
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<IOUASoul>()));
                 }

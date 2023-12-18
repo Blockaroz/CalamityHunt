@@ -7,8 +7,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
     {
         public static Vector2 FindSmashSpot(this NPC NPC, Vector2 target)
         {
-            var pos = target;
-            for (var j = 0; j < 36; j++) {
+            Vector2 pos = target;
+            for (int j = 0; j < 36; j++) {
                 Point world = new Point(pos.ToTileCoordinates().X, pos.ToTileCoordinates().Y + j);
                 if (WorldGen.InWorld(world.X, world.Y)) {
                     if (WorldGen.SolidTileAllowTopSlope(world.X, world.Y + j)) {
@@ -22,8 +22,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
         public static Vector2 FindSmashSpot(this Projectile Projectile, Vector2 target)
         {
-            var pos = target;
-            for (var j = 0; j < 32; j++) {
+            Vector2 pos = target;
+            for (int j = 0; j < 32; j++) {
                 Point world = new Point(pos.ToTileCoordinates().X, pos.ToTileCoordinates().Y + j);
                 if (WorldGen.InWorld(world.X, world.Y)) {
                     if (WorldGen.SolidTileAllowTopSlope(world.X, world.Y + j)) {
@@ -196,7 +196,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
         public static void DrawWormhole(Vector2 position, Color innerColor, float rotation, float scale)
         {
-            var wormhole = AssetDirectory.Textures.Goozma.Wormhole;
+            ReLogic.Content.Asset<Microsoft.Xna.Framework.Graphics.Texture2D> wormhole = AssetDirectory.Textures.Goozma.Wormhole;
             Main.EntitySpriteDraw(wormhole.Value, position - Main.screenPosition, null, innerColor, rotation, wormhole.Size() * 0.5f, scale * 2f, 0, 0);
 
         }

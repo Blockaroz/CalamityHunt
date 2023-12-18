@@ -69,7 +69,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 15, 0.0001f);
 
-            foreach (var otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 200)) {
+            foreach (Projectile otherBit in Main.projectile.Where(n => n.active && n.type == Type && n.whoAmI != Projectile.whoAmI && n.Distance(Projectile.Center) < 200)) {
                 otherBit.velocity += otherBit.DirectionFrom(Projectile.Center).SafeNormalize(Vector2.Zero) * 0.1f;
                 Projectile.velocity += Projectile.DirectionFrom(otherBit.Center).SafeNormalize(Vector2.Zero) * 0.1f;
             }
@@ -145,13 +145,13 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
-            var frame = texture.Frame(4, 1, Projectile.frame, 0);
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
+            Rectangle frame = texture.Frame(4, 1, Projectile.frame, 0);
 
-            for (var i = 0; i < 3; i++) {
-                var wobble = (float)Math.Sin(Projectile.localAI[0] * 0.15f + i * 1.3f) * 0.05f;
-                var rotation = Projectile.rotation * (0.5f + i * 0.1f);
+            for (int i = 0; i < 3; i++) {
+                float wobble = (float)Math.Sin(Projectile.localAI[0] * 0.15f + i * 1.3f) * 0.05f;
+                float rotation = Projectile.rotation * (0.5f + i * 0.1f);
                 Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, auraTexture.Frame(), new Color(20, 100, 150, 0) * 0.5f * (i > 0 ? 0.1f / i : 1f), rotation, auraTexture.Size() * 0.5f, Projectile.scale * (0.8f + wobble + i * 0.3f), 0, 0);
             }
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(10, 30, 110, 0), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);

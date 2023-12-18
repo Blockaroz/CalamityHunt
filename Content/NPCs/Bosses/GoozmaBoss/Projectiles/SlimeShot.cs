@@ -39,7 +39,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 15, Time, true) * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true));
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Zero, 0.001f + Utils.GetLerpValue(50, 165, Time, true) * 0.05f) * (1f + 0.115f * Utils.GetLerpValue(50, 0, Time, true));
 
-            var target = -1;
+            int target = -1;
             if (Main.player.Any(n => n.active && !n.dead)) {
                 target = Main.player.First(n => n.active && !n.dead).whoAmI;
             }
@@ -70,7 +70,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override void OnKill(int timeLeft)
         {
-            for (var i = 0; i < 30; i++) {
+            for (int i = 0; i < 30; i++) {
                 CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                     particle.position = Projectile.Center;
                     particle.velocity = Main.rand.NextVector2Circular(6, 6);
@@ -87,15 +87,15 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
             Vector2 squishFactor = new Vector2(1f - Projectile.velocity.Length() * 0.0045f, 1f + Projectile.velocity.Length() * 0.0075f);
 
-            var baseFrame = texture.Frame(3, 3, 0, Projectile.frame);
-            var glowFrame = texture.Frame(3, 3, 1, Projectile.frame);
-            var outlineFrame = texture.Frame(3, 3, 2, Projectile.frame);
+            Rectangle baseFrame = texture.Frame(3, 3, 0, Projectile.frame);
+            Rectangle glowFrame = texture.Frame(3, 3, 1, Projectile.frame);
+            Rectangle outlineFrame = texture.Frame(3, 3, 2, Projectile.frame);
 
-            var bloomColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * Utils.GetLerpValue(0, 25, Time, true)) with { A = 0 };
+            Color bloomColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) * Utils.GetLerpValue(0, 25, Time, true)) with { A = 0 };
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, outlineFrame, bloomColor, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.15f * squishFactor, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, outlineFrame, new Color(200, 200, 200, 0) * Utils.GetLerpValue(15, 30, Time, true), Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * 1.1f * squishFactor, 0, 0);

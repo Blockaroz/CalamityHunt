@@ -20,7 +20,7 @@ public class LoopingSound
 
     public void PlaySound(Func<Vector2> position, Func<float> volume, Func<float> pitch)
     {
-        var active = SoundEngine.TryGetActiveSound(slot, out var activeSound);
+        bool active = SoundEngine.TryGetActiveSound(slot, out ActiveSound activeSound);
 
         if ((!active || !slot.IsValid) && condition.Invoke()) {
             slot = SoundEngine.PlaySound(style, position.Invoke(), sound => {
@@ -43,7 +43,7 @@ public class LoopingSound
 
     public void StopSound()
     {
-        SoundEngine.TryGetActiveSound(slot, out var activeSound);
+        SoundEngine.TryGetActiveSound(slot, out ActiveSound activeSound);
 
         if (activeSound != null) {
             activeSound.Stop();

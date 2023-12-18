@@ -35,7 +35,7 @@ namespace CalamityHunt.Common.Utilities
 
         private string RewritePath(string path)
         {
-            foreach (var (from, to) in _redirects) {
+            foreach ((string from, string to) in _redirects) {
                 if (path.StartsWith(from))
                     return path.Replace(from, to);
             }

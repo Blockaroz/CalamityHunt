@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CalamityHunt.Common;
+using CalamityHunt.Common.Graphics;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles;
@@ -73,7 +74,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             NPC.aiStyle = -1;
             NPC.takenDamageMultiplier = 0.33f;
             if (ModLoader.HasMod(HUtils.CalamityMod)) {
-                var calamity = ModLoader.GetMod(HUtils.CalamityMod);
+                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
                 calamity.Call("SetDebuffVulnerabilities", "poison", false);
                 calamity.Call("SetDebuffVulnerabilities", "heat", true);
                 //calamity.Call("SetDefenseDamageNPC", Type, true);
@@ -123,7 +124,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 ambientCounter++;
                 if (ambientCounter > Main.rand.Next(100, 160)) {
                     ambientCounter = 0;
-                    var ambientNoise = AssetDirectory.Sounds.Goozmite.Ambient;
+                    SoundStyle ambientNoise = AssetDirectory.Sounds.Goozmite.Ambient;
                     SoundEngine.PlaySound(ambientNoise, NPC.Center);
                 }
 
@@ -136,7 +137,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(NPC.GetTargetData().Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f), ModContent.ProjectileType<RainbowLaser>(), GetDamage(1), 0, ai0: -10, ai1: NPC.whoAmI);
                     }
 
-                    var rateOfFiring = 30 + Main.npc.Count(n => n.active && n.type == ModContent.NPCType<Goozmite>()) * 5;
+                    int rateOfFiring = 30 + Main.npc.Count(n => n.active && n.type == ModContent.NPCType<Goozmite>()) * 5;
                     if (Time % rateOfFiring == 10 && Main.rand.NextBool(3)) {
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, NPC.DirectionTo(NPC.GetTargetData().Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f), ModContent.ProjectileType<RainbowLaser>(), GetDamage(1), 0, ai0: -Main.rand.Next(20, 30), ai1: NPC.whoAmI);
                     }
@@ -152,7 +153,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                         Host.life = Host.lifeMax;
                     }
 
-                    for (var i = 0; i < 50; i++) {
+                    for (int i = 0; i < 50; i++) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                             particle.position = NPC.Center + Main.rand.NextVector2Circular(10, 10);
                             particle.velocity = Main.rand.NextVector2Circular(9, 9);
@@ -182,7 +183,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                     NPC.life = 0;
                     Host.life -= 700;
                     NPC.checkDead();
-                    for (var i = 0; i < 30; i++) {
+                    for (int i = 0; i < 30; i++) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                             particle.position = NPC.Center + Main.rand.NextVector2Circular(10, 10);
                             particle.velocity = -NPC.velocity.RotatedByRandom(1f) * Main.rand.NextFloat(0.3f);
@@ -191,8 +192,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                             particle.colorData = new ColorOffsetData(true, NPC.localAI[0]);
                         }));
                     }
-                    for (var i = 0; i < 2; i++) {
-                        var gooVelocity = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 2f * i + NPC.velocity.ToRotation());
+                    for (int i = 0; i < 2; i++) {
+                        Vector2 gooVelocity = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 2f * i + NPC.velocity.ToRotation());
 
                         CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {
                             particle.position = NPC.Center + gooVelocity;
@@ -207,7 +208,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             else {
                 NPC.scale = 1f + (float)Math.Pow(Time / 10f, 4f) * 0.2f;
                 if (Time > 10) {
-                    for (var i = 0; i < 20; i++) {
+                    for (int i = 0; i < 20; i++) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                             particle.position = NPC.Center + Main.rand.NextVector2Circular(10, 10);
                             particle.velocity = Main.rand.NextVector2Circular(10, 10);
@@ -216,8 +217,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                             particle.colorData = new ColorOffsetData(true, NPC.localAI[0]);
                         }));
                     }
-                    for (var i = 0; i < 3; i++) {
-                        var gooVelocity = new Vector2(1).RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(0.6f);
+                    for (int i = 0; i < 3; i++) {
+                        Vector2 gooVelocity = new Vector2(1).RotatedBy(MathHelper.TwoPi / 3f * i).RotatedByRandom(0.6f);
 
                         CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {
                             particle.position = NPC.Center + gooVelocity;
@@ -250,7 +251,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             NPC.localAI[0]++;
             NPC.localAI[1]++;
 
-            var randCounter = Main.rand.Next(45, 60);
+            int randCounter = Main.rand.Next(45, 60);
             if ((Time - 40) % randCounter < Main.rand.Next(3)) {
                 zapRope = new Rope(NPC.Center, Host.Center, 45, NPC.Distance(Host.Center) * 0.02f, Main.rand.NextVector2Circular(1, 1));
             }
@@ -275,11 +276,11 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 NPC.dontTakeDamage = true;
                 NPC.ai[3] = 1;
 
-                var deathNoise = AssetDirectory.Sounds.Goozmite.Death;
+                SoundStyle deathNoise = AssetDirectory.Sounds.Goozmite.Death;
                 SoundEngine.PlaySound(deathNoise, NPC.Center);
             }
             else if (NPC.ai[3] == 1) {
-                var impactNoise = AssetDirectory.Sounds.Goozmite.Impact;
+                SoundStyle impactNoise = AssetDirectory.Sounds.Goozmite.Impact;
                 SoundEngine.PlaySound(impactNoise, NPC.Center);
             }
             return NPC.ai[3] == 0 && Time > TimeUntilDeath || NPC.ai[3] == 1 && Time > 10;
@@ -287,7 +288,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
         private int GetDamage(int attack, float modifier = 1f)
         {
-            var damage = attack switch
+            int damage = attack switch
             {
                 0 => 0,//contact
                 1 => 100,//mini rainbow balls
@@ -334,15 +335,15 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            var texture = TextureAssets.Npc[Type].Value;
-            var tentacleTexture = AssetDirectory.Textures.Goozma.MicroTentacle.Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
-            var flare = AssetDirectory.Textures.Sparkle.Value;
+            Texture2D texture = TextureAssets.Npc[Type].Value;
+            Texture2D tentacleTexture = AssetDirectory.Textures.Goozma.MicroTentacle.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
+            Texture2D flare = AssetDirectory.Textures.Sparkle.Value;
 
             NPC.spriteDirection = NPC.direction > 0 ? -1 : 1;
-            var direction = NPC.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            SpriteEffects direction = NPC.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            var myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
+            Color myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
             myColor.A = 0;
 
             if (Time > 40 && NPC.ai[3] == 0) {
@@ -389,8 +390,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             spriteBatch.Draw(bubbleTexture, NPC.Center - screenPos, bubbleTexture.Frame(), myColor, NPC.rotation, bubbleTexture.Size() * new Vector2(0.5f, 0.9f), NPC.scale * 1.01f * bubbleSquish, 0, 0);
             spriteBatch.Draw(bubbleTexture, NPC.Center - screenPos, bubbleTexture.Frame(), myColor, NPC.rotation, bubbleTexture.Size() * new Vector2(0.5f, 0.9f), NPC.scale * bubbleSquish, 0, 0);
 
-            GetGradientMapValues(out var brightnesses, out var colors);
-            var effect = AssetDirectory.Effects.HolographicGel.Value;
+            GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
+            Effect effect = AssetDirectory.Effects.HolographicGel.Value;
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
             effect.Parameters["colors"].SetValue(colors);
             effect.Parameters["brightnesses"].SetValue(brightnesses);
@@ -409,14 +410,14 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 spriteBatch.Draw(elfHat, NPC.Top - screenPos, null, Color.White, NPC.rotation + 0.1f * NPC.spriteDirection, elfHat.Size() * new Vector2(0.5f, 0.9f), NPC.scale * 0.4f, direction, 0);
             }
 
-            var flareScale = 1f + (float)Math.Sin(NPC.localAI[0] * 0.5f) * 0.05f;
+            float flareScale = 1f + (float)Math.Sin(NPC.localAI[0] * 0.5f) * 0.05f;
             spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.3f, 2f) * flareScale, 0, 0);
             spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), myColor, MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.3f, 1.5f) * flareScale, 0, 0);
             spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), -MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.1f, 0.7f) * flareScale, 0, 0);
             spriteBatch.Draw(flare, NPC.Center + lookVector - screenPos, flare.Frame(), new Color(255, 255, 255, 0), MathHelper.PiOver4, flare.Size() * 0.5f, new Vector2(0.1f, 0.7f) * flareScale, 0, 0);
 
             if (NPC.ai[3] <= 0 && !NPC.IsABestiaryIconDummy) {
-                var power = (float)Math.Pow(Utils.GetLerpValue(TimeUntilDeath - 20, TimeUntilDeath, Time, true), 2f);
+                float power = (float)Math.Pow(Utils.GetLerpValue(TimeUntilDeath - 20, TimeUntilDeath, Time, true), 2f);
                 if (NPC.ai[3] < 0)
                     power = (float)Math.Pow(Utils.GetLerpValue(0f, 8f, Time, true), 2f);
 
@@ -434,8 +435,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
         public void FlipShadersOnOff(SpriteBatch spriteBatch, Effect effect, bool immediate)
         {
             if (NPC.IsABestiaryIconDummy) {
-                var priorRasterizer = spriteBatch.GraphicsDevice.RasterizerState;
-                var priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
+                RasterizerState priorRasterizer = spriteBatch.GraphicsDevice.RasterizerState;
+                Rectangle priorScissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
                 spriteBatch.End();
                 spriteBatch.GraphicsDevice.RasterizerState = priorRasterizer;
                 spriteBatch.GraphicsDevice.ScissorRectangle = priorScissorRectangle;
@@ -443,7 +444,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             }
             else {
                 spriteBatch.End();
-                var sortMode = SpriteSortMode.Deferred;
+                SpriteSortMode sortMode = SpriteSortMode.Deferred;
                 if (immediate)
                     sortMode = SpriteSortMode.Immediate;
                 spriteBatch.Begin(sortMode, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, effect, Main.Transform);
@@ -452,11 +453,11 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
         public void GetGradientMapValues(out float[] brightnesses, out Vector3[] colors)
         {
-            var maxBright = 0.667f;
+            float maxBright = 0.667f;
             brightnesses = new float[10];
             colors = new Vector3[10];
 
-            var rainbowStartOffset = 0.35f + Main.GlobalTimeWrappedHourly * 0.667f % (maxBright * 2f);
+            float rainbowStartOffset = 0.35f + Main.GlobalTimeWrappedHourly * 0.667f % (maxBright * 2f);
             //Calculate and store every non-modulo brightness, with the shifting offset. 
             //The first brightness is ignored for the moment, it will be relevant later. Setting it to -1 temporarily
             brightnesses[0] = -1;
@@ -471,29 +472,29 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             brightnesses[9] = rainbowStartOffset + 0.75f;
 
             //Pass the entire rainbow through modulo 1
-            for (var i = 1; i < 10; i++)
+            for (int i = 1; i < 10; i++)
                 brightnesses[i] = HUtils.Modulo(brightnesses[i], maxBright) * maxBright;
 
             //Store the first element's value so we can find it again later
-            var firstBrightnessValue = brightnesses[1];
+            float firstBrightnessValue = brightnesses[1];
 
             //Sort the values from lowest to highest
             Array.Sort(brightnesses);
 
             //Find the new index of the original first element after the list being sorted
-            var rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
+            int rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
             //Substract 1 from the index, because we are ignoring the currently negative first array slot.
             rainbowStartIndex--;
 
             //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
-            for (var i = 0; i < 9; i++) {
+            for (int i = 0; i < 9; i++) {
                 colors[1 + (rainbowStartIndex + i) % 9] = SlimeUtils.GoozColorsVector3[i];
             }
 
             //We always want a brightness at index 0 to be the lower bound
             brightnesses[0] = 0;
             //Make the color at index 0 be a mix between the first and last colors in the list, based on the distance between the 2.
-            var interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
+            float interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
             colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
         }
 
@@ -501,8 +502,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
         {
             VertexStrip strip = new VertexStrip();
 
-            var myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]) with { A = 0 };
-            var goozmaColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Host.localAI[0]) with { A = 0 };
+            Color myColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]) with { A = 0 };
+            Color goozmaColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Host.localAI[0]) with { A = 0 };
 
             Color StripColor(float progress) => (Color.Lerp(myColor, goozmaColor * 0.5f, progress)) with { A = 0 };
             float StripWidth(float progress) => (1f - (float)Math.Sin(progress * 2.5f) * 0.25f) * 30f;
@@ -510,8 +511,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             if (zapRope != null) {
                 Vector2[] zapPoints = zapRope.GetPoints().ToArray();
                 float totalDistance = 0;
-                var rots = new float[zapPoints.Length];
-                for (var i = 0; i < zapPoints.Length - 1; i++) {
+                float[] rots = new float[zapPoints.Length];
+                for (int i = 0; i < zapPoints.Length - 1; i++) {
                     rots[i] = zapPoints[i].AngleTo(zapPoints[i + 1]);
                     totalDistance += zapPoints[i].Distance(zapPoints[i + 1]);
                 }

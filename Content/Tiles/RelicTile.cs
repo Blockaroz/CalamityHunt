@@ -63,7 +63,7 @@ namespace CalamityHunt.Content.Tiles
             if (AssetDirectory.Textures.Relic == null)
                 AssetDirectory.Textures.Relic = new Dictionary<int, Asset<Texture2D>>();
 
-            var newAsset = AssetUtilities.RequestImmediate<Texture2D>(AssetDirectory.AssetPath + "Textures/Tiles/Relics/" + Name);
+            Asset<Texture2D> newAsset = AssetUtilities.RequestImmediate<Texture2D>(AssetDirectory.AssetPath + "Textures/Tiles/Relics/" + Name);
             AssetDirectory.Textures.Relic.Add(Type, newAsset);
         }
 
@@ -77,38 +77,38 @@ namespace CalamityHunt.Content.Tiles
 
             // Take the tile, check if it actually exists
             Point p = new Point(i, j);
-            var tile = Main.tile[p.X, p.Y];
+            Tile tile = Main.tile[p.X, p.Y];
             if (tile == null || !tile.HasTile) {
                 return;
             }
 
             // Get the initial draw parameters
-            var texture = AssetDirectory.Textures.Relic[Type].Value;
+            Texture2D texture = AssetDirectory.Textures.Relic[Type].Value;
 
-            var frameY = tile.TileFrameX / FrameWidth; // Picks the frame on the sheet based on the placeStyle of the item
-            var frame = texture.Frame(1, 1, 0, frameY);
+            int frameY = tile.TileFrameX / FrameWidth; // Picks the frame on the sheet based on the placeStyle of the item
+            Rectangle frame = texture.Frame(1, 1, 0, frameY);
 
-            var origin = frame.Size() / 2f;
-            var worldPos = p.ToWorldCoordinates(24f, 64f);
+            Vector2 origin = frame.Size() / 2f;
+            Vector2 worldPos = p.ToWorldCoordinates(24f, 64f);
 
-            var color = Lighting.GetColor(p.X, p.Y);
+            Color color = Lighting.GetColor(p.X, p.Y);
 
-            var direction = tile.TileFrameY / FrameHeight != 0; // This is related to the alternate tile data we registered before
-            var effects = direction ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            bool direction = tile.TileFrameY / FrameHeight != 0; // This is related to the alternate tile data we registered before
+            SpriteEffects effects = direction ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // Some math magic to make it smoothly move up and down over time
-            var offset = (float)Math.Sin(Main.GlobalTimeWrappedHourly * MathHelper.TwoPi / 5f);
-            var drawPos = worldPos + offScreen - Main.screenPosition + new Vector2(0f, -40f) + new Vector2(0f, offset * 4f);
+            float offset = (float)Math.Sin(Main.GlobalTimeWrappedHourly * MathHelper.TwoPi / 5f);
+            Vector2 drawPos = worldPos + offScreen - Main.screenPosition + new Vector2(0f, -40f) + new Vector2(0f, offset * 4f);
 
             // Draw the main texture
             spriteBatch.Draw(texture, drawPos, frame, color, 0f, origin, 1f, effects, 0f);
 
             // Draw the periodic glow effect
-            var scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * MathHelper.TwoPi / 2f) * 0.3f + 0.7f;
-            var effectColor = color;
+            float scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * MathHelper.TwoPi / 2f) * 0.3f + 0.7f;
+            Color effectColor = color;
             effectColor.A = 0;
             effectColor = effectColor * 0.1f * scale;
-            for (var h = 0; h < 6; h++)
+            for (int h = 0; h < 6; h++)
                 spriteBatch.Draw(texture, drawPos + (MathHelper.TwoPi * h / 6f).ToRotationVector2() * (6f + offset * 2f), frame, effectColor, 0f, origin, 1f, effects, 0f);
 
         }

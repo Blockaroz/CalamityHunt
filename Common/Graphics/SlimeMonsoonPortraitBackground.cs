@@ -4,7 +4,7 @@ using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
 using Terraria.UI;
 
-namespace CalamityHunt.Common
+namespace CalamityHunt.Common.Graphics
 {
     public class SlimeMonsoonPortraitBackground : IBestiaryInfoElement, IBestiaryBackgroundImagePathAndColorProvider
     {

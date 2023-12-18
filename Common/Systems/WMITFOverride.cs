@@ -27,12 +27,12 @@ namespace CalamityHunt.Common.Systems
                 layers.Insert(index, new LegacyGameInterfaceLayer("CalamityHunt: Mouse Text", delegate
                 {
                     if (ModLoader.TryGetMod("WMITF", out Mod wmitf) && wmitf.TryFind("Config", out ModConfig config)) {
-                        var t = config.GetType().GetField("DisplayWorldTooltips", BindingFlags.Public | BindingFlags.Instance);
+                        FieldInfo t = config.GetType().GetField("DisplayWorldTooltips", BindingFlags.Public | BindingFlags.Instance);
                         if ((bool)t.GetValue(config) && !string.IsNullOrEmpty(MouseText)) {
                             string coloredString = string.Format("[c/{1}:[{0}][c/{1}:]]", MouseText, Colors.RarityBlue.Hex3());
-                            var text = ChatManager.ParseMessage(coloredString, Color.White).ToArray();
+                            TextSnippet[] text = ChatManager.ParseMessage(coloredString, Color.White).ToArray();
                             float x = ChatManager.GetStringSize(Terraria.GameContent.FontAssets.MouseText.Value, text, Vector2.One).X;
-                            var pos = Main.MouseScreen + new Vector2(16f, 16f);
+                            Vector2 pos = Main.MouseScreen + new Vector2(16f, 16f);
                             if (pos.Y > (float)(Main.screenHeight - 30))
                                 pos.Y = (float)(Main.screenHeight - 30);
                             if (pos.X > (float)(Main.screenWidth - x))
@@ -53,12 +53,12 @@ namespace CalamityHunt.Common.Systems
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             if (ModLoader.TryGetMod("WMITF", out Mod wmitf) && wmitf.TryFind("Config", out ModConfig config)) {
-                var t = config.GetType().GetField("DisplayItemTooltips", BindingFlags.Public | BindingFlags.Instance);
+                FieldInfo t = config.GetType().GetField("DisplayItemTooltips", BindingFlags.Public | BindingFlags.Instance);
                 if ((bool)t.GetValue(config) && item.ModItem != null) {
                     if (item.ModItem.Mod == Mod && !item.Name.Contains("[" + item.ModItem.Mod.Name + "]") && !item.Name.Contains("[" + item.ModItem.Mod.DisplayName + "]")) {
                         tooltips.RemoveAll(i => i.Text.Contains(Mod.Name));
                         tooltips.RemoveAll(i => i.Text.Contains(Mod.DisplayName));
-                        var n = config.GetType().GetField("DisplayTechnicalNames", BindingFlags.Public | BindingFlags.Instance);
+                        FieldInfo n = config.GetType().GetField("DisplayTechnicalNames", BindingFlags.Public | BindingFlags.Instance);
                         string text = ((bool)n.GetValue(config)) ? (WMITFOverride.Internal + ":" + item.ModItem.Name) : WMITFOverride.Display;
                         TooltipLine line = new(Mod, Mod.Name, "[" + text + "]");
                         line.OverrideColor = Colors.RarityBlue;
@@ -90,26 +90,26 @@ namespace CalamityHunt.Common.Systems
                 WMITFOverride.Hunted = false;
 
                 bool tech = (bool)config.GetType().GetField("DisplayTechnicalNames", BindingFlags.Public | BindingFlags.Instance).GetValue(config);
-                var tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+                Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
                 if (tile.HasTile) {
-                    var modTile = TileLoader.GetTile(tile.TileType);
+                    ModTile modTile = TileLoader.GetTile(tile.TileType);
                     if (modTile != null) {
                         if (modTile.Mod == Mod)
                             Replace(tech, modTile.Name);
                     }
                 }
                 else {
-                    var modWall = WallLoader.GetWall(tile.WallType);
+                    ModWall modWall = WallLoader.GetWall(tile.WallType);
                     if (modWall != null) {
                         if (modWall.Mod == Mod)
                             Replace(tech, modWall.Name);
                     }
                 }
-                var mousePos = Main.MouseWorld;
+                Vector2 mousePos = Main.MouseWorld;
                 for (int i = 0; i < Main.maxNPCs; i++) {
-                    var npc = Main.npc[i];
+                    NPC npc = Main.npc[i];
                     if (mousePos.Between(npc.TopLeft, npc.BottomRight)) {
-                        var modNPC = NPCLoader.GetNPC(npc.type);
+                        ModNPC modNPC = NPCLoader.GetNPC(npc.type);
                         if (modNPC != null && npc.active && !NPCID.Sets.ProjectileNPC[npc.type]) {
                             if (modNPC.Mod == Mod) {
                                 Replace(tech, modNPC.Name);

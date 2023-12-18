@@ -72,14 +72,14 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var bloom = AssetDirectory.Textures.Glow[0].Value;
-            var frame = texture.Frame(1, 2, 0, 0);
-            var glowFrame = texture.Frame(1, 2, 0, 1);
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D bloom = AssetDirectory.Textures.Glow[0].Value;
+            Rectangle frame = texture.Frame(1, 2, 0, 0);
+            Rectangle glowFrame = texture.Frame(1, 2, 0, 1);
 
             Color glowColor = new Color(100, 60, 255, 0);
-            var opacity = 0.98f;
-            var scaleUp = 1f;
+            float opacity = 0.98f;
+            float scaleUp = 1f;
             if (Projectile.localAI[1] > 195) {
                 texture = eyeTexture;
                 frame = texture.Frame(8, 1, (int)(Projectile.localAI[1] % 8), 0);
@@ -91,8 +91,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Black * 0.05f, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp * 1.33f, 0, 0);
             Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, glowColor * 0.5f, Projectile.rotation, bloom.Size() * 0.5f, Projectile.scale * scaleUp * 2f, 0, 0);
-            for (var i = 0; i < 4; i++) {
-                var off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + ProjAIStyleID.Rainbow);
+            for (int i = 0; i < 4; i++) {
+                Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + ProjAIStyleID.Rainbow);
                 Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, glowFrame, glowColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * scaleUp, 0, 0);
             }
 

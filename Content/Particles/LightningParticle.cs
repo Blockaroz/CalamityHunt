@@ -3,7 +3,6 @@ using CalamityHunt.Common.Systems.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using static tModPorter.ProgressUpdate;
 
 namespace CalamityHunt.Content.Particles;
 
@@ -59,5 +58,7 @@ public class LightningParticle : Particle
         dissolveEffect.CurrentTechnique.Passes[0].Apply();
 
         spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation + MathHelper.Pi / 3f * direction, frame.Size() * 0.5f, scale * new Vector2(1f, 1f + time * 0.05f), flip, 0);
+
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Common.Utilities.Interfaces;

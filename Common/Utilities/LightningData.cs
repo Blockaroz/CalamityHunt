@@ -41,13 +41,13 @@ public readonly struct LightningData
     {
         List<Vector2> points = new List<Vector2>();
 
-        for (var i = 0; i < pointCount; i++) {
+        for (int i = 0; i < pointCount; i++) {
             Vector2 a = Vector2.Lerp(origin, mid, (float)i / (pointCount - 1));
             Vector2 b = Vector2.Lerp(mid, end, (float)i / (pointCount - 1));
             points.Add(Vector2.Lerp(a, b, (float)i / (pointCount - 1)));
         }
 
-        for (var i = 1; i < pointCount - 1; i++)
+        for (int i = 1; i < pointCount - 1; i++)
             points[i] += Main.rand.NextVector2Circular(8, 16).RotatedBy(points[i].AngleTo(points[i + 1])) * strength;
 
         return points;

@@ -40,7 +40,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override void AI()
         {
             if (Projectile.ai[1] < 0) {
-                foreach (var player in Main.player.Where(n => n.active && !n.dead))
+                foreach (Player player in Main.player.Where(n => n.active && !n.dead))
                     Projectile.ai[1] = player.whoAmI;
             }
 
@@ -82,12 +82,12 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = ModContent.Request<Texture2D>(Texture);
-            var trail = ModContent.Request<Texture2D>(Texture + "Trail");
-            var tell = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Projectiles/GoozmaDeathGodrays");
+            ReLogic.Content.Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            ReLogic.Content.Asset<Texture2D> trail = ModContent.Request<Texture2D>(Texture + "Trail");
+            ReLogic.Content.Asset<Texture2D> tell = ModContent.Request<Texture2D>($"{nameof(CalamityHunt)}/Content/Projectiles/GoozmaDeathGodrays");
 
             if (Time < 0) {
-                var width = (float)Math.Pow(Utils.GetLerpValue(0, 15, Projectile.localAI[0], true) * Utils.GetLerpValue(5, -60, Time, true), 0.5f) * Projectile.width * 0.015f;
+                float width = (float)Math.Pow(Utils.GetLerpValue(0, 15, Projectile.localAI[0], true) * Utils.GetLerpValue(5, -60, Time, true), 0.5f) * Projectile.width * 0.015f;
                 Color tellColor = new Color(180, 30, 0, 0);
                 Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, width * 40 - 20), null, tellColor, Projectile.rotation + MathHelper.Pi, tell.Size() * new Vector2(0.5f, 0.66f), new Vector2(width, 14f - width), 0, 0);
                 return false;
@@ -100,20 +100,20 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             if (Time > 9)
                 squish = new Vector2(1f + Utils.GetLerpValue(18, 10, Time, true) * 0.7f, 1f - Utils.GetLerpValue(18, 10, Time, true) * 0.7f);
 
-            var fadeOut = Utils.GetLerpValue(20, 15, Time, true) * Utils.GetLerpValue(-1, 5, Time, true);
-            var trailOut = fadeOut * Utils.GetLerpValue(15, 10, Time, true) * 0.9f;
+            float fadeOut = Utils.GetLerpValue(20, 15, Time, true) * Utils.GetLerpValue(-1, 5, Time, true);
+            float trailOut = fadeOut * Utils.GetLerpValue(15, 10, Time, true) * 0.9f;
 
-            for (var i = 1; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
-                for (var j = 0; j < 5; j++) {
-                    var superProg = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
-                    var prog = j / 5f;
+            for (int i = 1; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+                for (int j = 0; j < 5; j++) {
+                    float superProg = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
+                    float prog = j / 5f;
 
                     if (Time > 9)
                         trailSquish = new Vector2(1f + Utils.GetLerpValue(18, 10, Time, true) * 0.7f * (1f - superProg - prog * 0.2f), 1f - Utils.GetLerpValue(18, 10, Time, true) * 0.7f * (1f - superProg - prog * 0.2f));
 
                     Color trailColor = Color.Lerp(Color.Black * 0.33f, new Color(30, 4, 2, 10), superProg);
-                    var trailProgress = Utils.GetLerpValue(0, ProjectileID.Sets.TrailCacheLength[Type], i + prog, true);
-                    var position = Vector2.Lerp(Projectile.oldPos[i - 1], Projectile.oldPos[i], prog) + Projectile.Size * new Vector2(0.5f, 1f);
+                    float trailProgress = Utils.GetLerpValue(0, ProjectileID.Sets.TrailCacheLength[Type], i + prog, true);
+                    Vector2 position = Vector2.Lerp(Projectile.oldPos[i - 1], Projectile.oldPos[i], prog) + Projectile.Size * new Vector2(0.5f, 1f);
                     Main.EntitySpriteDraw(trail.Value, position - Main.screenPosition, null, trailColor * (1f - trailProgress) * trailOut, Projectile.rotation, texture.Size() * new Vector2(0.5f, 1f), Projectile.scale * trailSquish * (0.5f + trailOut * 0.5f), 0, 0);
                 }
             }

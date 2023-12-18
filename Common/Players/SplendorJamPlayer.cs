@@ -41,7 +41,7 @@ namespace CalamityHunt.Common.Players
             delay = 0;
             if (!stressedOut) {
                 checkStress = stress;
-                if (SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))
+                if (SoundEngine.TryGetActiveSound(loopSlot, out ActiveSound activeSound))
                     activeSound.Stop();
             }
             if (Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15 && stress >= 0.25f && !stressedOut) {
@@ -138,7 +138,7 @@ namespace CalamityHunt.Common.Players
                 }
                 if (stressedOut && stress > 0) {
                     stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
-                    if (!SoundEngine.TryGetActiveSound(loopSlot, out var activeSound))
+                    if (!SoundEngine.TryGetActiveSound(loopSlot, out ActiveSound activeSound))
                         loopSlot = SoundEngine.PlaySound(AssetDirectory.Sounds.StressLoop, Player.Center);
                     else
                         activeSound.Position = Player.Center;

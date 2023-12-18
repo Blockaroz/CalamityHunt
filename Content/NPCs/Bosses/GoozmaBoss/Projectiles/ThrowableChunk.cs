@@ -145,7 +145,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             if (Time > 20) {
-                var radialPoint = Projectile.Center + Projectile.DirectionTo(targetHitbox.Center()).SafeNormalize(Vector2.Zero) * Math.Min(Projectile.Distance(targetHitbox.Center()), Projectile.width);
+                Vector2 radialPoint = Projectile.Center + Projectile.DirectionTo(targetHitbox.Center()).SafeNormalize(Vector2.Zero) * Math.Min(Projectile.Distance(targetHitbox.Center()), Projectile.width);
                 if (targetHitbox.Contains(radialPoint.ToPoint())) {
                     return true;
                 }
@@ -164,24 +164,24 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             else
                 texture = ModContent.Request<Texture2D>(Texture + "_Rock").Value;
 
-            var glow = AssetDirectory.Textures.Glow[0].Value;
-            var frame = texture.Frame(1, 3, 0, (int)Size);
-            var power = (float)Math.Sqrt(Utils.GetLerpValue(0, 30, Projectile.localAI[0], true));
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
+            Rectangle frame = texture.Frame(1, 3, 0, (int)Size);
+            float power = (float)Math.Sqrt(Utils.GetLerpValue(0, 30, Projectile.localAI[0], true));
 
             if (chunkStyle != ThrowableChunkStyle.Comet) {
                 Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(35, 5, 10, 0) * 0.3f * power, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 3f, 0, 0);
                 Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), new Color(150, 90, 20, 0) * 0.3f * power, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * power * (Size + 1) * 1.33f, 0, 0);
 
-                for (var i = 0; i < 8; i++) {
-                    var off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation);
+                for (int i = 0; i < 8; i++) {
+                    Vector2 off = new Vector2(2).RotatedBy(MathHelper.TwoPi / 8f * i + Projectile.rotation);
                     Main.EntitySpriteDraw(texture, Projectile.Center + off - Main.screenPosition, frame, new Color(150, 50, 20, 0) * power, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
                 }
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.Lerp(lightColor, Color.Coral, 0.2f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power, 0, 0);
             }
             else {
                 lightColor = Color.White;
-                for (var i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
-                    var prog = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
+                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+                    float prog = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
                     Main.EntitySpriteDraw(glow, Projectile.oldPos[i] + Projectile.Size * 0.5f - Main.screenPosition, glow.Frame(), Color.Lerp(new Color(53, 90, 200, 0), new Color(13, 13, 41, 0), prog) * 0.3f * (1f - prog), Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * power * (1f - prog) * 2f, 0, 0);
                     Main.EntitySpriteDraw(texture, Projectile.oldPos[i] + Projectile.Size * 0.5f - Main.screenPosition, frame, Color.Lerp(new Color(53, 90, 200, 0), new Color(13, 13, 41, 0), prog) * 0.2f * (1f - prog), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * power * (1f - prog) * 1.1f, 0, 0);
                 }

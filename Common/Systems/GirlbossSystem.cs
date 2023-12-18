@@ -22,17 +22,20 @@ public sealed class GirlbossSystem : ModSystem
             throw new DataMisalignedException();
         }
 
-        var keySize = (x: 283, y: 238);
+        (int x, int y) keySize = (x: 283, y: 238);
         const SurfaceFormat key_format = SurfaceFormat.Color;
         const int key_level_count = 1;
 
-        if (asset.Width() != keySize.x || asset.Height() != keySize.y)
+        if (asset.Width() != keySize.x || asset.Height() != keySize.y) {
             throw new DataMisalignedException();
+        }
 
-        if (asset.Value.Format != key_format)
+        if (asset.Value.Format != key_format) {
             throw new DataMisalignedException();
+        }
 
-        if (asset.Value.LevelCount != key_level_count)
+        if (asset.Value.LevelCount != key_level_count) {
             throw new DataMisalignedException();
+        }
     }
 }

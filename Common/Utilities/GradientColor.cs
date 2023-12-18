@@ -32,8 +32,8 @@ public readonly struct GradientColor
     [Pure]
     public Color ValueAt(float time)
     {
-        var t = time % timePerColor / fadeSpeed;
-        var index = (int)(Math.Abs(time) / timePerColor) % colors.Length;
+        float t = time % timePerColor / fadeSpeed;
+        int index = (int)(Math.Abs(time) / timePerColor) % colors.Length;
         return Color.Lerp(colors[index], colors[(index + 1) % colors.Length], t);
     }
 

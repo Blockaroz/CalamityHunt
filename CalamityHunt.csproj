@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Textures\NPCs\Bosses\Inventors\" />
+    <Folder Include="Common\UI\SoulInterface\" />
     <Folder Include="Content\NPCs\Bosses\Inventors\" />
   </ItemGroup>
 </Project>

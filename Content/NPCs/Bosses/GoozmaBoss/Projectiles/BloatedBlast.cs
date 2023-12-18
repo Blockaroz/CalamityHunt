@@ -51,7 +51,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Time++;
 
             if (Projectile.ai[1] == 0) {
-                var target = -1;
+                int target = -1;
 
                 if (Main.myPlayer == Projectile.owner) {
                     if (Main.player.Any(n => n.active && !n.dead)) {
@@ -101,11 +101,11 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             if (oldVels == null) {
                 oldVels = new Vector2[10];
-                for (var i = 0; i < oldVels.Length; i++)
+                for (int i = 0; i < oldVels.Length; i++)
                     oldVels[i] = Projectile.velocity;
             }
             else {
-                for (var i = 9; i > 0; i--)
+                for (int i = 9; i > 0; i--)
                     oldVels[i] = Vector2.Lerp(oldVels[i], oldVels[i - 1] * 1.2f, 0.6f);
                 oldVels[0] = Vector2.Lerp(oldVels[0], (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2(), 0.6f);
             }
@@ -125,14 +125,14 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override void OnKill(int timeLeft)
         {
             if (Projectile.ai[1] == 0) {
-                for (var i = 0; i < 4; i++) {
-                    var size = Main.rand.NextFloat(4f, 5f) + i * 2f;
-                    var rotation = Main.rand.NextFloat(-2f, 2f);
+                for (int i = 0; i < 4; i++) {
+                    float size = Main.rand.NextFloat(4f, 5f) + i * 2f;
+                    float rotation = Main.rand.NextFloat(-2f, 2f);
 
-                    for (var j = 0; j < 30; j++) {
-                        var glowColor = new GradientColor(SlimeUtils.GoozColors, 2f, 2f).ValueAt(j * 30f + i);
+                    for (int j = 0; j < 30; j++) {
+                        Color glowColor = new GradientColor(SlimeUtils.GoozColors, 2f, 2f).ValueAt(j * 30f + i);
                         glowColor.A /= 2;
-                        var outward = new Vector2(size + Main.rand.NextFloat(), 0).RotatedBy(MathHelper.TwoPi / 30f * j);
+                        Vector2 outward = new Vector2(size + Main.rand.NextFloat(), 0).RotatedBy(MathHelper.TwoPi / 30f * j);
                         outward.X *= 0.4f;
 
                         CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
@@ -145,22 +145,22 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     }
                 }
 
-                for (var i = 0; i < 80; i++) {
+                for (int i = 0; i < 80; i++) {
                     Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(15, 15), 100, Color.Black, 2f).noGravity = true;
                 }
 
-                var dartCount = (int)Common.Systems.ConditionalValue.DifficultyBasedValue(8, 12, 16, 18);
-                for (var i = 0; i < dartCount; i++) {
+                int dartCount = (int)Common.Systems.ConditionalValue.DifficultyBasedValue(8, 12, 16, 18);
+                for (int i = 0; i < dartCount; i++) {
                     Projectile dart = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(20, 0).RotatedBy(MathHelper.TwoPi / dartCount * i), Type, Projectile.damage, 0, ai1: 1);
                     dart.ai[1] = 1;
                     dart.localAI[0] = Projectile.localAI[0] + i / dartCount * 90f;
                 }
 
-                var dartSound = AssetDirectory.Sounds.Goozma.Dart with { Pitch = 0.3f };
+                SoundStyle dartSound = AssetDirectory.Sounds.Goozma.Dart with { Pitch = 0.3f };
                 SoundEngine.PlaySound(dartSound.WithVolumeScale(0.8f));
             }
 
-            for (var i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                     particle.position = Projectile.Center;
                     particle.velocity = Main.rand.NextVector2Circular(10, 10);
@@ -184,21 +184,21 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
-            var ring = AssetDirectory.Textures.GlowRing.Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
+            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
             Vector2 squishFactor = new Vector2(1f - Projectile.velocity.Length() * 0.0045f, 1f + Projectile.velocity.Length() * 0.0075f);
 
-            var bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
+            Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             bloomColor.A = 0;
 
             if (Projectile.ai[1] == 0) {
                 Color growColor = Color.Lerp(Color.Transparent, bloomColor, Utils.GetLerpValue(3, 40, Projectile.localAI[0], true));
-                var baseFrame = texture.Frame(3, 1, 0, 0);
-                var glowFrame = texture.Frame(3, 1, 1, 0);
-                var outlineFrame = texture.Frame(3, 1, 2, 0);
+                Rectangle baseFrame = texture.Frame(3, 1, 0, 0);
+                Rectangle glowFrame = texture.Frame(3, 1, 1, 0);
+                Rectangle outlineFrame = texture.Frame(3, 1, 2, 0);
 
-                var aboutToExplode = 0.4f + (float)Math.Cbrt(Utils.GetLerpValue(50, 65, Time, true)) * 0.7f;
+                float aboutToExplode = 0.4f + (float)Math.Cbrt(Utils.GetLerpValue(50, 65, Time, true)) * 0.7f;
                 Main.EntitySpriteDraw(glow, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.3f * aboutToExplode, 0, glow.Size() * 0.5f, Projectile.scale * 5f * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(ring, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.1f * aboutToExplode, 0, ring.Size() * 0.5f, Projectile.scale * 2.5f * aboutToExplode, 0, 0);
 
@@ -216,8 +216,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Main.EntitySpriteDraw(glow, Projectile.Center + Projectile.velocity * 0.2f - Main.screenPosition, null, growColor * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f * squishFactor, 0, 0);
             }
             if (Projectile.ai[1] == 1) {
-                var baseFrame = textureSmall.Frame(3, 1, 0, 0);
-                var glowFrame = textureSmall.Frame(3, 1, 1, 0);
+                Rectangle baseFrame = textureSmall.Frame(3, 1, 0, 0);
+                Rectangle glowFrame = textureSmall.Frame(3, 1, 1, 0);
                 //Rectangle outlineFrame = textureSmall.Frame(3, 1, 2, 0);
 
                 Main.EntitySpriteDraw(textureSmall, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
@@ -230,22 +230,22 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public void DrawTentacles(Color lightColor, Color growColor)
         {
-            var glow = AssetDirectory.Textures.Glow[0].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
 
             float tentaCount = 2;
-            for (var j = 0; j < tentaCount; j++) {
-                var dir = j > 0 ? 1 : -1;
+            for (int j = 0; j < tentaCount; j++) {
+                int dir = j > 0 ? 1 : -1;
 
-                var rot = Projectile.rotation + MathHelper.PiOver2;
-                var pos = Projectile.Center + new Vector2(10 * dir, 18).RotatedBy(Projectile.rotation);
-                var stick = (rot.ToRotationVector2() * 12 - Projectile.velocity * 0.05f) * (0.5f + Projectile.scale * 0.5f);
-                var segments = 10;
+                float rot = Projectile.rotation + MathHelper.PiOver2;
+                Vector2 pos = Projectile.Center + new Vector2(10 * dir, 18).RotatedBy(Projectile.rotation);
+                Vector2 stick = (rot.ToRotationVector2() * 12 - Projectile.velocity * 0.05f) * (0.5f + Projectile.scale * 0.5f);
+                int segments = 10;
 
-                var lastPos = pos;
+                Vector2 lastPos = pos;
 
-                for (var i = 0; i < segments; i++) {
-                    var prog = i / (float)segments;
-                    var segFrame = Math.Clamp((int)(prog * 5f), 1, 3);
+                for (int i = 0; i < segments; i++) {
+                    float prog = i / (float)segments;
+                    int segFrame = Math.Clamp((int)(prog * 5f), 1, 3);
                     if (i == 0) {
                         segFrame = 0;
                     }
@@ -254,15 +254,15 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                         segFrame = 4;
                     }
 
-                    var frame = textureTentacle.Frame(3, 5, 0, segFrame);
-                    var glowFrame = textureTentacle.Frame(3, 5, 1, segFrame);
+                    Rectangle frame = textureTentacle.Frame(3, 5, 0, segFrame);
+                    Rectangle glowFrame = textureTentacle.Frame(3, 5, 1, segFrame);
 
-                    var nextStick = stick.RotatedBy(oldVels[i].RotatedBy(-Projectile.rotation).ToRotation() + MathHelper.PiOver2).RotatedBy((float)Math.Sin((Projectile.localAI[0] * 0.2 - i * 0.8f) % MathHelper.TwoPi) * dir * 0.15f * (0.5f + i * 0.5f) - dir * 0.1f);
-                    var stickRot = lastPos.AngleTo(lastPos + nextStick);
-                    var stretch = new Vector2(1f, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(Projectile.scale, 1f, i / (float)segments);
+                    Vector2 nextStick = stick.RotatedBy(oldVels[i].RotatedBy(-Projectile.rotation).ToRotation() + MathHelper.PiOver2).RotatedBy((float)Math.Sin((Projectile.localAI[0] * 0.2 - i * 0.8f) % MathHelper.TwoPi) * dir * 0.15f * (0.5f + i * 0.5f) - dir * 0.1f);
+                    float stickRot = lastPos.AngleTo(lastPos + nextStick);
+                    Vector2 stretch = new Vector2(1f, 0.5f + lastPos.Distance(lastPos + nextStick) / 16f) * MathHelper.Lerp(Projectile.scale, 1f, i / (float)segments);
                     lastPos += nextStick;
 
-                    var bloomScale = (float)Math.Pow(prog, 1.25f);
+                    float bloomScale = (float)Math.Pow(prog, 1.25f);
                     Main.EntitySpriteDraw(textureTentacle, lastPos - Main.screenPosition, frame, lightColor, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
                     Main.EntitySpriteDraw(textureTentacle, lastPos - Main.screenPosition, glowFrame, growColor * bloomScale * 1.2f, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
                     Main.EntitySpriteDraw(glow, lastPos + oldVels[i] * 0.2f - Main.screenPosition, null, growColor * bloomScale * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);

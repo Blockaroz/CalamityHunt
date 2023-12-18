@@ -13,7 +13,7 @@ public static class VanityUtilities
 
     public static void ApplyVerticalOffset(ref this Vector2 drawPos, PlayerDrawSet drawInfo)
     {
-        var value = Main.OffsetsPlayerHeadgear[drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height];
+        Vector2 value = Main.OffsetsPlayerHeadgear[drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height];
         value.Y -= 2f;
         drawPos += value * -drawInfo.playerEffect.HasFlag(SpriteEffects.FlipVertically).ToDirectionInt();
     }

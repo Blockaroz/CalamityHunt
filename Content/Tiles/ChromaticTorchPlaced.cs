@@ -132,7 +132,7 @@ namespace CalamityHunt.Content.Tiles
             Color color = rainbowGlow;
             int width = 20;
             int height = 20;
-            var tile = Main.tile[i, j];
+            Tile tile = Main.tile[i, j];
             int frameX = tile.TileFrameX;
             int frameY = tile.TileFrameY;
 

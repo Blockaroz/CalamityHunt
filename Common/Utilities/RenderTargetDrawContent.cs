@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Utilities;
-using Steamworks;
-using Terraria;
 using Terraria.GameContent;
 
 namespace CalamityHunt.Common.Utilities;
@@ -22,7 +18,7 @@ public class RenderTargetDrawContent : INeedRenderTargetContent
         public Action<SpriteBatch> draw;
         public RenderTarget2D target;
     }
-    
+
     private List<DrawContent> _draws;
 
     private bool _ready;

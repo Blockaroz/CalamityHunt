@@ -71,14 +71,14 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     Main.npc[owner].localAI[1]++;
                     Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * (Main.npc[owner].GetTargetData().Velocity.Length() * 0.2f + Projectile.velocity.Length());
                     Cooldown = 15;
-                    for (var i = 0; i < 40; i++) {
-                        var glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
+                    for (int i = 0; i < 40; i++) {
+                        Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                         glowColor.A /= 2;
                         Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
                     }
                 }
 
-                foreach (var player in Main.player.Where(n => n.active && !n.dead && n.Distance(Projectile.Center) < 64)) {
+                foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(Projectile.Center) < 64)) {
                     if (HitCount < 0 || HitCount == 1) {
                         HitCount++;
                         Cooldown += 15;
@@ -92,8 +92,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     if (Time > 40)
                         SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.PixieBallBounce, Projectile.Center);
 
-                    for (var i = 0; i < 40; i++) {
-                        var glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
+                    for (int i = 0; i < 40; i++) {
+                        Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                         glowColor.A /= 2;
                         Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(15, 15) + Projectile.velocity, 0, glowColor, 1f + Main.rand.NextFloat(2f)).noGravity = true;
 
@@ -172,7 +172,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 particle.fadeColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.7f, 0);
             }));
 
-            for (var i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
+            for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
                 Projectile.oldPos[i] = Projectile.oldPos[i - 1];
                 Projectile.oldRot[i] = Projectile.oldRot[i - 1];
             }
@@ -180,8 +180,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.oldRot[0] = Projectile.rotation;
 
             if (Time > 400)
-                for (var i = 0; i < 40 - Time / 2; i++) {
-                    var glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
+                for (int i = 0; i < 40 - Time / 2; i++) {
+                    Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                     glowColor.A /= 2;
                     Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(25 - Time / 4f, 25 - Time / 4f), 0, glowColor, 2f + Main.rand.NextFloat(2f)).noGravity = true;
                 }
@@ -202,8 +202,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         {
             if (Projectile.localAI[1] > 10f) {
                 Projectile.localAI[1] = 0;
-                var warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f) * 1.1f - 1f;
-                var warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, 0.05f, 2f) * Projectile.scale;
+                float warningPitch = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.0006f, -2f, 2f) * 1.1f - 1f;
+                float warningVolume = Math.Clamp(1f - Projectile.Distance(Main.npc[owner].Center) * 0.001f, 0.05f, 2f) * Projectile.scale;
                 SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.Warning.WithPitchOffset(warningPitch).WithVolumeScale(warningVolume * 0.15f), Projectile.Center);
             }
 
@@ -246,13 +246,13 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var sparkle = TextureAssets.Extra[98].Value;
-            var ring = AssetDirectory.Textures.GlowRing.Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D sparkle = TextureAssets.Extra[98].Value;
+            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
 
-            var bloomColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.7f, 0);
-            var direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            Color bloomColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.7f, 0);
+            SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.Black * 0.1f, Projectile.rotation * 0.5f, texture.Size() * 0.5f, Projectile.scale * 1.5f, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), bloomColor, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale * 0.8f, 0, 0);
@@ -262,35 +262,35 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), new Color(255, 255, 255, 0), Projectile.rotation + 0.2f, texture.Size() * 0.5f, Projectile.scale * 0.7f, direction, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), bloomColor * 0.2f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, direction, 0);
 
-            var overlayColor = bloomColor * 0.6f;
+            Color overlayColor = bloomColor * 0.6f;
             overlayColor.A = 100;
             Main.EntitySpriteDraw(beachBallOverlay.Value, Projectile.Center - Main.screenPosition, beachBallOverlay.Value.Frame(), overlayColor * 0.1f, Projectile.rotation * 0.7f, beachBallOverlay.Value.Size() * 0.5f, Projectile.scale * 0.9f, 0, 0);
 
-            var lensAngle = Projectile.AngleFrom(Main.LocalPlayer.Center) + MathHelper.PiOver2;
-            var lensPower = 1f + Projectile.Distance(Main.LocalPlayer.Center) * 0.003f;
+            float lensAngle = Projectile.AngleFrom(Main.LocalPlayer.Center) + MathHelper.PiOver2;
+            float lensPower = 1f + Projectile.Distance(Main.LocalPlayer.Center) * 0.003f;
 
-            var sparkRotation = Projectile.velocity.X * 0.01f;
-            var wobble = 1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.05f;
-            var sparkleScale = new Vector2(0.5f, 6f) * wobble * Utils.GetLerpValue(0.3f, 1f, Projectile.scale, true);
+            float sparkRotation = Projectile.velocity.X * 0.01f;
+            float wobble = 1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.05f;
+            Vector2 sparkleScale = new Vector2(0.5f, 6f) * wobble * Utils.GetLerpValue(0.3f, 1f, Projectile.scale, true);
             Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, sparkle.Size() * 0.5f, sparkleScale, 0, 0);
             Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), sparkRotation + MathHelper.PiOver2 + 0.2f, sparkle.Size() * 0.5f, sparkleScale * 0.4f, 0, 0);
             Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.7f, 0, 0);
             Main.EntitySpriteDraw(sparkle, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), sparkRotation + MathHelper.PiOver2 - 0.3f, sparkle.Size() * 0.5f, sparkleScale * 0.3f, 0, 0);
 
-            var ringWobble0 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.6f) * 0.01f;
-            var ringWobble1 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.3f) * 0.01f;
-            var middleRingOff = new Vector2(0, 50 * lensPower).RotatedBy(lensAngle - 0.3f);
+            float ringWobble0 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.6f) * 0.01f;
+            float ringWobble1 = 1.05f + (float)Math.Sin(Projectile.localAI[0] * 0.1f + 0.3f) * 0.01f;
+            Vector2 middleRingOff = new Vector2(0, 50 * lensPower).RotatedBy(lensAngle - 0.3f);
 
             Main.EntitySpriteDraw(ring, Projectile.Center + middleRingOff - Main.screenPosition, null, bloomColor * 0.05f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * ringWobble0, 0, 0);
             Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 1.4f * ringWobble1, 0, 0);
 
-            var bottomRingOff = new Vector2(0, 40).RotatedBy(lensAngle + 0.2f) * lensPower;
+            Vector2 bottomRingOff = new Vector2(0, 40).RotatedBy(lensAngle + 0.2f) * lensPower;
             Main.EntitySpriteDraw(ring, Projectile.Center + bottomRingOff - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 0.4f, 0, 0);
-            var topRingOff = new Vector2(0, -60).RotatedBy(lensAngle) * lensPower;
+            Vector2 topRingOff = new Vector2(0, -60).RotatedBy(lensAngle) * lensPower;
             Main.EntitySpriteDraw(ring, Projectile.Center + topRingOff - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 0.8f, 0, 0);
 
-            var topFlareOff = topRingOff * ringWobble0 * 1.1f;
-            for (var i = 0; i < 3; i++)
+            Vector2 topFlareOff = topRingOff * ringWobble0 * 1.1f;
+            for (int i = 0; i < 3; i++)
                 Main.EntitySpriteDraw(sparkle, Projectile.Center + topFlareOff - Main.screenPosition, null, bloomColor * 0.2f, MathHelper.TwoPi / 3f * i, sparkle.Size() * 0.5f, new Vector2(0.3f, 1.5f), 0, 0);
 
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * (0.3f / lensPower), Projectile.rotation * 0.5f, glow.Size() * 0.5f, Projectile.scale * 4f, 0, 0);
@@ -343,29 +343,29 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public void DrawHitMeSign()
         {
-            var bloomColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.7f, 0) * 0.3f;
+            Color bloomColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.7f, 0) * 0.3f;
 
-            var influence = Utils.GetLerpValue(0, 10, Time, true);
-            var wobble = 0.7f + MathF.Sin(Time * 0.3f) * 0.1f;
+            float influence = Utils.GetLerpValue(0, 10, Time, true);
+            float wobble = 0.7f + MathF.Sin(Time * 0.3f) * 0.1f;
 
-            var handScale = Utils.GetLerpValue(0.5f, 0.9f, Projectile.scale, true);
-            var signScale = handScale * Utils.GetLerpValue(40, 60, Time, true);
-            var signPosition = Projectile.Center - Main.screenPosition - new Vector2(0, 100 * Projectile.scale);
+            float handScale = Utils.GetLerpValue(0.5f, 0.9f, Projectile.scale, true);
+            float signScale = handScale * Utils.GetLerpValue(40, 60, Time, true);
+            Vector2 signPosition = Projectile.Center - Main.screenPosition - new Vector2(0, 100 * Projectile.scale);
 
-            var hitMeFrame = hitMeSign.Value.Frame(1, 8, 0, signFrame);
+            Rectangle hitMeFrame = hitMeSign.Value.Frame(1, 8, 0, signFrame);
 
             Main.EntitySpriteDraw(hitMeSign.Value, signPosition, hitMeFrame, new Color(255, 255, 255, 128) * influence, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
-            for (var i = 0; i < 8; i++) {
-                var offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
+            for (int i = 0; i < 8; i++) {
+                Vector2 offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
                 Main.EntitySpriteDraw(hitMeSign.Value, signPosition + offset, hitMeFrame, bloomColor * influence * wobble, MathF.Sin(Time * 0.15f) * 0.1f, hitMeFrame.Size() * 0.5f, signScale, 0, 0);
             }
 
-            var pointerFrame = hitMeHand.Value.Frame(1, 6, 0, handFrame);
+            Rectangle pointerFrame = hitMeHand.Value.Frame(1, 6, 0, handFrame);
 
-            var handEffect = handDir < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            SpriteEffects handEffect = handDir < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Main.EntitySpriteDraw(hitMeHand.Value, handPosition, pointerFrame, new Color(255, 255, 255, 128) * influence, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
-            for (var i = 0; i < 8; i++) {
-                var offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
+            for (int i = 0; i < 8; i++) {
+                Vector2 offset = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 8f * i);
                 Main.EntitySpriteDraw(hitMeHand.Value, handPosition + offset, pointerFrame, bloomColor * influence * wobble, handRotation, pointerFrame.Size() * new Vector2(0.5f, 0.9f), handScale, handEffect, 0);
             }
         }

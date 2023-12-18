@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CalamityHunt.Common;
 using CalamityHunt.Common.DropRules;
+using CalamityHunt.Common.Graphics;
 using CalamityHunt.Common.Graphics.Skies;
 using CalamityHunt.Common.Systems;
 using CalamityHunt.Common.Systems.Camera;
@@ -1268,9 +1268,10 @@ public partial class Goozma : ModNPC, ISubjectOfNPC<Goozma>
                 Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(50), 100, 160, DustID.TintableDust, Main.rand.NextFloat(-1f, 1f), -4f, 230, Color.Black, Main.rand.NextFloat(1f, 3f));
                 dust.noGravity = true;
             }
+
             if (Main.rand.NextBool(6) || (Phase == 2 && Main.rand.NextBool()) || (Phase == -22 && Main.rand.NextBool())) {
                 CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
-                    particle.position = NPC.Center + Main.rand.NextVector2Circular(70, 120);
+                    particle.position = NPC.Center + Main.rand.NextVector2Circular(80, 130).RotatedBy(NPC.rotation) * NPC.scale;
                     particle.velocity = particle.position.DirectionFrom(NPC.Center) * Main.rand.NextFloat(0.5f, 2f);
                     particle.rotation = particle.velocity.ToRotation() + Main.rand.NextFloat(-0.1f, 0.1f);
                     particle.scale = Main.rand.NextFloat(0.6f, 1.5f);

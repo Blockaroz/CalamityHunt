@@ -31,12 +31,12 @@ public class SlimeBomb : ModProjectile
         Projectile.localAI[1] = Main.rand.NextFloat(30f);
         Projectile.rotation = Main.rand.NextFloat(-1f, 1f);
 
-        var shootSound = AssetDirectory.Sounds.Goozma.Shot with { Pitch = -0.3f };
+        SoundStyle shootSound = AssetDirectory.Sounds.Goozma.Shot with { Pitch = -0.3f };
         SoundEngine.PlaySound(shootSound, Projectile.Center);
 
         if (!Main.dedServ) {
-            for (var i = 0; i < 5; i++) {
-                var glowColor = new GradientColor(SlimeUtils.GoozColors, 0.4f, 0.5f).ValueAt(Projectile.localAI[1]);
+            for (int i = 0; i < 5; i++) {
+                Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.4f, 0.5f).ValueAt(Projectile.localAI[1]);
                 glowColor.A /= 2;
                 Dust.NewDustPerfect(Projectile.Center, DustID.RainbowMk2, Projectile.velocity + Main.rand.NextVector2Circular(5, 5), 0, glowColor, 1.5f).noGravity = true;
             }
@@ -54,7 +54,7 @@ public class SlimeBomb : ModProjectile
             Projectile.rotation = (float)Math.Sin(Projectile.localAI[1] * 0.03f) * Projectile.direction * 0.1f + Projectile.velocity.X * 0.1f;
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 17, Projectile.localAI[0], true)) + (float)Math.Pow(Utils.GetLerpValue(97, 100, Time, true), 2f) * 0.5f;
 
-            var target = -1;
+            int target = -1;
             if (Main.player.Any(n => n.active && !n.dead)) {
                 target = Main.player.First(n => n.active && !n.dead).whoAmI;
             }
@@ -84,7 +84,7 @@ public class SlimeBomb : ModProjectile
                 Projectile.ai[1]++;
             }
             if (Time == 1) {
-                var chargeSound = AssetDirectory.Sounds.Goozma.BombCharge;
+                SoundStyle chargeSound = AssetDirectory.Sounds.Goozma.BombCharge;
                 SoundEngine.PlaySound(chargeSound.WithVolumeScale(0.33f), Projectile.Center);
             }
         }
@@ -92,14 +92,14 @@ public class SlimeBomb : ModProjectile
             Projectile.scale = 1f;
 
             if (Time == 1) {
-                var explodeSound = AssetDirectory.Sounds.Goozma.BloatedBlastShoot;
+                SoundStyle explodeSound = AssetDirectory.Sounds.Goozma.BloatedBlastShoot;
                 SoundEngine.PlaySound(explodeSound.WithVolumeScale(0.7f), Projectile.Center);
                 SoundEngine.PlaySound(SoundID.DD2_KoboldExplosion.WithVolumeScale(0.8f), Projectile.Center);
             }
 
             if (Time < 3) {
-                for (var i = 0; i < 5; i++) {
-                    var gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
+                for (int i = 0; i < 5; i++) {
+                    Vector2 gooVelocity = new Vector2(1, 0).RotatedBy(MathHelper.TwoPi / 5f * i).RotatedByRandom(0.2f);
                     CalamityHunt.particles.Add(Particle.Create<ChromaticGooBurst>(particle => {
                         particle.position = Projectile.Center + gooVelocity * 2;
                         particle.velocity = gooVelocity;
@@ -119,7 +119,7 @@ public class SlimeBomb : ModProjectile
                     particle.colorData = new ColorOffsetData(true, Projectile.localAI[1]);
                 }));
 
-                for (var i = 0; i < 10; i++) {
+                for (int i = 0; i < 10; i++) {
                     Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.TintableDust, Main.rand.NextVector2Circular(10, 10), 100, Color.Black, 1f + Main.rand.NextFloat(2)).noGravity = true;
                 }
             }
@@ -136,11 +136,11 @@ public class SlimeBomb : ModProjectile
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
-        var maxDist = Math.Min(Projectile.Distance(targetHitbox.Center()), 250);
+        float maxDist = Math.Min(Projectile.Distance(targetHitbox.Center()), 250);
         //Dust.QuickDust(Projectile.Center + new Vector2(maxDist, 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center())), Color.Red);
 
         if (Projectile.ai[1] == 1) {
-            var radius = Projectile.Center + new Vector2(maxDist, 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center()));
+            Vector2 radius = Projectile.Center + new Vector2(maxDist, 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center()));
             if (Time < 25)
                 return targetHitbox.Contains(radius.ToPoint());
             return false;
@@ -151,19 +151,19 @@ public class SlimeBomb : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        var texture = TextureAssets.Projectile[Type].Value;
-        var glow = AssetDirectory.Textures.Glow[0].Value;
-        var ring = AssetDirectory.Textures.GlowRing.Value;
-        var baseFrame = texture.Frame(3, 4, 0, Projectile.frame);
-        var glowFrame = texture.Frame(3, 4, 1, Projectile.frame);
-        var outlineFrame = texture.Frame(3, 4, 2, Projectile.frame);
+        Microsoft.Xna.Framework.Graphics.Texture2D texture = TextureAssets.Projectile[Type].Value;
+        Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
+        Microsoft.Xna.Framework.Graphics.Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
+        Rectangle baseFrame = texture.Frame(3, 4, 0, Projectile.frame);
+        Rectangle glowFrame = texture.Frame(3, 4, 1, Projectile.frame);
+        Rectangle outlineFrame = texture.Frame(3, 4, 2, Projectile.frame);
 
-        var bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[1]);
+        Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[1]);
         bloomColor.A = 0;
 
         if (Projectile.ai[1] == 0) {
-            var ringScale = (float)Math.Cbrt(Utils.GetLerpValue(0, 100, Time, true));
-            var ringPower = 1f + (float)Math.Sin(Math.Pow(Time * 0.027f, 3f)) * 0.4f;
+            float ringScale = (float)Math.Cbrt(Utils.GetLerpValue(0, 100, Time, true));
+            float ringPower = 1f + (float)Math.Sin(Math.Pow(Time * 0.027f, 3f)) * 0.4f;
 
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f * ringScale * ringPower, Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height * 2f + 3f) * ringScale, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f * ringScale * ringPower, 0, glow.Size() * 0.5f, 250f / glow.Height * 2f * 0.5f * ringScale, 0, 0);
@@ -176,8 +176,8 @@ public class SlimeBomb : ModProjectile
 
         }
         else {
-            var ringScale = 1.01f + (float)Math.Sqrt(Time / 60f) * 0.3f;
-            var ringPower = (float)Math.Pow(Utils.GetLerpValue(30, 0, Time, true), 3f);
+            float ringScale = 1.01f + (float)Math.Sqrt(Time / 60f) * 0.3f;
+            float ringPower = (float)Math.Pow(Utils.GetLerpValue(30, 0, Time, true), 3f);
 
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.2f * Utils.GetLerpValue(30, 0, Time, true), Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height * 2f + 5f) * ringScale * ringPower, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f * Utils.GetLerpValue(20, 0, Time, true), 0, glow.Size() * 0.5f, 250f / glow.Height * 2f * 0.6f * ringScale * ringPower, 0, 0);

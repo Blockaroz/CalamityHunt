@@ -67,7 +67,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             if (Time > 95 && Time < 180) {
-                var point = 0f;
+                float point = 0f;
                 return Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Main.projectile[(int)Start].Center, Main.projectile[(int)End].Center, 90, ref point);
             }
             return false;
@@ -75,17 +75,17 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
-            var half = texture.Frame(1, 2, 0, 0);
-            var glowHalf = glow.Frame(1, 2, 0, 0);
+            Microsoft.Xna.Framework.Graphics.Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
+            Rectangle half = texture.Frame(1, 2, 0, 0);
+            Rectangle glowHalf = glow.Frame(1, 2, 0, 0);
 
-            var power = Utils.GetLerpValue(70, 95, Time, true) * Utils.GetLerpValue(180, 170, Time, true);
-            var lineColor = Color.Lerp(new Color(80, 50, 35, 0), new Color(255, 215, 180, 0), Utils.GetLerpValue(55, 65, Time, true) * 0.6f) * MathHelper.SmoothStep(0.15f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.1f, 1f, Utils.GetLerpValue(80, 95, Time, true)) * power;
-            var lineGlowColor = new Color(80, 50, 35, 0) * power;
-            var bloomColor = new Color(30, 14, 8, 0) * Utils.GetLerpValue(0, 20, Time, true) * Utils.GetLerpValue(180, 175, Time, true);
+            float power = Utils.GetLerpValue(70, 95, Time, true) * Utils.GetLerpValue(180, 170, Time, true);
+            Color lineColor = Color.Lerp(new Color(80, 50, 35, 0), new Color(255, 215, 180, 0), Utils.GetLerpValue(55, 65, Time, true) * 0.6f) * MathHelper.SmoothStep(0.15f + (float)Math.Sin(Projectile.localAI[0] * 0.5f) * 0.1f, 1f, Utils.GetLerpValue(80, 95, Time, true)) * power;
+            Color lineGlowColor = new Color(80, 50, 35, 0) * power;
+            Color bloomColor = new Color(30, 14, 8, 0) * Utils.GetLerpValue(0, 20, Time, true) * Utils.GetLerpValue(180, 175, Time, true);
             if (Time > 1) {
-                var wobble = 1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f % MathHelper.TwoPi) * 0.2f;
+                float wobble = 1f + (float)Math.Sin(Projectile.localAI[0] * 0.5f % MathHelper.TwoPi) * 0.2f;
 
                 //double end
                 Vector2 distance = new Vector2(wobble * 0.3f + power * 0.1f, Projectile.Distance(Main.projectile[(int)End].Center) / (half.Height * 1.5f));

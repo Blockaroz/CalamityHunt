@@ -22,7 +22,7 @@ public class MasterOrRevGlobalItem : GlobalItem
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
     {
-        var masterLine = tooltips.Find((t) => t.Name.Equals("Master"));
+        TooltipLine masterLine = tooltips.Find((t) => t.Name.Equals("Master"));
         if (masterLine != null) {
             masterLine.Text += Language.GetTextValue("Mods.CalamityHunt.OrRev");
         }

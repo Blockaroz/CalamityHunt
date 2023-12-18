@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CalamityHunt.Common.Utilities;
-using CalamityHunt.Common.Graphics.RenderTargets;
 using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -189,8 +187,8 @@ namespace CalamityHunt.Content.Mounts
 
                         ballTextureContent.Request(ballFrame.Width, ballFrame.Height, drawPlayer.whoAmI, spriteBatch => {
                             Texture2D ballTexture = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
-                            GetGradientMapValues(out var brightnesses, out var colors);
-                            var effect = AssetDirectory.Effects.HolographicGel.Value;
+                            GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
+                            Effect effect = AssetDirectory.Effects.HolographicGel.Value;
                             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
                             effect.Parameters["colors"].SetValue(colors);
                             effect.Parameters["brightnesses"].SetValue(brightnesses);
@@ -242,8 +240,8 @@ namespace CalamityHunt.Content.Mounts
             brightnesses = new float[10];
             colors = new Vector3[10];
 
-            var maxBright = 0.667f;
-            var rainbowStartOffset = 0.35f + Main.GlobalTimeWrappedHourly * 0.5f % (maxBright * 2f);
+            float maxBright = 0.667f;
+            float rainbowStartOffset = 0.35f + Main.GlobalTimeWrappedHourly * 0.5f % (maxBright * 2f);
             //Calculate and store every non-modulo brightness, with the shifting offset. 
             //The first brightness is ignored for the moment, it will be relevant later. Setting it to -1 temporarily
             brightnesses[0] = -1;
@@ -258,29 +256,29 @@ namespace CalamityHunt.Content.Mounts
             brightnesses[9] = rainbowStartOffset + 0.75f;
 
             //Pass the entire rainbow through modulo 1
-            for (var i = 1; i < 10; i++)
+            for (int i = 1; i < 10; i++)
                 brightnesses[i] = HUtils.Modulo(brightnesses[i], maxBright) * maxBright;
 
             //Store the first element's value so we can find it again later
-            var firstBrightnessValue = brightnesses[1];
+            float firstBrightnessValue = brightnesses[1];
 
             //Sort the values from lowest to highest
             Array.Sort(brightnesses);
 
             //Find the new index of the original first element after the list being sorted
-            var rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
+            int rainbowStartIndex = Array.IndexOf(brightnesses, firstBrightnessValue);
             //Substract 1 from the index, because we are ignoring the currently negative first array slot.
             rainbowStartIndex--;
 
             //9 loop, filling a list of colors in a array of 10 elements (ignoring the first one)
-            for (var i = 0; i < 9; i++) {
+            for (int i = 0; i < 9; i++) {
                 colors[1 + (rainbowStartIndex + i) % 9] = GoozmaColorUtils.Oil[i];
             }
 
             //We always want a brightness at index 0 to be the lower bound
             brightnesses[0] = 0;
             //Make the color at index 0 be a mix between the first and last colors in the list, based on the distance between the 2.
-            var interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
+            float interpolant = (1 - brightnesses[9]) / (brightnesses[1] + (1 - brightnesses[9]));
             colors[0] = Vector3.Lerp(colors[9], colors[0], interpolant);
         }
     }

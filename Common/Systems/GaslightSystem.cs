@@ -24,8 +24,8 @@ public sealed class GaslightSystem : ModSystem
         base.Load();
 
         allowLogging = false;
-        var loggerType = typeof(Logger);
-        var loggerIsEnabledForMethod = loggerType.GetMethod("IsEnabledFor", BindingFlags.Public | BindingFlags.Instance)!;
+        Type loggerType = typeof(Logger);
+        MethodInfo loggerIsEnabledForMethod = loggerType.GetMethod("IsEnabledFor", BindingFlags.Public | BindingFlags.Instance)!;
         loggerIsEnabledForHook = new Hook(loggerIsEnabledForMethod, DisableLoggingWhenDisallowed);
 
         DoGaslighting();
@@ -42,10 +42,10 @@ public sealed class GaslightSystem : ModSystem
 
     private void DoGaslighting()
     {
-        var tmlAsm = typeof(ModLoader).Assembly;
+        Assembly tmlAsm = typeof(ModLoader).Assembly;
 
-        var modlistCommandType = tmlAsm.GetType("Terraria.ModLoader.Default.ModlistCommand");
-        var modlistCommandActionMethod = modlistCommandType!.GetMethod("Action", BindingFlags.Public | BindingFlags.Instance)!;
+        Type? modlistCommandType = tmlAsm.GetType("Terraria.ModLoader.Default.ModlistCommand");
+        MethodInfo modlistCommandActionMethod = modlistCommandType!.GetMethod("Action", BindingFlags.Public | BindingFlags.Instance)!;
         modlistCommandActionHook = new ILHook(modlistCommandActionMethod, HideModFromModListCommand);
     }
 
@@ -53,7 +53,7 @@ public sealed class GaslightSystem : ModSystem
 
     private void HideModFromModListCommand(ILContext il)
     {
-        var c = new ILCursor(il);
+        ILCursor c = new ILCursor(il);
 
         int modListStloc = -1;
 
@@ -69,7 +69,7 @@ public sealed class GaslightSystem : ModSystem
                 return mods;
 
             // TODO: Should we use GetMod here instead of GetInstance?
-            var calamityHunt = ModContent.GetInstance<CalamityHunt>();
+            CalamityHunt calamityHunt = ModContent.GetInstance<CalamityHunt>();
 
             // We can also check internal names instead of pointer equality.
             return mods.Where(x => x != calamityHunt);

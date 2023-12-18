@@ -68,7 +68,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 rotation.Add(offset.X * 0.04f);
                 scale.Add(0.4f);
                 time.Add(0);
-                for (var i = 0; i < Main.rand.Next(3, 5); i++) {
+                for (int i = 0; i < Main.rand.Next(3, 5); i++) {
                     offset = new Vector2(Main.rand.NextFloat(38, 40) * Main.rand.NextFloatDirection(), Main.rand.NextFloat(4, 8) * i);
 
                     position.Add(Projectile.Bottom + new Vector2(offset.X * 0.7f, -35 * (Time / speed) - offset.Y));
@@ -87,7 +87,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             if (position.Count > 0) {
                 if (Height <= 0 && Time > maxHeight * speed + MaxTime) {
-                    for (var i = 0; i < 6; i++) {
+                    for (int i = 0; i < 6; i++) {
                         Dust.NewDustPerfect(position[position.Count - 1] + Main.rand.NextVector2Circular(12, 18) + Vector2.UnitY * 16, DustID.Stone, Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 3, 0, new Color(215, 200, 255), 1.5f);
                         if (Main.rand.NextBool())
                             Dust.NewDustPerfect(position[position.Count - 1] + Main.rand.NextVector2Circular(20, 42), DustID.Shadowflame, Main.rand.NextVector2Circular(6, 1), 0, Color.White, 2f).noGravity = true;
@@ -105,7 +105,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     }
                 }
 
-                for (var i = 0; i < position.Count; i++) {
+                for (int i = 0; i < position.Count; i++) {
                     scale[i] += 0.1f;
                     if (scale[i] > 1f)
                         scale[i] = 1f;
@@ -134,32 +134,32 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = ModContent.Request<Texture2D>(Texture);
-            var glow = ModContent.Request<Texture2D>(Texture + "Glow");
-            var tell = TextureAssets.Extra[178];
+            ReLogic.Content.Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            ReLogic.Content.Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
+            ReLogic.Content.Asset<Texture2D> tell = TextureAssets.Extra[178];
 
             Color glowColor = new Color(100, 60, 255, 0);
             if (Time < 0) {
-                var width = Projectile.width * 1.2f;
-                var tellColor = glowColor * (float)Math.Pow(Utils.GetLerpValue(-70, -30, Time, true), 2f) * Utils.GetLerpValue(0, -60, Time, true) * 0.6f;
+                float width = Projectile.width * 1.2f;
+                Color tellColor = glowColor * (float)Math.Pow(Utils.GetLerpValue(-70, -30, Time, true), 2f) * Utils.GetLerpValue(0, -60, Time, true) * 0.6f;
                 Main.EntitySpriteDraw(tell.Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, Main.screenHeight + 5), null, tellColor, Projectile.rotation - MathHelper.PiOver2, tell.Size() * new Vector2(0f, 0.5f), new Vector2(1.5f, width), 0, 0);
                 return false;
 
             }
 
             if (position.Count > 2) {
-                for (var i = position.Count - 1; i > 0; i--) {
-                    var frame = texture.Frame(4, 1, variant[i], 0);
-                    var rockScale = scale[i] + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.1f;
-                    for (var j = 0; j < 4; j++) {
-                        var off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * j) * rockScale;
+                for (int i = position.Count - 1; i > 0; i--) {
+                    Rectangle frame = texture.Frame(4, 1, variant[i], 0);
+                    float rockScale = scale[i] + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.1f;
+                    for (int j = 0; j < 4; j++) {
+                        Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * j) * rockScale;
                         Main.EntitySpriteDraw(glow.Value, position[i] + off + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, glowColor * 0.7f, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * rockScale, 0, 0);
                     }
                 }
-                for (var i = position.Count - 1; i > 0; i--) {
-                    var frame = texture.Frame(4, 1, variant[i], 0);
-                    var rockScale = scale[i] + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.1f;
-                    var drawColor = Lighting.GetColor(position[i].ToTileCoordinates());
+                for (int i = position.Count - 1; i > 0; i--) {
+                    Rectangle frame = texture.Frame(4, 1, variant[i], 0);
+                    float rockScale = scale[i] + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.1f;
+                    Color drawColor = Lighting.GetColor(position[i].ToTileCoordinates());
                     //drawColor = drawColor.MultiplyRGBA(Color.Lerp(Color.White, Color.DarkOrchid, 0.4f + (float)Math.Sin((time[i] * 0.1f + i * 0.1f) % MathHelper.TwoPi) * 0.4f));
                     Main.EntitySpriteDraw(texture.Value, position[i] + frame.Size() * new Vector2(0f, 0.3f) - Main.screenPosition, frame, drawColor, rotation[i], frame.Size() * new Vector2(0.5f, 0.6f), Projectile.scale * rockScale, 0, 0);
                 }

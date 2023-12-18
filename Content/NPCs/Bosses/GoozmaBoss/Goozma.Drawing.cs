@@ -270,8 +270,8 @@ public partial class Goozma : ModNPC
                 List<float> rotations = new List<float>();
 
                 float partitions = 50;
-                for (var i = 0; i < partitions; i++) {
-                    var offset = new Vector2(24 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (150 + (float)Math.Sin((NPC.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
+                for (int i = 0; i < partitions; i++) {
+                    Vector2 offset = new Vector2(24 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (150 + (float)Math.Sin((NPC.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
                     offset.X *= -1;// Host.NPC.direction;
                     offset += velocity.RotatedBy(-NPC.rotation) * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
                     offset *= 0.5f;
@@ -281,7 +281,7 @@ public partial class Goozma : ModNPC
 
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null);
 
-                var effect = AssetDirectory.Effects.GoozmaCordMap.Value;
+                Effect effect = AssetDirectory.Effects.GoozmaCordMap.Value;
                 effect.Parameters["uTransformMatrix"].SetValue(Matrix.Invert(Main.GameViewMatrix.EffectMatrix) * Matrix.CreateOrthographicOffCenter(0, 1024, 1024, 0, -1, 1));
                 effect.Parameters["uTime"].SetValue((NPC.IsABestiaryIconDummy ? Main.GlobalTimeWrappedHourly * 0.3f : NPC.localAI[0] * 0.005f) % 1f);
                 effect.Parameters["uTexture"].SetValue(AssetDirectory.Textures.Goozma.LiquidTrail.Value);

@@ -51,18 +51,18 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float collisionPoint = 0;
-            var onLine = Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(0, -180 * Projectile.scale).RotatedBy(Projectile.rotation), 6, ref collisionPoint);
+            bool onLine = Collision.CheckAABBvLineCollision(targetHitbox.TopRight(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(0, -180 * Projectile.scale).RotatedBy(Projectile.rotation), 6, ref collisionPoint);
             return onLine && Time > 10;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = ModContent.Request<Texture2D>(Texture);
-            var sparkle = TextureAssets.Extra[98];
-            var glow = ModContent.Request<Texture2D>(Texture + "Glow");
-            var frame = texture.Frame(4, 1, (int)Projectile.localAI[0], 0);
+            ReLogic.Content.Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
+            ReLogic.Content.Asset<Texture2D> sparkle = TextureAssets.Extra[98];
+            ReLogic.Content.Asset<Texture2D> glow = ModContent.Request<Texture2D>(Texture + "Glow");
+            Rectangle frame = texture.Frame(4, 1, (int)Projectile.localAI[0], 0);
 
-            var flip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects flip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Color glowColor = new Color(100, 60, 255, 0);
 
@@ -71,12 +71,12 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, glowColor * Utils.GetLerpValue(20, 80, Projectile.localAI[1], true), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Utils.GetLerpValue(20, 40, Projectile.localAI[1], true), flip, 0);
             }
 
-            for (var i = 0; i < 4; i++) {
-                var off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
+            for (int i = 0; i < 4; i++) {
+                Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + Projectile.rotation);
                 Main.EntitySpriteDraw(glow.Value, Projectile.Center + off - Main.screenPosition, frame, glowColor, Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);
             }
 
-            var sparklePower = (float)Math.Sqrt(Utils.GetLerpValue(8, 11, Time, true) * Utils.GetLerpValue(OutTime - 60, OutTime - 70, Time, true));
+            float sparklePower = (float)Math.Sqrt(Utils.GetLerpValue(8, 11, Time, true) * Utils.GetLerpValue(OutTime - 60, OutTime - 70, Time, true));
             Main.EntitySpriteDraw(sparkle.Value, Projectile.Center - Main.screenPosition, null, glowColor * sparklePower, Projectile.rotation, sparkle.Size() * new Vector2(0.5f, 0.66f), new Vector2(2f, 5f) * Projectile.scale, 0, 0);
 
             Main.EntitySpriteDraw(texture.Value, Projectile.Center - Main.screenPosition, frame, Lighting.GetColor(Projectile.Top.ToTileCoordinates()), Projectile.rotation, frame.Size() * new Vector2(0.5f, 1f), Projectile.scale, flip, 0);

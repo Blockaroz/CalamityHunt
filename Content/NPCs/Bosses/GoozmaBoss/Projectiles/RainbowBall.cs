@@ -41,7 +41,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             if (Time == 0) {
                 Projectile.localAI[0] = Main.rand.NextFloat(20);
 
-                for (var i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
                     Projectile.oldPos[i] = Projectile.Center;
                     Projectile.oldRot[i] = Projectile.rotation;
                 }
@@ -49,7 +49,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.rotation += Projectile.velocity.X * 0.04f;
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 25, Time, true));
 
-            var target = -1;
+            int target = -1;
             if (Main.player.Any(n => n.active && !n.dead)) {
                 target = Main.player.First(n => n.active && !n.dead).whoAmI;
             }
@@ -69,7 +69,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 particle.colorData = new ColorOffsetData(true, Projectile.localAI[0]);
             }));
 
-            for (var i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
+            for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
                 Projectile.oldPos[i] = Vector2.Lerp(Projectile.oldPos[i], Projectile.oldPos[i - 1], 0.66f);
                 Projectile.oldRot[i] = MathHelper.Lerp(Projectile.oldRot[i], Projectile.oldRot[i - 1], 0.66f);
             }
@@ -88,7 +88,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override void OnKill(int timeLeft)
         {
-            for (var i = 0; i < 40; i++) {
+            for (int i = 0; i < 40; i++) {
                 CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
                     particle.position = Projectile.Center;
                     particle.velocity = -Projectile.velocity * 0.2f + Main.rand.NextVector2Circular(3, 3);
@@ -108,21 +108,21 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var texture = TextureAssets.Projectile[Type].Value;
-            var glow = AssetDirectory.Textures.Glow[0].Value;
-            var frame = speedTexture.Frame(3, 1, Projectile.frame, 0);
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
+            Rectangle frame = speedTexture.Frame(3, 1, Projectile.frame, 0);
 
-            var bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) with { A = 0 };
-            var solidColor = bloomColor with { A = 100 };
-            var direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) with { A = 0 };
+            Color solidColor = bloomColor with { A = 100 };
+            SpriteEffects direction = Projectile.velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, solidColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, Projectile.rotation * 1.5f, texture.Size() * 0.5f, Projectile.scale, 0, 0);
 
-            for (var i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
-                var trailColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 2f) * 0.15f) with { A = 0 };
-                var fadeOut = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
-                var outScale = (float)Math.Pow(fadeOut, 1.5f);
+            for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
+                Color trailColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] - i * 2f) * 0.15f) with { A = 0 };
+                float fadeOut = 1f - (float)i / ProjectileID.Sets.TrailCacheLength[Type];
+                float outScale = (float)Math.Pow(fadeOut, 1.5f);
                 Main.EntitySpriteDraw(texture, Projectile.oldPos[i] + Projectile.velocity * i * 0.1f - Main.screenPosition, null, trailColor * outScale, Projectile.oldRot[i], texture.Size() * 0.5f, Projectile.scale * 1.6f * fadeOut, direction, 0);
             }
 

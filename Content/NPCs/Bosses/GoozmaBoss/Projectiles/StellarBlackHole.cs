@@ -47,7 +47,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             if (Time == 0) {
                 Projectile.netUpdate = true;
 
-                var invocation = AssetDirectory.Sounds.GoozmaMinions.StellarBlackHoleSummon;
+                SoundStyle invocation = AssetDirectory.Sounds.GoozmaMinions.StellarBlackHoleSummon;
                 SoundEngine.PlaySound(invocation.WithVolumeScale(1.5f), Projectile.Center);
             }
 
@@ -86,7 +86,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             Projectile.rotation += 0.1f * Projectile.direction;
 
-            for (var i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
                     particle.position = Projectile.Center;
                     particle.velocity = Main.rand.NextVector2Circular(50, 50);
@@ -135,11 +135,11 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             orig(self);
 
             if (Main.projectile.Any(n => n.active && n.type == ModContent.ProjectileType<StellarBlackHole>())) {
-                var projectile = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<StellarBlackHole>());
+                Projectile projectile = Main.projectile.FirstOrDefault(n => n.active && n.type == ModContent.ProjectileType<StellarBlackHole>());
 
-                for (var i = 0; i < Main.musicFade.Length; i++) {
-                    var volume = Main.musicFade[i] * Main.musicVolume * (1f - projectile.scale * 0.3f);
-                    var tempFade = Main.musicFade[i];
+                for (int i = 0; i < Main.musicFade.Length; i++) {
+                    float volume = Main.musicFade[i] * Main.musicVolume * (1f - projectile.scale * 0.3f);
+                    float tempFade = Main.musicFade[i];
                     Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.15f);
                     Main.musicFade[i] = tempFade;
                 }
@@ -150,18 +150,18 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            var glow = AssetDirectory.Textures.Glow[1].Value;
-            var ring = AssetDirectory.Textures.ShockRing.Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[1].Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D ring = AssetDirectory.Textures.ShockRing.Value;
 
-            var intensity = (float)Math.Sqrt(Utils.GetLerpValue(0.2f, 0.6f, Projectile.scale, true));
+            float intensity = (float)Math.Sqrt(Utils.GetLerpValue(0.2f, 0.6f, Projectile.scale, true));
 
-            var scaleWobble = MathF.Sin(Main.GlobalTimeWrappedHourly * 40f) * 0.033f;
+            float scaleWobble = MathF.Sin(Main.GlobalTimeWrappedHourly * 40f) * 0.033f;
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Gold * 0.8f) with { A = 0 }, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 8f + scaleWobble, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), (Color.Red * 0.6f) with { A = 0 }, -Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 20f + scaleWobble * 2f, 0, 0);
 
-            for (var i = 0; i < 7; i++) {
-                var exist = Utils.GetLerpValue(20, 60, Time + i * 3f, true) * intensity;
-                var comeIn = (float)Math.Pow(1f - (Time + i / 7f * 70) % 70 / 70f, 2f);
+            for (int i = 0; i < 7; i++) {
+                float exist = Utils.GetLerpValue(20, 60, Time + i * 3f, true) * intensity;
+                float comeIn = (float)Math.Pow(1f - (Time + i / 7f * 70) % 70 / 70f, 2f);
                 Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, ring.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.3f, ring.Size() * 0.5f, 150f * comeIn, 0, 0);
                 Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, ring.Frame(), Color.Black * Utils.PingPongFrom01To010(comeIn) * exist, (Time + i * 5f) * 0.3f, ring.Size() * 0.5f, 80f * comeIn, 0, 0);
             }
@@ -172,7 +172,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     .UseTargetPosition(Projectile.Center)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.1f % 1f)
                     .UseIntensity(intensity);
-                var shader = Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader;
+                Microsoft.Xna.Framework.Graphics.Effect shader = Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader;
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uPower"].SetValue(24f * intensity);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uSize"].SetValue((0.125f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 0.002f) * intensity);
                 Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uAngle"].SetValue((-40f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 2f) * intensity);
