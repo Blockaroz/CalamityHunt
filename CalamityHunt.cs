@@ -50,8 +50,12 @@ namespace CalamityHunt
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"] = new SlimeMonsoonSkyOld();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoonOld"].Load();
 
-            Ref<Effect> distort = new Ref<Effect>(AssetDirectory.Effects.SlimeMonsoonDistortion.Value);
-            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"] = new Filter(new ScreenShaderData(distort, "DistortionPass"), EffectPriority.Medium);
+            Ref<Effect> pluripotentSpawnDistort = new Ref<Effect>(AssetDirectory.Effects.PluripotentDistortion.Value);
+            Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"] = new Filter(new ScreenShaderData(pluripotentSpawnDistort, "DistortionPass"), EffectPriority.Medium);
+            Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].Load();
+            
+            Ref<Effect> slimeMonsoonDistort = new Ref<Effect>(AssetDirectory.Effects.SlimeMonsoonDistortion.Value);
+            Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"] = new Filter(new ScreenShaderData(slimeMonsoonDistort, "DistortionPass"), EffectPriority.Medium);
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Load();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"] = new SlimeMonsoonSky();
             SkyManager.Instance["HuntOfTheOldGods:SlimeMonsoon"].Load();

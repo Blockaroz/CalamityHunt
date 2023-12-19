@@ -8,6 +8,7 @@
     <LangVersion>11</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Effects\PluripotentDistortion.fx" />
     <None Remove="Assets\Textures\NPCs\Bosses\Goozma_Head_Boss.png" />
   </ItemGroup>
   <ItemGroup>

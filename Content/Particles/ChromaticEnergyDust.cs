@@ -50,7 +50,7 @@ public class ChromaticEnergyDust : Particle
         }
 
         for (int i = oldPos.Length - 1; i > 0; i--) {
-            oldPos[i] = oldPos[i - 1];
+            oldPos[i] = Vector2.Lerp(oldPos[i - 1], position, 0.1f);
             oldRot[i] = oldRot[i - 1];
         }
         oldRot[0] = position.AngleFrom(oldPos[0]);
@@ -87,8 +87,8 @@ public class ChromaticEnergyDust : Particle
         }
 
         for (int i = 1; i < oldPos.Length; i++) {
-            Color trailColor = color with { A = 40 } * (float)Math.Pow(1f - ((float)i / oldPos.Length), 2f) * 0.3f;
-            Vector2 trailStretch = new Vector2(oldPos[i].Distance(oldPos[i - 1]) + 1f, scale * 0.2f);
+            Color trailColor = color with { A = 40 } * (float)Math.Pow(1f - ((float)i / oldPos.Length), 2f) * 0.1f;
+            Vector2 trailStretch = new Vector2(oldPos[i].Distance(oldPos[i - 1]) * 0.5f, scale * 0.4f);
             spriteBatch.Draw(texture, oldPos[i] - Main.screenPosition, null, trailColor, oldRot[i], texture.Size() * 0.5f, trailStretch, 0, 0);
         }
 

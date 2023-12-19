@@ -74,8 +74,7 @@ public partial class Goozma : ModNPC
         Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
 
         SpriteEffects direction = NPC.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-        Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0]);
-        glowColor.A = 0;
+        Color glowColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0])) with { A = 0 };
 
         //Texture2D stick = TextureAssets.FishingLine.Value;
         //spriteBatch.Draw(stick, NPC.Center - Main.screenPosition, null, Color.DimGray, 0, TextureAssets.FishingLine.Size() * new Vector2(0.5f, 0f), new Vector2(6f, 150f / stick.Height + 10 * NPC.scale), 0, 0);
@@ -102,7 +101,7 @@ public partial class Goozma : ModNPC
             spriteBatch.Draw(godEye, NPC.Center - screenPos + realEyeOffset, godEye.Frame(), glowColor * (1f - eyeFlash) * 0.5f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f + eyeFlash * 3f), 0, 0);
             spriteBatch.Draw(godEye, NPC.Center - screenPos + realEyeOffset, godEye.Frame(), glowColor * (1f - eyeFlash) * 0.2f, eyeRot, godEye.Size() * 0.5f, eyeScale * (1f + eyePower.Length() * 0.06f + eyeFlash * 9f), 0, 0);
 
-            spriteBatch.Draw(sclera, NPC.Center - screenPos + realEyeOffset, sclera.Frame(), glowColor * 0.4f, 0, sclera.Size() * 0.5f, 1.05f, 0, 0);
+            spriteBatch.Draw(sclera, NPC.Center - screenPos + realEyeOffset, sclera.Frame(), Color.White, 0, sclera.Size() * 0.5f, 1.05f, 0, 0);
             spriteBatch.Draw(glow, NPC.Center - screenPos + realEyeOffset, glow.Frame(), glowColor * 0.5f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 1.2f, 0, 0);
         }
 
@@ -113,9 +112,17 @@ public partial class Goozma : ModNPC
 
             RestartSpriteBatch(spriteBatch, null, true);
 
-
-
             Main.pixelShader.CurrentTechnique.Passes["ColorOnly"].Apply();
+
+            if (!NPC.IsABestiaryIconDummy) {
+                for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
+                    Vector2 oldPos = NPC.oldPos[i] + NPC.Size * 0.5f;
+                    Color trailColor = (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0] - i * 5f)) with { A = 170 };
+                    trailColor = Color.Lerp(trailColor, Color.Transparent, MathF.Pow((float)i / NPCID.Sets.TrailCacheLength[Type], 0.3f)) * 0.5f;
+                    spriteBatch.Draw(goozmaTexture, oldPos + drawOffset - screenPos, goozmaTexture.Frame(), trailColor, NPC.oldRot[i], goozmaTexture.Size() * 0.5f, NPC.scale, direction, 0);
+                }
+            }
+
             for (int i = 0; i < 4; i++) {
                 Vector2 off = new Vector2(2, 0).RotatedBy(MathHelper.TwoPi / 4f * i + NPC.rotation);
                 spriteBatch.Draw(goozmaTexture, NPC.Center + drawOffset + off - screenPos, goozmaTexture.Frame(), glowColor with { A = 170 }, NPC.rotation, goozmaTexture.Size() * 0.5f, NPC.scale, direction, 0);
@@ -216,7 +223,7 @@ public partial class Goozma : ModNPC
 
             Vector2 position = new Vector2(1000);
             Color color = Color.White;
-            Vector2 velocity = new Vector2(NPC.velocity.X * NPC.direction, NPC.velocity.Y);
+            Vector2 velocity = new Vector2(NPC.velocity.X * NPC.direction, -NPC.velocity.Y);
             Vector2 tentacleVel = new Vector2(-tentacleVelocity.X * NPC.direction, tentacleVelocity.Y);
             float tilt = -extraTilt * NPC.direction + 0.2f;
 
@@ -271,8 +278,8 @@ public partial class Goozma : ModNPC
 
                 float partitions = 50;
                 for (int i = 0; i < partitions; i++) {
-                    Vector2 offset = new Vector2(24 + Utils.GetLerpValue(0, partitions / 2.1f, i, true) * Utils.GetLerpValue(partitions * 1.3f, partitions / 3f, i, true) * (150 + (float)Math.Sin((NPC.localAI[0] * 0.125f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 18 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.3f, i / partitions));
-                    offset.X *= -1;// Host.NPC.direction;
+                    Vector2 offset = new Vector2(20 + Utils.GetLerpValue(0, partitions / 1.8f, i, true) * Utils.GetLerpValue(partitions * 1.4f, partitions / 3f, i, true) * (150 + (float)Math.Sin((NPC.localAI[0] * 0.1f - i / (partitions * 0.036f)) % MathHelper.TwoPi) * 20 * (i / partitions)), 0).RotatedBy(MathHelper.SmoothStep(0.15f, -3.2f, i / partitions));
+                    offset.X *= -1;
                     offset += velocity.RotatedBy(-NPC.rotation) * Utils.GetLerpValue(partitions / 3f, partitions, i, true);
                     offset *= 0.5f;
                     positions.Add(new Vector2(512, 520) + offset);
@@ -291,7 +298,7 @@ public partial class Goozma : ModNPC
                 cordStrip ??= new VertexStrip();
 
                 Color ColorFunc(float progress) => Color.White;
-                float WidthFunc(float progress) => MathF.Pow(Utils.GetLerpValue(1.1f, 0.1f, progress, true), 0.7f) * 18f;
+                float WidthFunc(float progress) => MathF.Pow(Utils.GetLerpValue(1.1f, 0.3f, progress, true), 0.6f) * Utils.GetLerpValue(-0.1f, 0.1f, progress, true) * 18f;
 
                 cordStrip.PrepareStrip(positions.ToArray(), rotations.ToArray(), ColorFunc, WidthFunc, Vector2.Zero, positions.Count, true);
                 cordStrip.DrawTrail();
@@ -302,10 +309,10 @@ public partial class Goozma : ModNPC
 
             if (cordContent.IsTargetReady(identifier)) {
                 Texture2D cordTexture = cordContent.GetTarget(identifier);
-                spriteBatch.Draw(cordTexture, position + hitDirection * 0.5f, null, color, 0, cordTexture.Size() * 0.5f, 2f, 0, 0);
+                spriteBatch.Draw(cordTexture, position + hitDir * 0.5f, null, color, 0, cordTexture.Size() * 0.5f, 2f, 0, 0);
             }
 
-            spriteBatch.Draw(texture, position + hitDirection, null, color, tilt * 0.9f, texture.Size() * 0.5f, headScale, 0, 0);
+            spriteBatch.Draw(texture, position + hitDir, null, color, tilt * 0.9f, texture.Size() * 0.5f, headScale, 0, 0);
 
             if (!Main.xMas) {
                 spriteBatch.Draw(crownTexture, crownPos, null, color, tilt, crownTexture.Size() * new Vector2(0.5f, 1f), 1f, 0, 0);

@@ -50,35 +50,38 @@ float EdgeColor(float4 screen, float2 coords)
     float edges[8];
     
     float imageRatio = uImageSize.x / uImageSize.y;
-    float noise = length(tex2D(texN, uPosition * 0.05 + uScrollFar + float2(coords.x * 0.5 * imageRatio, coords.y * 0.5)).rgb) / 1.5 - 1;
-    float noise2 = length(tex2D(texN, uPosition * 0.05 + uScrollClose + float2(coords.x * 0.5 * imageRatio, coords.y * 0.5 + uTime) + noise * 0.1).rgb) + 1;
 
-    edges[0] = length(tex2D(uImage0, resize(coords, float2(noise2, 0))));
-    edges[1] = length(tex2D(uImage0, resize(coords, float2(0, noise2))));
-    edges[2] = length(tex2D(uImage0, resize(coords, float2(-noise2, 0))));
-    edges[3] = length(tex2D(uImage0, resize(coords, float2(0, -noise2))));
+    const float distance = 2;
+    edges[0] = length(tex2D(uImage0, resize(coords, float2(distance, 0))));
+    edges[1] = length(tex2D(uImage0, resize(coords, float2(0, distance))));
+    edges[2] = length(tex2D(uImage0, resize(coords, float2(-distance, 0))));
+    edges[3] = length(tex2D(uImage0, resize(coords, float2(0, -distance))));
     
-    return smoothstep(0, 0.01, edges[0] + edges[1] + edges[2] + edges[3]) * smoothstep(0.01, 0, length(screen.rgba) - noise2 * 0.01);
+    return smoothstep(0, 0.015, edges[0] + edges[1] + edges[2] + edges[3]) * smoothstep(0.01, -0.01, length(screen.rgba));
 }
 
 float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {  
-    float4 screen = tex2D(uImage0, coords);
     float imageRatio = uImageSize.x / uImageSize.y;
     float2 center = (coords - 0.5) * imageRatio / uZoom;
-
-    float2 realZoom = float2(uZoom, uZoom);
     
+    float edgeNoiseX = length(tex2D(texN, uPosition * 1.5 + uScrollFar + float2(center.x * 0.4 * imageRatio, frac(center.y * 0.4 + uTime)) * 2 / uZoom).rgb) - 0.5;
+    float edgeNoiseY = length(tex2D(texN, uPosition * 1.5 + uScrollClose + float2(center.x * 0.3 * imageRatio, frac(center.y * 0.3 + uTime)) / uZoom).rgb) - 0.5;
+    float2 coordDistortion = float2(edgeNoiseX * 0.02, edgeNoiseY * 0.02 + 0.003) * uZoom;
+
+    float4 screen = tex2D(uImage0, coords - coordDistortion * 0.1);
+
     float noise = length(tex2D(texN, uPosition * 0.025 + uScrollFar + float2(center.x * imageRatio, center.y) * uNoiseRepeats).rgb) / 3 - 0.5;
     float noise2 = length(tex2D(texN, uPosition * 0.05 + uScrollClose + float2(center.x * imageRatio, center.y - uTime * 2) * uNoiseRepeats + noise * 0.5).rgb) / 3 - 0.5;
     
     float spaceFar = length(tex2D(texF, uPosition * 0.05 + uScrollFar + float2(center.x * imageRatio, center.y) + noise2 * 0.5).rgb) / 1.5;
     float spaceClose = length(tex2D(texC, uPosition * 0.25 + uScrollClose + float2(center.x * imageRatio, center.y) + noise2 * 0.1).rgb) / 1.5;
     
-    float edge = EdgeColor(screen, coords);
-    float4 result = float4(((spaceFar + spaceClose * 2 + edge) * uFarColor + pow(spaceClose, 2) * uCloseColor).rgb, 1);
+    float4 distortedScreen = tex2D(uImage0, coords + coordDistortion * 0.2);
+    float4 edge = EdgeColor(distortedScreen, coords + coordDistortion * 0.5) * uOutlineColor;
+    float4 result = float4(((spaceFar + spaceClose * 2) * uFarColor + pow(spaceClose, 2) * uCloseColor).rgb, 1);
     
-    return result * smoothstep(0, 0.0001, length(screen.rgba)) + edge * uOutlineColor * (0.3f + smoothstep(0, 0.2, noise + 0.1) * 0.6);
+    return result * smoothstep(0, 0.0001, length(screen.rgba)) + edge;
 }
 
 technique Technique1

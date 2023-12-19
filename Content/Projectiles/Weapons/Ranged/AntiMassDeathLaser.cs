@@ -17,7 +17,7 @@ public class AntiMassDeathLaser : ModProjectile
 {
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.DrawScreenCheckFluff[Type] = 8000;
+        ProjectileID.Sets.DrawScreenCheckFluff[Type] = 15000;
     }
 
     public override void SetDefaults()
@@ -29,7 +29,7 @@ public class AntiMassDeathLaser : ModProjectile
         Projectile.penetrate = -1;
         Projectile.tileCollide = true;
         Projectile.ownerHitCheck = true;
-        Projectile.extraUpdates = 23;
+        Projectile.extraUpdates = 17;
         Projectile.localNPCHitCooldown = -1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.ignoreWater = true;
@@ -91,7 +91,7 @@ public class AntiMassDeathLaser : ModProjectile
             }
         }
 
-        if (Projectile.timeLeft > 180) {
+        if (Projectile.timeLeft > 240) {
             if (Main.myPlayer == Projectile.owner) {
                 if (DrillTime-- <= 0) {
                     Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 15;
@@ -111,10 +111,10 @@ public class AntiMassDeathLaser : ModProjectile
             }
         }
         else {
-            Projectile.velocity *= 0.9f;
+            Projectile.velocity *= 0.8f;
         }
 
-        if (Projectile.timeLeft < 180 || DrillTime > 0) {
+        if (Projectile.timeLeft < 240 || DrillTime > 0) {
             if (Main.rand.NextBool(3)) {
                 CalamityHunt.particles.Add(Particle.Create<LightningParticle>(particle => {
                     particle.position = Projectile.Center;
@@ -134,7 +134,7 @@ public class AntiMassDeathLaser : ModProjectile
         Projectile.tileCollide = false;
         Projectile.velocity = Vector2.Zero;
 
-        Projectile.timeLeft = (int)MathHelper.Min(Projectile.timeLeft, 180);
+        Projectile.timeLeft = (int)MathHelper.Min(Projectile.timeLeft, 240);
 
         return false;
     }
@@ -186,8 +186,8 @@ public class AntiMassDeathLaser : ModProjectile
         Texture2D texture = TextureAssets.Projectile[Type].Value;
         Rectangle half = texture.Frame(1, 2, 0, 0);
 
-        float thickness = MathF.Cbrt(Utils.GetLerpValue(0, 120, Projectile.timeLeft, true));
-        Vector2 trailDrawScale = new Vector2(thickness * 0.4f, visualSpeed / texture.Height * 2f);
+        float thickness = Utils.GetLerpValue(20, 240, Projectile.timeLeft, true);
+        Vector2 trailDrawScale = new Vector2(thickness * 0.5f, visualSpeed / texture.Height * 2f);
         Vector2 drawPosition = Projectile.Center + Main.rand.NextVector2Circular(3, 3);
 
         Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, half, AntiMassAccumulatorProj.MainColor, Projectile.rotation - MathHelper.PiOver2, half.Size() * new Vector2(0.5f, 1f), trailDrawScale, 0, 0);
@@ -212,7 +212,7 @@ public class AntiMassDeathLaser : ModProjectile
         lightningEffect.Parameters["uColor"].SetValue((Color.White with { A = 0 }).ToVector4());
         lightningEffect.Parameters["uBloomColor"].SetValue((Color.DarkOrange with { A = 20 }).ToVector4());
         lightningEffect.Parameters["uLength"].SetValue(visualSpeed / 128f);
-        lightningEffect.Parameters["uNoiseThickness"].SetValue(1f);
+        lightningEffect.Parameters["uNoiseThickness"].SetValue(1f * thickness);
         lightningEffect.Parameters["uNoiseSize"].SetValue(2f);
         lightningEffect.Parameters["uTime"].SetValue(Projectile.localAI[0]);
         lightningEffect.CurrentTechnique.Passes[0].Apply();

@@ -127,7 +127,7 @@ public static class AssetDirectory
     {
         public static class Goozma
         {
-            public static readonly SoundStyle SlimeAbsorb = new(AssetPath + "Sounds/Goozma/GoozmaSlimeAbsorb", 8) { MaxInstances = 0, Volume = 0.1f };
+            public static readonly SoundStyle SlimeAbsorb = new(AssetPath + "Sounds/Goozma/GoozmaSlimeAbsorb", 8) { MaxInstances = 0, Volume = 0.1f, PitchVariance = 0.2f };
             public static readonly SoundStyle Intro = new(AssetPath + "Sounds/Goozma/GoozmaIntro") { MaxInstances = 0, PlayOnlyIfFocused = true };
             public static readonly SoundStyle Awaken = new(AssetPath + "Sounds/Goozma/GoozmaAwaken") { MaxInstances = 0 };
             public static readonly SoundStyle Hurt = new(AssetPath + "Sounds/Goozma/GoozmaHurt", 1, 3) { MaxInstances = 0, PitchVariance = 0.1f };
@@ -254,7 +254,7 @@ public static class AssetDirectory
         public static readonly Asset<Effect> SlimeMonsoonOldCloudLayer = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/SlimeMonsoonOldCloudLayer");
         public static readonly Asset<Effect> SlimeMonsoonSkyLayer = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/SlimeMonsoonSkyLayer");
         public static readonly Asset<Effect> SlimeMonsoonDistortion = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/SlimeMonsoonDistortion");
-        //public static readonly Asset<Effect> PluripotentEggDistortion = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/PluripotentEggDistortion");
+        public static readonly Asset<Effect> PluripotentDistortion = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/PluripotentDistortion");
 
         public static readonly Asset<Effect> GoozmaCordMap = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/GoozmaCordMap");
         public static readonly Asset<Effect> GooLightning = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/GooLightningEffect");

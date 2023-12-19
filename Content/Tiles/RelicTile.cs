@@ -44,6 +44,11 @@ namespace CalamityHunt.Content.Tiles
             // Register map name and color
             // "MapObject.Relic" refers to the translation key for the vanilla "Relic" text
             AddMapEntry(new Color(233, 207, 94), Language.GetText("MapObject.Relic"));
+
+            AssetDirectory.Textures.Relic ??= new Dictionary<int, Asset<Texture2D>>();
+
+            Asset<Texture2D> newAsset = AssetUtilities.RequestImmediate<Texture2D>(AssetDirectory.AssetPath + "Textures/Tiles/Relics/" + Name);
+            AssetDirectory.Textures.Relic.Add(Type, newAsset);
         }
 
         public override bool CreateDust(int i, int j, ref int type) => false;
@@ -56,15 +61,6 @@ namespace CalamityHunt.Content.Tiles
             if (drawData.tileFrameX % FrameWidth == 0 && drawData.tileFrameY % FrameHeight == 0) {
                 Main.instance.TilesRenderer.AddSpecialLegacyPoint(i, j);
             }
-        }
-
-        public override void Load()
-        {
-            if (AssetDirectory.Textures.Relic == null)
-                AssetDirectory.Textures.Relic = new Dictionary<int, Asset<Texture2D>>();
-
-            Asset<Texture2D> newAsset = AssetUtilities.RequestImmediate<Texture2D>(AssetDirectory.AssetPath + "Textures/Tiles/Relics/" + Name);
-            AssetDirectory.Textures.Relic.Add(Type, newAsset);
         }
 
         public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
@@ -108,9 +104,9 @@ namespace CalamityHunt.Content.Tiles
             Color effectColor = color;
             effectColor.A = 0;
             effectColor = effectColor * 0.1f * scale;
-            for (int h = 0; h < 6; h++)
+            for (int h = 0; h < 6; h++) {
                 spriteBatch.Draw(texture, drawPos + (MathHelper.TwoPi * h / 6f).ToRotationVector2() * (6f + offset * 2f), frame, effectColor, 0f, origin, 1f, effects, 0f);
-
+            }
         }
     }
 }

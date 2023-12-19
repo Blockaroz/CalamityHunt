@@ -152,19 +152,19 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             Vector2 scytheEnd = Projectile.Center + Projectile.rotation.ToRotationVector2() * 110 * (Projectile.scale + (1f - swingPercent) * swingPercent * 4f);
             Vector2 swingEnd = Projectile.Center + Projectile.rotation.ToRotationVector2() * 200 * (Projectile.scale + (1f - swingPercent) * swingPercent * 4f);
 
-            if (swingPercent2 > 0.45f && swingPercent < 0.96f) {
+            if (swingPercent2 > 0.45f && swingPercent < 0.964f) {
                 Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.1f, 0.1f).ValueAt(Projectile.localAI[0]) with { A = 128 };
 
-                for (int i = 0; i < 1 + (int)((swingPercent - 0.1) * 15f); i++) {
+                for (int i = 0; i < 2 + (int)((swingPercent - 0.1) * 12f); i++) {
                     CalamityHunt.particles.Add(Particle.Create<FusionFlameParticle>(particle => {
                         particle.position = Vector2.Lerp(scytheEnd, swingEnd, Main.rand.NextFloat(0.5f, 0.6f)) + Main.rand.NextVector2Circular(10, 120).RotatedBy(Projectile.rotation + (i / 5f * 0.1f) * Projectile.spriteDirection);
                         particle.velocity = (Projectile.rotation + (MathHelper.PiOver2 + i / 5f * 0.01f) * Projectile.spriteDirection).ToRotationVector2().RotatedByRandom(0.2f) * Main.rand.NextFloat(3f, 6f);
                         particle.rotation = particle.velocity.ToRotation();
-                        particle.scale = (swingPercent - 0.1f) * 7f + Main.rand.NextFloat(1f, 2f);
-                        particle.maxTime = Main.rand.Next(30, 60);
+                        particle.scale = (swingPercent - 0.1f) * 5f + Main.rand.NextFloat(1f, 2f);
+                        particle.maxTime = Main.rand.Next(25, 40);
                         particle.color = glowColor * 1.5f;
                         particle.fadeColor = glowColor * 0.4f;
-                        particle.anchor = () => Player.velocity * 0.6f;
+                        particle.anchor = () => Player.velocity * 0.4f;
                         particle.gravity = particle.position.DirectionTo(Projectile.Center) * 0.1f;
                     }));
                 }

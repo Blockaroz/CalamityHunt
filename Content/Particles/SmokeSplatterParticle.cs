@@ -29,15 +29,16 @@ public class SmokeSplatterParticle : Particle
         style = Main.rand.Next(5);
         direction = Main.rand.NextBool().ToDirectionInt();
         scale *= Main.rand.NextFloat(0.9f, 1.1f);
-        rotationalVelocity = Main.rand.NextFloat(0.05f);
+        rotationalVelocity = Main.rand.NextFloat(0.2f);
+        maxTime = (int)(maxTime * 0.66f);
     }
 
     public override void Update()
     {
-        float progress = time / (maxTime * 2f);
+        float progress = (float)time / maxTime;
 
-        velocity *= 1f - progress * 0.3f;
-        velocity += gravity * (1f + progress * 0.5f);
+        velocity *= 0.97f;
+        velocity += gravity * (0.5f + progress);
 
         if (time++ > maxTime) {
             ShouldRemove = true;
@@ -47,30 +48,31 @@ public class SmokeSplatterParticle : Particle
             position += anchor.Invoke();
         }
 
+        rotationalVelocity *= 0.96f;
         rotation += (1f - MathF.Cbrt(progress)) * rotationalVelocity * direction;
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        float progress = time / (maxTime * 1.5f);
+        float progress = (float)time / maxTime;
 
         Texture2D texture = AssetDirectory.Textures.Particle[Type].Value;
         Rectangle frame = texture.Frame(1, 5, 0, style);
         SpriteEffects flip = direction > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
-        Color drawColor = Color.Lerp(color, fadeColor, Utils.GetLerpValue(0f, 0.2f, progress, true));
-        float drawScale = scale * MathF.Sqrt(Utils.GetLerpValue(-0.1f, 5f, time, true)) * (0.5f + progress * 1.33f);
+        Color drawColor = Color.Lerp(color, fadeColor, Utils.GetLerpValue(0f, 0.5f, progress, true));
+        float drawScale = scale * MathF.Sqrt(Utils.GetLerpValue(0f, 6f, time, true)) * (0.4f + progress * 0.5f);
 
         Effect dissolveEffect = AssetDirectory.Effects.FlameDissolve.Value;
-        dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[11].Value);
-        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(0.5f + scale * 0.05f));
+        dissolveEffect.Parameters["uTexture0"].SetValue(AssetDirectory.Textures.Noise[9].Value);
+        dissolveEffect.Parameters["uTextureScale"].SetValue(new Vector2(2f + scale * 0.07f));
         dissolveEffect.Parameters["uFrameCount"].SetValue(5);
-        dissolveEffect.Parameters["uProgress"].SetValue(Math.Clamp(1f - MathF.Sqrt(1f - progress), 0f, 1f));
-        dissolveEffect.Parameters["uPower"].SetValue(1f + Utils.GetLerpValue(0.15f, 0.8f, progress, true) * 50f);
-        dissolveEffect.Parameters["uNoiseStrength"].SetValue(0.7f);
+        dissolveEffect.Parameters["uProgress"].SetValue(MathF.Pow(progress, 1.3f));
+        dissolveEffect.Parameters["uPower"].SetValue(2f + Utils.GetLerpValue(0.15f, 0.8f, progress, true) * 50f);
+        dissolveEffect.Parameters["uNoiseStrength"].SetValue(progress);
         dissolveEffect.CurrentTechnique.Passes[0].Apply();
 
-        Vector2 squish = new Vector2(1f - progress * 0.4f, 1f + progress * 0.4f);
-        spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation + MathHelper.Pi / 3f * direction, frame.Size() * 0.5f, squish * drawScale * 0.66f, flip, 0);
+        Vector2 squish = new Vector2(1f - progress * 0.1f, 1f + progress * 0.1f);
+        spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation, frame.Size() * 0.5f, squish * drawScale * 0.5f, flip, 0);
 
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }

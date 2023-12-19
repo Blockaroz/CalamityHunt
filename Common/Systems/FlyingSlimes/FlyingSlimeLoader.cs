@@ -87,7 +87,7 @@ public class FlyingSlimeLoader : ILoadable
         public static void DrawFullBright(FlyingSlimeData data, SpriteBatch spriteBatch, Vector2 position, float rotation, float scale, float progress, Color color)
         {
             Texture2D texture = AssetDirectory.Textures.FlyingSlime[data.Type].Value;
-            Color secondColor = color;
+            Color secondColor = data.DrawColor * Utils.GetLerpValue(0, 0.1f, progress, true);
             if (ContentSamples.NpcsByNetId.ContainsKey(data.NPCType)) {
                 secondColor = ContentSamples.NpcsByNetId[data.NPCType].GetAlpha(color);
             }
@@ -105,8 +105,8 @@ public class FlyingSlimeLoader : ILoadable
             Texture2D texture = AssetDirectory.Textures.FlyingSlime[data.Type].Value;
             Texture2D keyTexture = TextureAssets.Item[ItemID.GoldenKey].Value;
 
-            spriteBatch.Draw(keyTexture, position, texture.Frame(), color, rotation, keyTexture.Size() * 0.5f, scale, 0, 0);
-            Color secondColor = color;
+            spriteBatch.Draw(keyTexture, position, keyTexture.Frame(), color, rotation, keyTexture.Size() * 0.5f, scale, 0, 0);
+            Color secondColor = color.MultiplyRGBA(data.DrawColor);
             if (ContentSamples.NpcsByNetId.ContainsKey(data.NPCType)) {
                 secondColor = ContentSamples.NpcsByNetId[data.NPCType].GetAlpha(color);
             }
@@ -190,7 +190,7 @@ public class FlyingSlimeLoader : ILoadable
 
             Color secondColor = data.DrawColor;
             if (ContentSamples.NpcsByNetId.ContainsKey(data.NPCType)) {
-                secondColor = ContentSamples.NpcsByNetId[data.NPCType].GetColor(Color.White);
+                secondColor = ContentSamples.NpcsByNetId[data.NPCType].color;
             }
 
             if (Main.rand.NextBool(4)) {
@@ -221,6 +221,22 @@ public class FlyingSlimeLoader : ILoadable
                 Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.Sand, 0, 0, 0, Color.White, 1.5f);
                 dust.noGravity = true;
             }
+        }        
+        
+        public static void Spore(FlyingSlimeData data, Vector2 position)
+        {
+            if (Main.rand.NextBool(4)) {
+                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.JungleSpore, 0, 0, 0, Color.White, 1.5f);
+                dust.noGravity = true;
+            }
+        }        
+       
+        public static void Shimmer(FlyingSlimeData data, Vector2 position)
+        {
+            if (Main.rand.NextBool(4)) {
+                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.Sand, 0, 0, 0, Color.White, 1.5f);
+                dust.noGravity = true;
+            }
         }
     }
 
@@ -236,11 +252,12 @@ public class FlyingSlimeLoader : ILoadable
     public void Load(Mod mod)
     {
         flyingSlimeDataInstances = new List<FlyingSlimeData>() {
-            new FlyingSlimeData("NormalSlime", 20f, Conditions.None, NPCID.BlueSlime, GetColor(NPCID.BlueSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
-            new FlyingSlimeData("NormalSlime", 40f, Conditions.None, NPCID.GreenSlime, GetColor(NPCID.GreenSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
-            new FlyingSlimeData("NormalSlime", 50f, Conditions.None, NPCID.RedSlime, GetColor(NPCID.RedSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
-            new FlyingSlimeData("NormalSlime", 50f, Conditions.None, NPCID.YellowSlime, GetColor(NPCID.YellowSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
+            new FlyingSlimeData("NormalSlime", 50f, Conditions.None, NPCID.BlueSlime, GetColor(NPCID.BlueSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
+            new FlyingSlimeData("NormalSlime", 60f, Conditions.None, NPCID.GreenSlime, GetColor(NPCID.GreenSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
+            new FlyingSlimeData("NormalSlime", 80f, Conditions.None, NPCID.RedSlime, GetColor(NPCID.RedSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
+            new FlyingSlimeData("NormalSlime", 80f, Conditions.None, NPCID.YellowSlime, GetColor(NPCID.YellowSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
             new FlyingSlimeData("NormalSlime", 80f, Conditions.None, NPCID.BlackSlime, GetColor(NPCID.BlackSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
+            new FlyingSlimeData("NormalSlime", 150f, Conditions.None, NPCID.JungleSlime, GetColor(NPCID.JungleSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
             new FlyingSlimeData("BigSlime", 80f, Conditions.None, NPCID.PurpleSlime, GetColor(NPCID.PurpleSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
             new FlyingSlimeData("BigSlime", 80f, Conditions.None, NPCID.MotherSlime, GetColor(NPCID.MotherSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
             new FlyingSlimeData("NormalSlime", 80f, Conditions.None, NPCID.BabySlime, GetColor(NPCID.BabySlime), dustMethod: DustMethods.Default, speed: 1f, specialDraw : DrawMethods.DrawSmall, load: true),
@@ -257,7 +274,7 @@ public class FlyingSlimeLoader : ILoadable
             new FlyingSlimeData("SandSlime", 700f, Conditions.None, NPCID.SandSlime, GetColor(NPCID.SandSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
             new FlyingSlimeData("JungleSlimeSpiked", 700f, Conditions.None, NPCID.SpikedJungleSlime, GetColor(NPCID.SpikedJungleSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
             new FlyingSlimeData("SpikedSlime", 700f, Conditions.None, NPCID.SlimeSpiked, GetColor(NPCID.SlimeSpiked), dustMethod: DustMethods.Default, speed: 1f, load: true),
-            new FlyingSlimeData("DungeonSlime", 1500f, Conditions.None, NPCID.DungeonSlime, GetColor(NPCID.DungeonSlime), dustMethod: DustMethods.Default, speed: 1f, load: true),
+            new FlyingSlimeData("DungeonSlime", 1500f, Conditions.None, NPCID.DungeonSlime, GetColor(NPCID.DungeonSlime), dustMethod: DustMethods.Default, speed: 1f, specialDraw: DrawMethods.DrawWithKey, load: true),
             new FlyingSlimeData("HoppinJack", Conditions.IsHalloween() ? 150f : 2000f, Conditions.None, NPCID.HoppinJack, GetColor(NPCID.HoppinJack), dustMethod: DustMethods.Flame, speed: 1.5f, load: true),
             new FlyingSlimeData("SlimeFish", 1000f, Conditions.None, NPCID.None, Color.White, load: true),
             new FlyingSlimeData("GoldSlime", 5000f, Conditions.None, NPCID.GoldenSlime, GetColor(NPCID.GoldenSlime), dustMethod: DustMethods.Default, speed: 2f, load: true),

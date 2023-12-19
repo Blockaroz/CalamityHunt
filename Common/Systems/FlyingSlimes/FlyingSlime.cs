@@ -26,11 +26,13 @@ public class FlyingSlime
 
     public bool ShouldRemove { get; private set; }
 
-    public void Update(float curvature)
+    public float curvature;
+
+    public void Update(float curveModifier = 0f)
     {
         Vector2 distance = Vector2.Lerp(startPosition, targetPosition, progress);
         Vector2 lastPos = new Vector2(currentPosition.X, currentPosition.Y);
-        startPosition += (startPosition.AngleTo(targetPosition) - MathHelper.PiOver2).ToRotationVector2() * curvature * MathHelper.TwoPi * (1f - progress * 0.7f);
+        startPosition += (startPosition.AngleTo(targetPosition) - MathHelper.PiOver2).ToRotationVector2() * (curvature + curveModifier) * MathHelper.TwoPi * (1f - progress * 0.7f);
         currentPosition = distance;
         rotation = (lastPos - currentPosition).ToRotation() - MathHelper.PiOver2;
         progress += data.Speed / 80f;
@@ -63,11 +65,12 @@ public class FlyingSlime
         }
     }
 
-    public FlyingSlime(int type)
+    public FlyingSlime(int type, float curvature)
     {
         data = FlyingSlimeLoader.flyingSlimeDataInstances[type];
         scale = Main.rand.NextFloat(0.9f, 1.1f);
         data.RandomValue = Main.rand.Next(100);
+        this.curvature = curvature;
     }
 
     public static FlyingSlime CreateRandom()
@@ -80,6 +83,6 @@ public class FlyingSlime
             }
         }
 
-        return new FlyingSlime(random.Get());
+        return new FlyingSlime(random.Get(), Main.rand.NextFloat(-4f, 4f));
     }
 }

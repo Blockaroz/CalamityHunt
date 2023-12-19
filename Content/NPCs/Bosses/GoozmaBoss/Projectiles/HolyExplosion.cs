@@ -9,6 +9,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Events;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -39,22 +40,23 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override void AI()
         {
-            if (Time > 85)
+            if (Time > 120)
                 Projectile.Kill();
 
             if (Config.Instance.photosensitiveToggle) {
-                float strength = Utils.GetLerpValue(0, 30, Time, true) * Utils.GetLerpValue(80, 40, Time, true);
-                if (Time % 3 == 0)
+                float strength = Utils.GetLerpValue(1, 5, Time, true) * Utils.GetLerpValue(110, 40, Time, true);
+                if (Time % 3 == 0) {
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), strength * 70, 15, 5));
+                }
+                ScreenDarkness.frontColor = new Color(255, 255, 255, 128);
+                ScreenDarkness.screenObstruction = strength;
             }
 
-            if (Time == 0) {
-                SoundStyle explosion = AssetDirectory.Sounds.GoozmaMinions.PixieBallExplode;
-                SoundEngine.PlaySound(explosion, Projectile.Center);
+            if (Time < 3) {
+                SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.PixieBallExplode.WithVolumeScale(1.5f).WithPitchOffset(-0.5f + Time * 0.5f));
             }
             if (Time == 35) {
-                SoundStyle ringing = AssetDirectory.Sounds.Goozma.EarRinging;
-                SoundEngine.PlaySound(ringing.WithVolumeScale(2f), Projectile.Center);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.EarRinging.WithVolumeScale(2f), Projectile.Center);
             }
 
             bool shouldParticle = !Config.Instance.photosensitiveToggle ? Time % 5 == 0 : true;

@@ -371,20 +371,19 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                         player.velocity.Y = -20;
 
                     Projectile leftPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(-190, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
-                    leftPillar.ai[0] = -25;
+                    leftPillar.ai[0] = -30;
                     leftPillar.ai[1] = 45;
                     leftPillar.ai[2] = spikeTime * spikeCount;
 
                     Projectile rightPillar = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), saveTarget + new Vector2(190, 100), Vector2.Zero, ModContent.ProjectileType<EbonstonePillar>(), GetDamage(3), 0);
-                    rightPillar.ai[0] = -35;
+                    rightPillar.ai[0] = -30;
                     rightPillar.ai[1] = 45;
                     rightPillar.ai[2] = spikeTime * spikeCount;
 
                     NPC.velocity.Y -= 40;
                     saveTarget = saveTarget - new Vector2(0, 1400);
 
-                    SoundStyle raise = AssetDirectory.Sounds.GoozmaMinions.EbonstoneRaise;
-                    SoundEngine.PlaySound(raise, NPC.Center);
+                    SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.EbonstoneRaise, NPC.Center);
                 }
             }
             else {
