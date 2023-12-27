@@ -27,11 +27,13 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         {
             Projectile.Resize((int)(MathF.Sqrt(Utils.GetLerpValue(0, 50, Time, true)) * Size), Projectile.height);
 
-            if (Time > 60)
+            if (Time > 60) {
                 Projectile.Kill();
+            }
 
-            if (Time > 30)
+            if (Time > 30) {
                 Projectile.damage = 0;
+            }
 
             if (Time > 0) {
                 float prog = MathF.Pow(Utils.GetLerpValue(0, 60, Time, true), 0.7f);

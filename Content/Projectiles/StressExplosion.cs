@@ -61,15 +61,19 @@ namespace CalamityHunt.Content.Projectiles
                     }));
                 }
             }
-            if (Time > 20)
+            if (Time > 20) {
                 Projectile.Kill();
+            }
+
             Time++;
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Stressed > 0)
+            if (Stressed > 0) {
                 return targetHitbox.Contains((Projectile.Center + new Vector2(Math.Min(Projectile.Distance(targetHitbox.Center()), 128), 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center()))).ToPoint());
+            }
+
             return targetHitbox.Contains((Projectile.Center + new Vector2(Math.Min(Projectile.Distance(targetHitbox.Center()), 64), 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center()))).ToPoint());
         }
 

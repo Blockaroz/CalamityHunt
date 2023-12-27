@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Gores.CrystalShieldGores;
 using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -96,20 +96,25 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
         public override void AI()
         {
-            if (NPC.ai[2] < 0)
+            if (NPC.ai[2] < 0) {
                 NPC.ai[2] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+            }
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active)) {
                 NPC.active = false;
+            }
 
-            if (wingFrame == 2 && NPC.frameCounter % 8 == 0)
+            if (wingFrame == 2 && NPC.frameCounter % 8 == 0) {
                 SoundEngine.PlaySound(SoundID.Item32.WithVolumeScale(2f), NPC.Center);
+            }
 
             NPC.realLife = Host.whoAmI;
 
-            if (!NPC.HasPlayerTarget)
+            if (!NPC.HasPlayerTarget) {
                 NPC.TargetClosestUpgraded();
-            if (!NPC.HasPlayerTarget)
+            }
+            if (!NPC.HasPlayerTarget) {
                 NPC.active = false;
+            }
 
             NPC.damage = 0;
 
@@ -123,7 +128,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 }
                 NPC.frameCounter++;
             }
-            else switch (Attack) {
+            else {
+                switch (Attack) {
                     case (int)AttackList.PrismDestroyer:
                         PrismDestroyer();
                         break;
@@ -149,25 +155,29 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                         NPC.damage = 0;
                         NPC.velocity *= 0.5f;
 
-                        if (Time < 15)
+                        if (Time < 15) {
                             Host.ai[0] = 0;
+                        }
 
                         break;
 
                     case (int)AttackList.TooFar:
 
-                        if (Time < 5)
+                        if (Time < 5) {
                             saveTarget = Target.Center;
+                        }
 
                         Vector2 midPoint = new Vector2((NPC.Center.X + saveTarget.X) / 2f, NPC.Center.Y);
                         Vector2 jumpTarget = Vector2.Lerp(Vector2.Lerp(NPC.Center, midPoint, Utils.GetLerpValue(0, 15, Time, true)), Vector2.Lerp(midPoint, saveTarget, Utils.GetLerpValue(5, 30, Time, true)), Utils.GetLerpValue(0, 30, Time, true));
                         NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(jumpTarget).SafeNormalize(Vector2.Zero) * NPC.Distance(jumpTarget) * 0.5f * Utils.GetLerpValue(0, 35, Time, true), (float)Math.Pow(Utils.GetLerpValue(0, 40, Time, true), 2f));
                         Host.ai[0] = 0;
 
-                        if (Time < 40)
+                        if (Time < 40) {
                             squishFactor = Vector2.Lerp(Vector2.One, new Vector2(0.6f, 1.3f), Time / 40f);
-                        else
+                        }
+                        else {
                             squishFactor = Vector2.Lerp(new Vector2(1.4f, 0.5f), Vector2.One, Utils.GetLerpValue(40, 54, Time, true));
+                        }
 
                         if (Time > 55) {
                             NPC.velocity *= 0f;
@@ -176,6 +186,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                         }
                         break;
                 }
+            }
 
             if (Main.rand.NextBool(10)) {
                 CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
@@ -196,11 +207,13 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             Attack = (int)AttackList.Interrupt;
             squishFactor = Vector2.One;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++) {
                 Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(40, 20), DustID.TintableDust, Main.rand.NextVector2Circular(15, 8), 200, Color.Pink, 1.5f);
+            }
 
-            if (Main.netMode == NetmodeID.MultiplayerClient)
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
                 NPC.netUpdate = true;
+            }
         }
 
         private Vector2 saveTarget;
@@ -227,8 +240,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                     SoundEngine.PlaySound(SoundID.QueenSlime, NPC.Center);
                 }
 
-                if (Time % 150 > 70 && Time % 150 < 100 && Time % 3 == 0)
+                if (Time % 150 > 70 && Time % 150 < 100 && Time % 3 == 0) {
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(saveTarget, Main.rand.NextVector2CircularEdge(3, 3), 4f * Utils.GetLerpValue(100, 70, Time % 150, true), 10, 12));
+                }
 
                 if (Time % 150 == 5) {
                     SoundStyle createSound = AssetDirectory.Sounds.GoozmaMinions.PrismDestroyerTelegraph;
@@ -249,8 +263,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                     SoundEngine.PlaySound(expandSound, NPC.Center);
                 }
 
-                foreach (Projectile proj in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<PrismDestroyer>() && n.ai[0] < 2))
+                foreach (Projectile proj in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<PrismDestroyer>() && n.ai[0] < 2)) {
                     proj.ai[2] += (NPC.velocity.X > 0 ? 1 : -1) * 0.07f * Utils.GetLerpValue(53, 10, Time % 150, true);
+                }
 
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center) * 0.07f * Utils.GetLerpValue(147, 40, Time % 150, true), 0.1f + 0.1f * Utils.GetLerpValue(170, 40, Time % 150, true));
 
@@ -264,8 +279,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
             NPC.damage = 0;
 
-            if (Time > danceCount * 150 + 30)
+            if (Time > danceCount * 150 + 30) {
                 Reset();
+            }
 
         }
 
@@ -283,15 +299,19 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 squishFactor = Vector2.Lerp(Vector2.Lerp(squishFactor, wobble, Utils.GetLerpValue(40, lengthOfAttack, Time, true) * 0.2f), Vector2.Lerp(squishFactor, Vector2.One, 0.1f), Utils.GetLerpValue(40 + lengthOfAttack, 110 + lengthOfAttack, Time, true));
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(Target.Center + new Vector2(0, -260)).SafeNormalize(Vector2.Zero) * NPC.Distance(Target.Center + new Vector2(0, -170)) * 0.2f, 0.2f + (float)Math.Sin(Time * 0.3f) * 0.1f);
 
-                if (Time <= lengthOfAttack + 100 && Time % 15 == 0)
-                    for (int i = 0; i < crystalFrequency; i++)
+                if (Time <= lengthOfAttack + 100 && Time % 15 == 0) {
+                    for (int i = 0; i < crystalFrequency; i++) {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Top, Main.rand.NextVector2Circular(8, 5) - Vector2.UnitY * 12 + NPC.DirectionTo(Target.Center).SafeNormalize(Vector2.Zero) * 5f, ModContent.ProjectileType<GelCrystalShard>(), GetDamage(2), 0);
+                    }
+                }
             }
-            if (Time > lengthOfAttack)
+            if (Time > lengthOfAttack) {
                 NPC.velocity *= 0.9f;
+            }
 
-            if (Time > lengthOfAttack + 110)
+            if (Time > lengthOfAttack + 110) {
                 Reset();
+            }
         }
 
         public int shieldChargeCount;
@@ -380,34 +400,43 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
         private void ShatterShield()
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment0>(), 1f);
+            }
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment1>(), 1f);
+            }
 
             Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment2>(), 1f);
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment3>(), 1f);
+            }
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment4>(), 1f);
+            }
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment5>(), 1f);
+            }
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment6>(), 1f);
+            }
 
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 7; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(9, 9), ModContent.GoreType<CrystalShieldFragment7>(), 1f);
+            }
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(11, 11), ModContent.GoreType<CrystalShieldFragment8>(), 1f);
+            }
 
-            for (int i = 0; i < 14; i++)
+            for (int i = 0; i < 14; i++) {
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center + Main.rand.NextVector2Circular(50, 50), Main.rand.NextVector2Circular(12, 12), ModContent.GoreType<CrystalShieldFragment9>(), 1f);
+            }
 
             SoundStyle shatter = AssetDirectory.Sounds.GoozmaMinions.PixiePrismDestroyed;
             SoundEngine.PlaySound(shatter, NPC.Center);
@@ -495,21 +524,25 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                 }));
             }
 
-            if (Time == 1)
+            if (Time == 1) {
                 ShatterShield();
+            }
 
-            if (Time == 20)
+            if (Time == 20) {
                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HolyExplosion>(), 0, 0);
+            }
 
-            if (Time < 35)
+            if (Time < 35) {
                 Host.ai[0] = 0;
+            }
 
             if (Time > 40) {
                 foreach (Player player in Main.player.Where(n => n.active && !n.dead && n.Distance(NPC.Center) < 8000)) {
                     bool shouldDie = player.statLife < 5;
                     player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} saw the light."), 9999, -1, false, true, 200, false, 0, 0, 0);
-                    if (!shouldDie)
+                    if (!shouldDie) {
                         player.statLife = 5;
+                    }
                     player.immuneTime += 120;
                 }
 
@@ -535,14 +568,17 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter++;
-            if (NPC.frameCounter % 7 == 0)
+            if (NPC.frameCounter % 7 == 0) {
                 npcFrame = (npcFrame + 1) % Main.npcFrameCount[Type];
+            }
 
-            if (NPC.frameCounter % 8 == 0 && Time >= 0)
+            if (NPC.frameCounter % 8 == 0 && Time >= 0) {
                 wingFrame = (wingFrame + 1) % 4;
+            }
 
-            if (NPC.frameCounter > 56)
+            if (NPC.frameCounter > 56) {
                 NPC.frameCounter = 0;
+            }
 
         }
 
@@ -563,14 +599,14 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
         public override void Load()
         {
-            coreTexture = AssetDirectory.Textures.Goozma.CrystalMine.Value;
-            wingsTexture = AssetDirectory.Textures.Goozma.DivineWings.Value;
-            shineTexture = ModContent.Request<Texture2D>(Texture + "Shine", AssetRequestMode.ImmediateLoad).Value;
-            trailTexture = ModContent.Request<Texture2D>(Texture + "Trail", AssetRequestMode.ImmediateLoad).Value;
-            dangerTexture = ModContent.Request<Texture2D>(Texture + "Danger", AssetRequestMode.ImmediateLoad).Value;
-            dangerShieldTexture = ModContent.Request<Texture2D>(Texture + "DangerShield", AssetRequestMode.ImmediateLoad).Value;
-            dangerShieldCrackTexture = ModContent.Request<Texture2D>(Texture + "DangerShieldCracks", AssetRequestMode.ImmediateLoad).Value;
-            dangerShineTexture = ModContent.Request<Texture2D>(Texture + "DangerShine", AssetRequestMode.ImmediateLoad).Value;
+            coreTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "CrystalOrb").Value;
+            wingsTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Wings").Value;
+            shineTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Shine").Value;
+            trailTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Trail").Value;
+            dangerTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Danger").Value;
+            dangerShieldTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "DangerShield").Value;
+            dangerShieldCrackTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "DangerShieldCracks").Value;
+            dangerShineTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "DangerShine").Value;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -578,7 +614,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
             Texture2D texture = TextureAssets.Npc[Type].Value;
             Texture2D sparkle = TextureAssets.Extra[89].Value;
             Texture2D glow = AssetDirectory.Textures.Glow[1].Value;
-            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
+            Texture2D ring = AssetDirectory.Textures.Glow[3].Value;
 
             Rectangle frame = texture.Frame(1, 4, 0, npcFrame);
             Rectangle wingRect = wingsTexture.Frame(1, 4, 0, wingFrame);
@@ -599,8 +635,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
             Color rainbowColor = Main.hslToRgb(NPC.localAI[0] * 0.03f % 1f, 1f, 0.7f, 0) * 0.8f;
             Vector2 corePos = NPC.Bottom + new Vector2(0, -50 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor;
-            if (Attack == (int)AttackList.DoubleRainbow && Time > 50 && Time < 540 || Attack == (int)AttackList.BlowUp)
+            if (Attack == (int)AttackList.DoubleRainbow && Time > 50 && Time < 540 || Attack == (int)AttackList.BlowUp) {
                 corePos = NPC.Center + new Vector2(0, 4 - (float)Math.Cos(npcFrame * MathHelper.PiOver2)) * squishFactor;
+            }
             Vector2 leftWingPos = corePos + new Vector2(-12, 2).RotatedBy(NPC.rotation) * NPC.scale;
             Vector2 rightWingPos = corePos + new Vector2(12, 2).RotatedBy(NPC.rotation) * NPC.scale;
 
@@ -654,10 +691,13 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
 
                             if (shieldBreakPercent > 0.13f) {
                                 int crackFrame = 0;
-                                if (shieldBreakPercent > 0.4f)
+                                if (shieldBreakPercent > 0.4f) {
                                     crackFrame = 1;
-                                if (shieldBreakPercent > 0.7f)
+                                }
+
+                                if (shieldBreakPercent > 0.7f) {
                                     crackFrame = 2;
+                                }
 
                                 Rectangle crackSourceFrame = dangerShieldCrackTexture.Frame(1, 3, 0, crackFrame);
                                 Color crackColor = rainbowColor * 0.2f;
@@ -683,8 +723,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
                         spriteBatch.Draw(sparkle, NPC.Center + flareOff - screenPos, sparkle.Frame(), rainbowColor, MathHelper.PiOver2, sparkle.Size() * 0.5f, NPC.scale * new Vector2(0.8f, 1.3f + shineStrength * 2f) * shineStrength * 2f, 0, 0);
 
                     }
-                    else
+                    else {
                         goto default;
+                    }
 
                     break;
 

@@ -4,6 +4,7 @@ using CalamityHunt.Common.Systems.Particles;
 using CalamityHunt.Common.Utilities;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -48,8 +49,9 @@ public class SlimeBomb : ModProjectile
     public override void AI()
     {
         if (Projectile.ai[1] == 0) {
-            if (Time > 8)
+            if (Time > 8) {
                 Projectile.velocity *= 0.955f;
+            }
 
             Projectile.rotation = (float)Math.Sin(Projectile.localAI[1] * 0.03f) * Projectile.direction * 0.1f + Projectile.velocity.X * 0.1f;
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(0, 17, Projectile.localAI[0], true)) + (float)Math.Pow(Utils.GetLerpValue(97, 100, Time, true), 2f) * 0.5f;
@@ -141,38 +143,40 @@ public class SlimeBomb : ModProjectile
 
         if (Projectile.ai[1] == 1) {
             Vector2 radius = Projectile.Center + new Vector2(maxDist, 0).RotatedBy(Projectile.Center.AngleTo(targetHitbox.Center()));
-            if (Time < 25)
+            if (Time < 25) {
                 return targetHitbox.Contains(radius.ToPoint());
+            }
+
             return false;
         }
-        else
+        else {
             return projHitbox.Intersects(targetHitbox);
+        }
     }
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Microsoft.Xna.Framework.Graphics.Texture2D texture = TextureAssets.Projectile[Type].Value;
-        Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
-        Microsoft.Xna.Framework.Graphics.Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
+        Texture2D glow = AssetDirectory.Textures.Glow[1].Value;
+        Texture2D ring = AssetDirectory.Textures.Glow[3].Value;
         Rectangle baseFrame = texture.Frame(3, 4, 0, Projectile.frame);
         Rectangle glowFrame = texture.Frame(3, 4, 1, Projectile.frame);
         Rectangle outlineFrame = texture.Frame(3, 4, 2, Projectile.frame);
 
-        Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[1]);
-        bloomColor.A = 0;
+        Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[1]) with { A = 0 };
 
         if (Projectile.ai[1] == 0) {
             float ringScale = (float)Math.Cbrt(Utils.GetLerpValue(0, 100, Time, true));
             float ringPower = 1f + (float)Math.Sin(Math.Pow(Time * 0.027f, 3f)) * 0.4f;
 
-            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f * ringScale * ringPower, Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height * 2f + 3f) * ringScale, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f * ringScale * ringPower, Projectile.rotation, glow.Size() * 0.5f, (250f / glow.Height * 2f + 1f) * ringScale, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f * ringScale * ringPower, 0, glow.Size() * 0.5f, 250f / glow.Height * 2f * 0.5f * ringScale, 0, 0);
             Main.EntitySpriteDraw(ring, Projectile.Center - Main.screenPosition, null, bloomColor * 0.1f * ringScale * ringPower, Projectile.rotation * 0.1f, ring.Size() * 0.5f, (250f / ring.Height * 2f + 0.5f) * ringScale, 0, 0);
 
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, bloomColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale, 0, 0);
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, bloomColor * 0.8f, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * 1.05f, 0, 0);
-            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * 2f, 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * 0.4f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale, 0, 0);
 
         }
         else {

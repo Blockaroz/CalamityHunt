@@ -42,8 +42,9 @@ namespace CalamityHunt.Content.Buffs
                     player.GetArmorPenetration(DamageClass.Generic) += 5f;
                 }
             }
-            else
+            else {
                 player.DelBuff(buffIndex);
+            }
         }
     }
 }

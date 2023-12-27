@@ -74,10 +74,12 @@ public class SlimeMonsoonSkyOld : CustomSky
         //Main.windSpeedTarget = -0.5f;
         _distanceMod = Utils.GetLerpValue(10000, 9000, Main.LocalPlayer.Distance(radialDistortPos) * 0.5f, true);
 
-        if (_active)
+        if (_active) {
             _strength = Math.Min(strengthTarget * _distanceMod, _strength + 0.005f);
-        else
+        }
+        else {
             _strength = Math.Max(0f, _strength - 0.005f);
+        }
 
         if (forceStrength.HasValue) {
             _strength = forceStrength.Value;
@@ -90,24 +92,26 @@ public class SlimeMonsoonSkyOld : CustomSky
         _windSpeed -= 0.0025f;
         _windSpeed = _windSpeed % 1f;
 
-        if (thunder == null)
+        if (thunder == null) {
             thunder = new List<OldMonsoonStrike>[]
             {
                 new List<OldMonsoonStrike>(),
                 new List<OldMonsoonStrike>(),
                 new List<OldMonsoonStrike>(),
             };
+        }
 
         for (int i = 0; i < thunder.Length; i++) {
-            if (_random.NextBool(Math.Clamp(120 + additionalLightningChance, 2, 1000)) && _strength > 0.65f && lightningEnabled && Config.Instance.monsoonLightning)
+            if (_random.NextBool(Math.Clamp(120 + additionalLightningChance, 2, 1000)) && _strength > 0.65f && lightningEnabled && Config.Instance.monsoonLightning) {
                 thunder[i].Add(new OldMonsoonStrike(Main.LocalPlayer.Center, _random.NextFloat(0.5f, 1.4f), _random.Next(50, 100), i));
+            }
 
             for (int j = 0; j < thunder[i].Count; j++) {
                 thunder[i][j].time--;
                 thunder[i][j].strength *= 0.9999f;
-                if (thunder[i][j].time < 0)
+                if (thunder[i][j].time < 0) {
                     thunder[i].Remove(thunder[i][j]);
-
+                }
             }
         }
     }
@@ -145,17 +149,22 @@ public class SlimeMonsoonSkyOld : CustomSky
             switch (i) {
                 case 0:
                 case 1:
-                    if (!(maxDepth >= float.MaxValue && minDepth < float.MaxValue))
+                    if (!(maxDepth >= float.MaxValue && minDepth < float.MaxValue)) {
                         continue;
+                    }
+
                     break;
                 default:
-                    if (maxDepth >= float.MaxValue && minDepth < float.MaxValue)
+                    if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
                         continue;
+                    }
+
                     break;
             }
 
-            if (i < 3 && thunder != null)
+            if (i < 3 && thunder != null) {
                 thunder[i].ForEach(n => n.Draw(spriteBatch));
+            }
 
             skyClouds.Parameters["uWorldPos"].SetValue(Main.screenPosition / (7000f - i * 500f));
             skyClouds.Parameters["uColorBase"].SetValue(Color.Lerp(darkColor, brightColor, Utils.GetLerpValue(0, 4, i, true)).ToVector4());
@@ -209,8 +218,9 @@ public class SlimeMonsoonSkyOld : CustomSky
 
 
             rots = new List<float>();
-            for (int i = 0; i < data.Value.Count - 1; i++)
+            for (int i = 0; i < data.Value.Count - 1; i++) {
                 rots.Add(points[i].AngleFrom(points[i + 1]));
+            }
 
             rots.Add(points[data.Value.Count - 2].AngleTo(points[data.Value.Count - 1]));
 

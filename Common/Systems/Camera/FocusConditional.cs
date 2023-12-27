@@ -31,8 +31,9 @@ public class FocusConditional : ICameraModifier
     {
         if (!Main.gamePaused) {
             bool shouldHold = condition.Invoke();
-            if (!shouldHold || time < riseTime)
+            if (!shouldHold || time < riseTime) {
                 time++;
+            }
         }
 
         float totalTime = Utils.GetLerpValue(0, riseTime, time, true) * Utils.GetLerpValue(riseTime + 1 + fallTime, riseTime + 1, time, true);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -83,6 +82,6 @@ public class FlyingSlime
             }
         }
 
-        return new FlyingSlime(random.Get(), Main.rand.NextFloat(-4f, 4f));
+        return new FlyingSlime(random.Get(), Main.rand.NextFloat(-MathHelper.Pi, MathHelper.Pi));
     }
 }

@@ -78,8 +78,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
                     //float totalOffRot = (firstWave + secondWave) * thirdWave * Projectile.direction + (float)Math.Sin(Time * 0.1f) * 0.03f * Utils.GetLerpValue(ChargeTime - 10, ChargeTime + 10, Time, true);
                     float totalOffRot = (float)Math.Cos((Time - ChargeTime) / LaserDuration * MathHelper.TwoPi) * 2.5f * Utils.GetLerpValue(ChargeTime * 0.8f, ChargeTime + LaserDuration * 0.1f, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration, ChargeTime + LaserDuration * 0.9f, Time, true);
-                    if (Time < 3)
+                    if (Time < 3) {
                         Projectile.direction = Main.rand.NextBool() ? -1 : 1;
+                    }
 
                     targetRotation = targetRotation.AngleTowards(Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center), Utils.GetLerpValue(ChargeTime + LaserDuration * 0.1f, ChargeTime, Time, true) * 0.04f + Utils.GetLerpValue(ChargeTime + LaserDuration * 0.3f, ChargeTime + LaserDuration * 0.6f, Time, true) * 0.01f);
                     targetSize = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 60, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
@@ -105,8 +106,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     Projectile.rotation = Projectile.rotation.AngleLerp(Projectile.AngleTo(Main.npc[(int)Owner].GetTargetData().Center), 0.02f);
                     targetSize = (float)Math.Pow(Utils.GetLerpValue(ChargeTime - 20, ChargeTime + 60, Time, true) * Utils.GetLerpValue(ChargeTime + LaserDuration + 60, ChargeTime + LaserDuration, Time, true), 3f);
 
-                    if (Time > ChargeTime + LaserDuration - 4 && Time < ChargeTime + LaserDuration - 2)
+                    if (Time > ChargeTime + LaserDuration - 4 && Time < ChargeTime + LaserDuration - 2) {
                         Time = ChargeTime + LaserDuration - 10;
+                    }
 
                     if (Main.npc[(int)Owner].ai[2] == 3 && Time < ChargeTime + LaserDuration - 2) {
                         targetSize = 0;
@@ -262,7 +264,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Microsoft.Xna.Framework.Graphics.Texture2D textureGlow = AssetDirectory.Textures.Goozma.FusionRay[2].Value;
             Microsoft.Xna.Framework.Graphics.Texture2D textureSecond = AssetDirectory.Textures.Goozma.FusionRay[3].Value;
             Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
-            Microsoft.Xna.Framework.Graphics.Texture2D ray = AssetDirectory.Textures.GlowRay.Value;
+            Microsoft.Xna.Framework.Graphics.Texture2D ray = AssetDirectory.Textures.Glow[2].Value;
 
             Color startColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
             startColor.A = 0;

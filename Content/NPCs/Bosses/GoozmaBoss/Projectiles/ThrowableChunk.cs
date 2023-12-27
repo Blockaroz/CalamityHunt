@@ -65,8 +65,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             ChunkStyleInt = (int)chunkStyle;
 
             Vector2 sized = new Vector2(42 + 42 * Size);
-            if (Projectile.width != (int)sized.X || Projectile.height != (int)sized.Y)
+            if (Projectile.width != (int)sized.X || Projectile.height != (int)sized.Y) {
                 Projectile.Resize((int)sized.X, (int)sized.Y);
+            }
 
             //if (Time < 50)
             //    Projectile.velocity *= Utils.GetLerpValue(0, 50, Time, true) * 1.4f;
@@ -159,10 +160,12 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             //i will allow this one to waste resources because it is weird
             Texture2D texture;
 
-            if (chunkStyle != ThrowableChunkStyle.Default)
+            if (chunkStyle != ThrowableChunkStyle.Default) {
                 texture = ModContent.Request<Texture2D>(Texture + "_" + chunkStyle.ToString()).Value;
-            else
+            }
+            else {
                 texture = ModContent.Request<Texture2D>(Texture + "_Rock").Value;
+            }
 
             Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
             Rectangle frame = texture.Frame(1, 3, 0, (int)Size);

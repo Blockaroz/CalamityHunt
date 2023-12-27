@@ -30,20 +30,25 @@ namespace CalamityHunt.Common.Systems
 
         public override void PostUpdateMiscEffects()
         {
-            if (parasolBloodWaitTime > 0)
+            if (parasolBloodWaitTime > 0) {
                 parasolBloodWaitTime--;
+            }
 
-            if (crystalGauntletsWaitTime > 0)
+            if (crystalGauntletsWaitTime > 0) {
                 crystalGauntletsWaitTime--;
+            }
 
-            if (parasolBlood > 0 && parasolBloodWaitTime <= 0)
+            if (parasolBlood > 0 && parasolBloodWaitTime <= 0) {
                 parasolBlood -= 100;
+            }
 
-            if (CrystalGauntletsCharge > 0 && crystalGauntletsWaitTime <= 0)
+            if (CrystalGauntletsCharge > 0 && crystalGauntletsWaitTime <= 0) {
                 CrystalGauntletsCharge *= 0.85f;
+            }
 
-            if (CrystalGauntletsCharge < 0.002f)
+            if (CrystalGauntletsCharge < 0.002f) {
                 CrystalGauntletsCharge = 0f;
+            }
 
             parasolBlood = Math.Clamp(parasolBlood, 0, ParasolBloodMax);
             CrystalGauntletsCharge = Math.Clamp(CrystalGauntletsCharge, 0f, 1f);
@@ -59,8 +64,9 @@ namespace CalamityHunt.Common.Systems
                 foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<CrystalGauntletBallThrown>() && n.owner == Player.whoAmI)) {
                     NPC target = projectile.FindTargetWithinRange(2400);
                     Vector2 dir = Vector2.Zero;
-                    if (target != null)
+                    if (target != null) {
                         dir = target.Center - projectile.Center;
+                    }
 
                     projectile.velocity = Vector2.Zero;
                     projectile.timeLeft = 17;
@@ -68,8 +74,9 @@ namespace CalamityHunt.Common.Systems
 
                     Vector2 oldDir = dir;
                     for (int i = 0; i < 10; i++) {
-                        if (oldDir.LengthSquared() < 5)
+                        if (oldDir.LengthSquared() < 5) {
                             dir = new Vector2(700, 0).RotatedBy(MathHelper.TwoPi / 10f * i);
+                        }
 
                         Projectile shock = Projectile.NewProjectileDirect(projectile.GetSource_Death(), projectile.Center, dir.SafeNormalize(Vector2.Zero), ModContent.ProjectileType<CrystalLightning>(), Player.HeldItem.damage, 1f, Player.whoAmI, ai1: projectile.whoAmI);
                         shock.ai[2] = dir.Length();
@@ -91,8 +98,10 @@ namespace CalamityHunt.Common.Systems
 
         public override float UseSpeedMultiplier(Item item)
         {
-            if (gobfloggerBuff && item.type == ModContent.ItemType<Gobflogger>())
+            if (gobfloggerBuff && item.type == ModContent.ItemType<Gobflogger>()) {
                 return 6.66f;
+            }
+
             return 1f;
         }
 
@@ -102,8 +111,9 @@ namespace CalamityHunt.Common.Systems
 
             crystalGauntletsHeld = false;
 
-            if (crystalGauntletsClapTime > 0)
+            if (crystalGauntletsClapTime > 0) {
                 crystalGauntletsClapTime--;
+            }
         }
     }
 }

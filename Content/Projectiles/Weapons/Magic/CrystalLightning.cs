@@ -137,8 +137,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     }));
                 }
             }
-            if (Time > 40)
+            if (Time > 40) {
                 Projectile.Kill();
+            }
 
             Time++;
             Projectile.localAI[0] = Main.projectile[(int)Owner].ai[0];
@@ -155,8 +156,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     return;
                 }
 
-                if (mouse.Distance(Projectile.Center) > 1100)
+                if (mouse.Distance(Projectile.Center) > 1100) {
                     mouse = Projectile.Center + Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 1100;
+                }
 
                 int target = Projectile.FindTargetWithLineOfSight(1500);
                 if (target >= 0) {
@@ -181,8 +183,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                     Vector2 center = Vector2.Lerp(points[i], points[i + 1], 0.5f);
                     hitbox.Location = (center - hitbox.Size() * 0.5f).ToPoint();
 
-                    if (targetHitbox.Intersects(hitbox))
+                    if (targetHitbox.Intersects(hitbox)) {
                         return true;
+                    }
                 }
             }
 
@@ -222,11 +225,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
                 Vector2[] position = new Vector2[points.Count];
                 float[] rotation = new float[points.Count];
 
-                for (int i = 0; i < position.Length; i++)
+                for (int i = 0; i < position.Length; i++) {
                     position[i] = points[i] + offsets[i];
+                }
 
-                for (int i = 0; i < position.Length; i++)
+                for (int i = 0; i < position.Length; i++) {
                     rotation[i] = Projectile.AngleTo(endPoint);
+                }
 
                 rotation[position.Length - 1] = Projectile.AngleTo(endPoint);
 

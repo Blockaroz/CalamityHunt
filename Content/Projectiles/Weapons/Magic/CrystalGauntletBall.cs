@@ -53,8 +53,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Owner.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * Owner.HeldItem.shootSpeed, 0.07f);
             Projectile.Center = Owner.MountedCenter + Projectile.velocity * (2f + 8f * Projectile.scale);
 
-            if ((Time - 8) % (8 + (int)(Owner.itemAnimationMax)) == 1)
+            if ((Time - 8) % (8 + (int)(Owner.itemAnimationMax)) == 1) {
                 Owner.CheckMana(15, true);
+            }
 
             if ((Time - 8) % 4 == 1) {
                 Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge += 0.0001f;
@@ -91,14 +92,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             //    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(10, 10), piercerVelocity, ModContent.ProjectileType<CrystalPiercer>(), Owner.HeldItem.damage, 1f, Owner.whoAmI, ai1: Projectile.whoAmI);
             //}
 
-            if ((!Owner.channel || !Owner.CheckMana(15)) && ((Time - 8) % 20 > 0))
+            if ((!Owner.channel || !Owner.CheckMana(15)) && ((Time - 8) % 20 > 0)) {
                 canKill = true;
+            }
 
-            if (!canKill)
+            if (!canKill) {
                 Projectile.timeLeft = 10000;
+            }
 
-            if (canKill && Projectile.timeLeft > 5)
+            if (canKill && Projectile.timeLeft > 5) {
                 Projectile.timeLeft = 5;
+            }
 
             if (canKill && Owner.GetModPlayer<GoozmaWeaponsPlayer>().CrystalGauntletsCharge > 0.999f && Projectile.timeLeft > 3) {
                 Projectile.timeLeft = 3;

@@ -61,25 +61,29 @@ namespace CalamityHunt.Content.Projectiles
 
         public override void AI()
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
                 Collision.SwitchTiles(Projectile.position, Projectile.width, Projectile.height, Projectile.oldPosition, 3);
+            }
 
-            if (InsaneMode)
+            if (InsaneMode) {
                 InsaneAI();
-            else
+            }
+            else {
                 NormalAI();
-
-
+            }
         }
 
         public void NormalAI()
         {
             if (Projectile.shimmerWet) {
-                if (Projectile.velocity.Y > 10f)
+                if (Projectile.velocity.Y > 10f) {
                     Projectile.velocity.Y *= 0.97f;
+                }
+
                 Projectile.velocity.Y -= 0.7f;
-                if (Projectile.velocity.Y < -10f)
+                if (Projectile.velocity.Y < -10f) {
                     Projectile.velocity.Y = -10f;
+                }
             }
             else {
                 Projectile.rotation += Projectile.velocity.X * 0.02f;
@@ -87,10 +91,13 @@ namespace CalamityHunt.Content.Projectiles
                 Projectile.velocity.Y = Math.Clamp(Projectile.velocity.Y, -16f, 16f);
 
                 if (Math.Abs(Projectile.velocity.Y) <= 1f) {
-                    if (Projectile.velocity.X > 0f && Projectile.velocity.X < 22)
+                    if (Projectile.velocity.X > 0f && Projectile.velocity.X < 22) {
                         Projectile.velocity.X += 0.05f;
-                    if (Projectile.velocity.X < 0f && Projectile.velocity.X > -22)
+                    }
+
+                    if (Projectile.velocity.X < 0f && Projectile.velocity.X > -22) {
                         Projectile.velocity.X -= 0.05f;
+                    }
                 }
                 Projectile.velocity.Y += 0.2f;
             }
@@ -110,8 +117,10 @@ namespace CalamityHunt.Content.Projectiles
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (InsaneMode)
+            if (InsaneMode) {
                 return false;
+            }
+
             if (Projectile.velocity.X != oldVelocity.X && InitialVelocityCheck) {
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
                 SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
@@ -147,8 +156,10 @@ namespace CalamityHunt.Content.Projectiles
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             if (Main.netMode == NetmodeID.SinglePlayer) {
-                if (target.difficulty != 1 && target.difficulty != 2)
+                if (target.difficulty != 1 && target.difficulty != 2) {
                     target.DropItems();
+                }
+
                 target.ghost = true;
                 target.statLife = 0;
                 target.KillMe(PlayerDeathReason.ByProjectile(target.whoAmI, Projectile.whoAmI), 1, 0);

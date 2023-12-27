@@ -64,28 +64,32 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             if (StickHost > -1) {
                 Grounded = 1;
 
-                if (Time < 400)
+                if (Time < 400) {
                     Time = 400;
+                }
 
-                if (!Main.npc[(int)StickHost].active)
+                if (!Main.npc[(int)StickHost].active) {
                     Projectile.Kill();
+                }
 
                 Projectile.velocity = Vector2.Zero;
                 Projectile.rotation = Projectile.AngleTo(Main.npc[(int)StickHost].Center);
                 Projectile.Center += Main.npc[(int)StickHost].position - Main.npc[(int)StickHost].oldPosition;
             }
 
-            if (Time == 40)
+            if (Time == 40) {
                 Projectile.velocity += Main.rand.NextVector2Circular(8, 12).RotatedBy(Projectile.velocity.ToRotation());
+            }
 
             Projectile.extraUpdates = Time < 25 ? 1 : 0;
 
-            if (Grounded == 0)
+            if (Grounded == 0) {
                 Projectile.velocity.Y += Time > 35 ? 1f : 0.3f;
+            }
 
-
-            if (Projectile.velocity.Length() > 25f)
+            if (Projectile.velocity.Length() > 25f) {
                 Projectile.velocity *= 0.98f;
+            }
 
             //if (IgnitionLevel > 0 && Main.rand.NextBool(Math.Max(13 - (int)IgnitionLevel * 2, 1) + (int)(Utils.GetLerpValue(450, 550, Time, true) * 30)))
             //{
@@ -103,13 +107,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             //    }
             //}
 
-            if (Collision.SolidCollision(Projectile.Center - new Vector2(20), 40, 40))
+            if (Collision.SolidCollision(Projectile.Center - new Vector2(20), 40, 40)) {
                 Grounded = 1;
-            else
+            }
+            else {
                 Grounded = 0;
+            }
 
-            if (Time > 550)
+            if (Time > 550) {
                 Projectile.Kill();
+            }
 
             Time++;
         }
@@ -132,8 +139,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             if (Grounded == 0 && Projectile.velocity.Y >= 0) {
                 Grounded = 1;
 
-                if (Time < 200)
+                if (Time < 200) {
                     Time = 200;
+                }
 
                 SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
 
@@ -141,8 +149,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 //    Particle.NewParticle(ModContent.GetInstance<DarkSludgeChunkParticleBehavior>(), Projectile.Top + Main.rand.NextVector2Circular(20, 10) * Projectile.scale, (-Vector2.UnitY.RotatedByRandom(1f) * 9) * Main.rand.NextFloat(0.5f, 1f), Color.White, 0.2f + Main.rand.NextFloat(0.6f));
             }
 
-            if (Grounded == 0 && MathF.Abs(Projectile.velocity.Y - oldVelocity.Y) > 0)
+            if (Grounded == 0 && MathF.Abs(Projectile.velocity.Y - oldVelocity.Y) > 0) {
                 Projectile.velocity.Y *= -1;
+            }
 
             return false;
         }

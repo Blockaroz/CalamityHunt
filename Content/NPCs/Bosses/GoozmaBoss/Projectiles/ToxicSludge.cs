@@ -42,8 +42,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.scale = (float)Math.Sqrt(Utils.GetLerpValue(-5, 12, Time, true)) * Projectile.localAI[0];
             Projectile.velocity.Y -= Main.rand.NextFloat(0.05f, 0.4f);
 
-            if (Main.rand.NextBool(9))
+            if (Main.rand.NextBool(9)) {
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24, 24), DustID.Corruption, Main.rand.NextVector2Circular(5, 5), 0, Color.White, 1.5f).noGravity = true;
+            }
 
             if (Main.rand.NextBool()) {
                 Color color = Color.Lerp(Color.DarkGreen, Color.DarkOrchid, 0.7f + Main.rand.NextFloat(0.3f));
@@ -57,22 +58,17 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > 20)
+            if (Time > 20) {
                 return base.Colliding(projHitbox, targetHitbox);
+            }
 
             return false;
-        }
-
-        public static Texture2D eyeTexture;
-
-        public override void Load()
-        {
-            eyeTexture = AssetDirectory.Textures.Goozma.CorruptEye.Value;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D eyeTexture = EbonianBehemuck.eyeTexture;
             Texture2D bloom = AssetDirectory.Textures.Glow[0].Value;
             Rectangle frame = texture.Frame(1, 2, 0, 0);
             Rectangle glowFrame = texture.Frame(1, 2, 0, 1);

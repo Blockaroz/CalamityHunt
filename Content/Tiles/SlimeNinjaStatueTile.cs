@@ -3,8 +3,6 @@ using CalamityHunt.Content.Items.Misc;
 using CalamityHunt.Content.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
-using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -51,8 +49,9 @@ namespace CalamityHunt.Content.Tiles
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = ModContent.ItemType<GelatinousCatalyst>();
 
-            if (player.HasItem(ModContent.ItemType<SludgeFocus>()))
+            if (player.HasItem(ModContent.ItemType<SludgeFocus>())) {
                 player.cursorItemIconID = ModContent.ItemType<SludgeFocus>();
+            }
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
@@ -73,10 +72,12 @@ namespace CalamityHunt.Content.Tiles
 
             for (int y = 0; y <= 6; y++) {
                 Tile checkTile = Framing.GetTileSafely(i, j + y);
-                if (checkTile.HasTile && checkTile.TileType == Type)
+                if (checkTile.HasTile && checkTile.TileType == Type) {
                     top++;
-                else
+                }
+                else {
                     break;
+                }
             }
 
             top -= 5;

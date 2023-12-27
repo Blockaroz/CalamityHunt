@@ -20,20 +20,20 @@ float uSaturation;
 float4 uSourceRect;
 float2 uZoom;
 
-texture distortionSample0;
-sampler2D dSample0 = sampler_state
+texture uNoiseTexture0;
+sampler2D noise0 = sampler_state
 {
-    texture = <distortionSample0>;
+    texture = <uNoiseTexture0>;
     magfilter = LINEAR;
     minfilter = LINEAR;
     mipfilter = LINEAR;
     AddressU = wrap;
     AddressV = wrap;
 };
-texture distortionSample1;
-sampler2D dSample1 = sampler_state
+texture uNoiseTexture1;
+sampler2D noise1 = sampler_state
 {
-    texture = <distortionSample1>;
+    texture = <uNoiseTexture1>;
     magfilter = LINEAR;
     minfilter = LINEAR;
     mipfilter = LINEAR;
@@ -47,15 +47,19 @@ float4 PixelShaderFunction(float4 baseColor : COLOR0, float2 coords : TEXCOORD0)
 {
     float2 targetCoords = (uTargetPosition - uScreenPosition) / uScreenResolution;
     float2 center = ((coords - targetCoords)) * (uScreenResolution / uScreenResolution.y) / uZoom;    
-
-    float2 polar = float2(atan2(center.y, center.x) / (3.1415), length(center) * 0.2 * distortSize.y);
-
-    float dist0 = tex2D(dSample0, uScreenPosition * 0.000001 + (polar / 2 + float2(polar.y * 0.2 + uProgress, -uProgress * 4)));
-    float dist1 = tex2D(dSample1, uScreenPosition * 0.000001 + (polar + float2(-polar.y * 0.2, -uProgress * 3)) + dist0 * 0.1);
+    float centerLength = length(center);
     
-    float distortion = (dist1 - 0.5) * uOpacity * smoothstep(0.3, 0.9, length(center));
-    float2 direction = center;
-    return tex2D(uImage0, coords + distortion * direction);
+    float2 polar = float2(atan2(center.y, center.x) / (3.1415), sqrt(centerLength) * 0.05 * distortSize.y);
+
+    float dist0 = length(tex2D(noise0, polar * 0.5 + float2(sin(polar.y * 6.28) * saturate(2 - polar.y) * 0.3, uProgress)).rgb);
+    float dist1 = length((tex2D(noise1, float2(polar.x * 2, polar.y) + float2(sin(polar.y * 6.28 + 0.7) * 0.5 * saturate(2 - polar.y), uProgress) + dist0 * 0.05) * pow(dist0, 1.5)).rgb);
+    centerLength -= dist0 * 0.1;
+    centerLength += dist1 * 0.1;
+
+    float distortion = pow(dist1, 2) * centerLength * smoothstep(1.5, 0.9, centerLength) * 0.7;
+    float subtraction = (pow(dist1, 2) - 0.1) * smoothstep(0.05, 0.3, centerLength) * smoothstep(3, 0.9, centerLength + dist0 * 0.4);
+    float addition = dist1 * smoothstep(0.05, 0.3, centerLength) * smoothstep(3, 0.9, centerLength);
+    return tex2D(uImage0, coords - distortion * normalize(center) * smoothstep(0.1, 0.2, center) * uOpacity) + (addition * 0.5 - subtraction) * uOpacity;
 
 }
 
@@ -63,6 +67,6 @@ technique Technique1
 {
     pass DistortionPass
     {
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        PixelShader = compile ps_3_0 PixelShaderFunction();
     }
 }

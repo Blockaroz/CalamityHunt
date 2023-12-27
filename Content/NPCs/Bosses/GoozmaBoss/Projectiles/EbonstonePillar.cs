@@ -89,8 +89,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 if (Height <= 0 && Time > maxHeight * speed + MaxTime) {
                     for (int i = 0; i < 6; i++) {
                         Dust.NewDustPerfect(position[position.Count - 1] + Main.rand.NextVector2Circular(12, 18) + Vector2.UnitY * 16, DustID.Stone, Main.rand.NextVector2Circular(2, 2) - Vector2.UnitY * 3, 0, new Color(215, 200, 255), 1.5f);
-                        if (Main.rand.NextBool())
+                        if (Main.rand.NextBool()) {
                             Dust.NewDustPerfect(position[position.Count - 1] + Main.rand.NextVector2Circular(20, 42), DustID.Shadowflame, Main.rand.NextVector2Circular(6, 1), 0, Color.White, 2f).noGravity = true;
+                        }
 
                         if (position.Count > 0) {
                             position.RemoveAt(position.Count - 1);
@@ -100,15 +101,18 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                             time.RemoveAt(position.Count - 1);
                         }
 
-                        if (position.Count < 10 && Time > 5)
+                        if (position.Count < 10 && Time > 5) {
                             Projectile.Kill();
+                        }
                     }
                 }
 
                 for (int i = 0; i < position.Count; i++) {
                     scale[i] += 0.1f;
-                    if (scale[i] > 1f)
+                    if (scale[i] > 1f) {
                         scale[i] = 1f;
+                    }
+
                     time[i]++;
                 }
             }

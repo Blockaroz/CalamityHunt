@@ -57,16 +57,19 @@ public sealed class GaslightSystem : ModSystem
 
         int modListStloc = -1;
 
-        if (!c.TryGotoNext(x => x.MatchCall("Terraria.ModLoader.ModLoader", "get_Mods")))
+        if (!c.TryGotoNext(x => x.MatchCall("Terraria.ModLoader.ModLoader", "get_Mods"))) {
             return;
+        }
 
-        if (!c.TryGotoNext(MoveType.After, x => x.MatchStloc(out modListStloc)))
+        if (!c.TryGotoNext(MoveType.After, x => x.MatchStloc(out modListStloc))) {
             return;
+        }
 
         c.Emit(OpCodes.Ldloc, modListStloc);
         c.EmitDelegate((IEnumerable<Mod> mods) => {
-            if (!ModLoader.HasMod(HUtils.CalamityMod))
+            if (!ModLoader.HasMod(HUtils.CalamityMod)) {
                 return mods;
+            }
 
             // TODO: Should we use GetMod here instead of GetInstance?
             CalamityHunt calamityHunt = ModContent.GetInstance<CalamityHunt>();

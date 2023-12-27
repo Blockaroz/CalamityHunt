@@ -6,7 +6,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
+namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 {
     public class CometKunaiStarfall : ModProjectile
     {
@@ -26,7 +26,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass d;
                 Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
-                calamity.TryFind<DamageClass>("RogueDamageClass", out d);
+                calamity.TryFind("RogueDamageClass", out d);
                 Projectile.DamageType = d;
             }
             Projectile.usesLocalNPCImmunity = true;

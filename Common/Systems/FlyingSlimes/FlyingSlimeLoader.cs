@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -64,8 +63,8 @@ public class FlyingSlimeLoader : ILoadable
             }
             spriteBatch.Draw(texture, position, texture.Frame(), secondColor, rotation, texture.Size() * new Vector2(0.5f, 0.33f), scale * 1.33f, 0, 0);
             spriteBatch.Draw(texture, position, texture.Frame(), color.MultiplyRGBA(data.DrawColor), rotation, texture.Size() * new Vector2(0.5f, 0.33f), scale * 1.33f, 0, 0);
-        }        
-        
+        }
+
         public static void DrawLikePinky(FlyingSlimeData data, SpriteBatch spriteBatch, Vector2 position, float rotation, float scale, float progress, Color color)
         {
             Texture2D texture = AssetDirectory.Textures.FlyingSlime[data.Type].Value;
@@ -92,8 +91,8 @@ public class FlyingSlimeLoader : ILoadable
                 secondColor = ContentSamples.NpcsByNetId[data.NPCType].GetAlpha(color);
             }
             spriteBatch.Draw(texture, position, texture.Frame(), secondColor, rotation, texture.Size() * new Vector2(0.5f, 0.33f), scale, 0, 0);
-        }           
-        
+        }
+
         public static void DrawRainbow(FlyingSlimeData data, SpriteBatch spriteBatch, Vector2 position, float rotation, float scale, float progress, Color color)
         {
             Texture2D texture = AssetDirectory.Textures.FlyingSlime[data.Type].Value;
@@ -201,40 +200,40 @@ public class FlyingSlimeLoader : ILoadable
 
         public static void Flame(FlyingSlimeData data, Vector2 position)
         {
-            if (Main.rand.NextBool(4)) {
+            if (Main.rand.NextBool()) {
                 Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.Torch, 0, 0, 0, Color.White, 1.5f);
                 dust.noGravity = true;
             }
-        }        
-        
+        }
+
         public static void Ice(FlyingSlimeData data, Vector2 position)
         {
             if (Main.rand.NextBool(4)) {
-                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.SnowflakeIce, 0, 0, 0, Color.White, 1.5f);
+                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.Snow, 0, 0, 0, Color.White, 2f);
                 dust.noGravity = true;
             }
-        }        
-        
+        }
+
         public static void Sand(FlyingSlimeData data, Vector2 position)
         {
             if (Main.rand.NextBool(4)) {
-                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.Sand, 0, 0, 0, Color.White, 1.5f);
+                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.Sand, 0, 0, 0, Color.White, 2f);
                 dust.noGravity = true;
             }
-        }        
-        
+        }
+
         public static void Spore(FlyingSlimeData data, Vector2 position)
         {
             if (Main.rand.NextBool(4)) {
-                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.JungleSpore, 0, 0, 0, Color.White, 1.5f);
+                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.JungleSpore, 0, 0, 0, Color.White, 2f);
                 dust.noGravity = true;
             }
-        }        
-       
+        }
+
         public static void Shimmer(FlyingSlimeData data, Vector2 position)
         {
-            if (Main.rand.NextBool(4)) {
-                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.Sand, 0, 0, 0, Color.White, 1.5f);
+            if (Main.rand.NextBool()) {
+                Dust dust = Dust.NewDustDirect(position - new Vector2(10), 20, 20, DustID.ShimmerSpark, 0, 0, 0, Main.hslToRgb(Main.GlobalTimeWrappedHourly % 1f, 0.5f, 0.66f, 128), 1.5f);
                 dust.noGravity = true;
             }
         }

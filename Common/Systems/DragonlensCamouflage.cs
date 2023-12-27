@@ -24,8 +24,9 @@ namespace CalamityHunt.Common.Systems
         //Cant use load because dragonlens loads after
         public override void PostSetupContent()
         {
-            if (!ModContent.GetInstance<GatekeepSystem>().Undercover || !ModLoader.HasMod("Dragonlens"))
+            if (!ModContent.GetInstance<GatekeepSystem>().Undercover || !ModLoader.HasMod("Dragonlens")) {
                 return;
+            }
 
             Assembly dragonlensCode = ModLoader.GetMod("DragonLens").Code;
 
@@ -81,10 +82,13 @@ namespace CalamityHunt.Common.Systems
         public static int modNPCEnd;
         public bool IndexIsModNPC(int type)
         {
-            if (type < modNPCStart)
+            if (type < modNPCStart) {
                 return false;
-            if (type >= modNPCEnd)
+            }
+
+            if (type >= modNPCEnd) {
                 return false;
+            }
 
             return true;
         }
@@ -93,10 +97,13 @@ namespace CalamityHunt.Common.Systems
         public static int modItemEnd;
         public bool IndexIsModItem(int type)
         {
-            if (type < modItemStart)
+            if (type < modItemStart) {
                 return false;
-            if (type >= modItemEnd)
+            }
+
+            if (type >= modItemEnd) {
                 return false;
+            }
 
             return true;
         }
@@ -106,10 +113,13 @@ namespace CalamityHunt.Common.Systems
         public static int modProjectileEnd;
         public bool IndexIsModProjectile(int type)
         {
-            if (type < modProjectileStart)
+            if (type < modProjectileStart) {
                 return false;
-            if (type >= modProjectileEnd)
+            }
+
+            if (type >= modProjectileEnd) {
                 return false;
+            }
 
             return true;
         }

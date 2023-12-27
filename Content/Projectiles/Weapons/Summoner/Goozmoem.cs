@@ -52,30 +52,36 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override void AI()
         {
-            if (!Player.GetModPlayer<SlimeCanePlayer>().slimes || Player.dead || Player.GetModPlayer<SlimeCanePlayer>().SlimeRank() < SlimeCanePlayer.HighestRank)
+            if (!Player.GetModPlayer<SlimeCanePlayer>().slimes || Player.dead || Player.GetModPlayer<SlimeCanePlayer>().SlimeRank() < SlimeCanePlayer.HighestRank) {
                 Projectile.Kill();
-            else
+            }
+            else {
                 Projectile.timeLeft = 2;
+            }
 
             int target = -1;
             Projectile.Minion_FindTargetInRange(1200, ref target, true);
             bool hasTarget = false;
             if (target > -1) {
                 hasTarget = true;
-                if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile))
+                if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile)) {
                     Attack(target);
-                else
+                }
+                else {
                     hasTarget = false;
+                }
             }
-            if (!hasTarget)
+            if (!hasTarget) {
                 Idle();
+            }
 
             Dust gas = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16, 25), DustID.TintableDust, Main.rand.NextVector2Circular(1, 1), 150, Color.Black, 0.5f + Main.rand.NextFloat());
             gas.noGravity = true;
             gas.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
 
-            if (AttackCD > 0)
+            if (AttackCD > 0) {
                 AttackCD--;
+            }
 
             if (Projectile.frameCounter++ > 3) {
                 Projectile.frameCounter = 0;
@@ -99,13 +105,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             Time = 0;
 
-            if (Math.Abs(Projectile.velocity.X) < 1f)
+            if (Math.Abs(Projectile.velocity.X) < 1f) {
                 Projectile.direction = Player.direction;
-            else
+            }
+            else {
                 Projectile.direction = Math.Sign(Projectile.velocity.X);
+            }
 
-            if (Projectile.Distance(HomePosition) > 14)
+            if (Projectile.Distance(HomePosition) > 14) {
                 Projectile.velocity += Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(HomePosition) * 0.03f);
+            }
             else {
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2Circular(2, 2), 0.3f);
                 Projectile.velocity *= 0.9f;
@@ -120,8 +129,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             NPC target = Main.npc[whoAmI];
 
-            if (Projectile.Distance(HomePosition) > 14)
+            if (Projectile.Distance(HomePosition) > 14) {
                 Projectile.velocity += Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(HomePosition) * 0.03f);
+            }
             else {
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2Circular(2, 2), 0.3f);
                 Projectile.velocity *= 0.9f;
@@ -158,12 +168,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public Vector2 eyeOffset;
 
+        public static Texture2D eyeTexture;
+        public static Texture2D crownTexture;
         public static RenderTargetDrawContent cordContent;
         public static RenderTargetDrawContent creatureContent;
         public VertexStrip cordStrip;
 
         public override void Load()
         {
+            eyeTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Eye").Value;
+            crownTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Crown").Value;
             Main.ContentThatNeedsRenderTargets.Add(creatureContent = new RenderTargetDrawContent());
             Main.ContentThatNeedsRenderTargets.Add(cordContent = new RenderTargetDrawContent());
         }
@@ -171,8 +185,6 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Texture2D eyeTexture = AssetDirectory.Textures.Goozma.GoozmoemEye.Value;
-            Texture2D crownTexture = AssetDirectory.Textures.Goozma.GoozmoemCrown.Value;
 
             Vector2 scale = Projectile.scale * Vector2.One;
 
@@ -272,8 +284,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             brightnesses[9] = rainbowStartOffset + 0.75f;
 
             //Pass the entire rainbow through modulo 1
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 10; i++) {
                 brightnesses[i] = HUtils.Modulo(brightnesses[i], maxBright) * maxBright;
+            }
 
             //Store the first element's value so we can find it again later
             float firstBrightnessValue = brightnesses[1];

@@ -628,6 +628,8 @@ Projectiles: {
 	ShakerSludge.DisplayName: Shaker Sludge
 	GoozmaBoulderProjectile.DisplayName: Motley Marble
 	StellarBlackHole.DisplayName: Stellar Black Hole
+	FissionFlyerProjectile.DisplayName: Fission Flyer Projectile
+	CometKunaiSuperProjectile.DisplayName: Comet Kunai Super Projectile
 }
 
 Chat: {

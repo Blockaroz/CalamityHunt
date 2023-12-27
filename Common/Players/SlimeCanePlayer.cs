@@ -18,14 +18,21 @@ namespace CalamityHunt.Common.Players
 
             int count = Player.ownedProjectileCounts[ModContent.ProjectileType<SlimeCaneGemCounter>()];
 
-            if (count > 1)
+            if (count > 1) {
                 num = 1;
-            if (count > 2)
+            }
+
+            if (count > 2) {
                 num = 2;
-            if (count > 3)
+            }
+
+            if (count > 3) {
                 num = 3;
-            if (count > 4)
+            }
+
+            if (count > 4) {
                 num = HighestRank;
+            }
 
             return num;
         }
@@ -34,8 +41,9 @@ namespace CalamityHunt.Common.Players
 
         public int ValueFromSlimeRank(params int[] values)
         {
-            if (values.Length != 5)
+            if (values.Length != 5) {
                 return -1;
+            }
 
             return values[SlimeRank()];
         }
@@ -60,16 +68,18 @@ namespace CalamityHunt.Common.Players
                 }
                 if (Player.ownedProjectileCounts[slimeType] <= 0) {
                     int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - (10 * i), Player.position.Y, 0, 0, slimeType, highestOriginalDamage, 0, Player.whoAmI);
-                    if (Main.projectile.IndexInRange(p))
+                    if (Main.projectile.IndexInRange(p)) {
                         Main.projectile[p].originalDamage = highestOriginalDamage;
+                    }
                 }
             }
 
             int goozType = ModContent.ProjectileType<Goozmoem>();
             if (SlimeRank() >= HighestRank && Player.ownedProjectileCounts[goozType] <= 0) {
                 int p = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.X - 20, Player.position.Y, 0, 0, goozType, highestOriginalDamage, 0, Player.whoAmI);
-                if (Main.projectile.IndexInRange(p))
+                if (Main.projectile.IndexInRange(p)) {
                     Main.projectile[p].originalDamage = highestOriginalDamage;
+                }
             }
         }
 
@@ -84,25 +94,29 @@ namespace CalamityHunt.Common.Players
                     foreach (Projectile gem in Main.projectile.Where(n => n.owner == Player.whoAmI && n.type == ModContent.ProjectileType<SlimeCaneGemCounter>())) {
                         count++;
 
-                        if (highestOriginalDamage < gem.originalDamage)
+                        if (highestOriginalDamage < gem.originalDamage) {
                             highestOriginalDamage = gem.originalDamage;
+                        }
 
-                        if (count > 5)
+                        if (count > 5) {
                             gem.Kill();
+                        }
                     }
 
 
                 }
 
                 int buffIndex = Player.FindBuffIndex(ModContent.BuffType<SlimeCaneBuff>());
-                if (!slimes)
+                if (!slimes) {
                     Player.DelBuff(buffIndex);
-                else
+                }
+                else {
                     Player.buffTime[buffIndex] = 18000;
+                }
 
-                if (Player.whoAmI == Main.myPlayer)
+                if (Player.whoAmI == Main.myPlayer) {
                     SetSlimes();
-
+                }
             }
         }
 

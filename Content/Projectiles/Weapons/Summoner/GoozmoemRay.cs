@@ -64,8 +64,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
             Projectile.localAI[0]++;
 
-            if (Projectile.localAI[0] % 3 == 0)
+            if (Projectile.localAI[0] % 3 == 0) {
                 Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Main.rand.NextVector2CircularEdge(1, 1), 2f, 5, 7, 1000));
+            }
 
             //for (int i = 0; i < 15; i++)
             //{
@@ -95,8 +96,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             volume = 0.7f;
             pitch = 0.5f - Projectile.timeLeft / 80f / 3f;
 
-            if (raySound == null)
+            if (raySound == null) {
                 raySound = new LoopingSound(AssetDirectory.Sounds.Goozma.FusionRayLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            }
 
             raySound.PlaySound(() => Projectile.Center, () => volume, () => pitch);
         }

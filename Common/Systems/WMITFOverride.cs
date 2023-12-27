@@ -33,12 +33,18 @@ namespace CalamityHunt.Common.Systems
                             TextSnippet[] text = ChatManager.ParseMessage(coloredString, Color.White).ToArray();
                             float x = ChatManager.GetStringSize(Terraria.GameContent.FontAssets.MouseText.Value, text, Vector2.One).X;
                             Vector2 pos = Main.MouseScreen + new Vector2(16f, 16f);
-                            if (pos.Y > (float)(Main.screenHeight - 30))
+                            if (pos.Y > (float)(Main.screenHeight - 30)) {
                                 pos.Y = (float)(Main.screenHeight - 30);
-                            if (pos.X > (float)(Main.screenWidth - x))
+                            }
+
+                            if (pos.X > (float)(Main.screenWidth - x)) {
                                 pos.X = (float)(Main.screenWidth - x);
-                            if (SecondLine)
+                            }
+
+                            if (SecondLine) {
                                 pos.Y += Terraria.GameContent.FontAssets.MouseText.Value.LineSpacing;
+                            }
+
                             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, Terraria.GameContent.FontAssets.MouseText.Value, text, pos, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet);
                         }
                         return true;
@@ -94,15 +100,17 @@ namespace CalamityHunt.Common.Systems
                 if (tile.HasTile) {
                     ModTile modTile = TileLoader.GetTile(tile.TileType);
                     if (modTile != null) {
-                        if (modTile.Mod == Mod)
+                        if (modTile.Mod == Mod) {
                             Replace(tech, modTile.Name);
+                        }
                     }
                 }
                 else {
                     ModWall modWall = WallLoader.GetWall(tile.WallType);
                     if (modWall != null) {
-                        if (modWall.Mod == Mod)
+                        if (modWall.Mod == Mod) {
                             Replace(tech, modWall.Name);
+                        }
                     }
                 }
                 Vector2 mousePos = Main.MouseWorld;

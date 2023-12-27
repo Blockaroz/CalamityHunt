@@ -49,10 +49,12 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override void AI()
         {
-            if (!Player.GetModPlayer<SlimeCanePlayer>().slimes || Player.dead)
+            if (!Player.GetModPlayer<SlimeCanePlayer>().slimes || Player.dead) {
                 Projectile.Kill();
-            else
+            }
+            else {
                 Projectile.timeLeft = 2;
+            }
 
             if (Projectile.Distance(HomePosition) > 1600) {
                 State = (int)SlimeMinionState.Idle;
@@ -69,13 +71,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             bool hasTarget = false;
             if (target > -1) {
                 hasTarget = true;
-                if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile))
+                if (Main.npc[target].active && Main.npc[target].CanBeChasedBy(Projectile)) {
                     Attack(target);
-                else
+                }
+                else {
                     hasTarget = false;
+                }
             }
-            if (!hasTarget)
+            if (!hasTarget) {
                 Idle();
+            }
 
             if (iAmInAir && Main.rand.NextBool(3)) {
                 Color color = Color.Lerp(new Color(130, 170, 255, 60), new Color(255, 110, 255, 60), Main.rand.Next(2));
@@ -84,8 +89,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 sparkle.shader = GameShaders.Armor.GetSecondaryShader(Player.cMinion, Player);
             }
 
-            if (AttackCD > 0)
+            if (AttackCD > 0) {
                 AttackCD--;
+            }
         }
 
         public Vector2 HomePosition => InAir ? Player.Bottom + new Vector2(-90 * Player.direction, -100) : Player.Bottom + new Vector2(-160 * Player.direction, -20);
@@ -97,35 +103,41 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public void Idle()
         {
             Time = 0;
-            if (InAir)
+            if (InAir) {
                 iAmInAir = true;
+            }
 
             bool tooFar = Projectile.Distance(HomePosition) > 900 && State != (int)SlimeMinionState.Attacking;
             if (tooFar) {
                 State = (int)SlimeMinionState.IdleMoving;
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * Projectile.Distance(HomePosition) * 0.05f, 0.1f);
                 Projectile.rotation = Projectile.velocity.X * 0.02f;
-                if (Projectile.velocity.Y > 0)
+                if (Projectile.velocity.Y > 0) {
                     Projectile.frame = 5;
-                else
+                }
+                else {
                     Projectile.frame = 0;
+                }
             }
 
             Projectile.velocity.X *= 0.95f;
 
             if (Math.Abs(Projectile.Center.X - HomePosition.X) > 4 || InAir) {
                 State = (int)SlimeMinionState.IdleMoving;
-                if (!InAir)
+                if (!InAir) {
                     Projectile.velocity.X = (HomePosition.X - Projectile.Center.X) * 0.05f;
-                else
+                }
+                else {
                     Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, (HomePosition.X - Projectile.Center.X) * 0.1f, 0.1f);
+                }
             }
 
             if (InAir) {
                 Projectile.tileCollide = false;
 
-                if (Projectile.Distance(HomePosition) > 14)
+                if (Projectile.Distance(HomePosition) > 14) {
                     Projectile.velocity += Projectile.DirectionTo(HomePosition).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(HomePosition) * 0.005f);
+                }
                 else {
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2Circular(5, 5), 0.05f);
                     Projectile.netUpdate = true;
@@ -133,15 +145,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Projectile.velocity *= 0.95f;
                 Projectile.rotation = Projectile.velocity.X * 0.04f;
             }
-            else
+            else {
                 Projectile.tileCollide = true;
+            }
 
             if (InAir) {
                 if (++Projectile.frameCounter >= 5) {
                     Projectile.frameCounter = 0;
                     Projectile.frame = Math.Clamp(Projectile.frame + 1, 6, 12);
-                    if (Projectile.frame == 12)
+                    if (Projectile.frame == 12) {
                         Projectile.frame = 6;
+                    }
                 }
             }
             else {
@@ -157,13 +171,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 }
             }
 
-            if (!iAmInAir)
+            if (!iAmInAir) {
                 Projectile.velocity.Y += 0.5f;
+            }
 
-            if (Math.Abs(Projectile.velocity.X) < 1f)
+            if (Math.Abs(Projectile.velocity.X) < 1f) {
                 Projectile.direction = Player.direction;
-            else
+            }
+            else {
                 Projectile.direction = Math.Sign(Projectile.velocity.X);
+            }
         }
 
         public void Attack(int whoAmI)
@@ -175,8 +192,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             iAmInAir = true;
             Projectile.tileCollide = false;
 
-            if (Projectile.Distance(target.Center) <= 300)
+            if (Projectile.Distance(target.Center) <= 300) {
                 State = (int)SlimeMinionState.Attacking;
+            }
 
             if (Projectile.Distance(target.Center) > 300 || State == (int)SlimeMinionState.IdleMoving || AttackCD > 0) {
                 State = (int)SlimeMinionState.IdleMoving;
@@ -184,8 +202,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 if (++Projectile.frameCounter >= 5) {
                     Projectile.frameCounter = 0;
                     Projectile.frame = Math.Clamp(Projectile.frame + 1, 6, 12);
-                    if (Projectile.frame == 12)
+                    if (Projectile.frame == 12) {
                         Projectile.frame = 6;
+                    }
                 }
 
                 Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * MathF.Max(0.1f, Projectile.Distance(target.Center) * 0.05f);
@@ -193,8 +212,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
             }
 
             if (State == (int)SlimeMinionState.Attacking && AttackCD == 0) {
-                if (Projectile.Distance(target.Center) > 100)
+                if (Projectile.Distance(target.Center) > 100) {
                     Projectile.velocity += Projectile.DirectionTo(target.Center).SafeNormalize(Vector2.Zero) * Projectile.Distance(target.Center) * 0.03f;
+                }
                 else if (Main.myPlayer == Projectile.owner) {
                     Projectile.velocity += Main.rand.NextVector2Circular(2, 2);
                     Projectile.netUpdate = true;
@@ -208,8 +228,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 if (++Projectile.frameCounter >= maxTime) {
                     Projectile.frameCounter = 0;
                     Projectile.frame = Math.Clamp(Projectile.frame + 1, 11, 17);
-                    if (Projectile.frame == 17)
+                    if (Projectile.frame == 17) {
                         Projectile.frame = 11;
+                    }
                 }
 
                 if (Time == maxTime * 3 + 5) {
@@ -228,15 +249,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 }
             }
 
-            if (Math.Abs(Projectile.velocity.X) > 0)
+            if (Math.Abs(Projectile.velocity.X) > 0) {
                 Projectile.direction = Math.Sign(Projectile.velocity.X);
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if (State == (int)SlimeMinionState.IdleMoving) {
-                if (Projectile.velocity.Y >= 0)
+                if (Projectile.velocity.Y >= 0) {
                     Jump(-7 - Math.Max(Math.Abs(HomePosition.X - Projectile.Center.X) * 0.01f + (iAmInAir ? Math.Abs(HomePosition.Y - Projectile.Center.Y) * 0.026f : 0) + 0.5f, 0), iAmInAir);
+                }
             }
 
             return false;

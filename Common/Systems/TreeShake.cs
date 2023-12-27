@@ -19,8 +19,9 @@ namespace CalamityHunt.Common.Systems
                     TreeTypes treeType = WorldGen.GetTreeType(Main.tile[treeX, treeY].TileType);
                     if (treeType != TreeTypes.None) {
                         treeY--;
-                        while (treeY > 10 && Main.tile[treeX, treeY].HasTile && TileID.Sets.IsShakeable[Main.tile[treeX, treeY].TileType])
+                        while (treeY > 10 && Main.tile[treeX, treeY].HasTile && TileID.Sets.IsShakeable[Main.tile[treeX, treeY].TileType]) {
                             treeY--;
+                        }
 
                         treeY++;
 
@@ -47,18 +48,24 @@ namespace CalamityHunt.Common.Systems
 
             int num = tileSafely.TileFrameX / 22;
             int num2 = tileSafely.TileFrameY / 22;
-            if (num == 3 && num2 <= 2)
+            if (num == 3 && num2 <= 2) {
                 x++;
-            else if (num == 4 && num2 >= 3 && num2 <= 5)
+            }
+            else if (num == 4 && num2 >= 3 && num2 <= 5) {
                 x--;
-            else if (num == 1 && num2 >= 6 && num2 <= 8)
+            }
+            else if (num == 1 && num2 >= 6 && num2 <= 8) {
                 x--;
-            else if (num == 2 && num2 >= 6 && num2 <= 8)
+            }
+            else if (num == 2 && num2 >= 6 && num2 <= 8) {
                 x++;
-            else if (num == 2 && num2 >= 9)
+            }
+            else if (num == 2 && num2 >= 9) {
                 x++;
-            else if (num == 3 && num2 >= 9)
+            }
+            else if (num == 3 && num2 >= 9) {
                 x--;
+            }
 
             tileSafely = Framing.GetTileSafely(x, y);
             while (y < Main.maxTilesY - 50 && (!tileSafely.HasTile || TileID.Sets.IsATreeTrunk[tileSafely.TileType] || tileSafely.TileType == TileID.MushroomTrees)) {

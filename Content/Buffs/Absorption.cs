@@ -9,8 +9,9 @@ namespace CalamityHunt.Content.Buffs
     {
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.HeldItem.type == ModContent.ItemType<Gobflogger>())
+            if (player.HeldItem.type == ModContent.ItemType<Gobflogger>()) {
                 player.GetModPlayer<GoozmaWeaponsPlayer>().gobfloggerBuff = true;
+            }
         }
     }
 }

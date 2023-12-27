@@ -36,11 +36,13 @@ namespace CalamityHunt.Content.Buffs
 
                 Dust slimeDust = Dust.NewDustDirect(Player.position - new Vector2(2), Player.width + 4, Player.height + 4, DustID.SlimeBunny, 0f, 0f, 190, new Color(0, 235, 90, 100), 1f + Main.rand.NextFloat());
 
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool(2)) {
                     slimeDust.alpha += 25;
+                }
 
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool(2)) {
                     slimeDust.alpha += 25;
+                }
 
                 slimeDust.noLight = true;
                 slimeDust.fadeIn = 1.3f;
@@ -57,11 +59,13 @@ namespace CalamityHunt.Content.Buffs
             if (npc.HasBuff<Swamped>()) {
                 Dust slimeDust = Dust.NewDustDirect(npc.position - new Vector2(2), npc.width + 4, npc.height + 4, DustID.SlimeBunny, 0f, 0f, 190, new Color(0, 235, 90, 100), 1f + Main.rand.NextFloat());
 
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool(2)) {
                     slimeDust.alpha += 25;
+                }
 
-                if (Main.rand.NextBool(2))
+                if (Main.rand.NextBool(2)) {
                     slimeDust.alpha += 25;
+                }
 
                 slimeDust.noLight = true;
                 slimeDust.fadeIn = 1.3f;

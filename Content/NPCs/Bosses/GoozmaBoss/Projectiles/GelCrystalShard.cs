@@ -31,8 +31,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-            if (Projectile.ai[0] == 0)
+            if (Projectile.ai[0] == 0) {
                 Projectile.velocity.Y += 0.06f;
+            }
 
             if (Main.rand.NextBool(2)) {
                 int dustType = Utils.SelectRandom(Main.rand, DustID.PinkCrystalShard, DustID.BlueCrystalShard, DustID.PurpleCrystalShard);
@@ -42,8 +43,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             Lighting.AddLight(Projectile.Center, Color.Lerp(Color.DarkBlue, Color.HotPink, (float)Math.Sqrt(Math.Sin(Projectile.timeLeft * 0.1f))).ToVector3() * 0.2f);
 
-            if (Projectile.timeLeft < 20)
+            if (Projectile.timeLeft < 20) {
                 Projectile.velocity *= 0.9f;
+            }
         }
 
         public override bool PreDraw(ref Color lightColor)

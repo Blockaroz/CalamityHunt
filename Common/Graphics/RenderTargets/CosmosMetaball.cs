@@ -1,8 +1,12 @@
-﻿using CalamityHunt.Common.Systems.Metaballs;
+﻿using System.Linq;
+using CalamityHunt.Common.Systems.Metaballs;
 using CalamityHunt.Common.Systems.Particles;
+using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
+using Terraria.ModLoader;
 
 namespace CalamityHunt.Common.Graphics.RenderTargets;
 
@@ -17,6 +21,16 @@ public class CosmosMetaball : MetaballDrawer
         content.width = Main.screenWidth;
         content.height = Main.screenHeight;
         content.draw = spriteBatch => {
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.EffectMatrix);
+            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.type == ModContent.ProjectileType<StellarBlackHole>())) {
+
+                float width = MathHelper.SmoothStep(0f, 1f, Utils.GetLerpValue(40, 110, projectile.ai[0], true) * Utils.GetLerpValue(projectile.ai[1] * 0.95f, projectile.ai[1] * 0.8f, projectile.ai[0], true));
+                Vector2 position = Vector2.Lerp(projectile.Center - Main.screenPosition, new Vector2(Main.screenWidth / 2f, 0), width);
+                Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, position, new Rectangle(0, 0, 2, 2), Color.White, 0, Vector2.One, new Vector2(width * (Main.screenWidth + 50), Main.screenHeight + 50), 0, 0);
+            }
+            spriteBatch.End();
+
             particles.Draw(spriteBatch);
         };
 
@@ -41,7 +55,7 @@ public class CosmosMetaball : MetaballDrawer
         effect.Parameters["uPosition"].SetValue(Main.screenPosition / 256f);
         effect.Parameters["uScrollClose"].SetValue(new Vector2(-Main.GlobalTimeWrappedHourly * 0.027f % 2f, -(Main.GlobalTimeWrappedHourly * 0.017f % 2f)));
         effect.Parameters["uScrollFar"].SetValue(new Vector2(Main.GlobalTimeWrappedHourly * 0.008f % 2f, -(Main.GlobalTimeWrappedHourly * 0.0004f % 2f)));
-        effect.Parameters["uCloseColor"].SetValue(Color.Lerp(Color.SteelBlue, Color.Cyan, 0.1f).ToVector3());
+        effect.Parameters["uCloseColor"].SetValue(Color.Lerp(Color.CornflowerBlue, Color.RoyalBlue, 0.1f).ToVector3() * 1.2f);
         effect.Parameters["uFarColor"].SetValue((Color.Blue * 0.2f).ToVector3());
         effect.Parameters["uOutlineColor"].SetValue(new Color(0, 10, 100, 20).ToVector4());
         effect.Parameters["uImageSize"].SetValue(Main.ScreenSize.ToVector2());

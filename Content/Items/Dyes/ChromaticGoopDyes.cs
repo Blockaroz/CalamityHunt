@@ -29,8 +29,9 @@ namespace CalamityHunt.Content.Items.Dyes
             loadedDyeCount = 0;
             Hunt = ModLoader.GetMod("CalamityHunt");
 
-            while (loadedDyeCount < Palettes.Count)
+            while (loadedDyeCount < Palettes.Count) {
                 LoadNextChromaDye();
+            }
         }
 
         public static int loadedDyeCount;

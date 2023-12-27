@@ -40,8 +40,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override void AI()
         {
-            if (Time > 120)
+            if (Time > 120) {
                 Projectile.Kill();
+            }
 
             if (Config.Instance.photosensitiveToggle) {
                 float strength = Utils.GetLerpValue(1, 5, Time, true) * Utils.GetLerpValue(110, 40, Time, true);
@@ -117,15 +118,17 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, bloomColor * 0.3f, Projectile.rotation, texture.Size() * 0.5f, MathF.Pow(time * 2f, 3f) * 4f, 0, 0);
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, bloomColor * 0.5f, Projectile.rotation, texture.Size() * 0.5f, MathF.Pow(time * 2f, 3f) * 2f, 0, 0);
 
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++) {
                     DrawSparkle(MathHelper.TwoPi / 4f * i, 4f, Projectile.Center, sparkleColor, time);
+                }
 
-
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++) {
                     DrawSparkle(MathHelper.TwoPi / 4f * i + MathHelper.PiOver4, 2f, Projectile.Center, sparkleColor * 0.8f, time);
+                }
 
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 8; i++) {
                     DrawSparkle(MathHelper.TwoPi / 8f * i + MathHelper.Pi / 8f, 1.5f, Projectile.Center, sparkleColor * 0.03f, time);
+                }
             }
             return false;
         }

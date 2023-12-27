@@ -142,7 +142,7 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
-            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
+            Texture2D ring = AssetDirectory.Textures.Glow[3].Value;
             SpriteEffects flip = SpriteEffects.None;// Projectile.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
@@ -181,8 +181,9 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
 
             if (oldVels == null) {
                 oldVels = new Vector2[10];
-                for (int i = 0; i < oldVels.Length; i++)
+                for (int i = 0; i < oldVels.Length; i++) {
                     oldVels[i] = Projectile.velocity;
+                }
             }
 
             float tentaCount = 2;
@@ -199,10 +200,13 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
                 for (int i = 0; i < segments; i++) {
                     float prog = i / (float)segments;
                     int segFrame = Math.Clamp((int)(prog * 5f), 1, 3);
-                    if (i == 0)
+                    if (i == 0) {
                         segFrame = 0;
-                    if (i == segments - 1)
+                    }
+
+                    if (i == segments - 1) {
                         segFrame = 4;
+                    }
 
                     Rectangle frame = tentacleTexture.Frame(3, 5, 0, segFrame);
                     Rectangle glowFrame = tentacleTexture.Frame(3, 5, 1, segFrame);
@@ -217,8 +221,9 @@ namespace CalamityHunt.Content.Pets.BloatBabyPet
                     Main.EntitySpriteDraw(tentacleTexture, lastPos - Main.screenPosition, glowFrame, growColor * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch, 0, 0);
                     Main.EntitySpriteDraw(tentacleTexture, lastPos - Main.screenPosition, glowFrame, growColor * 0.1f * bloomScale, stickRot - MathHelper.PiOver2, frame.Size() * 0.5f, stretch * 1.05f, 0, 0);
 
-                    if (Main.player[Projectile.owner].cPet <= 0)
+                    if (Main.player[Projectile.owner].cPet <= 0) {
                         Main.EntitySpriteDraw(glow, lastPos + oldVels[i] * 0.1f - Main.screenPosition, glow.Frame(), growColor * bloomScale * 0.1f, Projectile.rotation, glow.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.5f) * bloomScale, 0, 0);
+                    }
                 }
             }
         }

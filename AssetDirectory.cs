@@ -14,8 +14,6 @@ public static class AssetDirectory
     public static class Textures
     {
         public static readonly Asset<Texture2D> Sparkle = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/Sparkle");
-        public static readonly Asset<Texture2D> GlowRing = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/GlowRing");
-        public static readonly Asset<Texture2D> GlowRay = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/GlowRay");
         public static readonly Asset<Texture2D> ShockRing = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/ShockRing");
         public static readonly Asset<Texture2D> Empty = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/Empty");
         public static readonly Asset<Texture2D> Template = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/Template");
@@ -28,6 +26,8 @@ public static class AssetDirectory
         public static readonly Asset<Texture2D>[] SwordSwing = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/Extra/SwordSwing_");
         public static readonly Asset<Texture2D> QuestionMark = AssetUtilities.RequestImmediate<Texture2D>($"{nameof(CalamityHunt)}/icon_small");
         public static readonly Asset<Texture2D> Balloons = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/Balloons");
+
+        public static readonly Asset<Texture2D> ChromaticSoulEye = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Extra/SoulEyes/ChromaticSoulEye");
 
         public static Dictionary<int, Asset<Texture2D>> Particle = new Dictionary<int, Asset<Texture2D>>();
         public static Dictionary<int, Asset<Texture2D>> Relic = new Dictionary<int, Asset<Texture2D>>();
@@ -43,12 +43,9 @@ public static class AssetDirectory
         {
             public static readonly string GoozmaPrefix = AssetPath + "Textures/NPCs/Bosses/GoozmaBoss/";
 
-            public static readonly Asset<Texture2D> Dress = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaDress");
-            public static readonly Asset<Texture2D> Tentacle = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaTentacle");
             public static readonly Asset<Texture2D> MicroTentacle = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaMicroTentacle");
 
-            public static readonly Asset<Texture2D> BossPortrait = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaBC");
-            public static readonly Asset<Texture2D> GodEye = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "SpecialEye");
+            public static readonly Asset<Texture2D> BossChecklistPortrait = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaBC");
             public static readonly Asset<Texture2D> Sclera = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "GoozmaSclera");
             public static readonly Asset<Texture2D> Wormhole = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "Wormhole");
             public static readonly Asset<Texture2D> DarkSludge = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "DarkSludgeTexture");
@@ -57,30 +54,15 @@ public static class AssetDirectory
             public static readonly Asset<Texture2D> LightningGlow = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "LightningGlow");
             public static readonly Asset<Texture2D> LiquidTrail = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "LiquidTrail");
 
-            public static readonly Asset<Texture2D> Crown = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "Crowns/GoozmaCrown");
-            public static readonly Asset<Texture2D> CrownMask = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "Crowns/GoozmaCrown_Mask");
-            public static readonly Asset<Texture2D> Ornament = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "Crowns/GoozmaOrnament");
-            public static readonly Asset<Texture2D> Ninja = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "Crowns/DeadNinja");
-            public static readonly Asset<Texture2D> CorruptEye = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "Crowns/CorruptEye");
-            public static readonly Asset<Texture2D> CrystalMine = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "Crowns/CrystalMine");
-
-            public static readonly Asset<Texture2D> DivineWings = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "DivineGargooptuarWingsNevermindSorryDominic");
             public static readonly Asset<Texture2D> PixieBeachBall = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "PixieBeachBall");
             public static readonly Asset<Texture2D> PixieHitMeSign = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "PixieHitMeSign");
             public static readonly Asset<Texture2D> PixieHitMeHand = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "PixieHitMeHand");
 
-            public static readonly Asset<Texture2D>[] SwirlingRocks = AssetUtilities.RequestArrayImmediate<Texture2D>(GoozmaPrefix + "Crowns/SwirlingRocks_", 2);
+            public static readonly Asset<Texture2D>[] SwirlingRocks = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/Extra/SwirlingRocks_");
             public static readonly Asset<Texture2D> ConstellationArea = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "ConstellationArea");
             public static readonly Asset<Texture2D> SpaceTrail = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "SpaceTrail");
             public static readonly Asset<Texture2D> SpaceTrailGlow = AssetUtilities.RequestImmediate<Texture2D>(GoozmaPrefix + "SpaceTrailGlow");
 
-            public static readonly Asset<Texture2D> PaladinPalanquinBall = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Mounts/PaladinPalanquinMount_Ball");
-            public static readonly Asset<Texture2D> PaladinPalanquinWings = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Mounts/PaladinPalanquinMount_Wings");
-            public static readonly Asset<Texture2D> InkyHats = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Projectiles/Weapons/Summoner/InkyHats");
-            public static readonly Asset<Texture2D> InkyRings = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Projectiles/Weapons/Summoner/InkyRings");
-            public static readonly Asset<Texture2D> GoozmoemEye = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Projectiles/Weapons/Summoner/GoozmoemEye");
-            public static readonly Asset<Texture2D> GoozmoemCrown = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Projectiles/Weapons/Summoner/GoozmoemCrown");
-            public static readonly Asset<Texture2D> CometKunaiFlame = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/Projectiles/Weapons/Rogue/CometKunaiFlame");
             public static readonly Asset<Texture2D>[] FusionRay = AssetUtilities.RequestArrayImmediate<Texture2D>(GoozmaPrefix + "Projectiles/FusionRay_", 4);
         }
 
@@ -115,12 +97,12 @@ public static class AssetDirectory
 
     public static class Music
     {
-        public static readonly int GlutinousArbitration = MusicLoader.GetMusicSlot(AssetPath + "Music/GlutinousArbitration");
-        public static readonly int ViscousDesperation = MusicLoader.GetMusicSlot(AssetPath + "Music/ViscousDesperation");
+        public static readonly int GoozmaPhase1 = MusicLoader.GetMusicSlot(AssetPath + "Music/GlutinousArbitration");
+        public static readonly int GoozmaPhase2 = MusicLoader.GetMusicSlot(AssetPath + "Music/ViscousDesperation");
 
         //auric soul shorts
-        public static readonly int Iridescence = MusicLoader.GetMusicSlot(AssetPath + "Music/Souls/Iridescence");
-        public static readonly int DraconicSoulUnnamedSong = MusicLoader.GetMusicSlot(AssetPath + "Music/Souls/YharonAuricSoulMusic");
+        public static readonly int ChromaticSoul = MusicLoader.GetMusicSlot(AssetPath + "Music/Souls/Iridescence");
+        public static readonly int DraconicSoul = MusicLoader.GetMusicSlot(AssetPath + "Music/Souls/YharonAuricSoulMusic");
     }
 
     public static class Sounds
@@ -264,6 +246,7 @@ public static class AssetDirectory
         public static readonly Asset<Effect> HolographicGel = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/HolographEffect");
         public static readonly Asset<Effect> BlackHole = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/SpaceHole");
 
+        public static readonly Asset<Effect> CometKunaiTrail = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/CometKunaiTrail");
         public static readonly Asset<Effect> ShakerSludge = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/ShakerSludge");
         public static readonly Asset<Effect> CrystalLightning = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/CrystalLightningEffect");
         public static readonly Asset<Effect> FusionRay = AssetUtilities.RequestImmediate<Effect>(AssetPath + "Effects/FusionRayEffect");

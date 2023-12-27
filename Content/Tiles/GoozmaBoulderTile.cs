@@ -84,8 +84,9 @@ namespace CalamityHunt.Content.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
                 Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2((i + 2.5f) * 16 + 8, (j + 2.5f) * 16 + 8 + 4), Vector2.Zero, ModContent.ProjectileType<GoozmaBoulderProjectile>(), 1, 0);
+            }
         }
 
         public override bool IsTileDangerous(int i, int j, Player player) => true;

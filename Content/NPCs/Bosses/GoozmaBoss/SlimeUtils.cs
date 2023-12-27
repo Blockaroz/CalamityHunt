@@ -58,17 +58,20 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss
         {
             get
             {
-                if (Main.drunkWorld)
+                if (Main.drunkWorld) {
                     return ColorsForFunnyWorlds(GoozmaColorType);
+                }
 
-                if (Main.getGoodWorld && Main.masterMode || Main.zenithWorld)
+                if (Main.getGoodWorld && Main.masterMode || Main.zenithWorld) {
                     return GoozmaColorUtils.Nuclear;
-
-                else if (Main.getGoodWorld)
+                }
+                else if (Main.getGoodWorld) {
                     return GoozmaColorUtils.Masterful;
+                }
 
-                if (Main.notTheBeesWorld)
+                if (Main.notTheBeesWorld) {
                     return GoozmaColorUtils.Honey;
+                }
 
                 return GoozmaColorUtils.Oil;
             }

@@ -48,8 +48,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<Gobbed>(), 300);
-            if (!Main.player[Projectile.owner].HasBuff<Absorption>())
+            if (!Main.player[Projectile.owner].HasBuff<Absorption>()) {
                 Main.player[Projectile.owner].AddBuff(ModContent.BuffType<Absorption>(), 300);
+            }
+
             Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
         }
 
@@ -97,12 +99,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                     float t = Projectile.ai[0] / timeToFlyOut;
                     scale = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true));
                 }
-                else if (i > points.Count * 3 / 5)
+                else if (i > points.Count * 3 / 5) {
                     frameY = 3;
-                else if (i > points.Count / 3)
+                }
+                else if (i > points.Count / 3) {
                     frameY = 2;
-                else if (i > 0)
+                }
+                else if (i > 0) {
                     frameY = 1;
+                }
 
                 Vector2 change = points[i + 1] - points[i];
 

@@ -27,13 +27,16 @@ namespace CalamityHunt.Content.Projectiles
 
         public override void AI()
         {
-            if (Time < 20)
+            if (Time < 20) {
                 Projectile.scale = 1f + Projectile.ai[1];
-            else
+            }
+            else {
                 Projectile.scale *= 0.99f;
+            }
 
-            if (Projectile.scale < 0.3f)
+            if (Projectile.scale < 0.3f) {
                 Projectile.Kill();
+            }
 
             if (Projectile.owner == Main.myPlayer) {
                 Rectangle rectangle4 = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);

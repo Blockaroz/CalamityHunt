@@ -95,18 +95,22 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(5, 5) + Projectile.velocity * 0.8f, DustID.TintableDust, Projectile.velocity * 0.4f, 100, Color.Black, 1f + Main.rand.NextFloat()).noGravity = true;
                 }
 
-                if (Time > 250)
+                if (Time > 250) {
                     Projectile.Kill();
+                }
             }
 
             if (oldVels == null) {
                 oldVels = new Vector2[10];
-                for (int i = 0; i < oldVels.Length; i++)
+                for (int i = 0; i < oldVels.Length; i++) {
                     oldVels[i] = Projectile.velocity;
+                }
             }
             else {
-                for (int i = 9; i > 0; i--)
+                for (int i = 9; i > 0; i--) {
                     oldVels[i] = Vector2.Lerp(oldVels[i], oldVels[i - 1] * 1.2f, 0.6f);
+                }
+
                 oldVels[0] = Vector2.Lerp(oldVels[0], (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2(), 0.6f);
             }
 
@@ -115,8 +119,10 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Projectile.ai[1] == 0)
+            if (Projectile.ai[1] == 0) {
                 return false;
+            }
+
             return base.Colliding(projHitbox, targetHitbox);
         }
 
@@ -186,7 +192,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
-            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
+            Texture2D ring = AssetDirectory.Textures.Glow[3].Value;
             Vector2 squishFactor = new Vector2(1f - Projectile.velocity.Length() * 0.0045f, 1f + Projectile.velocity.Length() * 0.0075f);
 
             Color bloomColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]);
@@ -208,8 +214,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 //    Main.EntitySpriteDraw(texture.Value, Projectile.Center + off - Main.screenPosition, outlineFrame, growColor * 0.7f, Projectile.rotation, outlineFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 //}
 
-                if (oldVels != null)
+                if (oldVels != null) {
                     DrawTentacles(lightColor, growColor);
+                }
 
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, baseFrame, lightColor, Projectile.rotation, baseFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);
                 Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, glowFrame, growColor, Projectile.rotation, glowFrame.Size() * 0.5f, Projectile.scale * squishFactor, 0, 0);

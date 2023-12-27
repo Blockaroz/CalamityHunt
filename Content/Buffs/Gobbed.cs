@@ -20,8 +20,9 @@ namespace CalamityHunt.Content.Buffs
 
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
-            if (npc.HasBuff<Gobbed>())
+            if (npc.HasBuff<Gobbed>()) {
                 modifiers.FlatBonusDamage += Gobbed.TagDamage * ProjectileID.Sets.SummonTagDamageMultiplier[projectile.type];
+            }
         }
     }
 }

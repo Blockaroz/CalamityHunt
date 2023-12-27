@@ -48,8 +48,9 @@ namespace CalamityHunt.Content.Items.Consumable
                 self.potionDelay = self.restorationDelayTime;
                 self.AddBuff(21, self.potionDelay);
             }
-            else
+            else {
                 orig(self, sItem);
+            }
         }
 
         public override void AddRecipes()

@@ -48,8 +48,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.scale = 0.01f;
             List<int> eyeTypes = new List<int>();
             int eyeCount = 8;
-            for (int i = 0; i < eyeCount; i++)
+            for (int i = 0; i < eyeCount; i++) {
                 eyeTypes.Add(i);
+            }
 
             eyeType = new List<int>();
             for (int i = 0; i < eyeCount; i++) {
@@ -66,8 +67,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Projectile.active = false;
                 return;
             }
-            else
+            else {
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<EbonianBehemuck>() && n.active).whoAmI;
+            }
 
             int slimeCount = 5;
 
@@ -79,8 +81,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 float distanceOut = 220 + (float)Math.Pow(Utils.GetLerpValue(-30, 0, Time, true), 2f) * 200;
                 Vector2 outerTarget = Main.npc[owner].Center + new Vector2(distanceOut * (float)Math.Sqrt(Utils.GetLerpValue(-150, -80, Time + WhichOne % slimeCount * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
 
-                if (Projectile.ai[1] >= slimeCount)
+                if (Projectile.ai[1] >= slimeCount) {
                     outerTarget = Main.npc[owner].Center - new Vector2(distanceOut * (float)Math.Sqrt(Utils.GetLerpValue(-150, -90, Time + WhichOne % slimeCount * 40, true)), 0).RotatedBy(MathHelper.TwoPi / slimeCount * WhichOne + CupGameRotation);
+                }
 
                 CupGameRotation += Main.npc[owner].velocity.X * 0.001f;
                 Projectile.velocity = Projectile.DirectionTo(outerTarget).SafeNormalize(Vector2.Zero) * Projectile.Distance(outerTarget) * 0.2f;
@@ -106,8 +109,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                         }));
                     }
 
-                    for (int i = 0; i < Main.rand.Next(1, 3); i++)
+                    for (int i = 0; i < Main.rand.Next(1, 3); i++) {
                         Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextVector2Circular(5, 5), ModContent.ProjectileType<ToxicSludge>(), Projectile.damage / 2, 0);
+                    }
 
                     SoundEngine.PlaySound(SoundID.Item167.WithPitchOffset(0.2f), Projectile.Center);
 
@@ -116,13 +120,14 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             else {
                 Projectile.velocity = Vector2.Zero;
                 squish = Vector2.Lerp(new Vector2(0.6f, 1.5f), Vector2.One, Utils.GetLerpValue(15, 1, Time, true)) * Utils.GetLerpValue(20, 8, Time, true);
-                if (Time > 20)
+                if (Time > 20) {
                     Projectile.Kill();
+                }
             }
 
-            if (Main.rand.NextBool(3))
+            if (Main.rand.NextBool(3)) {
                 Dust.NewDustPerfect(Projectile.Center + new Vector2(0, Projectile.height / 2).RotatedBy(Projectile.rotation) * Projectile.scale * squish + Main.rand.NextVector2Circular(60, 48).RotatedBy(Projectile.rotation), 4, Projectile.velocity * 0.5f, 150, Color.DarkOrchid, 2f).noGravity = true;
-
+            }
 
             Projectile.frameCounter++;
 
@@ -138,8 +143,10 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > 0)
+            if (Time > 0) {
                 return base.Colliding(projHitbox, targetHitbox);
+            }
+
             return false;
         }
 
@@ -147,18 +154,17 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCs.Add(index);
 
-        public static Texture2D eyeTexture;
         public static Texture2D ballTexture;
 
         public override void Load()
         {
-            eyeTexture = AssetDirectory.Textures.Goozma.CorruptEye.Value;
             ballTexture = ModContent.Request<Texture2D>(Texture + "Ball", AssetRequestMode.ImmediateLoad).Value;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D eyeTexture = EbonianBehemuck.eyeTexture;
             Rectangle frame = texture.Frame(1, 4, 0, Projectile.frame);
 
             Texture2D tell = AssetDirectory.Textures.Glow[0].Value;

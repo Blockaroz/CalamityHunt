@@ -84,8 +84,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 }
                 else {
                     Target = Projectile.FindTargetWithLineOfSight(1200);
-                    if (Target > -1 && Main.netMode != NetmodeID.MultiplayerClient)
+                    if (Target > -1 && Main.netMode != NetmodeID.MultiplayerClient) {
                         Projectile.netUpdate = true;
+                    }
                 }
 
                 if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool(5)) {
@@ -94,8 +95,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 }
             }
 
-            if (Time == 30 || Time > 70)
+            if (Time == 30 || Time > 70) {
                 Projectile.velocity += Main.rand.NextVector2Circular(1, 1);
+            }
 
             Projectile.frame = (int)(Utils.GetLerpValue(8, 30, Time, true) * 4f + Utils.GetLerpValue(40, 90, Time, true) * 3f);
             Time++;

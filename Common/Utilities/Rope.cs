@@ -20,8 +20,10 @@ public class Rope
     public Rope(Vector2 startPoint, int segmentCount, float segmentLength, Vector2 gravity, float damping = 0f, int accuracy = 15, bool tileCollide = false)
     {
         segments = new List<RopeSegment>();
-        for (int i = 0; i < segmentCount; i++)
+        for (int i = 0; i < segmentCount; i++) {
             segments.Add(new RopeSegment(startPoint + gravity.SafeNormalize(Vector2.Zero) * i));
+        }
+
         StartPos = startPoint;
         EndPos = startPoint;
 
@@ -36,8 +38,10 @@ public class Rope
     public Rope(Vector2 startPoint, Vector2 endPoint, int segmentCount, float segmentLength, Vector2 gravity, float damping = 0f, int accuracy = 15, bool tileCollide = false)
     {
         segments = new List<RopeSegment>();
-        for (int i = 0; i < segmentCount; i++)
+        for (int i = 0; i < segmentCount; i++) {
             segments.Add(new RopeSegment(Vector2.Lerp(startPoint, endPoint, (float)i / (segmentCount - 1))));
+        }
+
         StartPos = startPoint;
         EndPos = endPoint;
 
@@ -52,8 +56,10 @@ public class Rope
     public List<Vector2> GetPoints()
     {
         List<Vector2> points = new List<Vector2>();
-        foreach (RopeSegment segment in segments)
+        foreach (RopeSegment segment in segments) {
             points.Add(segment.position);
+        }
+
         return points;
     }
 
@@ -113,8 +119,9 @@ public class Rope
 
     private Vector2 TileCollision(Vector2 position, Vector2 velocity)
     {
-        if (!tileCollide)
+        if (!tileCollide) {
             return velocity;
+        }
 
         Vector2 newVelocity = Collision.noSlopeCollision(position - new Vector2(3), velocity, 6, 6, true, true);
         Vector2 final = velocity;

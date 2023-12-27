@@ -31,8 +31,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 particle.velocity = Main.rand.NextVector2Circular(6, 6) + Projectile.velocity * Utils.GetLerpValue(0, 8, Time, true);
                 particle.scale = Main.rand.NextFloat(1f, 3f) * Projectile.scale;
                 particle.maxTime = Main.rand.Next(16, 30);
-                particle.color = Color.Lerp(Color.Coral, Color.Goldenrod, 0.5f) with { A = 128 };
-                particle.fadeColor = Color.Lerp(Color.Coral * 0.4f, Color.DarkOrchid, 0.1f) with { A = 128 };
+                particle.color = Color.Lerp(Color.Coral, Color.Goldenrod, 0.45f) with { A = 115 };
+                particle.fadeColor = Color.Lerp(Color.Coral * 0.3f, Color.MidnightBlue, Main.rand.NextFloat(0.4f, 0.7f)) with { A = 100 };
             }));
 
             Time++;

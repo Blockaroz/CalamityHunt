@@ -15,13 +15,14 @@ using Terraria.Chat;
 using Terraria.GameContent;
 using Terraria.GameContent.Events;
 using Terraria.Graphics.CameraModifiers;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace CalamityHunt.Content.NPCs;
 
-[AutoloadHead]
+[AutoloadBossHead]
 public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
 {
     public override void SetStaticDefaults()
@@ -45,6 +46,8 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
         NPC.dontCountMe = true;
         NPC.ShowNameOnHover = false;
         NPC.lifeMax = 2028;
+        NPC.BossBar = Main.BigBossProgressBar.NeverValid;
+        Music = AssetDirectory.Music.ChromaticSoul;
 
         slimeMonsoonText = Language.GetOrRegister(Mod.GetLocalizationKey("Chat.SlimeMonsoon"));
     }
@@ -60,11 +63,16 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
     public override void AI()
     {
         bool spawnBoss = false;
-        ScreenObstruction.screenObstruction = Utils.GetLerpValue(0, 100, NPC.localAI[0], true) * 0.2f;
+        ScreenObstruction.screenObstruction = Utils.GetLerpValue(0, 100, NPC.localAI[0], true) * 0.1f;
 
         if (Skip) {
             size = (int)(Utils.GetLerpValue(20, 105, Time, true) * 6f);
-            NPC.scale = 1f + MathF.Round(Utils.GetLerpValue(20, 105, Time, true), 2) + MathF.Pow(Utils.GetLerpValue(170, 200, Time, true), 3f) * 0.3f;
+            NPC.scale = 1f + MathF.Round(Utils.GetLerpValue(20, 105, Time, true), 2) + MathF.Pow(Utils.GetLerpValue(230, 250, Time, true), 3f) * 0.2f;
+            NPC.velocity.Y = MathHelper.SmoothStep(0, -3f, Utils.GetLerpValue(130, 250, Time, true) * Utils.GetLerpValue(250, 230, Time, true));
+
+            if (Time > 200 && Time % 3 == 0) {
+                shake += Main.rand.NextVector2Circular(6, 6) * Utils.GetLerpValue(130, 180, Time, true);
+            }
 
             if (Time == 105) {
                 if (Main.dedServ) {
@@ -75,25 +83,44 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
                 }
             }
 
-            if (Time > 200) {
-                Time = 0;
+            if (Time > 250 && Main.netMode != NetmodeID.MultiplayerClient) {
                 spawnBoss = true;
+                NPC.netUpdate = true;
             }
         }
         else {
             size = (int)(Utils.GetLerpValue(30, 1000, Time, true) * 6f);
             NPC.scale = 1f + MathF.Round(Utils.GetLerpValue(30, 1000, Time, true), 2);
+            NPC.velocity.Y = -0.3f * Utils.GetLerpValue(30, 1000, Time, true);
 
-            if (Time > 1000) {
+            if (Time % 3 == 0) {
+                shake += Main.rand.NextVector2Circular(6, 6) * size / 6f;
+            }
+
+            if (Time > 1000 && Main.netMode != NetmodeID.MultiplayerClient) {
                 Time = 104;
                 NPC.ai[1] = 1;
+                NPC.netUpdate = true;
+
                 slimes.Clear();
             }
 
             slimes ??= new HashSet<FlyingSlime>();
 
             foreach (FlyingSlime slime in slimes.ToHashSet()) {
-                slime.Update(MathF.Sin(Time * 0.12f) * 0.3f + MathF.Sin(Time * 0.01f) * 2f);
+                slime.Update(MathF.Sin(Time * 0.12f) * 0.3f + 4f);
+
+                if (Main.rand.NextBool(8)) {
+                    CalamityHunt.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
+                        particle.position = slime.currentPosition + Main.rand.NextVector2Circular(20, 20);
+                        particle.velocity = slime.currentPosition.DirectionTo(slime.targetPosition);
+                        particle.rotation = Main.rand.NextFloat(-0.1f, 0.1f);
+                        particle.scale = 1.2f;
+                        particle.color = Color.Black;
+                        particle.fadeColor = Color.DimGray * 0.2f;
+                        particle.maxTime = Main.rand.Next(30, 45);
+                    }));
+                }
 
                 if (slime.ShouldRemove) {
 
@@ -104,8 +131,8 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
                             particle.scale = Main.rand.NextFloat(0.3f, 1f) * slime.scale;
                             particle.color = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0] * 0.33f);
                         }));
-                    }                    
-                    
+                    }
+
                     if (Main.rand.NextBool(10 + (int)(Time * 0.001f))) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticGelChunk>(particle => {
                             particle.position = slime.currentPosition;
@@ -126,8 +153,8 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
                 SoundEngine.PlaySound(AssetDirectory.Sounds.Goozma.Intro.WithVolumeScale(2f).WithPitchOffset(-0.95f), NPC.Center);
             }
 
-            for (int i = 0; i < 45; i++) {
-                if (Time < 866 && Main.rand.NextBool((int)Math.Max(1, 150 - Time * 0.16f))) {
+            for (int i = 0; i < 60; i++) {
+                if (Time < 870 && Main.rand.NextBool((int)Math.Max(1, 150 - Time * 0.16f))) {
                     FlyingSlime slime = FlyingSlime.CreateRandom();
                     Vector2 slimeOffset = Main.rand.NextVector2CircularEdge(1400, 1400) + Main.rand.NextVector2Circular(500, 500);
                     slime.startPosition = NPC.Center + slimeOffset;
@@ -143,6 +170,7 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
 
         int boss = -1;
         if (Main.netMode != NetmodeID.MultiplayerClient && spawnBoss) {
+
             boss = NPC.NewNPC(NPC.GetBossSpawnSource(0), (int)NPC.Center.X, (int)NPC.Bottom.Y, ModContent.NPCType<Goozma>(), 0, ai1: -1);
             NPC.active = false;
 
@@ -162,10 +190,6 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
         }
 
         Time++;
-
-        if (Time % 3 == 0) {
-            shake += Main.rand.NextVector2Circular(6, 6) * size / 6f;
-        }
         shake *= 0.7f;
 
         if (Main.rand.NextBool(4)) {
@@ -200,7 +224,7 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
         if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<PluripotentSpawn>())) {
             NPC goozma = Main.npc.FirstOrDefault(n => n.active && n.type == ModContent.NPCType<PluripotentSpawn>());
             for (int i = 0; i < Main.musicFade.Length; i++) {
-                float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(200, 30, goozma.localAI[0], true);
+                float volume = Main.musicFade[i] * Main.musicVolume * Utils.GetLerpValue(300, 150, goozma.localAI[0], true);
                 float tempFade = Main.musicFade[i];
                 Main.audioSystem.UpdateCommonTrackTowardStopping(i, volume, ref tempFade, Main.musicFade[i] > 0.1f && goozma.ai[0] < 600);
                 Main.musicFade[i] = tempFade;
@@ -218,8 +242,23 @@ public class PluripotentSpawn : ModNPC, ISubjectOfNPC<Goozma>
             return false;
         }
 
+        float intensity = (Skip ? Utils.GetLerpValue(220, 110, Time, true) : Utils.GetLerpValue(40, 800, Time, true)) * Utils.GetLerpValue(0, 20, NPC.localAI[0], true);
+        if (Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].Active) {
+            Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].GetShader()
+                .UseTargetPosition(NPC.Center)
+                .UseProgress(Main.GlobalTimeWrappedHourly * 0.05f % 1f)
+                .UseOpacity(intensity * 0.1f)
+                .UseIntensity(1f);
+            Effect shader = Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].GetShader().Shader;
+            shader.Parameters["distortSize"].SetValue(Vector2.One * 5f);
+            shader.Parameters["uNoiseTexture0"].SetValue(AssetDirectory.Textures.Noise[0].Value);
+            shader.Parameters["uNoiseTexture1"].SetValue(AssetDirectory.Textures.Noise[11].Value);
+        }
+        else {
+            Filters.Scene.Activate("HuntOfTheOldGods:PluripotentSpawn", NPC.Center);
+        }
+
         Texture2D texture = TextureAssets.Npc[Type].Value;
-        Texture2D eye = AssetDirectory.Textures.Goozma.GodEye.Value;
         Texture2D glow = AssetDirectory.Textures.Glow[1].Value;
 
         Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0] * 0.33f) with { A = 0 };

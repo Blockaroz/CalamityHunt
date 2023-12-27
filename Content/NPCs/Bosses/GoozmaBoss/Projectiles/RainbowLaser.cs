@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -91,9 +90,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Texture2D texture = AssetDirectory.Textures.Sparkle.Value;
             Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
-            Texture2D ray = AssetDirectory.Textures.GlowRay.Value;
+            Texture2D ray = AssetDirectory.Textures.Glow[2].Value;
 
             Color glowColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0]) with { A = 0 };
 
@@ -102,12 +101,12 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Main.EntitySpriteDraw(ray, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * 0.5f, Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale, 0, 0);
             Main.EntitySpriteDraw(ray, Main.npc[(int)Owner].Center - Main.screenPosition, ray.Frame(), glowColor * Utils.GetLerpValue(0, 20, Projectile.localAI[1], true), Projectile.rotation, ray.Size() * new Vector2(0f, 0.5f), telegraphScale * new Vector2(2f, 1f), 0, 0);
 
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.1f), Projectile.scale * new Vector2(1.1f, 3f), 0, 0);
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.White with { A = 0 }, Projectile.rotation + MathHelper.PiOver2, texture.Size() * new Vector2(0.5f, 0.1f), Projectile.scale * new Vector2(0.66f, 1.66f), 0, 0);
-            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.33f, Projectile.rotation + MathHelper.PiOver2, glow.Size() * new Vector2(0.5f, 0.4f), Projectile.scale * new Vector2(1f, 1.66f), 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), glowColor, Projectile.rotation + MathHelper.PiOver2, texture.Size() * 0.5f, Projectile.scale * new Vector2(1.33f, 3f), 0, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, texture.Frame(), Color.White with { A = 0 }, Projectile.rotation + MathHelper.PiOver2, texture.Size() * 0.5f, Projectile.scale * new Vector2(1f, 1.66f), 0, 0);
+            Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, glow.Frame(), glowColor * 0.33f, Projectile.rotation + MathHelper.PiOver2, glow.Size() * new Vector2(0.5f, 0.4f), Projectile.scale * new Vector2(1.33f, 1.66f), 0, 0);
 
             Color StripColor(float progress) => (new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(Projectile.localAI[0] + progress * 15)) with { A = 100 };
-            float StripWidth(float progress) => MathF.Sqrt(1f - progress) * 50f * Projectile.scale;
+            float StripWidth(float progress) => MathF.Sqrt(1f - progress) * 30f * Projectile.scale;
 
             vertexStrip ??= new VertexStrip();
 

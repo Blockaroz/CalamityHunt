@@ -30,11 +30,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.velocity = Vector2.Zero;
             Projectile.scale = MathF.Sqrt(Utils.GetLerpValue(0, 35, Time, true)) * (Size + 1f);
 
-            if (Time == 0)
+            if (Time == 0) {
                 Projectile.localAI[1] = Main.rand.NextFloat(-1f, 1f);
+            }
 
-            if (Time > 35)
+            if (Time > 35) {
                 Projectile.Kill();
+            }
 
             Time++;
             Projectile.localAI[0]++;
@@ -44,8 +46,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             Point checkPoint = (Projectile.Center + Projectile.DirectionTo(targetHitbox.Center()) * 120f * Projectile.scale).ToPoint();
-            if (targetHitbox.Contains(checkPoint))
+            if (targetHitbox.Contains(checkPoint)) {
                 return true;
+            }
+
             return false;
         }
 

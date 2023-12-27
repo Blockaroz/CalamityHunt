@@ -32,8 +32,9 @@ public class ShadowspecLocker : GlobalItem
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
     {
-        if (!CanUseItem(item, Main.LocalPlayer) && ShadowspecItemFinder.ShadowspecItem(item.type))
+        if (!CanUseItem(item, Main.LocalPlayer) && ShadowspecItemFinder.ShadowspecItem(item.type)) {
             tooltips.Add(new TooltipLine(Mod, "GoozmaShadowspecCurse", curseText.Value));
+        }
     }
 
     //public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
@@ -75,8 +76,9 @@ public class ShadowspecItemFinder : ModSystem
             //Rarity method
             //Recipe method
             int shadowspecType = calamity.Find<ModItem>("ShadowspecBar").Type;
-            foreach (Recipe recipe in Main.recipe.Where(n => n.HasIngredient(shadowspecType)))
+            foreach (Recipe recipe in Main.recipe.Where(n => n.HasIngredient(shadowspecType))) {
                 shadowspecItemIDs.Add(recipe.createItem.type);
+            }
         }
     }
 }

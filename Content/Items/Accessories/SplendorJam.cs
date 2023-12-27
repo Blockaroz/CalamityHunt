@@ -21,8 +21,9 @@ namespace CalamityHunt.Content.Items.Accessories
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            if (!hideVisual)
+            if (!hideVisual) {
                 player.GetModPlayer<SplendorJamPlayer>().rainbow = true;
+            }
         }
         public override void UpdateEquip(Player player)
         {

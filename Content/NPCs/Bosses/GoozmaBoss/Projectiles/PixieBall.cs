@@ -47,19 +47,22 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Projectile.active = false;
                 return;
             }
-            else
+            else {
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active).whoAmI;
+            }
 
-            if (Time < 60)
+            if (Time < 60) {
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.npc[owner].GetTargetData().Velocity, 0.9f);
+            }
 
             if (HitCount < 0 || HitCount == 1) {
                 Projectile.velocity = Projectile.DirectionTo(Main.npc[owner].GetTargetData().Center).SafeNormalize(Vector2.Zero) * 36f;
                 Cooldown = 0;
             }
             else {
-                if (Main.rand.NextBool(5))
+                if (Main.rand.NextBool(5)) {
                     Projectile.velocity += Main.rand.NextVector2Circular(3, 3);
+                }
 
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * 3f, 0.03f) * Utils.GetLerpValue(500, 470, Time, true);
                 Projectile.velocity += Projectile.DirectionTo(Main.npc[owner].Center).SafeNormalize(Vector2.Zero) * (0.3f + Utils.GetLerpValue(500, 800, Projectile.Distance(Main.npc[owner].Center), true));
@@ -84,13 +87,15 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                         Cooldown += 15;
                         Projectile.velocity = -Vector2.UnitY * 10;
                     }
-                    else
+                    else {
                         Projectile.velocity = Projectile.DirectionFrom(player.Center).SafeNormalize(Vector2.Zero) * (14f + Projectile.velocity.Length() + player.velocity.Length());
+                    }
 
                     Cooldown += 15;
 
-                    if (Time > 40)
+                    if (Time > 40) {
                         SoundEngine.PlaySound(AssetDirectory.Sounds.GoozmaMinions.PixieBallBounce, Projectile.Center);
+                    }
 
                     for (int i = 0; i < 40; i++) {
                         Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
@@ -140,19 +145,24 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             if (HitCount > 2) {
                 Main.npc[owner].ai[0] = 0;
                 Main.npc[owner].ai[1] = -1;
-                if (Main.netMode == NetmodeID.MultiplayerClient)
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
                     Main.npc[owner].netUpdate = true;
+                }
+
                 Projectile.Kill();
             }
 
-            if (Time > 400)
+            if (Time > 400) {
                 Projectile.velocity *= 0.9f;
+            }
 
-            if (Time > 480)
+            if (Time > 480) {
                 Projectile.Kill();
+            }
 
-            if (Main.rand.NextBool(5))
+            if (Main.rand.NextBool(5)) {
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(36, 36), DustID.AncientLight, Main.rand.NextVector2Circular(3, 3), 0, Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.6f, 128), 1f + Main.rand.NextFloat(2f)).noGravity = true;
+            }
 
             if (Main.rand.NextBool(2)) {
                 CalamityHunt.particles.Add(Particle.Create<PrettySparkle>(particle => {
@@ -179,12 +189,13 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.oldPos[0] = Projectile.Center;
             Projectile.oldRot[0] = Projectile.rotation;
 
-            if (Time > 400)
+            if (Time > 400) {
                 for (int i = 0; i < 40 - Time / 2; i++) {
                     Color glowColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.5f, 0);
                     glowColor.A /= 2;
                     Dust.NewDustPerfect(Projectile.Center, DustID.AncientLight, Main.rand.NextVector2Circular(25 - Time / 4f, 25 - Time / 4f), 0, glowColor, 2f + Main.rand.NextFloat(2f)).noGravity = true;
                 }
+            }
 
             HandleSound();
 
@@ -209,17 +220,22 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             volume = Math.Clamp(1f + Projectile.velocity.Length() * 0.0001f - Main.LocalPlayer.Distance(Projectile.Center) * 0.0005f, 0, 1) * Projectile.scale;
 
-            if (auraSound == null)
+            if (auraSound == null) {
                 auraSound = new LoopingSound(AssetDirectory.Sounds.GoozmaMinions.PixieBallLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            }
+
             auraSound.PlaySound(() => Projectile.Center, () => volume, () => 0f);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (Math.Abs(oldVelocity.X - Projectile.velocity.X) > 1)
+            if (Math.Abs(oldVelocity.X - Projectile.velocity.X) > 1) {
                 Projectile.velocity.X = -oldVelocity.X;
-            if (Math.Abs(oldVelocity.Y - Projectile.velocity.Y) > 1)
+            }
+
+            if (Math.Abs(oldVelocity.Y - Projectile.velocity.Y) > 1) {
                 Projectile.velocity.Y = -oldVelocity.Y;
+            }
 
             return false;
         }
@@ -248,7 +264,7 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Texture2D sparkle = TextureAssets.Extra[98].Value;
-            Texture2D ring = AssetDirectory.Textures.GlowRing.Value;
+            Texture2D ring = AssetDirectory.Textures.Glow[3].Value;
             Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
 
             Color bloomColor = Main.hslToRgb(Projectile.localAI[0] * 0.01f % 1f, 1f, 0.7f, 0);
@@ -290,8 +306,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Main.EntitySpriteDraw(ring, Projectile.Center + topRingOff - Main.screenPosition, null, bloomColor * 0.1f, sparkRotation + MathHelper.PiOver2 + 0.2f, ring.Size() * 0.5f, new Vector2(1f, 1.05f) * Projectile.scale * 0.8f, 0, 0);
 
             Vector2 topFlareOff = topRingOff * ringWobble0 * 1.1f;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++) {
                 Main.EntitySpriteDraw(sparkle, Projectile.Center + topFlareOff - Main.screenPosition, null, bloomColor * 0.2f, MathHelper.TwoPi / 3f * i, sparkle.Size() * 0.5f, new Vector2(0.3f, 1.5f), 0, 0);
+            }
 
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * (0.3f / lensPower), Projectile.rotation * 0.5f, glow.Size() * 0.5f, Projectile.scale * 4f, 0, 0);
             Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, bloomColor * (0.08f / lensPower), Projectile.rotation * 0.5f, glow.Size() * 0.5f, Projectile.scale * 8f, 0, 0);

@@ -22,8 +22,9 @@ namespace CalamityHunt.Common.UI
 
         public static void DisplayBar()
         {
-            if (anyBar)
+            if (anyBar) {
                 showTime = 120;
+            }
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -33,8 +34,9 @@ namespace CalamityHunt.Common.UI
             baseColor = Color.DimGray;
             fillColor = Color.White;
             //showTime set elsewhere
-            if (showTime > 0)
+            if (showTime > 0) {
                 showTime--;
+            }
 
             //decide which bar
             if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<Parasanguine>()) {

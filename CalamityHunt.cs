@@ -53,7 +53,7 @@ namespace CalamityHunt
             Ref<Effect> pluripotentSpawnDistort = new Ref<Effect>(AssetDirectory.Effects.PluripotentDistortion.Value);
             Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"] = new Filter(new ScreenShaderData(pluripotentSpawnDistort, "DistortionPass"), EffectPriority.Medium);
             Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].Load();
-            
+
             Ref<Effect> slimeMonsoonDistort = new Ref<Effect>(AssetDirectory.Effects.SlimeMonsoonDistortion.Value);
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"] = new Filter(new ScreenShaderData(slimeMonsoonDistort, "DistortionPass"), EffectPriority.Medium);
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Load();
@@ -162,7 +162,7 @@ namespace CalamityHunt
                 sludge = ModLoader.GetMod(HUtils.CalamityMod).Find<ModItem>("OverloadedSludge").Type;
             }
             Action<SpriteBatch, Rectangle, Color> portrait = (SpriteBatch sb, Rectangle rect, Color color) => {
-                Texture2D texture = AssetDirectory.Textures.Goozma.BossPortrait.Value;
+                Texture2D texture = AssetDirectory.Textures.Goozma.BossChecklistPortrait.Value;
                 Vector2 centered = new Vector2(rect.Center.X - (texture.Width / 2), rect.Center.Y - (texture.Height / 2));
                 sb.Draw(texture, centered, color);
             };
@@ -209,8 +209,10 @@ namespace CalamityHunt
                     int projNum = reader.ReadByte();
                     ref Player player = ref Main.player[playerNum];
 
-                    if (player.difficulty != 1 && player.difficulty != 2)
+                    if (player.difficulty != 1 && player.difficulty != 2) {
                         player.DropItems();
+                    }
+
                     player.ghost = true;
                     player.statLife = 0;
                     player.KillMe(PlayerDeathReason.ByProjectile(playerNum, projNum), 1, 0);

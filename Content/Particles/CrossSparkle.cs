@@ -9,6 +9,7 @@ namespace CalamityHunt.Content.Particles;
 public class CrossSparkle : Particle
 {
     private int time;
+    public Func<Vector2> anchor;
 
     public override void OnSpawn()
     {
@@ -21,6 +22,10 @@ public class CrossSparkle : Particle
         time++;
         if (time > 15) {
             ShouldRemove = true;
+        }
+
+        if (anchor != null) {
+            position += anchor.Invoke();
         }
     }
 

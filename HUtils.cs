@@ -47,12 +47,14 @@ public static class HUtils
 
         public bool IsActiveAndInGame()
         {
-            if (Main.gameMenu)
+            if (Main.gameMenu) {
                 return false;
+            }
 
             NPC npc = Main.npc[_expectedIndex];
-            if (npc.active)
+            if (npc.active) {
                 return npc.type == _expectedType;
+            }
 
             return false;
         }
@@ -72,12 +74,14 @@ public static class HUtils
 
         public bool IsActiveAndInGame()
         {
-            if (Main.gameMenu)
+            if (Main.gameMenu) {
                 return false;
+            }
 
             Item item = Main.item[_expectedIndex];
-            if (item.active)
+            if (item.active) {
                 return item.type == _expectedType;
+            }
 
             return false;
         }

@@ -41,8 +41,9 @@ namespace CalamityHunt.Common.Players
             delay = 0;
             if (!stressedOut) {
                 checkStress = stress;
-                if (SoundEngine.TryGetActiveSound(loopSlot, out ActiveSound activeSound))
+                if (SoundEngine.TryGetActiveSound(loopSlot, out ActiveSound activeSound)) {
                     activeSound.Stop();
+                }
             }
             if (Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15 && stress >= 0.25f && !stressedOut) {
                 SoundEngine.PlaySound(AssetDirectory.Sounds.StressActivate, Player.Center);
@@ -99,31 +100,38 @@ namespace CalamityHunt.Common.Players
         }
         public override void FrameEffects()
         {
-            if (rainbow)
+            if (rainbow) {
                 Player.armorEffectDrawShadow = true;
+            }
         }
         public override void UpdateEquips()
         {
             if (rainbow || active) {
                 gooTime = (gooTime + 1) % 60;
-                if (gooTime > 1200)
+                if (gooTime > 1200) {
                     gooTime = 0;
+                }
             }
             if (active) {
                 int damage = (int)GetBestClassDamage(Player).ApplyTo(200);
                 Color goo = new GradientColor(SlimeUtils.GoozOilColors, 0.5f, 0.5f).ValueAt(Main.GlobalTimeWrappedHourly * 100 + gooTime);
                 Lighting.AddLight(Player.Center, new Vector3(goo.R, goo.G, goo.B) * 0.01f * checkStress);
-                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] < Player.GetModPlayer<SplendorJamPlayer>().tentacleCount && Player.whoAmI == Main.myPlayer)
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] < Player.GetModPlayer<SplendorJamPlayer>().tentacleCount && Player.whoAmI == Main.myPlayer) {
                     Projectile.NewProjectile(Player.GetSource_FromThis(), Player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<SplendorTentacle>(), damage, 0.5f, Player.whoAmI);
+                }
 
-                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] > Player.GetModPlayer<SplendorJamPlayer>().tentacleCount)
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SplendorTentacle>()] > Player.GetModPlayer<SplendorJamPlayer>().tentacleCount) {
                     Main.projectile.First(n => n.active && n.owner == Player.whoAmI && n.type == ModContent.ProjectileType<SplendorTentacle>()).Kill();
+                }
 
                 tentacleCount = stressedOut ? tentacleCount : (int)(1 + stress * 4f);
-                if (stress < 1f && !stressedOut)
+                if (stress < 1f && !stressedOut) {
                     stress += 0.0001f;
-                else if (stress > 1f && !stressedOut)
+                }
+                else if (stress > 1f && !stressedOut) {
                     stress = 1f;
+                }
+
                 if (stress > 0.25f && !t25) {
                     SoundEngine.PlaySound(AssetDirectory.Sounds.StressPing with { Pitch = -0.4f }, Player.Center);
                     t25 = true;
@@ -138,10 +146,12 @@ namespace CalamityHunt.Common.Players
                 }
                 if (stressedOut && stress > 0) {
                     stress -= checkStress / ((int)(checkStress * 16 + 4) * 60);
-                    if (!SoundEngine.TryGetActiveSound(loopSlot, out ActiveSound activeSound))
+                    if (!SoundEngine.TryGetActiveSound(loopSlot, out ActiveSound activeSound)) {
                         loopSlot = SoundEngine.PlaySound(AssetDirectory.Sounds.StressLoop, Player.Center);
-                    else
+                    }
+                    else {
                         activeSound.Position = Player.Center;
+                    }
                 }
                 if (stressedOut && stress <= 0) {
                     t25 = false;
@@ -151,10 +161,13 @@ namespace CalamityHunt.Common.Players
                     stress = 0;
                     checkStress = 0;
                 }
-                if (wait > 0)
+                if (wait > 0) {
                     wait--;
-                if (delay > 0)
+                }
+
+                if (delay > 0) {
                     delay--;
+                }
             }
             else {
                 t25 = false;
@@ -171,17 +184,22 @@ namespace CalamityHunt.Common.Players
                 playFull = false;
                 SoundEngine.PlaySound(AssetDirectory.Sounds.StressFull, Player.Center);
             }
-            else if (!playFull && checkStress < 1f)
+            else if (!playFull && checkStress < 1f) {
                 playFull = true;
+            }
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (active) {
-                if (proj.type == ModContent.ProjectileType<SplendorTentacle>() || Main.myPlayer != proj.owner)
+                if (proj.type == ModContent.ProjectileType<SplendorTentacle>() || Main.myPlayer != proj.owner) {
                     return;
+                }
+
                 if (stress < 1f && delay <= 0 && !stressedOut && target.type != NPCID.TargetDummy) {
-                    if (DummyCheck(target))
+                    if (DummyCheck(target)) {
                         return;
+                    }
+
                     float dis = Player.Distance(target.Center);
                     stress += 0.0005f + ((dis > 0 && dis <= 320) ? 0.0005f : 0.0005f - (dis / 320 * 0.0005f));
                     delay = 5;
@@ -220,21 +238,33 @@ namespace CalamityHunt.Common.Players
             float best = 1f;
 
             float melee = player.GetTotalDamage<MeleeDamageClass>().Additive;
-            if (melee > best) best = melee;
+            if (melee > best) {
+                best = melee;
+            }
+
             float ranged = player.GetTotalDamage<RangedDamageClass>().Additive;
-            if (ranged > best) best = ranged;
+            if (ranged > best) {
+                best = ranged;
+            }
+
             float magic = player.GetTotalDamage<MagicDamageClass>().Additive;
-            if (magic > best) best = magic;
+            if (magic > best) {
+                best = magic;
+            }
 
             // Summoner intentionally has a reduction. As the only class with no crit, it tends to have higher raw damage than other classes.
             float summon = player.GetTotalDamage<SummonDamageClass>().Additive * 0.75f;
-            if (summon > best) best = summon;
+            if (summon > best) {
+                best = summon;
+            }
             // We intentionally don't check whip class, because it inherits 100% from Summon
 
             if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass roguetype = ModLoader.GetMod(HUtils.CalamityMod).Find<DamageClass>("RogueDamageClass");
                 float rogue = player.GetTotalDamage(roguetype).Additive;
-                if (rogue > best) best = rogue;
+                if (rogue > best) {
+                    best = rogue;
+                }
             }
 
             // Add the best typical damage stat, then return the full modifier.
@@ -249,8 +279,10 @@ namespace CalamityHunt.Common.Players
             SplendorJamPlayer sp = player.GetModPlayer<SplendorJamPlayer>();
             if (sp.active && item.type != ItemID.Zenith) {
                 if (sp.stress < 1f && sp.delay <= 0 && !sp.stressedOut && target.type != NPCID.TargetDummy) {
-                    if (SplendorJamPlayer.DummyCheck(target))
+                    if (SplendorJamPlayer.DummyCheck(target)) {
                         return;
+                    }
+
                     float dis = player.Distance(target.Center);
                     sp.stress += 0.0005f + ((dis > 0 && dis <= 320) ? 0.0005f : 0.0005f - (dis / 320 * 0.0005f));
                     sp.delay = 5;

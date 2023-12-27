@@ -20,8 +20,9 @@ public readonly struct GradientColor
         this.colors = colors;
         this.timePerColor = timePerColor * 60;
         this.fadeSpeed = fadeSpeed * 60;
-        if (this.fadeSpeed > this.timePerColor)
+        if (this.fadeSpeed > this.timePerColor) {
             this.fadeSpeed = this.timePerColor;
+        }
     }
 
     /// <summary>

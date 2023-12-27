@@ -6,6 +6,7 @@ using CalamityHunt.Common.Utilities;
 using CalamityHunt.Common.Utilities.Interfaces;
 using CalamityHunt.Content.Particles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -76,29 +77,30 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             HandleSound();
 
             Time++;
-            if (Time > MaxTime)
+            if (Time > MaxTime) {
                 Projectile.Kill();
+            }
 
             Projectile.localAI[0]++;
 
-            if (Math.Abs(Projectile.velocity.X) > 2)
+            if (Math.Abs(Projectile.velocity.X) > 2) {
                 Projectile.direction = Math.Sign(Projectile.velocity.X);
+            }
 
             Projectile.rotation += 0.1f * Projectile.direction;
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 11; i++) {
                 CosmosMetaball.particles.Add(Particle.Create<SmokeSplatterParticle>(particle => {
                     particle.position = Projectile.Center;
-                    particle.velocity = Main.rand.NextVector2Circular(50, 50);
-                    particle.scale = Main.rand.NextFloat(25f, 30f) * Projectile.scale;
+                    particle.velocity = Main.rand.NextVector2Circular(90, 90) * Utils.GetLerpValue(0, 50, Time, true);
+                    particle.scale = Main.rand.NextFloat(20f, 30f) * Utils.GetLerpValue(-30, 50, Time, true);
                     particle.maxTime = Main.rand.Next(70, 100);
                     particle.color = Color.White;
                     particle.fadeColor = Color.White;
-                    particle.anchor = () => Projectile.velocity * 0.8f;
+                    particle.anchor = () => Projectile.velocity * 0.66f;
                 }));
             }
         }
-
 
         public LoopingSound holeSound;
         public LoopingSound windSound;
@@ -150,8 +152,8 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Microsoft.Xna.Framework.Graphics.Texture2D glow = AssetDirectory.Textures.Glow[1].Value;
-            Microsoft.Xna.Framework.Graphics.Texture2D ring = AssetDirectory.Textures.ShockRing.Value;
+            Texture2D glow = AssetDirectory.Textures.Glow[1].Value;
+            Texture2D ring = AssetDirectory.Textures.ShockRing.Value;
 
             float intensity = (float)Math.Sqrt(Utils.GetLerpValue(0.2f, 0.6f, Projectile.scale, true));
 
@@ -172,10 +174,10 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     .UseTargetPosition(Projectile.Center)
                     .UseProgress(Main.GlobalTimeWrappedHourly * 0.1f % 1f)
                     .UseIntensity(intensity);
-                Microsoft.Xna.Framework.Graphics.Effect shader = Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader;
-                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uPower"].SetValue(24f * intensity);
-                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uSize"].SetValue((0.125f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 0.002f) * intensity);
-                Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader.Parameters["uAngle"].SetValue((-40f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 2f) * intensity);
+                Effect shader = Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].GetShader().Shader;
+                shader.Parameters["uPower"].SetValue(24f * intensity);
+                shader.Parameters["uSize"].SetValue((0.125f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 0.002f) * intensity);
+                shader.Parameters["uAngle"].SetValue((-40f + MathF.Sin(Main.GlobalTimeWrappedHourly * 32f) * 2f) * intensity);
             }
             else {
                 Filters.Scene.Activate("HuntOfTheOldGods:StellarBlackHole", Projectile.Center);

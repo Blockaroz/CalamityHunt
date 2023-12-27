@@ -42,14 +42,17 @@ namespace CalamityHunt.Common.Players
 
                 if (spinEffect.ActiveState != previousState) {
                     //If we turned active while before we weren't, reactivate the effect
-                    if (!previousState)
+                    if (!previousState) {
                         spinEffect.Reactivate(Player, this);
-                    else
+                    }
+                    else {
                         deactivatedEffect = true;
+                    }
                 }
 
-                if (spinEffect.ActiveState)
+                if (spinEffect.ActiveState) {
                     spinEffect.Update(Player, this, ref rotation);
+                }
             }
 
             //Set the rotation if we have any active effects
@@ -58,8 +61,9 @@ namespace CalamityHunt.Common.Players
                 Player.fullRotationOrigin = Player.Size * 0.5f;
             }
             //If there's no more active effects after we deactivated one, that means we have to reset the rotation
-            else if (deactivatedEffect)
+            else if (deactivatedEffect) {
                 Player.fullRotation = 0;
+            }
 
             if (active) {
                 if (Player.dashDelay < 0) {
@@ -94,13 +98,16 @@ namespace CalamityHunt.Common.Players
         {
             bool inAir = !WorldGen.SolidOrSlopedTile(Main.tile[(Player.Bottom / 16f).ToPoint()]) && !Collision.SolidCollision(Player.position, Player.width, Player.height);
             if (active) {
-                if (Player.controlDown && !Player.mount.Active)
+                if (Player.controlDown && !Player.mount.Active) {
                     Player.gravity *= 1.1111f;
+                }
 
-                if (Player.controlDown && Player.velocity.Y > 1f && !Player.mount.Active)
+                if (Player.controlDown && Player.velocity.Y > 1f && !Player.mount.Active) {
                     slamPower++;
-                else
+                }
+                else {
                     slamPower = 0;
+                }
 
                 slamPower = Math.Clamp(slamPower, 0, 10);
 
@@ -119,19 +126,23 @@ namespace CalamityHunt.Common.Players
                         inertiaTimer = 60;
                     }
                 }
-                else if (slamPower > 0)
+                else if (slamPower > 0) {
                     Player.velocity.X += (Player.direction * 0.2f - Player.velocity.X * 0.01f) * Math.Clamp(Player.velocity.X, 0, 1);
+                }
 
-                if (Player.dashDelay > 0)
+                if (Player.dashDelay > 0) {
                     Player.dashDelay--;
+                }
 
-                if (!inAir && slamPower > 6)
+                if (!inAir && slamPower > 6) {
                     slamming = true;
+                }
 
                 if (slamming) {
                     bunnyHopCounter += 25;
-                    for (int i = 0; i < 40; i++)
+                    for (int i = 0; i < 40; i++) {
                         Dust.NewDustPerfect(Player.Bottom + Main.rand.NextVector2Circular(20, 5), DustID.TintableDust, Main.rand.NextVector2Circular(10, 1) - Vector2.UnitY * Main.rand.NextFloat(5f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
+                    }
 
                     for (int i = 0; i < 5; i++) {
                         CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
@@ -150,8 +161,9 @@ namespace CalamityHunt.Common.Players
                     if (Player.controlJump || Player.dashDelay < 0) {
                         bunnyHopCounter = -20;
                         Player.velocity.X *= 2f;
-                        for (int i = 0; i < 40; i++)
+                        for (int i = 0; i < 40; i++) {
                             Dust.NewDustPerfect(Player.Bottom + Main.rand.NextVector2Circular(20, 5), DustID.TintableDust, -Vector2.UnitY.RotatedByRandom(1f) * Main.rand.NextFloat(7f) * (i / 40f) - new Vector2(Player.direction * 10f, 0f), 100, Color.Black, 1f + Main.rand.NextFloat(1.5f)).noGravity = true;
+                        }
 
                         for (int i = 0; i < 5; i++) {
                             CalamityHunt.particles.Add(Particle.Create<ChromaticEnergyDust>(particle => {
@@ -167,16 +179,18 @@ namespace CalamityHunt.Common.Players
                     bunnyHopCounter++;
                 }
 
-                if (inAir)
+                if (inAir) {
                     Player.maxRunSpeed *= 1.2f;
+                }
             }
             else {
                 bunnyHopCounter = 0;
                 slamPower = 0;
             }
 
-            if (dashTime > 0)
+            if (dashTime > 0) {
                 dashTime--;
+            }
         }
 
         public override void ResetEffects()
@@ -201,8 +215,9 @@ namespace CalamityHunt.Common.Players
                     Player.wingTimeMax = 1;
                     Player.equippedWings = Player.armor[1];
 
-                    if (ModLoader.HasMod(HUtils.CalamityMod))
+                    if (ModLoader.HasMod(HUtils.CalamityMod)) {
                         ModLoader.GetMod(HUtils.CalamityMod).Call("ToggleInfiniteFlight", Player, true);
+                    }
 
                     if (Player.controlJump && Player.wingTime > 0f && !Player.GetJumpState(ExtraJump.CloudInABottle).Available && Player.jump == 0) {
                         bool hovering = Player.TryingToHoverDown && !Player.merman;
@@ -211,13 +226,15 @@ namespace CalamityHunt.Common.Players
                             Player.maxRunSpeed += 5;
 
                             Player.velocity.Y *= 0.7f;
-                            if (Player.velocity.Y > -2f && Player.velocity.Y < 1f)
+                            if (Player.velocity.Y > -2f && Player.velocity.Y < 1f) {
                                 Player.velocity.Y = 1E-05f;
+                            }
                         }
                     }
 
-                    if (Player.TryingToHoverUp && !Player.mount.Active)
+                    if (Player.TryingToHoverUp && !Player.mount.Active) {
                         Player.velocity.Y -= 1f;
+                    }
                 }
 
                 Player.noFallDmg = true;

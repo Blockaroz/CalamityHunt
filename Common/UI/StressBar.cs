@@ -29,8 +29,10 @@ namespace CalamityHunt.Common.UI
                     stressFrame++;
                     stressAnimDelay = 0;
                 }
-                if (stressFrame >= 5)
+                if (stressFrame >= 5) {
                     stressFrame = 0;
+                }
+
                 if (fillPercent >= 1f && stressTopFrame <= 10) {
                     stressTopTimer++;
                     if (stressTopTimer >= 5) {
@@ -38,8 +40,9 @@ namespace CalamityHunt.Common.UI
                         stressTopTimer = 0;
                     }
                 }
-                else if (fillPercent < 1f)
+                else if (fillPercent < 1f) {
                     stressTopFrame = -1;
+                }
             }
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -56,10 +59,14 @@ namespace CalamityHunt.Common.UI
                             Texture2D barTop = AssetDirectory.Textures.Bars.StressTopped.Value;
 
                             Vector2 vector = new Vector2(Config.Instance.stressX, Config.Instance.stressY);
-                            if (vector.X < 0f || vector.X > 100f)
+                            if (vector.X < 0f || vector.X > 100f) {
                                 vector.X = 35.77406f;
-                            if (vector.Y < 0f || vector.Y > 100f)
+                            }
+
+                            if (vector.Y < 0f || vector.Y > 100f) {
                                 vector.Y = 3.97614312f;
+                            }
+
                             Vector2 position = new Vector2((int)(vector.X * 0.01f * (Main.screenWidth - bar.Width)), (int)(vector.Y * 0.01f * (Main.screenHeight - (bar.Height / 5))));
                             Vector2 shake = Main.LocalPlayer.GetModPlayer<SplendorJamPlayer>().stressedOut ? Shake() * oldPercent : Vector2.Zero;
                             Vector2 offset = new Vector2(21, 26);
@@ -68,8 +75,9 @@ namespace CalamityHunt.Common.UI
 
                             Rectangle mouse = new Rectangle((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y, 8, 8);
                             Rectangle value = new Rectangle((int)(pos.X + 21), (int)(pos.Y + 26), 92, 24);
-                            if (mouse.Intersects(value))
+                            if (mouse.Intersects(value)) {
                                 Main.instance.MouseText("Stress: " + StressString(fillPercent * 100, 100), 0, 0);
+                            }
 
                             Rectangle barFrame = new Rectangle(0, stressFrame * (bar.Height / 5), bar.Width, bar.Height / 5);
                             Rectangle fillFrame = new Rectangle(0, (int)(oldPercent / 0.25f) * (barCharge.Height / 5), fillAmount, barCharge.Height / 5);

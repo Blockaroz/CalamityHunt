@@ -54,8 +54,10 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
 
         public override bool CanConsumeAmmo(Item ammo, Player player)
         {
-            if (Main.rand.Next(0, 100) < 80)
+            if (Main.rand.Next(0, 100) < 80) {
                 return false;
+            }
+
             return true;
         }
 
@@ -125,8 +127,9 @@ namespace CalamityHunt.Content.Items.Weapons.Ranged
                     aColor = Color.White;
                     aFrame = antennaTexture.Frame(1, 3, 0, 0);
                 }
-                else if (i > 4)
+                else if (i > 4) {
                     aFrame = antennaTexture.Frame(1, 3, 0, 1);
+                }
 
                 float rot = -drawInfo.drawPlayer.velocity.X * (0.03f * (i + 1) / 12f) - Math.Abs(drawInfo.drawPlayer.velocity.Y) * drawInfo.drawPlayer.velocity.X * (0.01f * i / 12f);
                 DrawData antenna = new DrawData(antennaTexture, aPos, aFrame, aColor * (1f - drawInfo.shadow), drawInfo.drawPlayer.bodyRotation + rot, aFrame.Size() * new Vector2(0.5f, 1f) - Vector2.UnitY, 1f, drawInfo.playerEffect);

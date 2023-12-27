@@ -19,8 +19,9 @@ namespace CalamityHunt.Common.Players
                 Player.runSlowdown = 0f;
                 Player.GoingDownWithGrapple = true;
             }
-            else
+            else {
                 preHookVelocity = Player.velocity;
+            }
 
             if (stickyHandTime > 0) {
                 Player.gravity *= Utils.GetLerpValue(30, 0, stickyHandTime, true);
@@ -32,8 +33,9 @@ namespace CalamityHunt.Common.Players
 
         public override void ResetEffects()
         {
-            if (stickyHandTime > 0)
+            if (stickyHandTime > 0) {
                 stickyHandTime--;
+            }
         }
     }
 }

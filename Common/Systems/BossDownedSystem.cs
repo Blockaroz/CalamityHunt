@@ -24,13 +24,15 @@ public sealed class BossDownedSystem : ModSystem
 
     public override void SaveWorldData(TagCompound tag)
     {
-        foreach (string entry in downedBoss.Keys)
+        foreach (string entry in downedBoss.Keys) {
             tag[KeyPrefix + entry] = downedBoss[entry];
+        }
     }
 
     public override void LoadWorldData(TagCompound tag)
     {
-        foreach (string entry in downedBoss.Keys)
+        foreach (string entry in downedBoss.Keys) {
             downedBoss[entry] = tag.GetBool(KeyPrefix + entry);
+        }
     }
 }

@@ -6,7 +6,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
+namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 {
     public class CometKunaiGhostProjectile : ModProjectile
     {
@@ -26,7 +26,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass d;
                 Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
-                calamity.TryFind<DamageClass>("RogueDamageClass", out d);
+                calamity.TryFind("RogueDamageClass", out d);
                 Projectile.DamageType = d;
             }
             Projectile.usesLocalNPCImmunity = true;
@@ -45,13 +45,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 }
             }
             else {
-                if (Projectile.ai[0] < 0)
+                if (Projectile.ai[0] < 0) {
                     Projectile.ai[0] = Projectile.FindTargetWithinRange(800)?.whoAmI ?? -1;
-
+                }
                 else {
                     NPC target = Main.npc[(int)Projectile.ai[0]];
-                    if (!target.CanBeChasedBy(this, true) && target.active)
+                    if (!target.CanBeChasedBy(this, true) && target.active) {
                         Projectile.ai[0] = -1;
+                    }
                 }
 
                 Projectile.extraUpdates = 1;

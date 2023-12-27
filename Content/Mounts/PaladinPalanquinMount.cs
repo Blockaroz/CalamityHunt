@@ -82,11 +82,13 @@ namespace CalamityHunt.Content.Mounts
 
                 player.maxFallSpeed = player.controlDownHold ? 40 : 20;
 
-                if (player.controlJump)
+                if (player.controlJump) {
                     player.velocity.Y -= 1f;
+                }
 
-                if (player.velocity.Y < -10f)
+                if (player.velocity.Y < -10f) {
                     player.velocity.Y = -10f;
+                }
 
                 data.frameCounter += (int)(Utils.GetLerpValue(-1, 15, Math.Abs(player.velocity.X), true) * 3);
                 if (data.frameCounter > 5) {
@@ -100,15 +102,17 @@ namespace CalamityHunt.Content.Mounts
                         data.ballFrameCounter = 0;
                         data.ballFrame = Math.Clamp(data.ballFrame + 1, 0, 2);
                     }
-                    if (data.ballFrame < 2)
+                    if (data.ballFrame < 2) {
                         data.rotation = 0;
+                    }
                 }
                 else {
                     data.ballFrameCounter++;
                     data.ballFrame = 2 - (int)(Utils.GetLerpValue(30, 50, data.ballFrameCounter, true) * 2);
                     heightBoost = 36 - (int)(Utils.GetLerpValue(30, 50, data.ballFrameCounter, true) * 2) * 4;
-                    if (data.ballFrame < 2)
+                    if (data.ballFrame < 2) {
                         data.rotation = 0;
+                    }
                 }
                 if (!player.controlJump) {
                     data.wingFrameCounter = 0;
@@ -161,10 +165,14 @@ namespace CalamityHunt.Content.Mounts
             public int frameCounter;
         }
 
+        public static Texture2D ballTexture;
+        public static Texture2D wingTexture;
         public static RenderTargetDrawContent ballTextureContent;
 
         public override void Load()
         {
+            ballTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Ball").Value;
+            wingTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Wing").Value;
             Main.ContentThatNeedsRenderTargets.Add(ballTextureContent = new RenderTargetDrawContent());
         }
 
@@ -183,10 +191,9 @@ namespace CalamityHunt.Content.Mounts
                         float xS = Math.Abs(drawPlayer.velocity.X * 0.01f) * (1f - yS * 0.7f);
                         Vector2 squish = new Vector2(1f - yS + xS, 1f + yS - xS) * drawScale;
 
-                        Rectangle ballFrame = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value.Frame(3, 1, data.ballFrame, 0);
+                        Rectangle ballFrame = ballTexture.Frame(3, 1, data.ballFrame, 0);
 
                         ballTextureContent.Request(ballFrame.Width, ballFrame.Height, drawPlayer.whoAmI, spriteBatch => {
-                            Texture2D ballTexture = AssetDirectory.Textures.Goozma.PaladinPalanquinBall.Value;
                             GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
                             Effect effect = AssetDirectory.Effects.HolographicGel.Value;
                             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly % 1f);
@@ -196,17 +203,13 @@ namespace CalamityHunt.Content.Mounts
                             effect.Parameters["baseToMapPercent"].SetValue(-0.05f);
 
                             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, effect);
-                            DrawData value = new DrawData(ballTexture, ballFrame.Size() * 0.5f, ballFrame, Color.White, data.rotation, ballFrame.Size() * 0.5f, 1f, 0, 0);
-                            value.Draw(spriteBatch);
-
+                            spriteBatch.Draw(ballTexture, ballFrame.Size() * 0.5f, ballFrame, Color.White, data.rotation, ballFrame.Size() * 0.5f, 1f, 0, 0);
                             spriteBatch.End();
                         });
 
                         if (ballTextureContent.IsTargetReady(drawPlayer.whoAmI)) {
                             Texture2D ballTexture = ballTextureContent.GetTarget(drawPlayer.whoAmI);
-
                             DrawData ballData = new DrawData(ballTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(0, MountData.heightBoost + xS * 8f + Math.Abs(data.tilt) * 8f) - Main.screenPosition, ballTexture.Frame(), drawColor, 0, ballTexture.Size() * 0.5f, squish, 0, 0);
-
                             ballData.shader = drawPlayer.cMount;
                             playerDrawData.Add(ballData);
                         }
@@ -217,7 +220,6 @@ namespace CalamityHunt.Content.Mounts
                         playerDrawData.Add(palanquinData);
 
                         if (data.ballFrame == 2) {
-                            Texture2D wingTexture = AssetDirectory.Textures.Goozma.PaladinPalanquinWings.Value;
                             Rectangle wingFrame = wingTexture.Frame(1, 4, 0, data.wingFrame);
 
                             DrawData wingData = new DrawData(wingTexture, drawPlayer.MountedCenter + minusVelocity + new Vector2(-24 * drawPlayer.direction, MountData.heightBoost - 8 + Math.Abs(data.tilt) * 10f) * squish - Main.screenPosition, wingFrame, drawColor, 0, wingFrame.Size() * 0.5f, drawScale, spriteEffects, 0);
@@ -256,8 +258,9 @@ namespace CalamityHunt.Content.Mounts
             brightnesses[9] = rainbowStartOffset + 0.75f;
 
             //Pass the entire rainbow through modulo 1
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 10; i++) {
                 brightnesses[i] = HUtils.Modulo(brightnesses[i], maxBright) * maxBright;
+            }
 
             //Store the first element's value so we can find it again later
             float firstBrightnessValue = brightnesses[1];

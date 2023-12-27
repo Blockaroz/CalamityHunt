@@ -54,10 +54,12 @@ namespace CalamityHunt.Content.Projectiles
 
         public override void AI()
         {
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active))
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<Goozma>() && n.active)) {
                 Projectile.active = false;
-            else
+            }
+            else {
                 Projectile.ai[1] = Main.npc.First(n => n.type == ModContent.NPCType<Goozma>() && n.active).whoAmI;
+            }
 
             Projectile.Center = Host.Center;
 

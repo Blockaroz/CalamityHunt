@@ -34,14 +34,18 @@ namespace CalamityHunt.Content.Tiles
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (Main.tile[i, j].TileFrameY < 56)
+            if (Main.tile[i, j].TileFrameY < 56) {
                 return;
+            }
 
             Player player = Main.LocalPlayer;
-            if (player is null)
+            if (player is null) {
                 return;
-            if (player.active)
+            }
+
+            if (player.active) {
                 Main.LocalPlayer.GetModPlayer<SceneEffectPlayer>().effectActive[(ushort)SceneEffectPlayer.EffectorType.SlimeMonsoonOld] = 30;
+            }
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)
@@ -97,10 +101,12 @@ namespace CalamityHunt.Content.Tiles
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
         {
             Tile tile = Main.tile[i, j];
-            if (tile.TileFrameY >= 56)
+            if (tile.TileFrameY >= 56) {
                 frameYOffset = Main.tileFrame[type] * 56;
-            else
+            }
+            else {
                 frameYOffset = 0;
+            }
         }
 
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)

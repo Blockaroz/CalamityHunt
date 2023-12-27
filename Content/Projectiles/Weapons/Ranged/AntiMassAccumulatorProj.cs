@@ -68,7 +68,7 @@ public class AntiMassAccumulatorProj : ModProjectile
 
         if (Projectile.owner == Main.myPlayer) {
             if (Time == 0) {
-                Projectile.velocity = Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed;
+                Projectile.velocity = Player.MountedCenter.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed;
                 Projectile.netUpdate = true;
             }
 
@@ -80,7 +80,7 @@ public class AntiMassAccumulatorProj : ModProjectile
             }
 
             if (Time > (int)(25 * Player.GetAttackSpeed(DamageClass.Ranged)) && Time < (int)(60 * Player.GetAttackSpeed(DamageClass.Ranged))) {
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Player.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed, 0.2f);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Player.MountedCenter.DirectionTo(Main.MouseWorld) * Player.HeldItem.shootSpeed, 0.2f);
                 Projectile.netUpdate = true;
 
                 if (Time > (int)(35 * Player.GetAttackSpeed(DamageClass.Ranged)) && !Player.channel) {

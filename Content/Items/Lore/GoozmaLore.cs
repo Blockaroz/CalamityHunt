@@ -12,6 +12,8 @@ namespace CalamityHunt.Content.Items.Lore
 {
     public class GoozmaLore : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
+
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemNoGravity[Type] = true;
@@ -34,16 +36,19 @@ namespace CalamityHunt.Content.Items.Lore
         {
             TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip0");
             if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift)) {
-                if (line != null)
+                if (line != null) {
                     line.Text = Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.LoreGeneric").Value;
+                }
+
                 return;
             }
 
             //stuff is in HuntOfTheoldGodUtils
             string tooltip = Language.GetOrRegister($"Mods.{nameof(CalamityHunt)}.LoreGoozma").Value;
 
-            if (line != null)
+            if (line != null) {
                 line.Text = tooltip;
+            }
         }
 
         public override bool CanUseItem(Player player) => false;

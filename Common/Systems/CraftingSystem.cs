@@ -20,9 +20,9 @@ namespace CalamityHunt.Common.Systems
             if (cal != null) {
                 for (int i = 0; i < Recipe.numRecipes; i++) {
                     Recipe recipe = Main.recipe[i];
-                    if (recipe.HasResult(cal.Find<ModItem>("ShadowspecBar").Type))
+                    if (recipe.HasResult(cal.Find<ModItem>("ShadowspecBar").Type)) {
                         recipe.AddIngredient(ModContent.ItemType<ChromaticMass>());
-
+                    }
                 }
             }
             Mod inf;

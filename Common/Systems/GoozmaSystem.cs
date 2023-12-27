@@ -30,6 +30,16 @@ namespace CalamityHunt.Common.Systems
                     Filters.Scene["HuntOfTheOldGods:StellarBlackHole"].Deactivate();
                 }
             }
+
+            Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].GetShader().UseProgress(Main.GlobalTimeWrappedHourly * 0.05f % 1f);
+            //stop pluripotent spawn shader
+            if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<PluripotentSpawn>())) {
+                if (Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].Active) {
+                    float intensity = Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].GetShader().Intensity;
+                    Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].GetShader().UseIntensity(intensity * 0.5f);
+                    Filters.Scene["HuntOfTheOldGods:PluripotentSpawn"].Deactivate();
+                }
+            }
         }
 
         public static bool GoozmaActive => Main.npc.Any(n => n is ISubjectOfNPC<Goozma> && n.active);
@@ -45,8 +55,9 @@ namespace CalamityHunt.Common.Systems
                 for (int j = jCenter - halfHeight; j <= jCenter + halfHeight; j++) {
                     Tile checkTile = Framing.GetTileSafely(i, j);
 
-                    if (ignore.Contains(new Point(i, j)))
+                    if (ignore.Contains(new Point(i, j))) {
                         continue;
+                    }
 
                     if (checkTile.HasTile && checkTile.TileType == TileID.Statues && checkTile.TileFrameX / 18 == 8) {
                         ignore.Add(new Point(i + 1, j));
@@ -83,20 +94,22 @@ namespace CalamityHunt.Common.Systems
             if (Main.slimeRain && (Main.hardMode || NPC.downedPlantBoss)) {
                 foreach (NPC nPC in Main.npc.Where(n => (n.type == NPCID.KingSlime || n.type == NPCID.QueenSlimeBoss) && n.boss && n.active)) {
                     slimeBoss = nPC.whoAmI;
-                    if (nPC.type == NPCID.QueenSlimeBoss)
+                    if (nPC.type == NPCID.QueenSlimeBoss) {
                         king = false;
+                    }
 
                     break;
                 }
                 if (slimeBoss > -1) {
                     ModLoader.TryGetMod(HUtils.CalamityMod, out Mod calamity);
                     if (calamity != null) {
-                        foreach (Item item in Main.item.Where(n => n.active && n.type == calamity.Find<ModItem>("OverloadedSludge").Type))
+                        foreach (Item item in Main.item.Where(n => n.active && n.type == calamity.Find<ModItem>("OverloadedSludge").Type)) {
                             if (Main.npc[slimeBoss].Hitbox.Intersects(item.Hitbox)) {
                                 spawnPos = item.Center;
                                 item.active = false;
                                 conditionsMet = true;
                             }
+                        }
                     }
 
                     foreach (Item item in Main.item.Where(n => n.active && n.type == ModContent.ItemType<OverloadedSludge>())) {

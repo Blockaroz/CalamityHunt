@@ -39,8 +39,9 @@ public partial class Goozma : ModNPC
         brightnesses[9] = rainbowStartOffset + 0.75f;
 
         //Pass the entire rainbow through modulo 1
-        for (int i = 1; i < 10; i++)
+        for (int i = 1; i < 10; i++) {
             brightnesses[i] = HUtils.Modulo(brightnesses[i], maxBright) * maxBright;
+        }
 
         //Store the first element's value so we can find it again later
         float firstBrightnessValue = brightnesses[1];
@@ -68,7 +69,7 @@ public partial class Goozma : ModNPC
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         Texture2D sclera = AssetDirectory.Textures.Goozma.Sclera.Value;
-        Texture2D godEye = AssetDirectory.Textures.Goozma.GodEye.Value;
+        Texture2D godEye = AssetDirectory.Textures.ChromaticSoulEye.Value;
 
         Texture2D glow = AssetDirectory.Textures.Glow[0].Value;
         Texture2D sparkle = AssetDirectory.Textures.Sparkle.Value;
@@ -130,22 +131,33 @@ public partial class Goozma : ModNPC
 
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
+            DrawSoulStuff();
+
             spriteBatch.Draw(goozmaTexture, NPC.Center + drawOffset - screenPos, goozmaTexture.Frame(), Color.White, NPC.rotation, goozmaTexture.Size() * 0.5f, NPC.scale, direction, 0);
 
             RestartSpriteBatch(spriteBatch, null, false);
         }
 
-        spriteBatch.Draw(godEye, NPC.Center - screenPos + realEyeOffset, godEye.Frame(), new Color(200, 200, 200, 150), eyeRot, godEye.Size() * 0.5f, eyeScale * 1.3f * (1f + eyePower.Length() * 0.06f), 0, 0);
-        spriteBatch.Draw(godEye, NPC.Center - screenPos + realEyeOffset, godEye.Frame(), glowColor, eyeRot, godEye.Size() * 0.5f, (eyeScale * 1.3f + 0.1f) * (1f + eyePower.Length() * 0.06f), 0, 0);
+        if (eyeOpen) {
+            spriteBatch.Draw(godEye, NPC.Center - screenPos + realEyeOffset, godEye.Frame(), new Color(200, 200, 200, 150), eyeRot, godEye.Size() * 0.5f, eyeScale * 1.3f * eyePower, 0, 0);
+            spriteBatch.Draw(godEye, NPC.Center - screenPos + realEyeOffset, godEye.Frame(), glowColor, eyeRot, godEye.Size() * 0.5f, (eyeScale * 1.3f + 0.1f) * eyePower, 0, 0);
 
-        spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot + MathHelper.PiOver2, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
-        spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 4f) + new Vector2(0, eyePower.X), 0, 0);
-        spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot + MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.X), 0, 0);
-        spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot - MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
+            spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot + MathHelper.PiOver2, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
+            spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 4f) + new Vector2(0, eyePower.X), 0, 0);
+            spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot + MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.X), 0, 0);
+            spriteBatch.Draw(sparkle, NPC.Center - screenPos + realEyeOffset, sparkle.Frame(), glowColor * 0.15f, eyeRot - MathHelper.PiOver4, sparkle.Size() * 0.5f, eyeScale * new Vector2(0.33f, 3f) + new Vector2(0, eyePower.Y), 0, 0);
 
-        spriteBatch.Draw(glow, NPC.Center - screenPos + realEyeOffset, null, glowColor * 0.3f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 2f * eyeScale, 0, 0);
+            spriteBatch.Draw(glow, NPC.Center - screenPos + realEyeOffset, null, glowColor * 0.3f, extraTilt + NPC.rotation, glow.Size() * 0.5f, 2f * eyeScale, 0, 0);
+        }
 
         return false;
+    }
+
+    public void DrawSoulStuff()
+    {
+        soulStrip ??= new VertexStrip();
+
+
     }
 
     public void RestartSpriteBatch(SpriteBatch spriteBatch, Effect effect, bool immediate)
@@ -169,41 +181,29 @@ public partial class Goozma : ModNPC
         }
     }
 
+    public static Texture2D dressTexture;
+    public static Texture2D crownTexture;
+    public static Texture2D crownMaskTexture;
+    public static Texture2D tentacleTexture;
     public static RenderTargetDrawContent goozmaContent;
     public static RenderTargetDrawContent cordContent;
+    public VertexStrip soulStrip;
     public VertexStrip cordStrip;
 
     private void LoadAssets()
     {
+        dressTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Dress").Value;
+        crownTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Crown").Value;
+        crownMaskTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "CrownMask").Value;
+        tentacleTexture = AssetUtilities.RequestImmediate<Texture2D>(Texture + "Tentacle").Value;
         Main.ContentThatNeedsRenderTargets.Add(goozmaContent = new RenderTargetDrawContent());
         Main.ContentThatNeedsRenderTargets.Add(cordContent = new RenderTargetDrawContent());
     }
 
     private void RequestTarget(SpriteBatch spriteBatch)
     {
-        Texture2D dressTexture = AssetDirectory.Textures.Goozma.Dress.Value;
-        Texture2D crownTexture = AssetDirectory.Textures.Goozma.Crown.Value;
-        Texture2D crownMaskTexture = AssetDirectory.Textures.Goozma.CrownMask.Value;
-        Texture2D tentacleTexture = AssetDirectory.Textures.Goozma.Tentacle.Value;
-        Texture2D ornamentTexture = AssetDirectory.Textures.Goozma.Ornament.Value;
-
         goozmaContent.Request(2000, 2000, NPC.whoAmI, sb => {
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.EffectMatrix);
-
-            //back ring
-            //Rectangle ornamentBase = OrnamentTexture.Frame(1, 2, 0, 0);
-            //Rectangle ornamentGlow = OrnamentTexture.Frame(1, 2, 0, 1);
-            //for (int i = 0; i < 8; i++) {
-            //    Color ornamentColor = new GradientColor(SlimeUtils.GoozColors, 0.2f, 0.2f).ValueAt(NPC.localAI[0] + i / 8f * 60);
-            //    ornamentColor.A /= 2;
-            //    float ornamentRotation = extraTilt + NPC.rotation + NPC.localAI[1] + MathHelper.TwoPi / 8f * i;
-            //    float rotFix = MathHelper.PiOver2 + MathHelper.PiOver4 * NPC.direction;
-            //    Vector2 ornamentPos = (new Vector2(-20 * NPC.direction, -10).RotatedBy(NPC.rotation) + new Vector2(80, 0).RotatedBy(ornamentRotation));
-
-            //    spriteBatch.Draw(OrnamentTexture, ornamentPos, ornamentBase, Color.White, ornamentRotation + rotFix, ornamentBase.Size() * 0.5f, 1f, direction, 0);
-            //    spriteBatch.Draw(OrnamentTexture, ornamentPos, ornamentGlow, ornamentColor, ornamentRotation + rotFix, ornamentGlow.Size() * 0.5f, 1f, direction, 0);
-            //    spriteBatch.Draw(sparkle, ornamentPos, null, new Color(ornamentColor.R, ornamentColor.G, ornamentColor.B, 0) * 0.2f, ornamentRotation + MathHelper.PiOver2, sparkle.Size() * 0.5f, new Vector2(1f, 2f), direction, 0);
-            //}
 
             GetGradientMapValues(out float[] brightnesses, out Vector3[] colors);
 

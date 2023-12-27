@@ -57,8 +57,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Projectile.Center = Owner.MountedCenter + Projectile.velocity.SafeNormalize(Vector2.Zero) * 25 + new Vector2(0, Owner.gfxOffY) + Main.rand.NextVector2Circular(2, 2) * Projectile.ai[2];
             Projectile.rotation = Projectile.velocity.ToRotation();
 
-            if (Time % (5 + (int)(Owner.itemAnimationMax)) == 1)
+            if (Time % (5 + (int)(Owner.itemAnimationMax)) == 1) {
                 Owner.CheckMana(15, true);
+            }
 
             //if ((Time - 8) % 5 == 1)
             //{
@@ -72,14 +73,17 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             //    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity * 5f + Main.rand.NextVector2Circular(10, 10), piercerVelocity, ModContent.ProjectileType<CrystalPiercer>(), Owner.HeldItem.damage, 1f, Owner.whoAmI, ai1: Projectile.whoAmI);
             //}
 
-            if ((!Owner.channel || !Owner.CheckMana(15)))
+            if ((!Owner.channel || !Owner.CheckMana(15))) {
                 canKill = true;
+            }
 
-            if (!canKill)
+            if (!canKill) {
                 Projectile.timeLeft = 10000;
+            }
 
-            if (canKill && Projectile.timeLeft > 30)
+            if (canKill && Projectile.timeLeft > 30) {
                 Projectile.timeLeft = 30;
+            }
 
             Time++;
 
@@ -89,8 +93,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             Size = 500;
             Projectile.spriteDirection = Owner.direction;
 
-            if (Time < 10)
+            if (Time < 10) {
                 newRot = Projectile.rotation;
+            }
 
             newRot = Utils.AngleLerp(newRot, Projectile.rotation, 0.05f);
 
@@ -99,21 +104,27 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
             if (Projectile.frameCounter++ > 5) {
                 if (Projectile.ai[2] > 0.7f) {
-                    if (++Projectile.frame > 7)
+                    if (++Projectile.frame > 7) {
                         Projectile.frame = 3;
+                    }
+
                     Projectile.frameCounter = 0;
                 }
-                else
+                else {
                     Projectile.frame = (int)(Projectile.ai[2] * 3);
+                }
             }
 
             foreach (Gore gore in Main.gore.Where(n => n.active)) {
                 Rectangle goreRec = new Rectangle((int)(gore.position.X - gore.scale * 10), (int)(gore.position.Y - gore.scale * 10), (int)(gore.scale * 20), (int)(gore.scale * 20));
-                if (Utils.IntersectsConeFastInaccurate(goreRec, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f))
+                if (Utils.IntersectsConeFastInaccurate(goreRec, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f)) {
                     gore.velocity = Vector2.Lerp(gore.velocity, gore.position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 15, 0.2f);
+                }
 
-                if (gore.position.Distance(Projectile.Center) < 70)
+                if (gore.position.Distance(Projectile.Center) < 70) {
                     gore.scale *= 0.9f;
+                }
+
                 if (gore.position.Distance(Projectile.Center) < 40) {
                     gore.active = false;
                     Poof();
@@ -122,19 +133,23 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
             foreach (Dust dust in Main.dust.Where(n => n.active && !n.noGravity)) {
                 Rectangle dustRec = new Rectangle((int)(dust.position.X - dust.scale * 3), (int)(dust.position.Y - dust.scale * 3), (int)(dust.scale * 6), (int)(dust.scale * 6));
-                if (Utils.IntersectsConeFastInaccurate(dustRec, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f))
+                if (Utils.IntersectsConeFastInaccurate(dustRec, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f)) {
                     dust.velocity = Vector2.Lerp(dust.velocity, dust.position.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 15, 0.2f);
+                }
 
-                if (dust.position.Distance(Projectile.Center) < 50)
+                if (dust.position.Distance(Projectile.Center) < 50) {
                     dust.scale *= 0.9f;
-                if (dust.position.Distance(Projectile.Center) < 30)
-                    dust.active = false;
+                }
 
+                if (dust.position.Distance(Projectile.Center) < 30) {
+                    dust.active = false;
+                }
             }
 
             foreach (Item item in Main.item.Where(n => n.active)) {
-                if (Utils.IntersectsConeFastInaccurate(item.Hitbox, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f))
+                if (Utils.IntersectsConeFastInaccurate(item.Hitbox, Projectile.Center, Size, Projectile.rotation, MathHelper.Pi / 8f)) {
                     item.velocity = Vector2.Lerp(item.velocity, item.DirectionTo(Projectile.Center).SafeNormalize(Vector2.Zero) * 15, 0.2f);
+                }
             }
 
             Color glowColor = new GradientColor(SlimeUtils.GoozOilColors, 0.2f, 0.2f).ValueAt(Time + 10);
@@ -171,11 +186,13 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
         {
             int length = 6;
             if (ribbonVels != null) {
-                for (int i = 0; i < ribbonVels.Length; i++)
+                for (int i = 0; i < ribbonVels.Length; i++) {
                     ribbonVels[i] = (Projectile.rotation - (1.5f + i * 0.2f) * Projectile.spriteDirection).ToRotationVector2() * 3f;
+                }
             }
-            else
+            else {
                 ribbonVels = new Vector2[length];
+            }
 
             if (ribbonPoints != null) {
                 float drawScale = Projectile.scale;
@@ -183,14 +200,16 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
                 for (int i = 1; i < ribbonPoints.Length; i++) {
                     ribbonPoints[i] += ribbonVels[i];
-                    if (ribbonPoints[i].Distance(ribbonPoints[i - 1]) > 10)
+                    if (ribbonPoints[i].Distance(ribbonPoints[i - 1]) > 10) {
                         ribbonPoints[i] = Vector2.Lerp(ribbonPoints[i], ribbonPoints[i - 1] + new Vector2(10, 0).RotatedBy(ribbonPoints[i - 1].AngleTo(ribbonPoints[i])), 0.8f);
+                    }
                 }
             }
             else {
                 ribbonPoints = new Vector2[length];
-                for (int i = 0; i < ribbonPoints.Length; i++)
+                for (int i = 0; i < ribbonPoints.Length; i++) {
                     ribbonPoints[i] = Projectile.Center;
+                }
             }
         }
 
@@ -203,8 +222,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
 
         public void HandleSound()
         {
-            if (windSoundLoop == null)
+            if (windSoundLoop == null) {
                 windSoundLoop = new LoopingSound(AssetDirectory.Sounds.Weapons.GoomoireWindLoop, new ProjectileAudioTracker(Projectile).IsActiveAndInGame);
+            }
 
             windSoundLoop.PlaySound(() => Projectile.Center, () => Projectile.ai[2] * 0.5f, () => Projectile.ai[2] - 0.9f);
         }
@@ -242,10 +262,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Magic
             if (ribbonPoints != null) {
                 for (int i = 0; i < ribbonPoints.Length - 1; i++) {
                     int style = 0;
-                    if (i == ribbonPoints.Length - 3)
+                    if (i == ribbonPoints.Length - 3) {
                         style = 1;
-                    if (i > ribbonPoints.Length - 3)
+                    }
+
+                    if (i > ribbonPoints.Length - 3) {
                         style = 2;
+                    }
+
                     Rectangle frame = ribbonTexture.Value.Frame(1, 3, 0, style);
                     float rotation = ribbonPoints[i].AngleTo(ribbonPoints[i + 1]);
                     Vector2 stretch = new Vector2(0.5f + Utils.GetLerpValue(0, ribbonPoints.Length - 2, i, true) * 0.4f, ribbonPoints[i].Distance(ribbonPoints[i + 1]) / (frame.Height - 5));

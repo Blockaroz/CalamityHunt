@@ -1,7 +1,7 @@
 ﻿using System;
 using CalamityHunt.Content.Items.Materials;
 using CalamityHunt.Content.Items.Rarities;
-using CalamityHunt.Content.Projectiles.Weapons.Rogue;
+using CalamityHunt.Content.Projectiles.Weapons.Melee;
 using CalamityHunt.Content.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -9,10 +9,14 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Items.Weapons.Rogue
+namespace CalamityHunt.Content.Items.Weapons.Melee
 {
     public class FissionFlyer : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.SkipsInitialUseSound[Type] = true;
+        }
         public override void SetDefaults()
         {
             Item.width = 50;
@@ -26,22 +30,21 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
             Item.useLimitPerAnimation = 3;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 5f;
-            Item.UseSound = SoundID.DD2_SkyDragonsFuryShot;
             Item.autoReuse = true;
             Item.shootSpeed = 15f;
             Item.rare = ModContent.RarityType<VioletRarity>();
-            Item.DamageType = DamageClass.Throwing;
+            Item.DamageType = DamageClass.Melee;
             Item.value = Item.sellPrice(gold: 20);
             if (ModLoader.HasMod(HUtils.CalamityMod)) {
                 DamageClass d;
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
-                calamity.TryFind<DamageClass>("RogueDamageClass", out d);
-                calamity.TryFind<ModRarity>("Violet", out r);
+                calamity.TryFind("RogueDamageClass", out d);
+                calamity.TryFind("Violet", out r);
                 Item.DamageType = d;
                 Item.rare = r.Type;
             }
-            Item.shoot = ModContent.ProjectileType<FissionFlyerProj>();
+            Item.shoot = ModContent.ProjectileType<FissionFlyerProjectile>();
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -51,10 +54,13 @@ namespace CalamityHunt.Content.Items.Weapons.Rogue
                 Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
 
                 if ((bool)calamity.Call("CanStealthStrike", player)) //setting the stealth strike
+{
                     stealth = true;
+                }
             }
-            else if (player.vortexStealthActive || player.shroomiteStealth)
+            else if (player.vortexStealthActive || player.shroomiteStealth) {
                 stealth = true;
+            }
 
             if (Main.myPlayer == player.whoAmI) {
                 Vector2 mouseWorld = Main.MouseWorld;

@@ -8,7 +8,6 @@ using CalamityHunt.Content.Items.Mounts;
 using CalamityHunt.Content.Items.Weapons.Magic;
 using CalamityHunt.Content.Items.Weapons.Melee;
 using CalamityHunt.Content.Items.Weapons.Ranged;
-using CalamityHunt.Content.Items.Weapons.Rogue;
 using CalamityHunt.Content.Items.Weapons.Summoner;
 using CalamityHunt.Content.NPCs.Bosses.GoozmaBoss;
 using Microsoft.Xna.Framework;
@@ -49,8 +48,7 @@ namespace CalamityHunt.Content.Items.BossBags
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<StickyHand>(), 3));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<PaladinPalanquin>(), 2));
             itemLoot.Add(ItemDropRule.FewFromOptions(1, 7, ModContent.ItemType<EbonianMask>(), ModContent.ItemType<DivineMask>(), ModContent.ItemType<CrimulanMask>(), ModContent.ItemType<StellarMask>()));
-            itemLoot.Add(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<CometKunai>()));
-            itemLoot.Add(ItemDropRule.FewFromOptions(1, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<CometKunai>()));
+            itemLoot.Add(ItemDropRule.FewFromOptions(2, 1, ModContent.ItemType<Parasanguine>(), ModContent.ItemType<SludgeShaker>(), ModContent.ItemType<CrystalGauntlets>(), ModContent.ItemType<SlimeCane>(), ModContent.ItemType<CometKunai>()));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<TendrilCursorAttachment>(), 20));
         }
 

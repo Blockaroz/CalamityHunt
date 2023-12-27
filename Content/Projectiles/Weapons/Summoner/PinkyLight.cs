@@ -60,17 +60,20 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 Color color = Color.Lerp(Color.Orchid, Color.CadetBlue, Utils.GetLerpValue(60, 70, Projectile.timeLeft, true));
                 color.A = 0;
                 int count = Main.rand.Next(5, 10);
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < count; i++) {
                     sparkles.Add(new Sparkle(MathHelper.TwoPi / count * i + Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(-1f, 1f) * 0.05f, Main.rand.NextFloat(0.9f, 1.2f) * scale, Main.rand.Next(15, 25), color));
+                }
             }
 
-            if (sparkles == null)
+            if (sparkles == null) {
                 sparkles = new List<Sparkle>();
+            }
 
             foreach (Sparkle sparkle in sparkles.ToList()) {
                 sparkle.Update();
-                if (!sparkle.active)
+                if (!sparkle.active) {
                     sparkles.Remove(sparkle);
+                }
             }
 
             Lighting.AddLight(Projectile.Center, Color.Orchid.ToVector3() * 0.5f);
@@ -82,8 +85,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             float radius = MathHelper.Clamp(Projectile.Center.Distance(targetHitbox.Center.ToVector2()), 0, Projectile.ai[1]);
             Vector2 checkPoint = Projectile.Center + (targetHitbox.Center.ToVector2() - Projectile.Center).SafeNormalize(Vector2.Zero) * radius;
-            if (targetHitbox.Contains(checkPoint.ToPoint()))
+            if (targetHitbox.Contains(checkPoint.ToPoint())) {
                 return true;
+            }
 
             return false;
         }
@@ -116,8 +120,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                 rotation += angularVelocity;
                 time++;
 
-                if (time > maxTime)
+                if (time > maxTime) {
                     active = false;
+                }
             }
 
             public void Draw(Vector2 position)
@@ -140,7 +145,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (sparkles != null) foreach (Sparkle sparkle in sparkles) sparkle.Draw(Projectile.Center - Main.screenPosition);
+            if (sparkles != null) {
+                foreach (Sparkle sparkle in sparkles) {
+                    sparkle.Draw(Projectile.Center - Main.screenPosition);
+                }
+            }
 
             return false;
         }

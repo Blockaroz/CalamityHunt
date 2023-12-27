@@ -4,6 +4,7 @@ using CalamityHunt.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.Graphics.Effects;
 using Terraria.Utilities;
 
@@ -27,7 +28,7 @@ public class SlimeMonsoonSky : CustomSky
         additionalLightningChance = 0;
     }
 
-    public override bool IsActive() => _strength > 0.001f && !Main.gameMenu;
+    public override bool IsActive() => _strength > 0.01f && !Main.gameMenu;
 
     public override void Reset()
     {
@@ -76,7 +77,7 @@ public class SlimeMonsoonSky : CustomSky
             forceStrength = null;
         }
 
-        radialDistortPos = Vector2.Lerp(radialDistortPos, Main.screenPosition + Main.ScreenSize.ToVector2() / 2f, 0.3f);
+        radialDistortPos = Vector2.Lerp(radialDistortPos, Main.screenPosition + Main.ScreenSize.ToVector2() / 2f, 0.5f);
 
         _brightness = MathHelper.Lerp(_brightness, 0.15f, 0.08f);
         _windSpeed -= Main.WindForVisuals * 0.0025f;
@@ -98,19 +99,18 @@ public class SlimeMonsoonSky : CustomSky
             new Color(50, 35, 40)
 
         }, 2f, 2f).Value;
-        Color darkColor = Color.Lerp(brightColor, Color.Black, 0.9f);
-        lightColor = Color.Lerp(Color.Purple, brightColor, 0.7f);
+        Color darkColor = Color.Lerp(brightColor, Color.Black, 0.7f);
+        lightColor = Color.Lerp(Color.Purple, brightColor, 0.8f);
 
         if (Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].Active) {
             Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader()
                 .UseColor(Color.White)
                 .UseTargetPosition(radialDistortPos)
-                .UseProgress(Main.GlobalTimeWrappedHourly * 0.005f % 5f)
-                .UseIntensity(1f)
-                .UseOpacity(_strength * (Main.zenithWorld ? 2f : 0.1f) * Config.Instance.monsoonDistortion);
+                .UseProgress(Main.GlobalTimeWrappedHourly * 0.01f % 1f)
+                .UseOpacity(0);//_strength * (Main.zenithWorld ? 2f : 0.1f) * Config.Instance.monsoonDistortion);
             Effect filterEffect = Filters.Scene["HuntOfTheOldGods:SlimeMonsoon"].GetShader().Shader;
-            filterEffect.Parameters["distortionSample0"].SetValue(AssetDirectory.Textures.Noise[5].Value);
-            filterEffect.Parameters["distortionSample1"].SetValue(AssetDirectory.Textures.Noise[0].Value);
+            filterEffect.Parameters["uNoiseTexture0"].SetValue(AssetDirectory.Textures.Noise[11].Value);
+            filterEffect.Parameters["uNoiseTexture1"].SetValue(AssetDirectory.Textures.Noise[0].Value);
             filterEffect.Parameters["distortSize"].SetValue(Vector2.One);
 
             if (_strength < 0.2f) {
@@ -119,10 +119,14 @@ public class SlimeMonsoonSky : CustomSky
         }
 
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
-            //spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
-            //spriteBatch.Draw(AssetDirectory.Textures.Noise[4].Value, new Rectangle(0, -yOffset - 100, Main.screenWidth, Main.screenHeight * 3), darkColor * 0.1f * _strength);
+            spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (float)Math.Sqrt(_strength));
         }
 
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.BackgroundViewMatrix.TransformationMatrix);
+
+        Effect cloudRingEffect = AssetDirectory.Effects.SlimeMonsoonSkyLayer.Value;
+        cloudRingEffect.CurrentTechnique.Passes[0].Apply();
 
         if (maxDepth >= 4 && minDepth < 5) {
 
@@ -135,6 +139,9 @@ public class SlimeMonsoonSky : CustomSky
         if (maxDepth >= 1 && minDepth < 2) {
 
         }
+
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.BackgroundViewMatrix.TransformationMatrix);
     }
 
     public class MonsoonStrike

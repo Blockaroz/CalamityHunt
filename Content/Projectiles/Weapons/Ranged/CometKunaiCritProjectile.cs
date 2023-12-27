@@ -6,7 +6,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
+namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 {
     public class CometKunaiCritProjectile : ModProjectile
     {
@@ -16,14 +16,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             Projectile.height = 20;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
-            Projectile.DamageType = DamageClass.Throwing;
             Projectile.timeLeft = 100;
-            if (ModLoader.HasMod(HUtils.CalamityMod)) {
-                DamageClass d;
-                Mod calamity = ModLoader.GetMod(HUtils.CalamityMod);
-                calamity.TryFind<DamageClass>("RogueDamageClass", out d);
-                Projectile.DamageType = d;
-            }
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 1;
             Projectile.manualDirectionChange = true;
@@ -36,14 +29,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
             for (int i = 0; i < 5; i++) {
                 Color randomColor = Color.Lerp(Color.Blue, Color.RoyalBlue, Main.rand.NextFloat());
                 randomColor.A = 0;
-                Dust d = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity / 5f * i, DustID.SparkForLightDisc, Vector2.Zero, 0, randomColor, 1.5f);
+                Dust d = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity / 5f * i, DustID.SparkForLightDisc, Projectile.velocity * 0.1f, 0, randomColor, 1.1f);
                 d.noGravity = true;
             }
 
-            if (Projectile.ai[0] == 0) {
+            if (Projectile.ai[0] == 0 && Main.myPlayer == Projectile.owner) {
                 Projectile.ai[0]++;
                 oldVelocity = Projectile.velocity;
                 Projectile.rotation = Main.rand.NextFloat();
+                Projectile.netUpdate = true;
             }
 
             Projectile.direction = oldVelocity.X > 0 ? 1 : -1;
@@ -64,7 +58,11 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Rogue
                 d.noGravity = true;
                 d.velocity += Main.rand.NextVector2Circular(4, 4);
             }
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, -oldVelocity * 0.6f, ModContent.ProjectileType<CometKunaiGhostProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, -1);
+
+            if (Main.myPlayer == Projectile.owner) {
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, -oldVelocity * 0.6f, ModContent.ProjectileType<CometKunaiGhostProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner, -1);
+                Projectile.netUpdate = true;
+            }
         }
 
         public override bool PreDraw(ref Color lightColor)

@@ -65,8 +65,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             if (Time <= 0) {
                 Projectile.localAI[0] = Main.rand.NextFloat(20f);
 
-                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
+                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++) {
                     Projectile.oldRot[i] = Projectile.rotation;
+                }
 
                 Projectile.velocity = Player.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero) * 5f;
                 Projectile.direction = Projectile.velocity.X < 0 ? -1 : 1;
@@ -142,8 +143,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                     if (Time > (int)(55 * speed)) {
                         Time = -1;
                         SwingStyle--;
-                        if (Main.myPlayer == Projectile.owner)
+                        if (Main.myPlayer == Projectile.owner) {
                             Projectile.Kill();
+                        }
                     }
 
                     break;
@@ -219,17 +221,22 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
             ribbon.Update();
 
             shakeStrength = MathHelper.Clamp(shakeStrength, 0f, 2.4f);
-            if (shakeStrength >= 0f)
+            if (shakeStrength >= 0f) {
                 shakeStrength *= 0.9f;
-            if (shakeStrength < 0.2f)
-                shakeStrength = 0f;
+            }
 
-            if (Main.myPlayer == Projectile.owner && shakeStrength > 0f)
+            if (shakeStrength < 0.2f) {
+                shakeStrength = 0f;
+            }
+
+            if (Main.myPlayer == Projectile.owner && shakeStrength > 0f) {
                 Main.instance.CameraModifiers.Add(new PunchCameraModifier(Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.Zero).RotatedByRandom(0.3f), shakeStrength * 4f, 10, 10));
+            }
 
             slashRotation = Projectile.rotation;
-            for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--)
+            for (int i = ProjectileID.Sets.TrailCacheLength[Type] - 1; i > 0; i--) {
                 Projectile.oldRot[i] = Projectile.oldRot[i].AngleLerp(Projectile.oldRot[i - 1], 0.8f);
+            }
 
             Projectile.oldRot[0] = Projectile.oldRot[0].AngleLerp(slashRotation, 0.8f);
         }
@@ -244,14 +251,20 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 0.2f * x + 0.85f
             };
 
-            if (x < 0.05f)
+            if (x < 0.05f) {
                 return MathHelper.Lerp(0f, functions[0], Utils.GetLerpValue(0f, 0.05f, x, true));
-            if (x < 0.3f)
+            }
+
+            if (x < 0.3f) {
                 return MathHelper.Lerp(functions[0], functions[1], Utils.GetLerpValue(0.2f, 0.3f, x, true));
-            if (x < 0.71f)
+            }
+
+            if (x < 0.71f) {
                 return MathHelper.Lerp(functions[1], functions[2], Utils.GetLerpValue(0.701f, 0.71f, x, true));
-            else
+            }
+            else {
                 return MathHelper.Lerp(functions[2], functions[3], Utils.GetLerpValue(0.8f, 1f, x, true));
+            }
         }
 
         private Rope ribbon;
@@ -333,8 +346,10 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (swingPercent2 > 0.5f && swingPercent2 < 0.7f || (SwingStyle == 1 && swingPercent2 > 0.25f && swingPercent2 < 0.35f))
+            if (swingPercent2 > 0.5f && swingPercent2 < 0.7f || (SwingStyle == 1 && swingPercent2 > 0.25f && swingPercent2 < 0.35f)) {
                 return base.Colliding(projHitbox, targetHitbox);
+            }
+
             return false;
         }
 
@@ -361,8 +376,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (Time < 1)
+            if (Time < 1) {
                 return false;
+            }
 
             lightColor = Color.Lerp(lightColor, Color.White, 0.4f);
 
@@ -445,10 +461,14 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Melee
                 Vector2[] ribbonPoints = ribbon.GetPoints().ToArray();
                 for (int i = 0; i < ribbonPoints.Length - 1; i++) {
                     int style = 0;
-                    if (i == ribbonPoints.Length - 3)
+                    if (i == ribbonPoints.Length - 3) {
                         style = 1;
-                    if (i > ribbonPoints.Length - 3)
+                    }
+
+                    if (i > ribbonPoints.Length - 3) {
                         style = 2;
+                    }
+
                     Rectangle frame = ribbonTexture.Frame(1, 3, 0, style);
                     float rotation = ribbonPoints[i].AngleTo(ribbonPoints[i + 1]);
                     Vector2 stretch = new Vector2(0.5f + Utils.GetLerpValue(0, ribbonPoints.Length - 2, i, true) * 0.8f, ribbonPoints[i].Distance(ribbonPoints[i + 1]) / (frame.Height - 5));

@@ -31,10 +31,12 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override void AI()
         {
             int owner = -1;
-            if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active))
+            if (!Main.npc.Any(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active)) {
                 Projectile.active = false;
-            else
+            }
+            else {
                 owner = Main.npc.First(n => n.type == ModContent.NPCType<DivineGargooptuar>() && n.active).whoAmI;
+            }
 
             if (owner > -1) {
                 int count = (int)Common.Systems.ConditionalValue.DifficultyBasedValue(3, 4, 5);
@@ -44,10 +46,12 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             }
 
-            if (Time < 0)
+            if (Time < 0) {
                 Projectile.rotation += Projectile.direction * 0.16f * Utils.GetLerpValue(-18, -50, Time, true);
-            else
+            }
+            else {
                 Projectile.rotation += -Projectile.direction * 0.002f;
+            }
 
             Projectile.scale = Utils.GetLerpValue(-2, 15, Time, true) * Utils.GetLerpValue(80, 60, Time, true) * 0.9f;
             Projectile.velocity *= 0.5f;
@@ -69,8 +73,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             Time++;
 
-            if (Time > 85 + WhoAmI)
+            if (Time > 85 + WhoAmI) {
                 Projectile.Kill();
+            }
 
             Projectile.localAI[0]++;
         }
@@ -83,8 +88,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     bool wide = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(70 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 20f, ref point);
                     bool mid = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(180 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 12f, ref point);
                     bool tip = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(320 * Projectile.scale).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + MathHelper.TwoPi / Rays * i), 5f, ref point);
-                    if (wide || mid || tip)
+                    if (wide || mid || tip) {
                         return true;
+                    }
                 }
             }
             return false;

@@ -53,11 +53,13 @@ namespace CalamityHunt.Content.Projectiles
             Index = 0;
 
             foreach (Projectile proj in Main.projectile.Where(n => n.active && n.owner == Player.whoAmI && n.type == Type)) {
-                if (proj.whoAmI > Projectile.whoAmI)
+                if (proj.whoAmI > Projectile.whoAmI) {
                     Index++;
+                }
 
-                if (proj.whoAmI == Projectile.whoAmI)
+                if (proj.whoAmI == Projectile.whoAmI) {
                     continue;
+                }
 
                 //if (Projectile.Distance(proj.Center) < 40)
                 //{
@@ -87,16 +89,18 @@ namespace CalamityHunt.Content.Projectiles
 
                         trackSpeed = 1f;
 
-                        if (Projectile.Distance(target.Center) < 300)
+                        if (Projectile.Distance(target.Center) < 300) {
                             TimeInner++;
+                        }
 
                         homePos = target.Center + new Vector2(MathHelper.SmoothStep(-200, 200, MathF.Sqrt(TimeInner / 25f)) * Projectile.direction, 0).RotatedBy(Projectile.rotation);
 
                         if (TimeInner > 25 && Main.netMode != NetmodeID.MultiplayerClient) {
                             TimeInner = 0;
 
-                            if (Main.rand.NextBool(2))
+                            if (Main.rand.NextBool(2)) {
                                 Attack++;
+                            }
 
                             Projectile.direction *= -1;
 
@@ -140,13 +144,15 @@ namespace CalamityHunt.Content.Projectiles
 
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(homePos) * Projectile.Distance(homePos) * 0.1f, trackSpeed);
 
-            if (Projectile.Distance(homePos) < 3f)
+            if (Projectile.Distance(homePos) < 3f) {
                 Projectile.Center = homePos;
+            }
 
             Time++;
 
-            if (tentacle == null)
+            if (tentacle == null) {
                 tentacle = new Rope(Projectile.Center, Player.MountedCenter, 30, 10f, Vector2.Zero, 0.05f, 30);
+            }
 
             tentacle.StartPos = Projectile.Center;
             tentacle.EndPos = Player.MountedCenter;
@@ -154,8 +160,9 @@ namespace CalamityHunt.Content.Projectiles
             tentacle.damping = Utils.GetLerpValue(20, 0, Player.velocity.Length(), true) * 0.05f;
             tentacle.Update();
 
-            if (Projectile.Distance(Player.MountedCenter) > 300)
+            if (Projectile.Distance(Player.MountedCenter) > 300) {
                 Projectile.Center = Player.MountedCenter + new Vector2(300, 0).RotatedBy(Projectile.AngleFrom(Player.MountedCenter));
+            }
         }
 
         public Rope tentacle;

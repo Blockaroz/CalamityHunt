@@ -34,13 +34,15 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             Player player = Main.player[Projectile.owner];
 
-            if (player.GetModPlayer<SlimeCanePlayer>().slimes)
+            if (player.GetModPlayer<SlimeCanePlayer>().slimes) {
                 Projectile.timeLeft = 2;
+            }
 
             if (++Projectile.frameCounter >= 4) {
                 Projectile.frameCounter = 0;
-                if (++Projectile.frame >= 6)
+                if (++Projectile.frame >= 6) {
                     Projectile.frame = 0;
+                }
             }
         }
 

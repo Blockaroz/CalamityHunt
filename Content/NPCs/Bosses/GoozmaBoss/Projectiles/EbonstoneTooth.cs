@@ -44,8 +44,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Projectile.localAI[1]++;
             Time++;
 
-            if (Time > OutTime)
+            if (Time > OutTime) {
                 Projectile.Kill();
+            }
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

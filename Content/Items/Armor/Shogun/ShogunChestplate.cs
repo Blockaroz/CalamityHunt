@@ -84,8 +84,9 @@ namespace CalamityHunt.Content.Items.Armor.Shogun
                 }
             }
 
-            if (player.wingsLogic == Item.wingSlot && player.wings <= 0)
+            if (player.wingsLogic == Item.wingSlot && player.wings <= 0) {
                 player.wings = Item.wingSlot;
+            }
 
             if (player.body == Item.bodySlot) {
                 player.waist = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Waist);

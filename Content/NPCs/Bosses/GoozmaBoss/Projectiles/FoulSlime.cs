@@ -42,8 +42,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
             int target = -1;
             if (Projectile.velocity.Y > 1) {
-                if (Main.player.Any(n => n.active && !n.dead))
+                if (Main.player.Any(n => n.active && !n.dead)) {
                     target = Main.player.First(n => n.active && !n.dead).whoAmI;
+                }
 
                 if (target > -1) {
                     if (Projectile.Center.Y > Main.player[target].MountedCenter.Y) {
@@ -51,8 +52,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                         Projectile.velocity.X *= 0.9f;
                     }
 
-                    if (Projectile.Center.Y > Main.player[target].MountedCenter.Y + 20)
+                    if (Projectile.Center.Y > Main.player[target].MountedCenter.Y + 20) {
                         Projectile.velocity.Y = -20;
+                    }
                 }
             }
 
@@ -61,9 +63,11 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                 Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20, 20), DustID.ToxicBubble, Projectile.velocity * 0.5f, 0, color, 1f).noGravity = true;
             }
 
-            if (Time > 200)
-                for (int i = 0; i < 5; i++)
+            if (Time > 200) {
+                for (int i = 0; i < 5; i++) {
                     Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(12, 12), DustID.Corruption, Main.rand.NextVector2Circular(5, 5), 0, Color.White, 1.5f).noGravity = true;
+                }
+            }
 
             Time++;
         }

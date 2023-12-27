@@ -107,11 +107,14 @@ namespace CalamityHunt.Content.Projectiles
                 TileID.DemonAltar,
                 TileID.ElderCrystalStand
             };
-            for (int i = 0; i < tilesToCheck.Count; ++i)
+            for (int i = 0; i < tilesToCheck.Count; ++i) {
                 tileExcludeList.Add(tilesToCheck[i]);
+            }
+
             List<int> wallExcludeList = new List<int>();
-            for (int i = 0; i < wallsToCheck.Count; ++i)
+            for (int i = 0; i < wallsToCheck.Count; ++i) {
                 wallExcludeList.Add(wallsToCheck[i]);
+            }
 
             for (int i = minTileX; i <= maxTileX; i++) {
                 for (int j = minTileY; j <= maxTileY; j++) {
@@ -124,21 +127,28 @@ namespace CalamityHunt.Content.Projectiles
                         bool canKillTile = true;
                         if (tile != null && tile.HasTile) {
                             if (checkExplosions) {
-                                if (!TileLoader.CanExplode(i, j))
+                                if (!TileLoader.CanExplode(i, j)) {
                                     canKillTile = false;
+                                }
                             }
 
-                            if (Main.tileContainer[tile.TileType])
+                            if (Main.tileContainer[tile.TileType]) {
                                 canKillTile = false;
-                            if (!TileLoader.CanKillTile(i, j, tile.TileType, ref t) || !TileLoader.CanKillTile(i, j, tile.TileType, ref f))
+                            }
+
+                            if (!TileLoader.CanKillTile(i, j, tile.TileType, ref t) || !TileLoader.CanKillTile(i, j, tile.TileType, ref f)) {
                                 canKillTile = false;
-                            if (tileExcludeList.Contains(tile.TileType))
+                            }
+
+                            if (tileExcludeList.Contains(tile.TileType)) {
                                 canKillTile = false;
+                            }
 
                             if (canKillTile) {
                                 WorldGen.KillTile(i, j, false, false, false);
-                                if (!tile.HasTile && Main.netMode != NetmodeID.SinglePlayer)
+                                if (!tile.HasTile && Main.netMode != NetmodeID.SinglePlayer) {
                                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j, 0f, 0, 0, 0);
+                                }
                             }
                         }
 
@@ -146,15 +156,19 @@ namespace CalamityHunt.Content.Projectiles
                             for (int x = i - 1; x <= i + 1; x++) {
                                 for (int y = j - 1; y <= j + 1; y++) {
                                     bool canExplode = true;
-                                    if (checkExplosions)
+                                    if (checkExplosions) {
                                         canExplode = WallLoader.CanExplode(x, y, Main.tile[x, y].WallType);
-                                    if (wallExcludeList.Contains(Main.tile[x, y].WallType))
+                                    }
+
+                                    if (wallExcludeList.Contains(Main.tile[x, y].WallType)) {
                                         canKillWalls = false;
+                                    }
 
                                     if (Main.tile[x, y] != null && Main.tile[x, y].WallType > WallID.None && canKillWalls && canExplode) {
                                         WorldGen.KillWall(x, y, false);
-                                        if (Main.tile[x, y].WallType == WallID.None && Main.netMode != NetmodeID.SinglePlayer)
+                                        if (Main.tile[x, y].WallType == WallID.None && Main.netMode != NetmodeID.SinglePlayer) {
                                             NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, x, y, 0f, 0, 0, 0);
+                                        }
                                     }
                                 }
                             }

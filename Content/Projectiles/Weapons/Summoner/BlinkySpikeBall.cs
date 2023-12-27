@@ -56,19 +56,23 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
                             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[target].Center).SafeNormalize(Vector2.Zero).RotatedByRandom(0.2f) * 20, 0.07f);
                             Projectile.netUpdate = true;
                         }
-                        if (Projectile.Distance(Main.npc[target].Center) < 100 && Projectile.ai[1] < 1)
+                        if (Projectile.Distance(Main.npc[target].Center) < 100 && Projectile.ai[1] < 1) {
                             Projectile.ai[1]++;
+                        }
                     }
-                    else
+                    else {
                         hasTarget = false;
+                    }
                 }
 
-                if (!hasTarget)
+                if (!hasTarget) {
                     Projectile.Minion_FindTargetInRange(800, ref target, false);
+                }
             }
 
-            if (Projectile.ai[1] > 0)
+            if (Projectile.ai[1] > 0) {
                 Projectile.ai[0]++;
+            }
 
             if (Projectile.ai[0] > 5) {
                 Projectile.velocity *= 0.95f;
@@ -123,8 +127,9 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Summoner
         {
             float radius = MathHelper.Clamp(Projectile.Center.Distance(targetHitbox.Center.ToVector2()), 0, 80);
             Vector2 checkPoint = Projectile.Center + (targetHitbox.Center.ToVector2() - Projectile.Center).SafeNormalize(Vector2.Zero) * radius;
-            if (targetHitbox.Contains(checkPoint.ToPoint()))
+            if (targetHitbox.Contains(checkPoint.ToPoint())) {
                 return true;
+            }
 
             return false;
         }

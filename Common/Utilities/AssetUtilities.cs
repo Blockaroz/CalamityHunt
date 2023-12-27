@@ -25,8 +25,10 @@ public static class AssetUtilities
     public static Asset<T>[] RequestArrayImmediate<T>(string path, int count, int start = 0) where T : class
     {
         Asset<T>[] assets = new Asset<T>[count];
-        for (int i = 0; i < assets.Length; i++)
+        for (int i = 0; i < assets.Length; i++) {
             assets[i] = RequestImmediate<T>(path + (i + start));
+        }
+
         return assets;
     }
 

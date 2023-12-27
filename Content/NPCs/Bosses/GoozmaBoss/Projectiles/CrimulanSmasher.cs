@@ -40,8 +40,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
         public override void AI()
         {
             if (Projectile.ai[1] < 0) {
-                foreach (Player player in Main.player.Where(n => n.active && !n.dead))
+                foreach (Player player in Main.player.Where(n => n.active && !n.dead)) {
                     Projectile.ai[1] = player.whoAmI;
+                }
             }
 
             if (Time < 1) {
@@ -52,22 +53,27 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, (Target.Center.X - Projectile.Center.X) * 0.05f, 0.01f * Utils.GetLerpValue(0, -25, Time, true));
                     Projectile.velocity.X *= 0.98f * Utils.GetLerpValue(0, -25, Time, true);
                 }
-                else
+                else {
                     Projectile.velocity.X = 0;
+                }
+
                 Projectile.position.Y = saveTarget.Y - 1200 + Projectile.height / 2;
             }
-            else
+            else {
                 Projectile.velocity.X = 0;
+            }
 
-
-            if (Time > 0)
+            if (Time > 0) {
                 Projectile.Center = Vector2.Lerp(Projectile.Center, saveTarget, 0.001f + Utils.GetLerpValue(0, 10, Time, true));
+            }
 
-            if (Time == 8)
+            if (Time == 8) {
                 SoundEngine.PlaySound(SoundID.Item167.WithPitchOffset(0.2f), Projectile.Center);
+            }
 
-            if (Time > 20)
+            if (Time > 20) {
                 Projectile.Kill();
+            }
 
             Time++;
             Projectile.localAI[0]++;
@@ -75,8 +81,10 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Time > 2 && Time < 12)
+            if (Time > 2 && Time < 12) {
                 return new Rectangle(projHitbox.X, projHitbox.Y - 500, projHitbox.Width, projHitbox.Height + 500).Intersects(targetHitbox);
+            }
+
             return false;
         }
 
@@ -97,8 +105,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
             Vector2 squish = new Vector2(0.5f, 1.5f);
             Vector2 trailSquish = new Vector2(0.5f, 1.5f);
 
-            if (Time > 9)
+            if (Time > 9) {
                 squish = new Vector2(1f + Utils.GetLerpValue(18, 10, Time, true) * 0.7f, 1f - Utils.GetLerpValue(18, 10, Time, true) * 0.7f);
+            }
 
             float fadeOut = Utils.GetLerpValue(20, 15, Time, true) * Utils.GetLerpValue(-1, 5, Time, true);
             float trailOut = fadeOut * Utils.GetLerpValue(15, 10, Time, true) * 0.9f;
@@ -108,8 +117,9 @@ namespace CalamityHunt.Content.NPCs.Bosses.GoozmaBoss.Projectiles
                     float superProg = i / (float)ProjectileID.Sets.TrailCacheLength[Type];
                     float prog = j / 5f;
 
-                    if (Time > 9)
+                    if (Time > 9) {
                         trailSquish = new Vector2(1f + Utils.GetLerpValue(18, 10, Time, true) * 0.7f * (1f - superProg - prog * 0.2f), 1f - Utils.GetLerpValue(18, 10, Time, true) * 0.7f * (1f - superProg - prog * 0.2f));
+                    }
 
                     Color trailColor = Color.Lerp(Color.Black * 0.33f, new Color(30, 4, 2, 10), superProg);
                     float trailProgress = Utils.GetLerpValue(0, ProjectileID.Sets.TrailCacheLength[Type], i + prog, true);
