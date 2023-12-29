@@ -23,8 +23,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
 
         public override void SetDefaults()
         {
-            Projectile.width = 20;
-            Projectile.height = 20;
+            Projectile.width = 16;
+            Projectile.height = 16;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             if (ModLoader.HasMod(HUtils.CalamityMod)) {
@@ -33,7 +33,7 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
                 calamity.TryFind("RogueDamageClass", out d);
                 Projectile.DamageType = d;
             }
-            Projectile.extraUpdates = 10;
+            Projectile.extraUpdates = 12;
             Projectile.timeLeft = 80;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 1;
@@ -69,8 +69,8 @@ namespace CalamityHunt.Content.Projectiles.Weapons.Ranged
             }
             else {
                 if (Projectile.ai[0] == -2) {
-                    Projectile.localAI[1] = MathHelper.Clamp(Projectile.localAI[1] - 0.015f, 0f, 1f);
-                    Projectile.rotation -= MathF.Sin(Projectile.localAI[0] * MathHelper.TwoPi * 2f) * 0.4f * Projectile.localAI[1] * Projectile.direction;
+                    Projectile.localAI[1] = MathHelper.Clamp(Projectile.localAI[1] - 0.02f, 0f, 1f);
+                    Projectile.rotation += MathF.Cos(Projectile.localAI[1] * MathHelper.TwoPi * 4f) * 0.4f * Projectile.localAI[1];
                 }
 
                 if (Projectile.ai[1] > -1) {

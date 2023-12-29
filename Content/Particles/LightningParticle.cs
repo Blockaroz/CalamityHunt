@@ -56,7 +56,7 @@ public class LightningParticle : Particle
         dissolveEffect.Parameters["uNoiseStrength"].SetValue(1f);
         dissolveEffect.CurrentTechnique.Passes[0].Apply();
 
-        spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation + MathHelper.Pi / 3f * direction, frame.Size() * 0.5f, scale * new Vector2(1f, 1f + time * 0.05f), flip, 0);
+        spriteBatch.Draw(texture, position - Main.screenPosition, frame, drawColor, rotation + MathHelper.Pi / 3f * direction, frame.Size() * 0.5f, scale * new Vector2(1f, 1f + time * 0.05f) * 0.5f, flip, 0);
 
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }

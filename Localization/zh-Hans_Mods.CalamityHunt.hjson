@@ -520,6 +520,11 @@ Items: {
 			The amount of tendrils depends on the slot this item is placed in
 			''' */
 	}
+
+	FissionFlayer: {
+		// DisplayName: Fission Flayer
+		// Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -629,6 +634,7 @@ Projectiles: {
 	// StellarBlackHole.DisplayName: Stellar Black Hole
 	// FissionFlyerProjectile.DisplayName: Fission Flyer Projectile
 	// CometKunaiSuperProjectile.DisplayName: Comet Kunai Super Projectile
+	// FissionFlayerProjectile.DisplayName: Fission Flayer Projectile
 }
 
 Chat: {

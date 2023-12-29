@@ -43,7 +43,7 @@ namespace CalamityHunt.Content.Items.Weapons.Magic
         {
             player.manaCost = 0f;
 
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<CrystalGauntletBall>()] <= 0) {
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<GoomoireSuck>()] <= 0) {
                 if (player.altFunctionUse == 0) {
                     Projectile.NewProjectileDirect(source, position, velocity, type, damage, 0, player.whoAmI);
                 }

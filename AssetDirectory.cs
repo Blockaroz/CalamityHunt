@@ -80,11 +80,12 @@ public static class AssetDirectory
 
         public static class Bars
         {
-            public static readonly Asset<Texture2D> Bar = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/ChargeBars/Style0_0");
-            public static readonly Asset<Texture2D> BarCharge = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/ChargeBars/Style0_1");
-            public static readonly Asset<Texture2D> Stress = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/ChargeBars/StressBar");
-            public static readonly Asset<Texture2D> StressCharge = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/ChargeBars/StressBarFill");
-            public static readonly Asset<Texture2D> StressTopped = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/ChargeBars/StressBarTopped");
+            public static readonly Asset<Texture2D>[] Bar = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/UI/Bars/BarBase_");
+            public static readonly Asset<Texture2D>[] BarFill = AssetUtilities.RequestArrayTotalImmediate<Texture2D>(AssetPath + "Textures/UI/Bars/BarFill_");
+
+            public static readonly Asset<Texture2D> Stress = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/UI/StressBar");
+            public static readonly Asset<Texture2D> StressCharge = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/UI/StressBarFill");
+            public static readonly Asset<Texture2D> StressTopped = AssetUtilities.RequestImmediate<Texture2D>(AssetPath + "Textures/UI/StressBarTopped");
         }
 
         public static class SlimeMonsoon
