@@ -11,7 +11,7 @@ public struct FlyingSlimeData
 {
     private static int dataCount;
 
-    public FlyingSlimeData(string name, float rarity, Func<bool> specificCondition, int npcType, Color color, Action<FlyingSlimeData, Vector2> dustMethod = null, float speed = 1f, Action<FlyingSlimeData, SpriteBatch, Vector2, float, float, float, Color> specialDraw = null, object extraData = null, bool load = false)
+    public FlyingSlimeData(string name, float rarity, Func<bool> specificCondition, int npcType, Color color, Action<FlyingSlimeData, Vector2> dustMethod = null, float speed = 1f, Action<FlyingSlimeData, SpriteBatch, Vector2, float, float, float, Color> specialDraw = null, object extraData = null, bool load = false) : this()
     {
         Type = dataCount++;
 
