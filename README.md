@@ -1,3 +1,3 @@
 # Hunt of the Old Gods
 
-The Goozma Mod
+Archive of the Goozma Mod, before ownership transferred
